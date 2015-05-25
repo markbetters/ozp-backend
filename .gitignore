@@ -1,0 +1,5 @@
+db.sqlite3
+*.sublime*
+__pycache__
+.vagrant
+*.pyc
