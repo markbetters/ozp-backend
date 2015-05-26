@@ -9,14 +9,52 @@ Note that on Python 2, __unicode__() should be defined instead.
 
 By default, fields cannot be null or blank
 
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+A note on model validation:
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+There are three steps involved in validating a model:
+1. Validate the model fields - Model.clean_fields()
+2. Validate the model as a whole - Model.clean()
+3. Validate the field uniqueness - Model.validate_unique()
+
+All three steps are performed when you call a model's full_clean() methods.
+
+When you use a ModelForm, the call to is_valid() will perform these validation
+steps for all the fields that are included on the form.
+
+Note that full_clean() will NOT be called automatically when you call your
+model's save() method. You can invoke that method manually when you want to
+run one-step model validation for your own models.
+Details: https://docs.djangoproject.com/en/1.8/ref/models/instances/#django.db.models.Model.validate_unique
+
+It seems odd at first that Django doesn't enforce model validations at the
+'model' level, but there are good reasons for it. Mainly - it's very hard.
+
+* not all ORM methods invoke Model.save() (e.g. bulk_create and update)
+* if you use defaults in your models, they will not be set even after
+	Model.save() returns, thus raising false validation errors
+* many things (like Django Admin) don't expect validation errors to occur when
+	invoking Model.save(), so apps may get 500 errors if you simply call
+	Model.full_clean() before each Model.save()
+
+* http://stackoverflow.com/questions/22587019/how-to-use-full-clean-for-data-validation-before-saving-in-django-1-5-graceful
+* http://stackoverflow.com/questions/4441539/why-doesnt-djangos-model-save-call-full-clean/4441740#4441740
+* http://stackoverflow.com/questions/13036315/correct-way-to-validate-django-model-objects/13039057#13039057
+
+The recommendation in the last link is to use the ModelForm abstraction for
+model validation, even if you never display the form in a template.
+
+
 """
 
 import uuid
 import re
 
 from django.core.exceptions import ValidationError
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.core.validators import RegexValidator
 from django.db import models
+from django.forms import ModelForm
 # plugin for enum support https://github.com/5monkeys/django-enumfield
 from django_enumfield import enum
 
@@ -269,24 +307,21 @@ class Intent(models.Model):
 
 
 class ItemComment(models.Model):
-    """
-    A comment made on a Listing
-    """
+	"""
+	A comment made on a Listing
+	"""
 	text = models.CharField(max_length=constants.MAX_VALUE_LENGTH)
-    rate = db.Column(db.Integer)
-    listing_id = db.Column(db.Integer, db.ForeignKey('listing.id'),
-                           nullable=False)
-    author_id = db.Column(db.Integer, db.ForeignKey('profile.id'),
-                          nullable=False)
+	rate = models.IntegerField(validators=[
+		MinValueValidator(1),
+		MaxValueValidator(5)
+		]
+	)
+	listing = models.ForeignKey('Listing', related_name='item_comments')
+	author = models.ForeignKey('Profile', related_name='item_comments')
 
-    @validates('rate')
-    def validate_rate(self, key, rate):
-        assert 1 <= rate <= 5
-        return rate
-
-    def __repr__(self):
-        return 'Author id %s: Rate %d Stars : %s' % (self.author_id,
-                                                     self.rate, self.text)
+	def __repr__(self):
+	    return 'Author id %s: Rate %d Stars : %s' % (self.author_id,
+	                                                 self.rate, self.text)
 
 class Profile(models.Model):
 	"""
@@ -331,3 +366,12 @@ class Listing(models.Model):
 
 	def __str__(self):
 		return self.title
+
+
+# - - - - - - - - - -
+# forms (used for validation only)
+# - - - - - - - - - -
+class ProfileForm(ModelForm):
+	class Meta:
+		model = Profile
+		fields = '__all__'
