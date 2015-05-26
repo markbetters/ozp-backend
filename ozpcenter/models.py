@@ -11,25 +11,26 @@ By default, fields cannot be null or blank
 
 """
 
-from enum import Enum
 import uuid
 import re
 
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from django.db import models
+# plugin for enum support https://github.com/5monkeys/django-enumfield
+from django_enumfield import enum
 
 import ozpcenter.constants as constants
 
 # User (Profile) roles
-class Roles(Enum):
+class Roles(enum.Enum):
     USER = 1
     ORG_STEWARD = 2
     APPS_MALL_STEWARD = 3
 
 
 # Listing approval statuses
-class ApprovalStatus(Enum):
+class ApprovalStatus(enum.Enum):
     IN_PROGRESS = 'In Progress'
     PENDING = 'Pending'
     APPROVED_ORG = 'Approved by Organization'
@@ -39,7 +40,7 @@ class ApprovalStatus(Enum):
 
 # Action for a Listing Activity
 # TODO: Actions also have a description
-class Action(Enum):
+class Action(enum.Enum):
     CREATED = 'Created'
     MODIFIED = 'Modified'
     SUBMITTED = 'Submitted'
@@ -193,6 +194,21 @@ class Contact(models.Model):
 	    return val
 
 
+class ContactType(models.Model):
+	"""
+	Contact Type
+
+	Examples: TechnicalPOC, GovieGuy, etc
+
+	TODO: Auditing for create, update, delete
+	"""
+	name = models.CharField(max_length=50, unique=True)
+	required = models.BooleanField(default=False)
+
+	def __repr__(self):
+	    return self.title
+
+
 class DocUrl(models.Model):
 	"""
     A documentation link that belongs to a Listing
@@ -208,11 +224,69 @@ class DocUrl(models.Model):
 				regex=constants.URL_REGEX,
 				message='url must be a url',
 				code='invalid url')]
-		)
+	)
 	listing = models.ForeignKey('Listing', related_name='doc_urls')
 
 	def __repr__(self):
 	    return '%s:%s' % (self.name, self.url)
+
+
+class Intent(models.Model):
+	"""
+	An Intent is an abstract description of an operation to be performed
+
+	TODO: Auditing for create, update, delete
+	"""
+	# TODO unique on type
+	action = models.CharField(
+		max_length=64,
+		validators=[
+			RegexValidator(
+				regex=constants.INTENT_ACTION_REGEX,
+				message='action must be a valid action',
+				code='invalid action')]
+	)
+	type = models.CharField(
+		max_length=129,
+		validators=[
+			RegexValidator(
+				regex=constants.MEDIA_TYPE_REGEX,
+				message='type must be a valid media type',
+				code='invalid type')]
+	)
+	label = models.CharField(max_length=255)
+	icon = models.CharField(
+		max_length=constants.MAX_URL_SIZE,
+		validators=[
+			RegexValidator(
+				regex=constants.URL_REGEX,
+				message='icon must be a url',
+				code='invalid icon')]
+	)
+
+	def __repr__(self):
+	    return '%s/%s' % (self.type, self.action)
+
+
+class ItemComment(models.Model):
+    """
+    A comment made on a Listing
+    """
+	text = models.CharField(max_length=constants.MAX_VALUE_LENGTH)
+    rate = db.Column(db.Integer)
+    listing_id = db.Column(db.Integer, db.ForeignKey('listing.id'),
+                           nullable=False)
+    author_id = db.Column(db.Integer, db.ForeignKey('profile.id'),
+                          nullable=False)
+
+    @validates('rate')
+    def validate_rate(self, key, rate):
+        assert 1 <= rate <= 5
+        return rate
+
+    def __repr__(self):
+        return 'Author id %s: Rate %d Stars : %s' % (self.author_id,
+                                                     self.rate, self.text)
 
 class Profile(models.Model):
 	"""
@@ -228,14 +302,8 @@ class Profile(models.Model):
 	bio = models.CharField(max_length=1000)
 	created_date = models.DateTimeField(auto_now_add=True)
 	last_login = models.DateTimeField()
-	ROLE_CHOICES = (
-		(Roles.USER, 'USER'),
-		(Roles.ORG_STEWARD, 'ORG_STEWARD'),
-		(Roles.APPS_MALL_STEWARD, 'ADMIN')
-	)
-	highest_role = models.PositiveSmallIntegerField(
-		choices=ROLE_CHOICES,
-		default=Roles.USER.value)
+	highest_role = enum.EnumField(Roles,
+		default=Roles.USER)
 	organizations = models.ManyToManyField(
 		Agency,
 		related_name='profiles',
