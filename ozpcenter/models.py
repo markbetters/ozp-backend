@@ -336,7 +336,7 @@ class Profile(models.Model):
 	email = models.CharField(max_length=255)
 	bio = models.CharField(max_length=1000)
 	created_date = models.DateTimeField(auto_now_add=True)
-	last_login = models.DateTimeField()
+	last_login = models.DateTimeField(blank=True, null=True)
 	highest_role = enum.EnumField(Roles,
 		default=Roles.USER)
 	organizations = models.ManyToManyField(
@@ -346,11 +346,17 @@ class Profile(models.Model):
 	stewarded_organizations = models.ManyToManyField(
 		Agency,
 		related_name='stewarded_profiles',
-		db_table='stewarded_agency_profile')
+		db_table='stewarded_agency_profile',
+		blank=True)
 	# iwc_data_objects = db.relationship('IwcDataObject', backref='profile')
 	# listing_activities = db.relationship('ListingActivity', backref='profile')
 	# rejection_listings = db.relationship('RejectionListing', backref='author')
 
+	def __repr__(self):
+	    return self.username
+
+	def __str__(self):
+		return self.username
 
 class Listing(models.Model):
 	"""
