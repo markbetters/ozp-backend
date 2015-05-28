@@ -44,6 +44,9 @@ It seems odd at first that Django doesn't enforce model validations at the
 The recommendation in the last link is to use the ModelForm abstraction for
 model validation, even if you never display the form in a template.
 
+Also note that although the max_length constraint is enforced at both the
+database and validation levels, SQLite does not enforce the length of a
+VARCHAR
 
 """
 
@@ -374,10 +377,18 @@ class Listing(models.Model):
 		return self.title
 
 
-# - - - - - - - - - -
-# forms (used for validation only)
-# - - - - - - - - - -
-class ProfileForm(ModelForm):
-	class Meta:
-		model = Profile
-		fields = '__all__'
+class ListingActivity(models.Model):
+    """
+    Listing Activity
+
+    Additional db.relationships:
+        * listing
+        * profile
+    """
+	action = models.CharField(max_length=255) # one of an enum of Action
+	activity_date = models.DateTimeField()
+    # TODO: how to handle last_activity?
+	listing = models.ForeignKey('Listing', related_name='listing_activities')
+	profile = models.ForeignKey('Profile', related_name='listing_activities')
+
+
