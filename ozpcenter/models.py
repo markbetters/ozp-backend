@@ -49,10 +49,6 @@ database and validation levels, SQLite does not enforce the length of a
 VARCHAR
 
 """
-
-import uuid
-import re
-
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.core.validators import RegexValidator
@@ -175,6 +171,7 @@ class ChangeDetail(models.Model):
 	old_value = models.CharField(max_length=constants.MAX_VALUE_LENGTH)
 	new_value = models.CharField(max_length=constants.MAX_VALUE_LENGTH)
 	listing = models.ForeignKey('Listing', related_name='change_details')
+	# TODO: add a date/time field?
 
 	def __repr__(self):
 	    return "id:%d field %s was %s now is %s" % (
@@ -351,9 +348,9 @@ class Profile(models.Model):
 		related_name='stewarded_profiles',
 		db_table='stewarded_agency_profile',
 		blank=True)
+
+	# TODO
 	# iwc_data_objects = db.relationship('IwcDataObject', backref='profile')
-	# listing_activities = db.relationship('ListingActivity', backref='profile')
-	# rejection_listings = db.relationship('RejectionListing', backref='author')
 
 	def __repr__(self):
 	    return self.username
@@ -368,6 +365,76 @@ class Listing(models.Model):
 	title = models.CharField(max_length=255, unique=True)
 	approved_date = models.DateTimeField(null=True)
 	agency = models.ForeignKey(Agency, related_name='listings')
+	appType = models.ForeignKey('Type', related_name='listings')
+	description = models.CharField(max_length=255)
+	launch_url = models.CharField(
+		max_length=constants.MAX_URL_SIZE,
+		validators=[
+			RegexValidator(
+				regex=constants.URL_REGEX,
+				message='launch_url must be a url',
+				code='invalid url')]
+	)
+	version_name = models.CharField(max_length=255)
+	# NOTE: replacing uuid with this
+	unique_name = models.CharField(max_length=255, unique=True)
+	small_icon = models.CharField(
+		max_length=constants.MAX_URL_SIZE,
+		validators=[
+			RegexValidator(
+				regex=constants.URL_REGEX,
+				message='small_icon must be a url',
+				code='invalid url')]
+	)
+	large_icon = models.CharField(
+		max_length=constants.MAX_URL_SIZE,
+		validators=[
+			RegexValidator(
+				regex=constants.URL_REGEX,
+				message='large_icon must be a url',
+				code='invalid url')]
+	)
+	banner_icon = models.CharField(
+		max_length=constants.MAX_URL_SIZE,
+		validators=[
+			RegexValidator(
+				regex=constants.URL_REGEX,
+				message='banner_icon must be a url',
+				code='invalid url')]
+	)
+	large_banner_icon = models.CharField(
+		max_length=constants.MAX_URL_SIZE,
+		validators=[
+			RegexValidator(
+				regex=constants.URL_REGEX,
+				message='large_banner_icon must be a url',
+				code='invalid url')]
+	)
+	what_is_new = models.CharField(max_length=255)
+	description_short = models.CharField(max_length=150)
+	requirements = models.CharField(max_length=1000)
+	approval_status = models.CharField(max_length=255) # one of enum ApprovalStatus
+    is_enabled = models.BooleanField(default=True)
+    is_featured = models.BooleanField(default=False)
+    avg_rate = models.DecimalField(max_digits=2, decimal_places=1, default=0.0)
+    total_votes = models.IntegerField(default=0)
+    total_rate5 = models.IntegerField(default=0)
+    total_rate4 = models.IntegerField(default=0)
+    total_rate3 = models.IntegerField(default=0)
+    total_rate2 = models.IntegerField(default=0)
+    total_rate1 = models.IntegerField(default=0)
+    total_comments = models.IntegerField(default=0)
+    singleton = models.BooleanField(default=False)
+
+	contacts = models.ManyToManyField(
+		'Contact',
+		related_name='listings',
+		db_table='contact_listing'
+	)
+
+	required_listings = models.ForeignKey('self')
+    # TODO
+    # last_activity_id = db.Column(db.Integer, db.ForeignKey('listing_activity.id'))
 
 
 	def __repr__(self):
@@ -391,4 +458,70 @@ class ListingActivity(models.Model):
 	listing = models.ForeignKey('Listing', related_name='listing_activities')
 	profile = models.ForeignKey('Profile', related_name='listing_activities')
 
+class RejectionListing(models.Model):
+    """
+    An admin can reject a submitted Listing, thus creating a Rejection Listing
+
+    TODO: Auditing for create, update, delete
+
+    Rejection Listings are referenced by RejectionActivities, and thus never
+    removed even after the Listing is approved. They are just ignored if the
+    ApprovalState of the Listing is APPROVED
+
+    Additional db.relationships:
+        * listing
+        * author
+    """
+	listing = models.ForeignKey('Listing', related_name='rejection_listings')
+	author = models.ForeignKey('Profile', related_name='rejection_listings')
+	description = models.CharField(max_length=2000)
+
+
+class Screenshot(models.Model):
+    """
+    A screenshot for a Listing
+
+    TODO: Auditing for create, update, delete
+
+    Additional db.relationships:
+        * listing
+    """
+	small_image_url = models.CharField(
+		max_length=constants.MAX_URL_SIZE,
+		validators=[
+			RegexValidator(
+				regex=constants.URL_REGEX,
+				message='small image url must be a url',
+				code='invalid url')]
+	)
+	large_image_url = models.CharField(
+		max_length=constants.MAX_URL_SIZE,
+		validators=[
+			RegexValidator(
+				regex=constants.URL_REGEX,
+				message='large image url must be a url',
+				code='invalid url')]
+	)
+	listing = models.ForeignKey('Listing', related_name='screenshots')
+
+    def __repr__(self):
+        return '%s, %s' % (self.large_image_url, self.small_image_url)
+
+    def __str__(self):
+        return '%s, %s' % (self.large_image_url, self.small_image_url)
+
+
+class Type(models.Model):
+    """
+    The type of a Listing
+
+    In NextGen OZP, only two listing types are supported: web apps and widgets
+
+    TODO: Auditing for create, update, delete
+    """
+	title = models.CharField(max_length=50, unique=True)
+	description = models.CharField(max_length=255)
+
+    def __repr__(self):
+        return self.title
 
