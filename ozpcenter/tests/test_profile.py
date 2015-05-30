@@ -16,8 +16,6 @@ from ozpcenter import model_forms as model_forms
 import ozpcenter.tests.factories as f
 
 class ProfileTest(TestCase):
-	# TODO: load a basic fixture. Not working yet, not sure why
-	fixtures = ['ozpcenter/tests/fixtures/base.json']	# loads fixture
 
 	def setUp(self):
 		"""

@@ -149,7 +149,7 @@ class Category(models.Model):
 	TODO: Auditing for create, update, delete
 	"""
 	title = models.CharField(max_length=50, unique=True)
-	desciption = models.CharField(max_length=255)
+	description = models.CharField(max_length=255)
 
 	def __repr__(self):
 	    return self.title
@@ -365,7 +365,7 @@ class Listing(models.Model):
 	title = models.CharField(max_length=255, unique=True)
 	approved_date = models.DateTimeField(null=True)
 	agency = models.ForeignKey(Agency, related_name='listings')
-	appType = models.ForeignKey('Type', related_name='listings')
+	appType = models.ForeignKey('ListingType', related_name='listings')
 	description = models.CharField(max_length=255)
 	launch_url = models.CharField(
 		max_length=constants.MAX_URL_SIZE,
@@ -414,17 +414,17 @@ class Listing(models.Model):
 	description_short = models.CharField(max_length=150)
 	requirements = models.CharField(max_length=1000)
 	approval_status = models.CharField(max_length=255) # one of enum ApprovalStatus
-    is_enabled = models.BooleanField(default=True)
-    is_featured = models.BooleanField(default=False)
-    avg_rate = models.DecimalField(max_digits=2, decimal_places=1, default=0.0)
-    total_votes = models.IntegerField(default=0)
-    total_rate5 = models.IntegerField(default=0)
-    total_rate4 = models.IntegerField(default=0)
-    total_rate3 = models.IntegerField(default=0)
-    total_rate2 = models.IntegerField(default=0)
-    total_rate1 = models.IntegerField(default=0)
-    total_comments = models.IntegerField(default=0)
-    singleton = models.BooleanField(default=False)
+	is_enabled = models.BooleanField(default=True)
+	is_featured = models.BooleanField(default=False)
+	avg_rate = models.DecimalField(max_digits=2, decimal_places=1, default=0.0)
+	total_votes = models.IntegerField(default=0)
+	total_rate5 = models.IntegerField(default=0)
+	total_rate4 = models.IntegerField(default=0)
+	total_rate3 = models.IntegerField(default=0)
+	total_rate2 = models.IntegerField(default=0)
+	total_rate1 = models.IntegerField(default=0)
+	total_comments = models.IntegerField(default=0)
+	singleton = models.BooleanField(default=False)
 
 	contacts = models.ManyToManyField(
 		'Contact',
@@ -445,47 +445,47 @@ class Listing(models.Model):
 
 
 class ListingActivity(models.Model):
-    """
-    Listing Activity
+	"""
+	Listing Activity
 
-    Additional db.relationships:
-        * listing
-        * profile
-    """
+	Additional db.relationships:
+	    * listing
+	    * profile
+	"""
 	action = models.CharField(max_length=255) # one of an enum of Action
 	activity_date = models.DateTimeField()
-    # TODO: how to handle last_activity?
+	# TODO: how to handle last_activity?
 	listing = models.ForeignKey('Listing', related_name='listing_activities')
 	profile = models.ForeignKey('Profile', related_name='listing_activities')
 
 class RejectionListing(models.Model):
-    """
-    An admin can reject a submitted Listing, thus creating a Rejection Listing
+	"""
+	An admin can reject a submitted Listing, thus creating a Rejection Listing
 
-    TODO: Auditing for create, update, delete
+	TODO: Auditing for create, update, delete
 
-    Rejection Listings are referenced by RejectionActivities, and thus never
-    removed even after the Listing is approved. They are just ignored if the
-    ApprovalState of the Listing is APPROVED
+	Rejection Listings are referenced by RejectionActivities, and thus never
+	removed even after the Listing is approved. They are just ignored if the
+	ApprovalState of the Listing is APPROVED
 
-    Additional db.relationships:
-        * listing
-        * author
-    """
+	Additional db.relationships:
+	    * listing
+	    * author
+	"""
 	listing = models.ForeignKey('Listing', related_name='rejection_listings')
 	author = models.ForeignKey('Profile', related_name='rejection_listings')
 	description = models.CharField(max_length=2000)
 
 
 class Screenshot(models.Model):
-    """
-    A screenshot for a Listing
+	"""
+	A screenshot for a Listing
 
-    TODO: Auditing for create, update, delete
+	TODO: Auditing for create, update, delete
 
-    Additional db.relationships:
-        * listing
-    """
+	Additional db.relationships:
+	    * listing
+	"""
 	small_image_url = models.CharField(
 		max_length=constants.MAX_URL_SIZE,
 		validators=[
@@ -504,24 +504,24 @@ class Screenshot(models.Model):
 	)
 	listing = models.ForeignKey('Listing', related_name='screenshots')
 
-    def __repr__(self):
-        return '%s, %s' % (self.large_image_url, self.small_image_url)
+	def __repr__(self):
+	    return '%s, %s' % (self.large_image_url, self.small_image_url)
 
-    def __str__(self):
-        return '%s, %s' % (self.large_image_url, self.small_image_url)
+	def __str__(self):
+	    return '%s, %s' % (self.large_image_url, self.small_image_url)
 
 
-class Type(models.Model):
-    """
-    The type of a Listing
+class ListingType(models.Model):
+	"""
+	The type of a Listing
 
-    In NextGen OZP, only two listing types are supported: web apps and widgets
+	In NextGen OZP, only two listing types are supported: web apps and widgets
 
-    TODO: Auditing for create, update, delete
-    """
+	TODO: Auditing for create, update, delete
+	"""
 	title = models.CharField(max_length=50, unique=True)
 	description = models.CharField(max_length=255)
 
-    def __repr__(self):
-        return self.title
+	def __repr__(self):
+	    return self.title
 
