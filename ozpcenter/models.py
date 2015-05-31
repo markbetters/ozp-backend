@@ -140,6 +140,9 @@ class ApplicationLibraryEntry(models.Model):
 	owner = models.ForeignKey('Profile', related_name='application_library_entries')
 	listing = models.ForeignKey('Listing', related_name='application_library_entries')
 
+	def __str__(self):
+		return self.listing.title
+
 
 class Category(models.Model):
 	"""
