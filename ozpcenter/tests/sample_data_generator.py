@@ -26,11 +26,11 @@ def create_sample_data():
 
 
 	# Contact Types
-	p = modles.ContactType(name='Worker')
+	p = models.ContactType(name='Worker')
 	p.save()
-	p = modles.ContactType(name='Manager')
+	p = models.ContactType(name='Manager')
 	p.save()
-	p = modles.ContactType(name='Boss')
+	p = models.ContactType(name='Boss')
 	p.save()
 
 	# Listing Types
@@ -42,10 +42,97 @@ def create_sample_data():
 	t.save()
 
 	# Intents
+	# TODO: more realistic data
+	i = models.Intent(action='/application/json/view',
+		media_type='vnd.ozp-intent-v1+json.json',
+		label='view',
+		icon='http://www.google.com/intent_view_icon.png')
+	i.save()
 
 	# Organizations
+	a = models.Agency(title='Ministry of Truth', short_name='m-truth',
+		icon_url='http://www.google.com/mot.png')
+	a.save()
+	a = models.Agency(title='Ministry of Peace', short_name='m-peace',
+		icon_url='http://www.google.com/mop.png')
+	a.save()
+	a = models.Agency(title='Ministry of Love', short_name='m-love',
+		icon_url='http://www.google.com/mol.png')
+	a.save()
 
-	# Stewards
+	# Org Stewards
+	p = models.Profile(username='wsmith', display_name='William Smith',
+		email='wsmith@nowhere.com', bio='I work at the Ministry of Truth',
+		highest_role=models.Roles.ORG_STEWARD)
+	p.save()
+	p.organizations.add(models.Agency.objects.get(title='Ministry of Truth'))
+	p.stewarded_organizations.add(models.Agency.objects.get(title='Ministry of Truth'))
+
+	# Apps Mall Stewards
+	p = models.Profile(username='pboss', display_name='P Boss',
+		email='pboss@nowhere.com', bio='I am the boss',
+		highest_role=models.Roles.APPS_MALL_STEWARD)
+	p.save()
 
 	# Notifications
+
+	# Contacts
+	c = models.Contact(name='Jimmy John', organization='Jimmy Johns',
+		contact_type=models.ContactType.objects.get(name='Manager'),
+		email='jimmyjohn@jimmyjohns.com', unsecure_phone='555-555-5555')
+	c.save()
+
+	# Listings
+	l = models.Listing(
+		title='Air Mail',
+		agency=models.Agency.objects.get(title='Ministry of Truth'),
+		app_type=models.ListingType.objects.get(title='web application'),
+		description='Sends mail via air',
+		launch_url='https://www.google.com/airmail',
+		version_name='1.0.0',
+		unique_name='ozp.test.air_mail',
+		small_icon='http://www.google.com/small_icon',
+		large_icon='http://www.google.com/large_icon',
+		banner_icon='http://www.google.com/banner_icon',
+		large_banner_icon='http://www.google.com/large_banner_icon',
+		what_is_new='Nothing really new here',
+		description_short='Sends airmail',
+		requirements='None',
+		approval_status=models.ApprovalStatus.APPROVED,
+		is_enabled=True,
+		is_featured=True,
+		singleton=False,
+	)
+	l.save()
+	l.contacts.add(models.Contact.objects.get(name='Jimmy John'))
+
+	l = models.Listing(
+		title='Bread Basket',
+		agency=models.Agency.objects.get(title='Ministry of Truth'),
+		app_type=models.ListingType.objects.get(title='web application'),
+		description='Carries delicious bread',
+		launch_url='https://www.google.com/breadbasket',
+		version_name='1.0.0',
+		unique_name='ozp.test.bread_basket',
+		small_icon='http://www.google.com/small_icon',
+		large_icon='http://www.google.com/large_icon',
+		banner_icon='http://www.google.com/banner_icon',
+		large_banner_icon='http://www.google.com/large_banner_icon',
+		what_is_new='Nothing really new here',
+		description_short='Carries bread',
+		requirements='None',
+		approval_status=models.ApprovalStatus.APPROVED,
+		is_enabled=True,
+		is_featured=True,
+		singleton=False,
+	)
+	l.save()
+	l.contacts.add(models.Contact.objects.get(name='Jimmy John'))
+	# add screenshots
+	s = models.Screenshot(small_image_url='http://www.google.com/air_mail.png',
+		large_image_url='http://www.google.com/air_mail.png',
+		listing=models.Listing.objects.get(title='Air Mail'))
+	s.save()
+	# add intents
+	l.intents.add(models.Intent.objects.get(action='/application/json/view'))
 

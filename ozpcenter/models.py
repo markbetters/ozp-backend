@@ -117,7 +117,6 @@ class Agency(models.Model):
 				code='invalid url')]
 	)
 	short_name = models.CharField(max_length=8, unique=True)
-	# listings = db.relationship('Listing', backref='agency')
 
 	def __repr__(self):
 		return self.title
@@ -284,7 +283,7 @@ class Intent(models.Model):
 				message='action must be a valid action',
 				code='invalid action')]
 	)
-	type = models.CharField(
+	media_type = models.CharField(
 		max_length=129,
 		validators=[
 			RegexValidator(
@@ -365,7 +364,7 @@ class Listing(models.Model):
 	title = models.CharField(max_length=255, unique=True)
 	approved_date = models.DateTimeField(null=True)
 	agency = models.ForeignKey(Agency, related_name='listings')
-	appType = models.ForeignKey('ListingType', related_name='listings')
+	app_type = models.ForeignKey('ListingType', related_name='listings')
 	description = models.CharField(max_length=255)
 	launch_url = models.CharField(
 		max_length=constants.MAX_URL_SIZE,
@@ -432,9 +431,17 @@ class Listing(models.Model):
 		db_table='contact_listing'
 	)
 
-	required_listings = models.ForeignKey('self')
-    # TODO
-    # last_activity_id = db.Column(db.Integer, db.ForeignKey('listing_activity.id'))
+	required_listings = models.ForeignKey('self', null=True)
+	# TODO: name/use of related name?
+	last_activity = models.ForeignKey('ListingActivity',
+		related_name='most_recent_listings', null=True)
+
+	intents = models.ManyToManyField(
+		'Intent',
+		related_name='listings',
+		db_table='intent_listing'
+	)
+
 
 
 	def __repr__(self):
