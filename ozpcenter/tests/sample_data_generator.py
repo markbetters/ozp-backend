@@ -1,6 +1,10 @@
 """
 Creates test data
 """
+import os
+import sys
+sys.path.insert(0, os.path.realpath(os.path.join(os.path.dirname(__file__), '../../')))
+
 from ozpcenter import models as models
 
 def create_sample_data():
@@ -136,3 +140,6 @@ def create_sample_data():
 	# add intents
 	l.intents.add(models.Intent.objects.get(action='/application/json/view'))
 
+
+if __name__ == "__main__":
+	create_sample_data()
