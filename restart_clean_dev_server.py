@@ -3,7 +3,7 @@
 # Useful for development ONLY, this script will:
 # 	* wipe the existing database
 #	* wipe all existing migrations
-#	* create a fresh database with new migrations
+#	* create a fresh database with a single new migration
 #	* load sample data
 #	* start up the django dev server on port 8000
 

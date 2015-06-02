@@ -143,9 +143,10 @@ def run():
 	l.intents.add(models.Intent.objects.get(action='/application/json/view'))
 
 	# add django users corresponding to Profiles
-	# user_manager = django.contrib.auth.models.UserManager()
-	# user_manager.create_superuser(username='wsmith',
-	#	email='wsmith@google.com', password='password')
+	django.contrib.auth.models.User.objects.create_user(username='wsmith',
+		email='wmsith@google.com', password='password')
+	django.contrib.auth.models.User.objects.create_superuser(username='admin',
+		password='password', email='admin@admin.com')
 
 def get_categories():
 	cats = models.Category.objects.all()

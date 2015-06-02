@@ -362,11 +362,14 @@ class Profile(models.Model):
 
 	# instead of overriding or expanding the builtin Django User model used
 	# for authentication, just link to it from here
-	django_user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True,
+	django_user = models.OneToOneField(settings.AUTH_USER_MODEL, null=True,
 		blank=True)
 
 	# TODO
 	# iwc_data_objects = db.relationship('IwcDataObject', backref='profile')
+
+	# TODO: on create, update, or delete, do the same for the related
+	# django_user
 
 	def __repr__(self):
 	    return self.username

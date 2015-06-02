@@ -5,6 +5,7 @@ from django.conf.urls import url, include
 from rest_framework import routers
 
 import ozpcenter.views as views
+import ozpcenter.auth_test_views as auth_test_views
 
 # Routers provide an easy way of automatically determining the URL conf.
 router = routers.DefaultRouter()
@@ -19,5 +20,6 @@ router.register(r'agency', views.AgencyViewSet)
 urlpatterns = [
     url(r'^', include(router.urls)),
     url(r'^metadata/$', views.metadataView),
-    url(r'^self/$', views.current_user)
+    url(r'^self/$', views.current_user),
+    url(r'^authtest/$', auth_test_views.test)
 ]
