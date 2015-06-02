@@ -54,6 +54,8 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.core.validators import RegexValidator
 from django.db import models
 from django.forms import ModelForm
+from django.conf import settings
+
 # plugin for enum support https://github.com/5monkeys/django-enumfield
 from django_enumfield import enum
 
@@ -96,6 +98,13 @@ class Action(enum.Enum):
     # AML-924 Inside/Outside
     INSIDE = 'Inside'
     OUTSIDE = 'Outside'
+
+# TODO: what to use here?
+class Classification(enum.Enum):
+	ONE = 1
+	TWO = 2
+	THREE = 3
+
 
 class Agency(models.Model):
 	"""
@@ -351,6 +360,11 @@ class Profile(models.Model):
 		db_table='stewarded_agency_profile',
 		blank=True)
 
+	# instead of overriding or expanding the builtin Django User model used
+	# for authentication, just link to it from here
+	django_user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True,
+		blank=True)
+
 	# TODO
 	# iwc_data_objects = db.relationship('IwcDataObject', backref='profile')
 
@@ -445,6 +459,11 @@ class Listing(models.Model):
 		db_table='intent_listing'
 	)
 
+	classification = enum.EnumField(Classification,
+		default=Classification.ONE)
+
+	# private listings can only be viewed by members of the same agency
+	is_private = models.BooleanField(default=False)
 
 
 	def __repr__(self):
@@ -535,3 +554,5 @@ class ListingType(models.Model):
 	def __repr__(self):
 	    return self.title
 
+	def __str__(self):
+	    return self.title

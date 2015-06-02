@@ -89,6 +89,7 @@ class ProfileTest(TestCase):
 		# after setting the bio, the form should be valid
 		data['bio'] = 'Some things about joe'
 		bound_form = model_forms.ProfileForm(data=data)
+		print('errors: ' + bound_form.errors.as_json())
 		self.assertTrue(bound_form.is_valid())
 		bound_form.save()
 
