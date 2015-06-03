@@ -8,10 +8,11 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import permission_classes
 
 import ozpcenter.models as models
+import ozpcenter.permissions as perms
 
 
 @api_view(['GET'])
-@permission_classes((IsAuthenticated, ))
+@permission_classes((perms.IsOrgSteward, ))
 def test(request):
 	profile = models.Profile.objects.get(username=request.user.username)
 	group_perms = request.user.get_group_permissions()
