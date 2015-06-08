@@ -80,7 +80,7 @@ class ProfileTest(TestCase):
 			'username': 'joey',
 			'display_name': 'joey m',
 			'email': 'joe@joe.com',
-			'highest_role': models.Roles.USER,
+			'highest_role': models.Profile.USER,
 			'organizations': [agency.id]
 		}
 		bound_form = model_forms.ProfileForm(data=data)
@@ -148,5 +148,5 @@ class ProfileTest(TestCase):
 		testUser = models.Profile(username='newguy')
 		testUser.save()
 		testUser = models.Profile.objects.get(username='newguy')
-		self.assertEqual(testUser.highest_role, models.Roles.USER)
+		self.assertEqual(testUser.highest_role, models.Profile.USER)
 

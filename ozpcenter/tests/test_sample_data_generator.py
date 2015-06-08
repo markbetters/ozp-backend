@@ -46,5 +46,5 @@ class SampleDataGeneratorTest(TestCase):
 		self.assertEquals(a.title, 'Ministry of Truth')
 
 		# find pboss, the Apps Mall Steward
-		p = models.Profile.objects.get(highest_role=models.Roles.APPS_MALL_STEWARD, username='pboss')
+		p = models.Profile.objects.get(highest_role=models.Profile.APPS_MALL_STEWARD, username='pboss')
 		self.assertEquals(p.username, 'pboss')

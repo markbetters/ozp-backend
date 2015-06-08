@@ -69,7 +69,7 @@ def run():
 	# Org Stewards
 	p = models.Profile(username='wsmith', display_name='William Smith',
 		email='wsmith@nowhere.com', bio='I work at the Ministry of Truth',
-		highest_role=models.Roles.ORG_STEWARD)
+		highest_role=models.Profile.ORG_STEWARD)
 	p.save()
 	p.organizations.add(models.Agency.objects.get(title='Ministry of Truth'))
 	p.stewarded_organizations.add(models.Agency.objects.get(title='Ministry of Truth'))
@@ -77,8 +77,15 @@ def run():
 	# Apps Mall Stewards
 	p = models.Profile(username='pboss', display_name='P Boss',
 		email='pboss@nowhere.com', bio='I am the boss',
-		highest_role=models.Roles.APPS_MALL_STEWARD)
+		highest_role=models.Profile.APPS_MALL_STEWARD)
 	p.save()
+
+	# Regular user
+	p = models.Profile(username='jdoe', display_name='John Doe',
+		email='djoe@nowhere.com', bio='Im a normal person',
+		highest_role=models.Profile.USER)
+	p.save()
+	p.organizations.add(models.Agency.objects.get(title='Ministry of Truth'))
 
 	# Notifications
 
@@ -134,6 +141,30 @@ def run():
 	)
 	l.save()
 	l.contacts.add(models.Contact.objects.get(name='Jimmy John'))
+
+	l = models.Listing(
+		title='Cupid',
+		agency=models.Agency.objects.get(title='Ministry of Love'),
+		app_type=models.ListingType.objects.get(title='web application'),
+		description='Find your match',
+		launch_url='https://www.google.com/cupid',
+		version_name='1.0.0',
+		unique_name='ozp.test.cupid',
+		small_icon='http://www.google.com/small_icon',
+		large_icon='http://www.google.com/large_icon',
+		banner_icon='http://www.google.com/banner_icon',
+		large_banner_icon='http://www.google.com/large_banner_icon',
+		what_is_new='Nothing really new here',
+		description_short='Cupid stuff',
+		requirements='None',
+		approval_status=models.ApprovalStatus.APPROVED,
+		is_enabled=True,
+		is_featured=True,
+		singleton=False,
+		is_private=True
+	)
+	l.save()
+	l.contacts.add(models.Contact.objects.get(name='Jimmy John'))
 	# add screenshots
 	s = models.Screenshot(small_image_url='http://www.google.com/air_mail.png',
 		large_image_url='http://www.google.com/air_mail.png',
@@ -142,11 +173,24 @@ def run():
 	# add intents
 	l.intents.add(models.Intent.objects.get(action='/application/json/view'))
 
+	# bookmark listings
+	a = models.ApplicationLibraryEntry(
+		owner=models.Profile.objects.get(username='wsmith'),
+		listing=models.Listing.objects.get(unique_name='ozp.test.bread_basket'))
+	a.save()
+
+	a = models.ApplicationLibraryEntry(
+		owner=models.Profile.objects.get(username='wsmith'),
+		listing=models.Listing.objects.get(unique_name='ozp.test.air_mail'))
+	a.save()
+
 	# add django users corresponding to Profiles
 	django.contrib.auth.models.User.objects.create_user(username='wsmith',
 		email='wmsith@google.com', password='password')
 	django.contrib.auth.models.User.objects.create_superuser(username='admin',
 		password='password', email='admin@admin.com')
+	django.contrib.auth.models.User.objects.create_superuser(username='jdoe',
+		password='password', email='jdoe@nowhere.com')
 
 def get_categories():
 	cats = models.Category.objects.all()

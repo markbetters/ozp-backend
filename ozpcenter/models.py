@@ -61,12 +61,6 @@ from django_enumfield import enum
 
 import ozpcenter.constants as constants
 
-# User (Profile) roles
-class Roles(enum.Enum):
-    USER = 1
-    ORG_STEWARD = 2
-    APPS_MALL_STEWARD = 3
-
 
 # Listing approval statuses
 class ApprovalStatus(enum.Enum):
@@ -145,7 +139,7 @@ class ApplicationLibraryEntry(models.Model):
 
 	TODO: folder seems HUD-specific
 	"""
-	folder = models.CharField(max_length=255, unique=True)
+	folder = models.CharField(max_length=255)
 	owner = models.ForeignKey('Profile', related_name='application_library_entries')
 	listing = models.ForeignKey('Listing', related_name='application_library_entries')
 
@@ -342,14 +336,22 @@ class Profile(models.Model):
 	"""
 	#application_library = db.relationship('ApplicationLibraryEntry',
 	#                                      backref='owner')
+	USER = 'USER'
+	ORG_STEWARD = 'ORG_STEWARD'
+	APPS_MALL_STEWARD = 'APPS_MALL_STEWARD'
+	ROLES = (
+		(USER, 'USER'),
+		(ORG_STEWARD, 'ORG_STEWARD'),
+		(APPS_MALL_STEWARD, 'APPS_MALL_STEWARD'),
+	)
 	username = models.CharField(max_length=255, unique=True)
 	display_name = models.CharField(max_length=255)
 	email = models.CharField(max_length=255)
 	bio = models.CharField(max_length=1000)
 	created_date = models.DateTimeField(auto_now_add=True)
 	last_login = models.DateTimeField(blank=True, null=True)
-	highest_role = enum.EnumField(Roles,
-		default=Roles.USER)
+	highest_role = models.CharField(max_length=128, choices=ROLES,
+		default=USER)
 	organizations = models.ManyToManyField(
 		Agency,
 		related_name='profiles',
