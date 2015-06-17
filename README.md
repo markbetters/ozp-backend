@@ -12,7 +12,8 @@ dependencies: `pip install -r requirements.txt`
 
 Now run the server: `./restart_clean_dev_server.sh`
 
-Take a look at the browsable api at `http://localhost:8000/api/`
+Take a look at the browsable api at `http://localhost:8000/api/`. Use
+username `wsmith` password `password` when promted for authentication info
 
 There's also the admin interface at `http://localhost:8000/admin`
 (username: `admin`, password: `password`)
