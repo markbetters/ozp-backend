@@ -61,6 +61,7 @@ from django.conf import settings
 from django_enumfield import enum
 
 import ozpcenter.constants as constants
+import ozpcenter.access_control as access_control
 
 
 # Listing approval statuses
@@ -94,11 +95,18 @@ class Action(enum.Enum):
     INSIDE = 'Inside'
     OUTSIDE = 'Outside'
 
-# TODO: what to use here?
-class Classification(enum.Enum):
-	ONE = 1
-	TWO = 2
-	THREE = 3
+
+class AccessControl(models.Model):
+	"""
+	Access levels (classifications)
+	"""
+	title = models.CharField(max_length=1024, unique=True)
+
+	def __repr__(self):
+		return self.title
+
+	def __str__(self):
+		return self.title
 
 
 class Agency(models.Model):
@@ -145,7 +153,7 @@ class ApplicationLibraryEntry(models.Model):
 	listing = models.ForeignKey('Listing', related_name='application_library_entries')
 
 	def __str__(self):
-		return self.listing.title
+		return self.folder
 
 
 class Category(models.Model):
@@ -340,6 +348,7 @@ class Profile(models.Model):
 	USER = 'USER'
 	ORG_STEWARD = 'ORG_STEWARD'
 	APPS_MALL_STEWARD = 'APPS_MALL_STEWARD'
+	# TODO: add metrics?
 	ROLES = (
 		(USER, 'USER'),
 		(ORG_STEWARD, 'ORG_STEWARD'),
@@ -363,6 +372,8 @@ class Profile(models.Model):
 		db_table='stewarded_agency_profile',
 		blank=True)
 
+	access_control = models.ForeignKey(AccessControl, related_name='profiles')
+
 	# instead of overriding or expanding the builtin Django User model used
 	# for authentication, just link to it from here
 	django_user = models.OneToOneField(settings.AUTH_USER_MODEL, null=True,
@@ -379,6 +390,34 @@ class Profile(models.Model):
 
 	def __str__(self):
 		return self.username
+
+
+class AccessControlListingManager(models.Manager):
+	"""
+	Use a custom manager to control access to Listings
+
+	Instead of using models.Listing.objects.all() or .filter(...) etc, use:
+	models.Listing.objects.for_user(user).all() or .filter(...) etc
+	"""
+	def for_user(self, username):
+		# get all listings
+		objects = super(AccessControlListingManager, self).get_queryset()
+		# filter out private listings
+		user = Profile.objects.get(username=username)
+		user_orgs = user.organizations.all()
+		user_orgs = [i.title for i in user_orgs]
+		# get all agencies for which this user is not a member
+		exclude_orgs = Agency.objects.exclude(title__in=user_orgs)
+		objects = objects.exclude(is_private=True,
+			agency__in=exclude_orgs)
+		# filter out listings by user's access level
+		titles_to_exclude=[]
+		for i in objects:
+			if not access_control.has_access(user.access_control.title, i.access_control.title):
+				titles_to_exclude.append(i.title)
+		objects = objects.exclude(title__in=titles_to_exclude)
+		return objects
+
 
 class Listing(models.Model):
 	"""
@@ -465,11 +504,13 @@ class Listing(models.Model):
 		db_table='intent_listing'
 	)
 
-	classification = enum.EnumField(Classification,
-		default=Classification.ONE)
+	access_control = models.ForeignKey(AccessControl, related_name='listings')
 
 	# private listings can only be viewed by members of the same agency
 	is_private = models.BooleanField(default=False)
+
+	# use a custom Manager class to limit returned Listings
+	objects = AccessControlListingManager()
 
 
 	def __repr__(self):
@@ -477,6 +518,7 @@ class Listing(models.Model):
 
 	def __str__(self):
 		return self.title
+
 
 
 class ListingActivity(models.Model):

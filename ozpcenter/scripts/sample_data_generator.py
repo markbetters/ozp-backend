@@ -66,10 +66,21 @@ def run():
 		icon_url='http://www.google.com/mol.png')
 	a.save()
 
+	# Access Controls
+	c = models.AccessControl(title='UNCLASSIFIED')
+	c.save()
+	c = models.AccessControl(title='UNCLASSIFIED//FOUO')
+	c.save()
+	c = models.AccessControl(title='SECRET')
+	c.save()
+	c = models.AccessControl(title='TOP SECRET')
+	c.save()
+
 	# Org Stewards
 	p = models.Profile(username='wsmith', display_name='William Smith',
 		email='wsmith@nowhere.com', bio='I work at the Ministry of Truth',
-		highest_role=models.Profile.ORG_STEWARD)
+		highest_role=models.Profile.ORG_STEWARD,
+		access_control=models.AccessControl.objects.get(title='UNCLASSIFIED'))
 	p.save()
 	p.organizations.add(models.Agency.objects.get(title='Ministry of Truth'))
 	p.stewarded_organizations.add(models.Agency.objects.get(title='Ministry of Truth'))
@@ -77,13 +88,15 @@ def run():
 	# Apps Mall Stewards
 	p = models.Profile(username='pboss', display_name='P Boss',
 		email='pboss@nowhere.com', bio='I am the boss',
-		highest_role=models.Profile.APPS_MALL_STEWARD)
+		highest_role=models.Profile.APPS_MALL_STEWARD,
+		access_control=models.AccessControl.objects.get(title='UNCLASSIFIED'))
 	p.save()
 
 	# Regular user
 	p = models.Profile(username='jdoe', display_name='John Doe',
 		email='djoe@nowhere.com', bio='Im a normal person',
-		highest_role=models.Profile.USER)
+		highest_role=models.Profile.USER,
+		access_control=models.AccessControl.objects.get(title='UNCLASSIFIED'))
 	p.save()
 	p.organizations.add(models.Agency.objects.get(title='Ministry of Truth'))
 
@@ -115,6 +128,7 @@ def run():
 		is_enabled=True,
 		is_featured=True,
 		singleton=False,
+		access_control=models.AccessControl.objects.get(title='UNCLASSIFIED')
 	)
 	l.save()
 	l.contacts.add(models.Contact.objects.get(name='Jimmy John'))
@@ -138,6 +152,7 @@ def run():
 		is_enabled=True,
 		is_featured=True,
 		singleton=False,
+		access_control=models.AccessControl.objects.get(title='UNCLASSIFIED')
 	)
 	l.save()
 	l.contacts.add(models.Contact.objects.get(name='Jimmy John'))
@@ -161,7 +176,8 @@ def run():
 		is_enabled=True,
 		is_featured=True,
 		singleton=False,
-		is_private=True
+		is_private=True,
+		access_control=models.AccessControl.objects.get(title='UNCLASSIFIED')
 	)
 	l.save()
 	l.contacts.add(models.Contact.objects.get(name='Jimmy John'))

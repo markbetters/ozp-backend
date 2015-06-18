@@ -31,7 +31,7 @@ def make_keysafe(key):
 	given an input string, make it lower case and remove all non alpha-numeric
 	characters so that it will be safe to use as a cache keyname
 	"""
-	return re.sub(r'\W+', '', key)
+	return re.sub(r'\W+', '', key).lower()
 
 
 def get_storefront(username):
@@ -43,8 +43,11 @@ def get_storefront(username):
 
 	TODO: include bookmarked status or not?
 
-	Key: storefront:<org_name>:<max_classification_level>
+	Key: storefront:<org_names>:<max_classification_level>
 	"""
+	user = models.Profile.objects.get(username=username)
+	user_key = make_keysafe(username)
+	orgs_key = make_keysafe()
 	pass
 
 def get_metadata():
@@ -152,10 +155,6 @@ def get_listings(username):
 	"""
 	Get Listings this user can see
 
-	This requires filtering out:
-	a) listings that are private to an organization this user does not belong to
-	b) listings with classifications above that of this user
-
 	Key: listings:<username>
 	"""
 	username = make_keysafe(username)
@@ -163,13 +162,7 @@ def get_listings(username):
 	data = cache.get(key)
 	if data is None:
 		try:
-			user = get_profile(username)
-			user_orgs = user.organizations.all()
-			user_orgs = [i.title for i in user_orgs]
-			# get all agencies for which this user is not a member
-			exclude_orgs = models.Agency.objects.exclude(title__in=user_orgs)
-			data = models.Listing.objects.exclude(is_private=True,
-				agency__in=exclude_orgs)
+			data = models.Listing.objects.for_user(username).all()
 			cache.set(key, data)
 			return data
 		except ObjectDoesNotExist:

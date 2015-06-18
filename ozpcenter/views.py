@@ -100,6 +100,15 @@ def metadataView(request):
 
 @api_view(['GET'])
 @permission_classes((permissions.IsUser, ))
+def storefrontView(request):
+    """
+    Featured, Recent, and most popular listings
+    """
+    data = model_access.get_storefront(request.user)
+    return Response(data)
+
+@api_view(['GET'])
+@permission_classes((permissions.IsUser, ))
 def current_user(request):
 	user = request.user
 	return Response({

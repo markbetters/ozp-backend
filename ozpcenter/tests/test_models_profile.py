@@ -28,6 +28,7 @@ class ProfileTest(TestCase):
 		"""
 		Set up test data for the whole TestCase (only run once for the TestCase)
 		"""
+		f.AccessControlFactory.create(title='UNCLASSIFIED//ABC')
 		f.UserFactory.create(username='bob', display_name='Bob B',
 			email='bob@bob.com')
 		f.UserFactory.create(username='alice')
@@ -49,6 +50,7 @@ class ProfileTest(TestCase):
 		f.UserFactory.create(username='bob2', display_name='Bob B',
 			email='bob@bob.com')
 
+
 	def test_non_factory_save(self):
 		"""
 		Shows how the standard save() method may be invoked on a model objects
@@ -60,8 +62,10 @@ class ProfileTest(TestCase):
 		This is because "constraints" like blank=False apply only to form
 		validation, not to the actual database
 		"""
+		c = models.AccessControl(title='SOMETHING//ABC')
+		c.save()
 		testUser = models.Profile(username='myname', display_name='My Name',
-			email='myname@me.com')
+			email='myname@me.com', access_control=models.AccessControl.objects.get(title='SOMETHING//ABC'))
 		testUser.save()
 		# check that it was saved
 		user_found = models.Profile.objects.filter(username='myname').count()
@@ -75,13 +79,16 @@ class ProfileTest(TestCase):
 		though it is never rendered in a template to the client
 		"""
 		agency = models.Agency.objects.get(short_name='TLA')
+		access_control = models.AccessControl.objects.get(title='UNCLASSIFIED//ABC')
+
 		# first, leave off the bio
 		data = {
 			'username': 'joey',
 			'display_name': 'joey m',
 			'email': 'joe@joe.com',
 			'highest_role': models.Profile.USER,
-			'organizations': [agency.id]
+			'organizations': [agency.id],
+			'access_control': access_control.id
 		}
 		bound_form = model_forms.ProfileForm(data=data)
 		self.assertFalse(bound_form.is_valid())
@@ -89,7 +96,7 @@ class ProfileTest(TestCase):
 		# after setting the bio, the form should be valid
 		data['bio'] = 'Some things about joe'
 		bound_form = model_forms.ProfileForm(data=data)
-		print('errors: ' + bound_form.errors.as_json())
+		# print('errors: ' + bound_form.errors.as_json())
 		self.assertTrue(bound_form.is_valid())
 		bound_form.save()
 
@@ -133,7 +140,8 @@ class ProfileTest(TestCase):
 		try:
 			with transaction.atomic():
 				uname_long = 'x' * 256
-				testUser = models.Profile(username=uname_long)
+				testUser = models.Profile(username=uname_long,
+					access_control=models.AccessControl.objects.get(title='UNCLASSIFIED//ABC'))
 				# this passes if we're using SQLite
 				testUser.save()
 			# self.assertTrue(0, 'username of excess length allowed')
@@ -145,8 +153,10 @@ class ProfileTest(TestCase):
 		pass
 
 	def test_highest_role(self):
-		testUser = models.Profile(username='newguy')
+		testUser = models.Profile(username='newguy',
+			access_control=models.AccessControl.objects.get(title='UNCLASSIFIED//ABC'))
 		testUser.save()
-		testUser = models.Profile.objects.get(username='newguy')
+		testUser = models.Profile.objects.get(username='newguy',
+			access_control=models.AccessControl.objects.get(title='UNCLASSIFIED//ABC'))
 		self.assertEqual(testUser.highest_role, models.Profile.USER)
 

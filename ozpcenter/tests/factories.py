@@ -13,6 +13,15 @@ import ozpcenter.models as models
 
 fake = Factory.create()
 
+class AccessControlFactory(factory.django.DjangoModelFactory):
+	class Meta:
+		model = models.AccessControl
+		# http://joequery.me/code/factory-boy-handle-unique-constraints/
+		django_get_or_create = ('title',)
+
+	title = fake.text(max_nb_chars=1024)
+
+
 class UserFactory(factory.django.DjangoModelFactory):
 	class Meta:
 		model = models.Profile
@@ -21,6 +30,8 @@ class UserFactory(factory.django.DjangoModelFactory):
 	display_name = fake.name()
 	email = fake.email()
 	bio = fake.text(max_nb_chars=1000)
+	access_control = factory.SubFactory(AccessControlFactory)
+
 
 class AgencyFactory(factory.django.DjangoModelFactory):
 	class Meta:

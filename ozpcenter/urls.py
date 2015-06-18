@@ -25,12 +25,12 @@ router.register(r'itemComment', views.ItemCommentViewSet)
 router.register(r'listing', views.ListingViewSet, base_name='listing')
 router.register(r'type', views.ListingTypeViewSet)
 router.register(r'djangoUser', views.DjangoUserViewSet)
+router.register(r'metadata', views.metadataView, base_name='metadata')
 
 
 # Wire up our API using automatic URL routing.
 urlpatterns = [
     url(r'^', include(router.urls)),
-    url(r'^metadata/$', views.metadataView),
     url(r'^self/$', views.current_user),
     url(r'^authtest/$', auth_test_views.test)
 ]

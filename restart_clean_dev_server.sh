@@ -4,6 +4,7 @@
 # 	* wipe the existing database
 #	* wipe all existing migrations
 #	* create a fresh database with a single new migration
+#	* run unit tests
 #	* load sample data
 #	* start up the django dev server on port 8000
 
@@ -13,6 +14,8 @@ rm db.sqlite3
 rm -r ozpcenter/migrations/*
 python manage.py makemigrations ozpcenter
 python manage.py migrate
+# run unit tests
+python manage.py test ozpcenter/tests
 # load sample data (uses runscript from django-extensions package)
 echo 'Loading sample data...'
 python manage.py runscript sample_data_generator
