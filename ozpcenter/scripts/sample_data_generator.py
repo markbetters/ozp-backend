@@ -69,7 +69,7 @@ def run():
 	# Access Controls
 	c = models.AccessControl(title='UNCLASSIFIED')
 	c.save()
-	c = models.AccessControl(title='UNCLASSIFIED//FOUO')
+	c = models.AccessControl(title='UNCLASSIFIED//ABC')
 	c.save()
 	c = models.AccessControl(title='SECRET')
 	c.save()
@@ -152,6 +152,7 @@ def run():
 		is_enabled=True,
 		is_featured=True,
 		singleton=False,
+		is_private=True,
 		access_control=models.AccessControl.objects.get(title='UNCLASSIFIED')
 	)
 	l.save()
@@ -178,6 +179,31 @@ def run():
 		singleton=False,
 		is_private=True,
 		access_control=models.AccessControl.objects.get(title='UNCLASSIFIED')
+	)
+	l.save()
+	l.contacts.add(models.Contact.objects.get(name='Jimmy John'))
+
+	l = models.Listing(
+		title='ChartCourse',
+		agency=models.Agency.objects.get(title='Ministry of Truth'),
+		app_type=models.ListingType.objects.get(title='web application'),
+		description='Find your match',
+		launch_url='https://www.google.com/chartcourse',
+		version_name='1.0.0',
+		unique_name='ozp.test.chartcourse',
+		small_icon='http://www.google.com/small_icon',
+		large_icon='http://www.google.com/large_icon',
+		banner_icon='http://www.google.com/banner_icon',
+		large_banner_icon='http://www.google.com/large_banner_icon',
+		what_is_new='Nothing really new here',
+		description_short='chart course stuff',
+		requirements='None',
+		approval_status=models.ApprovalStatus.APPROVED,
+		is_enabled=True,
+		is_featured=True,
+		singleton=False,
+		is_private=True,
+		access_control=models.AccessControl.objects.get(title='UNCLASSIFIED//ABC')
 	)
 	l.save()
 	l.contacts.add(models.Contact.objects.get(name='Jimmy John'))

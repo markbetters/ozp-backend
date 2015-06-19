@@ -99,6 +99,8 @@ class Action(enum.Enum):
 class AccessControl(models.Model):
 	"""
 	Access levels (classifications)
+
+	Format: <CLASSIFICATION>//CONTROL1//CONTROL2//...
 	"""
 	title = models.CharField(max_length=1024, unique=True)
 
@@ -398,6 +400,9 @@ class AccessControlListingManager(models.Manager):
 
 	Instead of using models.Listing.objects.all() or .filter(...) etc, use:
 	models.Listing.objects.for_user(user).all() or .filter(...) etc
+
+	This way there is a single place to implement this 'tailored view' logic
+	for listing queries
 	"""
 	def for_user(self, username):
 		# get all listings
