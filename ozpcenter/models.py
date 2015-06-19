@@ -110,6 +110,18 @@ class AccessControl(models.Model):
 	def __str__(self):
 		return self.title
 
+class Tag(models.Model):
+	"""
+	Tag name (for a listing)
+	"""
+	name = models.CharField(max_length=16)
+
+	def __repr__(self):
+		return self.name
+
+	def __str__(self):
+		return self.name
+
 
 class Agency(models.Model):
 	"""
@@ -482,6 +494,7 @@ class Listing(models.Model):
 	approval_status = models.CharField(max_length=255) # one of enum ApprovalStatus
 	is_enabled = models.BooleanField(default=True)
 	is_featured = models.BooleanField(default=False)
+	# a weighted average (5*total_rate5 + 4*total_rate4 + ...) / total_votes
 	avg_rate = models.DecimalField(max_digits=2, decimal_places=1, default=0.0)
 	total_votes = models.IntegerField(default=0)
 	total_rate5 = models.IntegerField(default=0)
@@ -496,6 +509,24 @@ class Listing(models.Model):
 		'Contact',
 		related_name='listings',
 		db_table='contact_listing'
+	)
+
+	owners = models.ManyToManyField(
+		'Profile',
+		related_name='owned_listings',
+		db_table='profile_listing'
+	)
+
+	categories = models.ManyToManyField(
+		'Category',
+		related_name='listings',
+		db_table='category_listing'
+	)
+
+	tags = models.ManyToManyField(
+		'Tag',
+		related_name='listings',
+		db_table='tag_listing'
 	)
 
 	required_listings = models.ForeignKey('self', null=True)
@@ -609,3 +640,19 @@ class ListingType(models.Model):
 
 	def __str__(self):
 	    return self.title
+
+class Notification(models.Model):
+	"""
+	A notification. Can optionally belong to a specific application
+	"""
+	message = models.CharField(max_length=1024)
+	expires_date = models.DateTimeField()
+	author = models.ForeignKey(Profile, related_name='authored_notifications')
+	dismissed_by = models.ManyToManyField(
+		'Profile',
+		related_name='dismissed_notifications',
+		db_table='notification_profile'
+	)
+	listing = models.ForeignKey(Listing, related_name='notifications',
+		null=True, blank=True)
+

@@ -45,15 +45,6 @@ class ItemCommentSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.ItemComment
 
-class ListingSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = models.Listing
-
-class ApplicationLibraryEntrySerializer(serializers.HyperlinkedModelSerializer):
-    listing = ListingSerializer()
-    class Meta:
-        model = models.ApplicationLibraryEntry
-
 class ListingActivitySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.ListingActivity
@@ -65,6 +56,57 @@ class RejectionListingSerializer(serializers.HyperlinkedModelSerializer):
 class ScreenshotSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.Screenshot
+
+class TagSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = models.Tag
+
+class ListingSerializer(serializers.HyperlinkedModelSerializer):
+    screenshots = ScreenshotSerializer(many=True)
+    doc_urls  = DocUrlSerializer(many=True)
+    owners  = ProfileSerializer(many=True)
+    categories  = CategorySerializer(many=True)
+    tags = TagSerializer(many=True)
+    class Meta:
+        model = models.Listing
+        depth = 1
+
+class LibraryListingSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = models.Listing
+        fields = ('title', 'unique_name', 'launch_url', 'small_icon',
+            'large_icon', 'banner_icon', 'large_banner_icon')
+
+class NotificationListingSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = models.Listing
+        fields = ('title', 'unique_name')
+
+class ApplicationLibraryEntrySerializer(serializers.HyperlinkedModelSerializer):
+    listing = LibraryListingSerializer()
+    class Meta:
+        model = models.ApplicationLibraryEntry
+        fields = ('listing', 'folder')
+
+class StorefrontSerializer(serializers.Serializer):
+    featured = ListingSerializer(many=True)
+    recent = ListingSerializer(many=True)
+    most_popular = ListingSerializer(many=True)
+
+class AccessControlSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = models.AccessControl
+
+class ShortProfileSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = models.Profile
+        fields = ('username',)
+
+class NotificationSerializer(serializers.HyperlinkedModelSerializer):
+    author = ShortProfileSerializer()
+    listing = NotificationListingSerializer()
+    class Meta:
+        model = models.Notification
 
 class DjangoUserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:

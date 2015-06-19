@@ -1,5 +1,8 @@
 """
 Custom permissions for API endpoints
+
+Can do things like if view.action == 'create'
+
 """
 from rest_framework import permissions
 import ozpcenter.models as models

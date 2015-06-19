@@ -20,17 +20,24 @@ router.register(r'docUrl', views.DocUrlViewSet)
 router.register(r'listingActivity', views.ListingActivityViewSet)
 router.register(r'rejectionListing', views.RejectionListingViewSet)
 router.register(r'screenshot', views.ScreenshotViewSet)
-router.register(r'library', views.ApplicationLibraryEntryViewSet)
+router.register(r'self/library', views.ApplicationLibraryEntryViewSet,
+	base_name='applicationlibraryentry')
 router.register(r'itemComment', views.ItemCommentViewSet)
 router.register(r'listing', views.ListingViewSet, base_name='listing')
 router.register(r'type', views.ListingTypeViewSet)
+router.register(r'accessControl', views.AccessControlViewSet)
+router.register(r'tag', views.TagViewSet)
+router.register(r'notification', views.NotificationViewSet)
+router.register(r'self/notification', views.NotificationSelfViewSet,
+	base_name='notification')
 router.register(r'djangoUser', views.DjangoUserViewSet)
-router.register(r'metadata', views.metadataView, base_name='metadata')
 
 
 # Wire up our API using automatic URL routing.
 urlpatterns = [
     url(r'^', include(router.urls)),
     url(r'^self/$', views.current_user),
+    url(r'^storefront/$', views.storefrontView),
+    url(r'^metadata/$', views.metadataView),
     url(r'^authtest/$', auth_test_views.test)
 ]

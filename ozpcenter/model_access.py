@@ -30,6 +30,8 @@ def make_keysafe(key):
 	"""
 	given an input string, make it lower case and remove all non alpha-numeric
 	characters so that it will be safe to use as a cache keyname
+
+	TODO: check for max length (250 chars by default for memcached)
 	"""
 	return re.sub(r'\W+', '', key).lower()
 
@@ -37,18 +39,54 @@ def make_keysafe(key):
 def get_storefront(username):
 	"""
 	Returns data for /storefront api invocation including:
-		* featured listings
-		* recent (new) listings
-		* most popular listings
+		* featured listings (max=12?)
+		* recent (new) listings (max=24?)
+		* most popular listings (max=36?)
 
-	TODO: include bookmarked status or not?
+	NOTE: think about adding Bookmark status to this later on
+
+	TODO: how to deal with fact that many users will have different access
+	controls, making this key fairly inefficient
 
 	Key: storefront:<org_names>:<max_classification_level>
 	"""
 	user = models.Profile.objects.get(username=username)
-	user_key = make_keysafe(username)
-	orgs_key = make_keysafe()
-	pass
+	orgs = ''
+	for i in user.organizations.all():
+		orgs += '%s_' % i.title
+	orgs_key = make_keysafe(orgs)
+	access_control_key = make_keysafe(user.access_control.title)
+
+	key = 'storefront:%s:%s' % (orgs_key, access_control_key)
+	data = cache.get(key)
+	if data is None:
+		try:
+			# get featured listings
+			featured_listings = models.Listing.objects.for_user(username).filter(
+				is_featured=True,
+				)[:12]
+
+			# get recent listings
+			recent_listings = models.Listing.objects.for_user(username).order_by(
+				'approved_date').filter(
+				)[:24]
+
+			# get most popular listings via a weighted average
+			most_popular_listings = models.Listing.objects.for_user(username).order_by(
+				'avg_rate').filter(
+				)[:36]
+
+			data = {
+				'featured': featured_listings,
+				'recent': recent_listings,
+				'most_popular': most_popular_listings
+			}
+
+			cache.set(key, data)
+		except Exception as e:
+			return {'error': True, 'msg': 'Error getting storefront: %s' % str(e)}
+	return data
+
 
 def get_metadata():
 	"""

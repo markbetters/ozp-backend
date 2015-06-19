@@ -35,3 +35,7 @@ class ModelAccessTest(TestCase):
 		self.assertEqual(len(listings), 2)
 		all_listings = models.Listing.objects.all()
 		self.assertEqual(len(all_listings), 4)
+
+	def test_model_access(self):
+		username = 'wsmith'
+		listings = model_access.get_storefront(username)

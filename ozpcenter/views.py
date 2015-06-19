@@ -1,6 +1,7 @@
 """
 Views
 """
+import datetime
 import logging
 
 import django.contrib.auth
@@ -46,6 +47,10 @@ class DocUrlViewSet(viewsets.ModelViewSet):
     queryset = models.DocUrl.objects.all()
     serializer_class = serializers.DocUrlSerializer
 
+class TagViewSet(viewsets.ModelViewSet):
+    queryset = models.Tag.objects.all()
+    serializer_class = serializers.TagSerializer
+
 class IntentViewSet(viewsets.ModelViewSet):
     queryset = models.Intent.objects.all()
     serializer_class = serializers.IntentSerializer
@@ -55,8 +60,12 @@ class ItemCommentViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.ItemCommentSerializer
 
 class ApplicationLibraryEntryViewSet(viewsets.ModelViewSet):
-    queryset = models.ApplicationLibraryEntry.objects.all()
+    permission_classes = (permissions.IsUser,)
     serializer_class = serializers.ApplicationLibraryEntrySerializer
+
+    def get_queryset(self):
+        return  models.ApplicationLibraryEntry.objects.filter(
+            owner__username=self.request.user.username)
 
 class ListingViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsUser,)
@@ -83,6 +92,34 @@ class ListingTypeViewSet(viewsets.ModelViewSet):
     queryset = models.ListingType.objects.all()
     serializer_class = serializers.ListingTypeSerializer
 
+class AccessControlViewSet(viewsets.ModelViewSet):
+    queryset = models.AccessControl.objects.all()
+    serializer_class = serializers.AccessControlSerializer
+
+class TagViewSet(viewsets.ModelViewSet):
+    queryset = models.Tag.objects.all()
+    serializer_class = serializers.TagSerializer
+
+class NotificationViewSet(viewsets.ModelViewSet):
+    queryset = models.Notification.objects.all()
+    serializer_class = serializers.NotificationSerializer
+
+class NotificationSelfViewSet(viewsets.ModelViewSet):
+    permission_classes = (permissions.IsUser,)
+    serializer_class = serializers.NotificationSerializer
+
+    def get_queryset(self):
+        """
+        get all notifications that have not yet expired AND:
+            * have not been dismissed by this user
+            * are regarding a listing in this user's library (if the
+                notification is listing-specific)
+        """
+        # TODO: add logic to ignore listing-specific notifications that are
+        #   for listings not part of user's library
+        return  models.Notification.objects.filter(
+            expires_date__gt=datetime.datetime.now())
+
 class DjangoUserViewSet(viewsets.ModelViewSet):
 	queryset = django.contrib.auth.models.User.objects.all()
 	serializer_class = serializers.DjangoUserSerializer
@@ -102,19 +139,20 @@ def metadataView(request):
 @permission_classes((permissions.IsUser, ))
 def storefrontView(request):
     """
-    Featured, Recent, and most popular listings
+    Featured, recent, and most popular listings
     """
     data = model_access.get_storefront(request.user)
-    return Response(data)
+    serializer = serializers.StorefrontSerializer(data,
+        context={'request': request})
+    return Response(serializer.data)
 
 @api_view(['GET'])
 @permission_classes((permissions.IsUser, ))
 def current_user(request):
-	user = request.user
-	return Response({
-	    'username': user.username,
-	    'email': user.email
-	})
+    data = model_access.get_profile(request.user.username)
+    serializer = serializers.ProfileSerializer(data,
+        context={'request': request})
+    return Response(serializer.data)
 
 # TODO: POST on api/image (create/edit listing) w/ contentType and id fields
 

@@ -1,6 +1,7 @@
 """
 Creates test data
 """
+import datetime
 import os
 import sys
 sys.path.insert(0, os.path.realpath(os.path.join(os.path.dirname(__file__), '../../')))
@@ -14,12 +15,12 @@ def run():
 	Creates basic sample data
 	"""
 	# Categories
-	cat = models.Category(title="Books and Reference",
+	cat1 = models.Category(title="Books and Reference",
 		description="Things made of paper")
-	cat.save()
-	cat = models.Category(title="Business",
+	cat1.save()
+	cat2 = models.Category(title="Business",
 		description="For making money")
-	cat.save()
+	cat2.save()
 	cat = models.Category(title="Education",
 		description="Educational in nature")
 	cat.save()
@@ -76,6 +77,12 @@ def run():
 	c = models.AccessControl(title='TOP SECRET')
 	c.save()
 
+	# Tags
+	t1 =  models.Tag(name='demo')
+	t1.save()
+	t2 = models.Tag(name='useless')
+	t2.save()
+
 	# Org Stewards
 	p = models.Profile(username='wsmith', display_name='William Smith',
 		email='wsmith@nowhere.com', bio='I work at the Ministry of Truth',
@@ -101,6 +108,14 @@ def run():
 	p.organizations.add(models.Agency.objects.get(title='Ministry of Truth'))
 
 	# Notifications
+	next_week = datetime.datetime.now() + datetime.timedelta(days=7)
+	n1 = models.Notification(message='The quick brown fox',
+		expires_date=next_week, author=p)
+	n1.save()
+	n2 = models.Notification(message='Jumps over the lazy dog',
+		expires_date=next_week, author=p)
+	n2.save()
+
 
 	# Contacts
 	c = models.Contact(name='Jimmy John', organization='Jimmy Johns',
@@ -132,6 +147,21 @@ def run():
 	)
 	l.save()
 	l.contacts.add(models.Contact.objects.get(name='Jimmy John'))
+	l.owners.add(p)
+	l.categories.add(cat1)
+	l.categories.add(cat2)
+	l.tags.add(t1)
+	l.tags.add(t2)
+	# add screenshots
+	s = models.Screenshot(small_image_url='http://www.google.com/air_mail.png',
+		large_image_url='http://www.google.com/air_mail.png',
+		listing=models.Listing.objects.get(title='Air Mail'))
+	s.save()
+	l.screenshots.add(s)
+	# add notification
+	n3 = models.Notification(message='Air Mail update next week',
+		expires_date=next_week, listing=l, author=p)
+	n3.save()
 
 	l = models.Listing(
 		title='Bread Basket',
@@ -157,6 +187,10 @@ def run():
 	)
 	l.save()
 	l.contacts.add(models.Contact.objects.get(name='Jimmy John'))
+	l.owners.add(p)
+	l.categories.add(cat1)
+	l.categories.add(cat2)
+	l.tags.add(t1)
 
 	l = models.Listing(
 		title='Cupid',
@@ -182,6 +216,9 @@ def run():
 	)
 	l.save()
 	l.contacts.add(models.Contact.objects.get(name='Jimmy John'))
+	l.owners.add(p)
+	l.categories.add(cat1)
+	l.tags.add(t2)
 
 	l = models.Listing(
 		title='ChartCourse',
@@ -207,13 +244,9 @@ def run():
 	)
 	l.save()
 	l.contacts.add(models.Contact.objects.get(name='Jimmy John'))
-	# add screenshots
-	s = models.Screenshot(small_image_url='http://www.google.com/air_mail.png',
-		large_image_url='http://www.google.com/air_mail.png',
-		listing=models.Listing.objects.get(title='Air Mail'))
-	s.save()
 	# add intents
 	l.intents.add(models.Intent.objects.get(action='/application/json/view'))
+	l.categories.add(cat2)
 
 	# bookmark listings
 	a = models.ApplicationLibraryEntry(
