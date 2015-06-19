@@ -74,7 +74,19 @@ class ListingViewSet(viewsets.ModelViewSet):
     search_fields = ('title', 'description', 'description_short',)
 
     def get_queryset(self):
-        return model_access.get_listings(self.request.user.username)
+        filter_params = {}
+        categories = self.request.query_params.getlist('categories', False)
+        agencies = self.request.query_params.getlist('agencies', False)
+        listing_types = self.request.query_params.getlist('listing_types', False)
+        if categories:
+            filter_params['categories'] = categories
+        if agencies:
+            filter_params['agencies'] = agencies
+        if listing_types:
+            filter_params['listing_types'] = listing_types
+
+        return model_access.filter_listings(self.request.user.username,
+            filter_params)
 
 class ListingActivityViewSet(viewsets.ModelViewSet):
     queryset = models.ListingActivity.objects.all()

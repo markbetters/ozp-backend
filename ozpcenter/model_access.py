@@ -169,25 +169,40 @@ def get_self_listings(username):
 	"""
 	pass
 
-def search_listings(username, search_params):
+def filter_listings(username, filter_params):
 	"""
-	Search for Listings
+	Filter Listings
 
-	Must respect private apps (only from user's agency) and user's
+	Respects private apps (only from user's agency) and user's
 	max_classification_level
 
-	search_params can contain:
-		* text (full-text search, case insensitve)
-		* categories (AND logic)
-		* agencies (OR logic)
-		* listing_types (OR logic)
+	filter_params can contain:
+		* list of category names (AND logic)
+		* list of agencies (OR logic)
+		* list of listing types (OR logic)
 		* offset (for pagination)
 
 	Too many variations to cache
 
 	TODO: use elasticsearch for text searches
 	"""
-	pass
+	objects = models.Listing.objects.for_user(username).all()
+	if 'categories' in filter_params:
+		logger.info('filtering categories: %s' % filter_params['categories'])
+		# TODO: this is OR logic not AND
+		objects = objects.filter(
+			categories__title__in=filter_params['categories'])
+	if 'agencies' in filter_params:
+		logger.info('filtering agencies: %s' % filter_params['agencies'])
+		objects = objects.filter(
+			agency__title__in=filter_params['agencies'])
+	if 'listing_types' in filter_params:
+		logger.info('filtering listing_types: %s' % filter_params['listing_types'])
+		objects = objects.filter(
+			app_type__title__in=filter_params['listing_types'])
+
+	# TODO: enforce any pagination params
+	return objects
 
 def get_listings(username):
 	"""

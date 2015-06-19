@@ -99,7 +99,7 @@ LOGGING = {
         },
         'ozp-center': {
             'handlers': ['console'],
-            'level': 'INFO',
+            'level': 'DEBUG',
         },
     },
 }

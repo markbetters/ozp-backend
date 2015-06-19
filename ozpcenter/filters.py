@@ -9,6 +9,6 @@ class ProfileFilter(django_filters.FilterSet):
 		model = models.Profile
 		fields = ['highest_role']
 
-class ListingFilter(django_filters.FilterSet):
+class ListingSearchFilter(django_filters.FilterSet):
     class Meta:
         model = models.Listing

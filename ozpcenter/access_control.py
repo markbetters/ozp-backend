@@ -47,7 +47,8 @@ def generate_access_control(entitlement_data):
 		pass
 	access_control += '//'
 
-	controls = entitlement_data['accesses'] + entitlement_data['legacy_accesses'] + entitlement_data['visa']
+	controls = entitlement_data['accesses'] + \
+		entitlement_data['legacy_accesses'] + entitlement_data['visa']
 	for i in controls:
 		access_control += '%s//' % i
 
