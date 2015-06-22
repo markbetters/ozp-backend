@@ -201,7 +201,15 @@ def filter_listings(username, filter_params):
 		objects = objects.filter(
 			app_type__title__in=filter_params['listing_types'])
 
-	# TODO: enforce any pagination params
+	# enforce any pagination params
+	if 'offset' in filter_params:
+		offset = int(filter_params['offset'])
+		objects = objects[offset:]
+
+	if 'limit' in filter_params:
+		limit = int(filter_params['limit'])
+		objects = objects[0:limit]
+
 	return objects
 
 def get_listings(username):

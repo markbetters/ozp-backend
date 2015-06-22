@@ -26,6 +26,7 @@ router.register(r'itemComment', views.ItemCommentViewSet)
 router.register(r'listing', views.ListingViewSet, base_name='listing')
 router.register(r'type', views.ListingTypeViewSet)
 router.register(r'accessControl', views.AccessControlViewSet)
+router.register(r'icon', views.IconViewSet)
 router.register(r'tag', views.TagViewSet)
 router.register(r'notification', views.NotificationViewSet)
 router.register(r'self/notification', views.NotificationSelfViewSet,

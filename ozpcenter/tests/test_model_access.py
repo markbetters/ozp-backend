@@ -36,6 +36,17 @@ class ModelAccessTest(TestCase):
 		all_listings = models.Listing.objects.all()
 		self.assertEqual(len(all_listings), 4)
 
-	def test_model_access(self):
+	def test_get_storefront(self):
 		username = 'wsmith'
 		listings = model_access.get_storefront(username)
+
+	def test_filter_listings(self):
+		username = 'wsmith'
+		filter_params = {
+			'categories': ['Business'],
+			'agencies': ['Ministry of Truth'],
+			'listing_types': ['Web Application'],
+			'offset': 0,
+			'limit': 24
+		}
+		listings = model_access.filter_listings(username, filter_params)

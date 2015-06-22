@@ -32,7 +32,13 @@ class ProfileTest(TestCase):
 		f.UserFactory.create(username='bob', display_name='Bob B',
 			email='bob@bob.com')
 		f.UserFactory.create(username='alice')
-		f.AgencyFactory.create(title='Three Letter Agency', short_name='TLA')
+		unclass = models.AccessControl(title='UNCLASSIFIED')
+		unclass.save()
+		icon = models.Icon(url='http://www.google.com/tla.png',
+			access_control=unclass)
+		icon.save()
+		f.AgencyFactory.create(title='Three Letter Agency', short_name='TLA',
+			icon=icon)
 
 
 	def test_unique_constraints(self):

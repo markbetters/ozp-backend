@@ -15,9 +15,14 @@ class ContactTypeSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.ContactType
 
+class IconSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = models.Icon
+
 class AgencySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.Agency
+        depth=1
 
 class ContactSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -40,6 +45,7 @@ class DocUrlSerializer(serializers.HyperlinkedModelSerializer):
 class IntentSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.Intent
+        depth = 1
 
 class ItemCommentSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -54,6 +60,8 @@ class RejectionListingSerializer(serializers.HyperlinkedModelSerializer):
         model = models.RejectionListing
 
 class ScreenshotSerializer(serializers.HyperlinkedModelSerializer):
+    small_image = IconSerializer()
+    large_image = IconSerializer()
     class Meta:
         model = models.Screenshot
 
@@ -69,7 +77,7 @@ class ListingSerializer(serializers.HyperlinkedModelSerializer):
     tags = TagSerializer(many=True)
     class Meta:
         model = models.Listing
-        depth = 1
+        depth = 2
 
 class LibraryListingSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:

@@ -38,5 +38,4 @@ class AgencyFactory(factory.django.DjangoModelFactory):
 		model = models.Agency
 
 	title = "Three Letter Agency"
-	icon_url = 'https://someplace.com/icon'
 	short_name = 'TLA'

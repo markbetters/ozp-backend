@@ -110,6 +110,20 @@ class AccessControl(models.Model):
 	def __str__(self):
 		return self.title
 
+class Icon(models.Model):
+	"""
+	Icon
+	"""
+	url = models.CharField(
+		max_length=constants.MAX_URL_SIZE,
+		validators=[
+			RegexValidator(
+				regex=constants.URL_REGEX,
+				message='icon url must be a url',
+				code='invalid url')]
+	)
+	access_control = models.ForeignKey(AccessControl, related_name='icons')
+
 class Tag(models.Model):
 	"""
 	Tag name (for a listing)
@@ -134,14 +148,8 @@ class Agency(models.Model):
 	    * steward_profiles
 	"""
 	title = models.CharField(max_length=255, unique=True)
-	icon_url = models.CharField(
-		max_length=constants.MAX_URL_SIZE,
-		validators=[
-			RegexValidator(
-				regex=constants.URL_REGEX,
-				message='icon_url must be a url',
-				code='invalid url')]
-	)
+	icon = models.ForeignKey(Icon, related_name='agency')
+
 	short_name = models.CharField(max_length=8, unique=True)
 
 	def __repr__(self):
@@ -321,14 +329,7 @@ class Intent(models.Model):
 				code='invalid type')]
 	)
 	label = models.CharField(max_length=255)
-	icon = models.CharField(
-		max_length=constants.MAX_URL_SIZE,
-		validators=[
-			RegexValidator(
-				regex=constants.URL_REGEX,
-				message='icon must be a url',
-				code='invalid icon')]
-	)
+	icon = models.ForeignKey(Icon, related_name='intent')
 
 	def __repr__(self):
 	    return '%s/%s' % (self.type, self.action)
@@ -456,38 +457,12 @@ class Listing(models.Model):
 	version_name = models.CharField(max_length=255)
 	# NOTE: replacing uuid with this
 	unique_name = models.CharField(max_length=255, unique=True)
-	small_icon = models.CharField(
-		max_length=constants.MAX_URL_SIZE,
-		validators=[
-			RegexValidator(
-				regex=constants.URL_REGEX,
-				message='small_icon must be a url',
-				code='invalid url')]
-	)
-	large_icon = models.CharField(
-		max_length=constants.MAX_URL_SIZE,
-		validators=[
-			RegexValidator(
-				regex=constants.URL_REGEX,
-				message='large_icon must be a url',
-				code='invalid url')]
-	)
-	banner_icon = models.CharField(
-		max_length=constants.MAX_URL_SIZE,
-		validators=[
-			RegexValidator(
-				regex=constants.URL_REGEX,
-				message='banner_icon must be a url',
-				code='invalid url')]
-	)
-	large_banner_icon = models.CharField(
-		max_length=constants.MAX_URL_SIZE,
-		validators=[
-			RegexValidator(
-				regex=constants.URL_REGEX,
-				message='large_banner_icon must be a url',
-				code='invalid url')]
-	)
+	small_icon = models.ForeignKey(Icon, related_name='listing_small_icon')
+	large_icon = models.ForeignKey(Icon, related_name='listing_large_icon')
+	banner_icon = models.ForeignKey(Icon, related_name='listing_banner_icon')
+	large_banner_icon = models.ForeignKey(Icon, related_name='listing_large_banner_icon')
+
+
 	what_is_new = models.CharField(max_length=255)
 	description_short = models.CharField(max_length=150)
 	requirements = models.CharField(max_length=1000)
@@ -599,22 +574,8 @@ class Screenshot(models.Model):
 	Additional db.relationships:
 	    * listing
 	"""
-	small_image_url = models.CharField(
-		max_length=constants.MAX_URL_SIZE,
-		validators=[
-			RegexValidator(
-				regex=constants.URL_REGEX,
-				message='small image url must be a url',
-				code='invalid url')]
-	)
-	large_image_url = models.CharField(
-		max_length=constants.MAX_URL_SIZE,
-		validators=[
-			RegexValidator(
-				regex=constants.URL_REGEX,
-				message='large image url must be a url',
-				code='invalid url')]
-	)
+	small_image = models.ForeignKey(Icon, related_name='screenshot_small')
+	large_image = models.ForeignKey(Icon, related_name='screenshot_large')
 	listing = models.ForeignKey('Listing', related_name='screenshots')
 
 	def __repr__(self):

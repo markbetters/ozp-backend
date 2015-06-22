@@ -16,6 +16,16 @@ def run():
 	"""
 	Creates basic sample data
 	"""
+	# Access Controls
+	unclass = models.AccessControl(title='UNCLASSIFIED')
+	unclass.save()
+	c = models.AccessControl(title='UNCLASSIFIED//ABC')
+	c.save()
+	c = models.AccessControl(title='SECRET')
+	c.save()
+	c = models.AccessControl(title='TOP SECRET')
+	c.save()
+
 	# Categories
 	cat1 = models.Category(title="Books and Reference",
 		description="Things made of paper")
@@ -52,32 +62,25 @@ def run():
 
 	# Intents
 	# TODO: more realistic data
+	icon = models.Icon(url='http://www.google.com/intent_view_icon.png',
+		access_control=unclass)
+	icon.save()
 	i = models.Intent(action='/application/json/view',
 		media_type='vnd.ozp-intent-v1+json.json',
 		label='view',
-		icon='http://www.google.com/intent_view_icon.png')
+		icon=icon)
 	i.save()
 
 	# Organizations
 	a = models.Agency(title='Ministry of Truth', short_name='m-truth',
-		icon_url='http://www.google.com/mot.png')
+		icon=icon)
 	a.save()
 	a = models.Agency(title='Ministry of Peace', short_name='m-peace',
-		icon_url='http://www.google.com/mop.png')
+		icon=icon)
 	a.save()
 	a = models.Agency(title='Ministry of Love', short_name='m-love',
-		icon_url='http://www.google.com/mol.png')
+		icon=icon)
 	a.save()
-
-	# Access Controls
-	c = models.AccessControl(title='UNCLASSIFIED')
-	c.save()
-	c = models.AccessControl(title='UNCLASSIFIED//ABC')
-	c.save()
-	c = models.AccessControl(title='SECRET')
-	c.save()
-	c = models.AccessControl(title='TOP SECRET')
-	c.save()
 
 	# Tags
 	t1 =  models.Tag(name='demo')
@@ -89,7 +92,7 @@ def run():
 	p = models.Profile(username='wsmith', display_name='William Smith',
 		email='wsmith@nowhere.com', bio='I work at the Ministry of Truth',
 		highest_role=models.Profile.ORG_STEWARD,
-		access_control=models.AccessControl.objects.get(title='UNCLASSIFIED'))
+		access_control=unclass)
 	p.save()
 	p.organizations.add(models.Agency.objects.get(title='Ministry of Truth'))
 	p.stewarded_organizations.add(models.Agency.objects.get(title='Ministry of Truth'))
@@ -98,14 +101,14 @@ def run():
 	p = models.Profile(username='pboss', display_name='P Boss',
 		email='pboss@nowhere.com', bio='I am the boss',
 		highest_role=models.Profile.APPS_MALL_STEWARD,
-		access_control=models.AccessControl.objects.get(title='UNCLASSIFIED'))
+		access_control=unclass)
 	p.save()
 
 	# Regular user
 	p = models.Profile(username='jdoe', display_name='John Doe',
 		email='djoe@nowhere.com', bio='Im a normal person',
 		highest_role=models.Profile.USER,
-		access_control=models.AccessControl.objects.get(title='UNCLASSIFIED'))
+		access_control=unclass)
 	p.save()
 	p.organizations.add(models.Agency.objects.get(title='Ministry of Truth'))
 
@@ -128,6 +131,18 @@ def run():
 	c.save()
 
 	# Listings
+	small_icon = models.Icon(url='http://www.google.com/small_icon',
+		access_control=unclass)
+	small_icon.save()
+	large_icon = models.Icon(url='http://www.google.com/large_icon',
+		access_control=unclass)
+	large_icon.save()
+	banner_icon = models.Icon(url='http://www.google.com/banner_icon',
+		access_control=unclass)
+	banner_icon.save()
+	large_banner_icon = models.Icon(url='http://www.google.com/large_banner_icon',
+		access_control=unclass)
+	large_banner_icon.save()
 	l = models.Listing(
 		title='Air Mail',
 		agency=models.Agency.objects.get(title='Ministry of Truth'),
@@ -136,10 +151,10 @@ def run():
 		launch_url='https://www.google.com/airmail',
 		version_name='1.0.0',
 		unique_name='ozp.test.air_mail',
-		small_icon='http://www.google.com/small_icon',
-		large_icon='http://www.google.com/large_icon',
-		banner_icon='http://www.google.com/banner_icon',
-		large_banner_icon='http://www.google.com/large_banner_icon',
+		small_icon=small_icon,
+		large_icon=large_icon,
+		banner_icon=banner_icon,
+		large_banner_icon=large_banner_icon,
 		what_is_new='Nothing really new here',
 		description_short='Sends airmail',
 		requirements='None',
@@ -147,7 +162,7 @@ def run():
 		is_enabled=True,
 		is_featured=True,
 		singleton=False,
-		access_control=models.AccessControl.objects.get(title='UNCLASSIFIED')
+		access_control=unclass
 	)
 	l.save()
 	l.contacts.add(models.Contact.objects.get(name='Jimmy John'))
@@ -157,8 +172,14 @@ def run():
 	l.tags.add(t1)
 	l.tags.add(t2)
 	# add screenshots
-	s = models.Screenshot(small_image_url='http://www.google.com/air_mail.png',
-		large_image_url='http://www.google.com/air_mail.png',
+	small_img = models.Icon(url='http://www.google.com/small_screenshot.png',
+		access_control=unclass)
+	small_img.save()
+	large_img = models.Icon(url='http://www.google.com/large_screenshot.png',
+		access_control=unclass)
+	large_img.save()
+	s = models.Screenshot(small_image=small_img,
+		large_image=large_img,
 		listing=models.Listing.objects.get(title='Air Mail'))
 	s.save()
 	l.screenshots.add(s)
@@ -175,10 +196,10 @@ def run():
 		launch_url='https://www.google.com/breadbasket',
 		version_name='1.0.0',
 		unique_name='ozp.test.bread_basket',
-		small_icon='http://www.google.com/small_icon',
-		large_icon='http://www.google.com/large_icon',
-		banner_icon='http://www.google.com/banner_icon',
-		large_banner_icon='http://www.google.com/large_banner_icon',
+		small_icon=small_icon,
+		large_icon=large_icon,
+		banner_icon=banner_icon,
+		large_banner_icon=large_banner_icon,
 		what_is_new='Nothing really new here',
 		description_short='Carries bread',
 		requirements='None',
@@ -187,7 +208,7 @@ def run():
 		is_featured=True,
 		singleton=False,
 		is_private=True,
-		access_control=models.AccessControl.objects.get(title='UNCLASSIFIED')
+		access_control=unclass
 	)
 	l.save()
 	l.contacts.add(models.Contact.objects.get(name='Jimmy John'))
@@ -204,10 +225,10 @@ def run():
 		launch_url='https://www.google.com/cupid',
 		version_name='1.0.0',
 		unique_name='ozp.test.cupid',
-		small_icon='http://www.google.com/small_icon',
-		large_icon='http://www.google.com/large_icon',
-		banner_icon='http://www.google.com/banner_icon',
-		large_banner_icon='http://www.google.com/large_banner_icon',
+		small_icon=small_icon,
+		large_icon=large_icon,
+		banner_icon=banner_icon,
+		large_banner_icon=large_banner_icon,
 		what_is_new='Nothing really new here',
 		description_short='Cupid stuff',
 		requirements='None',
@@ -216,7 +237,7 @@ def run():
 		is_featured=True,
 		singleton=False,
 		is_private=True,
-		access_control=models.AccessControl.objects.get(title='UNCLASSIFIED')
+		access_control=unclass
 	)
 	l.save()
 	l.contacts.add(models.Contact.objects.get(name='Jimmy John'))
@@ -232,10 +253,10 @@ def run():
 		launch_url='https://www.google.com/chartcourse',
 		version_name='1.0.0',
 		unique_name='ozp.test.chartcourse',
-		small_icon='http://www.google.com/small_icon',
-		large_icon='http://www.google.com/large_icon',
-		banner_icon='http://www.google.com/banner_icon',
-		large_banner_icon='http://www.google.com/large_banner_icon',
+		small_icon=small_icon,
+		large_icon=large_icon,
+		banner_icon=banner_icon,
+		large_banner_icon=large_banner_icon,
 		what_is_new='Nothing really new here',
 		description_short='chart course stuff',
 		requirements='None',

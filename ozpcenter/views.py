@@ -78,12 +78,19 @@ class ListingViewSet(viewsets.ModelViewSet):
         categories = self.request.query_params.getlist('categories', False)
         agencies = self.request.query_params.getlist('agencies', False)
         listing_types = self.request.query_params.getlist('listing_types', False)
+        limit = self.request.query_params.get('limit', False)
+        offset = self.request.query_params.get('offset', False)
         if categories:
             filter_params['categories'] = categories
         if agencies:
             filter_params['agencies'] = agencies
         if listing_types:
             filter_params['listing_types'] = listing_types
+        if limit:
+            filter_params['limit'] = limit
+        if offset:
+            filter_params['offset'] = offset
+
 
         return model_access.filter_listings(self.request.user.username,
             filter_params)
@@ -107,6 +114,10 @@ class ListingTypeViewSet(viewsets.ModelViewSet):
 class AccessControlViewSet(viewsets.ModelViewSet):
     queryset = models.AccessControl.objects.all()
     serializer_class = serializers.AccessControlSerializer
+
+class IconViewSet(viewsets.ModelViewSet):
+    queryset = models.Icon.objects.all()
+    serializer_class = serializers.IconSerializer
 
 class TagViewSet(viewsets.ModelViewSet):
     queryset = models.Tag.objects.all()
@@ -213,6 +224,6 @@ def current_user(request):
 
 # TODO: GET api/listing - params: approvalStatus, offset, max, org, enabled
 
-# TODO: CRUD for Categories, ContactTypes, Intents, Organizations, Stewards, and Notifications
+# TODO: CRUD for Categories, ContactTypes, Intents, Organizations, Stewards, AccessControls, and Notifications
 
 # TODO: Identify endpoints used by IWC
