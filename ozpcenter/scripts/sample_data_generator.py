@@ -62,7 +62,7 @@ def run():
 
 	# Intents
 	# TODO: more realistic data
-	icon = models.Icon(url='http://www.google.com/intent_view_icon.png',
+	icon = models.Icon(icon_url='http://www.google.com/intent_view_icon.png',
 		access_control=unclass)
 	icon.save()
 	i = models.Intent(action='/application/json/view',
@@ -131,16 +131,16 @@ def run():
 	c.save()
 
 	# Listings
-	small_icon = models.Icon(url='http://www.google.com/small_icon',
+	small_icon = models.Icon(icon_url='http://www.google.com/small_icon',
 		access_control=unclass)
 	small_icon.save()
-	large_icon = models.Icon(url='http://www.google.com/large_icon',
+	large_icon = models.Icon(icon_url='http://www.google.com/large_icon',
 		access_control=unclass)
 	large_icon.save()
-	banner_icon = models.Icon(url='http://www.google.com/banner_icon',
+	banner_icon = models.Icon(icon_url='http://www.google.com/banner_icon',
 		access_control=unclass)
 	banner_icon.save()
-	large_banner_icon = models.Icon(url='http://www.google.com/large_banner_icon',
+	large_banner_icon = models.Icon(icon_url='http://www.google.com/large_banner_icon',
 		access_control=unclass)
 	large_banner_icon.save()
 	l = models.Listing(
@@ -172,10 +172,10 @@ def run():
 	l.tags.add(t1)
 	l.tags.add(t2)
 	# add screenshots
-	small_img = models.Icon(url='http://www.google.com/small_screenshot.png',
+	small_img = models.Icon(icon_url='http://www.google.com/small_screenshot.png',
 		access_control=unclass)
 	small_img.save()
-	large_img = models.Icon(url='http://www.google.com/large_screenshot.png',
+	large_img = models.Icon(icon_url='http://www.google.com/large_screenshot.png',
 		access_control=unclass)
 	large_img.save()
 	s = models.Screenshot(small_image=small_img,

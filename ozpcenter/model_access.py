@@ -183,8 +183,6 @@ def filter_listings(username, filter_params):
 		* offset (for pagination)
 
 	Too many variations to cache
-
-	TODO: use elasticsearch for text searches
 	"""
 	objects = models.Listing.objects.for_user(username).all()
 	if 'categories' in filter_params:

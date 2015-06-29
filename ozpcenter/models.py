@@ -114,7 +114,7 @@ class Icon(models.Model):
 	"""
 	Icon
 	"""
-	url = models.CharField(
+	icon_url = models.CharField(
 		max_length=constants.MAX_URL_SIZE,
 		validators=[
 			RegexValidator(

@@ -1,11 +1,23 @@
 """
 Serializers for the API
+
+Serialization = Python obj -> JSON
+Deserialization = JSON -> Python obj
 """
 import django.contrib.auth
 from rest_framework import serializers
 
 import ozpcenter.models as models
 
+################################################################################
+#       Simple Serializers - no nested relationships, reusable between
+#   Read and Write operations
+################################################################################
+
+class AccessControlSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = models.AccessControl
+        fields = ('title',)
 
 class CategorySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -15,18 +27,24 @@ class ContactTypeSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.ContactType
 
+class ContactSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = models.Contact
+
+################################################################################
+#       Basic Serializers
+################################################################################
+
 class IconSerializer(serializers.HyperlinkedModelSerializer):
+    access_control = AccessControlSerializer()
     class Meta:
         model = models.Icon
 
 class AgencySerializer(serializers.HyperlinkedModelSerializer):
+    icon = IconSerializer()
     class Meta:
         model = models.Agency
-        depth=1
-
-class ContactSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = models.Contact
+        depth = 2
 
 class ProfileSerializer(serializers.HyperlinkedModelSerializer):
     organizations = AgencySerializer(many=True)
@@ -90,20 +108,32 @@ class NotificationListingSerializer(serializers.HyperlinkedModelSerializer):
         model = models.Listing
         fields = ('title', 'unique_name')
 
-class ApplicationLibraryEntrySerializer(serializers.HyperlinkedModelSerializer):
-    listing = LibraryListingSerializer()
+################################################################################
+#       Self Serializers
+################################################################################
+class LibraryEntryCreateSerializer(serializers.HyperlinkedModelSerializer):
+    """
+    Serializer for create self/library
+    """
     class Meta:
         model = models.ApplicationLibraryEntry
-        fields = ('listing', 'folder')
+        fields = ('listing')
+
+class ApplicationLibraryEntrySerializer(serializers.HyperlinkedModelSerializer):
+    """
+    Serializer for self/library - owner is always current user
+    """
+    listing = LibraryListingSerializer()
+    owner = ProfileSerializer()
+    class Meta:
+        model = models.ApplicationLibraryEntry
+        fields = ('listing', 'folder', 'owner')
+
 
 class StorefrontSerializer(serializers.Serializer):
     featured = ListingSerializer(many=True)
     recent = ListingSerializer(many=True)
     most_popular = ListingSerializer(many=True)
-
-class AccessControlSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = models.AccessControl
 
 class ShortProfileSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:

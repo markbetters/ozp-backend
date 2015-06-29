@@ -19,12 +19,17 @@ import ozpcenter.model_access as model_access
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center')
 
+################################################################################
+#       Simple Views (not user-specific, only basic role-based access control
+#       required)
+################################################################################
+class AccessControlViewSet(viewsets.ModelViewSet):
+    queryset = models.AccessControl.objects.all()
+    serializer_class = serializers.AccessControlSerializer
 
-class ProfileViewSet(viewsets.ModelViewSet):
-    permission_classes = (permissions.IsUser,)
-    queryset = models.Profile.objects.all()
-    serializer_class = serializers.ProfileSerializer
-    filter_fields = ('highest_role',)
+class AgencyViewSet(viewsets.ModelViewSet):
+    queryset = models.Agency.objects.all()
+    serializer_class = serializers.AgencySerializer
 
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = models.Category.objects.all()
@@ -35,9 +40,23 @@ class ContactTypeViewSet(viewsets.ModelViewSet):
     queryset = models.ContactType.objects.all()
     serializer_class = serializers.ContactTypeSerializer
 
-class AgencyViewSet(viewsets.ModelViewSet):
-    queryset = models.Agency.objects.all()
-    serializer_class = serializers.AgencySerializer
+class ListingTypeViewSet(viewsets.ModelViewSet):
+    queryset = models.ListingType.objects.all()
+    serializer_class = serializers.ListingTypeSerializer
+
+class ProfileViewSet(viewsets.ModelViewSet):
+    permission_classes = (permissions.IsUser,)
+    queryset = models.Profile.objects.all()
+    serializer_class = serializers.ProfileSerializer
+    filter_fields = ('highest_role',)
+
+class DjangoUserViewSet(viewsets.ModelViewSet):
+    queryset = django.contrib.auth.models.User.objects.all()
+    serializer_class = serializers.DjangoUserSerializer
+
+################################################################################
+#   Views that may require access control enforcement based on user's level
+################################################################################
 
 class ContactViewSet(viewsets.ModelViewSet):
     queryset = models.Contact.objects.all()
@@ -47,9 +66,9 @@ class DocUrlViewSet(viewsets.ModelViewSet):
     queryset = models.DocUrl.objects.all()
     serializer_class = serializers.DocUrlSerializer
 
-class TagViewSet(viewsets.ModelViewSet):
-    queryset = models.Tag.objects.all()
-    serializer_class = serializers.TagSerializer
+class IconViewSet(viewsets.ModelViewSet):
+    queryset = models.Icon.objects.all()
+    serializer_class = serializers.IconSerializer
 
 class IntentViewSet(viewsets.ModelViewSet):
     queryset = models.Intent.objects.all()
@@ -59,6 +78,30 @@ class ItemCommentViewSet(viewsets.ModelViewSet):
     queryset = models.ItemComment.objects.all()
     serializer_class = serializers.ItemCommentSerializer
 
+class ListingActivityViewSet(viewsets.ModelViewSet):
+    queryset = models.ListingActivity.objects.all()
+    serializer_class = serializers.ListingActivitySerializer
+
+class NotificationViewSet(viewsets.ModelViewSet):
+    queryset = models.Notification.objects.all()
+    serializer_class = serializers.NotificationSerializer
+
+class RejectionListingViewSet(viewsets.ModelViewSet):
+    queryset = models.RejectionListing.objects.all()
+    serializer_class = serializers.RejectionListingSerializer
+
+class ScreenshotViewSet(viewsets.ModelViewSet):
+    queryset = models.Screenshot.objects.all()
+    serializer_class = serializers.ScreenshotSerializer
+
+class TagViewSet(viewsets.ModelViewSet):
+    queryset = models.Tag.objects.all()
+    serializer_class = serializers.TagSerializer
+
+
+################################################################################
+#                     User-specific views (self/xyz)
+################################################################################
 class ApplicationLibraryEntryViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsUser,)
     serializer_class = serializers.ApplicationLibraryEntrySerializer
@@ -67,7 +110,46 @@ class ApplicationLibraryEntryViewSet(viewsets.ModelViewSet):
         return  models.ApplicationLibraryEntry.objects.filter(
             owner__username=self.request.user.username)
 
+    def create(self, request):
+        """
+        ---
+        parameters:
+            - name: listing
+              description: listing id
+              required: true
+        parameters_strategy:
+            form: replace
+            query: replace
+        omit_serializer: true
+        """
+        logger.info('creating library entry for user %s' % request.user)
+        logger.info('got data: %s' % request.data)
+        data = {
+            'listing': request.data['listing'][0]
+        }
+        serializer = serializers.LibraryEntryCreateSerializer(data=data)
+        serializer.is_valid()
+        # serializer.save(owner=request.user)
+
+    def list(self, request):
+        return super(ApplicationLibraryEntryViewSet, self).list(self, request)
+
+    def retrieve(self, request, pk=None):
+        pass
+
+    def update(self, request, pk=None):
+        pass
+
+    def partial_update(self, request, pk=None):
+        pass
+
+    def destroy(self, request, pk=None):
+        pass
+
 class ListingViewSet(viewsets.ModelViewSet):
+    """
+    Listings
+    """
     permission_classes = (permissions.IsUser,)
     serializer_class = serializers.ListingSerializer
     filter_backends = (filters.SearchFilter, )
@@ -95,37 +177,38 @@ class ListingViewSet(viewsets.ModelViewSet):
         return model_access.filter_listings(self.request.user.username,
             filter_params)
 
-class ListingActivityViewSet(viewsets.ModelViewSet):
-    queryset = models.ListingActivity.objects.all()
-    serializer_class = serializers.ListingActivitySerializer
+    def list(self, request):
+        """
+        ---
+        # YAML (must be separated by `---`)
 
-class RejectionListingViewSet(viewsets.ModelViewSet):
-    queryset = models.RejectionListing.objects.all()
-    serializer_class = serializers.RejectionListingSerializer
+        omit_serializer: false
 
-class ScreenshotViewSet(viewsets.ModelViewSet):
-    queryset = models.Screenshot.objects.all()
-    serializer_class = serializers.ScreenshotSerializer
+        parameters:
+            - name: categories
+              description: List of category names (AND logic)
+              required: false
+              paramType: query
+              allowMultiple: true
+            - name: agencies
+              description: List of agencies
+              paramType: query
+            - name: listing_types
+              description: List of application types
+              paramType: query
+            - name: limit
+              description: Max number of listings to retrieve
+              paramType: query
+            - name: offset
+              description: Offset
+              paramType: query
 
-class ListingTypeViewSet(viewsets.ModelViewSet):
-    queryset = models.ListingType.objects.all()
-    serializer_class = serializers.ListingTypeSerializer
+        responseMessages:
+            - code: 401
+              message: Not authenticated
+        """
+        return super(ListingViewSet, self).list(self, request)
 
-class AccessControlViewSet(viewsets.ModelViewSet):
-    queryset = models.AccessControl.objects.all()
-    serializer_class = serializers.AccessControlSerializer
-
-class IconViewSet(viewsets.ModelViewSet):
-    queryset = models.Icon.objects.all()
-    serializer_class = serializers.IconSerializer
-
-class TagViewSet(viewsets.ModelViewSet):
-    queryset = models.Tag.objects.all()
-    serializer_class = serializers.TagSerializer
-
-class NotificationViewSet(viewsets.ModelViewSet):
-    queryset = models.Notification.objects.all()
-    serializer_class = serializers.NotificationSerializer
 
 class NotificationSelfViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsUser,)
@@ -143,10 +226,10 @@ class NotificationSelfViewSet(viewsets.ModelViewSet):
         return  models.Notification.objects.filter(
             expires_date__gt=datetime.datetime.now())
 
-class DjangoUserViewSet(viewsets.ModelViewSet):
-	queryset = django.contrib.auth.models.User.objects.all()
-	serializer_class = serializers.DjangoUserSerializer
 
+################################################################################
+#                     Function-based Views
+################################################################################
 
 @api_view(['GET'])
 @permission_classes((permissions.IsUser, ))
