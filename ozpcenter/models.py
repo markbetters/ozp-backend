@@ -169,8 +169,11 @@ class ApplicationLibraryEntry(models.Model):
 	    * owner
 
 	TODO: folder seems HUD-specific
+
+	TODO: should we allow multiple bookmarks of the same listing (perhaps
+		in different folders)?
 	"""
-	folder = models.CharField(max_length=255)
+	folder = models.CharField(max_length=255, blank=True)
 	owner = models.ForeignKey('Profile', related_name='application_library_entries')
 	listing = models.ForeignKey('Listing', related_name='application_library_entries')
 

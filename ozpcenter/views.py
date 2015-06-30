@@ -7,6 +7,7 @@ import logging
 import django.contrib.auth
 from rest_framework.decorators import api_view
 from rest_framework.decorators import permission_classes
+from rest_framework import generics, status
 from rest_framework import filters
 from rest_framework import viewsets
 from rest_framework.response import Response
@@ -102,9 +103,8 @@ class TagViewSet(viewsets.ModelViewSet):
 ################################################################################
 #                     User-specific views (self/xyz)
 ################################################################################
-class ApplicationLibraryEntryViewSet(viewsets.ModelViewSet):
+class ApplicationLibraryEntryViewSet(viewsets.ViewSet):
     permission_classes = (permissions.IsUser,)
-    serializer_class = serializers.ApplicationLibraryEntrySerializer
 
     def get_queryset(self):
         return  models.ApplicationLibraryEntry.objects.filter(
@@ -112,11 +112,28 @@ class ApplicationLibraryEntryViewSet(viewsets.ModelViewSet):
 
     def create(self, request):
         """
+        Return:
+        {
+            "listing": {
+                "title": x,
+                "launch_url": x,
+                "universal_name": x,
+                "small_icon": x,
+                "large_icon": x,
+                "banner_icon": x,
+                "large_banner_icon": x,
+                "id": x,
+            },
+            "folder": null
+        }
         ---
         parameters:
             - name: listing
               description: listing id
               required: true
+            - name: folder
+              description: folder
+              type: string
         parameters_strategy:
             form: replace
             query: replace
@@ -124,15 +141,35 @@ class ApplicationLibraryEntryViewSet(viewsets.ModelViewSet):
         """
         logger.info('creating library entry for user %s' % request.user)
         logger.info('got data: %s' % request.data)
+        # data = {}
+        # if not 'folder' in request.data:
+        #     data['folder'] = ''
+        # else:
+        #     data['folder'] = request.data['folder']
+        # data['listing'] = request.data['listing'][0]
         data = {
-            'listing': request.data['listing'][0]
+            'listing_id': '1',
+            'folder': ''
         }
-        serializer = serializers.LibraryEntryCreateSerializer(data=data)
-        serializer.is_valid()
-        # serializer.save(owner=request.user)
+
+
+        serializer = serializers.LibraryEntrySerializer(data=data,
+            context={'request': request})
+        if not serializer.is_valid():
+            logger.error('%s' % serializer.errors)
+            return
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def list(self, request):
-        return super(ApplicationLibraryEntryViewSet, self).list(self, request)
+        """
+        ---
+        serializer: ozpcenter.serializers.ApplicationLibraryEntrySerializer
+        """
+        queryset = self.get_queryset()
+        serializer = serializers.ApplicationLibraryEntrySerializer(queryset,
+            many=True, context={'request': request})
+        return Response(serializer.data)
 
     def retrieve(self, request, pk=None):
         pass
