@@ -15,6 +15,11 @@ import ozpcenter.api.profile.serializers as profile_serializers
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center')
 
+# contacts are only used in conjunction with Listings
+class ContactSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = models.Contact
+
 class ListingTypeSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.ListingType

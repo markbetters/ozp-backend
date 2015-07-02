@@ -1,15 +1,15 @@
 """
-Model access tests
+Utils tests
 """
 from django.test import TestCase
 from django.db.utils import IntegrityError
 from django.db import transaction
 
 from ozpcenter import models as models
-from ozpcenter import model_access as model_access
+from ozpcenter import utils as utils
 from ozpcenter.scripts import sample_data_generator as data_gen
 
-class ModelAccessTest(TestCase):
+class UtilsTest(TestCase):
 
 	def setUp(self):
 		"""
@@ -26,7 +26,7 @@ class ModelAccessTest(TestCase):
 
 	def test_make_keysafe(self):
 		name = 'Test @string\'s !'
-		key_name = model_access.make_keysafe(name)
+		key_name = utils.make_keysafe(name)
 		self.assertEqual('teststrings', key_name)
 
 	def test_get_listings(self):

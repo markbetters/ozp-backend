@@ -1,5 +1,7 @@
 """
 Views
+
+TODO: POST on api/image (create/edit listing) w/ contentType and id fields
 """
 import logging
 
