@@ -6,8 +6,8 @@ from django.conf.urls import url, include
 
 # Wire up our API using automatic URL routing.
 urlpatterns = [
-    url(r'', include('ozpcenter.api.access_control.urls')),
     url(r'', include('ozpcenter.api.agency.urls')),
+    url(r'', include('ozpcenter.api.access_control.urls')),
     url(r'', include('ozpcenter.api.category.urls')),
     url(r'', include('ozpcenter.api.contact_type.urls')),
     url(r'', include('ozpcenter.api.image.urls')),

@@ -10,6 +10,10 @@ import ozpcenter.api.listing.views as views
 router = routers.DefaultRouter()
 
 router.register(r'listing', views.ListingViewSet, base_name='listing')
+router.register(r'screenshot', views.ScreenshotViewSet)
+router.register(r'tag', views.TagViewSet)
+router.register(r'listingtype', views.ListingTypeViewSet)
+router.register(r'contact', views.ContactViewSet)
 
 # Wire up our API using automatic URL routing.
 urlpatterns = [

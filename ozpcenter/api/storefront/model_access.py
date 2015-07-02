@@ -86,7 +86,7 @@ def get_metadata():
 			data['listing_types'] = models.ListingType.objects.all().values(
 				'title', 'description')
 			data['agencies'] = models.Agency.objects.all().values(
-				'title', 'short_name', 'icon_url')
+				'title', 'short_name', 'icon')
 			data['contact_types'] = models.ContactType.objects.all().values(
 				'name', 'required')
 			data['intents'] = models.Intent.objects.all().values(
