@@ -31,6 +31,8 @@ def MetadataView(request):
 def StorefrontView(request):
     """
     Featured, recent, and most popular listings
+    ---
+    serializer: ozpcenter.api.storefront.serializers.StorefrontSerializer
     """
     data = model_access.get_storefront(request.user)
     serializer = serializers.StorefrontSerializer(data,
