@@ -7,7 +7,7 @@ import logging
 
 from rest_framework import viewsets
 
-import ozpcenter.image.serializers as serializers
+import ozpcenter.api.image.serializers as serializers
 import ozpcenter.models as models
 
 # Get an instance of a logger

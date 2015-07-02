@@ -14,6 +14,8 @@ import logging
 
 import django.contrib.auth
 from rest_framework import viewsets
+from rest_framework.decorators import api_view
+from rest_framework.decorators import permission_classes
 
 import ozpcenter.api.profile.serializers as serializers
 import ozpcenter.models as models

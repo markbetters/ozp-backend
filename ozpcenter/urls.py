@@ -6,16 +6,15 @@ from django.conf.urls import url, include
 
 # Wire up our API using automatic URL routing.
 urlpatterns = [
-    url(r'^', include(router.urls)),
-    url(r'^/', include('ozpcenter.api.access_control.urls')),
-    url(r'^/', include('ozpcenter.api.agency.urls')),
-    url(r'^/', include('ozpcenter.api.category.urls')),
-    url(r'^/', include('ozpcenter.api.contact_type.urls')),
-    url(r'^/', include('ozpcenter.api.image.urls')),
-    url(r'^/', include('ozpcenter.api.intent.urls')),
-    url(r'^/', include('ozpcenter.api.library.urls')),
-    url(r'^/', include('ozpcenter.api.listing.urls')),
-    url(r'^/', include('ozpcenter.api.notification.urls')),
-    url(r'^/', include('ozpcenter.api.profile.urls')),
-    url(r'^/', include('ozpcenter.api.storefront.urls'))
+    url(r'', include('ozpcenter.api.access_control.urls')),
+    url(r'', include('ozpcenter.api.agency.urls')),
+    url(r'', include('ozpcenter.api.category.urls')),
+    url(r'', include('ozpcenter.api.contact_type.urls')),
+    url(r'', include('ozpcenter.api.image.urls')),
+    url(r'', include('ozpcenter.api.intent.urls')),
+    url(r'', include('ozpcenter.api.library.urls')),
+    url(r'', include('ozpcenter.api.listing.urls')),
+    url(r'', include('ozpcenter.api.notification.urls')),
+    url(r'', include('ozpcenter.api.profile.urls')),
+    url(r'', include('ozpcenter.api.storefront.urls'))
 ]

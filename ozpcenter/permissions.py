@@ -6,7 +6,7 @@ Can do things like if view.action == 'create'
 """
 from rest_framework import permissions
 import ozpcenter.models as models
-import ozpcenter.model_access as model_access
+import ozpcenter.api.profile.model_access as model_access
 
 class IsUser(permissions.BasePermission):
     """

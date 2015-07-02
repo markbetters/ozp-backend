@@ -11,7 +11,7 @@ from rest_framework.response import Response
 import ozpcenter.api.storefront.serializers as serializers
 import ozpcenter.permissions as permissions
 import ozpcenter.models as models
-import ozpcenter.storefront.model_access as model_access
+import ozpcenter.api.storefront.model_access as model_access
 
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center')

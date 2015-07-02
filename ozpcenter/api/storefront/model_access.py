@@ -32,7 +32,7 @@ def get_storefront(username):
 	for i in user.organizations.all():
 		orgs += '%s_' % i.title
 	orgs_key = utils.make_keysafe(orgs)
-	access_control_key = make_keysafe(user.access_control.title)
+	access_control_key = utils.make_keysafe(user.access_control.title)
 
 	key = 'storefront:%s:%s' % (orgs_key, access_control_key)
 	data = cache.get(key)

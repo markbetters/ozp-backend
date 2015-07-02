@@ -32,7 +32,7 @@ class LibraryApiTest(APITestCase):
 	def test_get_library(self):
 		factory = APIRequestFactory()
 		user = models.Profile.objects.get(username='wsmith').django_user
-		view = views.ApplicationLibraryEntryViewSet.as_view({'get': 'list'})
+		view = views.UserLibraryViewSet.as_view({'get': 'list'})
 		request = factory.get('/self/library', format='json')
 		force_authenticate(request, user=user)
 		response = view(request)
@@ -47,5 +47,5 @@ class LibraryApiTest(APITestCase):
 		# response = self.client.post(url, data, format='json')
 		# self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 		# self.assertEqual(response.data, data)
-
+		pass
 

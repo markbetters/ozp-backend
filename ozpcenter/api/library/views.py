@@ -7,6 +7,7 @@ from rest_framework import viewsets
 
 import ozpcenter.api.library.serializers as serializers
 import ozpcenter.models as models
+import ozpcenter.permissions as permissions
 
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center')
@@ -78,7 +79,7 @@ class UserLibraryViewSet(viewsets.ViewSet):
     def list(self, request):
         """
         ---
-        serializer: ozpcenter.serializers.ApplicationLibraryEntrySerializer
+        serializer: ozpcenter.api.library.serializers.ApplicationLibraryEntrySerializer
         """
         queryset = self.get_queryset()
         serializer = serializers.ApplicationLibraryEntrySerializer(queryset,

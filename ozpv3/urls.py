@@ -15,10 +15,18 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
+from rest_framework import routers
+
+import ozpcenter.views as views
+
+# Routers provide an easy way of automatically determining the URL conf.
+router = routers.SimpleRouter()
 
 urlpatterns = [
+    # url(r'^$', views.APIRoot.as_view()),
+    url(r'^', include(router.urls)),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^api/', include('ozpcenter.urls')),
-    url(r'^docs/', include('rest_framework_swagger.urls')),
+    url(r'^docs/', include('rest_framework_swagger.urls'))
 ]

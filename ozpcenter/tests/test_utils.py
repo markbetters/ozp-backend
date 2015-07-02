@@ -28,25 +28,3 @@ class UtilsTest(TestCase):
 		name = 'Test @string\'s !'
 		key_name = utils.make_keysafe(name)
 		self.assertEqual('teststrings', key_name)
-
-	def test_get_listings(self):
-		username = 'wsmith'
-		listings = model_access.get_listings(username)
-		self.assertEqual(len(listings), 2)
-		all_listings = models.Listing.objects.all()
-		self.assertEqual(len(all_listings), 4)
-
-	def test_get_storefront(self):
-		username = 'wsmith'
-		listings = model_access.get_storefront(username)
-
-	def test_filter_listings(self):
-		username = 'wsmith'
-		filter_params = {
-			'categories': ['Business'],
-			'agencies': ['Ministry of Truth'],
-			'listing_types': ['Web Application'],
-			'offset': 0,
-			'limit': 24
-		}
-		listings = model_access.filter_listings(username, filter_params)

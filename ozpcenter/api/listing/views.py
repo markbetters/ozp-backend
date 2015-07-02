@@ -45,6 +45,7 @@ from rest_framework import filters
 from rest_framework import viewsets
 
 import ozpcenter.api.listing.serializers as serializers
+import ozpcenter.permissions as permissions
 import ozpcenter.models as models
 
 # Get an instance of a logger

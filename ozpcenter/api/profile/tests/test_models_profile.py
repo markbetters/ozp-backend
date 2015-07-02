@@ -11,7 +11,7 @@ from django.db import transaction
 
 from django import forms
 from ozpcenter import models as models
-from ozpcenter import model_forms as model_forms
+import ozpcenter.api.profile.model_forms as model_forms
 
 import ozpcenter.tests.factories as f
 

@@ -7,6 +7,7 @@ import logging
 from rest_framework import viewsets
 
 import ozpcenter.api.notification.serializers as serializers
+import ozpcenter.permissions as permissions
 import ozpcenter.models as models
 
 # Get an instance of a logger
