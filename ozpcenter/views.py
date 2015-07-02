@@ -157,7 +157,9 @@ class ApplicationLibraryEntryViewSet(viewsets.ViewSet):
             context={'request': request})
         if not serializer.is_valid():
             logger.error('%s' % serializer.errors)
-            return
+            return Response(serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST)
+
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 

@@ -1,5 +1,7 @@
 """
 url routers
+
+Include all other 'resource-level' urls here
 """
 from django.conf.urls import url, include
 from rest_framework import routers
@@ -37,6 +39,7 @@ router.register(r'djangoUser', views.DjangoUserViewSet)
 # Wire up our API using automatic URL routing.
 urlpatterns = [
     url(r'^', include(router.urls)),
+    url(r'^', include(access_control.router.urls)),
     url(r'^self/$', views.current_user),
     url(r'^storefront/$', views.storefrontView),
     url(r'^metadata/$', views.metadataView),

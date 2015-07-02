@@ -133,30 +133,28 @@ class NotificationListingSerializer(serializers.HyperlinkedModelSerializer):
 ################################################################################
 #       Self Serializers
 ################################################################################
-# class ListingLibrarySerializer(serializers.HyperlinkedModelSerializer):
-#     class Meta:
-#         model = models.Listing
-#         depth = 1
-#         fields = ('id', 'title', 'unique_name')
-#         read_only_fields = ('title', 'unique_name')
-#         # fields = ('title', 'unique_name', 'small_icon', 'large_icon',
-#         #     'banner_icon', 'large_banner_icon')
-#         validators = []
+class ListingLibrarySerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = models.Listing
+        depth = 1
+        fields = ('id', 'title', 'unique_name')
+        read_only_fields = ('title', 'unique_name')
+        # fields = ('title', 'unique_name', 'small_icon', 'large_icon',
+        #     'banner_icon', 'large_banner_icon')
+        validators = []
 
-#     def validate(self, data):
-#         """
-#         TODO
-#         """
-#         logger.info('validate invoked for ListingLibrarySerializer: %s' % data)
-#         return data
+    def validate(self, data):
+        """
+        TODO
+        """
+        logger.info('validate invoked for ListingLibrarySerializer: %s' % data)
+        return data
 
 class LibraryEntrySerializer(serializers.Serializer):
     """
     Serializer for create self/library
     """
-    listing_id = serializers.IntegerField(max_value=None, min_value=0)
-    title = serializers.CharField(max_length=255, read_only=True)
-    unique_name = serializers.CharField(max_length=255, read_only=True)
+    listing = ListingLibrarySerializer()
     folder = serializers.CharField(max_length=255, required=False,
         allow_blank=True)
 
@@ -170,11 +168,10 @@ class LibraryEntrySerializer(serializers.Serializer):
 
     def create(self, validated_data):
         logger.info('inside LibraryEntryWriteSerializer.create - validated data: %s' % validated_data)
-        listing = models.Listing.objects.get(id=validated_data['listing_id'])
+        listing = models.Listing.objects.get(id=validated_data['listing'])
         owner = models.Profile.objects.get(username=self.context['request'].user.username)
         entry = models.ApplicationLibraryEntry(listing=listing, owner=owner,folder=validated_data['folder'])
         entry.save()
-        unique_name = 'something'
         return entry
 
 class ApplicationLibraryEntrySerializer(serializers.HyperlinkedModelSerializer):
