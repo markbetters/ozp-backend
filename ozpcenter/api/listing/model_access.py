@@ -53,6 +53,14 @@ def filter_listings(username, filter_params):
 
 	return objects
 
+def get_self_listings(username):
+	"""
+	Get the Listings that belong to this user
+
+	Key: self_listings:<username>
+	"""
+	pass
+
 def get_listings(username):
 	"""
 	Get Listings this user can see

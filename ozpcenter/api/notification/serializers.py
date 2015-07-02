@@ -12,4 +12,4 @@ logger = logging.getLogger('ozp-center')
 
 class CategorySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = models.Category
+        model = models.Notification

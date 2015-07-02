@@ -12,10 +12,10 @@ import ozpcenter.utils as utils
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center')
 
-def get_self_application_library(username):
+def get_self_notifications(username):
 	"""
-	Get the ApplicationLibrary for this user
+	Get notifications for user
 
-	Key: app_library:<username>
+	Key: notifications:<username>
 	"""
 	pass
