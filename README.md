@@ -20,6 +20,17 @@ There's also the admin interface at `http://localhost:8000/admin`
 
 
 ## For Developers
+Understanding this project requires knowing a small-medium amount of Django and
+a large amount of Django Rest Framework (DRF). From Django itself:
+* Object-relational mapper (ORM)
+* Authentication
+* `manage.py` utility (testing, database migration)
+* Caching
+* Logging
+* Settings
+
+Most of the URLs and Views are done with DRF, and very little is done with
+templating, forms, and the admin site
 
 ### Serializers
 Serialization = Python obj -> JSON
@@ -29,12 +40,12 @@ Deserialization = JSON -> Python obj
 DRF does not have a built-in, defacto way of specifying different serializers
 for handling input on a request vs output on a Response. Sometimes this is
 acceptable, but often times the two structures are not the same. For instance,
-some fields may be auto-generated on the server when a POST is made (so they
-shouldn't be part of the POST Request data that will be deserialized), but a
-GET request should return a Response that includes this information. For
+some fields may be auto-generated on the server when a `POST` is made (so they
+shouldn't be part of the `POST` Request data that will be deserialized), but a
+`GET` request should return a Response that includes this information. For
 simple cases like this, Serializer fields can be marked as `read_only` or
-`write_only` (read_only fields will not become part of the serializer's
-validated_data). If more control than this is needed (e.g. very different input
+`write_only` (`read_only` fields will not become part of the serializer's
+`validated_data`). If more control than this is needed (e.g. very different input
 and output formats), the `get_serializer_class()` method can be overridden
 in the View and selected dynamically based on request.method (`POST`, `GET`,
 etc).
@@ -105,10 +116,19 @@ database and validation levels, SQLite does not enforce the length of a
 VARCHAR
 
 ### Views
-TODO
+Nothing much special to say about views, except that we generally prefer to
+use class-based views and `ViewSet`s (`ModelViewSet`s in particular) just
+because it's less code (assuming you don't require a significant amount of
+customization)
 
-### Urls
-TODO
+### URLs
+All resource endpoints are defined in the resource's respective `urls.py` in
+`ozpcenter/api/`. `ozpcenter.urls` collects all of these endpoints, where they
+are given the `api/` prefix in the global `urls.py`
+
+DRF uses a browsable API, meaning that you can go to
+`localhost:8000/api/metadata` (for instance) in your browser. In general, the
+Swagger documentation is the recommended way to view and interact with the API
 
 ### Tests
 TODO
