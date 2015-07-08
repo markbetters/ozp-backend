@@ -3,6 +3,9 @@
 model definitions for ozpcenter
 
 """
+import logging
+
+import django.contrib.auth
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.core.validators import RegexValidator
@@ -16,6 +19,8 @@ from django_enumfield import enum
 import ozpcenter.constants as constants
 import ozpcenter.access_control as access_control
 
+# Get an instance of a logger
+logger = logging.getLogger('ozp-center')
 
 # Listing approval statuses
 class ApprovalStatus(enum.Enum):
@@ -312,27 +317,24 @@ class Profile(models.Model):
 	"""
 	A User (user's Profile) on OZP
 
+	Note that some information (username, email, last_login, date_joined) is
+	held in the associated Django User model. In addition, the user's role
+	(USER, ORG_STEWARD, or APPS_MALL_STEWARD) is represented by the Group
+	associated with the Django User model
+
+	Notes on use of contrib.auth.models.User model:
+		* first_name and last_name are not used
+		* is_superuser is always set to False
+		* is_staff is set to True for Org Stewards and Apps Mall Stewards
+		* password is only used in development. On production, client SSL certs
+			are used, and so password is set to TODO: TBD
+
 	TODO: Auditing for create, update, delete
 	"""
 	#application_library = db.relationship('ApplicationLibraryEntry',
 	#                                      backref='owner')
-	USER = 'USER'
-	ORG_STEWARD = 'ORG_STEWARD'
-	APPS_MALL_STEWARD = 'APPS_MALL_STEWARD'
-	# TODO: add metrics?
-	ROLES = (
-		(USER, 'USER'),
-		(ORG_STEWARD, 'ORG_STEWARD'),
-		(APPS_MALL_STEWARD, 'APPS_MALL_STEWARD'),
-	)
-	username = models.CharField(max_length=255, unique=True)
 	display_name = models.CharField(max_length=255)
-	email = models.CharField(max_length=255)
-	bio = models.CharField(max_length=1000)
-	created_date = models.DateTimeField(auto_now_add=True)
-	last_login = models.DateTimeField(blank=True, null=True)
-	highest_role = models.CharField(max_length=128, choices=ROLES,
-		default=USER)
+	bio = models.CharField(max_length=1000, blank=True)
 	organizations = models.ManyToManyField(
 		Agency,
 		related_name='profiles',
@@ -345,9 +347,10 @@ class Profile(models.Model):
 
 	access_control = models.ForeignKey(AccessControl, related_name='profiles')
 
-	# instead of overriding or expanding the builtin Django User model used
-	# for authentication, just link to it from here
-	django_user = models.OneToOneField(settings.AUTH_USER_MODEL, null=True,
+	# instead of overriding the builtin Django User model used
+	# for authentication, we extend it
+	# https://docs.djangoproject.com/en/1.8/topics/auth/customizing/#extending-the-existing-user-model
+	user = models.OneToOneField(settings.AUTH_USER_MODEL, null=True,
 		blank=True)
 
 	# TODO
@@ -357,10 +360,104 @@ class Profile(models.Model):
 	# django_user
 
 	def __repr__(self):
-	    return self.username
+	    return self.user.username
 
 	def __str__(self):
-		return self.username
+		return self.user.username
+
+	@staticmethod
+	def create_groups():
+		"""
+		Groups are used as Roles, and as such are relatively static, hence
+		their declaration here (NOTE that this must be invoked manually
+		after the server has started)
+		"""
+		# create the different Groups (Roles) of users
+		group = django.contrib.auth.models.Group.objects.create(
+			name='USER')
+		group = django.contrib.auth.models.Group.objects.create(
+			name='ORG_STEWARD')
+		group = django.contrib.auth.models.Group.objects.create(
+			name='APPS_MALL_STEWARD')
+
+	def highest_role(self):
+		"""
+		APPS_MALL_STEWARD > ORG_STEWARD > USER
+		"""
+		groups = self.user.groups.all()
+		group_names = [i.name for i in groups]
+
+		if 'APPS_MALL_STEWARD' in group_names:
+			return 'APPS_MALL_STEWARD'
+		elif 'ORG_STEWARD' in group_names:
+			return 'ORG_STEWARD'
+		elif 'USER' in group_names:
+			return 'USER'
+		else:
+			# TODO: raise exception?
+			logger.error('User %s has invalid Group' % self.user.username)
+			return ''
+
+	@staticmethod
+	def create_user(username, **kwargs):
+		"""
+		Create a new User and Profile object
+
+		kwargs:
+			password
+			display_name
+			bio
+			access_control (models.access_control.title)
+			organizations (['org1_title', 'org2_title'])
+			stewarded_organizations (['org1_title', 'org2_title'])
+			groups (['group1_name', 'group2_name'])
+
+		"""
+		# TODO: what to make default password?
+		password = kwargs.get('password', 'password')
+
+		email = kwargs.get('email', '')
+
+		# create User object
+		user = django.contrib.auth.models.User.objects.create_user(
+			username=username, password=password, email=email)
+		user.save()
+
+		# add user to group(s) (i.e. Roles - USER, ORG_STEWARD,
+		# APPS_MALL_STEWARD). If no specific Group is provided, we
+		# will default to USER
+		groups = kwargs.get('groups', ['USER'])
+		for i in groups:
+			g = django.contrib.auth.models.Group.objects.get(name=i)
+			user.groups.add(g)
+
+		# get additional profile information
+		display_name = kwargs.get('display_name', username)
+		bio = kwargs.get('password', '')
+		ac = kwargs.get('access_control', 'UNCLASSIFIED')
+		access_control = AccessControl.objects.get(title=ac)
+
+		# create the profile object and associate it with the User
+		p = Profile(display_name=display_name,
+			bio=bio,
+			access_control=access_control,
+			user=user
+		)
+		p.save()
+
+		# add organizations
+		organizations = kwargs.get('organizations', [])
+		for i in organizations:
+			org = Agency.objects.get(title=i)
+			p.organizations.add(org)
+
+		# add stewarded organizations
+		organizations = kwargs.get('stewarded_organizations', [])
+		for i in organizations:
+			org = Agency.objects.get(title=i)
+			p.stewarded_organizations.add(org)
+
+		return p
 
 
 class AccessControlListingManager(models.Manager):
@@ -377,7 +474,7 @@ class AccessControlListingManager(models.Manager):
 		# get all listings
 		objects = super(AccessControlListingManager, self).get_queryset()
 		# filter out private listings
-		user = Profile.objects.get(username=username)
+		user = Profile.objects.get(user__username=username)
 		user_orgs = user.organizations.all()
 		user_orgs = [i.title for i in user_orgs]
 		# get all agencies for which this user is not a member

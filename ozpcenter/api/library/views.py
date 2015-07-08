@@ -1,5 +1,5 @@
 """
-Views
+Library views
 """
 import logging
 
@@ -14,10 +14,29 @@ import ozpcenter.permissions as permissions
 logger = logging.getLogger('ozp-center')
 
 class LibraryViewSet(viewsets.ModelViewSet):
+    """
+    ModelViewSet for getting all library entries for all users
+
+    Must be an Org Steward to access this endpoint
+
+    GET api/library - return a list of all user's libraries
+    POST, PUT, PATCH, DELETE api/library/<id> - unallowed (for now)
+    """
+    permission_classes = (permissions.IsOrgSteward,)
     queryset = models.ApplicationLibraryEntry.objects.all()
     serializer_class = serializers.LibrarySerializer
 
 class UserLibraryViewSet(viewsets.ViewSet):
+    """
+    ViewSet for api/self/library
+
+    GET api/self/library - return a list of this user's library (full listing info)
+    POST api/self/library - add a listing to user's library
+        data = {'listing_id': id}
+    DELETE api/self/library/<id> - remove an entry from user's library
+    PUT, PATCH api/library/<id> - unallowed (library entries can only be created
+        or deleted, not updated)
+    """
     permission_classes = (permissions.IsUser,)
 
     def get_queryset(self):
@@ -90,11 +109,11 @@ class UserLibraryViewSet(viewsets.ViewSet):
     def retrieve(self, request, pk=None):
         pass
 
-    def update(self, request, pk=None):
-        pass
+    # def update(self, request, pk=None):
+    #     pass
 
-    def partial_update(self, request, pk=None):
-        pass
+    # def partial_update(self, request, pk=None):
+    #     pass
 
     def destroy(self, request, pk=None):
         pass

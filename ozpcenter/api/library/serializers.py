@@ -51,7 +51,7 @@ class LibraryEntrySerializer(serializers.Serializer):
     def create(self, validated_data):
         logger.info('inside LibraryEntryWriteSerializer.create - validated data: %s' % validated_data)
         listing = models.Listing.objects.get(id=validated_data['listing'])
-        owner = models.Profile.objects.get(username=self.context['request'].user.username)
+        owner = models.Profile.objects.get(user__username=self.context['request'].user.username)
         entry = models.ApplicationLibraryEntry(listing=listing, owner=owner,folder=validated_data['folder'])
         entry.save()
         return entry

@@ -27,7 +27,7 @@ def get_storefront(username):
 
 	Key: storefront:<org_names>:<max_classification_level>
 	"""
-	user = models.Profile.objects.get(username=username)
+	user = models.Profile.objects.get(user__username=username)
 	orgs = ''
 	for i in user.organizations.all():
 		orgs += '%s_' % i.title

@@ -24,12 +24,12 @@ def get_profile(username):
 	data = cache.get(key)
 	if data is None:
 		try:
-			data = models.Profile.objects.get(username=username)
+			data = models.Profile.objects.get(user__username=username)
 			cache.set(key, data)
-			logger.info('NOT getting data for key: %s from cache' % key)
+			logger.debug('NOT getting data for key: %s from cache' % key)
 			return data
 		except ObjectDoesNotExist:
 			return None
 	else:
-		logger.info('GOT data for key: %s from cache' % key)
+		logger.debug('GOT data for key: %s from cache' % key)
 		return data

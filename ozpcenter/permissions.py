@@ -19,8 +19,7 @@ class IsUser(permissions.BasePermission):
         profile = model_access.get_profile(request.user.username)
         if profile is None:
            return False
-        if profile.highest_role in [models.Profile.USER,
-            models.Profile.ORG_STEWARD, models.Profile.APPS_MALL_STEWARD]:
+        if profile.highest_role() in ['USER', 'ORG_STEWARD', 'APPS_MALL_STEWARD']:
         	return True
         else:
         	return False
@@ -36,8 +35,7 @@ class IsOrgSteward(permissions.BasePermission):
     	profile = model_access.get_profile(request.user.username)
     	if profile is None:
     		return False
-    	if profile.highest_role in [models.Profile.ORG_STEWARD,
-            models.Profile.APPS_MALL_STEWARD]:
+    	if profile.highest_role() in ['ORG_STEWARD', 'APPS_MALL_STEWARD']:
     		return True
     	else:
     		return False
@@ -53,7 +51,7 @@ class IsAppsMallSteward(permissions.BasePermission):
     	profile = model_access.get_profile(request.user.username)
     	if profile is None:
     		return False
-    	if profile.highest_role == models.Profile.APPS_MALL_STEWARD:
+    	if profile.highest_role() == 'APPS_MALL_STEWARD':
     		return True
     	else:
     		return False

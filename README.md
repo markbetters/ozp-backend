@@ -130,6 +130,66 @@ DRF uses a browsable API, meaning that you can go to
 `localhost:8000/api/metadata` (for instance) in your browser. In general, the
 Swagger documentation is the recommended way to view and interact with the API
 
+### Authentication and Authorization
+Authentication and authorization is based on the default `django.contrib.auth`
+system built into Django, with numerous customizations.
+
+The default User model is extended by giving the `Profile` model a one-to-one
+relationship with the `django.contrib.auth.models.User` model, as described
+[here](https://docs.djangoproject.com/en/1.8/topics/auth/customizing/#extending-the-existing-user-model)
+
+The default [User](https://docs.djangoproject.com/en/1.8/ref/contrib/auth/#user)
+model has the following fields:
+
+* username
+* first_name
+* last_name
+* email
+* password
+* groups (many-to-many relationship to Group)
+* user_permissions (many-to-many relationship to Permission)
+* is_staff (Boolean. Designates whether this user can access the admin site)
+* is_active (Boolean. Designates whether this user account should be considered
+	active)
+* is_superuser (Boolean. Designates that this user has all permissions without
+	explicitly assigning them)
+* last_login (a datetime of the user's last login)
+* date_joined (a datetime designating when the account was created)
+
+Of these fields:
+
+* first_name and last_name are not used
+* is_superuser is always set to False
+* is_staff is set to True for Org Stewards and Apps Mall Stewards
+* password is only used in development. On production, client SSL certs are
+	used, and so password is set to TODO: TBD
+
+[Groups](https://docs.djangoproject.com/en/1.8/topics/auth/default/#groups) are
+used to categorize users as Users, Org Stewards, Apps Mall Stewards, etc. These
+groups are used to partially control access to various resources (for example,
+Users cannot make modifications to the Categories). That said, the majority
+of 'access control' cannot be accomplished by creating generic permissions
+and groups. For example, an Org Steward should be able to approve a Listing only
+for organizations to which they belong. Furthermore, any resources (Listings,
+Images) that have a specific access_control associated with them must be
+hidden from users (regardless of role/group) without the appropriate level
+of access.
+
+Django Permissions are used to control access to the Admin site. By default,
+add, change, and delete permissions are added to each model in the application.
+The notion of separate permissions for these three operations don't make much
+sense for this application - for now, the default permissions will be left
+alone, but the Permissions infrastructure won't be used much beyond that. As
+previously stated, it is not possible to create generic permissions that can
+be statically assigned to users, like 'can_approve_listing', since the
+allowance of such an action depends on the object (model instance), not just the
+model type. Therefore, custom object-level permissions will typically be used
+to control access.
+
+
+In production, `django-ssl-client-auth` is used for the authentication backend
+to support PKI
+
 ### Tests
 TODO
 
@@ -138,4 +198,58 @@ TODO
 
 ### Documentation
 TODO
+
+## Controlling Access
+Anonymous users have no access - all must have a valid username/password (dev)
+or valid certificate (production) to be granted any access
+
+A few resources only provide READ access:
+
+* storefront
+* metadata
+
+Many resources allow global READ access with WRITE access restricted to
+Apps Mall Stewards:
+
+* access_control
+* agency
+* category
+* contact_type
+* listing_type
+
+image
+
+* global READ
+* WRITE access allowed for all users, but the associated access_control level
+	cannot exceed that of the current user
+
+intent
+
+* global READ and WRITE allowed, but associated intent.icon.access_control
+	cannot exceed that of the current user
+
+library
+
+* READ access for ORG stewards and above
+* no WRITE access
+* READ and WRITE access to /self/library for the current user
+
+notification
+
+* global READ access
+* WRITE access restricted to Org Stewards and above, unless the notification
+	is associated with a Listing owned by this user
+* READ and WRITE access to /self/notification for the current user
+
+profile
+
+* READ access restricted to Org Stewards and above
+* WRITE access restricted to the associated user (users cannot create, modify,
+	or delete users other than themselves)
+* READ and WRITE access to /self/profile for the current user
+
+
+
+
+
 

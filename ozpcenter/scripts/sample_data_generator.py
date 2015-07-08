@@ -11,11 +11,15 @@ import pytz
 import django.contrib.auth
 
 from ozpcenter import models as models
+from ozpcenter import model_access
 
 def run():
 	"""
 	Creates basic sample data
 	"""
+	# Create Groups
+	models.Profile.create_groups()
+
 	# Access Controls
 	unclass = models.AccessControl(title='UNCLASSIFIED')
 	unclass.save()
@@ -89,28 +93,35 @@ def run():
 	t2.save()
 
 	# Org Stewards
-	p = models.Profile(username='wsmith', display_name='William Smith',
-		email='wsmith@nowhere.com', bio='I work at the Ministry of Truth',
-		highest_role=models.Profile.ORG_STEWARD,
-		access_control=unclass)
-	p.save()
-	p.organizations.add(models.Agency.objects.get(title='Ministry of Truth'))
-	p.stewarded_organizations.add(models.Agency.objects.get(title='Ministry of Truth'))
+	models.Profile.create_user('wsmith',
+		email='wsmith@nowhere.com',
+		display_name='William Smith',
+		bio='I work at the Ministry of Truth',
+		access_control='UNCLASSIFIED',
+		organizations=['Ministry of Truth'],
+		stewarded_organizations=['Ministry of Truth'],
+		groups=['ORG_STEWARD']
+	)
 
 	# Apps Mall Stewards
-	p = models.Profile(username='pboss', display_name='P Boss',
-		email='pboss@nowhere.com', bio='I am the boss',
-		highest_role=models.Profile.APPS_MALL_STEWARD,
-		access_control=unclass)
-	p.save()
+	models.Profile.create_user('pboss',
+		email='pboss@nowhere.com',
+		display_name='P Boss',
+		bio='I am the boss',
+		access_control='UNCLASSIFIED',
+		organizations=['Ministry of Truth'],
+		groups=['APPS_MALL_STEWARD']
+	)
 
 	# Regular user
-	p = models.Profile(username='jdoe', display_name='John Doe',
-		email='djoe@nowhere.com', bio='Im a normal person',
-		highest_role=models.Profile.USER,
-		access_control=unclass)
-	p.save()
-	p.organizations.add(models.Agency.objects.get(title='Ministry of Truth'))
+	p = models.Profile.create_user('jdoe',
+		email='jdoe@nowhere.com',
+		display_name='John Doe',
+		bio='I am a normal person',
+		access_control='UNCLASSIFIED',
+		organizations=['Ministry of Truth'],
+		groups=['USER']
+	)
 
 	# Notifications
 	next_week = datetime.datetime.now() + datetime.timedelta(days=7)
@@ -275,22 +286,15 @@ def run():
 
 	# bookmark listings
 	a = models.ApplicationLibraryEntry(
-		owner=models.Profile.objects.get(username='wsmith'),
+		owner=model_access.get_profile('wsmith'),
 		listing=models.Listing.objects.get(unique_name='ozp.test.bread_basket'))
 	a.save()
 
 	a = models.ApplicationLibraryEntry(
-		owner=models.Profile.objects.get(username='wsmith'),
+		owner=model_access.get_profile('wsmith'),
 		listing=models.Listing.objects.get(unique_name='ozp.test.air_mail'))
 	a.save()
 
-	# add django users corresponding to Profiles
-	django.contrib.auth.models.User.objects.create_user(username='wsmith',
-		email='wmsith@google.com', password='password')
-	django.contrib.auth.models.User.objects.create_superuser(username='admin',
-		password='password', email='admin@admin.com')
-	django.contrib.auth.models.User.objects.create_superuser(username='jdoe',
-		password='password', email='jdoe@nowhere.com')
 
 def get_categories():
 	cats = models.Category.objects.all()

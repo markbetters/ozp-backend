@@ -1,7 +1,7 @@
 """
 Tests for library endpoints (listings in a user's library)
 """
-from django.core.urlresolvers import reverse
+from rest_framework.reverse import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 from rest_framework.test import APIRequestFactory
@@ -12,6 +12,7 @@ import ozpcenter.access_control as access_control
 from ozpcenter.scripts import sample_data_generator as data_gen
 import ozpcenter.api.library.views as views
 from ozpcenter import models as models
+from ozpcenter import model_access as generic_model_access
 
 
 class LibraryApiTest(APITestCase):
@@ -30,12 +31,11 @@ class LibraryApiTest(APITestCase):
 		data_gen.run()
 
 	def test_get_library(self):
-		factory = APIRequestFactory()
-		user = models.Profile.objects.get(username='wsmith').django_user
-		view = views.UserLibraryViewSet.as_view({'get': 'list'})
-		request = factory.get('/self/library', format='json')
-		force_authenticate(request, user=user)
-		response = view(request)
+		user = generic_model_access.get_profile('wsmith').user
+		self.client.force_authenticate(user=user)
+		print('got django user: %s' % user)
+		url = '/api/library/'
+		response = self.client.get(url, format='json')
 		print('response.data: %s' % response.data)
 
 	def test_bookmark_app(self):

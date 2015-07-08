@@ -9,6 +9,7 @@ https://factoryboy.readthedocs.org/en/latest/index.html
 """
 import factory
 from faker import Factory
+import django.contrib.auth
 import ozpcenter.models as models
 
 fake = Factory.create()
@@ -21,16 +22,32 @@ class AccessControlFactory(factory.django.DjangoModelFactory):
 
 	title = fake.text(max_nb_chars=1024)
 
+class GroupFactory(factory.django.DjangoModelFactory):
+	class Meta:
+		model = django.contrib.auth.models.Group
+		# http://joequery.me/code/factory-boy-handle-unique-constraints/
+		django_get_or_create = ('name',)
+
+	name = 'USER'
 
 class UserFactory(factory.django.DjangoModelFactory):
 	class Meta:
-		model = models.Profile
+		model = django.contrib.auth.models.User
+		# http://joequery.me/code/factory-boy-handle-unique-constraints/
+		django_get_or_create = ('username', 'email')
 
 	username = fake.user_name()
-	display_name = fake.name()
 	email = fake.email()
+
+
+class ProfileFactory(factory.django.DjangoModelFactory):
+	class Meta:
+		model = models.Profile
+
+	display_name = fake.name()
 	bio = fake.text(max_nb_chars=1000)
 	access_control = factory.SubFactory(AccessControlFactory)
+	user = factory.SubFactory(UserFactory)
 
 
 class AgencyFactory(factory.django.DjangoModelFactory):
