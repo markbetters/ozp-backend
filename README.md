@@ -54,7 +54,7 @@ For details regarding input vs output serializers:
 * https://github.com/tomchristie/django-rest-framework/issues/1563
 * http://stackoverflow.com/questions/17551380/python-rest-framwork-different-serializers-for-input-and-output-of-service
 
-### Model Access
+### Model Access and Caching
 `model_access.py` files should be used to encapsulate database queries. When
 reasonable, methods in these files should support a cache:
 ```
@@ -184,7 +184,10 @@ previously stated, it is not possible to create generic permissions that can
 be statically assigned to users, like 'can_approve_listing', since the
 allowance of such an action depends on the object (model instance), not just the
 model type. Therefore, custom object-level permissions will typically be used
-to control access.
+to control access to specific resource instances (for both read and write
+operations). For list queries where multiple resources are returned, these
+object-level permission checks are not used. Instead, filters and custom
+querysets are used to ensure only the appropriate data is returned.
 
 
 In production, `django-ssl-client-auth` is used for the authentication backend
@@ -199,16 +202,19 @@ TODO
 ### Documentation
 TODO
 
+### Logging
+TODO
+
 ## Controlling Access
 Anonymous users have no access - all must have a valid username/password (dev)
 or valid certificate (production) to be granted any access
 
-A few resources only provide READ access:
+A few endpoints only provide READ access:
 
 * storefront
 * metadata
 
-Many resources allow global READ access with WRITE access restricted to
+Several resources allow global READ access with WRITE access restricted to
 Apps Mall Stewards:
 
 * access_control
@@ -248,6 +254,23 @@ profile
 	or delete users other than themselves)
 * READ and WRITE access to /self/profile for the current user
 
+
+listing
+
+* READ access restricted by agency (if listing is private) and by access_control
+	level
+* WRITE access:
+	* global WRITE access to create/modify/delete a listing in the draft or
+		pending state ONLY
+	* Org Stewards and above can change the state to published/approved or
+		rejected, and change state to enabled/disabled, but must respect
+		Organization (an Org Steward cannot modify
+		a listing for which they are not the owner and/or not a member of
+		the listing's agency)
+	* global WRITE access to create/modify/delete reviews (item_comment) for
+		any listing (must respect organization (if private) and access_control
+		)
+* READ access to /self/listing to return listings that current user owns (?)
 
 
 
