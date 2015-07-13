@@ -20,7 +20,9 @@ def run():
 	# Create Groups
 	models.Profile.create_groups()
 
-	# Access Controls
+	############################################################################
+	# 							Access Controls
+	############################################################################
 	unclass = models.AccessControl(title='UNCLASSIFIED')
 	unclass.save()
 	c = models.AccessControl(title='UNCLASSIFIED//ABC')
@@ -30,7 +32,9 @@ def run():
 	c = models.AccessControl(title='TOP SECRET')
 	c.save()
 
-	# Categories
+	############################################################################
+	# 							Categories
+	############################################################################
 	cat1 = models.Category(title="Books and Reference",
 		description="Things made of paper")
 	cat1.save()
@@ -48,7 +52,9 @@ def run():
 	cat.save()
 
 
-	# Contact Types
+	############################################################################
+	# 							Contact Types
+	############################################################################
 	p = models.ContactType(name='Worker')
 	p.save()
 	p = models.ContactType(name='Manager')
@@ -56,7 +62,9 @@ def run():
 	p = models.ContactType(name='Boss')
 	p.save()
 
-	# Listing Types
+	############################################################################
+	# 							Listing Types
+	############################################################################
 	t = models.ListingType(title='web application',
 		description='web applications')
 	t.save()
@@ -64,7 +72,9 @@ def run():
 		description='widget things')
 	t.save()
 
-	# Intents
+	############################################################################
+	# 							Intents
+	############################################################################
 	# TODO: more realistic data
 	icon = models.Icon(icon_url='http://www.google.com/intent_view_icon.png',
 		access_control=unclass)
@@ -75,7 +85,9 @@ def run():
 		icon=icon)
 	i.save()
 
-	# Organizations
+	############################################################################
+	# 							Organizations
+	############################################################################
 	icon = models.Icon(icon_url='http://www.google.com/MoT_icon.png',
 		access_control=unclass)
 	icon.save()
@@ -95,13 +107,17 @@ def run():
 		icon=icon)
 	a.save()
 
-	# Tags
+	############################################################################
+	# 								Tags
+	############################################################################
 	t1 =  models.Tag(name='demo')
 	t1.save()
 	t2 = models.Tag(name='useless')
 	t2.save()
 
-	# Org Stewards
+	############################################################################
+	# 								Org Stewards
+	############################################################################
 	models.Profile.create_user('wsmith',
 		email='wsmith@nowhere.com',
 		display_name='William Smith',
@@ -112,7 +128,9 @@ def run():
 		groups=['ORG_STEWARD']
 	)
 
-	# Apps Mall Stewards
+	############################################################################
+	# 								Apps Mall Stewards
+	############################################################################
 	models.Profile.create_user('pboss',
 		email='pboss@nowhere.com',
 		display_name='P Boss',
@@ -122,7 +140,18 @@ def run():
 		groups=['APPS_MALL_STEWARD']
 	)
 
-	# Regular user
+	############################################################################
+	# 								Regular user
+	############################################################################
+	p = models.Profile.create_user('bjones',
+		email='bjones@nowhere.com',
+		display_name='Bob Jones',
+		bio='Nothing special',
+		access_control='UNCLASSIFIED',
+		organizations=['Ministry of Love'],
+		groups=['USER']
+	)
+
 	p = models.Profile.create_user('jdoe',
 		email='jdoe@nowhere.com',
 		display_name='John Doe',
@@ -132,7 +161,9 @@ def run():
 		groups=['USER']
 	)
 
-	# Notifications
+	############################################################################
+	# 							System Notifications
+	############################################################################
 	next_week = datetime.datetime.now() + datetime.timedelta(days=7)
 	eastern = pytz.timezone('US/Eastern')
 	next_week = eastern.localize(next_week)
@@ -143,14 +174,26 @@ def run():
 		expires_date=next_week, author=p)
 	n2.save()
 
-
-	# Contacts
+	############################################################################
+	# 							Contacts
+	############################################################################
 	c = models.Contact(name='Jimmy John', organization='Jimmy Johns',
 		contact_type=models.ContactType.objects.get(name='Manager'),
 		email='jimmyjohn@jimmyjohns.com', unsecure_phone='555-555-5555')
 	c.save()
 
-	# Listings
+	############################################################################
+	############################################################################
+	# 							Listings
+	############################################################################
+	############################################################################
+
+	############################################################################
+	# 							Air Mail
+	############################################################################
+	# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	#							Icons
+	# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	small_icon = models.Icon(icon_url='http://www.google.com/small_icon',
 		access_control=unclass)
 	small_icon.save()
@@ -163,6 +206,10 @@ def run():
 	large_banner_icon = models.Icon(icon_url='http://www.google.com/large_banner_icon',
 		access_control=unclass)
 	large_banner_icon.save()
+
+	# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	#							Listing
+	# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	l = models.Listing(
 		title='Air Mail',
 		agency=models.Agency.objects.get(title='Ministry of Truth'),
@@ -185,13 +232,28 @@ def run():
 		access_control=unclass
 	)
 	l.save()
+	# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	#							Contacts
+	# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	l.contacts.add(models.Contact.objects.get(name='Jimmy John'))
+
+	# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	#							Owners
+	# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	l.owners.add(p)
+	# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	#							Categories
+	# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	l.categories.add(cat1)
 	l.categories.add(cat2)
+	# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	#							Tags
+	# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	l.tags.add(t1)
 	l.tags.add(t2)
-	# add screenshots
+	# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	#							Screenshots
+	# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	small_img = models.Icon(icon_url='http://www.google.com/small_screenshot.png',
 		access_control=unclass)
 	small_img.save()
@@ -203,7 +265,9 @@ def run():
 		listing=models.Listing.objects.get(title='Air Mail'))
 	s.save()
 	l.screenshots.add(s)
-	# add notification
+	# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	#							Notifications
+	# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	n3 = models.Notification(message='Air Mail update next week',
 		expires_date=next_week, listing=l, author=p)
 	n3.save()
@@ -304,10 +368,6 @@ def run():
 		listing=models.Listing.objects.get(unique_name='ozp.test.air_mail'))
 	a.save()
 
-
-def get_categories():
-	cats = models.Category.objects.all()
-	print('categories: ' + str(cats))
 
 if __name__ == "__main__":
 	run()

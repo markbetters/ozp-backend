@@ -9,7 +9,7 @@ Django-based prototype for new OZP backend
 3. Create a new python environment using python 3.4.x. First, create a new
 	directory where this environment will live, for example, in
 	`~/python_envs/ozp-v3`. Now create a new environment there:
-	`virtualenv ENV -p python3.4` (where ENV is the path you used above)
+	`virtualenv ENV -p python3.4` (where `ENV` is the path you used above)
 4. Active the new environment: `source ENV/bin/activate`
 5. Install the necessary dependencies into this python environment:
 	`pip install -r requirements.txt`

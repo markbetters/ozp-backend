@@ -14,8 +14,26 @@ logger = logging.getLogger('ozp-center')
 
 def get_self_notifications(username):
 	"""
-	Get notifications for user
+	Get notifications for current user
+
+	get all notifications that have not yet expired AND:
+        * have not been dismissed by this user
+        * are regarding a listing in this user's library (if the
+            notification is listing-specific)
 
 	Key: notifications:<username>
 	"""
-	pass
+	# get all notifications that have been dismissed by this user
+    dismissed_notifications = models.Notification.objects.filter(
+        dismissed_by__user__username=self.request.user.username)
+
+    # get all unexpired notifications for listings in this user's library
+
+    # get all unexpired system-wide notifications
+    unexpired_system_notifications = models.Notification.objects.filter(
+        expires_date__gt=datetime.datetime.now(), listing=null)
+
+    # return all_unexpired_notifications - dismissed_notifications
+
+    return  models.Notification.objects.filter(
+        expires_date__gt=datetime.datetime.now())
