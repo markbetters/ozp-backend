@@ -3,17 +3,20 @@ ozp-v3
 Django-based prototype for new OZP backend
 
 ## Getting Started
-First, install python. You probably want to use a virtualenv, but it's not
-required. The app is being developed for Python 3.3+, though it should work with
-Python 2.7.6+ as well.
-
-With Python installed (and optionally using a virtualenv), install the
-dependencies: `pip install -r requirements.txt`
-
-Now run the server: `./restart_clean_dev_server.sh`
+1. Install Python 3.4.3. Python can be installed by downloading the appropriate
+	files [here](https://www.python.org/downloads/release/python-343/)
+2. Install `virtualenv`: `sudo pip install virtualenv`
+3. Create a new python environment using python 3.4.x. First, create a new
+	directory where this environment will live, for example, in
+	`~/python_envs/ozp-v3`. Now create a new environment there:
+	`virtualenv ENV -p python3.4` (where ENV is the path you used above)
+4. Active the new environment: `source ENV/bin/activate`
+5. Install the necessary dependencies into this python environment:
+	`pip install -r requirements.txt`
+6. Run the server: `./restart_clean_dev_server.sh`
 
 Swagger documentation for the api is available at `http://localhost:8000/docs/`
-Use username `wsmith` password `password` when promted for authentication info
+Use username `wsmith` password `password` when prompted for authentication info
 
 There's also the admin interface at `http://localhost:8000/admin`
 (username: `admin`, password: `password`)
