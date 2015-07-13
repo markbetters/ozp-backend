@@ -86,11 +86,20 @@ def get_metadata():
 			data['listing_types'] = models.ListingType.objects.all().values(
 				'title', 'description')
 			data['agencies'] = models.Agency.objects.all().values(
-				'title', 'short_name', 'icon')
+				'title', 'short_name', 'icon', 'id')
 			data['contact_types'] = models.ContactType.objects.all().values(
 				'name', 'required')
 			data['intents'] = models.Intent.objects.all().values(
-				'action', 'media_type', 'label', 'icon')
+				'action', 'media_type', 'label', 'icon', 'id')
+
+			# return icon/image urls instead of the id
+			# note that we will assume the icons for all intents and agencies
+			# are not access-controlled beyond the lowest setting
+			for i in data['agencies']:
+				i['icon'] = models.Icon.objects.get(id=i['icon']).icon_url
+
+			for i in data['intents']:
+				i['icon'] = models.Icon.objects.get(id=i['icon']).icon_url
 
 			cache.set(key, data)
 		except Exception as e:

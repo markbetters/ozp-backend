@@ -33,19 +33,48 @@ class LibraryApiTest(APITestCase):
 	def test_get_library(self):
 		user = generic_model_access.get_profile('wsmith').user
 		self.client.force_authenticate(user=user)
-		print('got django user: %s' % user)
 		url = '/api/library/'
 		response = self.client.get(url, format='json')
-		print('response.data: %s' % response.data)
+		# print('response.data: %s' % response.data)
 
-	def test_bookmark_app(self):
+	def test_create_library(self):
 		"""
 		POST to /self/library
 		"""
-		# url = reverse('account-list')
-		# data = {'name': 'DabApps'}
-		# response = self.client.post(url, data, format='json')
-		# self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-		# self.assertEqual(response.data, data)
-		pass
+		user = generic_model_access.get_profile('wsmith').user
+		self.client.force_authenticate(user=user)
+		url = '/api/self/library/'
+		data = {'listing_id': '1'}
+		response = self.client.post(url, data, format='json')
+		self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+		self.assertEqual(response.data['listing']['id'], 1)
 
+	def test_get_library_list(self):
+		"""
+		GET /self/library
+		"""
+		user = generic_model_access.get_profile('wsmith').user
+		self.client.force_authenticate(user=user)
+		url = '/api/self/library/'
+		response = self.client.get(url, format='json')
+		self.assertEqual(response.status_code, status.HTTP_200_OK)
+		self.assertIn('listing', response.data[0])
+		self.assertIn('id', response.data[0]['listing'])
+		self.assertIn('title', response.data[0]['listing'])
+		self.assertIn('unique_name', response.data[0]['listing'])
+		self.assertIn('folder', response.data[0])
+
+	def test_get_library_pk(self):
+		"""
+		GET /self/library/1
+		"""
+		user = generic_model_access.get_profile('wsmith').user
+		self.client.force_authenticate(user=user)
+		url = '/api/self/library/1/'
+		response = self.client.get(url, format='json')
+		self.assertEqual(response.status_code, status.HTTP_200_OK)
+		self.assertIn('listing', response.data)
+		self.assertIn('id', response.data['listing'])
+		self.assertIn('title', response.data['listing'])
+		self.assertIn('unique_name', response.data['listing'])
+		self.assertIn('folder', response.data)

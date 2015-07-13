@@ -1,10 +1,14 @@
 """
 Library views
 
+GET /self/library
+return the id and unique name of each listing in the user's library
 
 """
 import logging
 
+from django.shortcuts import get_object_or_404
+from rest_framework import status
 from rest_framework import viewsets
 from rest_framework.response import Response
 
@@ -43,27 +47,13 @@ class UserLibraryViewSet(viewsets.ViewSet):
 
     def get_queryset(self):
         return  models.ApplicationLibraryEntry.objects.filter(
-            owner__username=self.request.user.username)
+            owner__user__username=self.request.user.username)
 
     def create(self, request):
         """
-        Return:
-        {
-            "listing": {
-                "title": x,
-                "launch_url": x,
-                "universal_name": x,
-                "small_icon": x,
-                "large_icon": x,
-                "banner_icon": x,
-                "large_banner_icon": x,
-                "id": x,
-            },
-            "folder": null
-        }
         ---
         parameters:
-            - name: listing
+            - name: listing_id
               description: listing id
               required: true
             - name: folder
@@ -74,21 +64,14 @@ class UserLibraryViewSet(viewsets.ViewSet):
             query: replace
         omit_serializer: true
         """
-        logger.info('creating library entry for user %s' % request.user)
-        logger.info('got data: %s' % request.data)
-        # data = {}
-        # if not 'folder' in request.data:
-        #     data['folder'] = ''
-        # else:
-        #     data['folder'] = request.data['folder']
-        # data['listing'] = request.data['listing'][0]
         data = {
-            'listing_id': '1',
-            'folder': ''
+            'listing': {
+                'id': request.data['listing_id']
+            },
+            'folder': request.data.get('folder', '')
         }
 
-
-        serializer = serializers.LibraryEntrySerializer(data=data,
+        serializer = serializers.UserLibrarySerializer(data=data,
             context={'request': request})
         if not serializer.is_valid():
             logger.error('%s' % serializer.errors)
@@ -96,20 +79,25 @@ class UserLibraryViewSet(viewsets.ViewSet):
                 status=status.HTTP_400_BAD_REQUEST)
 
         serializer.save()
+
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def list(self, request):
         """
         ---
-        serializer: ozpcenter.api.library.serializers.ApplicationLibraryEntrySerializer
+        serializer: ozpcenter.api.library.serializers.UserLibrarySerializer
         """
         queryset = self.get_queryset()
-        serializer = serializers.ApplicationLibraryEntrySerializer(queryset,
+        serializer = serializers.UserLibrarySerializer(queryset,
             many=True, context={'request': request})
         return Response(serializer.data)
 
     def retrieve(self, request, pk=None):
-        pass
+        queryset = self.get_queryset()
+        library_entry = get_object_or_404(queryset, pk=pk)
+        serializer = serializers.UserLibrarySerializer(library_entry,
+            context={'request': request})
+        return Response(serializer.data)
 
     # def update(self, request, pk=None):
     #     pass
@@ -118,4 +106,7 @@ class UserLibraryViewSet(viewsets.ViewSet):
     #     pass
 
     def destroy(self, request, pk=None):
-        pass
+        queryset = self.get_queryset()
+        library_entry = get_object_or_404(queryset, pk=pk)
+        library_entry.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)

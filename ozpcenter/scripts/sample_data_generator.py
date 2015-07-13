@@ -76,12 +76,21 @@ def run():
 	i.save()
 
 	# Organizations
+	icon = models.Icon(icon_url='http://www.google.com/MoT_icon.png',
+		access_control=unclass)
+	icon.save()
 	a = models.Agency(title='Ministry of Truth', short_name='m-truth',
 		icon=icon)
 	a.save()
+	icon = models.Icon(icon_url='http://www.google.com/MoP_icon.png',
+		access_control=unclass)
+	icon.save()
 	a = models.Agency(title='Ministry of Peace', short_name='m-peace',
 		icon=icon)
 	a.save()
+	icon = models.Icon(icon_url='http://www.google.com/MoL_icon.png',
+		access_control=unclass)
+	icon.save()
 	a = models.Agency(title='Ministry of Love', short_name='m-love',
 		icon=icon)
 	a.save()

@@ -16,3 +16,8 @@ class AgencySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.Agency
         depth = 2
+
+class MinimalAgencySerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = models.Agency
+        fields = ('short_name',)

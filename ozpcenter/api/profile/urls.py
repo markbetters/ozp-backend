@@ -10,9 +10,11 @@ import ozpcenter.api.profile.views as views
 router = routers.DefaultRouter()
 
 router.register(r'profile', views.ProfileViewSet)
-router.register(r'djangoUser', views.DjangoUserViewSet)
+router.register(r'user', views.UserViewSet)
+router.register(r'group', views.GroupViewSet)
 
 # Wire up our API using automatic URL routing.
 urlpatterns = [
     url(r'^', include(router.urls)),
+    url(r'^self/profile/$', views.CurrentUserView)
 ]

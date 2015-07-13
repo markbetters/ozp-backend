@@ -1,5 +1,9 @@
 """
-views
+Storefront views for the Discovery page
+
+These are GET only views for retrieving a) metadata (categories, organizations,
+etc) and b) the apps displayed in the storefront (featured, recent, and
+most popular)
 """
 import logging
 

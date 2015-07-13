@@ -658,6 +658,9 @@ class ListingType(models.Model):
 class Notification(models.Model):
 	"""
 	A notification. Can optionally belong to a specific application
+
+	Notifications that do not have an associated listing are assumed to be
+	'system-wide', and thus will be sent to all users
 	"""
 	message = models.CharField(max_length=1024)
 	expires_date = models.DateTimeField()

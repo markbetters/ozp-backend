@@ -15,53 +15,47 @@ class LibrarySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.ApplicationLibraryEntry
 
+
 class LibraryListingSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.Listing
-        depth = 1
         fields = ('id', 'title', 'unique_name')
         read_only_fields = ('title', 'unique_name')
-        # fields = ('title', 'unique_name', 'small_icon', 'large_icon',
-        #     'banner_icon', 'large_banner_icon')
-        validators = []
-
-    def validate(self, data):
-        """
-        TODO
-        """
-        logger.info('validate invoked for ListingLibrarySerializer: %s' % data)
-        return data
-
-class LibraryEntrySerializer(serializers.Serializer):
-    """
-    Serializer for create self/library
-    """
-    listing = LibraryListingSerializer()
-    folder = serializers.CharField(max_length=255, required=False,
-        allow_blank=True)
-
-    def validate(self, data):
-        """
-        TODO
-        """
-        logger.info('validate invoked for LibraryEntrySerializer: %s' % data)
-        return data
+        # Any AutoFields on your model (which is what the automatically
+        # generated id key is) are set to read-only by default when Django
+        # REST Framework is creating fields in the background. read-only fields
+        # will not be part of validated_data. Override that behavior using the
+        # extra_kwargs
+        extra_kwargs = {
+            "id": {
+                "read_only": False,
+                "required": False,
+            },
+        }
 
 
-    def create(self, validated_data):
-        logger.info('inside LibraryEntryWriteSerializer.create - validated data: %s' % validated_data)
-        listing = models.Listing.objects.get(id=validated_data['listing'])
-        owner = models.Profile.objects.get(user__username=self.context['request'].user.username)
-        entry = models.ApplicationLibraryEntry(listing=listing, owner=owner,folder=validated_data['folder'])
-        entry.save()
-        return entry
-
-class ApplicationLibraryEntrySerializer(serializers.HyperlinkedModelSerializer):
+class UserLibrarySerializer(serializers.HyperlinkedModelSerializer):
     """
     Serializer for self/library - owner is always current user
     """
     listing = LibraryListingSerializer()
-    owner = profile_serializers.ProfileSerializer()
     class Meta:
         model = models.ApplicationLibraryEntry
-        fields = ('listing', 'folder', 'owner')
+        fields = ('listing', 'folder')
+
+    def validate(self, data):
+        """
+        Check for listing id (folder is optional)
+        """
+        if 'id' not in data['listing']:
+            raise serializers.ValidationError('No listing id provided')
+        return data
+
+    def create(self, validated_data):
+        folder = validated_data.get('folder', '')
+        listing = models.Listing.objects.get(id=validated_data['listing']['id'])
+        owner = models.Profile.objects.get(user__username=self.context['request'].user.username)
+        entry = models.ApplicationLibraryEntry(listing=listing, owner=owner,
+            folder=folder)
+        entry.save()
+        return entry

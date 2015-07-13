@@ -54,6 +54,14 @@ For details regarding input vs output serializers:
 * https://github.com/tomchristie/django-rest-framework/issues/1563
 * http://stackoverflow.com/questions/17551380/python-rest-framwork-different-serializers-for-input-and-output-of-service
 
+Sometimes it might not be clear where the Serializer classes should live for
+nested objects. For example, the listing resource needs to serialize the nested
+Agency model - should that Agency serializer live in the listing resource
+package or in the agency package? Generally speaking, if the serializer is
+very generic, it should live in its respective resource package. If instead
+it's highly customized (and thus unlikely to be used by other resources), it
+should live with its nested resource.
+
 ### Model Access and Caching
 `model_access.py` files should be used to encapsulate database queries. When
 reasonable, methods in these files should support a cache:

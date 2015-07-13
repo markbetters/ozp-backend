@@ -11,7 +11,7 @@ router = routers.DefaultRouter()
 
 router.register(r'notification', views.NotificationViewSet,
 	base_name='notification')
-router.register(r'self/notification', views.NotificationSelfViewSet,
+router.register(r'self/notification', views.UserNotificationViewSet,
 	base_name='notification')
 
 # Wire up our API using automatic URL routing.

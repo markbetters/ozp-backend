@@ -26,10 +26,10 @@ def get_profile(username):
 		try:
 			data = models.Profile.objects.get(user__username=username)
 			cache.set(key, data)
-			logger.debug('NOT getting data for key: %s from cache' % key)
+			# logger.debug('NOT getting data for key: %s from cache' % key)
 			return data
 		except ObjectDoesNotExist:
 			return None
 	else:
-		logger.debug('GOT data for key: %s from cache' % key)
+		# logger.debug('GOT data for key: %s from cache' % key)
 		return data
