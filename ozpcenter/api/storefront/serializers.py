@@ -13,7 +13,7 @@ import ozpcenter.api.category.serializers as category_serializers
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center')
 
-class IconSerializer(serializers.HyperlinkedModelSerializer):
+class ImageSerializer(serializers.HyperlinkedModelSerializer):
     access_control = access_control_serializers.AccessControlSerializer()
     class Meta:
         model = models.Image
@@ -74,8 +74,8 @@ class RejectionListingSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('description')
 
 class ScreenshotSerializer(serializers.HyperlinkedModelSerializer):
-    small_image = IconSerializer()
-    large_image = IconSerializer()
+    small_image = ImageSerializer()
+    large_image = ImageSerializer()
     class Meta:
         model = models.Screenshot
         fields = ('small_image', 'large_image')

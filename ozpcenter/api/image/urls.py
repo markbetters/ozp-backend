@@ -9,7 +9,7 @@ import ozpcenter.api.image.views as views
 # Routers provide an easy way of automatically determining the URL conf.
 router = routers.DefaultRouter()
 
-router.register(r'icon', views.IconViewSet)
+router.register(r'image', views.ImageViewSet)
 
 # Wire up our API using automatic URL routing.
 urlpatterns = [

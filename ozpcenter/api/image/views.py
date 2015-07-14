@@ -13,6 +13,6 @@ import ozpcenter.models as models
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center')
 
-class IconViewSet(viewsets.ModelViewSet):
+class ImageViewSet(viewsets.ModelViewSet):
     queryset = models.Image.objects.all()
-    serializer_class = serializers.IconSerializer
+    serializer_class = serializers.ImageSerializer

@@ -41,8 +41,8 @@ class RejectionListingSerializer(serializers.HyperlinkedModelSerializer):
         model = models.RejectionListing
 
 class ScreenshotSerializer(serializers.HyperlinkedModelSerializer):
-    small_image = image_serializers.IconSerializer()
-    large_image = image_serializers.IconSerializer()
+    small_image = image_serializers.ImageSerializer()
+    large_image = image_serializers.ImageSerializer()
     class Meta:
         model = models.Screenshot
 
