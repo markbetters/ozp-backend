@@ -26,9 +26,6 @@ python manage.py collectstatic --noinput
 # remove old media files
 rm -rf media/
 mkdir -p media
-# collect media files
-# TODO these should be added in a different way, creating uuids for each
-cp -r ozpcenter/scripts/test_images/* media/
 # run unit tests
 python manage.py test ozpcenter/tests
 # load sample data (uses runscript from django-extensions package)

@@ -15,3 +15,4 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
     access_control = access_control_serializers.AccessControlSerializer()
     class Meta:
         model = models.Image
+        fields = ('access_control', 'image_url')

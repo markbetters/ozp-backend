@@ -19,7 +19,7 @@ Swagger documentation for the api is available at `http://localhost:8000/docs/`
 Use username `wsmith` password `password` when prompted for authentication info
 
 There's also the admin interface at `http://localhost:8000/admin`
-(username: `admin`, password: `password`)
+(username: `wsmith`, password: `password`)
 
 
 ## For Developers
@@ -221,6 +221,15 @@ Static files: JS, CSS, fonts, etc. Media files: images uploaded during app
 usage. Good explanation [here](http://timmyomahony.com/blog/static-vs-media-and-root-vs-path-in-django/)
 
 Production static file server: Nginx (TBD)
+
+### Scripts
+The `runscript` command is installed via the django-extensions package and used
+to run scripts in the django context, just as you would get by running a set
+of commands in the shell using `python manage.py shell`. This can be used
+to run the script to populate the database with sample data:
+`python manage.py runscript sample_data_generator`. See the
+[docs](http://django-extensions.readthedocs.org/en/latest/runscript.html) for
+details
 
 ## Controlling Access
 Anonymous users have no access - all must have a valid username/password (dev)

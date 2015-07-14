@@ -4,6 +4,9 @@ Creates test data
 import datetime
 import os
 import sys
+
+from PIL import Image
+
 sys.path.insert(0, os.path.realpath(os.path.join(os.path.dirname(__file__), '../../')))
 
 import pytz
@@ -12,6 +15,8 @@ import django.contrib.auth
 
 from ozpcenter import models as models
 from ozpcenter import model_access
+
+TEST_IMG_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'test_images') + '/'
 
 def run():
 	"""
@@ -76,9 +81,9 @@ def run():
 	# 							Intents
 	############################################################################
 	# TODO: more realistic data
-	icon = models.Image(file_extension='png',
-		access_control=unclass)
-	icon.save()
+	img = Image.open(TEST_IMG_PATH + 'android.png')
+	icon = models.Image.create_image(img, file_extension='png',
+		access_control='UNCLASSIFIED')
 	i = models.Intent(action='/application/json/view',
 		media_type='vnd.ozp-intent-v1+json.json',
 		label='view',
@@ -88,21 +93,21 @@ def run():
 	############################################################################
 	# 							Organizations
 	############################################################################
-	icon = models.Image(file_extension='png',
-		access_control=unclass)
-	icon.save()
+	img = Image.open(TEST_IMG_PATH + 'ministry_of_truth.jpg')
+	icon = models.Image.create_image(img, file_extension='jpg',
+		access_control='UNCLASSIFIED')
 	a = models.Agency(title='Ministry of Truth', short_name='m-truth',
 		icon=icon)
 	a.save()
-	icon = models.Image(file_extension='png',
-		access_control=unclass)
-	icon.save()
+	img = Image.open(TEST_IMG_PATH + 'ministry_of_peace.png')
+	icon = models.Image.create_image(img, file_extension='png',
+		access_control='UNCLASSIFIED')
 	a = models.Agency(title='Ministry of Peace', short_name='m-peace',
 		icon=icon)
 	a.save()
-	icon = models.Image(file_extension='png',
-		access_control=unclass)
-	icon.save()
+	img = Image.open(TEST_IMG_PATH + 'ministry_of_love.jpeg')
+	icon = models.Image.create_image(img, file_extension='jpeg',
+		access_control='UNCLASSIFIED')
 	a = models.Agency(title='Ministry of Love', short_name='m-love',
 		icon=icon)
 	a.save()
@@ -194,18 +199,18 @@ def run():
 	# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	#							Icons
 	# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	small_icon = models.Image(file_extension='png',
-		access_control=unclass)
-	small_icon.save()
-	large_icon = models.Image(file_extension='png',
-		access_control=unclass)
-	large_icon.save()
-	banner_icon = models.Image(file_extension='png',
-		access_control=unclass)
-	banner_icon.save()
-	large_banner_icon = models.Image(file_extension='png',
-		access_control=unclass)
-	large_banner_icon.save()
+	img = Image.open(TEST_IMG_PATH + 'AirMail16.png')
+	small_icon = models.Image.create_image(img, file_extension='png',
+		access_control='UNCLASSIFIED')
+	img = Image.open(TEST_IMG_PATH + 'AirMail32.png')
+	large_icon = models.Image.create_image(img, file_extension='png',
+		access_control='UNCLASSIFIED')
+	img = Image.open(TEST_IMG_PATH + 'AirMail.png')
+	banner_icon = models.Image.create_image(img, file_extension='png',
+		access_control='UNCLASSIFIED')
+	img = Image.open(TEST_IMG_PATH + 'AirMailFeatured.png')
+	large_banner_icon = models.Image.create_image(img, file_extension='png',
+		access_control='UNCLASSIFIED')
 
 	# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	#							Listing
@@ -254,12 +259,12 @@ def run():
 	# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	#							Screenshots
 	# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	small_img = models.Image(file_extension='png',
-		access_control=unclass)
-	small_img.save()
-	large_img = models.Image(file_extension='png',
-		access_control=unclass)
-	large_img.save()
+	img = Image.open(TEST_IMG_PATH + 'screenshot_small.png')
+	small_img = models.Image.create_image(img, file_extension='png',
+		access_control='UNCLASSIFIED')
+	img = Image.open(TEST_IMG_PATH + 'screenshot_large.png')
+	large_img = models.Image.create_image(img, file_extension='png',
+		access_control='UNCLASSIFIED')
 	s = models.Screenshot(small_image=small_img,
 		large_image=large_img,
 		listing=models.Listing.objects.get(title='Air Mail'))
@@ -272,6 +277,28 @@ def run():
 		expires_date=next_week, listing=l, author=p)
 	n3.save()
 
+	############################################################################
+	# 							Bread Basket
+	############################################################################
+	# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	#							Icons
+	# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	img = Image.open(TEST_IMG_PATH + 'BreadBasket16.png')
+	small_icon = models.Image.create_image(img, file_extension='png',
+		access_control='UNCLASSIFIED')
+	img = Image.open(TEST_IMG_PATH + 'BreadBasket32.png')
+	large_icon = models.Image.create_image(img, file_extension='png',
+		access_control='UNCLASSIFIED')
+	img = Image.open(TEST_IMG_PATH + 'BreadBasket.png')
+	banner_icon = models.Image.create_image(img, file_extension='png',
+		access_control='UNCLASSIFIED')
+	img = Image.open(TEST_IMG_PATH + 'BreadBasketFeatured.png')
+	large_banner_icon = models.Image.create_image(img, file_extension='png',
+		access_control='UNCLASSIFIED')
+
+	# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	#							Listing
+	# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	l = models.Listing(
 		title='Bread Basket',
 		agency=models.Agency.objects.get(title='Ministry of Truth'),
@@ -300,6 +327,29 @@ def run():
 	l.categories.add(cat1)
 	l.categories.add(cat2)
 	l.tags.add(t1)
+
+	############################################################################
+	# 							Chart Course
+	############################################################################
+	# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	#							Icons
+	# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	img = Image.open(TEST_IMG_PATH + 'ChartCourse16.png')
+	small_icon = models.Image.create_image(img, file_extension='png',
+		access_control='UNCLASSIFIED')
+	img = Image.open(TEST_IMG_PATH + 'BreadBasket32.png')
+	large_icon = models.Image.create_image(img, file_extension='png',
+		access_control='UNCLASSIFIED')
+	img = Image.open(TEST_IMG_PATH + 'BreadBasket.png')
+	banner_icon = models.Image.create_image(img, file_extension='png',
+		access_control='UNCLASSIFIED')
+	img = Image.open(TEST_IMG_PATH + 'BreadBasketFeatured.png')
+	large_banner_icon = models.Image.create_image(img, file_extension='png',
+		access_control='UNCLASSIFIED')
+
+	# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	#							Listing
+	# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 	l = models.Listing(
 		title='Cupid',

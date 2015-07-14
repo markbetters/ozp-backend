@@ -134,7 +134,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 # MEDIA_URL is the relative browser URL to be used when accessing media files
 #   from the browser
-MEDIA_URL='/media/'
+MEDIA_URL='media/'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (

@@ -17,3 +17,6 @@ INTENT_ACTION_REGEX = r'\w'
 # TODO
 MEDIA_TYPE_REGEX = r'\w'
 # original media type regex: /^[-\w]([-\w\+\$\!\#\&\-\_\^\.]{1,63})?\/[-\w]([-\w\+\$\!\#\&\-\_\^\.]{1,63})?$/
+
+# valid image types
+VALID_IMAGE_TYPES = ['png', 'jpg', 'jpeg', 'gif']

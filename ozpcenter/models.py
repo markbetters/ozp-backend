@@ -4,6 +4,7 @@ model definitions for ozpcenter
 
 """
 import logging
+import os
 import uuid
 
 import django.contrib.auth
@@ -16,6 +17,8 @@ from django.conf import settings
 
 # plugin for enum support https://github.com/5monkeys/django-enumfield
 from django_enumfield import enum
+
+from PIL import Image
 
 import ozpcenter.constants as constants
 import ozpcenter.access_control as access_control
@@ -75,9 +78,23 @@ class Image(models.Model):
 
 	(Uploaded) images are stored in a flat directory on the server using a
 	randomly generated uuid as the filename
+
+	Images are used for:
+
+	agency icon: size=?
+	intent icon: size=?
+	listing.small_icon = 16x16
+	listing.large_icon = 32x32
+	listing.banner_icon = 220x137
+	listing.large_banner_icon = 600x376
+	listing.screenshot_small = 600x376
+	listing.screenshot_large = 960x600
+
+	When creating a new image, use the Image.create_image method, do not
+	use the Image.save() directly
 	"""
-	uuid = models.CharField(max_length=36,
-		default=str(uuid.uuid4()))
+	# this is set automatically by the create_image method
+	uuid = models.CharField(max_length=36, unique=True)
 	access_control = models.ForeignKey(AccessControl, related_name='images')
 	file_extension = models.CharField(max_length=16, default='png')
 
@@ -85,7 +102,46 @@ class Image(models.Model):
 		"""
 		Get the absolute(?) url of the image
 		"""
-		return settings.MEDIA_URL + self.uuid + self.file_extension
+		return settings.MEDIA_URL + self.uuid + '.' + self.file_extension
+
+	def __repr__(self):
+		return self.image_url()
+
+	def __str__(self):
+		return self.image_url()
+
+	@staticmethod
+	def create_image(pil_img, **kwargs):
+		"""
+		Given an image (PIL format) and some metadata, write to file sys and
+		create DB entry
+
+		pil_img: PIL.Image (see https://pillow.readthedocs.org/en/latest/reference/Image.html)
+		"""
+		# get DB info for image
+		random_uuid = str(uuid.uuid4())
+		ac = kwargs.get('access_control', 'UNCLASSIFIED')
+		access_control = AccessControl.objects.get(title=ac)
+		file_extension = kwargs.get('file_extension', 'png')
+		valid_extensions = constants.VALID_IMAGE_TYPES
+		if file_extension not in valid_extensions:
+			logger.error('Invalid image type: %s' % file_extension)
+			# TODO: raise exception?
+			return
+
+		# write the image to the file system
+		file_name = settings.MEDIA_ROOT + random_uuid + '.' + file_extension
+		pil_img.save(file_name)
+
+		# check size requirements
+		size_bytes = os.path.getsize(file_name)
+		# logger.debug('saved image file with size %d' % size_bytes)
+
+		# create database entry
+		img = Image(uuid=random_uuid, access_control=access_control,
+			file_extension=file_extension)
+		img.save()
+		return img
 
 
 class Tag(models.Model):
@@ -425,14 +481,23 @@ class Profile(models.Model):
 		email = kwargs.get('email', '')
 
 		# create User object
-		user = django.contrib.auth.models.User.objects.create_user(
-			username=username, password=password, email=email)
-		user.save()
+		# if this user is an ORG_STEWARD or APPS_MALL_STEWARD, give them
+		# access to the admin site
+		groups = kwargs.get('groups', ['USER'])
+		if 'ORG_STEWARD' in groups or 'APPS_MALL_STEWARD' in groups:
+			user = django.contrib.auth.models.User.objects.create_superuser(
+				username=username, email=email, password=password)
+			user.save()
+			# logger.warn('creating superuser: %s, password: %s' % (username, password))
+		else:
+			user = django.contrib.auth.models.User.objects.create_user(
+				username=username, email=email, password=password)
+			user.save()
+			# logger.info('creating user: %s' % username)
 
 		# add user to group(s) (i.e. Roles - USER, ORG_STEWARD,
 		# APPS_MALL_STEWARD). If no specific Group is provided, we
 		# will default to USER
-		groups = kwargs.get('groups', ['USER'])
 		for i in groups:
 			g = django.contrib.auth.models.Group.objects.get(name=i)
 			user.groups.add(g)
