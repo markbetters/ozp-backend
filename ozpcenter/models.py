@@ -4,6 +4,7 @@ model definitions for ozpcenter
 
 """
 import logging
+import uuid
 
 import django.contrib.auth
 from django.core.exceptions import ValidationError
@@ -68,19 +69,24 @@ class AccessControl(models.Model):
 	def __str__(self):
 		return self.title
 
-class Icon(models.Model):
+class Image(models.Model):
 	"""
-	Icon
+	Image
+
+	(Uploaded) images are stored in a flat directory on the server using a
+	randomly generated uuid as the filename
 	"""
-	icon_url = models.CharField(
-		max_length=constants.MAX_URL_SIZE,
-		validators=[
-			RegexValidator(
-				regex=constants.URL_REGEX,
-				message='icon url must be a url',
-				code='invalid url')]
-	)
-	access_control = models.ForeignKey(AccessControl, related_name='icons')
+	uuid = models.CharField(max_length=36,
+		default=str(uuid.uuid4()))
+	access_control = models.ForeignKey(AccessControl, related_name='images')
+	file_extension = models.CharField(max_length=16, default='png')
+
+	def image_url(self):
+		"""
+		Get the absolute(?) url of the image
+		"""
+		return settings.MEDIA_URL + self.uuid + self.file_extension
+
 
 class Tag(models.Model):
 	"""
@@ -106,7 +112,7 @@ class Agency(models.Model):
 	    * steward_profiles
 	"""
 	title = models.CharField(max_length=255, unique=True)
-	icon = models.ForeignKey(Icon, related_name='agency')
+	icon = models.ForeignKey(Image, related_name='agency')
 
 	short_name = models.CharField(max_length=8, unique=True)
 
@@ -290,7 +296,7 @@ class Intent(models.Model):
 				code='invalid type')]
 	)
 	label = models.CharField(max_length=255)
-	icon = models.ForeignKey(Icon, related_name='intent')
+	icon = models.ForeignKey(Image, related_name='intent')
 
 	def __repr__(self):
 	    return '%s/%s' % (self.type, self.action)
@@ -510,10 +516,10 @@ class Listing(models.Model):
 	version_name = models.CharField(max_length=255)
 	# NOTE: replacing uuid with this
 	unique_name = models.CharField(max_length=255, unique=True)
-	small_icon = models.ForeignKey(Icon, related_name='listing_small_icon')
-	large_icon = models.ForeignKey(Icon, related_name='listing_large_icon')
-	banner_icon = models.ForeignKey(Icon, related_name='listing_banner_icon')
-	large_banner_icon = models.ForeignKey(Icon, related_name='listing_large_banner_icon')
+	small_icon = models.ForeignKey(Image, related_name='listing_small_icon')
+	large_icon = models.ForeignKey(Image, related_name='listing_large_icon')
+	banner_icon = models.ForeignKey(Image, related_name='listing_banner_icon')
+	large_banner_icon = models.ForeignKey(Image, related_name='listing_large_banner_icon')
 
 
 	what_is_new = models.CharField(max_length=255)
@@ -627,8 +633,8 @@ class Screenshot(models.Model):
 	Additional db.relationships:
 	    * listing
 	"""
-	small_image = models.ForeignKey(Icon, related_name='screenshot_small')
-	large_image = models.ForeignKey(Icon, related_name='screenshot_large')
+	small_image = models.ForeignKey(Image, related_name='screenshot_small')
+	large_image = models.ForeignKey(Image, related_name='screenshot_large')
 	listing = models.ForeignKey('Listing', related_name='screenshots')
 
 	def __repr__(self):

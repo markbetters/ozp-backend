@@ -14,5 +14,5 @@ import ozpcenter.models as models
 logger = logging.getLogger('ozp-center')
 
 class IconViewSet(viewsets.ModelViewSet):
-    queryset = models.Icon.objects.all()
+    queryset = models.Image.objects.all()
     serializer_class = serializers.IconSerializer

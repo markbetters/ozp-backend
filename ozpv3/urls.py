@@ -13,16 +13,13 @@ Including another URLconf
     1. Add an import:  from blog import urls as blog_urls
     2. Add a URL to urlpatterns:  url(r'^blog/', include(blog_urls))
 """
+from django.conf import settings
 from django.conf.urls import include, url
+from django.conf.urls.static import static
 from django.contrib import admin
 # from rest_framework import routers
 
 import ozpcenter.views as views
-
-# Routers provide an easy way of automatically determining the URL conf.
-# router = routers.DefaultRouter()
-
-# router.register(r'', include('ozpcenter.urls'))
 
 urlpatterns = [
     url(r'^$', views.APIRoot.as_view()),
@@ -32,3 +29,10 @@ urlpatterns = [
     url(r'^api/', include('ozpcenter.urls')),
     url(r'^docs/', include('rest_framework_swagger.urls'))
 ]
+
+# in debug, serve the media and static resources with the django web server
+# https://docs.djangoproject.com/en/1.8/howto/static-files/#serving-static-files-during-development
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
+

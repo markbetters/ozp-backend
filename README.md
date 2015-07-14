@@ -216,6 +216,12 @@ TODO
 ### Logging
 TODO
 
+### Static and Media Files
+Static files: JS, CSS, fonts, etc. Media files: images uploaded during app
+usage. Good explanation [here](http://timmyomahony.com/blog/static-vs-media-and-root-vs-path-in-django/)
+
+Production static file server: Nginx (TBD)
+
 ## Controlling Access
 Anonymous users have no access - all must have a valid username/password (dev)
 or valid certificate (production) to be granted any access

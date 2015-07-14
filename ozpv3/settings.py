@@ -117,11 +117,24 @@ USE_L10N = True
 
 USE_TZ = True
 
+# for details regarding media vs static files:
+#   http://timmyomahony.com/blog/static-vs-media-and-root-vs-path-in-django/
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.8/howto/static-files/
+# STATIC_ROOT is the absolute path to the folder within which static files will
+#   be collected by the staticfiles application
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
+# STATIC_URL is the relative browser URL to be used when accessing static files
+#   from the browser
 STATIC_URL = '/static/'
+
+# MEDIA_ROOT is the absolute path to the folder that will hold user uploads
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+#MEDIA_ROOT = '/Users/Alan/ozp-v3/ozpv3/ozpv3/media'
+
+# MEDIA_URL is the relative browser URL to be used when accessing media files
+#   from the browser
+MEDIA_URL='/media/'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (

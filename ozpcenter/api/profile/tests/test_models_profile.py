@@ -38,7 +38,7 @@ class ProfileTest(TestCase):
 		f.ProfileFactory.create(user__username='alice')
 		unclass = models.AccessControl(title='UNCLASSIFIED')
 		unclass.save()
-		icon = models.Icon(icon_url='http://www.google.com/tla.png',
+		icon = models.Image(file_extension='png',
 			access_control=unclass)
 		icon.save()
 		f.AgencyFactory.create(title='Three Letter Agency', short_name='TLA',

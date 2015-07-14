@@ -76,7 +76,7 @@ def run():
 	# 							Intents
 	############################################################################
 	# TODO: more realistic data
-	icon = models.Icon(icon_url='http://www.google.com/intent_view_icon.png',
+	icon = models.Image(file_extension='png',
 		access_control=unclass)
 	icon.save()
 	i = models.Intent(action='/application/json/view',
@@ -88,19 +88,19 @@ def run():
 	############################################################################
 	# 							Organizations
 	############################################################################
-	icon = models.Icon(icon_url='http://www.google.com/MoT_icon.png',
+	icon = models.Image(file_extension='png',
 		access_control=unclass)
 	icon.save()
 	a = models.Agency(title='Ministry of Truth', short_name='m-truth',
 		icon=icon)
 	a.save()
-	icon = models.Icon(icon_url='http://www.google.com/MoP_icon.png',
+	icon = models.Image(file_extension='png',
 		access_control=unclass)
 	icon.save()
 	a = models.Agency(title='Ministry of Peace', short_name='m-peace',
 		icon=icon)
 	a.save()
-	icon = models.Icon(icon_url='http://www.google.com/MoL_icon.png',
+	icon = models.Image(file_extension='png',
 		access_control=unclass)
 	icon.save()
 	a = models.Agency(title='Ministry of Love', short_name='m-love',
@@ -194,16 +194,16 @@ def run():
 	# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	#							Icons
 	# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	small_icon = models.Icon(icon_url='http://www.google.com/small_icon',
+	small_icon = models.Image(file_extension='png',
 		access_control=unclass)
 	small_icon.save()
-	large_icon = models.Icon(icon_url='http://www.google.com/large_icon',
+	large_icon = models.Image(file_extension='png',
 		access_control=unclass)
 	large_icon.save()
-	banner_icon = models.Icon(icon_url='http://www.google.com/banner_icon',
+	banner_icon = models.Image(file_extension='png',
 		access_control=unclass)
 	banner_icon.save()
-	large_banner_icon = models.Icon(icon_url='http://www.google.com/large_banner_icon',
+	large_banner_icon = models.Image(file_extension='png',
 		access_control=unclass)
 	large_banner_icon.save()
 
@@ -254,10 +254,10 @@ def run():
 	# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	#							Screenshots
 	# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	small_img = models.Icon(icon_url='http://www.google.com/small_screenshot.png',
+	small_img = models.Image(file_extension='png',
 		access_control=unclass)
 	small_img.save()
-	large_img = models.Icon(icon_url='http://www.google.com/large_screenshot.png',
+	large_img = models.Image(file_extension='png',
 		access_control=unclass)
 	large_img.save()
 	s = models.Screenshot(small_image=small_img,

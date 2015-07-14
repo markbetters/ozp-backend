@@ -96,10 +96,10 @@ def get_metadata():
 			# note that we will assume the icons for all intents and agencies
 			# are not access-controlled beyond the lowest setting
 			for i in data['agencies']:
-				i['icon'] = models.Icon.objects.get(id=i['icon']).icon_url
+				i['icon'] = models.Image.objects.get(id=i['icon']).image_url()
 
 			for i in data['intents']:
-				i['icon'] = models.Icon.objects.get(id=i['icon']).icon_url
+				i['icon'] = models.Image.objects.get(id=i['icon']).image_url()
 
 			cache.set(key, data)
 		except Exception as e:

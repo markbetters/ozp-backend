@@ -16,8 +16,8 @@ logger = logging.getLogger('ozp-center')
 class IconSerializer(serializers.HyperlinkedModelSerializer):
     access_control = access_control_serializers.AccessControlSerializer()
     class Meta:
-        model = models.Icon
-        fields = ('icon_url', 'access_control')
+        model = models.Image
+        fields = ('image_url', 'access_control')
 
 class AgencySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
