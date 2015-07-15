@@ -15,44 +15,44 @@ import ozpcenter.models as models
 fake = Factory.create()
 
 class AccessControlFactory(factory.django.DjangoModelFactory):
-	class Meta:
-		model = models.AccessControl
-		# http://joequery.me/code/factory-boy-handle-unique-constraints/
-		django_get_or_create = ('title',)
+    class Meta:
+        model = models.AccessControl
+        # http://joequery.me/code/factory-boy-handle-unique-constraints/
+        django_get_or_create = ('title',)
 
-	title = fake.text(max_nb_chars=1024)
+    title = fake.text(max_nb_chars=1024)
 
 class GroupFactory(factory.django.DjangoModelFactory):
-	class Meta:
-		model = django.contrib.auth.models.Group
-		# http://joequery.me/code/factory-boy-handle-unique-constraints/
-		django_get_or_create = ('name',)
+    class Meta:
+        model = django.contrib.auth.models.Group
+        # http://joequery.me/code/factory-boy-handle-unique-constraints/
+        django_get_or_create = ('name',)
 
-	name = 'USER'
+    name = 'USER'
 
 class UserFactory(factory.django.DjangoModelFactory):
-	class Meta:
-		model = django.contrib.auth.models.User
-		# http://joequery.me/code/factory-boy-handle-unique-constraints/
-		django_get_or_create = ('username', 'email')
+    class Meta:
+        model = django.contrib.auth.models.User
+        # http://joequery.me/code/factory-boy-handle-unique-constraints/
+        django_get_or_create = ('username', 'email')
 
-	username = fake.user_name()
-	email = fake.email()
+    username = fake.user_name()
+    email = fake.email()
 
 
 class ProfileFactory(factory.django.DjangoModelFactory):
-	class Meta:
-		model = models.Profile
+    class Meta:
+        model = models.Profile
 
-	display_name = fake.name()
-	bio = fake.text(max_nb_chars=1000)
-	access_control = factory.SubFactory(AccessControlFactory)
-	user = factory.SubFactory(UserFactory)
+    display_name = fake.name()
+    bio = fake.text(max_nb_chars=1000)
+    access_control = factory.SubFactory(AccessControlFactory)
+    user = factory.SubFactory(UserFactory)
 
 
 class AgencyFactory(factory.django.DjangoModelFactory):
-	class Meta:
-		model = models.Agency
+    class Meta:
+        model = models.Agency
 
-	title = "Three Letter Agency"
-	short_name = 'TLA'
+    title = "Three Letter Agency"
+    short_name = 'TLA'

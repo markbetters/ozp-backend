@@ -11,7 +11,7 @@ router = routers.DefaultRouter()
 
 router.register(r'library', views.LibraryViewSet)
 router.register(r'self/library', views.UserLibraryViewSet,
-	base_name='applicationlibraryentry')
+    base_name='applicationlibraryentry')
 
 # Wire up our API using automatic URL routing.
 urlpatterns = [
