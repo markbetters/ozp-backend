@@ -23,12 +23,12 @@ logger = logging.getLogger('ozp-center')
 @api_view(['GET'])
 @permission_classes((permissions.IsUser, ))
 def MetadataView(request):
-	"""
-	Metadata for the store including categories, agencies, contact types,
-	intents, and listing types
-	"""
-	data = model_access.get_metadata()
-	return Response(data)
+    """
+    Metadata for the store including categories, agencies, contact types,
+    intents, and listing types
+    """
+    data = model_access.get_metadata()
+    return Response(data)
 
 @api_view(['GET'])
 @permission_classes((permissions.IsUser, ))

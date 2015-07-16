@@ -15,14 +15,14 @@ class IsUser(permissions.BasePermission):
 
     def has_permission(self, request, view):
         if not request.user.is_authenticated():
-        	return False
+            return False
         profile = model_access.get_profile(request.user.username)
         if profile is None:
            return False
         if profile.highest_role() in ['USER', 'ORG_STEWARD', 'APPS_MALL_STEWARD']:
-        	return True
+            return True
         else:
-        	return False
+            return False
 
 class IsOrgSteward(permissions.BasePermission):
     """
@@ -30,15 +30,15 @@ class IsOrgSteward(permissions.BasePermission):
     """
 
     def has_permission(self, request, view):
-    	if not request.user.is_authenticated():
-    		return False
-    	profile = model_access.get_profile(request.user.username)
-    	if profile is None:
-    		return False
-    	if profile.highest_role() in ['ORG_STEWARD', 'APPS_MALL_STEWARD']:
-    		return True
-    	else:
-    		return False
+        if not request.user.is_authenticated():
+            return False
+        profile = model_access.get_profile(request.user.username)
+        if profile is None:
+            return False
+        if profile.highest_role() in ['ORG_STEWARD', 'APPS_MALL_STEWARD']:
+            return True
+        else:
+            return False
 
 class IsAppsMallSteward(permissions.BasePermission):
     """
@@ -46,12 +46,12 @@ class IsAppsMallSteward(permissions.BasePermission):
     """
 
     def has_permission(self, request, view):
-    	if not request.user.is_authenticated():
-    		return False
-    	profile = model_access.get_profile(request.user.username)
-    	if profile is None:
-    		return False
-    	if profile.highest_role() == 'APPS_MALL_STEWARD':
-    		return True
-    	else:
-    		return False
+        if not request.user.is_authenticated():
+            return False
+        profile = model_access.get_profile(request.user.username)
+        if profile is None:
+            return False
+        if profile.highest_role() == 'APPS_MALL_STEWARD':
+            return True
+        else:
+            return False

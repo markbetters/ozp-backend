@@ -13,23 +13,23 @@ import ozpcenter.utils as utils
 logger = logging.getLogger('ozp-center')
 
 def get_profile(username):
-	"""
-	get a user's Profile
+    """
+    get a user's Profile
 
-	Key: current_profile:<username>
-	"""
-	username = utils.make_keysafe(username)
-	key = 'current_profile:%s' % username
+    Key: current_profile:<username>
+    """
+    username = utils.make_keysafe(username)
+    key = 'current_profile:%s' % username
 
-	data = cache.get(key)
-	if data is None:
-		try:
-			data = models.Profile.objects.get(user__username=username)
-			cache.set(key, data)
-			# logger.debug('NOT getting data for key: %s from cache' % key)
-			return data
-		except ObjectDoesNotExist:
-			return None
-	else:
-		# logger.debug('GOT data for key: %s from cache' % key)
-		return data
+    data = cache.get(key)
+    if data is None:
+        try:
+            data = models.Profile.objects.get(user__username=username)
+            cache.set(key, data)
+            # logger.debug('NOT getting data for key: %s from cache' % key)
+            return data
+        except ObjectDoesNotExist:
+            return None
+    else:
+        # logger.debug('GOT data for key: %s from cache' % key)
+        return data

@@ -11,20 +11,20 @@ from ozpcenter.scripts import sample_data_generator as data_gen
 
 class UtilsTest(TestCase):
 
-	def setUp(self):
-		"""
-		setUp is invoked before each test method
-		"""
-		pass
+    def setUp(self):
+        """
+        setUp is invoked before each test method
+        """
+        pass
 
-	@classmethod
-	def setUpTestData(cls):
-		"""
-		Set up test data for the whole TestCase (only run once for the TestCase)
-		"""
-		data_gen.run()
+    @classmethod
+    def setUpTestData(cls):
+        """
+        Set up test data for the whole TestCase (only run once for the TestCase)
+        """
+        data_gen.run()
 
-	def test_make_keysafe(self):
-		name = 'Test @string\'s !'
-		key_name = utils.make_keysafe(name)
-		self.assertEqual('teststrings', key_name)
+    def test_make_keysafe(self):
+        name = 'Test @string\'s !'
+        key_name = utils.make_keysafe(name)
+        self.assertEqual('teststrings', key_name)

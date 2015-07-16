@@ -14,4 +14,4 @@ import ozpcenter.model_access as generic_model_access
 logger = logging.getLogger('ozp-center')
 
 def get_self(username):
-	return generic_model_access.get_profile(username)
+    return generic_model_access.get_profile(username)
