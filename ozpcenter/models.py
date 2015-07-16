@@ -72,23 +72,34 @@ class AccessControl(models.Model):
     def __str__(self):
         return self.title
 
+
+class ImageType(models.Model):
+    """
+    Image types (as in Small Screenshot, not png)
+
+    This data should be rather static, but is convenient to place in the DB
+
+    listing_small_icon: 16x16
+    listing_large_icon: 32x32
+    listing_banner_icon: 220x137
+    listing_large_banner_icon: 600x376
+    listing_small_screenshot: 600x376
+    listing_large_screenshot: 960x600
+    """
+    name = models.CharField(max_length=32, unique=True)
+    max_size_bytes = models.IntegerField(default=1048576)
+    max_width = models.IntegerField()
+    max_height = models.IntegerField()
+    min_width = models.IntegerField(default=16)
+    min_height = models.IntegerField(default=16)
+
+
 class Image(models.Model):
     """
     Image
 
     (Uploaded) images are stored in a flat directory on the server using a
     randomly generated uuid as the filename
-
-    Images are used for:
-
-    agency icon: size=?
-    intent icon: size=?
-    listing.small_icon = 16x16
-    listing.large_icon = 32x32
-    listing.banner_icon = 220x137
-    listing.large_banner_icon = 600x376
-    listing.screenshot_small = 600x376
-    listing.screenshot_large = 960x600
 
     When creating a new image, use the Image.create_image method, do not
     use the Image.save() directly
@@ -97,10 +108,13 @@ class Image(models.Model):
     uuid = models.CharField(max_length=36, unique=True)
     access_control = models.ForeignKey(AccessControl, related_name='images')
     file_extension = models.CharField(max_length=16, default='png')
+    image_type = models.ForeignKey(ImageType, related_name='images')
 
     def image_url(self):
         """
-        Get the absolute(?) url of the image
+        Get the relative url of the image
+
+        TODO: might want to return an absolute url here
         """
         return settings.MEDIA_URL + self.uuid + '.' + self.file_extension
 
@@ -128,6 +142,12 @@ class Image(models.Model):
             logger.error('Invalid image type: %s' % file_extension)
             # TODO: raise exception?
             return
+        image_type = kwargs.get('file_extension', None)
+        if not image_type:
+            logger.error('No image_type provided')
+            # TODO raise exception?
+            return
+        image_type = ImageType.objects.get(name=image_type)
 
         # write the image to the file system
         file_name = settings.MEDIA_ROOT + random_uuid + '.' + file_extension
@@ -135,7 +155,13 @@ class Image(models.Model):
 
         # check size requirements
         size_bytes = os.path.getsize(file_name)
-        # logger.debug('saved image file with size %d' % size_bytes)
+        if size_bytes > image_type.max_size_bytes:
+            logger.error('Image size is %d bytes, which is larger than the max \
+                allowed %d bytes' % (size_bytes, image_type.max_size_bytes))
+            # TODO raise exception and remove file
+            return
+
+        if
 
         # create database entry
         img = Image(uuid=random_uuid, access_control=access_control,
@@ -729,6 +755,20 @@ class ListingType(models.Model):
 class Notification(models.Model):
     """
     A notification. Can optionally belong to a specific application
+
+    Notifications that do not have an associated listing are assumed to be
+    'system-wide', and thus will be sent to all users
+    """
+    message = models.CharField(max_length=1024)
+    expires_date = models.DateTimeField()
+    author = models.ForeignKey(Profile, related_name='authored_notifications')
+    dismissed_by = models.ManyToManyField(
+        'Profile',
+        related_name='dismissed_notifications',
+        db_table='notification_profile'
+    )
+    listing = models.ForeignKey(Listing, related_name='notifications',
+        null=True, blank=True)
 
     Notifications that do not have an associated listing are assumed to be
     'system-wide', and thus will be sent to all users

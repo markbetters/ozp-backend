@@ -93,6 +93,10 @@ class ListingSerializer(serializers.HyperlinkedModelSerializer):
     tags = TagSerializer(many=True)
     agency = AgencySerializer()
     contacts = ContactSerializer(many=True)
+    small_icon = ImageSerializer()
+    large_icon = ImageSerializer()
+    banner_icon = ImageSerializer()
+    large_banner_icon = ImageSerializer()
     class Meta:
         model = models.Listing
         depth = 2
