@@ -770,17 +770,3 @@ class Notification(models.Model):
     )
     listing = models.ForeignKey(Listing, related_name='notifications',
         null=True, blank=True)
-
-    Notifications that do not have an associated listing are assumed to be
-    'system-wide', and thus will be sent to all users
-    """
-    message = models.CharField(max_length=1024)
-    expires_date = models.DateTimeField()
-    author = models.ForeignKey(Profile, related_name='authored_notifications')
-    dismissed_by = models.ManyToManyField(
-        'Profile',
-        related_name='dismissed_notifications',
-        db_table='notification_profile'
-    )
-    listing = models.ForeignKey(Listing, related_name='notifications',
-        null=True, blank=True)
