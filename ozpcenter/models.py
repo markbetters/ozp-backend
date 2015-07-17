@@ -88,8 +88,8 @@ class ImageType(models.Model):
     """
     name = models.CharField(max_length=32, unique=True)
     max_size_bytes = models.IntegerField(default=1048576)
-    max_width = models.IntegerField()
-    max_height = models.IntegerField()
+    max_width = models.IntegerField(default=2048)
+    max_height = models.IntegerField(default=2048)
     min_width = models.IntegerField(default=16)
     min_height = models.IntegerField(default=16)
 
@@ -142,7 +142,8 @@ class Image(models.Model):
             logger.error('Invalid image type: %s' % file_extension)
             # TODO: raise exception?
             return
-        image_type = kwargs.get('file_extension', None)
+
+        image_type = kwargs.get('image_type', None)
         if not image_type:
             logger.error('No image_type provided')
             # TODO raise exception?
@@ -161,11 +162,11 @@ class Image(models.Model):
             # TODO raise exception and remove file
             return
 
-        if
+        # TODO: check width and height
 
         # create database entry
         img = Image(uuid=random_uuid, access_control=access_control,
-            file_extension=file_extension)
+            file_extension=file_extension, image_type=image_type)
         img.save()
         return img
 

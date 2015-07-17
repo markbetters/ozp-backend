@@ -78,12 +78,37 @@ def run():
     t.save()
 
     ############################################################################
+    #                           Image Types
+    ############################################################################
+    # Note: these image sizes do not represent those that should be used in
+    # production
+    t = models.ImageType(name='listing_small_icon', max_size_bytes='4096')
+    t.save()
+    t = models.ImageType(name='listing_large_icon', max_size_bytes='8192')
+    t.save()
+    t = models.ImageType(name='listing_banner_icon', max_size_bytes='2097152')
+    t.save()
+    t = models.ImageType(name='listing_large_banner_icon',
+        max_size_bytes='2097152')
+    t.save()
+    t = models.ImageType(name='listing_small_screenshot',
+        max_size_bytes='1048576')
+    t.save()
+    t = models.ImageType(name='listing_large_screenshot',
+        max_size_bytes='1048576')
+    t.save()
+    t = models.ImageType(name='intent_icon', max_size_bytes='2097152')
+    t.save()
+    t = models.ImageType(name='agency_icon', max_size_bytes='2097152')
+    t.save()
+
+    ############################################################################
     #                           Intents
     ############################################################################
     # TODO: more realistic data
     img = Image.open(TEST_IMG_PATH + 'android.png')
     icon = models.Image.create_image(img, file_extension='png',
-        access_control='UNCLASSIFIED')
+        access_control='UNCLASSIFIED', image_type='intent_icon')
     i = models.Intent(action='/application/json/view',
         media_type='vnd.ozp-intent-v1+json.json',
         label='view',
@@ -95,19 +120,19 @@ def run():
     ############################################################################
     img = Image.open(TEST_IMG_PATH + 'ministry_of_truth.jpg')
     icon = models.Image.create_image(img, file_extension='jpg',
-        access_control='UNCLASSIFIED')
+        access_control='UNCLASSIFIED', image_type='agency_icon')
     a = models.Agency(title='Ministry of Truth', short_name='m-truth',
         icon=icon)
     a.save()
     img = Image.open(TEST_IMG_PATH + 'ministry_of_peace.png')
     icon = models.Image.create_image(img, file_extension='png',
-        access_control='UNCLASSIFIED')
+        access_control='UNCLASSIFIED', image_type='agency_icon')
     a = models.Agency(title='Ministry of Peace', short_name='m-peace',
         icon=icon)
     a.save()
     img = Image.open(TEST_IMG_PATH + 'ministry_of_love.jpeg')
     icon = models.Image.create_image(img, file_extension='jpeg',
-        access_control='UNCLASSIFIED')
+        access_control='UNCLASSIFIED', image_type='agency_icon')
     a = models.Agency(title='Ministry of Love', short_name='m-love',
         icon=icon)
     a.save()
@@ -201,16 +226,16 @@ def run():
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     img = Image.open(TEST_IMG_PATH + 'AirMail16.png')
     small_icon = models.Image.create_image(img, file_extension='png',
-        access_control='UNCLASSIFIED')
+        access_control='UNCLASSIFIED', image_type='listing_small_icon')
     img = Image.open(TEST_IMG_PATH + 'AirMail32.png')
     large_icon = models.Image.create_image(img, file_extension='png',
-        access_control='UNCLASSIFIED')
+        access_control='UNCLASSIFIED', image_type='listing_large_icon')
     img = Image.open(TEST_IMG_PATH + 'AirMail.png')
     banner_icon = models.Image.create_image(img, file_extension='png',
-        access_control='UNCLASSIFIED')
+        access_control='UNCLASSIFIED', image_type='listing_banner_icon')
     img = Image.open(TEST_IMG_PATH + 'AirMailFeatured.png')
     large_banner_icon = models.Image.create_image(img, file_extension='png',
-        access_control='UNCLASSIFIED')
+        access_control='UNCLASSIFIED', image_type='listing_large_banner_icon')
 
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     #                           Listing
@@ -261,10 +286,10 @@ def run():
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     img = Image.open(TEST_IMG_PATH + 'screenshot_small.png')
     small_img = models.Image.create_image(img, file_extension='png',
-        access_control='UNCLASSIFIED')
+        access_control='UNCLASSIFIED', image_type='listing_small_screenshot')
     img = Image.open(TEST_IMG_PATH + 'screenshot_large.png')
     large_img = models.Image.create_image(img, file_extension='png',
-        access_control='UNCLASSIFIED')
+        access_control='UNCLASSIFIED', image_type='listing_large_screenshot')
     s = models.Screenshot(small_image=small_img,
         large_image=large_img,
         listing=models.Listing.objects.get(title='Air Mail'))
@@ -285,16 +310,16 @@ def run():
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     img = Image.open(TEST_IMG_PATH + 'BreadBasket16.png')
     small_icon = models.Image.create_image(img, file_extension='png',
-        access_control='UNCLASSIFIED')
+        access_control='UNCLASSIFIED', image_type='listing_small_icon')
     img = Image.open(TEST_IMG_PATH + 'BreadBasket32.png')
     large_icon = models.Image.create_image(img, file_extension='png',
-        access_control='UNCLASSIFIED')
+        access_control='UNCLASSIFIED', image_type='listing_large_icon')
     img = Image.open(TEST_IMG_PATH + 'BreadBasket.png')
     banner_icon = models.Image.create_image(img, file_extension='png',
-        access_control='UNCLASSIFIED')
+        access_control='UNCLASSIFIED', image_type='listing_banner_icon')
     img = Image.open(TEST_IMG_PATH + 'BreadBasketFeatured.png')
     large_banner_icon = models.Image.create_image(img, file_extension='png',
-        access_control='UNCLASSIFIED')
+        access_control='UNCLASSIFIED', image_type='listing_large_screenshot')
 
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     #                           Listing
@@ -336,16 +361,16 @@ def run():
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     img = Image.open(TEST_IMG_PATH + 'ChartCourse16.png')
     small_icon = models.Image.create_image(img, file_extension='png',
-        access_control='UNCLASSIFIED')
+        access_control='UNCLASSIFIED', image_type='listing_small_icon')
     img = Image.open(TEST_IMG_PATH + 'BreadBasket32.png')
     large_icon = models.Image.create_image(img, file_extension='png',
-        access_control='UNCLASSIFIED')
+        access_control='UNCLASSIFIED', image_type='listing_large_icon')
     img = Image.open(TEST_IMG_PATH + 'BreadBasket.png')
     banner_icon = models.Image.create_image(img, file_extension='png',
-        access_control='UNCLASSIFIED')
+        access_control='UNCLASSIFIED', image_type='listing_banner_icon')
     img = Image.open(TEST_IMG_PATH + 'BreadBasketFeatured.png')
     large_banner_icon = models.Image.create_image(img, file_extension='png',
-        access_control='UNCLASSIFIED')
+        access_control='UNCLASSIFIED', image_type='listing_large_banner_icon')
 
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     #                           Listing
