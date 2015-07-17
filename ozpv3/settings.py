@@ -40,11 +40,13 @@ INSTALLED_APPS = (
     'rest_framework',
     'django_extensions',
     'rest_framework_swagger',
-    'ozpcenter'
+    'ozpcenter',
+    'corsheaders'
 )
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -159,4 +161,9 @@ CACHES = {
         }
     }
 }
+
+# django-cors-headers
+# TODO: lock this down in production
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
 
