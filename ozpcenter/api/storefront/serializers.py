@@ -13,23 +13,23 @@ import ozpcenter.api.category.serializers as category_serializers
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center')
 
-class ImageSerializer(serializers.HyperlinkedModelSerializer):
+class ImageSerializer(serializers.ModelSerializer):
     access_control = access_control_serializers.AccessControlSerializer()
     class Meta:
         model = models.Image
         fields = ('image_url', 'access_control')
 
-class AgencySerializer(serializers.HyperlinkedModelSerializer):
+class AgencySerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Agency
         fields = ('short_name',)
 
-class GroupSerializer(serializers.HyperlinkedModelSerializer):
+class GroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = django.contrib.auth.models.Group
         fields = ('name',)
 
-class UserSerializer(serializers.HyperlinkedModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
     class Meta:
         # TODO: not supposed to reference Django's User model directly, but
         # using settings.AUTH_USER_MODEL here doesn't not work
@@ -37,55 +37,55 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         model = django.contrib.auth.models.User
         fields = ('username', 'email')
 
-class ProfileSerializer(serializers.HyperlinkedModelSerializer):
+class ProfileSerializer(serializers.ModelSerializer):
     user = UserSerializer()
     class Meta:
         model = models.Profile
         fields = ('user',)
 
-class ContactSerializer(serializers.HyperlinkedModelSerializer):
+class ContactSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Contact
         fields = ('name', 'email')
 
-class ListingTypeSerializer(serializers.HyperlinkedModelSerializer):
+class ListingTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.ListingType
         fields = ('title', 'description')
 
-class DocUrlSerializer(serializers.HyperlinkedModelSerializer):
+class DocUrlSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.DocUrl
         fields = ('name', 'url')
 
-class ItemCommentSerializer(serializers.HyperlinkedModelSerializer):
+class ItemCommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.ItemComment
         fields = ('text', 'rate')
 
-class ListingActivitySerializer(serializers.HyperlinkedModelSerializer):
+class ListingActivitySerializer(serializers.ModelSerializer):
     class Meta:
         model = models.ListingActivity
         fields = ('action', 'activity_date')
 
-class RejectionListingSerializer(serializers.HyperlinkedModelSerializer):
+class RejectionListingSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.RejectionListing
         fields = ('description')
 
-class ScreenshotSerializer(serializers.HyperlinkedModelSerializer):
+class ScreenshotSerializer(serializers.ModelSerializer):
     small_image = ImageSerializer()
     large_image = ImageSerializer()
     class Meta:
         model = models.Screenshot
         fields = ('small_image', 'large_image')
 
-class TagSerializer(serializers.HyperlinkedModelSerializer):
+class TagSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Tag
         fields = ('name',)
 
-class ListingSerializer(serializers.HyperlinkedModelSerializer):
+class ListingSerializer(serializers.ModelSerializer):
     screenshots = ScreenshotSerializer(many=True)
     doc_urls = DocUrlSerializer(many=True)
     owners = ProfileSerializer(many=True)
@@ -100,6 +100,7 @@ class ListingSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.Listing
         depth = 2
+
 
 class StorefrontSerializer(serializers.Serializer):
     featured = ListingSerializer(many=True)
