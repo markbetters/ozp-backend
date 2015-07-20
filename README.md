@@ -1,6 +1,6 @@
 ozp-backend
 =====================
-Django-based prototype for new OZP backend
+Django-based backend for OZP
 
 ## Getting Started
 1. Install Python 3.4.3. Python can be installed by downloading the appropriate
