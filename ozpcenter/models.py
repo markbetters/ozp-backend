@@ -103,6 +103,9 @@ class Image(models.Model):
 
     When creating a new image, use the Image.create_image method, do not
     use the Image.save() directly
+
+    Note that these images are access controlled, and as such cannot simply
+    be statically served
     """
     # this is set automatically by the create_image method
     uuid = models.CharField(max_length=36, unique=True)
@@ -115,8 +118,11 @@ class Image(models.Model):
         Get the relative url of the image
 
         TODO: might want to return an absolute url here
+
+        TODO: images cannot be served statically, since we need to enforce
+        access control
         """
-        return settings.MEDIA_URL + self.uuid + '.' + self.file_extension
+        return 'image/' + str(self.id)
 
     def __repr__(self):
         return self.image_url()

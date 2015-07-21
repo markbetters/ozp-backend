@@ -223,6 +223,9 @@ usage. Good explanation [here](http://timmyomahony.com/blog/static-vs-media-and-
 
 Production static file server: Nginx (TBD)
 
+NOTE: We can't serve /media files statically, as access control must be enforced
+on each of them
+
 ### Scripts
 The `runscript` command is installed via the django-extensions package and used
 to run scripts in the django context, just as you would get by running a set
