@@ -11,6 +11,9 @@ from django.shortcuts import get_object_or_404
 from rest_framework import viewsets
 from rest_framework.response import Response
 
+import ozpcenter.access_control as access_control
+import ozpcenter.permissions as permissions
+import ozpcenter.model_access as generic_model_access
 import ozpcenter.api.image.model_access as model_access
 import ozpcenter.api.image.serializers as serializers
 import ozpcenter.models as models
@@ -19,12 +22,18 @@ import ozpcenter.models as models
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center')
 
+class ImageTypeViewSet(viewsets.ModelViewSet):
+    queryset = models.ImageType.objects.all()
+    serializer_class = serializers.ImageTypeSerializer
+    fields = ('name',)
+
+
 class ImageViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
-        # TODO: enforce access control
-        return  models.Image.objects.all()
+        return  models.Image.objects.for_user(self.request.user.username).all()
 
     serializer_class = serializers.ImageSerializer
+    permission_classes = (permissions.IsUser,)
 
     def create(self, request):
         pass
@@ -43,6 +52,10 @@ class ImageViewSet(viewsets.ModelViewSet):
         image = get_object_or_404(queryset, pk=pk)
         image_path = model_access.get_image_path(pk)
         # TODO: enforce access control
+        user = generic_model_access.get_profile(self.request.user.username)
+        if not access_control.has_access(user.access_control.title,
+            image.access_control.title):
+            return Response(status=403)
         content_type = 'image/' + image.file_extension
         try:
             with open(image_path, "rb") as f:

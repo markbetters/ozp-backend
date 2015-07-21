@@ -2,6 +2,7 @@
 Image model access
 """
 import logging
+import os.path
 
 from django.conf import settings
 from django.core.cache import cache
@@ -20,4 +21,9 @@ def get_image_path(pk):
     image = models.Image.objects.get(id=pk)
     # TODO: check this file exists
     image_path = settings.MEDIA_ROOT + '/' + image.uuid + '.' + image.file_extension
-    return image_path
+    if os.path.isfile(image_path):
+        return image_path
+    else:
+        logger.error('image for pk %d does not exist' % pk)
+        # TODO: raise exception
+        return '/does/not/exist'

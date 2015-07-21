@@ -9,15 +9,10 @@ from rest_framework import serializers
 import ozpcenter.models as models
 import ozpcenter.api.access_control.serializers as access_control_serializers
 import ozpcenter.api.category.serializers as category_serializers
+import ozpcenter.api.image.serializers as image_serializers
 
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center')
-
-class ImageSerializer(serializers.ModelSerializer):
-    access_control = access_control_serializers.AccessControlSerializer()
-    class Meta:
-        model = models.Image
-        fields = ('image_url', 'access_control')
 
 class AgencySerializer(serializers.ModelSerializer):
     class Meta:
@@ -74,8 +69,8 @@ class RejectionListingSerializer(serializers.ModelSerializer):
         fields = ('description')
 
 class ScreenshotSerializer(serializers.ModelSerializer):
-    small_image = ImageSerializer()
-    large_image = ImageSerializer()
+    small_image = image_serializers.ImageSerializer()
+    large_image = image_serializers.ImageSerializer()
     class Meta:
         model = models.Screenshot
         fields = ('small_image', 'large_image')
@@ -93,10 +88,10 @@ class ListingSerializer(serializers.ModelSerializer):
     tags = TagSerializer(many=True)
     agency = AgencySerializer()
     contacts = ContactSerializer(many=True)
-    small_icon = ImageSerializer()
-    large_icon = ImageSerializer()
-    banner_icon = ImageSerializer()
-    large_banner_icon = ImageSerializer()
+    small_icon = image_serializers.ImageSerializer()
+    large_icon = image_serializers.ImageSerializer()
+    banner_icon = image_serializers.ImageSerializer()
+    large_banner_icon = image_serializers.ImageSerializer()
     class Meta:
         model = models.Listing
         depth = 2

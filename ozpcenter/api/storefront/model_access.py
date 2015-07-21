@@ -93,13 +93,13 @@ def get_metadata():
                 'action', 'media_type', 'label', 'icon', 'id')
 
             # return icon/image urls instead of the id
-            # note that we will assume the icons for all intents and agencies
-            # are not access-controlled beyond the lowest setting
             for i in data['agencies']:
-                i['icon'] = models.Image.objects.get(id=i['icon']).image_url()
+                # i['icon'] = models.Image.objects.get(id=i['icon']).image_url()
+                i['icon'] = '/TODO'
 
             for i in data['intents']:
-                i['icon'] = models.Image.objects.get(id=i['icon']).image_url()
+                # i['icon'] = models.Image.objects.get(id=i['icon']).image_url()
+                i['icon'] = '/TODO'
 
             cache.set(key, data)
         except Exception as e:

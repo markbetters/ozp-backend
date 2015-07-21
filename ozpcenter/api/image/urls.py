@@ -10,6 +10,7 @@ import ozpcenter.api.image.views as views
 router = routers.DefaultRouter()
 
 router.register(r'image', views.ImageViewSet, base_name='image')
+router.register(r'imagetype', views.ImageTypeViewSet, base_name='imagetype')
 
 # Wire up our API using automatic URL routing.
 urlpatterns = [

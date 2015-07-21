@@ -93,6 +93,28 @@ class ImageType(models.Model):
     min_width = models.IntegerField(default=16)
     min_height = models.IntegerField(default=16)
 
+class AccessControlImageManager(models.Manager):
+    """
+    Use a custom manager to control access to Images
+
+    Instead of using models.Image.objects.all() or .filter(...) etc, use:
+    models.Image.objects.for_user(user).all() or .filter(...) etc
+
+    This way there is a single place to implement this 'tailored view' logic
+    for image queries
+    """
+    def for_user(self, username):
+        # get all images
+        objects = super(AccessControlImageManager, self).get_queryset()
+        user = Profile.objects.get(user__username=username)
+        # filter out listings by user's access level
+        images_to_exclude=[]
+        for i in objects:
+            if not access_control.has_access(user.access_control.title, i.access_control.title):
+                images_to_exclude.append(i.uuid)
+        objects = objects.exclude(uuid__in=images_to_exclude)
+        return objects
+
 
 class Image(models.Model):
     """
@@ -113,22 +135,14 @@ class Image(models.Model):
     file_extension = models.CharField(max_length=16, default='png')
     image_type = models.ForeignKey(ImageType, related_name='images')
 
-    def image_url(self):
-        """
-        Get the relative url of the image
-
-        TODO: might want to return an absolute url here
-
-        TODO: images cannot be served statically, since we need to enforce
-        access control
-        """
-        return 'image/' + str(self.id)
+    # use a custom Manager class to limit returned Images
+    objects = AccessControlImageManager()
 
     def __repr__(self):
-        return self.image_url()
+        return self.uuid
 
     def __str__(self):
-        return self.image_url()
+        return self.uuid
 
     @staticmethod
     def create_image(pil_img, **kwargs):
@@ -766,6 +780,8 @@ class Notification(models.Model):
     Notifications that do not have an associated listing are assumed to be
     'system-wide', and thus will be sent to all users
     """
+    # TODO: created date
+    created_date = models.DateTimeField(auto_now=True)
     message = models.CharField(max_length=1024)
     expires_date = models.DateTimeField()
     author = models.ForeignKey(Profile, related_name='authored_notifications')
