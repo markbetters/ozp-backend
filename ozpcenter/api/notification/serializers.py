@@ -26,7 +26,7 @@ class NotificationListingSerializer(serializers.HyperlinkedModelSerializer):
         model = models.Listing
         fields = ('title',)
 
-class NotificationSerializer(serializers.HyperlinkedModelSerializer):
+class NotificationSerializer(serializers.ModelSerializer):
     author = ShortProfileSerializer()
     listing = NotificationListingSerializer()
     class Meta:

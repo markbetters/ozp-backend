@@ -19,7 +19,6 @@ def get_image_path(pk):
     Return absolute file path to an image given its id (pk)
     """
     image = models.Image.objects.get(id=pk)
-    # TODO: check this file exists
     image_path = settings.MEDIA_ROOT + '/' + image.uuid + '.' + image.file_extension
     if os.path.isfile(image_path):
         return image_path
