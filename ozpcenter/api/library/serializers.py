@@ -7,6 +7,7 @@ from rest_framework import serializers
 
 import ozpcenter.models as models
 import ozpcenter.api.profile.serializers as profile_serializers
+import ozpcenter.api.image.serializers as image_serializers
 
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center')
@@ -17,9 +18,13 @@ class LibrarySerializer(serializers.HyperlinkedModelSerializer):
 
 
 class LibraryListingSerializer(serializers.HyperlinkedModelSerializer):
+    small_icon = image_serializers.ImageSerializer()
+    large_icon = image_serializers.ImageSerializer()
+    banner_icon = image_serializers.ImageSerializer()
     class Meta:
         model = models.Listing
-        fields = ('id', 'title', 'unique_name')
+        fields = ('id', 'title', 'unique_name', 'launch_url', 'small_icon',
+            'large_icon', 'banner_icon')
         read_only_fields = ('title', 'unique_name')
         # Any AutoFields on your model (which is what the automatically
         # generated id key is) are set to read-only by default when Django
