@@ -34,14 +34,7 @@ class LibraryViewSet(viewsets.ModelViewSet):
 
 class UserLibraryViewSet(viewsets.ViewSet):
     """
-    ViewSet for api/self/library
-
-    GET api/self/library - return a list of this user's library (full listing info)
-    POST api/self/library - add a listing to user's library
-        data = {'listing_id': id}
-    DELETE api/self/library/<id> - remove an entry from user's library
-    PUT, PATCH api/library/<id> - unallowed (library entries can only be created
-        or deleted, not updated)
+    Listings that have been bookmarked by the current user
     """
     permission_classes = (permissions.IsUser,)
 
@@ -51,27 +44,25 @@ class UserLibraryViewSet(viewsets.ViewSet):
 
     def create(self, request):
         """
+        Bookmark a Listing for the current user. POST JSON data:
+        {
+            "listing":
+                {
+                    "id": 1
+                },
+            "folder": "folderName" (optonal)
+        }
         ---
         parameters:
-            - name: listing_id
-              description: listing id
+            - name: body
               required: true
-            - name: folder
-              description: folder
-              type: string
+              paramType: body
         parameters_strategy:
             form: replace
             query: replace
         omit_serializer: true
         """
-        data = {
-            'listing': {
-                'id': request.data['listing_id']
-            },
-            'folder': request.data.get('folder', '')
-        }
-
-        serializer = serializers.UserLibrarySerializer(data=data,
+        serializer = serializers.UserLibrarySerializer(data=request.data,
             context={'request': request})
         if not serializer.is_valid():
             logger.error('%s' % serializer.errors)
@@ -84,6 +75,7 @@ class UserLibraryViewSet(viewsets.ViewSet):
 
     def list(self, request):
         """
+        The current user's bookmarked listings
         ---
         serializer: ozpcenter.api.library.serializers.UserLibrarySerializer
         """
@@ -93,19 +85,62 @@ class UserLibraryViewSet(viewsets.ViewSet):
         return Response(serializer.data)
 
     def retrieve(self, request, pk=None):
+        """
+        Retrieve by library id (not listing id)
+        """
         queryset = self.get_queryset()
         library_entry = get_object_or_404(queryset, pk=pk)
         serializer = serializers.UserLibrarySerializer(library_entry,
             context={'request': request})
         return Response(serializer.data)
 
-    # def update(self, request, pk=None):
-    #     pass
+    def update(self, request, pk=None):
+        """
+        Update ALL of the user's library entries
 
-    # def partial_update(self, request, pk=None):
-    #     pass
+        Used to move library entries into different folders for HUD
+
+        [
+            {
+                "listing": {
+                    "id": 1
+                },
+                "folder": "folderName" (or null)
+            },
+            {
+                "listing": {
+                    "id": 2
+                },
+                "folder": "folderName" (or null)
+            }
+        ]
+        ---
+        parameters:
+            - name: body
+              required: true
+              paramType: body
+        parameters_strategy:
+            form: replace
+            query: replace
+        omit_serializer: true
+        """
+        serializer = serializers.UserLibrarySerializer(data=request.data,
+            context={'request': request})
+        if not serializer.is_valid():
+            logger.error('%s' % serializer.errors)
+            return Response(serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST)
+
+        serializer.save()
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def destroy(self, request, pk=None):
+        """
+        Remove a Listing from the current user's library (unbookmark)
+
+        Delete by library id, not listing id
+        """
         queryset = self.get_queryset()
         library_entry = get_object_or_404(queryset, pk=pk)
         library_entry.delete()

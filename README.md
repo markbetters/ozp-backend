@@ -235,6 +235,11 @@ to run the script to populate the database with sample data:
 [docs](http://django-extensions.readthedocs.org/en/latest/runscript.html) for
 details
 
+### API Input
+All POST, PUT, and PATCH endpoints should use JSON encoded input as per
+[this](http://www.vinaysahni.com/best-practices-for-a-pragmatic-restful-api#json-requests)
+
+
 ## Controlling Access
 Anonymous users have no access - all must have a valid username/password (dev)
 or valid certificate (production) to be granted any access
