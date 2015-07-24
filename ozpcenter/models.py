@@ -93,6 +93,7 @@ class ImageType(models.Model):
     min_width = models.IntegerField(default=16)
     min_height = models.IntegerField(default=16)
 
+
 class AccessControlImageManager(models.Manager):
     """
     Use a custom manager to control access to Images
@@ -422,6 +423,7 @@ class ItemComment(models.Model):
         return 'Author id %s: Rate %d Stars : %s' % (self.author_id,
                                                      self.rate, self.text)
 
+
 class Profile(models.Model):
     """
     A User (user's Profile) on OZP
@@ -702,7 +704,6 @@ class Listing(models.Model):
         return self.title
 
 
-
 class ListingActivity(models.Model):
     """
     Listing Activity
@@ -716,6 +717,7 @@ class ListingActivity(models.Model):
     # TODO: how to handle last_activity?
     listing = models.ForeignKey('Listing', related_name='listing_activities')
     profile = models.ForeignKey('Profile', related_name='listing_activities')
+
 
 class RejectionListing(models.Model):
     """
@@ -772,6 +774,7 @@ class ListingType(models.Model):
 
     def __str__(self):
         return self.title
+
 
 class Notification(models.Model):
     """

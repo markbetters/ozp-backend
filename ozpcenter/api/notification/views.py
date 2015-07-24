@@ -4,12 +4,17 @@ Views
 import datetime
 import logging
 
+from django.shortcuts import get_object_or_404
+
+from rest_framework import status
 from rest_framework import viewsets
+from rest_framework.response import Response
 
 import ozpcenter.api.notification.serializers as serializers
 import ozpcenter.permissions as permissions
 import ozpcenter.models as models
 import ozpcenter.api.notification.model_access as model_access
+import ozpcenter.model_access as generic_model_access
 
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center')
@@ -39,3 +44,13 @@ class UserNotificationViewSet(viewsets.ModelViewSet):
         Get current user's notifications
         """
         return model_access.get_self_notifications(self.request.user.username)
+
+    def destroy(self, request, pk=None):
+        """
+        Dismiss notification
+        """
+        queryset = self.get_queryset()
+        notification = get_object_or_404(queryset, pk=pk)
+        user = generic_model_access.get_profile(self.request.user.username)
+        notification.dismissed_by.add(user)
+        return Response(status=status.HTTP_204_NO_CONTENT)

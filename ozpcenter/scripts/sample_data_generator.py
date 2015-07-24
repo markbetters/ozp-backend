@@ -338,7 +338,6 @@ def run():
 
     # create some expired notifications
     last_week = datetime.datetime.now() - datetime.timedelta(days=7)
-    eastern = pytz.timezone('US/Eastern')
     last_week = eastern.localize(last_week)
     n1 = models.Notification(message='System will be going down for \
         approximately 30 minutes on C/D at 1700Z',
@@ -382,16 +381,16 @@ def run():
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     img = Image.open(TEST_IMG_PATH + 'AirMail16.png')
     small_icon = models.Image.create_image(img, file_extension='png',
-        access_control='UNCLASSIFIED', image_type='listing_small_icon')
+        access_control=unclass.title, image_type=small_icon_type.name)
     img = Image.open(TEST_IMG_PATH + 'AirMail32.png')
     large_icon = models.Image.create_image(img, file_extension='png',
-        access_control='UNCLASSIFIED', image_type='listing_large_icon')
+        access_control=unclass.title, image_type=large_icon_type.name)
     img = Image.open(TEST_IMG_PATH + 'AirMail.png')
     banner_icon = models.Image.create_image(img, file_extension='png',
-        access_control='UNCLASSIFIED', image_type='listing_banner_icon')
+        access_control=unclass.title, image_type=banner_icon_type.name)
     img = Image.open(TEST_IMG_PATH + 'AirMailFeatured.png')
     large_banner_icon = models.Image.create_image(img, file_extension='png',
-        access_control='UNCLASSIFIED', image_type='listing_large_banner_icon')
+        access_control=unclass.title, image_type=large_banner_icon_type.name)
 
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     #                           Listing
@@ -523,13 +522,13 @@ def run():
     img = Image.open(TEST_IMG_PATH + 'ChartCourse16.png')
     small_icon = models.Image.create_image(img, file_extension='png',
         access_control=unclass.title, image_type=small_icon_type.name)
-    img = Image.open(TEST_IMG_PATH + 'BreadBasket32.png')
+    img = Image.open(TEST_IMG_PATH + 'ChartCourse32.png')
     large_icon = models.Image.create_image(img, file_extension='png',
         access_control=unclass.title, image_type=large_icon_type.name)
-    img = Image.open(TEST_IMG_PATH + 'BreadBasket.png')
+    img = Image.open(TEST_IMG_PATH + 'ChartCourse.png')
     banner_icon = models.Image.create_image(img, file_extension='png',
         access_control=unclass.title, image_type=banner_icon_type.name)
-    img = Image.open(TEST_IMG_PATH + 'BreadBasketFeatured.png')
+    img = Image.open(TEST_IMG_PATH + 'ChartCourseFeatured.png')
     large_banner_icon = models.Image.create_image(img, file_extension='png',
         access_control=unclass.title, image_type=large_banner_icon_type.name)
 
@@ -568,8 +567,270 @@ def run():
     listing.screenshots.add(screenshot)
 
 
+    ############################################################################
+    #                           Chatter Box
+    ############################################################################
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    #                           Icons
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    img = Image.open(TEST_IMG_PATH + 'ChatterBox16.png')
+    small_icon = models.Image.create_image(img, file_extension='png',
+        access_control=unclass.title, image_type=small_icon_type.name)
+    img = Image.open(TEST_IMG_PATH + 'ChatterBox32.png')
+    large_icon = models.Image.create_image(img, file_extension='png',
+        access_control=unclass.title, image_type=large_icon_type.name)
+    img = Image.open(TEST_IMG_PATH + 'ChatterBox.png')
+    banner_icon = models.Image.create_image(img, file_extension='png',
+        access_control=unclass.title, image_type=banner_icon_type.name)
+    img = Image.open(TEST_IMG_PATH + 'ChatterBoxFeatured.png')
+    large_banner_icon = models.Image.create_image(img, file_extension='png',
+        access_control=unclass.title, image_type=large_banner_icon_type.name)
 
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    #                           Listing
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+    listing = models.Listing(
+        title='Chatter Box',
+        agency=minitrue,
+        app_type=web_app,
+        description='Chat with people',
+        launch_url='https://www.google.com/chatterbox',
+        version_name='1.0.0',
+        unique_name='ozp.test.chatterbox',
+        small_icon=small_icon,
+        large_icon=large_icon,
+        banner_icon=banner_icon,
+        large_banner_icon=large_banner_icon,
+        what_is_new='Nothing really new here',
+        description_short='Chat in a box',
+        requirements='None',
+        approval_status=models.ApprovalStatus.APPROVED,
+        is_enabled=True,
+        is_featured=True,
+        singleton=False,
+        is_private=True,
+        access_control=unclass
+    )
+    listing.save()
+    listing.contacts.add(rob_baratheon)
+    listing.owners.add(winston)
+    listing.categories.add(tools)
+    listing.categories.add(education)
+    listing.tags.add(demo)
+    listing.screenshots.add(screenshot)
+
+    ############################################################################
+    #                           Clipboard
+    ############################################################################
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    #                           Icons
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    img = Image.open(TEST_IMG_PATH + 'Clipboard16.png')
+    small_icon = models.Image.create_image(img, file_extension='png',
+        access_control=unclass.title, image_type=small_icon_type.name)
+    img = Image.open(TEST_IMG_PATH + 'Clipboard32.png')
+    large_icon = models.Image.create_image(img, file_extension='png',
+        access_control=unclass.title, image_type=large_icon_type.name)
+    img = Image.open(TEST_IMG_PATH + 'Clipboard.png')
+    banner_icon = models.Image.create_image(img, file_extension='png',
+        access_control=unclass.title, image_type=banner_icon_type.name)
+    img = Image.open(TEST_IMG_PATH + 'ClipboardFeatured.png')
+    large_banner_icon = models.Image.create_image(img, file_extension='png',
+        access_control=unclass.title, image_type=large_banner_icon_type.name)
+
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    #                           Listing
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+    listing = models.Listing(
+        title='Clipboard',
+        agency=minitrue,
+        app_type=web_app,
+        description='Clip stuff on a board',
+        launch_url='https://www.google.com/clipboard',
+        version_name='1.0.0',
+        unique_name='ozp.test.clipboard',
+        small_icon=small_icon,
+        large_icon=large_icon,
+        banner_icon=banner_icon,
+        large_banner_icon=large_banner_icon,
+        what_is_new='Nothing really new here',
+        description_short='Its a clipboard',
+        requirements='None',
+        approval_status=models.ApprovalStatus.APPROVED,
+        is_enabled=True,
+        is_featured=True,
+        singleton=False,
+        is_private=True,
+        access_control=unclass
+    )
+    listing.save()
+    listing.contacts.add(rob_baratheon)
+    listing.owners.add(winston)
+    listing.categories.add(tools)
+    listing.categories.add(education)
+    listing.tags.add(demo)
+    listing.screenshots.add(screenshot)
+
+    ############################################################################
+    #                           FrameIt
+    ############################################################################
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    #                           Icons
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    img = Image.open(TEST_IMG_PATH + 'FrameIt16.png')
+    small_icon = models.Image.create_image(img, file_extension='png',
+        access_control=unclass.title, image_type=small_icon_type.name)
+    img = Image.open(TEST_IMG_PATH + 'FrameIt32.png')
+    large_icon = models.Image.create_image(img, file_extension='png',
+        access_control=unclass.title, image_type=large_icon_type.name)
+    img = Image.open(TEST_IMG_PATH + 'FrameIt.png')
+    banner_icon = models.Image.create_image(img, file_extension='png',
+        access_control=unclass.title, image_type=banner_icon_type.name)
+    img = Image.open(TEST_IMG_PATH + 'FrameItFeatured.png')
+    large_banner_icon = models.Image.create_image(img, file_extension='png',
+        access_control=unclass.title, image_type=large_banner_icon_type.name)
+
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    #                           Listing
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+    listing = models.Listing(
+        title='FrameIt',
+        agency=minitrue,
+        app_type=web_app,
+        description='Show things in an iframe',
+        launch_url='https://www.google.com/frameit',
+        version_name='1.0.0',
+        unique_name='ozp.test.frameit',
+        small_icon=small_icon,
+        large_icon=large_icon,
+        banner_icon=banner_icon,
+        large_banner_icon=large_banner_icon,
+        what_is_new='Nothing really new here',
+        description_short='Its an iframe',
+        requirements='None',
+        approval_status=models.ApprovalStatus.APPROVED,
+        is_enabled=True,
+        is_featured=True,
+        singleton=False,
+        is_private=True,
+        access_control=unclass
+    )
+    listing.save()
+    listing.contacts.add(rob_baratheon)
+    listing.owners.add(winston)
+    listing.categories.add(tools)
+    listing.categories.add(education)
+    listing.tags.add(demo)
+    listing.screenshots.add(screenshot)
+
+    ############################################################################
+    #                           Hatch Latch
+    ############################################################################
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    #                           Icons
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    img = Image.open(TEST_IMG_PATH + 'HatchLatch16.png')
+    small_icon = models.Image.create_image(img, file_extension='png',
+        access_control=unclass.title, image_type=small_icon_type.name)
+    img = Image.open(TEST_IMG_PATH + 'HatchLatch32.png')
+    large_icon = models.Image.create_image(img, file_extension='png',
+        access_control=unclass.title, image_type=large_icon_type.name)
+    img = Image.open(TEST_IMG_PATH + 'HatchLatch.png')
+    banner_icon = models.Image.create_image(img, file_extension='png',
+        access_control=unclass.title, image_type=banner_icon_type.name)
+    img = Image.open(TEST_IMG_PATH + 'HatchLatchFeatured.png')
+    large_banner_icon = models.Image.create_image(img, file_extension='png',
+        access_control=unclass.title, image_type=large_banner_icon_type.name)
+
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    #                           Listing
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+    listing = models.Listing(
+        title='Hatch Latch',
+        agency=minitrue,
+        app_type=web_app,
+        description='Hatch latches',
+        launch_url='https://www.google.com/hatchlatch',
+        version_name='1.0.0',
+        unique_name='ozp.test.hatchlatch',
+        small_icon=small_icon,
+        large_icon=large_icon,
+        banner_icon=banner_icon,
+        large_banner_icon=large_banner_icon,
+        what_is_new='Nothing really new here',
+        description_short='Its a hatch latch',
+        requirements='None',
+        approval_status=models.ApprovalStatus.APPROVED,
+        is_enabled=True,
+        is_featured=True,
+        singleton=False,
+        is_private=True,
+        access_control=unclass
+    )
+    listing.save()
+    listing.contacts.add(rob_baratheon)
+    listing.owners.add(winston)
+    listing.categories.add(tools)
+    listing.categories.add(education)
+    listing.tags.add(demo)
+    listing.screenshots.add(screenshot)
+
+    ############################################################################
+    #                           Jot Spot
+    ############################################################################
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    #                           Icons
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    img = Image.open(TEST_IMG_PATH + 'JotSpot16.png')
+    small_icon = models.Image.create_image(img, file_extension='png',
+        access_control=unclass.title, image_type=small_icon_type.name)
+    img = Image.open(TEST_IMG_PATH + 'JotSpot32.png')
+    large_icon = models.Image.create_image(img, file_extension='png',
+        access_control=unclass.title, image_type=large_icon_type.name)
+    img = Image.open(TEST_IMG_PATH + 'JotSpot.png')
+    banner_icon = models.Image.create_image(img, file_extension='png',
+        access_control=unclass.title, image_type=banner_icon_type.name)
+    img = Image.open(TEST_IMG_PATH + 'JotSpotFeatured.png')
+    large_banner_icon = models.Image.create_image(img, file_extension='png',
+        access_control=unclass.title, image_type=large_banner_icon_type.name)
+
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    #                           Listing
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+    listing = models.Listing(
+        title='JotSpot',
+        agency=minitrue,
+        app_type=web_app,
+        description='Jot things down',
+        launch_url='https://www.google.com/jotspot',
+        version_name='1.0.0',
+        unique_name='ozp.test.jotspot',
+        small_icon=small_icon,
+        large_icon=large_icon,
+        banner_icon=banner_icon,
+        large_banner_icon=large_banner_icon,
+        what_is_new='Nothing really new here',
+        description_short='Jot stuff down',
+        requirements='None',
+        approval_status=models.ApprovalStatus.APPROVED,
+        is_enabled=True,
+        is_featured=True,
+        singleton=False,
+        is_private=True,
+        access_control=unclass
+    )
+    listing.save()
+    listing.contacts.add(rob_baratheon)
+    listing.owners.add(winston)
+    listing.categories.add(tools)
+    listing.categories.add(education)
+    listing.tags.add(demo)
+    listing.screenshots.add(screenshot)
 
     ############################################################################
     #                           Library

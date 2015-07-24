@@ -28,13 +28,14 @@ def get_self_notifications(username):
     dismissed_notifications = models.Notification.objects.filter(
         dismissed_by__user__username=username)
 
-    # get all unexpired notifications for listings in this user's library
+    # TODO get all unexpired notifications for listings in this user's library
 
     # get all unexpired system-wide notifications
     unexpired_system_notifications = models.Notification.objects.filter(
         expires_date__gt=datetime.datetime.now(), listing__isnull=True)
 
     # return all_unexpired_notifications - dismissed_notifications
+    notifications = unexpired_system_notifications.exclude(
+        pk__in=dismissed_notifications)
 
-    return  models.Notification.objects.filter(
-        expires_date__gt=datetime.datetime.now())
+    return notifications
