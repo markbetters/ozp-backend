@@ -8,6 +8,7 @@ return the id and unique name of each listing in the user's library
 import logging
 
 from django.shortcuts import get_object_or_404
+from rest_framework.decorators import detail_route, list_route
 from rest_framework import status
 from rest_framework import viewsets
 from rest_framework.response import Response
@@ -94,7 +95,19 @@ class UserLibraryViewSet(viewsets.ViewSet):
             context={'request': request})
         return Response(serializer.data)
 
-    def update(self, request, pk=None):
+    def destroy(self, request, pk=None):
+        """
+        Remove a Listing from the current user's library (unbookmark)
+
+        Delete by library id, not listing id
+        """
+        queryset = self.get_queryset()
+        library_entry = get_object_or_404(queryset, pk=pk)
+        library_entry.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    @list_route(methods=['put'])
+    def update_all(self, request):
         """
         Update ALL of the user's library entries
 
@@ -105,13 +118,15 @@ class UserLibraryViewSet(viewsets.ViewSet):
                 "listing": {
                     "id": 1
                 },
-                "folder": "folderName" (or null)
+                "folder": "folderName" (or null),
+                "id": 2
             },
             {
                 "listing": {
                     "id": 2
                 },
-                "folder": "folderName" (or null)
+                "folder": "folderName" (or null),
+                "id": 1
             }
         ]
         ---
@@ -124,24 +139,24 @@ class UserLibraryViewSet(viewsets.ViewSet):
             query: replace
         omit_serializer: true
         """
-        serializer = serializers.UserLibrarySerializer(data=request.data,
-            context={'request': request})
-        if not serializer.is_valid():
-            logger.error('%s' % serializer.errors)
-            return Response(serializer.errors,
-                status=status.HTTP_400_BAD_REQUEST)
+        # This method is different than most. The ViewSet update method only
+        # works on a single instance, hence the use of a special update_all
+        # method. Serializers must be customized to support nested writable
+        # representations, and even after doing so, the input data validation
+        # didn't seem acceptable. Hence this customized method
+        #
+        # validate input
+        for i in request.data:
+            if 'listing' not in i or 'id' not in i:
+                return Response(serializer.errors,
+                    status=status.HTTP_400_BAD_REQUEST)
 
-        serializer.save()
+        # update each instance
+        for i in request.data:
+            instance = models.ApplicationLibraryEntry.objects.get(id=i['id'])
+            instance.folder = i['folder']
+            instance.listing = models.Listing.objects.get(id=i['listing']['id'])
+            instance.save()
 
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-    def destroy(self, request, pk=None):
-        """
-        Remove a Listing from the current user's library (unbookmark)
-
-        Delete by library id, not listing id
-        """
-        queryset = self.get_queryset()
-        library_entry = get_object_or_404(queryset, pk=pk)
-        library_entry.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        # return original data
+        return Response(request.data, status=status.HTTP_200_OK)
