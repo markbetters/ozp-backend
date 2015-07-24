@@ -30,77 +30,130 @@ def run():
     ############################################################################
     unclass = models.AccessControl(title='UNCLASSIFIED')
     unclass.save()
-    c = models.AccessControl(title='UNCLASSIFIED//ABC')
-    c.save()
-    c = models.AccessControl(title='SECRET')
-    c.save()
-    c = models.AccessControl(title='TOP SECRET')
-    c.save()
+    secret = models.AccessControl(title='SECRET')
+    secret.save()
+    secret_n = models.AccessControl(title='SECRET//NOVEMBER')
+    secret_n.save()
+    ts = models.AccessControl(title='TOP SECRET')
+    ts.save()
+    ts_s = models.AccessControl(title='TOP SECRET//SIERRA')
+    ts_s.save()
+    ts_st = models.AccessControl(title='TOP SECRET//SIERRA//TANGO')
+    ts_st.save()
+    ts_stgh = models.AccessControl(title='TOP SECRET//SIERRA//TANGO//GOLF//HOTEL')
+    ts_stgh.save()
+
+    ts_n = models.AccessControl(title='TOP SECRET//NOVEMBER')
+    ts_n.save()
+    ts_sn = models.AccessControl(title='TOP SECRET//SIERRA//NOVEMBER')
+    ts_sn.save()
+    ts_stn = models.AccessControl(title='TOP SECRET//SIERRA//TANGO//NOVEMBER')
+    ts_stn.save()
+    ts_stghn = models.AccessControl(title='TOP SECRET//SIERRA//TANGO//GOLF//HOTEL//NOVEMBER')
+    ts_stghn.save()
 
     ############################################################################
     #                           Categories
     ############################################################################
-    cat1 = models.Category(title="Books and Reference",
+    books_ref = models.Category(title="Books and Reference",
         description="Things made of paper")
-    cat1.save()
-    cat2 = models.Category(title="Business",
+    books_ref.save()
+    business = models.Category(title="Business",
         description="For making money")
-    cat2.save()
-    cat = models.Category(title="Education",
+    business.save()
+    communication = models.Category(title="Communication",
+        description="Moving info between people and things")
+    communication.save()
+    education = models.Category(title="Education",
         description="Educational in nature")
-    cat.save()
-    cat = models.Category(title="Entertainment",
+    education.save()
+    entertainment = models.Category(title="Entertainment",
         description="For fun")
-    cat.save()
-    cat = models.Category(title="Tools",
+    entertainment.save()
+    finance = models.Category(title="Finance",
+        description="For managing money")
+    finance.save()
+    health_fitness = models.Category(title="Health and Fitness",
+        description="Be healthy, be fit")
+    health_fitness.save()
+    media_video = models.Category(title="Media and Video",
+        description="Videos and media stuff")
+    media_video.save()
+    music_audio = models.Category(title="Music and Audio",
+        description="Using your ears")
+    music_audio.save()
+    news = models.Category(title="News",
+        description="What's happening where")
+    news.save()
+    productivity = models.Category(title="Productivity",
+        description="Do more in less time")
+    productivity.save()
+    shopping = models.Category(title="Shopping",
+        description="For spending your money")
+    shopping.save()
+    sports = models.Category(title="Sports",
+        description="Score more points than your opponent")
+    sports.save()
+    tools = models.Category(title="Tools",
         description="Tools and Utilities")
-    cat.save()
+    tools.save()
+    weather = models.Category(title="Weather",
+        description="Get the temperature")
+    weather.save()
 
 
     ############################################################################
     #                           Contact Types
     ############################################################################
-    p = models.ContactType(name='Worker')
-    p.save()
-    p = models.ContactType(name='Manager')
-    p.save()
-    p = models.ContactType(name='Boss')
-    p.save()
+    civillian = models.ContactType(name='Civillian')
+    civillian.save()
+    government = models.ContactType(name='Government')
+    government.save()
+    military = models.ContactType(name='Military')
+    military.save()
 
     ############################################################################
     #                           Listing Types
     ############################################################################
-    t = models.ListingType(title='web application',
+    web_app = models.ListingType(title='web application',
         description='web applications')
-    t.save()
-    t = models.ListingType(title='widgets',
+    web_app.save()
+    widget = models.ListingType(title='widgets',
         description='widget things')
-    t.save()
+    widget.save()
+    dev_resource = models.ListingType(title='developer resource',
+        description='APIs and resources for developers')
+    dev_resource.save()
 
     ############################################################################
     #                           Image Types
     ############################################################################
     # Note: these image sizes do not represent those that should be used in
     # production
-    t = models.ImageType(name='listing_small_icon', max_size_bytes='4096')
-    t.save()
-    t = models.ImageType(name='listing_large_icon', max_size_bytes='8192')
-    t.save()
-    t = models.ImageType(name='listing_banner_icon', max_size_bytes='2097152')
-    t.save()
-    t = models.ImageType(name='listing_large_banner_icon',
+    small_icon_type = models.ImageType(name='listing_small_icon',
+        max_size_bytes='4096')
+    small_icon_type.save()
+    large_icon_type = models.ImageType(name='listing_large_icon',
+        max_size_bytes='8192')
+    large_icon_type.save()
+    banner_icon_type = models.ImageType(name='listing_banner_icon',
         max_size_bytes='2097152')
-    t.save()
-    t = models.ImageType(name='listing_small_screenshot',
+    banner_icon_type.save()
+    large_banner_icon_type = models.ImageType(name='listing_large_banner_icon',
+        max_size_bytes='2097152')
+    large_banner_icon_type.save()
+    small_screenshot_type = models.ImageType(name='listing_small_screenshot',
         max_size_bytes='1048576')
-    t.save()
-    t = models.ImageType(name='listing_large_screenshot',
+    small_screenshot_type.save()
+    large_screenshot_type = models.ImageType(name='listing_large_screenshot',
         max_size_bytes='1048576')
-    t.save()
-    t = models.ImageType(name='intent_icon', max_size_bytes='2097152')
-    t.save()
-    t = models.ImageType(name='agency_icon', max_size_bytes='2097152')
-    t.save()
+    large_screenshot_type.save()
+    intent_icon_type = models.ImageType(name='intent_icon',
+        max_size_bytes='2097152')
+    intent_icon_type.save()
+    agency_icon_type = models.ImageType(name='agency_icon',
+        max_size_bytes='2097152')
+    agency_icon_type.save()
 
     ############################################################################
     #                           Intents
@@ -108,7 +161,7 @@ def run():
     # TODO: more realistic data
     img = Image.open(TEST_IMG_PATH + 'android.png')
     icon = models.Image.create_image(img, file_extension='png',
-        access_control='UNCLASSIFIED', image_type='intent_icon')
+        access_control='UNCLASSIFIED', image_type=intent_icon_type.name)
     i = models.Intent(action='/application/json/view',
         media_type='vnd.ozp-intent-v1+json.json',
         label='view',
@@ -121,96 +174,199 @@ def run():
     img = Image.open(TEST_IMG_PATH + 'ministry_of_truth.jpg')
     icon = models.Image.create_image(img, file_extension='jpg',
         access_control='UNCLASSIFIED', image_type='agency_icon')
-    a = models.Agency(title='Ministry of Truth', short_name='m-truth',
+    minitrue = models.Agency(title='Ministry of Truth', short_name='Minitrue',
         icon=icon)
-    a.save()
+    minitrue.save()
+
     img = Image.open(TEST_IMG_PATH + 'ministry_of_peace.png')
     icon = models.Image.create_image(img, file_extension='png',
         access_control='UNCLASSIFIED', image_type='agency_icon')
-    a = models.Agency(title='Ministry of Peace', short_name='m-peace',
+    minipax = models.Agency(title='Ministry of Peace', short_name='Minipax',
         icon=icon)
-    a.save()
+    minipax.save()
+
     img = Image.open(TEST_IMG_PATH + 'ministry_of_love.jpeg')
     icon = models.Image.create_image(img, file_extension='jpeg',
         access_control='UNCLASSIFIED', image_type='agency_icon')
-    a = models.Agency(title='Ministry of Love', short_name='m-love',
+    miniluv = models.Agency(title='Ministry of Love', short_name='Miniluv',
         icon=icon)
-    a.save()
+    miniluv.save()
+
+    img = Image.open(TEST_IMG_PATH + 'ministry_of_plenty.png')
+    icon = models.Image.create_image(img, file_extension='png',
+        access_control='UNCLASSIFIED', image_type='agency_icon')
+    miniplenty = models.Agency(title='Ministry of Plenty',
+        short_name='Miniplenty', icon=icon)
+    miniplenty.save()
 
     ############################################################################
     #                               Tags
     ############################################################################
-    t1 =  models.Tag(name='demo')
-    t1.save()
-    t2 = models.Tag(name='useless')
-    t2.save()
+    demo =  models.Tag(name='demo')
+    demo.save()
+    example = models.Tag(name='example')
+    example.save()
 
     ############################################################################
     #                               Org Stewards
     ############################################################################
-    models.Profile.create_user('wsmith',
-        email='wsmith@nowhere.com',
-        display_name='William Smith',
+    winston = models.Profile.create_user('wsmith',
+        email='wsmith@oceania.gov',
+        display_name='Winston Smith',
         bio='I work at the Ministry of Truth',
-        access_control='UNCLASSIFIED',
+        access_control=ts_stn.title,
         organizations=['Ministry of Truth'],
         stewarded_organizations=['Ministry of Truth'],
+        groups=['ORG_STEWARD']
+    )
+
+    julia = models.Profile.create_user('julia',
+        email='julia@oceania.gov',
+        display_name='Julia Dixon',
+        bio='An especially zealous propagandist',
+        access_control=ts_s.title,
+        organizations=['Ministry of Truth'],
+        stewarded_organizations=['Ministry of Truth', 'Ministry of Love'],
+        groups=['ORG_STEWARD']
+    )
+    obrien = models.Profile.create_user('obrien',
+        email='obrien@oceania.gov',
+        display_name='O\'brien',
+        bio='I will find you, winston and julia',
+        access_control=ts_stghn.title,
+        organizations=['Ministry of Peace'],
+        stewarded_organizations=['Ministry of Peace', 'Ministry of Plenty'],
         groups=['ORG_STEWARD']
     )
 
     ############################################################################
     #                               Apps Mall Stewards
     ############################################################################
-    models.Profile.create_user('pboss',
-        email='pboss@nowhere.com',
-        display_name='P Boss',
-        bio='I am the boss',
-        access_control='UNCLASSIFIED',
-        organizations=['Ministry of Truth'],
+    big_brother = models.Profile.create_user('bigbrother',
+        email='bigbrother@oceania.gov',
+        display_name='Big Brother',
+        bio='I make everyones life better',
+        access_control=ts_stghn.title,
+        organizations=['Ministry of Truth', 'Ministry of Love',
+        'Ministry of Peace', 'Ministry of Plenty'],
+        groups=['APPS_MALL_STEWARD']
+    )
+
+    big_brother2 = models.Profile.create_user('bigbrother2',
+        email='bigbrother2@oceania.gov',
+        display_name='Big Brother2',
+        bio='I also make everyones life better',
+        access_control=ts_stghn.title,
+        organizations=['Ministry of Truth', 'Ministry of Love',
+        'Ministry of Peace', 'Ministry of Plenty'],
         groups=['APPS_MALL_STEWARD']
     )
 
     ############################################################################
     #                               Regular user
     ############################################################################
-    p = models.Profile.create_user('bjones',
-        email='bjones@nowhere.com',
-        display_name='Bob Jones',
+    aaronson = models.Profile.create_user('aaronson',
+        email='aaronson@airstripone.com',
+        display_name='Aaronson',
         bio='Nothing special',
-        access_control='UNCLASSIFIED',
+        access_control=secret_n.title,
         organizations=['Ministry of Love'],
         groups=['USER']
     )
 
-    p = models.Profile.create_user('jdoe',
-        email='jdoe@nowhere.com',
-        display_name='John Doe',
+    jones = models.Profile.create_user('jones',
+        email='jones@airstripone.com',
+        display_name='Jones',
         bio='I am a normal person',
-        access_control='UNCLASSIFIED',
+        access_control=secret_n.title,
         organizations=['Ministry of Truth'],
+        groups=['USER']
+    )
+
+    rutherford = models.Profile.create_user('rutherford',
+        email='rutherford@airstripone.com',
+        display_name='Rutherford',
+        bio='I am a normal person',
+        access_control=secret.title,
+        organizations=['Ministry of Plenty'],
+        groups=['USER']
+    )
+
+    syme = models.Profile.create_user('syme',
+        email='syme@airstripone.com',
+        display_name='Syme',
+        bio='I am too smart for my own good',
+        access_control=ts_s.title,
+        organizations=['Ministry of Peace'],
+        groups=['USER']
+    )
+
+    tparsons = models.Profile.create_user('tparsons',
+        email='tparsons@airstripone.com',
+        display_name='Tom Parsons',
+        bio='I am uneducated and loyal',
+        access_control=unclass.title,
+        organizations=['Ministry of Peace', 'Ministry of Love'],
+        groups=['USER']
+    )
+
+    charrington = models.Profile.create_user('charrington',
+        email='charrington@airstripone.com',
+        display_name='Charrington',
+        bio='A member of the Thought Police',
+        access_control=ts_stghn.title,
+        organizations=['Ministry of Peace', 'Ministry of Love',
+        'Ministry of Truth'],
         groups=['USER']
     )
 
     ############################################################################
     #                           System Notifications
     ############################################################################
+    # create some notifications that expire next week
     next_week = datetime.datetime.now() + datetime.timedelta(days=7)
     eastern = pytz.timezone('US/Eastern')
     next_week = eastern.localize(next_week)
-    n1 = models.Notification(message='The quick brown fox',
-        expires_date=next_week, author=p)
+    n1 = models.Notification(message='System will be going down for \
+        approximately 30 minutes on X/Y at 1100Z',
+        expires_date=next_week, author=winston)
     n1.save()
-    n2 = models.Notification(message='Jumps over the lazy dog',
-        expires_date=next_week, author=p)
+    n2 = models.Notification(message='System will be functioning in a \
+        degredaded state between 1800Z-0400Z on A/B',
+        expires_date=next_week, author=julia)
+    n2.save()
+
+    # create some expired notifications
+    last_week = datetime.datetime.now() - datetime.timedelta(days=7)
+    eastern = pytz.timezone('US/Eastern')
+    last_week = eastern.localize(last_week)
+    n1 = models.Notification(message='System will be going down for \
+        approximately 30 minutes on C/D at 1700Z',
+        expires_date=last_week, author=winston)
+    n1.save()
+    n2 = models.Notification(message='System will be functioning in a \
+        degredaded state between 2100Z-0430Z on F/G',
+        expires_date=last_week, author=julia)
     n2.save()
 
     ############################################################################
     #                           Contacts
     ############################################################################
-    c = models.Contact(name='Jimmy John', organization='Jimmy Johns',
-        contact_type=models.ContactType.objects.get(name='Manager'),
-        email='jimmyjohn@jimmyjohns.com', unsecure_phone='555-555-5555')
-    c.save()
+    osha = models.Contact(name='Osha', organization='House Stark',
+        contact_type=models.ContactType.objects.get(name='Civillian'),
+        email='osha@stark.com', unsecure_phone='321-123-7894')
+    osha.save()
+
+    rob_baratheon = models.Contact(name='Robert Baratheon',
+        organization='House Baratheon',
+        contact_type=models.ContactType.objects.get(name='Government'),
+        email='rbaratheon@baratheon.com', unsecure_phone='123-456-7890')
+    rob_baratheon.save()
+
+    brienne = models.Contact(name='Brienne Tarth', organization='House Stark',
+        contact_type=models.ContactType.objects.get(name='Military'),
+        email='brienne@stark.com', unsecure_phone='222-324-3846')
+    brienne.save()
 
     ############################################################################
     ############################################################################
@@ -240,10 +396,10 @@ def run():
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     #                           Listing
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    l = models.Listing(
+    listing = models.Listing(
         title='Air Mail',
-        agency=models.Agency.objects.get(title='Ministry of Truth'),
-        app_type=models.ListingType.objects.get(title='web application'),
+        agency=minitrue,
+        app_type=web_app,
         description='Sends mail via air',
         launch_url='https://www.google.com/airmail',
         version_name='1.0.0',
@@ -261,46 +417,47 @@ def run():
         singleton=False,
         access_control=unclass
     )
-    l.save()
+    listing.save()
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     #                           Contacts
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    l.contacts.add(models.Contact.objects.get(name='Jimmy John'))
+    listing.contacts.add(osha)
+    listing.contacts.add(brienne)
 
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     #                           Owners
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    l.owners.add(p)
+    listing.owners.add(winston)
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     #                           Categories
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    l.categories.add(cat1)
-    l.categories.add(cat2)
+    listing.categories.add(communication)
+    listing.categories.add(productivity)
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     #                           Tags
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    l.tags.add(t1)
-    l.tags.add(t2)
+    listing.tags.add(demo)
+    listing.tags.add(example)
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     #                           Screenshots
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     img = Image.open(TEST_IMG_PATH + 'screenshot_small.png')
     small_img = models.Image.create_image(img, file_extension='png',
-        access_control='UNCLASSIFIED', image_type='listing_small_screenshot')
+        access_control=unclass.title, image_type=small_screenshot_type.name)
     img = Image.open(TEST_IMG_PATH + 'screenshot_large.png')
     large_img = models.Image.create_image(img, file_extension='png',
-        access_control='UNCLASSIFIED', image_type='listing_large_screenshot')
-    s = models.Screenshot(small_image=small_img,
+        access_control=unclass.title, image_type=large_screenshot_type.name)
+    screenshot = models.Screenshot(small_image=small_img,
         large_image=large_img,
-        listing=models.Listing.objects.get(title='Air Mail'))
-    s.save()
-    l.screenshots.add(s)
+        listing=listing)
+    screenshot.save()
+    listing.screenshots.add(screenshot)
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     #                           Notifications
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    n3 = models.Notification(message='Air Mail update next week',
-        expires_date=next_week, listing=l, author=p)
-    n3.save()
+    notification1 = models.Notification(message='Air Mail update next week',
+        expires_date=next_week, listing=listing, author=winston)
+    notification1.save()
 
     ############################################################################
     #                           Bread Basket
@@ -310,24 +467,24 @@ def run():
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     img = Image.open(TEST_IMG_PATH + 'BreadBasket16.png')
     small_icon = models.Image.create_image(img, file_extension='png',
-        access_control='UNCLASSIFIED', image_type='listing_small_icon')
+        access_control=unclass.title, image_type=small_icon_type.name)
     img = Image.open(TEST_IMG_PATH + 'BreadBasket32.png')
     large_icon = models.Image.create_image(img, file_extension='png',
-        access_control='UNCLASSIFIED', image_type='listing_large_icon')
+        access_control=unclass.title, image_type=large_icon_type.name)
     img = Image.open(TEST_IMG_PATH + 'BreadBasket.png')
     banner_icon = models.Image.create_image(img, file_extension='png',
-        access_control='UNCLASSIFIED', image_type='listing_banner_icon')
+        access_control=unclass.title, image_type=banner_icon_type.name)
     img = Image.open(TEST_IMG_PATH + 'BreadBasketFeatured.png')
     large_banner_icon = models.Image.create_image(img, file_extension='png',
-        access_control='UNCLASSIFIED', image_type='listing_large_screenshot')
+        access_control=unclass.title, image_type=large_banner_icon_type.name)
 
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     #                           Listing
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    l = models.Listing(
+    listing = models.Listing(
         title='Bread Basket',
-        agency=models.Agency.objects.get(title='Ministry of Truth'),
-        app_type=models.ListingType.objects.get(title='web application'),
+        agency=minitrue,
+        app_type=web_app,
         description='Carries delicious bread',
         launch_url='https://www.google.com/breadbasket',
         version_name='1.0.0',
@@ -346,12 +503,16 @@ def run():
         is_private=True,
         access_control=unclass
     )
-    l.save()
-    l.contacts.add(models.Contact.objects.get(name='Jimmy John'))
-    l.owners.add(p)
-    l.categories.add(cat1)
-    l.categories.add(cat2)
-    l.tags.add(t1)
+    listing.save()
+
+    listing.contacts.add(osha)
+    listing.owners.add(julia)
+    listing.categories.add(health_fitness)
+    listing.categories.add(shopping)
+    listing.screenshots.add(screenshot)
+
+    listing.tags.add(demo)
+    listing.tags.add(example)
 
     ############################################################################
     #                           Chart Course
@@ -361,54 +522,26 @@ def run():
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     img = Image.open(TEST_IMG_PATH + 'ChartCourse16.png')
     small_icon = models.Image.create_image(img, file_extension='png',
-        access_control='UNCLASSIFIED', image_type='listing_small_icon')
+        access_control=unclass.title, image_type=small_icon_type.name)
     img = Image.open(TEST_IMG_PATH + 'BreadBasket32.png')
     large_icon = models.Image.create_image(img, file_extension='png',
-        access_control='UNCLASSIFIED', image_type='listing_large_icon')
+        access_control=unclass.title, image_type=large_icon_type.name)
     img = Image.open(TEST_IMG_PATH + 'BreadBasket.png')
     banner_icon = models.Image.create_image(img, file_extension='png',
-        access_control='UNCLASSIFIED', image_type='listing_banner_icon')
+        access_control=unclass.title, image_type=banner_icon_type.name)
     img = Image.open(TEST_IMG_PATH + 'BreadBasketFeatured.png')
     large_banner_icon = models.Image.create_image(img, file_extension='png',
-        access_control='UNCLASSIFIED', image_type='listing_large_banner_icon')
+        access_control=unclass.title, image_type=large_banner_icon_type.name)
 
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     #                           Listing
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-    l = models.Listing(
-        title='Cupid',
-        agency=models.Agency.objects.get(title='Ministry of Love'),
-        app_type=models.ListingType.objects.get(title='web application'),
-        description='Find your match',
-        launch_url='https://www.google.com/cupid',
-        version_name='1.0.0',
-        unique_name='ozp.test.cupid',
-        small_icon=small_icon,
-        large_icon=large_icon,
-        banner_icon=banner_icon,
-        large_banner_icon=large_banner_icon,
-        what_is_new='Nothing really new here',
-        description_short='Cupid stuff',
-        requirements='None',
-        approval_status=models.ApprovalStatus.APPROVED,
-        is_enabled=True,
-        is_featured=True,
-        singleton=False,
-        is_private=True,
-        access_control=unclass
-    )
-    l.save()
-    l.contacts.add(models.Contact.objects.get(name='Jimmy John'))
-    l.owners.add(p)
-    l.categories.add(cat1)
-    l.tags.add(t2)
-
-    l = models.Listing(
-        title='ChartCourse',
-        agency=models.Agency.objects.get(title='Ministry of Truth'),
-        app_type=models.ListingType.objects.get(title='web application'),
-        description='Find your match',
+    listing = models.Listing(
+        title='Chart Course',
+        agency=minitrue,
+        app_type=web_app,
+        description='Chart your course',
         launch_url='https://www.google.com/chartcourse',
         version_name='1.0.0',
         unique_name='ozp.test.chartcourse',
@@ -417,31 +550,40 @@ def run():
         banner_icon=banner_icon,
         large_banner_icon=large_banner_icon,
         what_is_new='Nothing really new here',
-        description_short='chart course stuff',
+        description_short='Chart your course',
         requirements='None',
         approval_status=models.ApprovalStatus.APPROVED,
         is_enabled=True,
         is_featured=True,
         singleton=False,
         is_private=True,
-        access_control=models.AccessControl.objects.get(title='UNCLASSIFIED//ABC')
+        access_control=unclass
     )
-    l.save()
-    l.contacts.add(models.Contact.objects.get(name='Jimmy John'))
-    # add intents
-    l.intents.add(models.Intent.objects.get(action='/application/json/view'))
-    l.categories.add(cat2)
+    listing.save()
+    listing.contacts.add(rob_baratheon)
+    listing.owners.add(winston)
+    listing.categories.add(tools)
+    listing.categories.add(education)
+    listing.tags.add(demo)
+    listing.screenshots.add(screenshot)
 
+
+
+
+
+    ############################################################################
+    #                           Library
+    ############################################################################
     # bookmark listings
-    a = models.ApplicationLibraryEntry(
-        owner=model_access.get_profile('wsmith'),
+    library_entry = models.ApplicationLibraryEntry(
+        owner=winston,
         listing=models.Listing.objects.get(unique_name='ozp.test.bread_basket'))
-    a.save()
+    library_entry.save()
 
-    a = models.ApplicationLibraryEntry(
-        owner=model_access.get_profile('wsmith'),
+    library_entry = models.ApplicationLibraryEntry(
+        owner=winston,
         listing=models.Listing.objects.get(unique_name='ozp.test.air_mail'))
-    a.save()
+    library_entry.save()
 
 
 if __name__ == "__main__":

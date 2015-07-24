@@ -38,9 +38,15 @@ class ProfileTest(TestCase):
         f.ProfileFactory.create(user__username='alice')
         unclass = models.AccessControl(title='UNCLASSIFIED')
         unclass.save()
+
+        img_type = models.ImageType(name='listing_small_icon')
+        img_type.save()
+
         icon = models.Image(file_extension='png',
-            access_control=unclass)
+            access_control=unclass,
+            image_type=models.ImageType.objects.get(name='listing_small_icon'))
         icon.save()
+
         f.AgencyFactory.create(title='Three Letter Agency', short_name='TLA',
             icon=icon)
 

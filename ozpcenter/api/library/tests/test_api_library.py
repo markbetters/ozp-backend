@@ -44,7 +44,7 @@ class LibraryApiTest(APITestCase):
         user = generic_model_access.get_profile('wsmith').user
         self.client.force_authenticate(user=user)
         url = '/api/self/library/'
-        data = {'listing_id': '1'}
+        data = {'listing': {'id': '1'}, 'folder': ''}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data['listing']['id'], 1)
