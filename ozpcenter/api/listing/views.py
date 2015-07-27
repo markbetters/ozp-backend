@@ -47,6 +47,7 @@ from rest_framework import viewsets
 import ozpcenter.api.listing.serializers as serializers
 import ozpcenter.permissions as permissions
 import ozpcenter.models as models
+import ozpcenter.api.listing.model_access as model_access
 
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center')
@@ -84,7 +85,7 @@ class TagViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.TagSerializer
 
 
-class ListingViewSet(viewsets.ModelViewSet):
+class ListingSearchViewSet(viewsets.ModelViewSet):
     """
     Listings
     """
@@ -95,9 +96,9 @@ class ListingViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         filter_params = {}
-        categories = self.request.query_params.getlist('categories', False)
-        agencies = self.request.query_params.getlist('agencies', False)
-        listing_types = self.request.query_params.getlist('listing_types', False)
+        categories = self.request.query_params.getlist('category', False)
+        agencies = self.request.query_params.getlist('agency', False)
+        listing_types = self.request.query_params.getlist('type', False)
         limit = self.request.query_params.get('limit', False)
         offset = self.request.query_params.get('offset', False)
         if categories:
@@ -145,4 +146,4 @@ class ListingViewSet(viewsets.ModelViewSet):
             - code: 401
               message: Not authenticated
         """
-        return super(ListingViewSet, self).list(self, request)
+        return super(ListingSearchViewSet, self).list(self, request)

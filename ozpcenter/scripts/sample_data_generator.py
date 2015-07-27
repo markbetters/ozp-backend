@@ -555,7 +555,7 @@ def run():
         is_enabled=True,
         is_featured=True,
         singleton=False,
-        is_private=True,
+        is_private=False,
         access_control=unclass
     )
     listing.save()
@@ -592,7 +592,7 @@ def run():
 
     listing = models.Listing(
         title='Chatter Box',
-        agency=minitrue,
+        agency=miniluv,
         app_type=web_app,
         description='Chat with people',
         launch_url='https://www.google.com/chatterbox',
@@ -609,14 +609,13 @@ def run():
         is_enabled=True,
         is_featured=True,
         singleton=False,
-        is_private=True,
+        is_private=False,
         access_control=unclass
     )
     listing.save()
     listing.contacts.add(rob_baratheon)
-    listing.owners.add(winston)
-    listing.categories.add(tools)
-    listing.categories.add(education)
+    listing.owners.add(julia)
+    listing.categories.add(communication)
     listing.tags.add(demo)
     listing.screenshots.add(screenshot)
 
@@ -662,7 +661,7 @@ def run():
         is_enabled=True,
         is_featured=True,
         singleton=False,
-        is_private=True,
+        is_private=False,
         access_control=unclass
     )
     listing.save()
@@ -715,7 +714,7 @@ def run():
         is_enabled=True,
         is_featured=True,
         singleton=False,
-        is_private=True,
+        is_private=False,
         access_control=unclass
     )
     listing.save()
@@ -768,7 +767,7 @@ def run():
         is_enabled=True,
         is_featured=True,
         singleton=False,
-        is_private=True,
+        is_private=False,
         access_control=unclass
     )
     listing.save()
@@ -821,7 +820,7 @@ def run():
         is_enabled=True,
         is_featured=True,
         singleton=False,
-        is_private=True,
+        is_private=False,
         access_control=unclass
     )
     listing.save()

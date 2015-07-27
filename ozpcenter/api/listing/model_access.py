@@ -20,7 +20,7 @@ def filter_listings(username, filter_params):
     max_classification_level
 
     filter_params can contain:
-        * list of category names (AND logic)
+        * list of category names (OR logic)
         * list of agencies (OR logic)
         * list of listing types (OR logic)
         * offset (for pagination)
@@ -36,7 +36,7 @@ def filter_listings(username, filter_params):
     if 'agencies' in filter_params:
         logger.info('filtering agencies: %s' % filter_params['agencies'])
         objects = objects.filter(
-            agency__title__in=filter_params['agencies'])
+            agency__short_name__in=filter_params['agencies'])
     if 'listing_types' in filter_params:
         logger.info('filtering listing_types: %s' % filter_params['listing_types'])
         objects = objects.filter(
