@@ -124,15 +124,18 @@ class ListingSearchViewSet(viewsets.ModelViewSet):
         omit_serializer: false
 
         parameters:
-            - name: categories
+            - name: search
+              description: Text to search
+              paramType: query
+            - name: category
               description: List of category names (AND logic)
               required: false
               paramType: query
               allowMultiple: true
-            - name: agencies
+            - name: agency
               description: List of agencies
               paramType: query
-            - name: listing_types
+            - name: type
               description: List of application types
               paramType: query
             - name: limit

@@ -29,7 +29,7 @@ class ListingTest(TestCase):
         listings = model_access.get_listings(username)
         self.assertTrue(len(listings) >= 2)
         all_listings = models.Listing.objects.all()
-        self.assertEqual(len(all_listings), 3)
+        self.assertEqual(len(all_listings), 8)
 
     def test_filter_listings(self):
         username = 'wsmith'

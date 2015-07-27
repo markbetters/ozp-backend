@@ -775,6 +775,7 @@ def run():
     listing.owners.add(winston)
     listing.categories.add(tools)
     listing.categories.add(education)
+    listing.categories.add(health_fitness)
     listing.tags.add(demo)
     listing.screenshots.add(screenshot)
 
