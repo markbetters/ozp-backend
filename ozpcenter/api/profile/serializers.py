@@ -27,9 +27,23 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         model = django.contrib.auth.models.User
         fields = ('username', 'email', 'groups')
 
+class ShortUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        # TODO: not supposed to reference Django's User model directly, but
+        # using settings.AUTH_USER_MODEL here doesn't not work
+        # model = settings.AUTH_USER_MODEL
+        model = django.contrib.auth.models.User
+        fields = ('username', 'email')
+
 class ProfileSerializer(serializers.HyperlinkedModelSerializer):
     organizations = agency_serializers.MinimalAgencySerializer(many=True)
     stewarded_organizations = agency_serializers.MinimalAgencySerializer(many=True)
     user = UserSerializer()
     class Meta:
         model = models.Profile
+
+class ShortProfileSerializer(serializers.ModelSerializer):
+    user = ShortUserSerializer()
+    class Meta:
+        model = models.Profile
+        fields = ('user', 'display_name')

@@ -89,5 +89,16 @@ class ListingApiTest(APITestCase):
         self.assertTrue('Bread Basket' in titles)
         self.assertEqual(len(titles), 1)
 
+    def test_self_listing(self):
+        user = generic_model_access.get_profile('julia').user
+        self.client.force_authenticate(user=user)
+        url = '/api/self/listing/'
+        response = self.client.get(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        titles = [i['title'] for i in response.data]
+        self.assertTrue('Bread Basket' in titles)
+        self.assertTrue('Chatter Box' in titles)
+        self.assertTrue('Air Mail' not in titles)
+
 
 

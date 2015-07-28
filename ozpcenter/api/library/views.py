@@ -148,7 +148,7 @@ class UserLibraryViewSet(viewsets.ViewSet):
         # validate input
         for i in request.data:
             if 'listing' not in i or 'id' not in i:
-                return Response(serializer.errors,
+                return Response('Missing listing and/or id from request data',
                     status=status.HTTP_400_BAD_REQUEST)
 
         # update each instance

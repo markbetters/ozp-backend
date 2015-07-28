@@ -423,6 +423,10 @@ class ItemComment(models.Model):
         return 'Author id %s: Rate %d Stars : %s' % (self.author_id,
                                                      self.rate, self.text)
 
+    class Meta:
+        # a user can only have one review per listing
+        unique_together = ('author', 'listing')
+
 
 class Profile(models.Model):
     """

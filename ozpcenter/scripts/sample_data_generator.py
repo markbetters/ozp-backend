@@ -458,6 +458,30 @@ def run():
         expires_date=next_week, listing=listing, author=winston)
     notification1.save()
 
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    #                           Reviews
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    air_mail_comment_1 = models.ItemComment(
+        text="This app is great - well designed and easy to use",
+        rate=5,
+        author=charrington,
+        listing=listing)
+    air_mail_comment_1.save()
+
+    air_mail_comment_2 = models.ItemComment(
+        text="Air mail is ok - does what it says and no more",
+        rate=3,
+        author=tparsons,
+        listing=listing)
+    air_mail_comment_2.save()
+
+    air_mail_comment_3 = models.ItemComment(
+        text="Air mail crashes all the time - it doesn't even support IE 6!",
+        rate=1,
+        author=syme,
+        listing=listing)
+    air_mail_comment_3.save()
+
     ############################################################################
     #                           Bread Basket
     ############################################################################
