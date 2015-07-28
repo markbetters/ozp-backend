@@ -241,7 +241,7 @@ class ApplicationLibraryEntry(models.Model):
     TODO: should we allow multiple bookmarks of the same listing (perhaps
         in different folders)?
     """
-    folder = models.CharField(max_length=255, blank=True)
+    folder = models.CharField(max_length=255, blank=True, null=True)
     owner = models.ForeignKey('Profile', related_name='application_library_entries')
     listing = models.ForeignKey('Listing', related_name='application_library_entries')
 
