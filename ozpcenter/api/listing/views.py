@@ -69,11 +69,12 @@ class ItemCommentViewSet(viewsets.ModelViewSet):
     """
     Item comments (reviews) for a given listing
 
-    The unique_together contraints make it difficult to use the standard
-    Serializer classes (see the Note here:
+    The unique_together contraints on models.ItemComment make it difficult to
+    use the standard Serializer classes (see the Note here:
         http://www.django-rest-framework.org/api-guide/serializers/#specifying-read-only-fields)
 
-    For that reason, we forego using Serializers for POST and PUT
+    Primarily for that reason, we forgo using Serializers for POST and PUT
+    actions
     """
     queryset = models.ItemComment.objects.all()
     serializer_class = serializers.ItemCommentSerializer
@@ -206,10 +207,7 @@ class ListingUserViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.ListingSerializer
 
     def get_queryset(self):
-        user = generic_model_access.get_profile(self.request.user.username)
-        return models.Listing.objects.for_user(
-            self.request.user.username).filter(
-                owners__in=[user.id])
+        return model_access.get_self_listings(self.request.user.username)
 
     def list(self, request):
         return super(ListingUserViewSet, self).list(self, request)

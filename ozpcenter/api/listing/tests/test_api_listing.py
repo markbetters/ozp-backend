@@ -33,7 +33,7 @@ class ListingApiTest(APITestCase):
     def test_search_categories_single_with_space(self):
         user = generic_model_access.get_profile('wsmith').user
         self.client.force_authenticate(user=user)
-        url = '/api/listing/search/?category=Health and Fitness'
+        url = '/api/listings/search/?category=Health and Fitness'
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         titles = [i['title'] for i in response.data]
@@ -43,7 +43,7 @@ class ListingApiTest(APITestCase):
     def test_search_categories_multiple_with_space(self):
         user = generic_model_access.get_profile('wsmith').user
         self.client.force_authenticate(user=user)
-        url = '/api/listing/search/?category=Health and Fitness&category=Communication'
+        url = '/api/listings/search/?category=Health and Fitness&category=Communication'
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         titles = [i['title'] for i in response.data]
@@ -53,7 +53,7 @@ class ListingApiTest(APITestCase):
     def test_search_text(self):
         user = generic_model_access.get_profile('wsmith').user
         self.client.force_authenticate(user=user)
-        url = '/api/listing/search/?search=air ma'
+        url = '/api/listings/search/?search=air ma'
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         titles = [i['title'] for i in response.data]
@@ -63,7 +63,7 @@ class ListingApiTest(APITestCase):
     def test_search_type(self):
         user = generic_model_access.get_profile('wsmith').user
         self.client.force_authenticate(user=user)
-        url = '/api/listing/search/?type=web application'
+        url = '/api/listings/search/?type=web application'
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         titles = [i['title'] for i in response.data]
@@ -73,7 +73,7 @@ class ListingApiTest(APITestCase):
     def test_search_agency(self):
         user = generic_model_access.get_profile('wsmith').user
         self.client.force_authenticate(user=user)
-        url = '/api/listing/search/?agency=Minipax&agency=Miniluv'
+        url = '/api/listings/search/?agency=Minipax&agency=Miniluv'
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         titles = [i['title'] for i in response.data]
@@ -82,7 +82,7 @@ class ListingApiTest(APITestCase):
     def test_search_offset_limit(self):
         user = generic_model_access.get_profile('wsmith').user
         self.client.force_authenticate(user=user)
-        url = '/api/listing/search/?offset=1&limit=1'
+        url = '/api/listings/search/?offset=1&limit=1'
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         titles = [i['title'] for i in response.data]
@@ -99,6 +99,28 @@ class ListingApiTest(APITestCase):
         self.assertTrue('Bread Basket' in titles)
         self.assertTrue('Chatter Box' in titles)
         self.assertTrue('Air Mail' not in titles)
+
+    def test_get_reviews(self):
+        pass
+
+    def test_get_single_review(self):
+        pass
+
+    def test_create_review(self):
+        pass
+
+    def test_update_review(self):
+        pass
+
+    def test_delete_review(self):
+        pass
+
+    def test_avg_rate_upated(self):
+        """
+        Ensure the models.Listing.avg_rate is updated after a review is
+        created, deleted, or updated
+        """
+        pass
 
 
 

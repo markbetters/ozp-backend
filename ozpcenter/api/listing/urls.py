@@ -1,5 +1,9 @@
 """
 Urls
+
+Unlike most (maybe all) of the other resources, the Listing resource has several
+nested resources - item comments and activity, for example. To help generate
+nested URLs for these resources, the drf-nested-routers package is used.
 """
 from django.conf.urls import url, include
 # use drf-nested-routers extension
@@ -7,19 +11,21 @@ from rest_framework_nested import routers
 
 import ozpcenter.api.listing.views as views
 
-# Routers provide an easy way of automatically determining the URL conf.
+# Create a 'root level' router and urls
 router = routers.SimpleRouter()
 router.register(r'listing', views.ListingViewSet, base_name="listing")
-router.register(r'listing/search', views.ListingSearchViewSet,
-    base_name='listingsearch')
+# TODO: broken - probably from adding nested routes. Temporary fix:
+# change /listing/search to /listings/search
+router.register(r'listings/search', views.ListingSearchViewSet,
+    base_name='listingssearch')
 router.register(r'self/listing', views.ListingUserViewSet,
     base_name='selflisting')
 router.register(r'listingtype', views.ListingTypeViewSet)
 
 # nested routes
-comment_router = routers.NestedSimpleRouter(router, r'listing',
+nested_router = routers.NestedSimpleRouter(router, r'listing',
     lookup='listing')
-comment_router.register(r'itemComment', views.ItemCommentViewSet,
+nested_router.register(r'itemComment', views.ItemCommentViewSet,
     base_name='itemcomment')
 # TODO: nest these
 router.register(r'screenshot', views.ScreenshotViewSet)
@@ -29,5 +35,5 @@ router.register(r'contact', views.ContactViewSet)
 # Wire up our API using automatic URL routing.
 urlpatterns = [
     url(r'^', include(router.urls)),
-    url(r'^', include(comment_router.urls)),
+    url(r'^', include(nested_router.urls)),
 ]

@@ -27,7 +27,7 @@ python manage.py collectstatic --noinput
 rm -rf media/
 mkdir -p media
 # run unit tests
-python manage.py test ozpcenter/tests
+python manage.py test
 # load sample data (uses runscript from django-extensions package)
 echo 'Loading sample data...'
 python manage.py runscript sample_data_generator
