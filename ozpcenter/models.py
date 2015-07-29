@@ -405,6 +405,25 @@ class Intent(models.Model):
     def __repr__(self):
         return '%s/%s' % (self.type, self.action)
 
+class AccessControlItemCommentManager(models.Manager):
+    """
+    Use a custom manager to control access to ItemComments
+
+    Instead of using models.ItemComment.objects.all() or .filter(...) etc, use:
+    models.ItemComment.objects.for_user(user).all() or .filter(...) etc
+
+    This way there is a single place to implement this 'tailored view' logic
+    for item comment queries
+    """
+    def for_user(self, username):
+        # get all comments
+        all_comments = super(AccessControlItemCommentManager, self).get_queryset()
+        # get all listings for this user
+        listings = Listing.objects.for_user(username).all()
+        # filter out item_comments for listings this user cannot see
+        filtered_comments = all_comments.filter(listing__in=listings)
+        return filtered_comments
+
 
 class ItemComment(models.Model):
     """
@@ -418,6 +437,9 @@ class ItemComment(models.Model):
     )
     listing = models.ForeignKey('Listing', related_name='item_comments')
     author = models.ForeignKey('Profile', related_name='item_comments')
+
+    # use a custom Manager class to limit returned ItemComments
+    objects = AccessControlItemCommentManager()
 
     def __repr__(self):
         return 'Author id %s: Rate %d Stars : %s' % (self.author_id,

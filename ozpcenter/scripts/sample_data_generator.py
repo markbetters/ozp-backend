@@ -537,6 +537,13 @@ def run():
     listing.tags.add(demo)
     listing.tags.add(example)
 
+    bread_basket_comment_1 = models.ItemComment(
+        text="This bread is stale!",
+        rate=2,
+        author=jones,
+        listing=listing)
+    bread_basket_comment_1.save()
+
     ############################################################################
     #                           Chart Course
     ############################################################################

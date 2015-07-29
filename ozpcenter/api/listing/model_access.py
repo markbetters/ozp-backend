@@ -90,3 +90,24 @@ def get_listings(username):
             return None
     else:
         return data
+
+def get_item_comments(username):
+    """
+    Get ItemComments this user can see
+
+    Key: item_comments:<username>
+    """
+    username = utils.make_keysafe(username)
+    key = 'item_comments:%s' % username
+    data = cache.get(key)
+    if data is None:
+        try:
+            data = models.ItemComment.objects.for_user(username).all()
+            cache.set(key, data)
+            return data
+        except ObjectDoesNotExist:
+            return None
+    else:
+        return data
+
+

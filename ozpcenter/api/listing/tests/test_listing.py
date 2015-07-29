@@ -41,3 +41,22 @@ class ListingTest(TestCase):
             'limit': 24
         }
         listings = model_access.filter_listings(username, filter_params)
+
+    def test_get_item_comments(self):
+        username = 'wsmith'
+        comments = model_access.get_item_comments(username)
+        self.assertTrue(len(comments) > 1)
+        # we should have at least one review from Air Mail and one from
+        # bread basket
+        listings_with_comments = [i.listing.title for i in comments]
+        self.assertTrue('Air Mail' in listings_with_comments)
+        self.assertTrue('Bread Basket' in listings_with_comments)
+        # now make a request with a user that doesn't have access to
+        # Bread Basket
+        username = 'obrien'
+        comments = model_access.get_item_comments(username)
+        self.assertTrue(len(comments) > 1)
+        # make sure Air Mail is present but not Bread Basket
+        listings_with_comments = [i.listing.title for i in comments]
+        self.assertTrue('Air Mail' in listings_with_comments)
+        self.assertTrue('Bread Basket' not in listings_with_comments)

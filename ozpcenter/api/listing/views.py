@@ -76,19 +76,20 @@ class ItemCommentViewSet(viewsets.ModelViewSet):
     Primarily for that reason, we forgo using Serializers for POST and PUT
     actions
     """
-    queryset = models.ItemComment.objects.all()
+    permission_classes = (permissions.IsUser,)
     serializer_class = serializers.ItemCommentSerializer
 
+    def get_queryset(self):
+        return model_access.get_item_comments(self.request.user.username)
+
     def list(self, request, listing_pk=None):
-        # TODO: enforce access control
-        queryset = self.queryset.filter(listing=listing_pk)
+        queryset = self.get_queryset().filter(listing=listing_pk)
         serializer = serializers.ItemCommentSerializer(queryset, many=True,
             context={'request': request})
         return Response(serializer.data)
 
     def retrieve(self, request, pk=None, listing_pk=None):
-        # TODO: enforce access control
-        queryset = self.queryset.get(pk=pk, listing=listing_pk)
+        queryset = self.get_queryset().get(pk=pk, listing=listing_pk)
         serializer = serializers.ItemCommentSerializer(queryset,
             context={'request': request})
         return Response(serializer.data)
@@ -97,7 +98,7 @@ class ItemCommentViewSet(viewsets.ModelViewSet):
         # TODO: permission check. either the current user must be the
         #   author of this item_comment, or the user must be an Org Steward
         #   or higher
-        queryset = self.queryset
+        queryset = self.get_queryset()
         item_comment = get_object_or_404(queryset, pk=pk)
         item_comment.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
@@ -106,37 +107,34 @@ class ItemCommentViewSet(viewsets.ModelViewSet):
         """
         Create a new item_comment
         """
-        logger.info('create itemComment. listing_pk: %s' % listing_pk)
         author = generic_model_access.get_profile(
             request.user.username)
-        # TODO: check that this user has access to the given listing
         try:
-            listing = models.Listing.objects.get(id=listing_pk)
+            listing = models.Listing.objects.for_user(
+                request.user.username).get(id=listing_pk)
         except:
             return Response('Invalid listing',
                 status=status.HTTP_400_BAD_REQUEST)
 
-        # TODO: validate, raise errors as needed
         try:
             rate = int(request.data['rate'])
             text = request.data['text']
+
+            comment = models.ItemComment(listing=listing, author=author,
+                rate=rate, text=text)
+            comment.save()
+            output = {"rate": rate, "text": text, "author": author.id,
+                "listing": listing.id, "id": comment.id}
+            return Response(output, status=status.HTTP_201_CREATED)
         except:
             return Response('Bad request to create new item_comment',
                 status=status.HTTP_400_BAD_REQUEST)
 
-        comment = models.ItemComment(listing=listing, author=author,
-            rate=rate, text=text)
-        comment.save()
-        output = {"rate": rate, "text": text, "author": author.id,
-            "listing": listing.id, "id": comment.id}
-        return Response(output, status=status.HTTP_201_CREATED)
 
     def update(self, request, pk=None, listing_pk=None):
         """
         Update an existing item_comment
         """
-        logger.info('update itemComment. listing_pk: %s' % listing_pk)
-
         try:
             instance = models.ItemComment.objects.get(id=pk)
         except models.ItemComment.DoesNotExist:
