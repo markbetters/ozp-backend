@@ -14,8 +14,8 @@ import ozpcenter.api.listing.views as views
 # Create a 'root level' router and urls
 router = routers.SimpleRouter()
 router.register(r'listing', views.ListingViewSet, base_name="listing")
-# TODO: broken - probably from adding nested routes. Temporary fix:
-# change /listing/search to /listings/search
+# Ideally this route would be listing/search, but that conflicts with the
+# nested router
 router.register(r'listings/search', views.ListingSearchViewSet,
     base_name='listingssearch')
 router.register(r'self/listing', views.ListingUserViewSet,

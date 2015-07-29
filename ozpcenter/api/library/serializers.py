@@ -60,7 +60,6 @@ class UserLibrarySerializer(serializers.ModelSerializer):
         return data
 
     def create(self, validated_data):
-        logger.info('UserLibrarySerializer.create')
         folder = validated_data.get('folder', '')
         listing = models.Listing.objects.get(id=validated_data['listing']['id'])
         owner = models.Profile.objects.get(user__username=self.context['request'].user.username)

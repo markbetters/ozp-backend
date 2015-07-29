@@ -3,6 +3,7 @@ Model access
 """
 import datetime
 import logging
+import pytz
 
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
@@ -32,7 +33,7 @@ def get_self_notifications(username):
 
     # get all unexpired system-wide notifications
     unexpired_system_notifications = models.Notification.objects.filter(
-        expires_date__gt=datetime.datetime.now(), listing__isnull=True)
+        expires_date__gt=datetime.datetime.now(pytz.utc), listing__isnull=True)
 
     # return all_unexpired_notifications - dismissed_notifications
     notifications = unexpired_system_notifications.exclude(

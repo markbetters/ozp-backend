@@ -63,7 +63,6 @@ class NotificationApiTest(APITestCase):
 
         # now dismiss the first notification
         dismissed_notification_id = notification_ids[0]
-        print('dismissed_notification_id: %s' % dismissed_notification_id)
         url = url + str(dismissed_notification_id) + '/'
         response = self.client.delete(url, format='json')
         self.assertEqual(response.status_code, 204)

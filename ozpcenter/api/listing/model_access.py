@@ -30,16 +30,13 @@ def filter_listings(username, filter_params):
     """
     objects = models.Listing.objects.for_user(username).all()
     if 'categories' in filter_params:
-        logger.info('filtering categories: %s' % filter_params['categories'])
         # TODO: this is OR logic not AND
         objects = objects.filter(
             categories__title__in=filter_params['categories'])
     if 'agencies' in filter_params:
-        logger.info('filtering agencies: %s' % filter_params['agencies'])
         objects = objects.filter(
             agency__short_name__in=filter_params['agencies'])
     if 'listing_types' in filter_params:
-        logger.info('filtering listing_types: %s' % filter_params['listing_types'])
         objects = objects.filter(
             app_type__title__in=filter_params['listing_types'])
 
@@ -60,7 +57,6 @@ def get_self_listings(username):
 
     Key: self_listings:<username>
     """
-    # TODO
     username = utils.make_keysafe(username)
     key = 'self_listings:%s' % username
     data = cache.get(key)

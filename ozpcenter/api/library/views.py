@@ -14,6 +14,7 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 
 import ozpcenter.api.library.serializers as serializers
+import ozpcenter.api.library.model_access as model_access
 import ozpcenter.models as models
 import ozpcenter.permissions as permissions
 
@@ -40,8 +41,8 @@ class UserLibraryViewSet(viewsets.ViewSet):
     permission_classes = (permissions.IsUser,)
 
     def get_queryset(self):
-        return  models.ApplicationLibraryEntry.objects.filter(
-            owner__user__username=self.request.user.username)
+        return model_access.get_self_application_library(
+            self.request.user.username)
 
     def create(self, request):
         """

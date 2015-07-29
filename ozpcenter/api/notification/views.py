@@ -3,6 +3,7 @@ Views
 """
 import datetime
 import logging
+import pytz
 
 from django.shortcuts import get_object_or_404
 
@@ -33,7 +34,7 @@ class NotificationViewSet(viewsets.ModelViewSet):
         # TODO: add logic to ignore listing-specific notifications that are
         #   for listings not part of user's library
         return  models.Notification.objects.filter(
-            expires_date__gt=datetime.datetime.now())
+            expires_date__gt=datetime.datetime.now(pytz.utc))
 
 class UserNotificationViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsUser,)

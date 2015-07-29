@@ -18,4 +18,16 @@ def get_self_application_library(username):
 
     Key: app_library:<username>
     """
-    pass
+    username = utils.make_keysafe(username)
+    key = 'app_library:%s' % username
+    data = cache.get(key)
+    if data is None:
+        try:
+            data = models.ApplicationLibraryEntry.objects.filter(
+                owner__user__username=username)
+            cache.set(key, data)
+            return data
+        except ObjectDoesNotExist:
+            return None
+    else:
+        return data
