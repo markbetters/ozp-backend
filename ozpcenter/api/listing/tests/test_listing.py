@@ -60,3 +60,7 @@ class ListingTest(TestCase):
         listings_with_comments = [i.listing.title for i in comments]
         self.assertTrue('Air Mail' in listings_with_comments)
         self.assertTrue('Bread Basket' not in listings_with_comments)
+
+    def test_duplicate_review(self):
+        # TODO
+        pass

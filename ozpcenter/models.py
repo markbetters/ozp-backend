@@ -429,7 +429,8 @@ class ItemComment(models.Model):
     """
     A comment made on a Listing
     """
-    text = models.CharField(max_length=constants.MAX_VALUE_LENGTH)
+    text = models.CharField(max_length=constants.MAX_VALUE_LENGTH,
+        blank=True, null=True)
     rate = models.IntegerField(validators=[
         MinValueValidator(1),
         MaxValueValidator(5)
@@ -721,7 +722,6 @@ class Listing(models.Model):
 
     # use a custom Manager class to limit returned Listings
     objects = AccessControlListingManager()
-
 
     def __repr__(self):
         return self.title

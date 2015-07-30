@@ -27,14 +27,6 @@ TODO: GET api/listing/search? - see model_access.search_listings for params
 
 TODO DELETE api/listing/<id>
 
-TODO: GET api/listing/<id>/itemComment get all reviews for the listing
-
-TODO: POST api/listing/<id>/itemComment - create a review
-
-TODO: PUT api/listing/<id>/itemComment/<id> - edit a review
-
-TODO: DELETE api/listing/<id>/itemComment/<id> - delete a review
-
 TODO: GET api/listing/activity - params: offset, max
 
 TODO: GET api/listing - params: approvalStatus, offset, max, org, enabled
@@ -99,8 +91,20 @@ class ItemCommentViewSet(viewsets.ModelViewSet):
         #   author of this item_comment, or the user must be an Org Steward
         #   or higher
         queryset = self.get_queryset()
-        item_comment = get_object_or_404(queryset, pk=pk)
-        item_comment.delete()
+        instance = get_object_or_404(queryset, pk=pk)
+
+        # if the author doesn't match the current user AND the current user
+        # is not an org steward or higher, deny the request
+        profile = generic_model_access.get_profile(request.user.username)
+        priv_roles = ['APPS_MALL_STEWARD', 'ORG_STEWARD']
+        if profile.highest_role() in priv_roles:
+            pass
+        elif instance.author.user.username != request.user.username:
+            return Response('Cannot update another user\'s review',
+                status=status.HTTP_403_FORBIDDEN)
+
+        instance.delete()
+        model_access.update_rating(request.user.username, listing_pk)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     def create(self, request, listing_pk=None):
@@ -118,15 +122,18 @@ class ItemCommentViewSet(viewsets.ModelViewSet):
 
         try:
             rate = int(request.data['rate'])
-            text = request.data['text']
+            text = request.data.get('text', None)
 
             comment = models.ItemComment(listing=listing, author=author,
                 rate=rate, text=text)
             comment.save()
+            model_access.update_rating(request.user.username, listing_pk)
+
             output = {"rate": rate, "text": text, "author": author.id,
                 "listing": listing.id, "id": comment.id}
             return Response(output, status=status.HTTP_201_CREATED)
-        except:
+        except Exception as e:
+            raise e
             return Response('Bad request to create new item_comment',
                 status=status.HTTP_400_BAD_REQUEST)
 
@@ -141,14 +148,13 @@ class ItemCommentViewSet(viewsets.ModelViewSet):
             return Response('Invalid item comment',
                 status=status.HTTP_400_BAD_REQUEST)
 
+        if instance.author.user.username != request.user.username:
+            return Response('Cannot update another user\'s review',
+                status=status.HTTP_403_FORBIDDEN)
 
-        # TODO: make sure current user is owner of this comment OR
-        #   current user is org steward or above
-
-        # TODO: validate, raise errors as needed
         try:
             rate = request.data.get('rate', instance.rate)
-            text = request.data.get('text', instance.text)
+            text = request.data.get('text', None)
         except:
             return Response('Bad request to create new item_comment',
                 status=status.HTTP_400_BAD_REQUEST)
@@ -156,6 +162,8 @@ class ItemCommentViewSet(viewsets.ModelViewSet):
         instance.rate = rate
         instance.text = text
         instance.save()
+        model_access.update_rating(request.user.username, listing_pk)
+
         output = {"rate": instance.rate, "text": instance.text,
             "author": instance.author.id,
             "listing": instance.listing.id, "id": instance.id}

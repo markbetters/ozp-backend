@@ -110,4 +110,37 @@ def get_item_comments(username):
     else:
         return data
 
+def update_rating(username, listing_id):
+    """
+    Invoked each time a review is created, deleted, or updated
+    """
+    listing = models.Listing.objects.for_user(username).get(id=listing_id)
+    reviews = models.ItemComment.objects.filter(listing__id=listing_id)
+    rate1 = reviews.filter(rate=1).count()
+    rate2 = reviews.filter(rate=2).count()
+    rate3 = reviews.filter(rate=3).count()
+    rate4 = reviews.filter(rate=4).count()
+    rate5 = reviews.filter(rate=5).count()
+    total_votes = reviews.count()
+    total_comments = total_votes - reviews.filter(text=None).count()
+
+    # calculate weighted average
+    avg_rate = (5*rate5 + 4*rate4 + 3*rate3 + 2*rate2 + rate1)/total_votes
+
+    # update listing
+    listing.total_rate1 = rate1
+    listing.total_rate2 = rate2
+    listing.total_rate3 = rate3
+    listing.total_rate4 = rate4
+    listing.total_rate5 = rate5
+    listing.total_votes = total_votes
+    listing.total_comments = total_comments
+    listing.avg_rate = avg_rate
+    listing.save()
+
+
+
+
+
+
 
