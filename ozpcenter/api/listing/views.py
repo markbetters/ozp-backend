@@ -178,9 +178,9 @@ class ListingActivityViewSet(viewsets.ModelViewSet):
     queryset = models.ListingActivity.objects.all()
     serializer_class = serializers.ListingActivitySerializer
 
-class RejectionListingViewSet(viewsets.ModelViewSet):
-    queryset = models.RejectionListing.objects.all()
-    serializer_class = serializers.RejectionListingSerializer
+# class RejectionListingViewSet(viewsets.ModelViewSet):
+#     queryset = models.RejectionListing.objects.all()
+#     serializer_class = serializers.RejectionListingSerializer
 
 class ScreenshotViewSet(viewsets.ModelViewSet):
     queryset = models.Screenshot.objects.all()

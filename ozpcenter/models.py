@@ -67,7 +67,6 @@ class Action(enum.Enum):
     REMOVE_RELATED_ITEMS = 'Requirements removed'
 
 
-
 class AccessControl(models.Model):
     """
     Access levels (classifications)
@@ -283,12 +282,11 @@ class ChangeDetail(models.Model):
     that was modified
 
     Additional db.relationships:
+        * ListingActivity (ManyToMany)
     """
     field_name = models.CharField(max_length=255)
     old_value = models.CharField(max_length=constants.MAX_VALUE_LENGTH)
     new_value = models.CharField(max_length=constants.MAX_VALUE_LENGTH)
-    listing = models.ForeignKey('Listing', related_name='change_details')
-    # TODO: add a date/time field?
 
     def __repr__(self):
         return "id:%d field %s was %s now is %s" % (
@@ -715,7 +713,7 @@ class Listing(models.Model):
     )
 
     required_listings = models.ForeignKey('self', null=True)
-    # TODO: name/use of related name? (no reverse relationship - use '+')
+    # no reverse relationship - use '+'
     last_activity = models.OneToOneField('ListingActivity', related_name='+',
         null=True)
 
@@ -743,34 +741,49 @@ class Listing(models.Model):
 class ListingActivity(models.Model):
     """
     Listing Activity
-
-    Additional db.relationships:
-        * listing
-        * profile
     """
     action = models.CharField(max_length=255) # one of an enum of Action
     activity_date = models.DateTimeField(auto_now=True)
+    # an optional description of the activity (required if the action is
+    #   REJECTED)
+    description = models.CharField(max_length=2000, blank=True, null=True)
     author = models.ForeignKey('Profile', related_name='listing_activities')
     listing = models.ForeignKey('Listing', related_name='listing_activities')
+    change_details = models.ManyToManyField(
+        'ChangeDetail',
+        related_name='listing_activity',
+        db_table='listing_activity_change_detail'
+    )
+
+    def __repr__(self):
+        return '%s %s %s at %s' % (self.author.user.username, self.action,
+            self.listing.title, self.activity_date)
+
+    def __str__(self):
+        return '%s %s %s at %s' % (self.author.user.username, self.action,
+            self.listing.title, self.activity_date)
 
 
-class RejectionListing(models.Model):
-    """
-    An admin can reject a submitted Listing, thus creating a Rejection Listing
+# class RejectionListing(models.Model):
+#     """
+#     An admin can reject a submitted Listing, thus creating a Rejection Listing
 
-    TODO: Auditing for create, update, delete
+#     TODO: not sure why we need this, since the info is available via the
+#     ListingActivity
 
-    Rejection Listings are referenced by RejectionActivities, and thus never
-    removed even after the Listing is approved. They are just ignored if the
-    ApprovalState of the Listing is APPROVED
+#     TODO: Auditing for create, update, delete
 
-    Additional db.relationships:
-        * listing
-        * author
-    """
-    listing = models.ForeignKey('Listing', related_name='rejection_listings')
-    author = models.ForeignKey('Profile', related_name='rejection_listings')
-    description = models.CharField(max_length=2000)
+#     Rejection Listings are referenced by RejectionActivities, and thus never
+#     removed even after the Listing is approved. They are just ignored if the
+#     ApprovalState of the Listing is APPROVED
+
+#     Additional db.relationships:
+#         * listing
+#         * author
+#     """
+#     listing = models.ForeignKey('Listing', related_name='rejection_listings')
+#     author = models.ForeignKey('Profile', related_name='rejection_listings')
+#     description = models.CharField(max_length=2000)
 
 
 class Screenshot(models.Model):

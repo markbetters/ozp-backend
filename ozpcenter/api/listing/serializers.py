@@ -34,9 +34,9 @@ class ListingActivitySerializer(serializers.ModelSerializer):
     class Meta:
         model = models.ListingActivity
 
-class RejectionListingSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.RejectionListing
+# class RejectionListingSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = models.RejectionListing
 
 class ScreenshotSerializer(serializers.ModelSerializer):
     small_image = image_serializers.ImageSerializer()

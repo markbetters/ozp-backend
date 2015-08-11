@@ -156,11 +156,11 @@ def log_activity_create(username, listing_id):
     listing.last_activity = listing_activity
     listing.save()
 
-def log_activity_modify(username, listing_id, data):
+def log_activity_modify(username, listing_id, change_details):
     """
     Invoke when a Listing is modified
 
-    data: [
+    change_details: [
         {
             "field_name": "name",
             "old_value": "old_val",
@@ -171,53 +171,198 @@ def log_activity_modify(username, listing_id, data):
         }
     ]
     """
-    pass
+    user = generic_model_access.get_profile(username)
+    listing = models.Listing.objects.for_user(username).get(id=listing_id)
+
+    # add to activity log
+    listing_activity = models.ListingActivity(action=models.Action.MODIFIED,
+        author=user, listing=listing)
+    listing_activity.save()
+    for i in change_details:
+        change = models.ChangeDetail(field_name=i['field_name'],
+            old_value=i['old_value'], new_value=i['new_value'])
+        change.save()
+        listing_activity.change_details.add(change)
+
+    listing.last_activity = listing_activity
+    listing.save()
 
 def log_activity_submit(username, listing_id):
     """
     Invoke when a Listing is submitted for approval
     """
-    pass
+    user = generic_model_access.get_profile(username)
+    listing = models.Listing.objects.for_user(username).get(id=listing_id)
+
+    # update the listing
+    listing.approval_status = models.ApprovalStatus.PENDING
+
+    # add to activity log
+    listing_activity = models.ListingActivity(action=models.Action.SUBMITTED,
+        author=user, listing=listing)
+    listing_activity.save()
+
+    listing.last_activity = listing_activity
+    listing.save()
 
 def log_activity_org_approve(username, listing_id):
     """
     Invoke when a submitted Listing is approved by an org steward
     """
-    pass
+    user = generic_model_access.get_profile(username)
+    listing = models.Listing.objects.for_user(username).get(id=listing_id)
+
+    # update the listing
+    listing.approval_status = models.ApprovalStatus.APPROVED_ORG
+
+    # add to activity log
+    listing_activity = models.ListingActivity(action=models.Action.APPROVED_ORG,
+        author=user, listing=listing)
+    listing_activity.save()
+
+    listing.last_activity = listing_activity
+    listing.save()
 
 def log_activity_approve(username, listing_id):
     """
     Invoke when a Listings is fully approved (by apps mall steward)
     """
-    pass
+    user = generic_model_access.get_profile(username)
+    listing = models.Listing.objects.for_user(username).get(id=listing_id)
 
-def log_activity_reject(username, listing_id):
+    # update the listing
+    listing.approval_status = models.ApprovalStatus.APPROVED
+
+    # add to activity log
+    listing_activity = models.ListingActivity(action=models.Action.APPROVED,
+        author=user, listing=listing)
+    listing_activity.save()
+
+    listing.last_activity = listing_activity
+    listing.save()
+
+def log_activity_reject(username, listing_id, rejection_description):
     """
     Invoke when a Listings is rejected
     """
-    pass
+    user = generic_model_access.get_profile(username)
+    listing = models.Listing.objects.for_user(username).get(id=listing_id)
+
+    # update the listing
+    listing.approval_status = models.ApprovalStatus.REJECTED
+
+    # add to activity log
+    listing_activity = models.ListingActivity(action=models.Action.REJECTED,
+        author=user, listing=listing, description=rejection_description)
+    listing_activity.save()
+
+    # TODO: we may also need to create a RejectionListing
+
+    listing.last_activity = listing_activity
+    listing.save()
 
 def log_activity_enable(username, listing_id):
     """
     Invoke when a Listings is enabled
     """
-    pass
+    user = generic_model_access.get_profile(username)
+    listing = models.Listing.objects.for_user(username).get(id=listing_id)
+
+    # update the listing
+    listing.is_enabled = True
+
+    # add to activity log
+    listing_activity = models.ListingActivity(action=models.Action.ENABLED,
+        author=user, listing=listing)
+    listing_activity.save()
+
+    listing.last_activity = listing_activity
+    listing.save()
 
 def log_activity_disable(username, listing_id):
     """
     Invoke when a Listings is disabled
     """
-    pass
+    user = generic_model_access.get_profile(username)
+    listing = models.Listing.objects.for_user(username).get(id=listing_id)
 
-def log_activity_review_modify(username, listing_id, item_comment_id):
+    # update the listing
+    listing.is_enabled = False
+
+    # add to activity log
+    listing_activity = models.ListingActivity(action=models.Action.DISABLED,
+        author=user, listing=listing)
+    listing_activity.save()
+
+    listing.last_activity = listing_activity
+    listing.save()
+
+def log_activity_review_edit(username, listing_id, change_details):
     """
     Invoke when a review for a listing is modified
-    """
-    pass
 
-def log_activity_review_remove(username, listing_id, item_comment_id):
+    change_details should include the old and new values for review description
+    and rating
+
+    change_details: [
+        {
+            "field_name": "name",
+            "old_value": "old_val",
+            "new_value": "new_val"
+        },
+        {
+        ...
+        }
+    ]
+    """
+    user = generic_model_access.get_profile(username)
+    listing = models.Listing.objects.for_user(username).get(id=listing_id)
+
+    # add to activity log
+    listing_activity = models.ListingActivity(
+        action=models.Action.REVIEW_EDITED, author=user, listing=listing)
+    listing_activity.save()
+    for i in change_details:
+        change = models.ChangeDetail(field_name=i['field_name'],
+            old_value=i['old_value'], new_value=i['new_value'])
+        change.save()
+        listing_activity.change_details.add(change)
+
+    listing.last_activity = listing_activity
+    listing.save()
+
+def log_activity_review_delete(username, listing_id, change_details):
     """
     Invoke when a review for a listing is removed
+
+    change_details should include the old text and rating for the review being
+    removed. The new values should just be blank
+
+    change_details: [
+        {
+            "field_name": "name",
+            "old_value": "old_val",
+            "new_value": "new_val"
+        },
+        {
+        ...
+        }
+    ]
     """
-    pass
+    user = generic_model_access.get_profile(username)
+    listing = models.Listing.objects.for_user(username).get(id=listing_id)
+
+    # add to activity log
+    listing_activity = models.ListingActivity(
+        action=models.Action.REVIEW_DELETED, author=user, listing=listing)
+    listing_activity.save()
+    for i in change_details:
+        change = models.ChangeDetail(field_name=i['field_name'],
+            old_value=i['old_value'], new_value=i['new_value'])
+        change.save()
+        listing_activity.change_details.add(change)
+
+
+    listing.last_activity = listing_activity
+    listing.save()
 

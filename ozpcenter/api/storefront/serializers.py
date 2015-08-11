@@ -63,10 +63,10 @@ class ListingActivitySerializer(serializers.ModelSerializer):
         model = models.ListingActivity
         fields = ('action', 'activity_date')
 
-class RejectionListingSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.RejectionListing
-        fields = ('description')
+# class RejectionListingSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = models.RejectionListing
+#         fields = ('description')
 
 class ScreenshotSerializer(serializers.ModelSerializer):
     small_image = image_serializers.ImageSerializer()
