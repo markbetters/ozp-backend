@@ -64,3 +64,17 @@ class ListingTest(TestCase):
     def test_duplicate_review(self):
         # TODO
         pass
+
+    def test_log_activity_create(self):
+        username = 'wsmith'
+        air_mail = models.Listing.objects.for_user(username).get(
+            title='Air Mail')
+        self.assertEqual(air_mail.approval_status,
+            models.ApprovalStatus.APPROVED)
+        model_access.log_activity_create(username, air_mail.id)
+
+        air_mail = models.Listing.objects.for_user(username).get(
+            title='Air Mail')
+        self.assertEqual(air_mail.last_activity.action,
+            models.Action.CREATED)
+

@@ -138,9 +138,86 @@ def update_rating(username, listing_id):
     listing.avg_rate = avg_rate
     listing.save()
 
+def log_activity_create(username, listing_id):
+    """
+    Invoke when a Listing is first created
+    """
+    user = generic_model_access.get_profile(username)
+    listing = models.Listing.objects.for_user(username).get(id=listing_id)
 
+    # update the listing
+    listing.approval_status = models.ApprovalStatus.IN_PROGRESS
 
+    # add to activity log
+    listing_activity = models.ListingActivity(action=models.Action.CREATED,
+        author=user, listing=listing)
+    listing_activity.save()
 
+    listing.last_activity = listing_activity
+    listing.save()
 
+def log_activity_modify(username, listing_id, data):
+    """
+    Invoke when a Listing is modified
 
+    data: [
+        {
+            "field_name": "name",
+            "old_value": "old_val",
+            "new_value": "new_val"
+        },
+        {
+        ...
+        }
+    ]
+    """
+    pass
+
+def log_activity_submit(username, listing_id):
+    """
+    Invoke when a Listing is submitted for approval
+    """
+    pass
+
+def log_activity_org_approve(username, listing_id):
+    """
+    Invoke when a submitted Listing is approved by an org steward
+    """
+    pass
+
+def log_activity_approve(username, listing_id):
+    """
+    Invoke when a Listings is fully approved (by apps mall steward)
+    """
+    pass
+
+def log_activity_reject(username, listing_id):
+    """
+    Invoke when a Listings is rejected
+    """
+    pass
+
+def log_activity_enable(username, listing_id):
+    """
+    Invoke when a Listings is enabled
+    """
+    pass
+
+def log_activity_disable(username, listing_id):
+    """
+    Invoke when a Listings is disabled
+    """
+    pass
+
+def log_activity_review_modify(username, listing_id, item_comment_id):
+    """
+    Invoke when a review for a listing is modified
+    """
+    pass
+
+def log_activity_review_remove(username, listing_id, item_comment_id):
+    """
+    Invoke when a review for a listing is removed
+    """
+    pass
 

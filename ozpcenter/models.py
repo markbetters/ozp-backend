@@ -38,24 +38,34 @@ class ApprovalStatus(enum.Enum):
 # Action for a Listing Activity
 # TODO: Actions also have a description
 class Action(enum.Enum):
+    # listing is initially created
     CREATED = 'Created'
+    # field of a listing is modified - has a corresponding ChangeDetail entry
     MODIFIED = 'Modified'
+    # listing is submitted for approval by org steward and apps mall steward
     SUBMITTED = 'Submitted'
+    # listing is approved by an org steward
     APPROVED_ORG = 'Approved by Organization'
+    # listing is approved by apps mall steward (upon previous org steward
+        # approval) - it is now visible to users
     APPROVED = 'Approved'
+    # listing is rejected for approval by org steward or apps mall steward
     REJECTED = 'Rejected'
+    # listing is enabled (visible to users)
     ENABLED = 'Enabled'
+    # listing is disabled (hidden from users)
     DISABLED = 'Disabled'
+    # a review for a listing has been modified
+    REVIEW_EDITED = 'Review Edited'
+    # a review for a listing has been deleted
+    REVIEW_DELETED = 'Review Deleted'
+
+    # not sure if we'll use these or not
     ADD_RELATED_TO_ITEM = 'Adds as a requirement'
     REMOVE_RELATED_TO_ITEM = 'Removed as a requirement'
     ADD_RELATED_ITEMS = 'New requirements added'
     REMOVE_RELATED_ITEMS = 'Requirements removed'
-    REVIEW_EDITED = 'Review Edited'
-    REVIEW_DELETED = 'Review Deleted'
 
-    # AML-924 Inside/Outside
-    INSIDE = 'Inside'
-    OUTSIDE = 'Outside'
 
 
 class AccessControl(models.Model):
@@ -705,9 +715,9 @@ class Listing(models.Model):
     )
 
     required_listings = models.ForeignKey('self', null=True)
-    # TODO: name/use of related name?
-    last_activity = models.ForeignKey('ListingActivity',
-        related_name='most_recent_listings', null=True)
+    # TODO: name/use of related name? (no reverse relationship - use '+')
+    last_activity = models.OneToOneField('ListingActivity', related_name='+',
+        null=True)
 
     intents = models.ManyToManyField(
         'Intent',
@@ -739,10 +749,9 @@ class ListingActivity(models.Model):
         * profile
     """
     action = models.CharField(max_length=255) # one of an enum of Action
-    activity_date = models.DateTimeField()
-    # TODO: how to handle last_activity?
+    activity_date = models.DateTimeField(auto_now=True)
+    author = models.ForeignKey('Profile', related_name='listing_activities')
     listing = models.ForeignKey('Listing', related_name='listing_activities')
-    profile = models.ForeignKey('Profile', related_name='listing_activities')
 
 
 class RejectionListing(models.Model):
