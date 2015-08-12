@@ -36,35 +36,34 @@ class ApprovalStatus(enum.Enum):
 
 
 # Action for a Listing Activity
-# TODO: Actions also have a description
 class Action(enum.Enum):
     # listing is initially created
-    CREATED = 'Created'
+    CREATED = 'CREATED'
     # field of a listing is modified - has a corresponding ChangeDetail entry
-    MODIFIED = 'Modified'
+    MODIFIED = 'MODIFIED'
     # listing is submitted for approval by org steward and apps mall steward
-    SUBMITTED = 'Submitted'
+    SUBMITTED = 'SUBMITTED'
     # listing is approved by an org steward
-    APPROVED_ORG = 'Approved by Organization'
+    APPROVED_ORG = 'APPROVED_ORG'
     # listing is approved by apps mall steward (upon previous org steward
         # approval) - it is now visible to users
-    APPROVED = 'Approved'
+    APPROVED = 'APPROVED'
     # listing is rejected for approval by org steward or apps mall steward
-    REJECTED = 'Rejected'
+    REJECTED = 'REJECTED'
     # listing is enabled (visible to users)
-    ENABLED = 'Enabled'
+    ENABLED = 'ENABLED'
     # listing is disabled (hidden from users)
-    DISABLED = 'Disabled'
+    DISABLED = 'DISABLED'
     # a review for a listing has been modified
-    REVIEW_EDITED = 'Review Edited'
+    REVIEW_EDITED = 'REVIEW_EDITED'
     # a review for a listing has been deleted
-    REVIEW_DELETED = 'Review Deleted'
+    REVIEW_DELETED = 'REVIEW_DELETED'
 
     # not sure if we'll use these or not
-    ADD_RELATED_TO_ITEM = 'Adds as a requirement'
-    REMOVE_RELATED_TO_ITEM = 'Removed as a requirement'
-    ADD_RELATED_ITEMS = 'New requirements added'
-    REMOVE_RELATED_ITEMS = 'Requirements removed'
+    ADD_RELATED_TO_ITEM = 'ADD_RELATED_TO_ITEM'
+    REMOVE_RELATED_TO_ITEM = 'REMOVE_RELATED_TO_ITEM'
+    ADD_RELATED_ITEMS = 'ADD_RELATED_ITEMS'
+    REMOVE_RELATED_ITEMS = 'REMOVE_RELATED_ITEMS'
 
 
 class AccessControl(models.Model):
@@ -285,8 +284,10 @@ class ChangeDetail(models.Model):
         * ListingActivity (ManyToMany)
     """
     field_name = models.CharField(max_length=255)
-    old_value = models.CharField(max_length=constants.MAX_VALUE_LENGTH)
-    new_value = models.CharField(max_length=constants.MAX_VALUE_LENGTH)
+    old_value = models.CharField(max_length=constants.MAX_VALUE_LENGTH,
+        blank=True, null=True)
+    new_value = models.CharField(max_length=constants.MAX_VALUE_LENGTH,
+        blank=True, null=True)
 
     def __repr__(self):
         return "id:%d field %s was %s now is %s" % (
@@ -648,32 +649,42 @@ class AccessControlListingManager(models.Manager):
 class Listing(models.Model):
     """
     Listing
+
+    To allow users to save Listings in an incompleted state, most of the fields
+    in this model are nullable, even though that's not valid for a finalized
+    listing
     """
     title = models.CharField(max_length=255, unique=True)
     approved_date = models.DateTimeField(null=True)
     agency = models.ForeignKey(Agency, related_name='listings')
-    app_type = models.ForeignKey('ListingType', related_name='listings')
-    description = models.CharField(max_length=255)
+    app_type = models.ForeignKey('ListingType', related_name='listings',
+        null=True)
+    description = models.CharField(max_length=255, null=True)
     launch_url = models.CharField(
         max_length=constants.MAX_URL_SIZE,
         validators=[
             RegexValidator(
                 regex=constants.URL_REGEX,
                 message='launch_url must be a url',
-                code='invalid url')]
+                code='invalid url')
+        ], null=True
     )
-    version_name = models.CharField(max_length=255)
-    # NOTE: replacing uuid with this
-    unique_name = models.CharField(max_length=255, unique=True)
-    small_icon = models.ForeignKey(Image, related_name='listing_small_icon')
-    large_icon = models.ForeignKey(Image, related_name='listing_large_icon')
-    banner_icon = models.ForeignKey(Image, related_name='listing_banner_icon')
-    large_banner_icon = models.ForeignKey(Image, related_name='listing_large_banner_icon')
+    version_name = models.CharField(max_length=255, null=True)
+    # NOTE: replacing uuid with this - will need to add to the form
+    unique_name = models.CharField(max_length=255, unique=True, null=True)
+    small_icon = models.ForeignKey(Image, related_name='listing_small_icon',
+        null=True)
+    large_icon = models.ForeignKey(Image, related_name='listing_large_icon',
+        null=True)
+    banner_icon = models.ForeignKey(Image, related_name='listing_banner_icon',
+        null=True)
+    large_banner_icon = models.ForeignKey(Image,
+        related_name='listing_large_banner_icon', null=True)
 
 
-    what_is_new = models.CharField(max_length=255)
-    description_short = models.CharField(max_length=150)
-    requirements = models.CharField(max_length=1000)
+    what_is_new = models.CharField(max_length=255, null=True)
+    description_short = models.CharField(max_length=150, null=True)
+    requirements = models.CharField(max_length=1000, null=True)
     approval_status = models.CharField(max_length=255) # one of enum ApprovalStatus
     is_enabled = models.BooleanField(default=True)
     is_featured = models.BooleanField(default=False)
@@ -723,7 +734,8 @@ class Listing(models.Model):
         db_table='intent_listing'
     )
 
-    access_control = models.ForeignKey(AccessControl, related_name='listings')
+    access_control = models.ForeignKey(AccessControl, related_name='listings',
+        null=True)
 
     # private listings can only be viewed by members of the same agency
     is_private = models.BooleanField(default=False)
@@ -737,6 +749,26 @@ class Listing(models.Model):
     def __str__(self):
         return self.title
 
+class AccessControlListingActivityManager(models.Manager):
+    """
+    Use a custom manager to control access to ListingActivities
+
+    Instead of using models.ListingActivity.objects.all() or .filter(...) etc,
+    use: models.ListingActivity.objects.for_user(user).all() or .filter(...) etc
+
+    This way there is a single place to implement this 'tailored view' logic
+    for ListingActivity queries
+    """
+    def for_user(self, username):
+        # get all comments
+        all_activities = super(
+            AccessControlListingActivityManager, self).get_queryset()
+        # get all listings for this user
+        listings = Listing.objects.for_user(username).all()
+        # filter out listing_activities for listings this user cannot see
+        filtered_listing_activities = all_activities.filter(
+            listing__in=listings)
+        return filtered_listing_activities
 
 class ListingActivity(models.Model):
     """
@@ -754,6 +786,9 @@ class ListingActivity(models.Model):
         related_name='listing_activity',
         db_table='listing_activity_change_detail'
     )
+
+    # use a custom Manager class to limit returned activities
+    objects = AccessControlListingActivityManager()
 
     def __repr__(self):
         return '%s %s %s at %s' % (self.author.user.username, self.action,

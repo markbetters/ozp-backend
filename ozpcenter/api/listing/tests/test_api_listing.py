@@ -170,6 +170,9 @@ class ListingApiTest(APITestCase):
         self.assertEqual(created_id, new_review.id)
 
     def test_update_review(self):
+        """
+        Also tests the listing/<id>/activity endpoint
+        """
         # create a new review
         user = generic_model_access.get_profile('wsmith').user
         self.client.force_authenticate(user=user)
@@ -186,6 +189,12 @@ class ListingApiTest(APITestCase):
         response = self.client.put(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(4, response.data['rate'])
+
+        # test the listing/<id>/activity endpoint
+        url = '/api/listing/%s/activity/' % air_mail_id
+        response = self.client.get(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        print ('response: %s' % response.data)
 
         # try to edit a comment from another user - should fail
         url = '/api/listing/%s/itemComment/1/' % air_mail_id

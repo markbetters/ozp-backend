@@ -27,6 +27,8 @@ nested_router = routers.NestedSimpleRouter(router, r'listing',
     lookup='listing')
 nested_router.register(r'itemComment', views.ItemCommentViewSet,
     base_name='itemcomment')
+nested_router.register(r'activity', views.ListingActivityViewSet,
+    base_name='activity')
 # TODO: nest these
 router.register(r'screenshot', views.ScreenshotViewSet)
 router.register(r'tag', views.TagViewSet)

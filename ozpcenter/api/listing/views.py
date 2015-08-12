@@ -159,10 +159,28 @@ class ItemCommentViewSet(viewsets.ModelViewSet):
             return Response('Bad request to create new item_comment',
                 status=status.HTTP_400_BAD_REQUEST)
 
+        change_details = [
+            {
+                'field_name': 'rate',
+                'old_value': instance.rate,
+                'new_value': rate
+            },
+            {
+                'field_name': 'text',
+                'old_value': instance.text,
+                'new_value': text
+            }
+        ]
         instance.rate = rate
         instance.text = text
         instance.save()
+        # update this listing's rating
         model_access.update_rating(request.user.username, listing_pk)
+        # log this activity
+        listing = models.Listing.objects.for_user(request.user.username).get(
+          id=listing_pk)
+        model_access.edit_listing_review(instance.author,
+            listing, change_details)
 
         output = {"rate": instance.rate, "text": instance.text,
             "author": instance.author.id,
@@ -175,8 +193,25 @@ class ListingTypeViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.ListingTypeSerializer
 
 class ListingActivityViewSet(viewsets.ModelViewSet):
-    queryset = models.ListingActivity.objects.all()
+    """
+    ListingActivity endpoints are read-only
+    """
     serializer_class = serializers.ListingActivitySerializer
+
+    def get_queryset(self):
+        user = generic_model_access.get_profile(self.request.user.username)
+        return models.ListingActivity.objects.for_user(
+            self.request.user.username).all()
+
+    def list(self, request, listing_pk=None):
+        return super(ListingActivityViewSet, self).list(self, request)
+
+    def retrieve(self, request, pk=None, listing_pk=None):
+        queryset = self.get_queryset().get(pk=pk, listing=listing_pk)
+        serializer = serializers.ListingActivitySerializer(queryset,
+            context={'request': request})
+        return Response(serializer.data)
+
 
 # class RejectionListingViewSet(viewsets.ModelViewSet):
 #     queryset = models.RejectionListing.objects.all()
@@ -204,6 +239,188 @@ class ListingViewSet(viewsets.ModelViewSet):
 
     def list(self, request):
         return super(ListingViewSet, self).list(self, request)
+
+    def create(self, request):
+        """
+        Save a new Listing - only title is required
+
+        Sample Payload:
+        {
+           "title":"My Test App",
+           "description":"This is the full description of my app",
+           "descriptionShort":"short app description",
+           "contacts":[
+              {
+                 "type":"Technical Support",
+                 "name":"Tech Support Contact",
+                 "organization":"ABC Inc",
+                 "email":"tsc@gmail.com",
+                 "securePhone":"555-555-5555",
+                 "unsecurePhone":"111-222-3454"
+              }
+           ],
+           "tags":[
+              "tag1",
+              "tag2"
+           ],
+           "type":"Web Application",
+           "requirements":"None",
+           "versionName":"1.0.0",
+           "launchUrl":"http://www.google.com/myApp",
+           "whatIsNew":"Nothing is new",
+           "owners":[
+              {
+                 "username":"alan"
+              }
+           ],
+           "agency":"Test Organization",
+           "categories":[
+              "Entertainment",
+              "Media and Video"
+           ],
+           "intents":[
+              "application/json/edit",
+              "application/json/view"
+           ],
+           "docUrls":[
+              {
+                 "name":"wiki",
+                 "url":"http://www.wikipedia.com/myApp"
+              }
+           ],
+           "smallIconId":"b0b54993-0668-4419-98e8-787e4c3a2dc2",
+           "largeIconId":"e94128ab-d32d-4241-8820-bd2c69a64a87",
+           "bannerIconId":"ecf79771-79a0-4884-a36d-5820c79c6d72",
+           "featuredBannerIconId":"c3e6a369-4773-485e-b369-5cebaa331b69",
+           "changeLogs":[
+
+           ],
+           "screenshots":[
+              {
+                 "smallImageId":"0b8db892-b669-4e86-af23-d899cb4d4d91",
+                 "largeImageId":"80957d25-f34b-48bc-b860-b353cfd9e101"
+              }
+           ]
+        }
+
+        ---
+        parameters:
+            - name: body
+              required: true
+              paramType: body
+        parameters_strategy:
+            form: replace
+            query: replace
+        omit_serializer: true
+        """
+        pass
+
+    def retrieve(self, request, pk=None):
+        """
+        Get a Listing by id
+        """
+        pass
+
+    def destroy(self, request, pk=None):
+        """
+        Delete a listing
+        """
+        pass
+
+    def update(self, request, pk=None):
+        """
+        Update a Listing
+
+        Sample payload:
+
+        {
+           "id":45,
+           "title":"My Test App",
+           "description":"This is the full description of my app",
+           "descriptionShort":"short app description",
+           "contacts":[
+              {
+                 "securePhone":"555-555-5555",
+                 "unsecurePhone":"111-222-3454",
+                 "email":"tsc@gmail.com",
+                 "organization":"ABC Inc",
+                 "name":"Tech Support Contact",
+                 "type":"Technical Support"
+              }
+           ],
+           "totalComments":0,
+           "avgRate":0,
+           "totalRate1":0,
+           "totalRate2":0,
+           "totalRate3":0,
+           "totalRate4":0,
+           "height":null,
+           "width":null,
+           "totalRate5":0,
+           "totalVotes":0,
+           "tags":[
+              "tag2",
+              "tag1"
+           ],
+           "type":"Web Application",
+           "uuid":"e378c427-bba6-470c-b2f3-e550b9129504",
+           "requirements":"None",
+           "singleton":false,
+           "versionName":"1.0.0",
+           "launchUrl":"http://www.google.com/myApp",
+           "whatIsNew":"Nothing is new",
+           "owners":[
+              {
+                 "displayName":"kevink",
+                 "username":"kevink",
+                 "id":5
+              }
+           ],
+           "agency":"Test Organization",
+           "agencyShort":"TO",
+           "currentRejection":null,
+           "isEnabled":true,
+           "categories":[
+              "Media and Video",
+              "Entertainment"
+           ],
+           "editedDate":"2015-08-12T10:53:47.036+0000",
+           "intents":[
+              "application/json/edit",
+              "application/json/view"
+           ],
+           "docUrls":[
+              {
+                 "url":"http://www.wikipedia.com/myApp",
+                 "name":"wiki"
+              }
+           ],
+           "approvalStatus":"IN_PROGRESS",
+           "isFeatured":false,
+           "smallIconId":"b0b54993-0668-4419-98e8-787e4c3a2dc2",
+           "largeIconId":"e94128ab-d32d-4241-8820-bd2c69a64a87",
+           "bannerIconId":"ecf79771-79a0-4884-a36d-5820c79c6d72",
+           "featuredBannerIconId":"c3e6a369-4773-485e-b369-5cebaa331b69",
+           "changeLogs":[
+
+           ],
+           "screenshots":[
+              {
+                 "largeImageId":"80957d25-f34b-48bc-b860-b353cfd9e101",
+                 "smallImageId":"0b8db892-b669-4e86-af23-d899cb4d4d91"
+              }
+           ]
+        }
+        """
+        pass
+
+    def partial_update(self, request, pk=None):
+        """
+        TODO: probobly don't use this (PATCH)
+        """
+        pass
+
+
 
 class ListingUserViewSet(viewsets.ModelViewSet):
     """

@@ -7,6 +7,7 @@ from django.db import transaction
 
 from ozpcenter import models as models
 import ozpcenter.api.listing.model_access as model_access
+import ozpcenter.model_access as generic_model_access
 from ozpcenter.scripts import sample_data_generator as data_gen
 
 class ListingTest(TestCase):
@@ -65,53 +66,56 @@ class ListingTest(TestCase):
         # TODO
         pass
 
-    def test_log_activity_create(self):
-        username = 'wsmith'
-        air_mail = models.Listing.objects.for_user(username).get(
-            title='Air Mail')
-        self.assertEqual(air_mail.approval_status,
-            models.ApprovalStatus.APPROVED)
-        model_access.log_activity_create(username, air_mail.id)
+    def test_create_listing(self):
+        author = generic_model_access.get_profile('wsmith')
 
-        air_mail = models.Listing.objects.for_user(username).get(
+        air_mail = models.Listing.objects.for_user(author.user.username).get(
+            title='Air Mail')
+
+        model_access.create_listing(author, air_mail)
+
+        air_mail = models.Listing.objects.for_user(author.user.username).get(
             title='Air Mail')
         self.assertEqual(air_mail.last_activity.action,
             models.Action.CREATED)
+        self.assertEqual(air_mail.approval_status,
+            models.ApprovalStatus.IN_PROGRESS)
 
-    def test_log_activity_modify(self):
-        username = 'wsmith'
-        air_mail = models.Listing.objects.for_user(username).get(
+    def test_log_listing_modification(self):
+        author = generic_model_access.get_profile('wsmith')
+        air_mail = models.Listing.objects.for_user(author.user.username).get(
             title='Air Mail')
 
         # fields to change
-        changes = [
+        change_details = [
             {'old_value': '', 'new_value': 'lots of things',
                 'field_name': 'what_is_new'},
             {'old_value': 'Ministry of Truth', 'new_value': 'Ministry of Love',
                 'field_name': 'agency'}
         ]
-        model_access.log_activity_modify(username, air_mail.id, changes)
+        model_access.log_listing_modification(author, air_mail, change_details)
 
         listing_activities = air_mail.listing_activities.filter(
             action=models.Action.MODIFIED)
 
         modified_activity = listing_activities[0]
-        self.assertEqual(modified_activity.author.user.username, username)
+        self.assertEqual(modified_activity.author.user.username,
+            author.user.username)
         change_details = modified_activity.change_details.all()
         self.assertEqual(len(change_details), 2)
 
-        air_mail = models.Listing.objects.for_user(username).get(
+        air_mail = models.Listing.objects.for_user(author.user.username).get(
             title='Air Mail')
         self.assertEqual(air_mail.last_activity, modified_activity)
 
-    def test_log_activity_submit(self):
-        username = 'wsmith'
-        air_mail = models.Listing.objects.for_user(username).get(
+    def test_submit_listing(self):
+        author = generic_model_access.get_profile('wsmith')
+        air_mail = models.Listing.objects.for_user(author.user.username).get(
             title='Air Mail')
 
-        model_access.log_activity_submit(username, air_mail.id)
+        model_access.submit_listing(author, air_mail)
 
-        air_mail = models.Listing.objects.for_user(username).get(
+        air_mail = models.Listing.objects.for_user(author.user.username).get(
             title='Air Mail')
         self.assertEqual(air_mail.last_activity.action,
             models.Action.SUBMITTED)
@@ -119,14 +123,16 @@ class ListingTest(TestCase):
         listing_activities = air_mail.listing_activities.filter(
             action=models.Action.SUBMITTED)
         submitted_activity = listing_activities[0]
-        self.assertEqual(submitted_activity.author.user.username, username)
+        self.assertEqual(submitted_activity.author.user.username,
+            author.user.username)
 
-    def test_log_activity_approve_org(self):
-        username = 'wsmith'
+    def test_approve_listing_by_org_steward(self):
+        org_steward = generic_model_access.get_profile('wsmith')
+        username = org_steward.user.username
         air_mail = models.Listing.objects.for_user(username).get(
             title='Air Mail')
 
-        model_access.log_activity_org_approve(username, air_mail.id)
+        model_access.approve_listing_by_org_steward(org_steward, air_mail)
 
         air_mail = models.Listing.objects.for_user(username).get(
             title='Air Mail')
@@ -138,12 +144,13 @@ class ListingTest(TestCase):
         approved_org_activity = listing_activities[0]
         self.assertEqual(approved_org_activity.author.user.username, username)
 
-    def test_log_activity_approve(self):
-        username = 'wsmith'
+    def test_approve_listing(self):
+        apps_mall_steward = generic_model_access.get_profile('wsmith')
+        username = apps_mall_steward.user.username
         air_mail = models.Listing.objects.for_user(username).get(
             title='Air Mail')
 
-        model_access.log_activity_approve(username, air_mail.id)
+        model_access.approve_listing(apps_mall_steward, air_mail)
 
         air_mail = models.Listing.objects.for_user(username).get(
             title='Air Mail')
@@ -152,16 +159,17 @@ class ListingTest(TestCase):
 
         listing_activities = air_mail.listing_activities.filter(
             action=models.Action.APPROVED)
-        approved_activity = listing_activities[0]
-        self.assertEqual(approved_activity.author.user.username, username)
+        approved_org_activity = listing_activities[0]
+        self.assertEqual(approved_org_activity.author.user.username, username)
 
-    def test_log_activity_reject(self):
-        username = 'wsmith'
+    def test_reject_listing(self):
+        steward = generic_model_access.get_profile('wsmith')
+        username = steward.user.username
         air_mail = models.Listing.objects.for_user(username).get(
             title='Air Mail')
 
         description = 'this app is bad'
-        model_access.log_activity_reject(username, air_mail.id,
+        model_access.reject_listing(steward, air_mail,
             description)
 
         air_mail = models.Listing.objects.for_user(username).get(
@@ -175,15 +183,15 @@ class ListingTest(TestCase):
         self.assertEqual(rejected_activity.author.user.username, username)
         self.assertEqual(rejected_activity.description, description)
 
-    def test_log_activity_enable(self):
-        username = 'wsmith'
-        air_mail = models.Listing.objects.for_user(username).get(
-            title='Air Mail')
-
-        model_access.log_activity_enable(username, air_mail.id)
+    def test_enable_listing(self):
+        user = generic_model_access.get_profile('wsmith')
+        username = user.user.username
 
         air_mail = models.Listing.objects.for_user(username).get(
             title='Air Mail')
+
+        model_access.enable_listing(user, air_mail)
+
         self.assertEqual(air_mail.last_activity.action,
             models.Action.ENABLED)
 
@@ -193,15 +201,15 @@ class ListingTest(TestCase):
         self.assertEqual(enabled_activity.author.user.username, username)
         self.assertTrue(air_mail.is_enabled)
 
-    def test_log_activity_disable(self):
-        username = 'wsmith'
-        air_mail = models.Listing.objects.for_user(username).get(
-            title='Air Mail')
-
-        model_access.log_activity_disable(username, air_mail.id)
+    def test_disable_listing(self):
+        user = generic_model_access.get_profile('wsmith')
+        username = user.user.username
 
         air_mail = models.Listing.objects.for_user(username).get(
             title='Air Mail')
+
+        model_access.disable_listing(user, air_mail)
+
         self.assertEqual(air_mail.last_activity.action,
             models.Action.DISABLED)
 
@@ -211,8 +219,9 @@ class ListingTest(TestCase):
         self.assertEqual(enabled_activity.author.user.username, username)
         self.assertFalse(air_mail.is_enabled)
 
-    def test_log_activity_review_edit(self):
-        username = 'wsmith'
+    def test_edit_listing_review(self):
+        author = generic_model_access.get_profile('wsmith')
+        username = author.user.username
         air_mail = models.Listing.objects.for_user(username).get(
             title='Air Mail')
 
@@ -228,7 +237,7 @@ class ListingTest(TestCase):
                 'new_value': 'this app is just ok'
             }
         ]
-        model_access.log_activity_review_edit(username, air_mail.id,
+        model_access.edit_listing_review(author, air_mail,
             change_details)
 
         air_mail = models.Listing.objects.for_user(username).get(
@@ -241,8 +250,9 @@ class ListingTest(TestCase):
         enabled_activity = listing_activities[0]
         self.assertEqual(enabled_activity.author.user.username, username)
 
-    def test_log_activity_review_delete(self):
-        username = 'wsmith'
+    def test_delete_listing_review(self):
+        author = generic_model_access.get_profile('wsmith')
+        username = author.user.username
         air_mail = models.Listing.objects.for_user(username).get(
             title='Air Mail')
 
@@ -258,7 +268,7 @@ class ListingTest(TestCase):
                 'new_value': 'N/A'
             }
         ]
-        model_access.log_activity_review_delete(username, air_mail.id,
+        model_access.delete_listing_review(author, air_mail,
             change_details)
 
         air_mail = models.Listing.objects.for_user(username).get(

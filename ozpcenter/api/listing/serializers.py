@@ -21,18 +21,15 @@ class ContactSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Contact
 
+
 class ListingTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.ListingType
 
+
 class DocUrlSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.DocUrl
-
-
-class ListingActivitySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.ListingActivity
 
 # class RejectionListingSerializer(serializers.ModelSerializer):
 #     class Meta:
@@ -44,9 +41,15 @@ class ScreenshotSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Screenshot
 
+
 class TagSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Tag
+
+class ChangeDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.ChangeDetail
+
 
 class ListingSerializer(serializers.ModelSerializer):
     screenshots = ScreenshotSerializer(many=True)
@@ -58,8 +61,25 @@ class ListingSerializer(serializers.ModelSerializer):
         model = models.Listing
         depth = 2
 
+
 class ItemCommentSerializer(serializers.ModelSerializer):
     author = profile_serializers.ShortProfileSerializer()
     class Meta:
         model = models.ItemComment
         fields = ('author', 'listing', 'rate', 'text', 'id')
+
+
+class ShortListingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Listing
+        fields = ('unique_name', 'title')
+
+
+class ListingActivitySerializer(serializers.ModelSerializer):
+    author = profile_serializers.ShortProfileSerializer()
+    listing = ShortListingSerializer()
+    change_details = ChangeDetailSerializer(many=True)
+    class Meta:
+        model = models.ListingActivity
+        fields = ('action', 'activity_date', 'description', 'author', 'listing',
+            'change_details')
