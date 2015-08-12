@@ -43,6 +43,7 @@ from rest_framework.response import Response
 import ozpcenter.api.listing.serializers as serializers
 import ozpcenter.permissions as permissions
 import ozpcenter.models as models
+import ozpcenter.errors as errors
 import ozpcenter.api.listing.model_access as model_access
 import ozpcenter.model_access as generic_model_access
 
@@ -87,24 +88,13 @@ class ItemCommentViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     def destroy(self, request, pk=None, listing_pk=None):
-        # TODO: permission check. either the current user must be the
-        #   author of this item_comment, or the user must be an Org Steward
-        #   or higher
         queryset = self.get_queryset()
-        instance = get_object_or_404(queryset, pk=pk)
-
-        # if the author doesn't match the current user AND the current user
-        # is not an org steward or higher, deny the request
-        profile = generic_model_access.get_profile(request.user.username)
-        priv_roles = ['APPS_MALL_STEWARD', 'ORG_STEWARD']
-        if profile.highest_role() in priv_roles:
-            pass
-        elif instance.author.user.username != request.user.username:
+        review = get_object_or_404(queryset, pk=pk)
+        try:
+            model_access.delete_listing_review(request.user.username, review)
+        except errors.PermissionDenied:
             return Response('Cannot update another user\'s review',
                 status=status.HTTP_403_FORBIDDEN)
-
-        instance.delete()
-        model_access.update_rating(request.user.username, listing_pk)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     def create(self, request, listing_pk=None):
@@ -127,7 +117,7 @@ class ItemCommentViewSet(viewsets.ModelViewSet):
             comment = models.ItemComment(listing=listing, author=author,
                 rate=rate, text=text)
             comment.save()
-            model_access.update_rating(request.user.username, listing_pk)
+            model_access.update_rating(request.user.username, listing)
 
             output = {"rate": rate, "text": text, "author": author.id,
                 "listing": listing.id, "id": comment.id}
@@ -175,10 +165,10 @@ class ItemCommentViewSet(viewsets.ModelViewSet):
         instance.text = text
         instance.save()
         # update this listing's rating
-        model_access.update_rating(request.user.username, listing_pk)
-        # log this activity
         listing = models.Listing.objects.for_user(request.user.username).get(
           id=listing_pk)
+        model_access.update_rating(request.user.username, listing)
+        # log this activity
         model_access.edit_listing_review(instance.author,
             listing, change_details)
 

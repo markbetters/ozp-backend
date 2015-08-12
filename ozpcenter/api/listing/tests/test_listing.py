@@ -251,25 +251,12 @@ class ListingTest(TestCase):
         self.assertEqual(enabled_activity.author.user.username, username)
 
     def test_delete_listing_review(self):
-        author = generic_model_access.get_profile('wsmith')
-        username = author.user.username
+        username = 'charrington'
         air_mail = models.Listing.objects.for_user(username).get(
             title='Air Mail')
-
-        change_details = [
-            {
-                'field_name': 'rate',
-                'old_value': 5,
-                'new_value': 'N/A'
-            },
-            {
-                'field_name': 'text',
-                'old_value': 'this app is the best',
-                'new_value': 'N/A'
-            }
-        ]
-        model_access.delete_listing_review(author, air_mail,
-            change_details)
+        review = models.ItemComment.objects.get(listing=air_mail,
+            author__user__username=username)
+        model_access.delete_listing_review(username, review)
 
         air_mail = models.Listing.objects.for_user(username).get(
             title='Air Mail')

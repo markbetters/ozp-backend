@@ -7,6 +7,7 @@ from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 
 import ozpcenter.models as models
+import ozpcenter.errors as errors
 import ozpcenter.utils as utils
 import ozpcenter.model_access as generic_model_access
 
@@ -110,12 +111,11 @@ def get_item_comments(username):
     else:
         return data
 
-def update_rating(username, listing_id):
+def update_rating(username, listing):
     """
     Invoked each time a review is created, deleted, or updated
     """
-    listing = models.Listing.objects.for_user(username).get(id=listing_id)
-    reviews = models.ItemComment.objects.filter(listing__id=listing_id)
+    reviews = models.ItemComment.objects.filter(listing=listing)
     rate1 = reviews.filter(rate=1).count()
     rate2 = reviews.filter(rate=2).count()
     rate3 = reviews.filter(rate=3).count()
@@ -137,6 +137,7 @@ def update_rating(username, listing_id):
     listing.total_comments = total_comments
     listing.avg_rate = avg_rate
     listing.save()
+    return listing
 
 def add_listing_activity(author, listing, action, change_details=None,
     description=None):
@@ -264,11 +265,46 @@ def edit_listing_review(author, listing, change_details):
         change_details=change_details)
     return listing
 
-def delete_listing_review(author, listing, change_details):
+def delete_listing_review(username, review):
     """
     Delete an existing review
+
+    Args:
+        username: user making this request
+        review (models.ItemComment): review to delete
+
+    Returns: Listing associated with this review
     """
-    listing = add_listing_activity(author, listing,
+    user = generic_model_access.get_profile(username)
+    # ensure user is the author of this review, or that user is an org
+    # steward or apps mall steward
+    priv_roles = ['APPS_MALL_STEWARD', 'ORG_STEWARD']
+    if user.highest_role() in priv_roles:
+        pass
+    elif review.author.user.username != username:
+        raise errors.PermissionDenied()
+
+    # make a note of the change
+    change_details = [
+        {
+            'field_name': 'rate',
+            'old_value': review.rate,
+            'new_value': None
+        },
+        {
+            'field_name': 'text',
+            'old_value': review.text,
+            'new_value': None
+        }
+    ]
+    # add this action to the log
+    listing = review.listing
+    listing = add_listing_activity(review.author, listing,
         models.Action.REVIEW_DELETED, change_details=change_details)
+
+    # delete the review
+    review.delete()
+    # update this listing's rating
+    update_rating(username, listing)
     return listing
 
