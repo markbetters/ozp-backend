@@ -169,7 +169,10 @@ class ListingActivityViewSet(viewsets.ModelViewSet):
             self.request.user.username).all()
 
     def list(self, request, listing_pk=None):
-        return super(ListingActivityViewSet, self).list(self, request)
+        queryset = self.get_queryset().filter(listing=listing_pk)
+        serializer = serializers.ListingActivitySerializer(queryset,
+            context={'request': request}, many=True)
+        return Response(serializer.data)
 
     def retrieve(self, request, pk=None, listing_pk=None):
         queryset = self.get_queryset().get(pk=pk, listing=listing_pk)
@@ -279,11 +282,14 @@ class ListingViewSet(viewsets.ModelViewSet):
         """
         pass
 
-    # def retrieve(self, request, pk=None):
-    #     """
-    #     Get a Listing by id
-    #     """
-    #     pass
+    def retrieve(self, request, pk=None):
+        """
+        Get a Listing by id
+        """
+        queryset = self.get_queryset().get(pk=pk)
+        serializer = serializers.ListingSerializer(queryset,
+            context={'request': request})
+        return Response(serializer.data)
 
     def destroy(self, request, pk=None):
         """
