@@ -101,27 +101,24 @@ class ItemCommentViewSet(viewsets.ModelViewSet):
         """
         Create a new item_comment
         """
-        author = generic_model_access.get_profile(
-            request.user.username)
         try:
             listing = models.Listing.objects.for_user(
                 request.user.username).get(id=listing_pk)
-        except:
+        except Exception:
             return Response('Invalid listing',
                 status=status.HTTP_400_BAD_REQUEST)
 
         try:
             rate = int(request.data['rate'])
             text = request.data.get('text', None)
+        except Exception:
+            return Response('Invalid input data',
+                status=status.HTTP_400_BAD_REQUEST)
 
-            comment = models.ItemComment(listing=listing, author=author,
-                rate=rate, text=text)
-            comment.save()
-            model_access.update_rating(request.user.username, listing)
-
-            output = {"rate": rate, "text": text, "author": author.id,
-                "listing": listing.id, "id": comment.id}
-            return Response(output, status=status.HTTP_201_CREATED)
+        try:
+            resp = model_access.create_listing_review(request.user.username,
+                listing, rate, text)
+            return Response(resp, status=status.HTTP_201_CREATED)
         except Exception as e:
             raise e
             return Response('Bad request to create new item_comment',
@@ -133,49 +130,28 @@ class ItemCommentViewSet(viewsets.ModelViewSet):
         Update an existing item_comment
         """
         try:
-            instance = models.ItemComment.objects.get(id=pk)
+            review = models.ItemComment.objects.get(id=pk)
         except models.ItemComment.DoesNotExist:
             return Response('Invalid item comment',
                 status=status.HTTP_400_BAD_REQUEST)
 
-        if instance.author.user.username != request.user.username:
-            return Response('Cannot update another user\'s review',
-                status=status.HTTP_403_FORBIDDEN)
-
         try:
-            rate = request.data.get('rate', instance.rate)
+            rate = request.data.get('rate', review.rate)
             text = request.data.get('text', None)
         except:
             return Response('Bad request to create new item_comment',
                 status=status.HTTP_400_BAD_REQUEST)
 
-        change_details = [
-            {
-                'field_name': 'rate',
-                'old_value': instance.rate,
-                'new_value': rate
-            },
-            {
-                'field_name': 'text',
-                'old_value': instance.text,
-                'new_value': text
-            }
-        ]
-        instance.rate = rate
-        instance.text = text
-        instance.save()
-        # update this listing's rating
-        listing = models.Listing.objects.for_user(request.user.username).get(
-          id=listing_pk)
-        model_access.update_rating(request.user.username, listing)
-        # log this activity
-        model_access.edit_listing_review(instance.author,
-            listing, change_details)
-
-        output = {"rate": instance.rate, "text": instance.text,
-            "author": instance.author.id,
-            "listing": instance.listing.id, "id": instance.id}
-        return Response(output, status=status.HTTP_200_OK)
+        try:
+            review = model_access.edit_listing_review(request.user.username,
+                review, rate, text)
+            output = {"rate": review.rate, "text": review.text,
+                "author": review.author.id,
+                "listing": review.listing.id, "id": review.id}
+            return Response(output, status=status.HTTP_200_OK)
+        except errors.PermissionDenied:
+            return Response('Cannot update another user\'s review',
+                 status=status.HTTP_403_FORBIDDEN)
 
 
 class ListingTypeViewSet(viewsets.ModelViewSet):
@@ -189,7 +165,6 @@ class ListingActivityViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.ListingActivitySerializer
 
     def get_queryset(self):
-        user = generic_model_access.get_profile(self.request.user.username)
         return models.ListingActivity.objects.for_user(
             self.request.user.username).all()
 
@@ -223,7 +198,6 @@ class ListingViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.ListingSerializer
 
     def get_queryset(self):
-        user = generic_model_access.get_profile(self.request.user.username)
         return models.Listing.objects.for_user(
             self.request.user.username).all()
 
@@ -305,11 +279,11 @@ class ListingViewSet(viewsets.ModelViewSet):
         """
         pass
 
-    def retrieve(self, request, pk=None):
-        """
-        Get a Listing by id
-        """
-        pass
+    # def retrieve(self, request, pk=None):
+    #     """
+    #     Get a Listing by id
+    #     """
+    #     pass
 
     def destroy(self, request, pk=None):
         """
@@ -409,7 +383,6 @@ class ListingViewSet(viewsets.ModelViewSet):
         TODO: probobly don't use this (PATCH)
         """
         pass
-
 
 
 class ListingUserViewSet(viewsets.ModelViewSet):

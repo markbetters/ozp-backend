@@ -685,7 +685,8 @@ class Listing(models.Model):
     what_is_new = models.CharField(max_length=255, null=True)
     description_short = models.CharField(max_length=150, null=True)
     requirements = models.CharField(max_length=1000, null=True)
-    approval_status = models.CharField(max_length=255) # one of enum ApprovalStatus
+    approval_status = models.CharField(max_length=255,
+        default=ApprovalStatus.IN_PROGRESS) # one of enum ApprovalStatus
     is_enabled = models.BooleanField(default=True)
     is_featured = models.BooleanField(default=False)
     # a weighted average (5*total_rate5 + 4*total_rate4 + ...) / total_votes

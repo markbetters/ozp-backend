@@ -111,7 +111,7 @@ def get_item_comments(username):
     else:
         return data
 
-def update_rating(username, listing):
+def _update_rating(username, listing):
     """
     Invoked each time a review is created, deleted, or updated
     """
@@ -139,7 +139,7 @@ def update_rating(username, listing):
     listing.save()
     return listing
 
-def add_listing_activity(author, listing, action, change_details=None,
+def _add_listing_activity(author, listing, action, change_details=None,
     description=None):
     """
     Adds a ListingActivity
@@ -186,7 +186,7 @@ def create_listing(author, listing):
     """
     Create a listing
     """
-    listing = add_listing_activity(author, listing, models.Action.CREATED)
+    listing = _add_listing_activity(author, listing, models.Action.CREATED)
     listing.approval_status = models.ApprovalStatus.IN_PROGRESS
     listing.save()
     return listing
@@ -195,7 +195,7 @@ def log_listing_modification(author, listing, change_details):
     """
     Log a listing modification
     """
-    listing = add_listing_activity(author, listing, models.Action.MODIFIED,
+    listing = _add_listing_activity(author, listing, models.Action.MODIFIED,
         change_details)
     return listing
 
@@ -203,7 +203,7 @@ def submit_listing(author, listing):
     """
     Submit a listing for approval
     """
-    listing = add_listing_activity(author, listing, models.Action.SUBMITTED)
+    listing = _add_listing_activity(author, listing, models.Action.SUBMITTED)
     listing.approval_status = models.ApprovalStatus.PENDING
     listing.save()
     return listing
@@ -212,7 +212,7 @@ def approve_listing_by_org_steward(org_steward, listing):
     """
     Give Org Steward approval to a listing
     """
-    listing = add_listing_activity(org_steward, listing,
+    listing = _add_listing_activity(org_steward, listing,
         models.Action.APPROVED_ORG)
     listing.approval_status = models.ApprovalStatus.APPROVED_ORG
     listing.save()
@@ -222,7 +222,7 @@ def approve_listing(steward, listing):
     """
     Give final approval to a listing
     """
-    listing = add_listing_activity(steward, listing,
+    listing = _add_listing_activity(steward, listing,
         models.Action.APPROVED)
     listing.approval_status = models.ApprovalStatus.APPROVED
     listing.save()
@@ -232,7 +232,7 @@ def reject_listing(steward, listing, rejection_description):
     """
     Reject a submitted listing
     """
-    listing = add_listing_activity(steward, listing,
+    listing = _add_listing_activity(steward, listing,
         models.Action.REJECTED, description=rejection_description)
     listing.approval_status = models.ApprovalStatus.REJECTED
     listing.save()
@@ -242,7 +242,7 @@ def enable_listing(user, listing):
     """
     Enable a listing
     """
-    listing = add_listing_activity(user, listing,
+    listing = _add_listing_activity(user, listing,
         models.Action.ENABLED)
     listing.is_enabled = True
     listing.save()
@@ -252,18 +252,85 @@ def disable_listing(steward, listing):
     """
     Disable a listing
     """
-    listing = add_listing_activity(steward, listing, models.Action.DISABLED)
+    listing = _add_listing_activity(steward, listing, models.Action.DISABLED)
     listing.is_enabled = False
     listing.save()
     return listing
 
-def edit_listing_review(author, listing, change_details):
+def create_listing_review(username, listing, rating, text=None):
+    """
+    Create a new review for a listing
+
+    Args:
+        username (str): author's username
+        rating (int): rating, 1-5
+        text (Optional(str)): review text
+    Returns:
+        {
+            "rate": rate,
+            "text": text,
+            "author": author.id,
+            "listing": listing.id,
+            "id": comment.id
+        }
+    """
+    author = generic_model_access.get_profile(username)
+    comment = models.ItemComment(listing=listing, author=author,
+                rate=rating, text=text)
+    comment.save()
+    # update this listing's rating
+    _update_rating(username, listing)
+
+    resp = {
+        "rate": rating,
+        "text": text,
+        "author": author.id,
+        "listing": listing.id,
+        "id": comment.id
+    }
+    return resp
+
+def edit_listing_review(username, review, rate, text=None):
     """
     Edit an existing review
+
+    Args:
+        username: user making this request
+        review (models.ItemComment): review to modify
+        rate (int): rating (1-5)
+        text (Optional(str)): review text
+
+    Returns:
+        The modified review
     """
-    listing = add_listing_activity(author, listing, models.Action.REVIEW_EDITED,
+    # only the author of a review can edit it
+    user = generic_model_access.get_profile(username)
+    if review.author.user.username != username:
+        raise errors.PermissionDenied()
+
+    change_details = [
+        {
+            'field_name': 'rate',
+            'old_value': review.rate,
+            'new_value': rate
+        },
+        {
+            'field_name': 'text',
+            'old_value': review.text,
+            'new_value': text
+        }
+    ]
+
+    listing = review.listing
+    listing = _add_listing_activity(user, listing, models.Action.REVIEW_EDITED,
         change_details=change_details)
-    return listing
+
+    review.rate = rate
+    review.text = text
+    review.save()
+
+    _update_rating(username, listing)
+    return review
 
 def delete_listing_review(username, review):
     """
@@ -299,12 +366,12 @@ def delete_listing_review(username, review):
     ]
     # add this action to the log
     listing = review.listing
-    listing = add_listing_activity(review.author, listing,
+    listing = _add_listing_activity(review.author, listing,
         models.Action.REVIEW_DELETED, change_details=change_details)
 
     # delete the review
     review.delete()
     # update this listing's rating
-    update_rating(username, listing)
+    _update_rating(username, listing)
     return listing
 

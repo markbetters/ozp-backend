@@ -6,6 +6,7 @@ from django.db.utils import IntegrityError
 from django.db import transaction
 
 from ozpcenter import models as models
+import ozpcenter.errors as errors
 import ozpcenter.api.listing.model_access as model_access
 import ozpcenter.model_access as generic_model_access
 from ozpcenter.scripts import sample_data_generator as data_gen
@@ -220,25 +221,14 @@ class ListingTest(TestCase):
         self.assertFalse(air_mail.is_enabled)
 
     def test_edit_listing_review(self):
-        author = generic_model_access.get_profile('wsmith')
-        username = author.user.username
+        username = 'charrington'
         air_mail = models.Listing.objects.for_user(username).get(
             title='Air Mail')
+        review = models.ItemComment.objects.get(listing=air_mail,
+            author__user__username=username)
 
-        change_details = [
-            {
-                'field_name': 'rate',
-                'old_value': 5,
-                'new_value': 3
-            },
-            {
-                'field_name': 'text',
-                'old_value': 'this app is the best',
-                'new_value': 'this app is just ok'
-            }
-        ]
-        model_access.edit_listing_review(author, air_mail,
-            change_details)
+        model_access.edit_listing_review(username, review,
+            2, 'not great')
 
         air_mail = models.Listing.objects.for_user(username).get(
             title='Air Mail')
@@ -249,6 +239,11 @@ class ListingTest(TestCase):
             action=models.Action.REVIEW_EDITED)
         enabled_activity = listing_activities[0]
         self.assertEqual(enabled_activity.author.user.username, username)
+
+        # edit listing by another user should fail
+        self.assertRaises(errors.PermissionDenied,
+            model_access.edit_listing_review,
+            'wsmith', review, 2, 'still not great')
 
     def test_delete_listing_review(self):
         username = 'charrington'

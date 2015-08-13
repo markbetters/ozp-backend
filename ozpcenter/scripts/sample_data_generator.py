@@ -15,6 +15,7 @@ import django.contrib.auth
 
 from ozpcenter import models as models
 from ozpcenter import model_access
+import ozpcenter.api.listing.model_access as listing_model_access
 
 TEST_IMG_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'test_images') + '/'
 
@@ -410,7 +411,6 @@ def run():
         what_is_new='Nothing really new here',
         description_short='Sends airmail',
         requirements='None',
-        approval_status=models.ApprovalStatus.APPROVED,
         is_enabled=True,
         is_featured=True,
         singleton=False,
@@ -482,6 +482,11 @@ def run():
         listing=listing)
     air_mail_comment_3.save()
 
+    listing_model_access.create_listing(winston, listing)
+    listing_model_access.submit_listing(winston, listing)
+    listing_model_access.approve_listing_by_org_steward(winston, listing)
+    listing_model_access.approve_listing(winston, listing)
+
     ############################################################################
     #                           Bread Basket
     ############################################################################
@@ -519,7 +524,6 @@ def run():
         what_is_new='Nothing really new here',
         description_short='Carries bread',
         requirements='None',
-        approval_status=models.ApprovalStatus.APPROVED,
         is_enabled=True,
         is_featured=True,
         singleton=False,
@@ -543,6 +547,11 @@ def run():
         author=jones,
         listing=listing)
     bread_basket_comment_1.save()
+
+    listing_model_access.create_listing(julia, listing)
+    listing_model_access.submit_listing(julia, listing)
+    listing_model_access.approve_listing_by_org_steward(winston, listing)
+    listing_model_access.approve_listing(winston, listing)
 
     ############################################################################
     #                           Chart Course
@@ -582,7 +591,6 @@ def run():
         what_is_new='Nothing really new here',
         description_short='Chart your course',
         requirements='None',
-        approval_status=models.ApprovalStatus.APPROVED,
         is_enabled=True,
         is_featured=True,
         singleton=False,
@@ -596,6 +604,11 @@ def run():
     listing.categories.add(education)
     listing.tags.add(demo)
     listing.screenshots.add(screenshot)
+
+    listing_model_access.create_listing(winston, listing)
+    listing_model_access.submit_listing(winston, listing)
+    listing_model_access.approve_listing_by_org_steward(winston, listing)
+    listing_model_access.approve_listing(winston, listing)
 
 
     ############################################################################
@@ -636,7 +649,6 @@ def run():
         what_is_new='Nothing really new here',
         description_short='Chat in a box',
         requirements='None',
-        approval_status=models.ApprovalStatus.APPROVED,
         is_enabled=True,
         is_featured=True,
         singleton=False,
@@ -649,6 +661,11 @@ def run():
     listing.categories.add(communication)
     listing.tags.add(demo)
     listing.screenshots.add(screenshot)
+
+    listing_model_access.create_listing(julia, listing)
+    listing_model_access.submit_listing(julia, listing)
+    listing_model_access.approve_listing_by_org_steward(winston, listing)
+    listing_model_access.approve_listing(winston, listing)
 
     ############################################################################
     #                           Clipboard
@@ -688,7 +705,6 @@ def run():
         what_is_new='Nothing really new here',
         description_short='Its a clipboard',
         requirements='None',
-        approval_status=models.ApprovalStatus.APPROVED,
         is_enabled=True,
         is_featured=True,
         singleton=False,
@@ -702,6 +718,11 @@ def run():
     listing.categories.add(education)
     listing.tags.add(demo)
     listing.screenshots.add(screenshot)
+
+    listing_model_access.create_listing(winston, listing)
+    listing_model_access.submit_listing(winston, listing)
+    listing_model_access.approve_listing_by_org_steward(winston, listing)
+    listing_model_access.approve_listing(winston, listing)
 
     ############################################################################
     #                           FrameIt
@@ -741,7 +762,6 @@ def run():
         what_is_new='Nothing really new here',
         description_short='Its an iframe',
         requirements='None',
-        approval_status=models.ApprovalStatus.APPROVED,
         is_enabled=True,
         is_featured=True,
         singleton=False,
@@ -755,6 +775,11 @@ def run():
     listing.categories.add(education)
     listing.tags.add(demo)
     listing.screenshots.add(screenshot)
+
+    listing_model_access.create_listing(winston, listing)
+    listing_model_access.submit_listing(winston, listing)
+    listing_model_access.approve_listing_by_org_steward(winston, listing)
+    listing_model_access.approve_listing(winston, listing)
 
     ############################################################################
     #                           Hatch Latch
@@ -794,7 +819,6 @@ def run():
         what_is_new='Nothing really new here',
         description_short='Its a hatch latch',
         requirements='None',
-        approval_status=models.ApprovalStatus.APPROVED,
         is_enabled=True,
         is_featured=True,
         singleton=False,
@@ -809,6 +833,11 @@ def run():
     listing.categories.add(health_fitness)
     listing.tags.add(demo)
     listing.screenshots.add(screenshot)
+
+    listing_model_access.create_listing(winston, listing)
+    listing_model_access.submit_listing(winston, listing)
+    listing_model_access.approve_listing_by_org_steward(winston, listing)
+    listing_model_access.approve_listing(winston, listing)
 
     ############################################################################
     #                           Jot Spot
@@ -848,7 +877,6 @@ def run():
         what_is_new='Nothing really new here',
         description_short='Jot stuff down',
         requirements='None',
-        approval_status=models.ApprovalStatus.APPROVED,
         is_enabled=True,
         is_featured=True,
         singleton=False,
@@ -862,6 +890,11 @@ def run():
     listing.categories.add(education)
     listing.tags.add(demo)
     listing.screenshots.add(screenshot)
+
+    listing_model_access.create_listing(winston, listing)
+    listing_model_access.submit_listing(winston, listing)
+    listing_model_access.approve_listing_by_org_steward(winston, listing)
+    listing_model_access.approve_listing(winston, listing)
 
     ############################################################################
     #                           Library

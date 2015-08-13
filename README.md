@@ -77,6 +77,12 @@ if data is None:
 return data
 ```
 
+In general, try to put the majority of the 'business logic' into model_access
+files, as opposed to putting this logic directly in the Views. This will make
+it easier to test and reuse. These methods are easier to use in sample data
+generators, and allows the complexity of Django Rest Framework to stay largely
+separate from the core application logic
+
 ### Models
 Regarding `__str__()`:
 It’s important to add `__str__()` methods to your models, not only for your own
