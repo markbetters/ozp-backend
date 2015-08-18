@@ -13,6 +13,7 @@ import ozpcenter.api.image.serializers as image_serializers
 import ozpcenter.api.category.serializers as category_serializers
 import ozpcenter.api.profile.serializers as profile_serializers
 import ozpcenter.api.intent.serializers as intent_serializers
+import ozpcenter.api.agency.serializers as agency_serializers
 import ozpcenter.api.access_control.serializers as access_control_serializers
 import ozpcenter.model_access as generic_model_access
 
@@ -52,6 +53,7 @@ class ScreenshotSerializer(serializers.ModelSerializer):
     large_image = image_serializers.ImageSerializer()
     class Meta:
         model = models.Screenshot
+        fields = ('small_image', 'large_image')
 
 
 class TagSerializer(serializers.ModelSerializer):
@@ -79,17 +81,47 @@ class CreateListingProfileSerializer(serializers.ModelSerializer):
         model = models.Profile
         fields = ('user',)
 
+class UsernameField(serializers.RelatedField):
+    """
+    Use a username to get/set Profile objects
+    """
+    def to_representation(self, value):
+        """
+        value: models.Profile
+        """
+        return value.user.username
+
+    def to_internal_value(self, data):
+        """
+        data: list of usernames
+        """
+        return data
+
 
 class ListingSerializer(serializers.ModelSerializer):
     screenshots = ScreenshotSerializer(many=True, required=False)
     doc_urls  = DocUrlSerializer(many=True, required=False)
     owners = CreateListingProfileSerializer(required=False, many=True)
+    # owners = serializers.SlugRelatedField(
+    #     slug_field='username',
+    #     queryset=django.contrib.auth.models.User.objects.all(),
+    #     many=True
+    # )
     categories  = category_serializers.CategorySerializer(many=True,
         required=False)
     tags = TagSerializer(many=True, required=False)
     contacts = ContactSerializer(many=True, required=False)
     intents = intent_serializers.IntentSerializer(many=True, required=False)
-    access_control = access_control_serializers.AccessControlSerializer(required=False, validators=[])
+    access_control = serializers.SlugRelatedField(
+        slug_field='title',
+        queryset=models.AccessControl.objects.all(),
+        required=False
+    )
+    small_icon = image_serializers.ImageSerializer(required=False)
+    large_icon = image_serializers.ImageSerializer(required=False)
+    banner_icon = image_serializers.ImageSerializer(required=False)
+    large_banner_icon = image_serializers.ImageSerializer(required=False)
+    agency = agency_serializers.AgencySerializer(required=False, read_only=True)
 
     class Meta:
         model = models.Listing

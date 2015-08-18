@@ -139,6 +139,7 @@ class Image(models.Model):
     be statically served
     """
     # this is set automatically by the create_image method
+    # TODO: do we need a UUID?
     uuid = models.CharField(max_length=36, unique=True)
     access_control = models.ForeignKey(AccessControl, related_name='images')
     file_extension = models.CharField(max_length=16, default='png')
