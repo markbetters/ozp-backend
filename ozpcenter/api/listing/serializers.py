@@ -36,6 +36,7 @@ class ContactSerializer(serializers.ModelSerializer):
 class ListingTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.ListingType
+        fields = ('title',)
 
 
 class DocUrlSerializer(serializers.ModelSerializer):
@@ -65,6 +66,11 @@ class ChangeDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.ChangeDetail
 
+class ListingActivitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.ListingActivity
+        fields = ('action',)
+
 
 # class CreateListingUserSerializer(serializers.ModelSerializer):
 #     class Meta:
@@ -80,22 +86,6 @@ class CreateListingProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Profile
         fields = ('user',)
-
-class UsernameField(serializers.RelatedField):
-    """
-    Use a username to get/set Profile objects
-    """
-    def to_representation(self, value):
-        """
-        value: models.Profile
-        """
-        return value.user.username
-
-    def to_internal_value(self, data):
-        """
-        data: list of usernames
-        """
-        return data
 
 
 class ListingSerializer(serializers.ModelSerializer):
@@ -122,6 +112,8 @@ class ListingSerializer(serializers.ModelSerializer):
     banner_icon = image_serializers.ImageSerializer(required=False)
     large_banner_icon = image_serializers.ImageSerializer(required=False)
     agency = agency_serializers.AgencySerializer(required=False, read_only=True)
+    last_activity = ListingActivitySerializer(required=False, read_only=True)
+    app_type = ListingTypeSerializer(required=False)
 
     class Meta:
         model = models.Listing

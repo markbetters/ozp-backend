@@ -10,6 +10,6 @@ import ozpcenter.models as models
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center')
 
-class CategorySerializer(serializers.HyperlinkedModelSerializer):
+class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Category
