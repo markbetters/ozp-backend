@@ -2,6 +2,7 @@
 Tests for listing endpoints
 """
 from decimal import Decimal
+import unittest
 
 from django.db import transaction
 from django.db.utils import IntegrityError
@@ -83,6 +84,18 @@ class ListingApiTest(APITestCase):
         titles = [i['title'] for i in response.data]
         self.assertTrue('Chatter Box' in titles)
 
+    @unittest.skip('Broken in DRF 3.2.0')
+    def test_search_limit(self):
+        user = generic_model_access.get_profile('wsmith').user
+        self.client.force_authenticate(user=user)
+        url = '/api/listings/search/?limit=1'
+        response = self.client.get(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        titles = [i['title'] for i in response.data]
+        self.assertTrue('Air Mail' in titles)
+        self.assertEqual(len(titles), 1)
+
+    @unittest.skip('Broken in DRF 3.2.0')
     def test_search_offset_limit(self):
         user = generic_model_access.get_profile('wsmith').user
         self.client.force_authenticate(user=user)
@@ -194,7 +207,6 @@ class ListingApiTest(APITestCase):
         url = '/api/listing/%s/activity/' % air_mail_id
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        print ('response: %s' % response.data)
 
         # try to edit a comment from another user - should fail
         url = '/api/listing/%s/itemComment/1/' % air_mail_id
@@ -375,3 +387,50 @@ class ListingApiTest(APITestCase):
         self.assertEqual(listing.total_rate3, 1)
         self.assertEqual(listing.total_rate4, 1)
         self.assertEqual(listing.total_rate5, 1)
+
+    def test_create_listing_minimal(self):
+        # create a new listing with minimal data (title)
+        user = generic_model_access.get_profile('julia').user
+        self.client.force_authenticate(user=user)
+        url = '/api/listing/'
+        title = 'julias app'
+        data = {'title': title}
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data['title'], title)
+
+        # trying to create an app without a title should fail
+        data = {'description': 'text here'}
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_create_listing_contacts(self):
+        # create a new listing with contacts
+        user = generic_model_access.get_profile('julia').user
+        self.client.force_authenticate(user=user)
+        url = '/api/listing/'
+        title = 'julias app'
+        data = {'title': title, "contacts": [
+                {"email": "a@a.com", "secure_phone": "111-222-3434",
+                    "unsecure_phone": "444-555-4545", "name": "me",
+                    "contact_type": "Government"
+                },
+                {"email": "b@b.com", "secure_phone": "222-222-3333",
+                    "unsecure_phone": "555-555-5555", "name": "you",
+                    "contact_type": "Military"
+                }
+            ]
+        }
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data['title'], title)
+        self.assertEqual(len(response.data['contacts']), 2)
+        names = []
+        for c in response.data['contacts']:
+            names.append(c['name'])
+        self.assertTrue('me' in names)
+        self.assertTrue('you' in names)
+
+
+
+

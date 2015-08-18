@@ -254,7 +254,12 @@ class ApplicationLibraryEntry(models.Model):
     listing = models.ForeignKey('Listing', related_name='application_library_entries')
 
     def __str__(self):
-        return self.folder
+        return '%s:%s:%s' % (self.folder, self.owner.user.username,
+            self.listing.title)
+
+    def __repr__(self):
+        return '%s:%s:%s' % (self.folder, self.owner.user.username,
+            self.listing.title)
 
 
 class Category(models.Model):
@@ -309,7 +314,8 @@ class Contact(models.Model):
             RegexValidator(
                 regex=constants.PHONE_REGEX,
                 message='secure_phone must be a valid phone number',
-                code='invalid phone number')]
+                code='invalid phone number')],
+        null=True
     )
     unsecure_phone = models.CharField(
         max_length=50,
@@ -317,7 +323,8 @@ class Contact(models.Model):
             RegexValidator(
                 regex=constants.PHONE_REGEX,
                 message='unsecure_phone must be a valid phone number',
-                code='invalid phone number')]
+                code='invalid phone number')],
+        null=True
     )
     email = models.CharField(
         max_length=100,
@@ -328,7 +335,7 @@ class Contact(models.Model):
                 code='invalid email')]
     )
     name = models.CharField(max_length=100)
-    organization = models.CharField(max_length=100)
+    organization = models.CharField(max_length=100, null=True)
     contact_type = models.ForeignKey('ContactType', related_name='contacts')
 
     def clean(self):
@@ -507,10 +514,10 @@ class Profile(models.Model):
     # django_user
 
     def __repr__(self):
-        return self.user.username
+        return 'Profile: %s' % self.user.username
 
     def __str__(self):
-        return self.user.username
+        return 'Profile: %s' % self.user.username
 
     @staticmethod
     def create_groups():

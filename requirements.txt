@@ -5,7 +5,7 @@ django-extensions==1.5.5
 django-extras==0.3
 django-filter==0.10.0
 django-rest-swagger==0.3.2
-djangorestframework==3.1.2
+djangorestframework==3.2.2
 drf-nested-routers==0.9.0
 factory-boy==2.5.2
 fake-factory==0.5.1

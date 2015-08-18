@@ -280,7 +280,20 @@ class ListingViewSet(viewsets.ModelViewSet):
             query: replace
         omit_serializer: true
         """
-        pass
+        try:
+          logger.debug('inside ListingViewSet.create')
+          serializer = serializers.ListingSerializer(data=request.data,
+              context={'request': request})
+          if not serializer.is_valid():
+              logger.error('%s' % serializer.errors)
+              return Response(serializer.errors,
+                  status=status.HTTP_400_BAD_REQUEST)
+
+          serializer.save()
+
+          return Response(serializer.data, status=status.HTTP_201_CREATED)
+        except Exception as e:
+          raise e
 
     def retrieve(self, request, pk=None):
         """
@@ -413,6 +426,7 @@ class ListingSearchViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.ListingSerializer
     filter_backends = (filters.SearchFilter, )
     search_fields = ('title', 'description', 'description_short',)
+    pagination_class = None
 
     def get_queryset(self):
         filter_params = {}

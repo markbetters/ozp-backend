@@ -10,7 +10,7 @@ import ozpcenter.models as models
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center')
 
-class AccessControlSerializer(serializers.HyperlinkedModelSerializer):
+class AccessControlSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.AccessControl
         fields = ('title',)

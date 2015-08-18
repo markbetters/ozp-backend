@@ -48,7 +48,8 @@ def filter_listings(username, filter_params):
 
     if 'limit' in filter_params:
         limit = int(filter_params['limit'])
-        objects = objects[0:limit]
+        objects = objects[:limit]
+
 
     return objects
 
