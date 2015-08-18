@@ -85,7 +85,7 @@ class CreateListingProfileSerializer(serializers.ModelSerializer):
     )
     class Meta:
         model = models.Profile
-        fields = ('user',)
+        fields = ('user', 'display_name', 'id')
 
 
 class ListingSerializer(serializers.ModelSerializer):
