@@ -41,7 +41,6 @@ class ProfileSerializer(serializers.ModelSerializer):
 class ContactSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Contact
-        fields = ('name', 'email')
 
 class ListingTypeSerializer(serializers.ModelSerializer):
     class Meta:

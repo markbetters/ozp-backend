@@ -79,13 +79,11 @@ class ListingActivitySerializer(serializers.ModelSerializer):
 
 
 class CreateListingProfileSerializer(serializers.ModelSerializer):
-    user = serializers.SlugRelatedField(
-        slug_field='username',
-        queryset=django.contrib.auth.models.User.objects.all()
-    )
+    user = profile_serializers.ShortUserSerializer()
     class Meta:
         model = models.Profile
         fields = ('user', 'display_name', 'id')
+        read_only = ('display_name', 'id')
 
 
 class ListingSerializer(serializers.ModelSerializer):
@@ -102,11 +100,13 @@ class ListingSerializer(serializers.ModelSerializer):
     tags = TagSerializer(many=True, required=False)
     contacts = ContactSerializer(many=True, required=False)
     intents = intent_serializers.IntentSerializer(many=True, required=False)
-    access_control = serializers.SlugRelatedField(
-        slug_field='title',
-        queryset=models.AccessControl.objects.all(),
-        required=False
-    )
+    # access_control = serializers.SlugRelatedField(
+    #     slug_field='title',
+    #     source='*',
+    #     queryset=models.AccessControl.objects.all(),
+    #     required=False
+    # )
+    access_control = access_control_serializers.AccessControlSerializer(required=False)
     small_icon = image_serializers.ImageSerializer(required=False)
     large_icon = image_serializers.ImageSerializer(required=False)
     banner_icon = image_serializers.ImageSerializer(required=False)
