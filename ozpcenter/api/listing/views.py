@@ -426,26 +426,18 @@ class ListingSearchViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.ListingSerializer
     filter_backends = (filters.SearchFilter, )
     search_fields = ('title', 'description', 'description_short',)
-    pagination_class = None
 
     def get_queryset(self):
         filter_params = {}
         categories = self.request.query_params.getlist('category', False)
         agencies = self.request.query_params.getlist('agency', False)
         listing_types = self.request.query_params.getlist('type', False)
-        limit = self.request.query_params.get('limit', False)
-        offset = self.request.query_params.get('offset', False)
         if categories:
             filter_params['categories'] = categories
         if agencies:
             filter_params['agencies'] = agencies
         if listing_types:
             filter_params['listing_types'] = listing_types
-        if limit:
-            filter_params['limit'] = limit
-        if offset:
-            filter_params['offset'] = offset
-
 
         return model_access.filter_listings(self.request.user.username,
             filter_params)

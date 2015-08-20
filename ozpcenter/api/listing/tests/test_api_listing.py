@@ -84,25 +84,23 @@ class ListingApiTest(APITestCase):
         titles = [i['title'] for i in response.data]
         self.assertTrue('Chatter Box' in titles)
 
-    @unittest.skip('Broken in DRF 3.2.0')
     def test_search_limit(self):
         user = generic_model_access.get_profile('wsmith').user
         self.client.force_authenticate(user=user)
         url = '/api/listings/search/?limit=1'
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        titles = [i['title'] for i in response.data]
+        titles = [i['title'] for i in response.data['results']]
         self.assertTrue('Air Mail' in titles)
         self.assertEqual(len(titles), 1)
 
-    @unittest.skip('Broken in DRF 3.2.0')
     def test_search_offset_limit(self):
         user = generic_model_access.get_profile('wsmith').user
         self.client.force_authenticate(user=user)
         url = '/api/listings/search/?offset=1&limit=1'
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        titles = [i['title'] for i in response.data]
+        titles = [i['title'] for i in response.data['results']]
         self.assertTrue('Bread Basket' in titles)
         self.assertEqual(len(titles), 1)
 
