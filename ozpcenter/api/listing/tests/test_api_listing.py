@@ -411,11 +411,11 @@ class ListingApiTest(APITestCase):
         data = {'title': title, "contacts": [
                 {"email": "a@a.com", "secure_phone": "111-222-3434",
                     "unsecure_phone": "444-555-4545", "name": "me",
-                    "contact_type": "Government"
+                    "contact_type": {"name": "Government"}
                 },
                 {"email": "b@b.com", "secure_phone": "222-222-3333",
                     "unsecure_phone": "555-555-5555", "name": "you",
-                    "contact_type": "Military"
+                    "contact_type": {"name": "Military"}
                 }
             ]
         }

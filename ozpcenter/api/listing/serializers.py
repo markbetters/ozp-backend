@@ -33,6 +33,10 @@ class ContactTypeSerializer(serializers.ModelSerializer):
         model = models.ContactType
         fields = ('name',)
 
+        extra_kwargs = {
+                'name': {'validators': []}
+        }
+
 # contacts are only used in conjunction with Listings
 class ContactSerializer(serializers.ModelSerializer):
     contact_type = ContactTypeSerializer()
@@ -175,6 +179,7 @@ class ListingSerializer(serializers.ModelSerializer):
                         raise serializers.ValidationError(
                             'Contact requires a %s' % field)
 
+
         # if 'owners' in data:
         #     required_fields = ['user']
         #     for owner in data['owners']:
@@ -240,7 +245,7 @@ class ListingSerializer(serializers.ModelSerializer):
                     secure_phone=contact['secure_phone'],
                     unsecure_phone=contact['unsecure_phone'],
                     organization=contact.get('organization', None),
-                    contact_type=contact['contact_type'])
+                    contact_type=models.ContactType.objects.get(name=contact['contact_type']['name']))
                 new_contact.save()
                 listing.contacts.add(new_contact)
 
