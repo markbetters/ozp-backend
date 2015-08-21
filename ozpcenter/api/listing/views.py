@@ -162,6 +162,7 @@ class ListingActivityViewSet(viewsets.ModelViewSet):
     """
     ListingActivity endpoints are read-only
     """
+    permission_classes = (permissions.IsUser,)
     serializer_class = serializers.ListingActivitySerializer
 
     def get_queryset(self):
