@@ -28,11 +28,11 @@ logger = logging.getLogger('ozp-center')
 
 # Listing approval statuses
 class ApprovalStatus(enum.Enum):
-    IN_PROGRESS = 'In Progress'
-    PENDING = 'Pending'
-    APPROVED_ORG = 'Approved by Organization'
-    APPROVED = 'Approved'
-    REJECTED = 'Rejected'
+    IN_PROGRESS = 'IN_PROGRESS'
+    PENDING = 'PENDING'
+    APPROVED_ORG = 'APPROVED_BY_ORG'
+    APPROVED = 'APPROVED'
+    REJECTED = 'REJECTED'
 
 
 # Action for a Listing Activity
