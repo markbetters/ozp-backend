@@ -14,22 +14,28 @@ import ozpcenter.api.category.serializers as category_serializers
 import ozpcenter.api.profile.serializers as profile_serializers
 import ozpcenter.api.intent.serializers as intent_serializers
 import ozpcenter.api.agency.serializers as agency_serializers
-import ozpcenter.api.access_control.serializers as access_control_serializers
 import ozpcenter.model_access as generic_model_access
 
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center')
 
+class AccessControlSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.AccessControl
+        fields = ('title',)
+
+        extra_kwargs = {
+                'title': {'validators': []}
+        }
+
 class ContactTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.ContactType
+        fields = ('name',)
 
 # contacts are only used in conjunction with Listings
 class ContactSerializer(serializers.ModelSerializer):
-    contact_type = serializers.SlugRelatedField(
-        slug_field='name',
-        queryset=models.ContactType.objects.all()
-     )
+    contact_type = ContactTypeSerializer()
     class Meta:
         model = models.Contact
 
@@ -37,6 +43,10 @@ class ListingTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.ListingType
         fields = ('title',)
+
+        extra_kwargs = {
+                'title': {'validators': []}
+        }
 
 
 class DocUrlSerializer(serializers.ModelSerializer):
@@ -106,14 +116,14 @@ class ListingSerializer(serializers.ModelSerializer):
     #     queryset=models.AccessControl.objects.all(),
     #     required=False
     # )
-    access_control = access_control_serializers.AccessControlSerializer(required=False)
+    access_control = AccessControlSerializer(required=False)
     small_icon = image_serializers.ImageSerializer(required=False)
     large_icon = image_serializers.ImageSerializer(required=False)
     banner_icon = image_serializers.ImageSerializer(required=False)
     large_banner_icon = image_serializers.ImageSerializer(required=False)
     agency = agency_serializers.AgencySerializer(required=False, read_only=True)
     last_activity = ListingActivitySerializer(required=False, read_only=True)
-    app_type = ListingTypeSerializer(required=False)
+    listing_type = ListingTypeSerializer(required=False)
 
     class Meta:
         model = models.Listing
@@ -131,7 +141,30 @@ class ListingSerializer(serializers.ModelSerializer):
         data['what_is_new'] = data.get('what_is_new', None)
         data['description_short'] = data.get('description_short', None)
         data['requirements'] = data.get('requirements', None)
-        data['access_control'] = data.get('access_control', None)
+
+        # acces_control
+        access_control_title = data.get('access_control', None)
+        if access_control_title:
+            data['access_control'] = models.AccessControl.objects.get(
+                title=data['access_control']['title'])
+        else:
+            data['access_control'] = None
+
+        # type
+        type_title = data.get('listing_type', None)
+        if type_title:
+            data['listing_type'] = models.ListingType.objects.get(
+                title=data['listing_type']['title'])
+        else:
+            data['listing_type'] = None
+
+        # small_icon
+
+        # large_icon
+
+        # banner_icon
+
+        # large_banner_icon
 
         if 'contacts' in data:
             required_fields = ['email', 'secure_phone', 'unsecure_phone',
@@ -195,7 +228,8 @@ class ListingSerializer(serializers.ModelSerializer):
             what_is_new=validated_data['what_is_new'],
             description_short=validated_data['description_short'],
             requirements=validated_data['requirements'],
-            access_control=validated_data['access_control'])
+            access_control=validated_data['access_control'],
+            listing_type=validated_data['listing_type'])
 
         listing.save()
 
@@ -230,6 +264,9 @@ class ListingSerializer(serializers.ModelSerializer):
 
 
         return listing
+
+    def update(self, instance, validated_data):
+        return instance
 
 
 class ItemCommentSerializer(serializers.ModelSerializer):

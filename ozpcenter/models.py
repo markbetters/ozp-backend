@@ -665,7 +665,7 @@ class Listing(models.Model):
     title = models.CharField(max_length=255, unique=True)
     approved_date = models.DateTimeField(null=True)
     agency = models.ForeignKey(Agency, related_name='listings')
-    app_type = models.ForeignKey('ListingType', related_name='listings',
+    listing_type = models.ForeignKey('ListingType', related_name='listings',
         null=True)
     description = models.CharField(max_length=255, null=True)
     launch_url = models.CharField(

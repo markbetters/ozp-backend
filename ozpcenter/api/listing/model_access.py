@@ -38,7 +38,7 @@ def filter_listings(username, filter_params):
             agency__short_name__in=filter_params['agencies'])
     if 'listing_types' in filter_params:
         objects = objects.filter(
-            app_type__title__in=filter_params['listing_types'])
+            listing_type__title__in=filter_params['listing_types'])
 
     return objects
 

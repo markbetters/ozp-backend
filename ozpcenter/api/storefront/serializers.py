@@ -17,7 +17,7 @@ logger = logging.getLogger('ozp-center')
 class AgencySerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Agency
-        fields = ('short_name',)
+        fields = ('short_name', 'title')
 
 class GroupSerializer(serializers.ModelSerializer):
     class Meta:
@@ -38,7 +38,13 @@ class ProfileSerializer(serializers.ModelSerializer):
         model = models.Profile
         fields = ('user',)
 
+class ContactTypeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.ContactType
+        fields = ('name',)
+
 class ContactSerializer(serializers.ModelSerializer):
+    contact_type = ContactTypeSerializer()
     class Meta:
         model = models.Contact
 

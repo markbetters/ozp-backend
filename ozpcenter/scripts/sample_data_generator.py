@@ -399,7 +399,7 @@ def run():
     listing = models.Listing(
         title='Air Mail',
         agency=minitrue,
-        app_type=web_app,
+        listing_type=web_app,
         description='Sends mail via air',
         launch_url='https://www.google.com/airmail',
         version_name='1.0.0',
@@ -512,7 +512,7 @@ def run():
     listing = models.Listing(
         title='Bread Basket',
         agency=minitrue,
-        app_type=web_app,
+        listing_type=web_app,
         description='Carries delicious bread',
         launch_url='https://www.google.com/breadbasket',
         version_name='1.0.0',
@@ -579,7 +579,7 @@ def run():
     listing = models.Listing(
         title='Chart Course',
         agency=minitrue,
-        app_type=web_app,
+        listing_type=web_app,
         description='Chart your course',
         launch_url='https://www.google.com/chartcourse',
         version_name='1.0.0',
@@ -637,7 +637,7 @@ def run():
     listing = models.Listing(
         title='Chatter Box',
         agency=miniluv,
-        app_type=web_app,
+        listing_type=web_app,
         description='Chat with people',
         launch_url='https://www.google.com/chatterbox',
         version_name='1.0.0',
@@ -693,7 +693,7 @@ def run():
     listing = models.Listing(
         title='Clipboard',
         agency=minitrue,
-        app_type=web_app,
+        listing_type=web_app,
         description='Clip stuff on a board',
         launch_url='https://www.google.com/clipboard',
         version_name='1.0.0',
@@ -750,7 +750,7 @@ def run():
     listing = models.Listing(
         title='FrameIt',
         agency=minitrue,
-        app_type=web_app,
+        listing_type=web_app,
         description='Show things in an iframe',
         launch_url='https://www.google.com/frameit',
         version_name='1.0.0',
@@ -807,7 +807,7 @@ def run():
     listing = models.Listing(
         title='Hatch Latch',
         agency=minitrue,
-        app_type=web_app,
+        listing_type=web_app,
         description='Hatch latches',
         launch_url='https://www.google.com/hatchlatch',
         version_name='1.0.0',
@@ -865,7 +865,7 @@ def run():
     listing = models.Listing(
         title='JotSpot',
         agency=minitrue,
-        app_type=web_app,
+        listing_type=web_app,
         description='Jot things down',
         launch_url='https://www.google.com/jotspot',
         version_name='1.0.0',
