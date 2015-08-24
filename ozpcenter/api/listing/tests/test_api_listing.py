@@ -542,6 +542,23 @@ class ListingApiTest(APITestCase):
         self.assertTrue(2 in screenshots_large)
         self.assertTrue(4 in screenshots_large)
 
+        # fields that should come back with default values
+        self.assertEqual(response.data['approved_date'], None)
+        self.assertEqual(response.data['approval_status'],
+            models.ApprovalStatus.IN_PROGRESS)
+        self.assertEqual(response.data['is_enabled'], True)
+        self.assertEqual(response.data['is_featured'], False)
+        self.assertEqual(response.data['avg_rate'], '0.0')
+        self.assertEqual(response.data['total_votes'], 0)
+        self.assertEqual(response.data['total_rate5'], 0)
+        self.assertEqual(response.data['total_rate4'], 0)
+        self.assertEqual(response.data['total_rate3'], 0)
+        self.assertEqual(response.data['total_rate2'], 0)
+        self.assertEqual(response.data['total_rate1'], 0)
+        self.assertEqual(response.data['total_comments'], 0)
+        self.assertEqual(response.data['singleton'], False)
+        self.assertEqual(response.data['required_listings'], None)
+
     def test_delete_listing(self):
         user = generic_model_access.get_profile('wsmith').user
         self.client.force_authenticate(user=user)
