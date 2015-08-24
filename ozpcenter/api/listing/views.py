@@ -309,7 +309,14 @@ class ListingViewSet(viewsets.ModelViewSet):
         """
         Delete a listing
         """
-        pass
+        queryset = self.get_queryset()
+        listing = get_object_or_404(queryset, pk=pk)
+        try:
+            model_access.delete_listing(request.user.username, listing)
+        except errors.PermissionDenied:
+            return Response('Permission Denied',
+                status=status.HTTP_403_FORBIDDEN)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
     def update(self, request, pk=None):
         """

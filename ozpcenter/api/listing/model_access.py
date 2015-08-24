@@ -365,3 +365,21 @@ def delete_listing_review(username, review):
     _update_rating(username, listing)
     return listing
 
+def delete_listing(username, listing):
+    """
+    TODO: need a way to keep track of this listing as being deleted.
+
+    for now just remove
+    """
+    user = generic_model_access.get_profile(username)
+    app_owners = [i.user.username for i in listing.owners.all()]
+    # ensure user is the author of this review, or that user is an org
+    # steward or apps mall steward
+    priv_roles = ['APPS_MALL_STEWARD', 'ORG_STEWARD']
+    if user.highest_role() in priv_roles:
+        pass
+    elif username not in app_owners:
+        raise errors.PermissionDenied()
+
+    listing.delete()
+

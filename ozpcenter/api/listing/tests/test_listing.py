@@ -262,3 +262,23 @@ class ListingTest(TestCase):
             action=models.Action.REVIEW_DELETED)
         enabled_activity = listing_activities[0]
         self.assertEqual(enabled_activity.author.user.username, username)
+
+    def test_delete_listing(self):
+        username = 'wsmith'
+        air_mail = models.Listing.objects.for_user(username).get(
+            title='Air Mail')
+        model_access.delete_listing(username, air_mail)
+        self.assertEquals(0, models.Listing.objects.for_user(username).filter(
+            title='Air Mail').count())
+
+    def test_delete_listing_no_permission(self):
+        username = 'jones'
+        air_mail = models.Listing.objects.for_user(username).get(
+            title='Air Mail')
+        self.assertRaises(errors.PermissionDenied,
+            model_access.delete_listing,
+            username, air_mail)
+
+        self.assertEquals(1, models.Listing.objects.for_user(username).filter(
+            title='Air Mail').count())
+

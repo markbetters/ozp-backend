@@ -541,3 +541,17 @@ class ListingApiTest(APITestCase):
             screenshots_large.append(s['large_image']['id'])
         self.assertTrue(2 in screenshots_large)
         self.assertTrue(4 in screenshots_large)
+
+    def test_delete_listing(self):
+        user = generic_model_access.get_profile('wsmith').user
+        self.client.force_authenticate(user=user)
+        url = '/api/listing/1/'
+        response = self.client.delete(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+    def test_delete_listing_permission_denied(self):
+        user = generic_model_access.get_profile('jones').user
+        self.client.force_authenticate(user=user)
+        url = '/api/listing/1/'
+        response = self.client.delete(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
