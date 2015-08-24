@@ -169,6 +169,12 @@ def run():
         icon=icon)
     i.save()
 
+    i = models.Intent(action='/application/json/edit',
+        media_type='vnd.ozp-intent-v1+json.json',
+        label='edit',
+        icon=icon)
+    i.save()
+
     ############################################################################
     #                           Organizations
     ############################################################################

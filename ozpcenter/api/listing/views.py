@@ -284,7 +284,7 @@ class ListingViewSet(viewsets.ModelViewSet):
         try:
           logger.debug('inside ListingViewSet.create')
           serializer = serializers.ListingSerializer(data=request.data,
-              context={'request': request})
+              context={'request': request}, partial=True)
           if not serializer.is_valid():
               logger.error('%s' % serializer.errors)
               return Response(serializer.errors,

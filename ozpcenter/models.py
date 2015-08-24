@@ -204,8 +204,10 @@ class Image(models.Model):
 class Tag(models.Model):
     """
     Tag name (for a listing)
+
+    TODO: this will work differently than legacy
     """
-    name = models.CharField(max_length=16)
+    name = models.CharField(max_length=16, unique=True)
 
     def __repr__(self):
         return self.name
@@ -377,6 +379,8 @@ class DocUrl(models.Model):
 
     Additional db.relationships:
         * listing
+
+    # TODO: unique_together constraint on name and url
     """
     name = models.CharField(max_length=255)
     url = models.CharField(

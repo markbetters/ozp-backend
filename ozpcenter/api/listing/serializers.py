@@ -6,13 +6,11 @@ import logging
 import django.contrib.auth
 
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 
 import ozpcenter.models as models
 
-import ozpcenter.api.image.serializers as image_serializers
-import ozpcenter.api.category.serializers as category_serializers
 import ozpcenter.api.profile.serializers as profile_serializers
-import ozpcenter.api.intent.serializers as intent_serializers
 import ozpcenter.api.agency.serializers as agency_serializers
 import ozpcenter.model_access as generic_model_access
 
@@ -25,8 +23,23 @@ class AccessControlSerializer(serializers.ModelSerializer):
         fields = ('title',)
 
         extra_kwargs = {
-                'title': {'validators': []}
+            'title': {'validators': []}
         }
+
+class ImageSerializer(serializers.HyperlinkedModelSerializer):
+    access_control = AccessControlSerializer(required=False)
+    class Meta:
+        model = models.Image
+        fields = ('url', 'id', 'access_control')
+
+        extra_kwargs = {
+            'access_control': {'validators': []},
+            "id": {
+                "read_only": False,
+                "required": False,
+            }
+        }
+
 
 class ContactTypeSerializer(serializers.ModelSerializer):
     class Meta:
@@ -34,7 +47,7 @@ class ContactTypeSerializer(serializers.ModelSerializer):
         fields = ('name',)
 
         extra_kwargs = {
-                'name': {'validators': []}
+            'name': {'validators': []}
         }
 
 # contacts are only used in conjunction with Listings
@@ -49,13 +62,14 @@ class ListingTypeSerializer(serializers.ModelSerializer):
         fields = ('title',)
 
         extra_kwargs = {
-                'title': {'validators': []}
+            'title': {'validators': []}
         }
 
 
 class DocUrlSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.DocUrl
+        fields = ('name', 'url')
 
 
 # class RejectionListingSerializer(serializers.ModelSerializer):
@@ -64,8 +78,8 @@ class DocUrlSerializer(serializers.ModelSerializer):
 
 
 class ScreenshotSerializer(serializers.ModelSerializer):
-    small_image = image_serializers.ImageSerializer()
-    large_image = image_serializers.ImageSerializer()
+    small_image = ImageSerializer()
+    large_image = ImageSerializer()
     class Meta:
         model = models.Screenshot
         fields = ('small_image', 'large_image')
@@ -74,26 +88,56 @@ class ScreenshotSerializer(serializers.ModelSerializer):
 class TagSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Tag
+        fields = ('name',)
+
+        extra_kwargs = {
+            'name': {'validators': []}
+        }
 
 
 class ChangeDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.ChangeDetail
 
+
 class ListingActivitySerializer(serializers.ModelSerializer):
     class Meta:
         model = models.ListingActivity
         fields = ('action',)
 
+class IntentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Intent
+        # TODO: is action the right thing?
+        fields = ('action',)
 
-# class CreateListingUserSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = django.contrib.auth.models.User
-#         fields = ('username',)
+        extra_kwargs = {
+            'action': {'validators': []}
+        }
+
+
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Category
+        fields = ('title', 'description')
+
+        extra_kwargs = {
+            'title': {'validators': []}
+        }
+
+
+class CreateListingUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = django.contrib.auth.models.User
+        fields = ('username',)
+
+        extra_kwargs = {
+            'username': {'validators': []}
+        }
 
 
 class CreateListingProfileSerializer(serializers.ModelSerializer):
-    user = profile_serializers.ShortUserSerializer()
+    user = CreateListingUserSerializer()
     class Meta:
         model = models.Profile
         fields = ('user', 'display_name', 'id')
@@ -104,27 +148,16 @@ class ListingSerializer(serializers.ModelSerializer):
     screenshots = ScreenshotSerializer(many=True, required=False)
     doc_urls  = DocUrlSerializer(many=True, required=False)
     owners = CreateListingProfileSerializer(required=False, many=True)
-    # owners = serializers.SlugRelatedField(
-    #     slug_field='username',
-    #     queryset=django.contrib.auth.models.User.objects.all(),
-    #     many=True
-    # )
-    categories  = category_serializers.CategorySerializer(many=True,
+    categories = CategorySerializer(many=True,
         required=False)
     tags = TagSerializer(many=True, required=False)
     contacts = ContactSerializer(many=True, required=False)
-    intents = intent_serializers.IntentSerializer(many=True, required=False)
-    # access_control = serializers.SlugRelatedField(
-    #     slug_field='title',
-    #     source='*',
-    #     queryset=models.AccessControl.objects.all(),
-    #     required=False
-    # )
+    intents = IntentSerializer(many=True, required=False)
     access_control = AccessControlSerializer(required=False)
-    small_icon = image_serializers.ImageSerializer(required=False)
-    large_icon = image_serializers.ImageSerializer(required=False)
-    banner_icon = image_serializers.ImageSerializer(required=False)
-    large_banner_icon = image_serializers.ImageSerializer(required=False)
+    small_icon = ImageSerializer(required=False)
+    large_icon = ImageSerializer(required=False)
+    banner_icon = ImageSerializer(required=False)
+    large_banner_icon = ImageSerializer(required=False)
     agency = agency_serializers.AgencySerializer(required=False, read_only=True)
     last_activity = ListingActivitySerializer(required=False, read_only=True)
     listing_type = ListingTypeSerializer(required=False)
@@ -134,7 +167,7 @@ class ListingSerializer(serializers.ModelSerializer):
         depth = 2
 
     def validate(self, data):
-        logger.info('inside ListingSerializer validate')
+        logger.info('inside ListingSerializer validate. data: %s' % data)
         if 'title' not in data:
             raise serializers.ValidationError('Title is required')
 
@@ -154,7 +187,7 @@ class ListingSerializer(serializers.ModelSerializer):
         else:
             data['access_control'] = None
 
-        # type
+        # listing_type
         type_title = data.get('listing_type', None)
         if type_title:
             data['listing_type'] = models.ListingType.objects.get(
@@ -163,12 +196,36 @@ class ListingSerializer(serializers.ModelSerializer):
             data['listing_type'] = None
 
         # small_icon
+        small_icon = data.get('small_icon', None)
+        if small_icon:
+            data['small_icon'] = models.Image.objects.get(
+                id=data['small_icon']['id'])
+        else:
+            data['small_icon'] = None
 
         # large_icon
+        large_icon = data.get('large_icon', None)
+        if large_icon:
+            data['large_icon'] = models.Image.objects.get(
+                id=data['large_icon']['id'])
+        else:
+            data['large_icon'] = None
 
         # banner_icon
+        banner_icon = data.get('banner_icon', None)
+        if banner_icon:
+            data['banner_icon'] = models.Image.objects.get(
+                id=data['banner_icon']['id'])
+        else:
+            data['banner_icon'] = None
 
         # large_banner_icon
+        large_banner_icon = data.get('large_banner_icon', None)
+        if large_banner_icon:
+            data['large_banner_icon'] = models.Image.objects.get(
+                id=data['large_banner_icon']['id'])
+        else:
+            data['large_banner_icon'] = None
 
         if 'contacts' in data:
             required_fields = ['email', 'secure_phone', 'unsecure_phone',
@@ -180,24 +237,33 @@ class ListingSerializer(serializers.ModelSerializer):
                             'Contact requires a %s' % field)
 
 
-        # if 'owners' in data:
-        #     required_fields = ['user']
-        #     for owner in data['owners']:
-        #         for field in required_fields:
-        #             if field not in contact:
-        #                 raise serializers.ValidationError(
-        #                     'Owner requires a %s' % field)
+        owners = []
+        if 'owners' in data:
+            for owner in data['owners']:
+                owners.append(models.Profile.objects.get(
+                    user__username=owner['user']['username']))
+        data['owners'] = owners
 
+        categories = []
         if 'categories' in data:
-            pass
+            for category in data['categories']:
+                categories.append(models.Category.objects.get(
+                    title=category['title']))
+        data['categories'] = categories
 
+        # tags will be created (if necessary) in create()
         if 'tags' in data:
             pass
 
+        intents = []
         if 'intents' in data:
-            pass
+            for intent in data['intents']:
+                intents.append(models.Intent.objects.get(
+                    action=intent['action']))
+        data['intents'] = intents
 
-        if 'tags' in data:
+        # doc urls will be created in create()
+        if 'doc_urls' in data:
             pass
 
         return data
@@ -211,20 +277,7 @@ class ListingSerializer(serializers.ModelSerializer):
         # TODO: what to use if user belongs to multiple agencies?
         agency = user.organizations.all()[0]
 
-        # access_control
-
-        # type
-
-        # small_icon
-
-        # large_icon
-
-        # banner_icon
-
-        # large_banner_icon
-
-        # required_listings
-
+        # TODO required_listings
         listing = models.Listing(title=title, agency=agency,
             description=validated_data['description'],
             launch_url=validated_data['launch_url'],
@@ -234,7 +287,11 @@ class ListingSerializer(serializers.ModelSerializer):
             description_short=validated_data['description_short'],
             requirements=validated_data['requirements'],
             access_control=validated_data['access_control'],
-            listing_type=validated_data['listing_type'])
+            listing_type=validated_data['listing_type'],
+            small_icon=validated_data['small_icon'],
+            large_icon=validated_data['large_icon'],
+            banner_icon=validated_data['banner_icon'],
+            large_banner_icon=validated_data['large_banner_icon'])
 
         listing.save()
 
@@ -250,23 +307,28 @@ class ListingSerializer(serializers.ModelSerializer):
                 listing.contacts.add(new_contact)
 
         if 'owners' in validated_data:
-            logger.debug('owners: %s' % validated_data['owners'])
             for owner in validated_data['owners']:
-                print ('adding owner: %s' % owner)
                 listing.owners.add(owner)
 
         if 'categories' in validated_data:
-            pass
+            for category in validated_data['categories']:
+                listing.categories.add(category)
 
+        # tags will be automatically created if necessary
         if 'tags' in validated_data:
-            pass
+            for tag in validated_data['tags']:
+                obj, created = models.Tag.objects.get_or_create(
+                    name=tag['name'])
+                listing.tags.add(obj)
 
         if 'intents' in validated_data:
-            pass
+            for intent in validated_data['intents']:
+                listing.intents.add(intent)
 
-        if 'tags' in validated_data:
-            pass
-
+        if 'doc_urls' in validated_data:
+            for d in validated_data['doc_urls']:
+                doc_url = models.DocUrl(name=d['name'], url=d['url'], listing=listing)
+                doc_url.save()
 
         return listing
 

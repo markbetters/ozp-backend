@@ -402,13 +402,21 @@ class ListingApiTest(APITestCase):
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_create_listing_contacts(self):
-        # create a new listing with contacts
+    def test_create_listing_full(self):
         user = generic_model_access.get_profile('julia').user
         self.client.force_authenticate(user=user)
         url = '/api/listing/'
         title = 'julias app'
-        data = {'title': title, "contacts": [
+        data = {
+            "title": title,
+            "description": "description of app",
+            "launch_url": "http://www.google.com/launch",
+            "version_name": "1.0.0",
+            "unique_name": "org.apps.julia-one",
+            "what_is_new": "nothing is new",
+            "description_short": "a shorter description",
+            "requirements": "None",
+            "contacts": [
                 {"email": "a@a.com", "secure_phone": "111-222-3434",
                     "unsecure_phone": "444-555-4545", "name": "me",
                     "contact_type": {"name": "Government"}
@@ -417,18 +425,100 @@ class ListingApiTest(APITestCase):
                     "unsecure_phone": "555-555-5555", "name": "you",
                     "contact_type": {"name": "Military"}
                 }
+            ],
+            "access_control": {"title": "UNCLASSIFIED"},
+            "listing_type": {"title": "web application"},
+            "small_icon": {"id": 1},
+            "large_icon": {"id": 2},
+            "banner_icon": {"id": 3},
+            "large_banner_icon": {"id": 4},
+            "categories": [
+                {"title": "Business"},
+                {"title": "Education"}
+            ],
+            "owners": [
+                {"user": {"username": "wsmith"}},
+                {"user": {"username": "julia"}}
+            ],
+            "tags": [
+                {"name": "demo"},
+                {"name": "map"}
+            ],
+            "intents": [
+                {"action": "/application/json/view"},
+                {"action": "/application/json/edit"}
+            ],
+            "doc_urls": [
+                {"name": "wiki", "url": "http://www.google.com/wiki"},
+                {"name": "guide", "url": "http://www.google.com/guide"}
             ]
+
         }
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        # title
         self.assertEqual(response.data['title'], title)
+        # description
+        self.assertEqual(response.data['description'], 'description of app')
+        # launch_url
+        self.assertEqual(response.data['launch_url'],
+            'http://www.google.com/launch')
+        # version_name
+        self.assertEqual(response.data['version_name'], '1.0.0')
+        # unique_name
+        self.assertEqual(response.data['unique_name'], 'org.apps.julia-one')
+        # what_is_new
+        self.assertEqual(response.data['what_is_new'], 'nothing is new')
+        # description_short
+        self.assertEqual(response.data['description_short'],
+            'a shorter description')
+        # requirements
+        self.assertEqual(response.data['requirements'], 'None')
+        # contacts
         self.assertEqual(len(response.data['contacts']), 2)
         names = []
         for c in response.data['contacts']:
             names.append(c['name'])
         self.assertTrue('me' in names)
         self.assertTrue('you' in names)
-
-
-
-
+        # access_control
+        self.assertEqual(response.data['access_control']['title'],
+            'UNCLASSIFIED')
+        # listing_type
+        self.assertEqual(response.data['listing_type']['title'],
+            'web application')
+        # icons
+        self.assertEqual(response.data['small_icon']['id'], 1)
+        self.assertEqual(response.data['large_icon']['id'], 2)
+        self.assertEqual(response.data['banner_icon']['id'], 3)
+        self.assertEqual(response.data['large_banner_icon']['id'], 4)
+        # categories
+        categories = []
+        for c in response.data['categories']:
+            categories.append(c['title'])
+        self.assertTrue('Business' in categories)
+        self.assertTrue('Education' in categories)
+        # owners
+        owners = []
+        for o in response.data['owners']:
+            owners.append(o['user']['username'])
+        self.assertTrue('wsmith' in owners)
+        self.assertTrue('julia' in owners)
+        # tags
+        tags = []
+        for t in response.data['tags']:
+            tags.append(t['name'])
+        self.assertTrue('demo' in tags)
+        self.assertTrue('map' in tags)
+        # intents
+        intents = []
+        for i in response.data['intents']:
+            intents.append(i['action'])
+        self.assertTrue('/application/json/view' in intents)
+        self.assertTrue('/application/json/edit' in intents)
+        # doc_urls
+        doc_urls = []
+        for d in response.data['doc_urls']:
+            doc_urls.append(d['url'])
+        self.assertTrue('http://www.google.com/wiki' in doc_urls)
+        self.assertTrue('http://www.google.com/guide' in doc_urls)
