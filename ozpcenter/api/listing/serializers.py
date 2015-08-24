@@ -178,6 +178,7 @@ class ListingSerializer(serializers.ModelSerializer):
         data['what_is_new'] = data.get('what_is_new', None)
         data['description_short'] = data.get('description_short', None)
         data['requirements'] = data.get('requirements', None)
+        data['is_private'] = data.get('is_private', False)
 
         # acces_control
         access_control_title = data.get('access_control', None)
@@ -266,6 +267,10 @@ class ListingSerializer(serializers.ModelSerializer):
         if 'doc_urls' in data:
             pass
 
+        # screenshots will be created in create()
+        if 'screenshots' in data:
+            pass
+
         return data
 
     def create(self, validated_data):
@@ -291,7 +296,8 @@ class ListingSerializer(serializers.ModelSerializer):
             small_icon=validated_data['small_icon'],
             large_icon=validated_data['large_icon'],
             banner_icon=validated_data['banner_icon'],
-            large_banner_icon=validated_data['large_banner_icon'])
+            large_banner_icon=validated_data['large_banner_icon'],
+            is_private=validated_data['is_private'])
 
         listing.save()
 
@@ -325,10 +331,20 @@ class ListingSerializer(serializers.ModelSerializer):
             for intent in validated_data['intents']:
                 listing.intents.add(intent)
 
+        # doc_urls will be automatically created
         if 'doc_urls' in validated_data:
             for d in validated_data['doc_urls']:
                 doc_url = models.DocUrl(name=d['name'], url=d['url'], listing=listing)
                 doc_url.save()
+
+        # screenshots will be automatically created
+        if 'screenshots' in validated_data:
+            for s in validated_data['screenshots']:
+                screenshot = models.Screenshot(
+                    small_image=models.Image.objects.get(id=s['small_image']['id']),
+                    large_image=models.Image.objects.get(id=s['large_image']['id']),
+                    listing=listing)
+                screenshot.save()
 
         return listing
 

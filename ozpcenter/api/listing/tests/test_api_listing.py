@@ -416,6 +416,7 @@ class ListingApiTest(APITestCase):
             "what_is_new": "nothing is new",
             "description_short": "a shorter description",
             "requirements": "None",
+            "is_private": "true",
             "contacts": [
                 {"email": "a@a.com", "secure_phone": "111-222-3434",
                     "unsecure_phone": "444-555-4545", "name": "me",
@@ -451,6 +452,10 @@ class ListingApiTest(APITestCase):
             "doc_urls": [
                 {"name": "wiki", "url": "http://www.google.com/wiki"},
                 {"name": "guide", "url": "http://www.google.com/guide"}
+            ],
+            "screenshots": [
+                {"small_image": {"id": 1}, "large_image": {"id": 2}},
+                {"small_image": {"id": 3}, "large_image": {"id": 4}}
             ]
 
         }
@@ -474,6 +479,8 @@ class ListingApiTest(APITestCase):
             'a shorter description')
         # requirements
         self.assertEqual(response.data['requirements'], 'None')
+        # is_private
+        self.assertEqual(response.data['is_private'], True)
         # contacts
         self.assertEqual(len(response.data['contacts']), 2)
         names = []
@@ -522,3 +529,15 @@ class ListingApiTest(APITestCase):
             doc_urls.append(d['url'])
         self.assertTrue('http://www.google.com/wiki' in doc_urls)
         self.assertTrue('http://www.google.com/guide' in doc_urls)
+        # screenshots
+        screenshots_small = []
+        for s in response.data['screenshots']:
+            screenshots_small.append(s['small_image']['id'])
+        self.assertTrue(1 in screenshots_small)
+        self.assertTrue(3 in screenshots_small)
+
+        screenshots_large = []
+        for s in response.data['screenshots']:
+            screenshots_large.append(s['large_image']['id'])
+        self.assertTrue(2 in screenshots_large)
+        self.assertTrue(4 in screenshots_large)
