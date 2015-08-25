@@ -20,3 +20,5 @@ MEDIA_TYPE_REGEX = r'\w'
 
 # valid image types
 VALID_IMAGE_TYPES = ['png', 'jpg', 'jpeg', 'gif']
+
+DEFAULT_ACCESS_CONTROL = 'UNCLASSIFIED'

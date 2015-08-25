@@ -456,7 +456,6 @@ def run():
         large_image=large_img,
         listing=listing)
     screenshot.save()
-    listing.screenshots.add(screenshot)
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     #                           Notifications
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -487,6 +486,16 @@ def run():
         author=syme,
         listing=listing)
     air_mail_comment_3.save()
+
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    #                           Document URLs
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    wiki = models.DocUrl(name='wiki', url='http://www.google.com/wiki',
+        listing=listing)
+    wiki.save()
+    guide = models.DocUrl(name='guide', url='http://www.google.com/guide',
+        listing=listing)
+    guide.save()
 
     listing_model_access.create_listing(winston, listing)
     listing_model_access.submit_listing(winston, listing)
@@ -542,7 +551,6 @@ def run():
     listing.owners.add(julia)
     listing.categories.add(health_fitness)
     listing.categories.add(shopping)
-    listing.screenshots.add(screenshot)
 
     listing.tags.add(demo)
     listing.tags.add(example)
@@ -609,7 +617,6 @@ def run():
     listing.categories.add(tools)
     listing.categories.add(education)
     listing.tags.add(demo)
-    listing.screenshots.add(screenshot)
 
     listing_model_access.create_listing(winston, listing)
     listing_model_access.submit_listing(winston, listing)
@@ -666,7 +673,6 @@ def run():
     listing.owners.add(julia)
     listing.categories.add(communication)
     listing.tags.add(demo)
-    listing.screenshots.add(screenshot)
 
     listing_model_access.create_listing(julia, listing)
     listing_model_access.submit_listing(julia, listing)
@@ -723,7 +729,6 @@ def run():
     listing.categories.add(tools)
     listing.categories.add(education)
     listing.tags.add(demo)
-    listing.screenshots.add(screenshot)
 
     listing_model_access.create_listing(winston, listing)
     listing_model_access.submit_listing(winston, listing)
@@ -780,7 +785,6 @@ def run():
     listing.categories.add(tools)
     listing.categories.add(education)
     listing.tags.add(demo)
-    listing.screenshots.add(screenshot)
 
     listing_model_access.create_listing(winston, listing)
     listing_model_access.submit_listing(winston, listing)
@@ -838,7 +842,6 @@ def run():
     listing.categories.add(education)
     listing.categories.add(health_fitness)
     listing.tags.add(demo)
-    listing.screenshots.add(screenshot)
 
     listing_model_access.create_listing(winston, listing)
     listing_model_access.submit_listing(winston, listing)
@@ -895,7 +898,6 @@ def run():
     listing.categories.add(tools)
     listing.categories.add(education)
     listing.tags.add(demo)
-    listing.screenshots.add(screenshot)
 
     listing_model_access.create_listing(winston, listing)
     listing_model_access.submit_listing(winston, listing)

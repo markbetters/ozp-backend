@@ -9,10 +9,12 @@ from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
 import ozpcenter.models as models
+import ozpcenter.constants as constants
 
 import ozpcenter.api.profile.serializers as profile_serializers
 import ozpcenter.api.agency.serializers as agency_serializers
 import ozpcenter.model_access as generic_model_access
+import ozpcenter.errors as errors
 
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center')
@@ -154,19 +156,20 @@ class ListingSerializer(serializers.ModelSerializer):
     contacts = ContactSerializer(many=True, required=False)
     intents = IntentSerializer(many=True, required=False)
     access_control = AccessControlSerializer(required=False)
-    small_icon = ImageSerializer(required=False)
-    large_icon = ImageSerializer(required=False)
-    banner_icon = ImageSerializer(required=False)
-    large_banner_icon = ImageSerializer(required=False)
+    small_icon = ImageSerializer(required=False, allow_null=True)
+    large_icon = ImageSerializer(required=False, allow_null=True)
+    banner_icon = ImageSerializer(required=False, allow_null=True)
+    large_banner_icon = ImageSerializer(required=False, allow_null=True)
     agency = agency_serializers.AgencySerializer(required=False, read_only=True)
     last_activity = ListingActivitySerializer(required=False, read_only=True)
-    listing_type = ListingTypeSerializer(required=False)
+    listing_type = ListingTypeSerializer(required=False, allow_null=True)
 
     class Meta:
         model = models.Listing
         depth = 2
 
     def validate(self, data):
+        logger.debug('inside ListingSerializer.validate')
         if 'title' not in data:
             raise serializers.ValidationError('Title is required')
 
@@ -182,6 +185,10 @@ class ListingSerializer(serializers.ModelSerializer):
         # only checked on update, not create
         data['is_enabled'] = data.get('is_enabled', False)
         data['is_featured'] = data.get('is_featured', False)
+        if data['is_featured']:
+            # TODO user must be an org steward
+            pass
+        data['approval_status'] = data.get('approval_status', None)
 
         # acces_control
         access_control_title = data.get('access_control', None)
@@ -285,6 +292,11 @@ class ListingSerializer(serializers.ModelSerializer):
         # TODO: what to use if user belongs to multiple agencies?
         agency = user.organizations.all()[0]
 
+        # assign a default access_control level if none is provided
+        if not validated_data['access_control']:
+            validated_data['access_control'] = models.AccessControl.objects.get(
+                title=constants.DEFAULT_ACCESS_CONTROL)
+
         # TODO required_listings
         listing = models.Listing(title=title, agency=agency,
             description=validated_data['description'],
@@ -362,10 +374,23 @@ class ListingSerializer(serializers.ModelSerializer):
         instance.unique_name = validated_data['unique_name']
         instance.what_is_new = validated_data['what_is_new']
         instance.is_private = validated_data['is_private']
-        # TODO: permission check
         instance.is_enabled = validated_data['is_enabled']
-        # TODO: permission check
-        instance.is_featured = validated_data['is_featured']
+
+        if validated_data['is_featured'] != instance.is_featured:
+            if user.highest_role not in ['APPS_MALL_STEWARD', 'ORG_STEWARD']:
+                raise errors.PermissionDenied('Only stewards can change is_featured setting of a listing')
+            instance.is_featured = validated_data['is_featured']
+
+        s = validated_data['approval_status']
+        if s and  s != instance.approval_status:
+            user = generic_model_access.get_profile(
+                self.context['request'].user.username)
+            if s == models.ApprovalStatus.APPROVED and user.highest_role() != 'APPS_MALL_STEWARD':
+                raise errors.PermissionDenied('Only an APPS_MALL_STEWARD can mark a listing as APPROVED')
+            if s == models.ApprovalStatus.APPROVED_ORG and user.highest_role not in ['APPS_MALL_STEWARD', 'ORG_STEWARD']:
+                raise errors.PermissionDenied('Only stewards can mark a listing as APPROVED_ORG')
+
+            instance.approval_status = validated_data['approval_status']
 
         instance.access_control = validated_data['access_control']
         instance.listing_type = validated_data['listing_type']
@@ -406,17 +431,35 @@ class ListingSerializer(serializers.ModelSerializer):
                     name=tag['name'])
                 instance.tags.add(obj)
 
+        if 'intents' in validated_data:
+            instance.intents.clear()
+            for intent in validated_data['intents']:
+                instance.intents.add(intent)
+
+        # doc_urls will be automatically created
+        if 'doc_urls' in validated_data:
+            # TODO: remove existing ones
+            for d in validated_data['doc_urls']:
+                obj, created = models.DocUrl.objects.get_or_create(
+                    name=d['name'], url=d['url'], listing=instance)
+
+        # screenshots will be automatically created
+        if 'screenshots' in validated_data:
+            # TODO: think about this - this is one reason to have a UUID for each image,
+            # since removing these and re-adding them will change their DB id (pk)
+            current_screenshots = models.Screenshot.objects.filter(
+                listing=instance)
+            current_screenshots.delete()
+            for s in validated_data['screenshots']:
+                obj, created = models.Screenshot.objects.get_or_create(
+                    small_image=models.Image.objects.get(
+                        id=s['small_image']['id']),
+                    large_image=models.Image.objects.get(
+                        id=s['large_image']['id']),
+                    listing=instance)
+
         # TODO: allow agency change?
-
-
-
         instance.save()
-
-        # special fields:
-
-        # approval_status
-        # is_enabled
-        # is_featured
         return instance
 
 

@@ -700,38 +700,74 @@ class ListingApiTest(APITestCase):
         self.assertEqual(len(response.data['intents']), 2)
         self.assertTrue('/application/json/view' in intents)
         self.assertTrue('/application/json/edit' in intents)
-        # # doc_urls
-        # doc_urls = []
-        # for d in response.data['doc_urls']:
-        #     doc_urls.append(d['url'])
-        # self.assertTrue('http://www.google.com/wiki' in doc_urls)
-        # self.assertTrue('http://www.google.com/guide' in doc_urls)
-        # # screenshots
-        # screenshots_small = []
-        # for s in response.data['screenshots']:
-        #     screenshots_small.append(s['small_image']['id'])
-        # self.assertTrue(1 in screenshots_small)
-        # self.assertTrue(3 in screenshots_small)
+        # doc_urls
+        doc_urls = []
+        for d in response.data['doc_urls']:
+            doc_urls.append(d['url'])
+        self.assertEqual(len(response.data['doc_urls']), 2)
+        self.assertTrue('http://www.google.com/wiki' in doc_urls)
+        self.assertTrue('http://www.google.com/guide' in doc_urls)
+        # screenshots
+        screenshots_small = []
+        self.assertEqual(len(response.data['screenshots']), 2)
+        for s in response.data['screenshots']:
+            screenshots_small.append(s['small_image']['id'])
+        self.assertTrue(1 in screenshots_small)
+        self.assertTrue(3 in screenshots_small)
 
-        # screenshots_large = []
-        # for s in response.data['screenshots']:
-        #     screenshots_large.append(s['large_image']['id'])
-        # self.assertTrue(2 in screenshots_large)
-        # self.assertTrue(4 in screenshots_large)
+        screenshots_large = []
+        for s in response.data['screenshots']:
+            screenshots_large.append(s['large_image']['id'])
+        self.assertTrue(2 in screenshots_large)
+        self.assertTrue(4 in screenshots_large)
 
 
-        # self.assertEqual(response.data['approved_date'], None)
-        # self.assertEqual(response.data['approval_status'],
-        #     models.ApprovalStatus.IN_PROGRESS)
+        self.assertEqual(response.data['approved_date'], None)
+        self.assertEqual(response.data['approval_status'],
+            models.ApprovalStatus.APPROVED)
         self.assertEqual(response.data['is_enabled'], False)
         self.assertEqual(response.data['is_featured'], True)
-        # self.assertEqual(response.data['avg_rate'], '0.0')
-        # self.assertEqual(response.data['total_votes'], 0)
-        # self.assertEqual(response.data['total_rate5'], 0)
-        # self.assertEqual(response.data['total_rate4'], 0)
-        # self.assertEqual(response.data['total_rate3'], 0)
-        # self.assertEqual(response.data['total_rate2'], 0)
-        # self.assertEqual(response.data['total_rate1'], 0)
-        # self.assertEqual(response.data['total_comments'], 0)
-        # self.assertEqual(response.data['singleton'], False)
-        # self.assertEqual(response.data['required_listings'], None)
+        self.assertEqual(response.data['avg_rate'], '0.0')
+        self.assertEqual(response.data['total_votes'], 0)
+        self.assertEqual(response.data['total_rate5'], 0)
+        self.assertEqual(response.data['total_rate4'], 0)
+        self.assertEqual(response.data['total_rate3'], 0)
+        self.assertEqual(response.data['total_rate2'], 0)
+        self.assertEqual(response.data['total_rate1'], 0)
+        self.assertEqual(response.data['total_comments'], 0)
+        self.assertEqual(response.data['singleton'], False)
+        self.assertEqual(response.data['required_listings'], None)
+
+    def test_update_listing_approval_status(self):
+        # a standard user cannot update the approval_status
+        user = generic_model_access.get_profile('jones').user
+        self.client.force_authenticate(user=user)
+        url = '/api/listing/'
+
+        data = {
+            "title": 'mr jones app',
+            "approval_status": "APPROVED"
+        }
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data['approval_status'], 'IN_PROGRESS')
+
+        data = response.data
+        data['approval_status'] = models.ApprovalStatus.APPROVED
+
+        url = '/api/listing/%s/' % data['id']
+        response = self.client.put(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+        # double check that the status wasn't changed
+        url = '/api/listing/%s/' % data['id']
+        response = self.client.get(url, data, format='json')
+        self.assertEqual(response.data['approval_status'], models.ApprovalStatus.IN_PROGRESS)
+
+        # but an org steward can
+        # user = generic_model_access.get_profile('wmsith').user
+
+
+
+
+

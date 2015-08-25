@@ -408,6 +408,7 @@ class ListingViewSet(viewsets.ModelViewSet):
           instance = self.get_queryset().get(pk=pk)
           serializer = serializers.ListingSerializer(instance,
             data=request.data, context={'request': request}, partial=True)
+          logger.debug('created ListingSerializer')
           if not serializer.is_valid():
               logger.error('%s' % serializer.errors)
               return Response(serializer.errors,
@@ -416,6 +417,9 @@ class ListingViewSet(viewsets.ModelViewSet):
           serializer.save()
 
           return Response(serializer.data, status=status.HTTP_200_OK)
+        except errors.PermissionDenied:
+            return Response('Permission Denied',
+                status=status.HTTP_403_FORBIDDEN)
         except Exception as e:
           raise e
 

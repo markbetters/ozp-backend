@@ -31,7 +31,8 @@ class ProfileViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsUser,)
     queryset = models.Profile.objects.all()
     serializer_class = serializers.ProfileSerializer
-    filter_fields = ('highest_role',)
+    # filter_backends = (filters.DjangoFilterBackend,)
+    # filter_fields = ('highest_role',)
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = django.contrib.auth.models.User.objects.all()
