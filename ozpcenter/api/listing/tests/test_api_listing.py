@@ -693,12 +693,13 @@ class ListingApiTest(APITestCase):
         self.assertEqual(len(response.data['tags']), 2)
         self.assertTrue('demo' in tags)
         self.assertTrue('map' in tags)
-        # # intents
-        # intents = []
-        # for i in response.data['intents']:
-        #     intents.append(i['action'])
-        # self.assertTrue('/application/json/view' in intents)
-        # self.assertTrue('/application/json/edit' in intents)
+        # intents
+        intents = []
+        for i in response.data['intents']:
+            intents.append(i['action'])
+        self.assertEqual(len(response.data['intents']), 2)
+        self.assertTrue('/application/json/view' in intents)
+        self.assertTrue('/application/json/edit' in intents)
         # # doc_urls
         # doc_urls = []
         # for d in response.data['doc_urls']:
