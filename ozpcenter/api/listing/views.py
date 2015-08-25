@@ -403,7 +403,21 @@ class ListingViewSet(viewsets.ModelViewSet):
            ]
         }
         """
-        pass
+        try:
+          logger.debug('inside ListingViewSet.update')
+          instance = self.get_queryset().get(pk=pk)
+          serializer = serializers.ListingSerializer(instance,
+            data=request.data, context={'request': request}, partial=True)
+          if not serializer.is_valid():
+              logger.error('%s' % serializer.errors)
+              return Response(serializer.errors,
+                  status=status.HTTP_400_BAD_REQUEST)
+
+          serializer.save()
+
+          return Response(serializer.data, status=status.HTTP_200_OK)
+        except Exception as e:
+          raise e
 
     def partial_update(self, request, pk=None):
         """

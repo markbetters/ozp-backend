@@ -167,7 +167,6 @@ class ListingSerializer(serializers.ModelSerializer):
         depth = 2
 
     def validate(self, data):
-        logger.info('inside ListingSerializer validate. data: %s' % data)
         if 'title' not in data:
             raise serializers.ValidationError('Title is required')
 
@@ -179,6 +178,10 @@ class ListingSerializer(serializers.ModelSerializer):
         data['description_short'] = data.get('description_short', None)
         data['requirements'] = data.get('requirements', None)
         data['is_private'] = data.get('is_private', False)
+
+        # only checked on update, not create
+        data['is_enabled'] = data.get('is_enabled', False)
+        data['is_featured'] = data.get('is_featured', False)
 
         # acces_control
         access_control_title = data.get('access_control', None)
@@ -308,7 +311,8 @@ class ListingSerializer(serializers.ModelSerializer):
                     secure_phone=contact['secure_phone'],
                     unsecure_phone=contact['unsecure_phone'],
                     organization=contact.get('organization', None),
-                    contact_type=models.ContactType.objects.get(name=contact['contact_type']['name']))
+                    contact_type=models.ContactType.objects.get(
+                        name=contact['contact_type']['name']))
                 new_contact.save()
                 listing.contacts.add(new_contact)
 
@@ -349,6 +353,70 @@ class ListingSerializer(serializers.ModelSerializer):
         return listing
 
     def update(self, instance, validated_data):
+        instance.title = validated_data['title']
+        instance.description = validated_data['description']
+        instance.description_short = validated_data['description_short']
+        instance.launch_url = validated_data['launch_url']
+        instance.version_name = validated_data['version_name']
+        instance.requirements = validated_data['requirements']
+        instance.unique_name = validated_data['unique_name']
+        instance.what_is_new = validated_data['what_is_new']
+        instance.is_private = validated_data['is_private']
+        # TODO: permission check
+        instance.is_enabled = validated_data['is_enabled']
+        # TODO: permission check
+        instance.is_featured = validated_data['is_featured']
+
+        instance.access_control = validated_data['access_control']
+        instance.listing_type = validated_data['listing_type']
+        instance.small_icon = validated_data['small_icon']
+        instance.large_icon = validated_data['large_icon']
+        instance.banner_icon = validated_data['banner_icon']
+        instance.large_banner_icon = validated_data['large_banner_icon']
+
+        if 'contacts' in validated_data:
+            instance.contacts.clear()
+            for contact in validated_data['contacts']:
+                obj, created = models.Contact.objects.get_or_create(
+                    name=contact['name'],
+                    email=contact['email'],
+                    secure_phone=contact['secure_phone'],
+                    unsecure_phone=contact['unsecure_phone'],
+                    organization=contact.get('organization', None),
+                    contact_type=models.ContactType.objects.get(
+                        name=contact['contact_type']['name'])
+                )
+                instance.contacts.add(obj)
+
+        if 'categories' in validated_data:
+            instance.categories.clear()
+            for category in validated_data['categories']:
+                instance.categories.add(category)
+
+        if 'owners' in validated_data:
+            instance.owners.clear()
+            for owner in validated_data['owners']:
+                instance.owners.add(owner)
+
+        # tags will be automatically created if necessary
+        if 'tags' in validated_data:
+            instance.tags.clear()
+            for tag in validated_data['tags']:
+                obj, created = models.Tag.objects.get_or_create(
+                    name=tag['name'])
+                instance.tags.add(obj)
+
+        # TODO: allow agency change?
+
+
+
+        instance.save()
+
+        # special fields:
+
+        # approval_status
+        # is_enabled
+        # is_featured
         return instance
 
 

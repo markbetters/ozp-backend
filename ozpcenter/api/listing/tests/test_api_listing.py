@@ -572,3 +572,165 @@ class ListingApiTest(APITestCase):
         url = '/api/listing/1/'
         response = self.client.delete(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_update_listing_full(self):
+        user = generic_model_access.get_profile('julia').user
+        self.client.force_authenticate(user=user)
+        url = '/api/listing/1/'
+        title = 'julias app'
+        data = {
+            "title": title,
+            "description": "description of app",
+            "launch_url": "http://www.google.com/launch",
+            "version_name": "1.0.0",
+            "unique_name": "org.apps.julia-one",
+            "what_is_new": "nothing is new",
+            "description_short": "a shorter description",
+            "requirements": "None",
+            "is_private": "true",
+            "is_enabled": "false",
+            "is_featured": "true",
+            "contacts": [
+                {"email": "a@a.com", "secure_phone": "111-222-3434",
+                    "unsecure_phone": "444-555-4545", "name": "me",
+                    "contact_type": {"name": "Government"}
+                },
+                {"email": "b@b.com", "secure_phone": "222-222-3333",
+                    "unsecure_phone": "555-555-5555", "name": "you",
+                    "contact_type": {"name": "Military"}
+                }
+            ],
+            "access_control": {"title": "UNCLASSIFIED"},
+            "listing_type": {"title": "web application"},
+            "small_icon": {"id": 1},
+            "large_icon": {"id": 2},
+            "banner_icon": {"id": 3},
+            "large_banner_icon": {"id": 4},
+            "categories": [
+                {"title": "Business"},
+                {"title": "Education"}
+            ],
+            "owners": [
+                {"user": {"username": "wsmith"}},
+                {"user": {"username": "julia"}}
+            ],
+            "tags": [
+                {"name": "demo"},
+                {"name": "map"}
+            ],
+            "intents": [
+                {"action": "/application/json/view"},
+                {"action": "/application/json/edit"}
+            ],
+            "doc_urls": [
+                {"name": "wiki", "url": "http://www.google.com/wiki"},
+                {"name": "guide", "url": "http://www.google.com/guide"}
+            ],
+            "screenshots": [
+                {"small_image": {"id": 1}, "large_image": {"id": 2}},
+                {"small_image": {"id": 3}, "large_image": {"id": 4}}
+            ]
+
+        }
+        response = self.client.put(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        # title
+        self.assertEqual(response.data['title'], title)
+        # description
+        self.assertEqual(response.data['description'], 'description of app')
+        # launch_url
+        self.assertEqual(response.data['launch_url'],
+            'http://www.google.com/launch')
+        # version_name
+        self.assertEqual(response.data['version_name'], '1.0.0')
+        # unique_name
+        self.assertEqual(response.data['unique_name'], 'org.apps.julia-one')
+        # what_is_new
+        self.assertEqual(response.data['what_is_new'], 'nothing is new')
+        # description_short
+        self.assertEqual(response.data['description_short'],
+            'a shorter description')
+        # requirements
+        self.assertEqual(response.data['requirements'], 'None')
+        # is_private
+        self.assertEqual(response.data['is_private'], True)
+        # contacts
+        self.assertEqual(len(response.data['contacts']), 2)
+        names = []
+        for c in response.data['contacts']:
+            names.append(c['name'])
+        self.assertTrue('me' in names)
+        self.assertTrue('you' in names)
+        # access_control
+        self.assertEqual(response.data['access_control']['title'],
+            'UNCLASSIFIED')
+        # listing_type
+        self.assertEqual(response.data['listing_type']['title'],
+            'web application')
+        # icons
+        self.assertEqual(response.data['small_icon']['id'], 1)
+        self.assertEqual(response.data['large_icon']['id'], 2)
+        self.assertEqual(response.data['banner_icon']['id'], 3)
+        self.assertEqual(response.data['large_banner_icon']['id'], 4)
+        # categories
+        categories = []
+        for c in response.data['categories']:
+            categories.append(c['title'])
+        self.assertEqual(len(response.data['categories']), 2)
+        self.assertTrue('Business' in categories)
+        self.assertTrue('Education' in categories)
+        # owners
+        owners = []
+        for o in response.data['owners']:
+            owners.append(o['user']['username'])
+        self.assertEqual(len(response.data['owners']), 2)
+        self.assertTrue('wsmith' in owners)
+        self.assertTrue('julia' in owners)
+        # tags
+        tags = []
+        for t in response.data['tags']:
+            tags.append(t['name'])
+        self.assertEqual(len(response.data['tags']), 2)
+        self.assertTrue('demo' in tags)
+        self.assertTrue('map' in tags)
+        # # intents
+        # intents = []
+        # for i in response.data['intents']:
+        #     intents.append(i['action'])
+        # self.assertTrue('/application/json/view' in intents)
+        # self.assertTrue('/application/json/edit' in intents)
+        # # doc_urls
+        # doc_urls = []
+        # for d in response.data['doc_urls']:
+        #     doc_urls.append(d['url'])
+        # self.assertTrue('http://www.google.com/wiki' in doc_urls)
+        # self.assertTrue('http://www.google.com/guide' in doc_urls)
+        # # screenshots
+        # screenshots_small = []
+        # for s in response.data['screenshots']:
+        #     screenshots_small.append(s['small_image']['id'])
+        # self.assertTrue(1 in screenshots_small)
+        # self.assertTrue(3 in screenshots_small)
+
+        # screenshots_large = []
+        # for s in response.data['screenshots']:
+        #     screenshots_large.append(s['large_image']['id'])
+        # self.assertTrue(2 in screenshots_large)
+        # self.assertTrue(4 in screenshots_large)
+
+
+        # self.assertEqual(response.data['approved_date'], None)
+        # self.assertEqual(response.data['approval_status'],
+        #     models.ApprovalStatus.IN_PROGRESS)
+        self.assertEqual(response.data['is_enabled'], False)
+        self.assertEqual(response.data['is_featured'], True)
+        # self.assertEqual(response.data['avg_rate'], '0.0')
+        # self.assertEqual(response.data['total_votes'], 0)
+        # self.assertEqual(response.data['total_rate5'], 0)
+        # self.assertEqual(response.data['total_rate4'], 0)
+        # self.assertEqual(response.data['total_rate3'], 0)
+        # self.assertEqual(response.data['total_rate2'], 0)
+        # self.assertEqual(response.data['total_rate1'], 0)
+        # self.assertEqual(response.data['total_comments'], 0)
+        # self.assertEqual(response.data['singleton'], False)
+        # self.assertEqual(response.data['required_listings'], None)
