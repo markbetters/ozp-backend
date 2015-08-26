@@ -193,6 +193,7 @@ def submit_listing(author, listing):
     """
     Submit a listing for approval
     """
+    # TODO: check that all required fields are set
     listing = _add_listing_activity(author, listing, models.Action.SUBMITTED)
     listing.approval_status = models.ApprovalStatus.PENDING
     listing.save()

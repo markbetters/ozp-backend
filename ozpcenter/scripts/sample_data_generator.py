@@ -119,7 +119,7 @@ def run():
     web_app = models.ListingType(title='web application',
         description='web applications')
     web_app.save()
-    widget = models.ListingType(title='widgets',
+    widget = models.ListingType(title='widget',
         description='widget things')
     widget.save()
     dev_resource = models.ListingType(title='developer resource',

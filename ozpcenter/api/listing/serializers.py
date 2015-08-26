@@ -11,6 +11,7 @@ from rest_framework.exceptions import ValidationError
 import ozpcenter.models as models
 import ozpcenter.constants as constants
 
+import ozpcenter.api.listing.model_access as model_access
 import ozpcenter.api.profile.serializers as profile_serializers
 import ozpcenter.api.agency.serializers as agency_serializers
 import ozpcenter.model_access as generic_model_access
@@ -185,9 +186,6 @@ class ListingSerializer(serializers.ModelSerializer):
         # only checked on update, not create
         data['is_enabled'] = data.get('is_enabled', False)
         data['is_featured'] = data.get('is_featured', False)
-        if data['is_featured']:
-            # TODO user must be an org steward
-            pass
         data['approval_status'] = data.get('approval_status', None)
 
         # acces_control
@@ -362,23 +360,41 @@ class ListingSerializer(serializers.ModelSerializer):
                     listing=listing)
                 screenshot.save()
 
+        # create a new activity
+        model_access.create_listing(user, listing)
+
         return listing
 
     def update(self, instance, validated_data):
-        instance.title = validated_data['title']
-        instance.description = validated_data['description']
-        instance.description_short = validated_data['description_short']
-        instance.launch_url = validated_data['launch_url']
-        instance.version_name = validated_data['version_name']
-        instance.requirements = validated_data['requirements']
-        instance.unique_name = validated_data['unique_name']
-        instance.what_is_new = validated_data['what_is_new']
-        instance.is_private = validated_data['is_private']
-        instance.is_enabled = validated_data['is_enabled']
+        user = generic_model_access.get_profile(
+            self.context['request'].user.username)
+        change_details = []
+
+        simple_fields = ['title', 'description', 'description_short',
+            'launch_url', 'version_name', 'requirements', 'unique_name',
+            'what_is_new']
+
+        for i in simple_fields:
+            if getattr(instance, i) != validated_data[i]:
+                change_details.append({'old_value': getattr(instance, i),
+                    'new_value': validated_data[i], 'field_name': i})
+                setattr(instance, i, validated_data[i])
+
+        if validated_data['is_enabled'] != instance.is_enabled:
+            change_details.append({'old_value': str(instance.is_enabled).lower(),
+                    'new_value': str(validated_data['is_enabled']).lower(), 'field_name': 'is_enabled'})
+            instance.is_enabled = validated_data['is_enabled']
+
+        if validated_data['is_private'] != instance.is_private:
+            change_details.append({'old_value': str(instance.is_private).lower(),
+                    'new_value': str(validated_data['is_private']).lower(), 'field_name': 'is_private'})
+            instance.is_private = validated_data['is_private']
 
         if validated_data['is_featured'] != instance.is_featured:
-            if user.highest_role not in ['APPS_MALL_STEWARD', 'ORG_STEWARD']:
+            if user.highest_role() not in ['APPS_MALL_STEWARD', 'ORG_STEWARD']:
                 raise errors.PermissionDenied('Only stewards can change is_featured setting of a listing')
+            change_details.append({'old_value': str(instance.is_featured).lower(),
+                    'new_value': str(validated_data['is_featured']).lower(), 'field_name': 'is_featured'})
             instance.is_featured = validated_data['is_featured']
 
         s = validated_data['approval_status']
@@ -387,69 +403,136 @@ class ListingSerializer(serializers.ModelSerializer):
                 self.context['request'].user.username)
             if s == models.ApprovalStatus.APPROVED and user.highest_role() != 'APPS_MALL_STEWARD':
                 raise errors.PermissionDenied('Only an APPS_MALL_STEWARD can mark a listing as APPROVED')
-            if s == models.ApprovalStatus.APPROVED_ORG and user.highest_role not in ['APPS_MALL_STEWARD', 'ORG_STEWARD']:
+            if s == models.ApprovalStatus.APPROVED_ORG and user.highest_role() not in ['APPS_MALL_STEWARD', 'ORG_STEWARD']:
                 raise errors.PermissionDenied('Only stewards can mark a listing as APPROVED_ORG')
 
+            change_details.append({'old_value': instance.approval_status,
+                    'new_value': validated_data['approval_status'], 'field_name': 'approval_status'})
             instance.approval_status = validated_data['approval_status']
 
-        instance.access_control = validated_data['access_control']
-        instance.listing_type = validated_data['listing_type']
-        instance.small_icon = validated_data['small_icon']
-        instance.large_icon = validated_data['large_icon']
-        instance.banner_icon = validated_data['banner_icon']
-        instance.large_banner_icon = validated_data['large_banner_icon']
+        if instance.access_control != validated_data['access_control']:
+            change_details.append({'old_value': instance.access_control.title,
+                    'new_value': validated_data['access_control'].title, 'field_name': 'access_control'})
+            instance.access_control = validated_data['access_control']
+
+        if instance.listing_type != validated_data['listing_type']:
+            change_details.append({'old_value': instance.listing_type.title,
+                    'new_value': validated_data['listing_type'].title, 'field_name': 'listing_type'})
+            instance.listing_type = validated_data['listing_type']
+
+        if instance.small_icon != validated_data['small_icon']:
+            change_details.append({'old_value': instance.small_icon.id,
+                    'new_value': validated_data['small_icon'].id, 'field_name': 'small_icon'})
+            instance.small_icon = validated_data['small_icon']
+
+        if instance.large_icon != validated_data['large_icon']:
+            change_details.append({'old_value': instance.large_icon.id,
+                    'new_value': validated_data['large_icon'].id, 'field_name': 'large_icon'})
+            instance.large_icon = validated_data['large_icon']
+
+        if instance.banner_icon != validated_data['banner_icon']:
+            change_details.append({'old_value': instance.banner_icon.id,
+                    'new_value': validated_data['banner_icon'].id, 'field_name': 'banner_icon'})
+            instance.banner_icon = validated_data['banner_icon']
+
+        if instance.large_banner_icon != validated_data['large_banner_icon']:
+            change_details.append({'old_value': instance.large_banner_icon.id,
+                    'new_value': validated_data['large_banner_icon'].id, 'field_name': 'large_banner_icon'})
+            instance.large_banner_icon = validated_data['large_banner_icon']
 
         if 'contacts' in validated_data:
-            instance.contacts.clear()
-            for contact in validated_data['contacts']:
-                obj, created = models.Contact.objects.get_or_create(
-                    name=contact['name'],
-                    email=contact['email'],
-                    secure_phone=contact['secure_phone'],
-                    unsecure_phone=contact['unsecure_phone'],
-                    organization=contact.get('organization', None),
-                    contact_type=models.ContactType.objects.get(
-                        name=contact['contact_type']['name'])
-                )
-                instance.contacts.add(obj)
+            old_contacts = [(i.name, i.email) for i in instance.contacts.all()]
+            new_contacts = [(i['name'], i['email']) for i in validated_data['contacts']]
+            if sorted(old_contacts) != sorted(new_contacts):
+                change_details.append({'old_value': old_contacts,
+                    'new_value': new_contacts, 'field_name': 'contacts'})
+                instance.contacts.clear()
+                for contact in validated_data['contacts']:
+                    obj, created = models.Contact.objects.get_or_create(
+                        name=contact['name'],
+                        email=contact['email'],
+                        secure_phone=contact['secure_phone'],
+                        unsecure_phone=contact['unsecure_phone'],
+                        organization=contact.get('organization', None),
+                        contact_type=models.ContactType.objects.get(
+                            name=contact['contact_type']['name'])
+                    )
+                    instance.contacts.add(obj)
 
         if 'categories' in validated_data:
-            instance.categories.clear()
-            for category in validated_data['categories']:
-                instance.categories.add(category)
+            old_categories = [i.title for i in instance.categories.all()]
+            new_categories = [i.title for i in validated_data['categories']]
+            if sorted(old_categories) != sorted(new_categories):
+                change_details.append({'old_value': old_categories,
+                    'new_value': new_categories, 'field_name': 'categories'})
+                instance.categories.clear()
+                for category in validated_data['categories']:
+                    instance.categories.add(category)
 
         if 'owners' in validated_data:
-            instance.owners.clear()
-            for owner in validated_data['owners']:
-                instance.owners.add(owner)
+            old_owners = [i.user.username for i in instance.owners.all()]
+            new_owners = [i.user.username for i in validated_data['owners']]
+            if sorted(old_owners) != sorted(new_owners):
+                change_details.append({'old_value': old_owners,
+                    'new_value': new_owners, 'field_name': 'owners'})
+                instance.owners.clear()
+                for owner in validated_data['owners']:
+                    instance.owners.add(owner)
 
         # tags will be automatically created if necessary
         if 'tags' in validated_data:
-            instance.tags.clear()
-            for tag in validated_data['tags']:
-                obj, created = models.Tag.objects.get_or_create(
-                    name=tag['name'])
-                instance.tags.add(obj)
+            old_tags = [i.name for i in instance.tags.all()]
+            new_tags = [i['name'] for i in validated_data['tags']]
+            if sorted(old_tags) != sorted(new_tags):
+                change_details.append({'old_value': old_tags,
+                    'new_value': new_tags, 'field_name': 'tags'})
+                instance.tags.clear()
+                for tag in validated_data['tags']:
+                    obj, created = models.Tag.objects.get_or_create(
+                        name=tag['name'])
+                    instance.tags.add(obj)
 
         if 'intents' in validated_data:
-            instance.intents.clear()
-            for intent in validated_data['intents']:
-                instance.intents.add(intent)
+            old_intents = [i.action for i in instance.intents.all()]
+            new_intents = [i.action for i in validated_data['intents']]
+            if sorted(old_intents) != sorted(new_intents):
+                change_details.append({'old_value': old_intents,
+                    'new_value': new_intents, 'field_name': 'intents'})
+                instance.intents.clear()
+                for intent in validated_data['intents']:
+                    instance.intents.add(intent)
 
         # doc_urls will be automatically created
         if 'doc_urls' in validated_data:
-            # TODO: remove existing ones
-            for d in validated_data['doc_urls']:
-                obj, created = models.DocUrl.objects.get_or_create(
-                    name=d['name'], url=d['url'], listing=instance)
+            old_doc_url_instances = models.DocUrl.objects.filter(
+                listing=instance)
+            old_doc_urls = [(i.name, i.url) for i in old_doc_url_instances]
+            new_doc_urls = [(i['name'], i['url']) for i in validated_data['doc_urls']]
+            if sorted(old_doc_urls) != sorted(new_doc_urls):
+                change_details.append({'old_value': old_doc_urls,
+                    'new_value': new_doc_urls, 'field_name': 'doc_urls'})
+
+                new_doc_url_instances = []
+                for d in validated_data['doc_urls']:
+                    obj, created = models.DocUrl.objects.get_or_create(
+                        name=d['name'], url=d['url'], listing=instance)
+                    new_doc_url_instances.append(obj)
+                for i in old_doc_url_instances:
+                    if i not in new_doc_url_instances:
+                        logger.info('Deleting doc_url: %s' % i.id)
+                        i.delete()
 
         # screenshots will be automatically created
         if 'screenshots' in validated_data:
-            # TODO: think about this - this is one reason to have a UUID for each image,
-            # since removing these and re-adding them will change their DB id (pk)
-            current_screenshots = models.Screenshot.objects.filter(
+            old_screenshot_instances = models.Screenshot.objects.filter(
                 listing=instance)
-            current_screenshots.delete()
+            old_screenshots = [(i.small_image.id, i.large_image.id) for i in old_screenshot_instances]
+            new_screenshots = [(i['small_image']['id'], i['large_image']['id']) for i in validated_data['screenshots']]
+            if sorted(old_screenshots) != sorted(new_screenshots):
+                change_details.append({'old_value': old_screenshots,
+                    'new_value': new_screenshots, 'field_name': 'screenshots'})
+
+            new_screenshot_instances = []
             for s in validated_data['screenshots']:
                 obj, created = models.Screenshot.objects.get_or_create(
                     small_image=models.Image.objects.get(
@@ -457,9 +540,16 @@ class ListingSerializer(serializers.ModelSerializer):
                     large_image=models.Image.objects.get(
                         id=s['large_image']['id']),
                     listing=instance)
+                new_screenshot_instances.append(obj)
+            for i in old_screenshot_instances:
+                if i not in new_screenshot_instances:
+                    logger.info('Deleting screenshot: %s' % i.id)
+                    i.delete()
 
         # TODO: allow agency change?
         instance.save()
+
+        model_access.log_listing_modification(user, instance, change_details)
         return instance
 
 

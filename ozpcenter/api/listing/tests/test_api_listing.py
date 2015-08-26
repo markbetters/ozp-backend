@@ -1,6 +1,7 @@
 """
 Tests for listing endpoints
 """
+from copy import deepcopy
 from decimal import Decimal
 import unittest
 
@@ -204,7 +205,10 @@ class ListingApiTest(APITestCase):
         # test the listing/<id>/activity endpoint
         url = '/api/listing/%s/activity/' % air_mail_id
         response = self.client.get(url, format='json')
+        activiy_actions = [i['action'] for i in response.data]
+
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue(models.Action.REVIEW_EDITED in activiy_actions)
 
         # try to edit a comment from another user - should fail
         url = '/api/listing/%s/itemComment/1/' % air_mail_id
@@ -227,6 +231,13 @@ class ListingApiTest(APITestCase):
         url = '/api/listing/%s/itemComment/%s/' % (air_mail_id, comment_id)
         response = self.client.delete(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+        # test the listing/<id>/activity endpoint
+        url = '/api/listing/%s/activity/' % air_mail_id
+        response = self.client.get(url, format='json')
+        activiy_actions = [i['action'] for i in response.data]
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue(models.Action.REVIEW_DELETED in activiy_actions)
 
     def test_delete_review(self):
         # create a new review
@@ -582,14 +593,14 @@ class ListingApiTest(APITestCase):
             "title": title,
             "description": "description of app",
             "launch_url": "http://www.google.com/launch",
-            "version_name": "1.0.0",
+            "version_name": "2.1.8",
             "unique_name": "org.apps.julia-one",
             "what_is_new": "nothing is new",
             "description_short": "a shorter description",
-            "requirements": "None",
+            "requirements": "Many new things",
             "is_private": "true",
             "is_enabled": "false",
-            "is_featured": "true",
+            "is_featured": "false",
             "contacts": [
                 {"email": "a@a.com", "secure_phone": "111-222-3434",
                     "unsecure_phone": "444-555-4545", "name": "me",
@@ -600,8 +611,8 @@ class ListingApiTest(APITestCase):
                     "contact_type": {"name": "Military"}
                 }
             ],
-            "access_control": {"title": "UNCLASSIFIED"},
-            "listing_type": {"title": "web application"},
+            "access_control": {"title": "SECRET"},
+            "listing_type": {"title": "widget"},
             "small_icon": {"id": 1},
             "large_icon": {"id": 2},
             "banner_icon": {"id": 3},
@@ -623,8 +634,8 @@ class ListingApiTest(APITestCase):
                 {"action": "/application/json/edit"}
             ],
             "doc_urls": [
-                {"name": "wiki", "url": "http://www.google.com/wiki"},
-                {"name": "guide", "url": "http://www.google.com/guide"}
+                {"name": "wiki", "url": "http://www.google.com/wiki2"},
+                {"name": "guide", "url": "http://www.google.com/guide2"}
             ],
             "screenshots": [
                 {"small_image": {"id": 1}, "large_image": {"id": 2}},
@@ -632,26 +643,27 @@ class ListingApiTest(APITestCase):
             ]
 
         }
+        # for checking Activity status later on
+        old_listing_data = self.client.get(url, format='json').data
+
         response = self.client.put(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         # title
-        self.assertEqual(response.data['title'], title)
+        self.assertEqual(response.data['title'], data['title'])
         # description
-        self.assertEqual(response.data['description'], 'description of app')
+        self.assertEqual(response.data['description'], data['description'])
         # launch_url
-        self.assertEqual(response.data['launch_url'],
-            'http://www.google.com/launch')
+        self.assertEqual(response.data['launch_url'], data['launch_url'])
         # version_name
-        self.assertEqual(response.data['version_name'], '1.0.0')
+        self.assertEqual(response.data['version_name'], data['version_name'])
         # unique_name
-        self.assertEqual(response.data['unique_name'], 'org.apps.julia-one')
+        self.assertEqual(response.data['unique_name'], data['unique_name'])
         # what_is_new
-        self.assertEqual(response.data['what_is_new'], 'nothing is new')
+        self.assertEqual(response.data['what_is_new'], data['what_is_new'])
         # description_short
-        self.assertEqual(response.data['description_short'],
-            'a shorter description')
+        self.assertEqual(response.data['description_short'], data['description_short'])
         # requirements
-        self.assertEqual(response.data['requirements'], 'None')
+        self.assertEqual(response.data['requirements'], data['requirements'])
         # is_private
         self.assertEqual(response.data['is_private'], True)
         # contacts
@@ -663,10 +675,10 @@ class ListingApiTest(APITestCase):
         self.assertTrue('you' in names)
         # access_control
         self.assertEqual(response.data['access_control']['title'],
-            'UNCLASSIFIED')
+            'SECRET')
         # listing_type
         self.assertEqual(response.data['listing_type']['title'],
-            'web application')
+            'widget')
         # icons
         self.assertEqual(response.data['small_icon']['id'], 1)
         self.assertEqual(response.data['large_icon']['id'], 2)
@@ -705,8 +717,8 @@ class ListingApiTest(APITestCase):
         for d in response.data['doc_urls']:
             doc_urls.append(d['url'])
         self.assertEqual(len(response.data['doc_urls']), 2)
-        self.assertTrue('http://www.google.com/wiki' in doc_urls)
-        self.assertTrue('http://www.google.com/guide' in doc_urls)
+        self.assertTrue('http://www.google.com/wiki2' in doc_urls)
+        self.assertTrue('http://www.google.com/guide2' in doc_urls)
         # screenshots
         screenshots_small = []
         self.assertEqual(len(response.data['screenshots']), 2)
@@ -726,7 +738,7 @@ class ListingApiTest(APITestCase):
         self.assertEqual(response.data['approval_status'],
             models.ApprovalStatus.APPROVED)
         self.assertEqual(response.data['is_enabled'], False)
-        self.assertEqual(response.data['is_featured'], True)
+        self.assertEqual(response.data['is_featured'], False)
         self.assertEqual(response.data['avg_rate'], '0.0')
         self.assertEqual(response.data['total_votes'], 0)
         self.assertEqual(response.data['total_rate5'], 0)
@@ -738,7 +750,76 @@ class ListingApiTest(APITestCase):
         self.assertEqual(response.data['singleton'], False)
         self.assertEqual(response.data['required_listings'], None)
 
-    def test_update_listing_approval_status(self):
+
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        #                   verify change_details
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        activity_url = url + 'activity/'
+        activity_response = self.client.get(activity_url, format='json')
+        activity_data = activity_response.data
+
+        fields = ['title', 'description', 'description_short', 'version_name',
+            'requirements', 'unique_name', 'what_is_new', 'launch_url',
+            'is_enabled', 'is_featured', 'is_private', 'doc_urls', 'contacts',
+            'screenshots', 'categories', 'owners', 'tags', 'small_icon',
+            'large_icon', 'banner_icon', 'large_banner_icon', 'access_control',
+            'listing_type', 'approval_status', 'intents']
+
+        total_found = 0
+        for activity in activity_data:
+            if activity['action'] == 'MODIFIED':
+                for change in activity['change_details']:
+                    if change['field_name'] == 'title':
+                        self.assertEqual(change['new_value'], data['title'])
+                        self.assertEqual(change['old_value'], old_listing_data['title'])
+                        total_found += 1
+                    if change['field_name'] == 'description':
+                        self.assertEqual(change['new_value'], data['description'])
+                        self.assertEqual(change['old_value'], old_listing_data['description'])
+                        total_found += 1
+                    if change['field_name'] == 'description_short':
+                        self.assertEqual(change['new_value'], data['description_short'])
+                        self.assertEqual(change['old_value'], old_listing_data['description_short'])
+                        total_found += 1
+                    if change['field_name'] == 'version_name':
+                        self.assertEqual(change['new_value'], data['version_name'])
+                        self.assertEqual(change['old_value'], old_listing_data['version_name'])
+                        total_found += 1
+                    if change['field_name'] == 'requirements':
+                        self.assertEqual(change['new_value'], data['requirements'])
+                        self.assertEqual(change['old_value'], old_listing_data['requirements'])
+                        total_found += 1
+                    if change['field_name'] == 'what_is_new':
+                        self.assertEqual(change['new_value'], data['what_is_new'])
+                        self.assertEqual(change['old_value'], old_listing_data['what_is_new'])
+                        total_found += 1
+                    if change['field_name'] == 'unique_name':
+                        self.assertEqual(change['new_value'], data['unique_name'])
+                        self.assertEqual(change['old_value'], old_listing_data['unique_name'])
+                        total_found += 1
+                    if change['field_name'] == 'launch_url':
+                        self.assertEqual(change['new_value'], data['launch_url'])
+                        self.assertEqual(change['old_value'], old_listing_data['launch_url'])
+                        total_found += 1
+                    if change['field_name'] == 'is_enabled':
+                        self.assertEqual(change['new_value'], data['is_enabled'])
+                        self.assertEqual(change['old_value'], str(old_listing_data['is_enabled']).lower())
+                        total_found += 1
+                    if change['field_name'] == 'is_private':
+                        self.assertEqual(change['new_value'], data['is_private'])
+                        self.assertEqual(change['old_value'], str(old_listing_data['is_private']).lower())
+                        total_found += 1
+                    if change['field_name'] == 'doc_urls':
+                        # self.assertEqual(change['new_value'], data['doc_urls'])
+                        # self.assertEqual(change['old_value'], old_listing_data['requirements'])
+                        total_found += 1
+
+        # self.assertEqual(total_found, len(fields))
+        self.assertEqual(total_found, 11)
+
+
+
+    def test_update_listing_approval_status_deny_user(self):
         # a standard user cannot update the approval_status
         user = generic_model_access.get_profile('jones').user
         self.client.force_authenticate(user=user)
@@ -764,8 +845,51 @@ class ListingApiTest(APITestCase):
         response = self.client.get(url, data, format='json')
         self.assertEqual(response.data['approval_status'], models.ApprovalStatus.IN_PROGRESS)
 
-        # but an org steward can
-        # user = generic_model_access.get_profile('wmsith').user
+    def test_listing_activities(self):
+        # CREATED
+        user = generic_model_access.get_profile('jones').user
+        self.client.force_authenticate(user=user)
+        url = '/api/listing/'
+
+        data = {
+            "title": 'mr jones app'
+        }
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        app_id = response.data['id']
+        data = response.data
+
+        url = '/api/listing/%s/activity/' % app_id
+        response = self.client.get(url, format='json')
+        activity_actions = [i['action'] for i in response.data]
+        self.assertTrue(len(activity_actions), 1)
+        self.assertTrue(activity_actions[0], 'CREATED')
+
+        # MODIFIED
+        url = '/api/listing/%s/' % app_id
+        response = self.client.put(url, data, format='json')
+
+        url = '/api/listing/%s/activity/' % app_id
+        response = self.client.get(url, format='json')
+        activity_actions = [i['action'] for i in response.data]
+        self.assertTrue(len(activity_actions), 2)
+        print('activiy_actions: %s' % activity_actions)
+        self.assertTrue(models.Action.MODIFIED in activity_actions)
+
+        # SUBMITTED
+
+
+        # APPROVED_ORG
+
+        # APPROVED
+
+        # ENABLED
+
+        # DISABLED
+
+
+
+
 
 
 

@@ -652,6 +652,8 @@ class AccessControlListingManager(models.Manager):
         # filter out listings by user's access level
         titles_to_exclude=[]
         for i in objects:
+            if not i.access_control:
+                logger.error('Listing %s has no access_control' % i.title)
             if not access_control.has_access(user.access_control.title, i.access_control.title):
                 titles_to_exclude.append(i.title)
         objects = objects.exclude(title__in=titles_to_exclude)
