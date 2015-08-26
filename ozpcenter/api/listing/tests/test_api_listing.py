@@ -17,6 +17,7 @@ import ozpcenter.access_control as access_control
 
 from ozpcenter.scripts import sample_data_generator as data_gen
 import ozpcenter.api.listing.views as views
+import ozpcenter.api.listing.model_access as model_access
 from ozpcenter import models as models
 from ozpcenter import model_access as generic_model_access
 
@@ -803,19 +804,28 @@ class ListingApiTest(APITestCase):
                         total_found += 1
                     if change['field_name'] == 'is_enabled':
                         self.assertEqual(change['new_value'], data['is_enabled'])
-                        self.assertEqual(change['old_value'], str(old_listing_data['is_enabled']).lower())
+                        self.assertEqual(change['old_value'], model_access.bool_to_string(old_listing_data['is_enabled']))
                         total_found += 1
                     if change['field_name'] == 'is_private':
                         self.assertEqual(change['new_value'], data['is_private'])
-                        self.assertEqual(change['old_value'], str(old_listing_data['is_private']).lower())
+                        self.assertEqual(change['old_value'], model_access.bool_to_string(old_listing_data['is_private']))
                         total_found += 1
                     if change['field_name'] == 'doc_urls':
-                        # self.assertEqual(change['new_value'], data['doc_urls'])
-                        # self.assertEqual(change['old_value'], old_listing_data['requirements'])
+                        self.assertEqual(change['new_value'],
+                            model_access.doc_urls_to_string(data['doc_urls']))
+                        self.assertEqual(change['old_value'],
+                            model_access.doc_urls_to_string(old_listing_data['doc_urls']))
+                        total_found += 1
+                    if change['field_name'] == 'screenshots':
+                        self.assertEqual(change['new_value'],
+                            model_access.screenshots_to_string(data['screenshots']))
+                        self.assertEqual(change['old_value'],
+                            model_access.screenshots_to_string(old_listing_data['screenshots']))
                         total_found += 1
 
+
         # self.assertEqual(total_found, len(fields))
-        self.assertEqual(total_found, 11)
+        self.assertEqual(total_found, 12)
 
 
 

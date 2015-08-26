@@ -381,20 +381,20 @@ class ListingSerializer(serializers.ModelSerializer):
                 setattr(instance, i, validated_data[i])
 
         if validated_data['is_enabled'] != instance.is_enabled:
-            change_details.append({'old_value': str(instance.is_enabled).lower(),
-                    'new_value': str(validated_data['is_enabled']).lower(), 'field_name': 'is_enabled'})
+            change_details.append({'old_value':model_access.bool_to_string(instance.is_enabled),
+                    'new_value': model_access.bool_to_string(validated_data['is_enabled']), 'field_name': 'is_enabled'})
             instance.is_enabled = validated_data['is_enabled']
 
         if validated_data['is_private'] != instance.is_private:
-            change_details.append({'old_value': str(instance.is_private).lower(),
-                    'new_value': str(validated_data['is_private']).lower(), 'field_name': 'is_private'})
+            change_details.append({'old_value': model_access.bool_to_string(instance.is_private),
+                    'new_value': model_access.bool_to_string(validated_data['is_private']), 'field_name': 'is_private'})
             instance.is_private = validated_data['is_private']
 
         if validated_data['is_featured'] != instance.is_featured:
             if user.highest_role() not in ['APPS_MALL_STEWARD', 'ORG_STEWARD']:
                 raise errors.PermissionDenied('Only stewards can change is_featured setting of a listing')
-            change_details.append({'old_value': str(instance.is_featured).lower(),
-                    'new_value': str(validated_data['is_featured']).lower(), 'field_name': 'is_featured'})
+            change_details.append({'old_value': model_access.bool_to_string(instance.is_featured),
+                    'new_value': model_access.bool_to_string(validated_data['is_featured']), 'field_name': 'is_featured'})
             instance.is_featured = validated_data['is_featured']
 
         s = validated_data['approval_status']
@@ -506,11 +506,15 @@ class ListingSerializer(serializers.ModelSerializer):
         if 'doc_urls' in validated_data:
             old_doc_url_instances = models.DocUrl.objects.filter(
                 listing=instance)
-            old_doc_urls = [(i.name, i.url) for i in old_doc_url_instances]
-            new_doc_urls = [(i['name'], i['url']) for i in validated_data['doc_urls']]
-            if sorted(old_doc_urls) != sorted(new_doc_urls):
-                change_details.append({'old_value': old_doc_urls,
-                    'new_value': new_doc_urls, 'field_name': 'doc_urls'})
+            old_doc_urls = model_access.doc_urls_to_string(
+                old_doc_url_instances, True)
+            new_doc_urls = model_access.doc_urls_to_string(
+                validated_data['doc_urls'])
+            if old_doc_urls != new_doc_urls:
+                change_details.append({
+                    'old_value': old_doc_urls,
+                    'new_value': new_doc_urls,
+                    'field_name': 'doc_urls'})
 
                 new_doc_url_instances = []
                 for d in validated_data['doc_urls']:
@@ -526,9 +530,10 @@ class ListingSerializer(serializers.ModelSerializer):
         if 'screenshots' in validated_data:
             old_screenshot_instances = models.Screenshot.objects.filter(
                 listing=instance)
-            old_screenshots = [(i.small_image.id, i.large_image.id) for i in old_screenshot_instances]
-            new_screenshots = [(i['small_image']['id'], i['large_image']['id']) for i in validated_data['screenshots']]
-            if sorted(old_screenshots) != sorted(new_screenshots):
+            old_screenshots = model_access.screenshots_to_string(old_screenshot_instances, True)
+            new_screenshots = model_access.screenshots_to_string(
+                validated_data['screenshots'])
+            if old_screenshots != new_screenshots:
                 change_details.append({'old_value': old_screenshots,
                     'new_value': new_screenshots, 'field_name': 'screenshots'})
 

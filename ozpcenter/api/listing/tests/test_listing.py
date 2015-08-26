@@ -282,3 +282,42 @@ class ListingTest(TestCase):
         self.assertEquals(1, models.Listing.objects.for_user(username).filter(
             title='Air Mail').count())
 
+    def test_doc_urls_to_string(self):
+        doc_urls = [
+            {"name": "wiki", "url": "http://www.wiki.com"},
+            {"name": "guide", "url": "http://www.guide.com"}
+        ]
+        out = model_access.doc_urls_to_string(doc_urls)
+        self.assertEqual(out, "[('guide', 'http://www.guide.com'), ('wiki', 'http://www.wiki.com')]")
+
+        doc_urls = models.DocUrl.objects.filter(listing__id=1)
+        out = model_access.doc_urls_to_string(doc_urls, True)
+        self.assertEqual(out, "[('guide', 'http://www.google.com/guide'), ('wiki', 'http://www.google.com/wiki')]")
+
+    def test_screenshots_to_string(self):
+        screenshots = [
+            {
+                "small_image": {
+                    "url": "http://localhost:8000/api/image/1/",
+                    "id": 1,
+                    "access_control": {
+                        "title": "UNCLASSIFIED"
+                    }
+                },
+                "large_image": {
+                    "url": "http://localhost:8000/api/image/2/",
+                    "id": 2,
+                    "access_control": {
+                        "title": "UNCLASSIFIED"
+                    }
+                }
+            }
+        ]
+
+        out = model_access.screenshots_to_string(screenshots)
+        self.assertEqual(out, "[{'small_image': 1, 'large_image': 2}]")
+
+        screenshots = models.Screenshots.objects.filter(listing__id=1)
+        out = model_access.screenshots_to_string(screenshots, True)
+
+

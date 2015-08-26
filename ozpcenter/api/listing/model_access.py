@@ -384,3 +384,42 @@ def delete_listing(username, listing):
 
     listing.delete()
 
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+#   Methods to convert Response representations of objects to strings for use
+#   in the change_details of a listing's activity
+#
+#   For simple strings this is obvious (and a separate method is unnecessary),
+#   but for representing objects (and collections of objects), such utilities
+#   are useful
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+def doc_urls_to_string(doc_urls, queryset=False):
+    """
+    Args:
+        doc_urls: [{"name": "wiki", "url": "http://www.wiki.com"}, ...] OR
+        doc_urls: [models.DocUrl] (if queryset=True)
+    Returns:
+        '(wiki, http://www.wiki.com), ...'
+    """
+    if queryset:
+        new_doc_urls = [(i.name, i.url) for i in doc_urls]
+    else:
+        new_doc_urls = [(i['name'], i['url']) for i in doc_urls]
+    return str(sorted(new_doc_urls))
+
+def screenshots_to_string(screenshots, queryset=False):
+    """
+    Args:
+        screenshots: [{"small_image": {"id": 1}, "large_image": {"id": 2}}, ...] OR
+        screenshots: [models.Screenshot] (if queryset=True)
+    Returns:
+        "[{'small_image': 'id', 'large_image': 'id'}, ...]"
+    """
+    if queryset:
+        new_screenshots = [{'small_image': i.small_image.id, 'large_image': i.large_image.id} for i in screenshots]
+    else:
+        new_screenshots = [{'small_image': i['small_image']['id'], 'large_image': i['large_image']['id']} for i in screenshots]
+    # TODO: sort??
+    return str(new_screenshots)
+
+def bool_to_string(var):
+    return str(var).lower()
