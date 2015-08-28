@@ -34,7 +34,17 @@ class StorefrontTest(TestCase):
 
         """
         username = 'wsmith'
-        listings = model_access.get_storefront(username)
+        data = model_access.get_storefront(username)
+
+        # test that only APPROVED listings are returned
+        for i in data['featured']:
+            self.assertEqual(i.approval_status, models.ApprovalStatus.APPROVED)
+
+        for i in data['recent']:
+            self.assertEqual(i.approval_status, models.ApprovalStatus.APPROVED)
+
+        for i in data['most_popular']:
+            self.assertEqual(i.approval_status, models.ApprovalStatus.APPROVED)
 
 
     def test_get_metadata(self):

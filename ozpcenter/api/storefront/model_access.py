@@ -39,19 +39,22 @@ def get_storefront(username):
     if data is None:
         try:
             # get featured listings
-            featured_listings = models.Listing.objects.for_user(username).filter(
-                is_featured=True,
-                )[:12]
+            featured_listings = models.Listing.objects.for_user(
+                username).filter(
+                    is_featured=True,
+                    approval_status=models.ApprovalStatus.APPROVED)[:12]
 
             # get recent listings
-            recent_listings = models.Listing.objects.for_user(username).order_by(
-                'approved_date').filter(
-                )[:24]
+            recent_listings = models.Listing.objects.for_user(
+                username).order_by(
+                    'approved_date').filter(
+                        approval_status=models.ApprovalStatus.APPROVED)[:24]
 
             # get most popular listings via a weighted average
-            most_popular_listings = models.Listing.objects.for_user(username).order_by(
+            most_popular_listings = models.Listing.objects.for_user(
+                username).order_by(
                 'avg_rate').filter(
-                )[:36]
+                    approval_status=models.ApprovalStatus.APPROVED)[:36]
 
             data = {
                 'featured': featured_listings,
