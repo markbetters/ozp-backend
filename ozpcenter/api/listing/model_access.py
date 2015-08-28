@@ -409,17 +409,93 @@ def doc_urls_to_string(doc_urls, queryset=False):
 def screenshots_to_string(screenshots, queryset=False):
     """
     Args:
-        screenshots: [{"small_image": {"id": 1}, "large_image": {"id": 2}}, ...] OR
+        screenshots: [({"small_image": {"id": 1}, "large_image": {"id": 2}}), ...] OR
         screenshots: [models.Screenshot] (if queryset=True)
     Returns:
-        "[{'small_image': 'id', 'large_image': 'id'}, ...]"
+        "[(<small_image_id>, <large_image_id>), ...]"
     """
     if queryset:
-        new_screenshots = [{'small_image': i.small_image.id, 'large_image': i.large_image.id} for i in screenshots]
+        new_screenshots = [(i.small_image.id, i.large_image.id) for i in screenshots]
     else:
-        new_screenshots = [{'small_image': i['small_image']['id'], 'large_image': i['large_image']['id']} for i in screenshots]
-    # TODO: sort??
-    return str(new_screenshots)
+        new_screenshots = [(i['small_image']['id'], i['large_image']['id']) for i in screenshots]
+    return str(sorted(new_screenshots))
+
+def contacts_to_string(contacts, queryset=False):
+    """
+    Args:
+        contacts: [
+            {"contact_type": {"name": "Government"},
+                "secure_phone": "111-222-3434",
+                "unsecure_phone": "444-555-4545",
+                "email": "a@a.com",
+                "name": "me",
+                "organization": null}] OR
+            [models.Contact] (if queryset=True)
+    Returns:
+        [('name', 'email'), ...]
+    """
+    if queryset:
+        new_contacts = [(i.name, i.email) for i in contacts]
+    else:
+        new_contacts = [(i['name'], i['email']) for i in contacts]
+    return str(sorted(new_contacts))
+
+def intents_to_string(intents, queryset=False):
+    """
+    Args:
+        intents: [{"action": "/application/json/view"}, ...] OR
+                    [models.Intent] (if queryset=True)
+    Returns:
+        ['<intent.action', ...]
+    """
+    if queryset:
+        new_intents = [i.action for i in intents]
+    else:
+        new_intents = [i['action'] for i in intents]
+    return str(sorted(new_intents))
+
+def categories_to_string(categories, queryset=False):
+    """
+    Args:
+        categories: [{"title": "Business"}, ...] OR
+                    [models.Category] (if queryset=True)
+    Returns:
+        ['<category.title', ...]
+    """
+    if queryset:
+        new_categories = [i.title for i in categories]
+    else:
+        new_categories = [i['title'] for i in categories]
+    return str(sorted(new_categories))
+
+def tags_to_string(tags, queryset=False):
+    """
+    Args:
+        tags: [{"name": "Demo"}, ...] OR
+                    [models.Tag] (if queryset=True)
+    Returns:
+        ['<tag.name', ...]
+    """
+    if queryset:
+        new_tags = [i.name for i in tags]
+    else:
+        new_tags = [i['name'] for i in tags]
+    return str(sorted(new_tags))
+
+def owners_to_string(owners, queryset=False):
+    """
+    Args:
+        owners: [{"user": {"username": "jack"}}, ...] OR
+                    [models.Profile] (if queryset=True)
+    Returns:
+        ['<Profile.user.username', ...]
+    """
+    if queryset:
+        new_owners = [i.user.username for i in owners]
+    else:
+        new_owners = [i['user']['username'] for i in owners]
+    return str(sorted(new_owners))
+
 
 def bool_to_string(var):
     return str(var).lower()

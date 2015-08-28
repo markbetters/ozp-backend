@@ -810,6 +810,34 @@ class ListingApiTest(APITestCase):
                         self.assertEqual(change['new_value'], data['is_private'])
                         self.assertEqual(change['old_value'], model_access.bool_to_string(old_listing_data['is_private']))
                         total_found += 1
+                    if change['field_name'] == 'is_featured':
+                        self.assertEqual(change['new_value'], data['is_featured'])
+                        self.assertEqual(change['old_value'], model_access.bool_to_string(old_listing_data['is_featured']))
+                        total_found += 1
+                    if change['field_name'] == 'listing_type':
+                        self.assertEqual(change['new_value'], data['listing_type']['title'])
+                        self.assertEqual(change['old_value'], old_listing_data['listing_type']['title'])
+                        total_found += 1
+                    if change['field_name'] == 'access_control':
+                        self.assertEqual(change['new_value'], data['access_control']['title'])
+                        self.assertEqual(change['old_value'], old_listing_data['access_control']['title'])
+                        total_found += 1
+                    if change['field_name'] == 'small_icon':
+                        self.assertEqual(change['new_value'], str(data['small_icon']['id']))
+                        self.assertEqual(change['old_value'], str(old_listing_data['small_icon']['id']))
+                        total_found += 1
+                    if change['field_name'] == 'large_icon':
+                        self.assertEqual(change['new_value'], str(data['large_icon']['id']))
+                        self.assertEqual(change['old_value'], str(old_listing_data['large_icon']['id']))
+                        total_found += 1
+                    if change['field_name'] == 'banner_icon':
+                        self.assertEqual(change['new_value'], str(data['banner_icon']['id']))
+                        self.assertEqual(change['old_value'], str(old_listing_data['banner_icon']['id']))
+                        total_found += 1
+                    if change['field_name'] == 'large_banner_icon':
+                        self.assertEqual(change['new_value'], str(data['large_banner_icon']['id']))
+                        self.assertEqual(change['old_value'], str(old_listing_data['large_banner_icon']['id']))
+                        total_found += 1
                     if change['field_name'] == 'doc_urls':
                         self.assertEqual(change['new_value'],
                             model_access.doc_urls_to_string(data['doc_urls']))
@@ -822,12 +850,39 @@ class ListingApiTest(APITestCase):
                         self.assertEqual(change['old_value'],
                             model_access.screenshots_to_string(old_listing_data['screenshots']))
                         total_found += 1
+                    if change['field_name'] == 'contacts':
+                        self.assertEqual(change['new_value'],
+                            model_access.contacts_to_string(data['contacts']))
+                        self.assertEqual(change['old_value'],
+                            model_access.contacts_to_string(old_listing_data['contacts']))
+                        total_found += 1
+                    if change['field_name'] == 'intents':
+                        self.assertEqual(change['new_value'],
+                            model_access.intents_to_string(data['intents']))
+                        self.assertEqual(change['old_value'],
+                            model_access.intents_to_string(old_listing_data['intents']))
+                        total_found += 1
+                    if change['field_name'] == 'categories':
+                        self.assertEqual(change['new_value'],
+                            model_access.categories_to_string(data['categories']))
+                        self.assertEqual(change['old_value'],
+                            model_access.categories_to_string(old_listing_data['categories']))
+                        total_found += 1
+                    if change['field_name'] == 'tags':
+                        self.assertEqual(change['new_value'],
+                            model_access.tags_to_string(data['tags']))
+                        self.assertEqual(change['old_value'],
+                            model_access.tags_to_string(old_listing_data['tags']))
+                        total_found += 1
+                    if change['field_name'] == 'owners':
+                        self.assertEqual(change['new_value'],
+                            model_access.owners_to_string(data['owners']))
+                        self.assertEqual(change['old_value'],
+                            model_access.owners_to_string(old_listing_data['owners']))
+                        total_found += 1
 
 
-        # self.assertEqual(total_found, len(fields))
-        self.assertEqual(total_found, 12)
-
-
+        self.assertEqual(total_found, len(fields)-1)    # -1 for approved_status
 
     def test_update_listing_approval_status_deny_user(self):
         # a standard user cannot update the approval_status

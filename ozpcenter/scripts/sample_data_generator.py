@@ -1,5 +1,11 @@
 """
 Creates test data
+
+************************************WARNING************************************
+Many of the unit tests depend on data set in this script. Always
+run the unit tests (python manage.py test) after making any changes to this
+data!!
+************************************WARNING************************************
 """
 import datetime
 import os

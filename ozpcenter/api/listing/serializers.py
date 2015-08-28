@@ -327,8 +327,12 @@ class ListingSerializer(serializers.ModelSerializer):
                 listing.contacts.add(new_contact)
 
         if 'owners' in validated_data:
-            for owner in validated_data['owners']:
-                listing.owners.add(owner)
+            if validated_data['owners']:
+                for owner in validated_data['owners']:
+                    listing.owners.add(owner)
+            else:
+                # if no owners are specified, just add the current user
+                listing.owners.add(user)
 
         if 'categories' in validated_data:
             for category in validated_data['categories']:
@@ -368,6 +372,12 @@ class ListingSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         user = generic_model_access.get_profile(
             self.context['request'].user.username)
+
+        if user.highest_role() not in ['APPS_MALL_STEWARD', 'ORG_STEWARD']:
+            if user not in instance.owners.all():
+                raise errors.PermissionDenied(
+                    'User is not an owner of this listing')
+
         change_details = []
 
         simple_fields = ['title', 'description', 'description_short',
@@ -398,13 +408,15 @@ class ListingSerializer(serializers.ModelSerializer):
             instance.is_featured = validated_data['is_featured']
 
         s = validated_data['approval_status']
-        if s and  s != instance.approval_status:
-            user = generic_model_access.get_profile(
-                self.context['request'].user.username)
+        if s and s != instance.approval_status:
             if s == models.ApprovalStatus.APPROVED and user.highest_role() != 'APPS_MALL_STEWARD':
                 raise errors.PermissionDenied('Only an APPS_MALL_STEWARD can mark a listing as APPROVED')
             if s == models.ApprovalStatus.APPROVED_ORG and user.highest_role() not in ['APPS_MALL_STEWARD', 'ORG_STEWARD']:
                 raise errors.PermissionDenied('Only stewards can mark a listing as APPROVED_ORG')
+
+            if s == models.ApprovalStatus.PENDING:
+                # user has submitted this app
+                model_access.submit_listing(user, instance)
 
             change_details.append({'old_value': instance.approval_status,
                     'new_value': validated_data['approval_status'], 'field_name': 'approval_status'})
@@ -441,9 +453,12 @@ class ListingSerializer(serializers.ModelSerializer):
             instance.large_banner_icon = validated_data['large_banner_icon']
 
         if 'contacts' in validated_data:
-            old_contacts = [(i.name, i.email) for i in instance.contacts.all()]
-            new_contacts = [(i['name'], i['email']) for i in validated_data['contacts']]
-            if sorted(old_contacts) != sorted(new_contacts):
+            old_contact_instances = instance.contacts.all()
+            old_contacts = model_access.contacts_to_string(
+                old_contact_instances, True)
+            new_contacts = model_access.contacts_to_string(
+                validated_data['contacts'])
+            if old_contacts != new_contacts:
                 change_details.append({'old_value': old_contacts,
                     'new_value': new_contacts, 'field_name': 'contacts'})
                 instance.contacts.clear()
@@ -460,9 +475,12 @@ class ListingSerializer(serializers.ModelSerializer):
                     instance.contacts.add(obj)
 
         if 'categories' in validated_data:
-            old_categories = [i.title for i in instance.categories.all()]
-            new_categories = [i.title for i in validated_data['categories']]
-            if sorted(old_categories) != sorted(new_categories):
+            old_category_instances = instance.categories.all()
+            old_categories = model_access.categories_to_string(
+                old_category_instances, True)
+            new_categories = model_access.categories_to_string(
+                validated_data['categories'], True)
+            if old_categories != new_categories:
                 change_details.append({'old_value': old_categories,
                     'new_value': new_categories, 'field_name': 'categories'})
                 instance.categories.clear()
@@ -470,9 +488,12 @@ class ListingSerializer(serializers.ModelSerializer):
                     instance.categories.add(category)
 
         if 'owners' in validated_data:
-            old_owners = [i.user.username for i in instance.owners.all()]
-            new_owners = [i.user.username for i in validated_data['owners']]
-            if sorted(old_owners) != sorted(new_owners):
+            old_owner_instances = instance.owners.all()
+            old_owners = model_access.owners_to_string(
+                old_owner_instances, True)
+            new_owners = model_access.owners_to_string(
+                validated_data['owners'], True)
+            if old_owners != new_owners:
                 change_details.append({'old_value': old_owners,
                     'new_value': new_owners, 'field_name': 'owners'})
                 instance.owners.clear()
@@ -481,9 +502,10 @@ class ListingSerializer(serializers.ModelSerializer):
 
         # tags will be automatically created if necessary
         if 'tags' in validated_data:
-            old_tags = [i.name for i in instance.tags.all()]
-            new_tags = [i['name'] for i in validated_data['tags']]
-            if sorted(old_tags) != sorted(new_tags):
+            old_tag_instances = instance.tags.all()
+            old_tags = model_access.tags_to_string(old_tag_instances, True)
+            new_tags = model_access.tags_to_string(validated_data['tags'])
+            if old_tags != new_tags:
                 change_details.append({'old_value': old_tags,
                     'new_value': new_tags, 'field_name': 'tags'})
                 instance.tags.clear()
@@ -493,9 +515,12 @@ class ListingSerializer(serializers.ModelSerializer):
                     instance.tags.add(obj)
 
         if 'intents' in validated_data:
-            old_intents = [i.action for i in instance.intents.all()]
-            new_intents = [i.action for i in validated_data['intents']]
-            if sorted(old_intents) != sorted(new_intents):
+            old_intent_instances = instance.intents.all()
+            old_intents = model_access.intents_to_string(old_intent_instances,
+                True)
+            new_intents = model_access.intents_to_string(
+                validated_data['intents'], True)
+            if old_intents != new_intents:
                 change_details.append({'old_value': old_intents,
                     'new_value': new_intents, 'field_name': 'intents'})
                 instance.intents.clear()

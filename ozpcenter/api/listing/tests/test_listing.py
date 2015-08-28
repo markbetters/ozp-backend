@@ -315,9 +315,75 @@ class ListingTest(TestCase):
         ]
 
         out = model_access.screenshots_to_string(screenshots)
-        self.assertEqual(out, "[{'small_image': 1, 'large_image': 2}]")
+        self.assertEqual(out, "[(1, 2)]")
 
-        screenshots = models.Screenshots.objects.filter(listing__id=1)
+        screenshots = models.Screenshot.objects.filter(listing__id=1)
         out = model_access.screenshots_to_string(screenshots, True)
+
+    def test_contacts_to_string(self):
+        contacts = [
+            {
+                "contact_type": {"name": "Government"},
+                "secure_phone": "111-222-3434",
+                "unsecure_phone": "444-555-4545",
+                "email": "me@google.com",
+                "name": "me",
+                "organization": None
+            },
+            {
+                "contact_type": {"name": "Military"},
+                "secure_phone": "111-222-3434",
+                "unsecure_phone": "444-555-4545",
+                "email": "you@google.com",
+                "name": "you",
+                "organization": None
+            }
+        ]
+
+        out = model_access.contacts_to_string(contacts)
+        self.assertEqual(out, "[('me', 'me@google.com'), ('you', 'you@google.com')]")
+
+        contacts = models.Contact.objects.filter(organization='House Stark')
+        out = model_access.contacts_to_string(contacts, True)
+        self.assertEqual(out, "[('Brienne Tarth', 'brienne@stark.com'), ('Osha', 'osha@stark.com')]")
+
+    def test_categories_to_string(self):
+        categories = [
+            {"title": "Business"},
+            {"title": "Education"}
+        ]
+
+        out = model_access.categories_to_string(categories)
+        self.assertEqual(out, "['Business', 'Education']")
+
+        categories = models.Category.objects.filter(title__istartswith='b')
+        out = model_access.categories_to_string(categories, True)
+        self.assertEqual(out, "['Books and Reference', 'Business']")
+
+    def test_tags_to_string(self):
+        tags = [
+            {"name": "test tag one"},
+            {"name": "test tag two"}
+        ]
+
+        out = model_access.tags_to_string(tags)
+        self.assertEqual(out, "['test tag one', 'test tag two']")
+
+        tags = models.Tag.objects.all()
+        out = model_access.tags_to_string(tags, True)
+        self.assertEqual(out, "['demo', 'example']")
+
+    def test_owners_to_string(self):
+        owners = [
+            {"user": {"username": "jack"}},
+            {"user": {"username": "jill"}}
+        ]
+
+        out = model_access.owners_to_string(owners)
+        self.assertEqual(out, "['jack', 'jill']")
+
+        owners = models.Profile.objects.filter(user__username__istartswith='j')
+        out = model_access.owners_to_string(owners, True)
+        self.assertEqual(out, "['jones', 'julia']")
 
 
