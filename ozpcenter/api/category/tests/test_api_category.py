@@ -57,7 +57,7 @@ class CategoryApiTest(APITestCase):
         self.assertTrue(description != None)
 
     def test_create_category(self):
-        user = generic_model_access.get_profile('wsmith').user
+        user = generic_model_access.get_profile('bigbrother').user
         self.client.force_authenticate(user=user)
         url = '/api/category/'
         data = {'title': 'new category', 'description': 'category description'}
@@ -69,7 +69,7 @@ class CategoryApiTest(APITestCase):
         self.assertEqual(description, 'category description')
 
     def test_update_category(self):
-        user = generic_model_access.get_profile('wsmith').user
+        user = generic_model_access.get_profile('bigbrother').user
         self.client.force_authenticate(user=user)
         url = '/api/category/1/'
         data = {'title': 'updated category', 'description': 'updated description'}
@@ -81,7 +81,7 @@ class CategoryApiTest(APITestCase):
         self.assertEqual(description, 'updated description')
 
     def test_delete_category(self):
-        user = generic_model_access.get_profile('wsmith').user
+        user = generic_model_access.get_profile('bigbrother').user
         self.client.force_authenticate(user=user)
         url = '/api/category/1/'
         response = self.client.delete(url, format='json')

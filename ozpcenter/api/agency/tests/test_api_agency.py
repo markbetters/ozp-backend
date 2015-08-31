@@ -56,7 +56,7 @@ class AgencyApiTest(APITestCase):
         self.assertEqual(short_name, 'Minitrue')
 
     def test_create_agency(self):
-        user = generic_model_access.get_profile('wsmith').user
+        user = generic_model_access.get_profile('bigbrother').user
         self.client.force_authenticate(user=user)
         url = '/api/agency/'
         data = {'title': 'new agency', 'short_name': 'orgname'}
@@ -68,7 +68,7 @@ class AgencyApiTest(APITestCase):
         self.assertEqual(short_name, 'orgname')
 
     def test_update_agency(self):
-        user = generic_model_access.get_profile('wsmith').user
+        user = generic_model_access.get_profile('bigbrother').user
         self.client.force_authenticate(user=user)
         url = '/api/agency/1/'
         data = {'title': 'updated agency', 'short_name': 'uporg'}
@@ -80,7 +80,7 @@ class AgencyApiTest(APITestCase):
         self.assertEqual(short_name, 'uporg')
 
     def test_delete_agency(self):
-        user = generic_model_access.get_profile('wsmith').user
+        user = generic_model_access.get_profile('bigbrother').user
         self.client.force_authenticate(user=user)
         url = '/api/agency/1/'
         response = self.client.delete(url, format='json')

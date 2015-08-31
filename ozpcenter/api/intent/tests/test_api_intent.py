@@ -56,7 +56,7 @@ class IntentApiTest(APITestCase):
         self.assertEqual(action, '/application/json/view')
 
     def test_create_intent(self):
-        user = generic_model_access.get_profile('wsmith').user
+        user = generic_model_access.get_profile('bigbrother').user
         self.client.force_authenticate(user=user)
         url = '/api/intent/'
         data = {'action': '/application/test',
@@ -67,7 +67,7 @@ class IntentApiTest(APITestCase):
         action = response.data['action']
 
     def test_update_intent(self):
-        user = generic_model_access.get_profile('wsmith').user
+        user = generic_model_access.get_profile('bigbrother').user
         self.client.force_authenticate(user=user)
         url = '/api/intent/1/'
         data = {'action': '/application/json/viewtest',
@@ -83,7 +83,7 @@ class IntentApiTest(APITestCase):
         self.assertEqual(media_type, 'vnd.ozp-intent-v2+json.json')
 
     def test_delete_intent(self):
-        user = generic_model_access.get_profile('wsmith').user
+        user = generic_model_access.get_profile('bigbrother').user
         self.client.force_authenticate(user=user)
         url = '/api/intent/1/'
         response = self.client.delete(url, format='json')

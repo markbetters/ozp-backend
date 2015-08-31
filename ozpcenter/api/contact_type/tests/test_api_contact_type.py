@@ -55,7 +55,7 @@ class ContactTypeApiTest(APITestCase):
         self.assertEqual(name, 'Civillian')
 
     def test_create_contact_type(self):
-        user = generic_model_access.get_profile('wsmith').user
+        user = generic_model_access.get_profile('bigbrother').user
         self.client.force_authenticate(user=user)
         url = '/api/contact_type/'
         data = {'name': 'New Contact Type'}
@@ -65,7 +65,7 @@ class ContactTypeApiTest(APITestCase):
         self.assertEqual(name, 'New Contact Type')
 
     def test_update_contact_type(self):
-        user = generic_model_access.get_profile('wsmith').user
+        user = generic_model_access.get_profile('bigbrother').user
         self.client.force_authenticate(user=user)
         url = '/api/contact_type/1/'
         data = {'name': 'Updated Type', 'required': True}
@@ -77,7 +77,7 @@ class ContactTypeApiTest(APITestCase):
         self.assertEqual(required, True)
 
     def test_delete_contact_type(self):
-        user = generic_model_access.get_profile('wsmith').user
+        user = generic_model_access.get_profile('bigbrother').user
         self.client.force_authenticate(user=user)
         url = '/api/contact_type/1/'
         response = self.client.delete(url, format='json')

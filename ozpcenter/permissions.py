@@ -8,6 +8,26 @@ from rest_framework import permissions
 import ozpcenter.models as models
 import ozpcenter.model_access as model_access
 
+SAFE_METHODS = ['GET', 'HEAD', 'OPTIONS']
+
+class IsAppsMallStewardOrReadOnly(permissions.BasePermission):
+    def has_permission(self, request, view):
+        user_profile = model_access.get_profile(request.user.username)
+        if (request.method in SAFE_METHODS or \
+            user_profile.highest_role() in ['APPS_MALL_STEWARD']):
+            return True
+        return False
+
+
+class IsOrgStewardOrReadOnly(permissions.BasePermission):
+    def has_permission(self, request, view):
+        user_profile = model_access.get_profile(request.user.username)
+        if (request.method in SAFE_METHODS or \
+            user_profile.highest_role() in ['APPS_MALL_STEWARD', 'ORG_STEWARD']):
+            return True
+        return False
+
+
 class IsUser(permissions.BasePermission):
     """
     Global permission check if current user is a User
