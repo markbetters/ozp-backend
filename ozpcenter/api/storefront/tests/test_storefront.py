@@ -46,7 +46,6 @@ class StorefrontTest(TestCase):
         for i in data['most_popular']:
             self.assertEqual(i.approval_status, models.ApprovalStatus.APPROVED)
 
-
     def test_get_metadata(self):
         """
         test for model_access.get_metadata()

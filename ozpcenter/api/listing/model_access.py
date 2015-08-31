@@ -233,8 +233,7 @@ def enable_listing(user, listing):
     """
     Enable a listing
     """
-    listing = _add_listing_activity(user, listing,
-        models.Action.ENABLED)
+    listing = _add_listing_activity(user, listing, models.Action.ENABLED)
     listing.is_enabled = True
     listing.save()
     return listing

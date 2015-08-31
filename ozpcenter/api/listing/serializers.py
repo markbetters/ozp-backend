@@ -391,8 +391,15 @@ class ListingSerializer(serializers.ModelSerializer):
                 setattr(instance, i, validated_data[i])
 
         if validated_data['is_enabled'] != instance.is_enabled:
-            change_details.append({'old_value':model_access.bool_to_string(instance.is_enabled),
-                    'new_value': model_access.bool_to_string(validated_data['is_enabled']), 'field_name': 'is_enabled'})
+            if validated_data['is_enabled']:
+                model_access.enable_listing(user, instance)
+                change_details.append({'field_name': 'is_enabled',
+                    'old_value': 'false', 'new_value': 'true'})
+            else:
+                model_access.disable_listing(user, instance)
+                change_details.append({'field_name': 'is_enabled',
+                    'old_value': 'true', 'new_value': 'false'})
+
             instance.is_enabled = validated_data['is_enabled']
 
         if validated_data['is_private'] != instance.is_private:
@@ -415,12 +422,14 @@ class ListingSerializer(serializers.ModelSerializer):
                 raise errors.PermissionDenied('Only stewards can mark a listing as APPROVED_ORG')
 
             if s == models.ApprovalStatus.PENDING:
-                # user has submitted this app
                 model_access.submit_listing(user, instance)
-
-            change_details.append({'old_value': instance.approval_status,
-                    'new_value': validated_data['approval_status'], 'field_name': 'approval_status'})
-            instance.approval_status = validated_data['approval_status']
+            if s == models.ApprovalStatus.APPROVED_ORG:
+                model_access.approve_listing_by_org_steward(user, instance)
+            if s == models.ApprovalStatus.APPROVED:
+                model_access.approve_listing(user, instance)
+            if s == models.ApprovalStatus.REJECTED:
+                # TODO: need to get the rejection text from somewhere
+                model_access.reject_listing(user, instance, 'TODO: rejection reason')
 
         if instance.access_control != validated_data['access_control']:
             change_details.append({'old_value': instance.access_control.title,

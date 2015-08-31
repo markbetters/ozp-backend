@@ -933,22 +933,40 @@ class ListingApiTest(APITestCase):
         # MODIFIED
         url = '/api/listing/%s/' % app_id
         response = self.client.put(url, data, format='json')
+        data = response.data
 
         url = '/api/listing/%s/activity/' % app_id
         response = self.client.get(url, format='json')
         activity_actions = [i['action'] for i in response.data]
         self.assertTrue(len(activity_actions), 2)
-        print('activiy_actions: %s' % activity_actions)
         self.assertTrue(models.Action.MODIFIED in activity_actions)
 
         # SUBMITTED
+        data['approval_status'] = models.ApprovalStatus.PENDING
+        url = '/api/listing/%s/' % app_id
+        response = self.client.put(url, data, format='json')
 
+        url = '/api/listing/%s/activity/' % app_id
+        response = self.client.get(url, format='json')
+        activity_actions = [i['action'] for i in response.data]
+        self.assertTrue(len(activity_actions), 3)
+        print('activity actions: %s' % activity_actions)
+        self.assertTrue(models.Action.SUBMITTED in activity_actions)
 
         # APPROVED_ORG
 
         # APPROVED
 
         # ENABLED
+        data['is_enabled'] = False
+        url = '/api/listing/%s/' % app_id
+        response = self.client.put(url, data, format='json')
+
+        url = '/api/listing/%s/activity/' % app_id
+        response = self.client.get(url, format='json')
+        activity_actions = [i['action'] for i in response.data]
+        self.assertTrue(len(activity_actions), 4)
+        self.assertTrue(models.Action.DISABLED in activity_actions)
 
         # DISABLED
 
