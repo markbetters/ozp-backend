@@ -1,5 +1,5 @@
 """
-Tests for ContactType endpoints
+Tests for intent endpoints
 """
 import unittest
 
@@ -19,7 +19,7 @@ from ozpcenter import models as models
 from ozpcenter import model_access as generic_model_access
 
 
-class ContactTypeApiTest(APITestCase):
+class IntentApiTest(APITestCase):
 
     def setUp(self):
         """
@@ -34,52 +34,58 @@ class ContactTypeApiTest(APITestCase):
         """
         data_gen.run()
 
-    def test_get_contact_type_list(self):
+    def test_get_intent_list(self):
         user = generic_model_access.get_profile('wsmith').user
         self.client.force_authenticate(user=user)
-        url = '/api/contact_type/'
+        url = '/api/intent/'
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        names = [i['name'] for i in response.data]
-        self.assertTrue('Civillian' in names)
-        self.assertTrue('Government' in names)
-        self.assertTrue(len(names) > 2)
+        actions = [i['action'] for i in response.data]
+        self.assertTrue('/application/json/view' in actions)
+        self.assertTrue(response.data[0]['icon'] != None)
+        self.assertTrue(response.data[0]['media_type'] != None)
+        self.assertTrue(response.data[0]['label'] != None)
 
-    def test_get_contact_type(self):
+    def test_get_intent(self):
         user = generic_model_access.get_profile('wsmith').user
         self.client.force_authenticate(user=user)
-        url = '/api/contact_type/1/'
+        url = '/api/intent/1/'
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        name = response.data['name']
-        self.assertEqual(name, 'Civillian')
+        action = response.data['action']
+        self.assertEqual(action, '/application/json/view')
 
-    def test_create_contact_type(self):
+    def test_create_intent(self):
         user = generic_model_access.get_profile('wsmith').user
         self.client.force_authenticate(user=user)
-        url = '/api/contact_type/'
-        data = {'name': 'New Contact Type'}
+        url = '/api/intent/'
+        data = {'action': '/application/test',
+            'media_type': 'vnd.ozp-intent-v1+json.json', 'label': 'test',
+            'icon': {'id': 1}}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        name = response.data['name']
-        self.assertEqual(name, 'New Contact Type')
+        action = response.data['action']
 
-    def test_update_contact_type(self):
+    def test_update_intent(self):
         user = generic_model_access.get_profile('wsmith').user
         self.client.force_authenticate(user=user)
-        url = '/api/contact_type/1/'
-        data = {'name': 'Updated Type', 'required': True}
+        url = '/api/intent/1/'
+        data = {'action': '/application/json/viewtest',
+            'media_type': 'vnd.ozp-intent-v2+json.json', 'label': 'mylabel',
+            'icon': {'id': 1}}
         response = self.client.put(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        name = response.data['name']
-        required = response.data['required']
-        self.assertEqual(name, 'Updated Type')
-        self.assertEqual(required, True)
+        action = response.data['action']
+        label = response.data['label']
+        media_type = response.data['media_type']
+        self.assertEqual(action, '/application/json/viewtest')
+        self.assertEqual(label, 'mylabel')
+        self.assertEqual(media_type, 'vnd.ozp-intent-v2+json.json')
 
-    def test_delete_contact_type(self):
+    def test_delete_intent(self):
         user = generic_model_access.get_profile('wsmith').user
         self.client.force_authenticate(user=user)
-        url = '/api/contact_type/1/'
+        url = '/api/intent/1/'
         response = self.client.delete(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 

@@ -21,3 +21,27 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.Image
         fields = ('url', 'id', 'access_control')
+
+
+class AccessControlSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.AccessControl
+        fields = ('title',)
+
+        extra_kwargs = {
+            'title': {'validators': []}
+        }
+
+class ShortImageSerializer(serializers.HyperlinkedModelSerializer):
+    access_control = AccessControlSerializer(required=False)
+    class Meta:
+        model = models.Image
+        fields = ('url', 'id', 'access_control')
+
+        extra_kwargs = {
+            'access_control': {'validators': []},
+            "id": {
+                "read_only": False,
+                "required": False,
+            }
+        }
