@@ -227,7 +227,8 @@ class Agency(models.Model):
         * steward_profiles
     """
     title = models.CharField(max_length=255, unique=True)
-    icon = models.ForeignKey(Image, related_name='agency')
+    icon = models.ForeignKey(Image, related_name='agency', null=True,
+        blank=True)
 
     short_name = models.CharField(max_length=8, unique=True)
 
