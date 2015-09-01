@@ -970,6 +970,65 @@ class ListingApiTest(APITestCase):
 
         # DISABLED
 
+    def test_get_all_listing_activities(self):
+        """
+        All stewards should be able to access this endpoint (not std users)
+
+        Make sure org stewards of one org can't access activity for private
+        listings of another org.
+        """
+        expected_titles = ['Air Mail', 'Bread Basket', 'Chart Course',
+            'Chatter Box', 'Clipboard']
+        user = generic_model_access.get_profile('jones').user
+        self.client.force_authenticate(user=user)
+        url = '/api/listings/activity/'
+        response = self.client.get(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+        user = generic_model_access.get_profile('wsmith').user
+        self.client.force_authenticate(user=user)
+        url = '/api/listings/activity/'
+        response = self.client.get(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        titles = [i['listing']['title'] for i in response.data]
+        counter = 0
+        for i in expected_titles:
+            self.assertTrue(i in titles)
+            counter += 1
+        self.assertEqual(counter, len(expected_titles))
+
+        user = generic_model_access.get_profile('bigbrother').user
+        self.client.force_authenticate(user=user)
+        url = '/api/listings/activity/'
+        response = self.client.get(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        titles = [i['listing']['title'] for i in response.data]
+        counter = 0
+        for i in expected_titles:
+            self.assertTrue(i in titles)
+            counter += 1
+        self.assertEqual(counter, len(expected_titles))
+
+    def test_get_self_listing_activities(self):
+        """
+        Returns activity for listings owned by current user
+        """
+        expected_titles = ['Bread Basket', 'Chatter Box']
+
+        user = generic_model_access.get_profile('julia').user
+        self.client.force_authenticate(user=user)
+        url = '/api/self/listings/activity/'
+        response = self.client.get(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        titles = [i['listing']['title'] for i in response.data]
+        counter = 0
+        for i in expected_titles:
+            self.assertTrue(i in titles)
+            counter += 1
+        self.assertEqual(counter, len(expected_titles))
+
+
+
 
 
 

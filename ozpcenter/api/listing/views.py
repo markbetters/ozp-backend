@@ -158,6 +158,44 @@ class ListingTypeViewSet(viewsets.ModelViewSet):
     queryset = models.ListingType.objects.all()
     serializer_class = serializers.ListingTypeSerializer
 
+
+class ListingUserActivitiesViewSet(viewsets.ModelViewSet):
+    """
+    ListingUserActivitiesViewSet endpoints are read-only
+    """
+    permission_classes = (permissions.IsUser,)
+    serializer_class = serializers.ListingActivitySerializer
+
+    def get_queryset(self):
+        return models.ListingActivity.objects.for_user(
+            self.request.user.username).filter(
+              listing__owners__user__username__exact=self.request.user.username)
+
+    def list(self, request):
+        queryset = self.get_queryset()
+        serializer = serializers.ListingActivitySerializer(queryset,
+            context={'request': request}, many=True)
+        return Response(serializer.data)
+
+
+class ListingActivitiesViewSet(viewsets.ModelViewSet):
+    """
+    ListingActivity endpoints are read-only
+    """
+    permission_classes = (permissions.IsOrgSteward,)
+    serializer_class = serializers.ListingActivitySerializer
+
+    def get_queryset(self):
+        return models.ListingActivity.objects.for_user(
+            self.request.user.username).all()
+
+    def list(self, request):
+        queryset = self.get_queryset()
+        serializer = serializers.ListingActivitySerializer(queryset,
+            context={'request': request}, many=True)
+        return Response(serializer.data)
+
+
 class ListingActivityViewSet(viewsets.ModelViewSet):
     """
     ListingActivity endpoints are read-only

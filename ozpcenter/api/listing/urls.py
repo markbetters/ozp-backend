@@ -18,8 +18,14 @@ router.register(r'listing', views.ListingViewSet, base_name="listing")
 # nested router
 router.register(r'listings/search', views.ListingSearchViewSet,
     base_name='listingssearch')
+# Ideally this route would be listing/activity, but that conflicts with the
+# nested router
+router.register(r'listings/activity', views.ListingActivitiesViewSet,
+    base_name='listingsactivity')
 router.register(r'self/listing', views.ListingUserViewSet,
     base_name='selflisting')
+router.register(r'self/listings/activity', views.ListingUserActivitiesViewSet,
+    base_name='selflistingsactivity')
 router.register(r'listingtype', views.ListingTypeViewSet)
 
 # nested routes
