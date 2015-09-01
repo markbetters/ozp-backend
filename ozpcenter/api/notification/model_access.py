@@ -40,3 +40,13 @@ def get_self_notifications(username):
         pk__in=dismissed_notifications)
 
     return notifications
+
+def get_all_pending_notifications():
+    unexpired_system_notifications = models.Notification.objects.filter(
+        expires_date__gt=datetime.datetime.now(pytz.utc), listing__isnull=True)
+    return unexpired_system_notifications
+
+def get_all_expired_notifications():
+    expired_system_notifications = models.Notification.objects.filter(
+        expires_date__lt=datetime.datetime.now(pytz.utc), listing__isnull=True)
+    return expired_system_notifications

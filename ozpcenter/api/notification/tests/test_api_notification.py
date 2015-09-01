@@ -1,6 +1,9 @@
 """
 Tests for notification endpoints
 """
+import datetime
+import pytz
+
 from rest_framework.reverse import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
@@ -34,7 +37,7 @@ class NotificationApiTest(APITestCase):
         url = '/api/self/notification/'
         # test unauthorized user
         response = self.client.get(url, format='json')
-        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
         # test authorized user
         user = generic_model_access.get_profile('wsmith').user
@@ -65,7 +68,7 @@ class NotificationApiTest(APITestCase):
         dismissed_notification_id = notification_ids[0]
         url = url + str(dismissed_notification_id) + '/'
         response = self.client.delete(url, format='json')
-        self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
 
         # now get our notifications again, make sure the one was removed
@@ -78,4 +81,72 @@ class NotificationApiTest(APITestCase):
 
         self.assertEqual(1, len(notification_ids))
         self.assertTrue(notification_ids[0] != dismissed_notification_id)
+
+    def test_get_pending_notifications(self):
+        url = '/api/notifications/pending/'
+        # test unauthorized user
+        user = generic_model_access.get_profile('jones').user
+        self.client.force_authenticate(user=user)
+        response = self.client.get(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+        user = generic_model_access.get_profile('wsmith').user
+        self.client.force_authenticate(user=user)
+        response = self.client.get(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        expires_at = [i['expires_date'] for i in response.data]
+        self.assertTrue(len(expires_at) > 1)
+        now = datetime.datetime.now(pytz.utc)
+        for i in expires_at:
+            test_time = datetime.datetime.strptime(i,
+                "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=pytz.utc)
+            self.assertTrue(test_time > now)
+
+    def test_get_expired_notifications(self):
+        url = '/api/notifications/expired/'
+        # test unauthorized user
+        user = generic_model_access.get_profile('jones').user
+        self.client.force_authenticate(user=user)
+        response = self.client.get(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+        user = generic_model_access.get_profile('wsmith').user
+        self.client.force_authenticate(user=user)
+        response = self.client.get(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        expires_at = [i['expires_date'] for i in response.data]
+        self.assertTrue(len(expires_at) > 1)
+        now = datetime.datetime.now(pytz.utc)
+        for i in expires_at:
+            test_time = datetime.datetime.strptime(i,
+                "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=pytz.utc)
+            self.assertTrue(test_time < now)
+
+    def test_create_system_notification(self):
+        url = '/api/notification/'
+        # test unauthorized user - only org stewards and above can create
+        # system notifications
+        user = generic_model_access.get_profile('jones').user
+        self.client.force_authenticate(user=user)
+        data = {'expires_date': '2016-09-01T15:45:55.322421Z',
+            'message': 'a simple test'}
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+        user = generic_model_access.get_profile('wsmith').user
+        self.client.force_authenticate(user=user)
+        data = {'expires_date': '2016-09-01T15:45:55.322421Z',
+            'message': 'a simple test'}
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data['message'], 'a simple test')
+
+    def test_delete_system_notification(self):
+        url = '/api/notification/1/'
+        user = generic_model_access.get_profile('wsmith').user
+        self.client.force_authenticate(user=user)
+        now = datetime.datetime.now(pytz.utc)
+        data = {'expires_date': str(now)}
+        response = self.client.put(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 

@@ -7,10 +7,13 @@ import pytz
 
 from django.shortcuts import get_object_or_404
 
+from rest_framework.decorators import api_view
+from rest_framework.decorators import permission_classes
 from rest_framework import status
 from rest_framework import viewsets
 from rest_framework.response import Response
 
+import ozpcenter.errors as errors
 import ozpcenter.api.notification.serializers as serializers
 import ozpcenter.permissions as permissions
 import ozpcenter.models as models
@@ -23,18 +26,53 @@ logger = logging.getLogger('ozp-center')
 class NotificationViewSet(viewsets.ModelViewSet):
     # queryset = models.Notification.objects.all()
     serializer_class = serializers.NotificationSerializer
+    permission_classes = (permissions.IsUser,)
 
     def get_queryset(self):
+        return  models.Notification.objects.all()
+
+    def create(self, request):
+        try:
+            serializer = serializers.NotificationSerializer(data=request.data,
+                context={'request': request}, partial=True)
+            if not serializer.is_valid():
+                logger.error('%s' % serializer.errors)
+                return Response(serializer.errors,
+                    status=status.HTTP_400_BAD_REQUEST)
+
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        except errors.PermissionDenied:
+            return Response('Permission Denied',
+                status=status.HTTP_403_FORBIDDEN)
+        except Exception as e:
+          raise e
+
+    def update(self, request, pk=None):
         """
-        get all notifications that have not yet expired AND:
-            * have not been dismissed by this user
-            * are regarding a listing in this user's library (if the
-                notification is listing-specific)
+        update is used only change the expiration date of the message
         """
-        # TODO: add logic to ignore listing-specific notifications that are
-        #   for listings not part of user's library
-        return  models.Notification.objects.filter(
-            expires_date__gt=datetime.datetime.now(pytz.utc))
+        try:
+
+            instance = self.get_queryset().get(pk=pk)
+            serializer = serializers.NotificationSerializer(instance,
+                data=request.data, context={'request': request}, partial=True)
+
+            if not serializer.is_valid():
+                logger.error('%s' % serializer.errors)
+                return Response(serializer.errors,
+                    status=status.HTTP_400_BAD_REQUEST)
+
+            serializer.save()
+
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except errors.PermissionDenied:
+            return Response('Permission Denied',
+                status=status.HTTP_403_FORBIDDEN)
+        except Exception as e:
+          raise e
+
+
 
 class UserNotificationViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsUser,)
@@ -55,3 +93,26 @@ class UserNotificationViewSet(viewsets.ModelViewSet):
         user = generic_model_access.get_profile(self.request.user.username)
         notification.dismissed_by.add(user)
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+@api_view(['GET'])
+@permission_classes((permissions.IsOrgSteward, ))
+def PendingNotificationView(request):
+    """
+    Get all pending (unexpired) notifications
+    """
+    data = model_access.get_all_pending_notifications()
+    serializer = serializers.NotificationSerializer(data,
+        context={'request': request}, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes((permissions.IsOrgSteward, ))
+def ExpiredNotificationView(request):
+    """
+    Get all expired notifications
+    """
+    data = model_access.get_all_expired_notifications()
+    serializer = serializers.NotificationSerializer(data,
+        context={'request': request}, many=True)
+    return Response(serializer.data)
