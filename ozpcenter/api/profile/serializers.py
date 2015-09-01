@@ -8,10 +8,18 @@ import django.contrib.auth
 from rest_framework import serializers
 
 import ozpcenter.models as models
-import ozpcenter.api.agency.serializers as agency_serializers
 
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center')
+
+class AgencySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Agency
+        fields = ('short_name', 'title')
+
+        extra_kwargs = {
+            'title': {'validators': []}
+        }
 
 class GroupSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -36,13 +44,32 @@ class ShortUserSerializer(serializers.ModelSerializer):
         fields = ('username', 'email')
 
 class ProfileSerializer(serializers.ModelSerializer):
-    organizations = agency_serializers.MinimalAgencySerializer(many=True)
-    stewarded_organizations = agency_serializers.MinimalAgencySerializer(many=True)
+    organizations = AgencySerializer(many=True)
+    stewarded_organizations = AgencySerializer(many=True)
     user = UserSerializer()
     class Meta:
         model = models.Profile
         fields = ('id', 'display_name', 'bio', 'organizations',
             'stewarded_organizations', 'user', 'highest_role')
+        read_only_fields = ('id', 'bio', 'organizations', 'user',
+            'highest_role')
+
+    def validate(self, data):
+        stewarded_organizations = []
+
+        if 'stewarded_organizations' in data:
+            for org in data['stewarded_organizations']:
+                stewarded_organizations.append(models.Agency.objects.get(
+                    title=org['title']))
+        data['stewarded_organizations'] = stewarded_organizations
+        return data
+
+    def update(self, instance, validated_data):
+        if validated_data['stewarded_organizations']:
+            instance.stewarded_organizations.clear()
+            for org in validated_data['stewarded_organizations']:
+                instance.stewarded_organizations.add(org)
+        return instance
 
 class ShortProfileSerializer(serializers.ModelSerializer):
     user = ShortUserSerializer()
