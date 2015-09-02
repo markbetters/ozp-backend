@@ -79,5 +79,19 @@ class ProfileApiTest(APITestCase):
         self.assertTrue('Ministry of Love' in orgs)
         self.assertEqual(len(orgs), 2)
 
+    def test_username_starts_with(self):
+        user = generic_model_access.get_profile('wsmith').user
+        self.client.force_authenticate(user=user)
+        url = '/api/profile/?username_starts_with=ws'
+        response = self.client.get(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 1)
+        self.assertEqual(response.data[0]['user']['username'], 'wsmith')
+
+        url = '/api/profile/?username_starts_with=asdf'
+        response = self.client.get(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 0)
+
 
 

@@ -29,7 +29,7 @@ import ozpcenter.api.profile.model_access as model_access
 logger = logging.getLogger('ozp-center')
 
 class ProfileViewSet(viewsets.ModelViewSet):
-    permission_classes = (permissions.IsOrgSteward,)
+    permission_classes = (permissions.IsOrgStewardOrReadOnly,)
     serializer_class = serializers.ProfileSerializer
 
     def get_queryset(self):
@@ -38,6 +38,13 @@ class ProfileViewSet(viewsets.ModelViewSet):
         if role:
             queryset = models.Profile.objects.filter(
                 user__groups__name__exact=role)
+        # support starts-with matching for finding users in the
+        # Submit/Edit Listing form
+        username_starts_with = self.request.query_params.get(
+            'username_starts_with', None)
+        if username_starts_with:
+            queryset = queryset.filter(
+                user__username__startswith=username_starts_with)
         return queryset
 
     def update(self, request, pk=None):
