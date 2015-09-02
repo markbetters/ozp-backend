@@ -338,19 +338,21 @@ class ListingViewSet(viewsets.ModelViewSet):
         omit_serializer: true
         """
         try:
-          logger.debug('inside ListingViewSet.create')
-          serializer = serializers.ListingSerializer(data=request.data,
-              context={'request': request}, partial=True)
-          if not serializer.is_valid():
-              logger.error('%s' % serializer.errors)
-              return Response(serializer.errors,
-                  status=status.HTTP_400_BAD_REQUEST)
+            logger.debug('inside ListingViewSet.create')
+            serializer = serializers.ListingSerializer(data=request.data,
+                context={'request': request}, partial=True)
+            if not serializer.is_valid():
+                logger.error('%s' % serializer.errors)
+                return Response(serializer.errors,
+                    status=status.HTTP_400_BAD_REQUEST)
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-          serializer.save()
-
-          return Response(serializer.data, status=status.HTTP_201_CREATED)
+        except errors.PermissionDenied:
+            return Response('Permission Denied',
+                status=status.HTTP_403_FORBIDDEN)
         except Exception as e:
-          raise e
+            raise e
 
     def retrieve(self, request, pk=None):
         """

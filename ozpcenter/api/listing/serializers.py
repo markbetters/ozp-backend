@@ -13,12 +13,24 @@ import ozpcenter.constants as constants
 
 import ozpcenter.api.listing.model_access as model_access
 import ozpcenter.api.profile.serializers as profile_serializers
-import ozpcenter.api.agency.serializers as agency_serializers
 import ozpcenter.model_access as generic_model_access
 import ozpcenter.errors as errors
 
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center')
+
+class AgencySerializer(serializers.ModelSerializer):
+    # icon = image_serializers.ImageSerializer()
+    class Meta:
+        model = models.Agency
+        depth = 2
+        fields = ('title', 'short_name')
+
+        extra_kwargs = {
+            'title': {'validators': []},
+            'short_name': {'validators': []}
+        }
+
 
 class AccessControlSerializer(serializers.ModelSerializer):
     class Meta:
@@ -161,7 +173,7 @@ class ListingSerializer(serializers.ModelSerializer):
     large_icon = ImageSerializer(required=False, allow_null=True)
     banner_icon = ImageSerializer(required=False, allow_null=True)
     large_banner_icon = ImageSerializer(required=False, allow_null=True)
-    agency = agency_serializers.AgencySerializer(required=False, read_only=True)
+    agency = AgencySerializer(required=False)
     last_activity = ListingActivitySerializer(required=False, read_only=True)
     listing_type = ListingTypeSerializer(required=False, allow_null=True)
 
@@ -194,9 +206,9 @@ class ListingSerializer(serializers.ModelSerializer):
         agency_title = data.get('agency', None)
         if agency_title:
             data['agency'] = models.Agency.objects.get(
-                title=data['agency']['title'])
+                title=agency_title['title'])
             if data['agency'] not in user.organizations.all():
-                raise ValidationError('User is not in this organization')
+                raise errors.PermissionDenied('User is not in this organization')
         else:
             data['agency'] = user.organizations.all()[0]
 
@@ -596,7 +608,12 @@ class ListingSerializer(serializers.ModelSerializer):
                     logger.info('Deleting screenshot: %s' % i.id)
                     i.delete()
 
-        # TODO: allow agency change?
+        if 'agency' in validated_data:
+            if instance.agency != validated_data['agency']:
+                change_details.append({'old_value': instance.agency.title,
+                    'new_value': validated_data['agency'].title, 'field_name': 'agency'})
+                instance.agency = validated_data['agency']
+
         instance.save()
 
         model_access.log_listing_modification(user, instance, change_details)

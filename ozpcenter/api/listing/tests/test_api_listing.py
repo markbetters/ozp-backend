@@ -919,7 +919,7 @@ class ListingApiTest(APITestCase):
         url = '/api/listing/'
 
         data = {
-            "title": 'mr jones app'
+            "title": "mr jones app"
         }
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -933,6 +933,7 @@ class ListingApiTest(APITestCase):
         self.assertTrue(activity_actions[0], 'CREATED')
 
         # MODIFIED
+        data['title'] = "mr jones mod app"
         url = '/api/listing/%s/' % app_id
         response = self.client.put(url, data, format='json')
         data = response.data
@@ -940,7 +941,7 @@ class ListingApiTest(APITestCase):
         url = '/api/listing/%s/activity/' % app_id
         response = self.client.get(url, format='json')
         activity_actions = [i['action'] for i in response.data]
-        self.assertTrue(len(activity_actions), 2)
+        self.assertEqual(len(activity_actions), 2)
         self.assertTrue(models.Action.MODIFIED in activity_actions)
 
         # SUBMITTED
@@ -1040,6 +1041,14 @@ class ListingApiTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertTrue(len(response.data) > 5)
         # TODO: more tests
+
+    def test_create_listing_with_invalid_agency(self):
+        user = generic_model_access.get_profile('julia').user
+        self.client.force_authenticate(user=user)
+        url = '/api/listing/'
+        data = {'title': 'test app', 'agency': {'title': 'Ministry of Plenty'}}
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
 
 
