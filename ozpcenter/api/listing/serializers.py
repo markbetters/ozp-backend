@@ -171,6 +171,8 @@ class ListingSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         logger.debug('inside ListingSerializer.validate')
+        user = generic_model_access.get_profile(
+            self.context['request'].user.username)
         if 'title' not in data:
             raise serializers.ValidationError('Title is required')
 
@@ -187,6 +189,16 @@ class ListingSerializer(serializers.ModelSerializer):
         data['is_enabled'] = data.get('is_enabled', False)
         data['is_featured'] = data.get('is_featured', False)
         data['approval_status'] = data.get('approval_status', None)
+
+        # agency
+        agency_title = data.get('agency', None)
+        if agency_title:
+            data['agency'] = models.Agency.objects.get(
+                title=data['agency']['title'])
+            if data['agency'] not in user.organizations.all():
+                raise ValidationError('User is not in this organization')
+        else:
+            data['agency'] = user.organizations.all()[0]
 
         # acces_control
         access_control_title = data.get('access_control', None)
@@ -287,8 +299,6 @@ class ListingSerializer(serializers.ModelSerializer):
             self.context['request'].user.username)
         logger.info('creating listing %s for user %s' % (title,
             user.user.username))
-        # TODO: what to use if user belongs to multiple agencies?
-        agency = user.organizations.all()[0]
 
         # assign a default access_control level if none is provided
         if not validated_data['access_control']:
@@ -296,7 +306,8 @@ class ListingSerializer(serializers.ModelSerializer):
                 title=constants.DEFAULT_ACCESS_CONTROL)
 
         # TODO required_listings
-        listing = models.Listing(title=title, agency=agency,
+        listing = models.Listing(title=title,
+            agency=validated_data['agency'],
             description=validated_data['description'],
             launch_url=validated_data['launch_url'],
             version_name=validated_data['version_name'],
