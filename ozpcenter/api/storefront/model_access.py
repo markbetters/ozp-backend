@@ -68,7 +68,7 @@ def get_storefront(username):
     return data
 
 
-def get_metadata():
+def get_metadata(username):
     """
     Returns metadata including:
         * categories
@@ -95,10 +95,12 @@ def get_metadata():
             data['intents'] = models.Intent.objects.all().values(
                 'action', 'media_type', 'label', 'icon', 'id')
 
-            # return icon/image urls instead of the id
+            # return icon/image urls instead of the id and get listing counts
             for i in data['agencies']:
                 # i['icon'] = models.Image.objects.get(id=i['icon']).image_url()
-                i['icon'] = '/TODO'
+                # i['icon'] = '/TODO'
+                i['listing_count'] = models.Listing.objects.for_user(
+                    username).filter(agency__title=i['title']).count()
 
             for i in data['intents']:
                 # i['icon'] = models.Image.objects.get(id=i['icon']).image_url()

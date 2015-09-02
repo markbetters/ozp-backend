@@ -27,7 +27,7 @@ def MetadataView(request):
     Metadata for the store including categories, agencies, contact types,
     intents, and listing types
     """
-    data = model_access.get_metadata()
+    data = model_access.get_metadata(request.user.username)
     return Response(data)
 
 @api_view(['GET'])
