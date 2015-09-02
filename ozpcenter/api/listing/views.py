@@ -240,8 +240,26 @@ class ListingViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.ListingSerializer
 
     def get_queryset(self):
-        return models.Listing.objects.for_user(
+        approval_status = self.request.query_params.get('approval_status', None)
+        org = self.request.query_params.get('org', None)
+        enabled = self.request.query_params.get('enabled', None)
+        if enabled:
+            enabled = enabled.lower()
+            if enabled in ['true', '1']:
+                enabled = True
+            else:
+                enabled = False
+
+        listings = models.Listing.objects.for_user(
             self.request.user.username).all()
+        if approval_status:
+            listings = listings.filter(approval_status=approval_status)
+        if org:
+            listings = listings.filter(agency__title=org)
+        if enabled is not None:
+            listings = listings.filter(is_enabled=enabled)
+
+        return listings
 
     def list(self, request):
         return super(ListingViewSet, self).list(self, request)
