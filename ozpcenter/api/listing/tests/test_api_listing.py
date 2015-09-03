@@ -1050,12 +1050,33 @@ class ListingApiTest(APITestCase):
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
+    def test_reject_listing_normal_user(self):
+        user = generic_model_access.get_profile('jones').user
+        self.client.force_authenticate(user=user)
+        url = '/api/listing/1/rejection/'
+        response = self.client.get(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+        data = {'description': 'because it\'s not good'}
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
+    def test_reject_listing_org_steward(self):
+        user = generic_model_access.get_profile('wsmith').user
+        self.client.force_authenticate(user=user)
+        url = '/api/listing/1/rejection/'
+        data = {'description': 'because it\'s not good'}
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
+        url = '/api/listing/1/activity/'
+        response = self.client.get(url, format='json')
+        actions = [i['action'] for i in response.data]
+        self.assertTrue('REJECTED' in actions)
 
-
-
+        url = '/api/listing/1/'
+        response = self.client.get(url, format='json')
+        self.assertEqual(response.data['last_activity']['action'], 'REJECTED')
 
 
 

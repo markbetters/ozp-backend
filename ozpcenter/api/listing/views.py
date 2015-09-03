@@ -220,9 +220,33 @@ class ListingActivityViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-# class RejectionListingViewSet(viewsets.ModelViewSet):
-#     queryset = models.RejectionListing.objects.all()
-#     serializer_class = serializers.RejectionListingSerializer
+class ListingRejectionViewSet(viewsets.ModelViewSet):
+    permission_classes = (permissions.IsOrgStewardOrReadOnly,)
+    serializer_class = serializers.ListingActivitySerializer
+
+    def get_queryset(self):
+        queryset = model_access.get_rejection_listings(
+            self.request.user.username)
+        return queryset
+
+    def list(self, request, listing_pk=None):
+        queryset = self.get_queryset().filter(listing__id=listing_pk)
+        serializer = serializers.ListingActivitySerializer(queryset,
+            context={'request': request}, many=True)
+        return Response(serializer.data)
+
+    def create(self, request, listing_pk=None):
+        try:
+            user = generic_model_access.get_profile(request.user.username)
+            listing = models.Listing.objects.get(id=listing_pk)
+            rejection_description = request.data['description']
+            listing = model_access.reject_listing(user, listing,
+                rejection_description)
+            return Response(data={"status": "success"},
+                status=status.HTTP_201_CREATED)
+        except Exception as e:
+            return Response("Error rejecting listing",
+                    status=status.HTTP_400_BAD_REQUEST)
 
 class ScreenshotViewSet(viewsets.ModelViewSet):
     queryset = models.Screenshot.objects.all()

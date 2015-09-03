@@ -765,6 +765,7 @@ class Listing(models.Model):
     def __str__(self):
         return self.title
 
+
 class AccessControlListingActivityManager(models.Manager):
     """
     Use a custom manager to control access to ListingActivities
@@ -785,6 +786,7 @@ class AccessControlListingActivityManager(models.Manager):
         filtered_listing_activities = all_activities.filter(
             listing__in=listings)
         return filtered_listing_activities
+
 
 class ListingActivity(models.Model):
     """
@@ -813,28 +815,6 @@ class ListingActivity(models.Model):
     def __str__(self):
         return '%s %s %s at %s' % (self.author.user.username, self.action,
             self.listing.title, self.activity_date)
-
-
-# class RejectionListing(models.Model):
-#     """
-#     An admin can reject a submitted Listing, thus creating a Rejection Listing
-
-#     TODO: not sure why we need this, since the info is available via the
-#     ListingActivity
-
-#     TODO: Auditing for create, update, delete
-
-#     Rejection Listings are referenced by RejectionActivities, and thus never
-#     removed even after the Listing is approved. They are just ignored if the
-#     ApprovalState of the Listing is APPROVED
-
-#     Additional db.relationships:
-#         * listing
-#         * author
-#     """
-#     listing = models.ForeignKey('Listing', related_name='rejection_listings')
-#     author = models.ForeignKey('Profile', related_name='rejection_listings')
-#     description = models.CharField(max_length=2000)
 
 
 class Screenshot(models.Model):

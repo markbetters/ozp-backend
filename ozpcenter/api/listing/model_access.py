@@ -129,6 +129,11 @@ def _update_rating(username, listing):
     listing.save()
     return listing
 
+def get_rejection_listings(username):
+    activities = models.ListingActivity.objects.for_user(username).filter(
+        action=models.Action.REJECTED)
+    return activities
+
 def _add_listing_activity(author, listing, action, change_details=None,
     description=None):
     """

@@ -35,6 +35,8 @@ nested_router.register(r'itemComment', views.ItemCommentViewSet,
     base_name='itemcomment')
 nested_router.register(r'activity', views.ListingActivityViewSet,
     base_name='activity')
+nested_router.register(r'rejection', views.ListingRejectionViewSet,
+    base_name='rejection')
 # TODO: nest these
 router.register(r'screenshot', views.ScreenshotViewSet)
 router.register(r'tag', views.TagViewSet)
