@@ -1,7 +1,5 @@
 """
 Views
-
-TODO: POST on api/image (create/edit listing) w/ contentType and id fields
 """
 import logging
 
@@ -26,22 +24,34 @@ import ozpcenter.errors as errors
 logger = logging.getLogger('ozp-center')
 
 class ImageTypeViewSet(viewsets.ModelViewSet):
-    queryset = models.ImageType.objects.all()
+    queryset = model_access.get_all_image_types()
     serializer_class = serializers.ImageTypeSerializer
+    permission_classes = (permissions.IsAppsMallStewardOrReadOnly,)
     fields = ('name',)
 
 
 class ImageViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
-        return  models.Image.objects.for_user(self.request.user.username).all()
+        return model_access.get_all_images(self.request.user.username)
 
     serializer_class = serializers.ImageSerializer
     permission_classes = (permissions.IsUser,)
     parser_classes = (MultiPartParser,)
 
     def create(self, request):
+        """
+        Upload an image
+
+        Use content_type = `application/form-data`
+        Data (key = value) example:
+        ```
+        access_control = UNCLASSIFIED
+        image_type = listing_small_screenshot
+        file_extension = jpg
+        image = <file>
+        ```
+        """
         try:
-            logger.debug('inside ImageViewSet.create')
             serializer = serializers.ImageCreateSerializer(data=request.data,
                 context={'request': request})
             if not serializer.is_valid():
@@ -70,22 +80,22 @@ class ImageViewSet(viewsets.ModelViewSet):
         queryset = self.get_queryset()
         image = get_object_or_404(queryset, pk=pk)
         image_path = model_access.get_image_path(pk)
-        # TODO: enforce access control
+        # enforce access control
         user = generic_model_access.get_profile(self.request.user.username)
         if not access_control.has_access(user.access_control.title,
             image.access_control.title):
-            return Response(status=403)
+            return Response(status=status.HTTP_403_FORBIDDEN)
         content_type = 'image/' + image.file_extension
         try:
-            with open(image_path, "rb") as f:
+            with open(image_path, 'rb') as f:
                 return HttpResponse(f.read(), content_type=content_type)
         except IOError:
             logger.error('No image found for pk %d' % pk)
-            return Response(status=404)
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
     def destroy(self, request, pk=None):
         queryset = self.get_queryset()
         image = get_object_or_404(queryset, pk=pk)
-        # TODO: remove from file system
+        # TODO: remove image from file system
         image.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
