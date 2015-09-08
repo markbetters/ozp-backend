@@ -5,6 +5,8 @@ import logging
 
 from rest_framework import serializers
 
+from PIL import Image
+
 import ozpcenter.models as models
 import ozpcenter.api.access_control.serializers as access_control_serializers
 
@@ -45,3 +47,31 @@ class ShortImageSerializer(serializers.HyperlinkedModelSerializer):
                 "required": False,
             }
         }
+
+
+class ImageCreateSerializer(serializers.Serializer):
+    # access_control.title
+    access_control = serializers.CharField(max_length=200)
+    # image_type.name
+    image_type = serializers.CharField(max_length=200)
+    image = serializers.ImageField()
+    file_extension = serializers.CharField(max_length=10)
+
+    def create(self, validated_data):
+        img = Image.open(validated_data['image'])
+        created_image = models.Image.create_image(img,
+            image_type=validated_data['image_type'],
+            access_control=validated_data['access_control'],
+            file_extension=validated_data['file_extension'])
+        return created_image
+
+    def to_representation(self, obj):
+        """
+        Since this serializer's fields don't map identically to that of
+        models.Image, explicity set the output (read) representation
+        """
+        return {
+            'id': obj.id,
+            'access_control': str(obj.access_control)
+        }
+

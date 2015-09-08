@@ -9,7 +9,9 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 
 from rest_framework import viewsets
+from rest_framework.parsers import MultiPartParser
 from rest_framework.response import Response
+from rest_framework import status
 
 import ozpcenter.access_control as access_control
 import ozpcenter.permissions as permissions
@@ -17,6 +19,7 @@ import ozpcenter.model_access as generic_model_access
 import ozpcenter.api.image.model_access as model_access
 import ozpcenter.api.image.serializers as serializers
 import ozpcenter.models as models
+import ozpcenter.errors as errors
 
 
 # Get an instance of a logger
@@ -34,9 +37,25 @@ class ImageViewSet(viewsets.ModelViewSet):
 
     serializer_class = serializers.ImageSerializer
     permission_classes = (permissions.IsUser,)
+    parser_classes = (MultiPartParser,)
 
     def create(self, request):
-        pass
+        try:
+            logger.debug('inside ImageViewSet.create')
+            serializer = serializers.ImageCreateSerializer(data=request.data,
+                context={'request': request})
+            if not serializer.is_valid():
+                logger.error('%s' % serializer.errors)
+                return Response(serializer.errors,
+                    status=status.HTTP_400_BAD_REQUEST)
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        except errors.PermissionDenied:
+            return Response('Permission Denied',
+                status=status.HTTP_403_FORBIDDEN)
+        except Exception as e:
+            raise e
 
     def list(self, request):
         queryset = self.get_queryset()
@@ -63,12 +82,6 @@ class ImageViewSet(viewsets.ModelViewSet):
         except IOError:
             logger.error('No image found for pk %d' % pk)
             return Response(status=404)
-
-    def update(self, request, pk=None):
-        pass
-
-    def partial_update(self, request, pk=None):
-        pass
 
     def destroy(self, request, pk=None):
         queryset = self.get_queryset()

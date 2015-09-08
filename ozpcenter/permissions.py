@@ -12,6 +12,8 @@ SAFE_METHODS = ['GET', 'HEAD', 'OPTIONS']
 
 class IsAppsMallStewardOrReadOnly(permissions.BasePermission):
     def has_permission(self, request, view):
+        if not request.user.is_authenticated():
+            return False
         user_profile = model_access.get_profile(request.user.username)
         if (request.method in SAFE_METHODS or \
             user_profile.highest_role() in ['APPS_MALL_STEWARD']):
@@ -21,6 +23,8 @@ class IsAppsMallStewardOrReadOnly(permissions.BasePermission):
 
 class IsOrgStewardOrReadOnly(permissions.BasePermission):
     def has_permission(self, request, view):
+        if not request.user.is_authenticated():
+            return False
         user_profile = model_access.get_profile(request.user.username)
         if (request.method in SAFE_METHODS or \
             user_profile.highest_role() in ['APPS_MALL_STEWARD', 'ORG_STEWARD']):

@@ -182,6 +182,7 @@ class Image(models.Model):
 
         # write the image to the file system
         file_name = settings.MEDIA_ROOT + random_uuid + '.' + file_extension
+        logger.debug('saving image %s' % file_name)
         pil_img.save(file_name)
 
         # check size requirements
