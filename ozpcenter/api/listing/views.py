@@ -58,11 +58,11 @@ class DocUrlViewSet(viewsets.ModelViewSet):
     queryset = models.DocUrl.objects.all()
     serializer_class = serializers.DocUrlSerializer
 
-class ItemCommentViewSet(viewsets.ModelViewSet):
+class ReviewViewSet(viewsets.ModelViewSet):
     """
-    Item comments (reviews) for a given listing
+    Reviews for a given listing
 
-    The unique_together contraints on models.ItemComment make it difficult to
+    The unique_together contraints on models.Review make it difficult to
     use the standard Serializer classes (see the Note here:
         http://www.django-rest-framework.org/api-guide/serializers/#specifying-read-only-fields)
 
@@ -70,20 +70,20 @@ class ItemCommentViewSet(viewsets.ModelViewSet):
     actions
     """
     permission_classes = (permissions.IsUser,)
-    serializer_class = serializers.ItemCommentSerializer
+    serializer_class = serializers.ReviewSerializer
 
     def get_queryset(self):
-        return model_access.get_item_comments(self.request.user.username)
+        return model_access.get_reviews(self.request.user.username)
 
     def list(self, request, listing_pk=None):
         queryset = self.get_queryset().filter(listing=listing_pk)
-        serializer = serializers.ItemCommentSerializer(queryset, many=True,
+        serializer = serializers.ReviewSerializer(queryset, many=True,
             context={'request': request})
         return Response(serializer.data)
 
     def retrieve(self, request, pk=None, listing_pk=None):
         queryset = self.get_queryset().get(pk=pk, listing=listing_pk)
-        serializer = serializers.ItemCommentSerializer(queryset,
+        serializer = serializers.ReviewSerializer(queryset,
             context={'request': request})
         return Response(serializer.data)
 
@@ -99,7 +99,7 @@ class ItemCommentViewSet(viewsets.ModelViewSet):
 
     def create(self, request, listing_pk=None):
         """
-        Create a new item_comment
+        Create a new review
         """
         try:
             listing = models.Listing.objects.for_user(
@@ -121,25 +121,25 @@ class ItemCommentViewSet(viewsets.ModelViewSet):
             return Response(resp, status=status.HTTP_201_CREATED)
         except Exception as e:
             raise e
-            return Response('Bad request to create new item_comment',
+            return Response('Bad request to create new review',
                 status=status.HTTP_400_BAD_REQUEST)
 
 
     def update(self, request, pk=None, listing_pk=None):
         """
-        Update an existing item_comment
+        Update an existing review
         """
         try:
-            review = models.ItemComment.objects.get(id=pk)
-        except models.ItemComment.DoesNotExist:
-            return Response('Invalid item comment',
+            review = models.Review.objects.get(id=pk)
+        except models.Review.DoesNotExist:
+            return Response('Invalid review',
                 status=status.HTTP_400_BAD_REQUEST)
 
         try:
             rate = request.data.get('rate', review.rate)
             text = request.data.get('text', None)
         except:
-            return Response('Bad request to create new item_comment',
+            return Response('Bad request to create new review',
                 status=status.HTTP_400_BAD_REQUEST)
 
         try:
@@ -421,7 +421,7 @@ class ListingViewSet(viewsets.ModelViewSet):
                  "type":"Technical Support"
               }
            ],
-           "totalComments":0,
+           "totalReviews":0,
            "avgRate":0,
            "totalRate1":0,
            "totalRate2":0,

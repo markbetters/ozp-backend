@@ -44,24 +44,24 @@ class ListingTest(TestCase):
         }
         listings = model_access.filter_listings(username, filter_params)
 
-    def test_get_item_comments(self):
+    def test_get_reviews(self):
         username = 'wsmith'
-        comments = model_access.get_item_comments(username)
-        self.assertTrue(len(comments) > 1)
+        reviews = model_access.get_reviews(username)
+        self.assertTrue(len(reviews) > 1)
         # we should have at least one review from Air Mail and one from
         # bread basket
-        listings_with_comments = [i.listing.title for i in comments]
-        self.assertTrue('Air Mail' in listings_with_comments)
-        self.assertTrue('Bread Basket' in listings_with_comments)
+        listings_with_reviews = [i.listing.title for i in reviews]
+        self.assertTrue('Air Mail' in listings_with_reviews)
+        self.assertTrue('Bread Basket' in listings_with_reviews)
         # now make a request with a user that doesn't have access to
         # Bread Basket
         username = 'obrien'
-        comments = model_access.get_item_comments(username)
-        self.assertTrue(len(comments) > 1)
+        reviews = model_access.get_reviews(username)
+        self.assertTrue(len(reviews) > 1)
         # make sure Air Mail is present but not Bread Basket
-        listings_with_comments = [i.listing.title for i in comments]
-        self.assertTrue('Air Mail' in listings_with_comments)
-        self.assertTrue('Bread Basket' not in listings_with_comments)
+        listings_with_reviews = [i.listing.title for i in reviews]
+        self.assertTrue('Air Mail' in listings_with_reviews)
+        self.assertTrue('Bread Basket' not in listings_with_reviews)
 
     def test_duplicate_review(self):
         # TODO
@@ -224,7 +224,7 @@ class ListingTest(TestCase):
         username = 'charrington'
         air_mail = models.Listing.objects.for_user(username).get(
             title='Air Mail')
-        review = models.ItemComment.objects.get(listing=air_mail,
+        review = models.Review.objects.get(listing=air_mail,
             author__user__username=username)
 
         model_access.edit_listing_review(username, review,
@@ -249,7 +249,7 @@ class ListingTest(TestCase):
         username = 'charrington'
         air_mail = models.Listing.objects.for_user(username).get(
             title='Air Mail')
-        review = models.ItemComment.objects.get(listing=air_mail,
+        review = models.Review.objects.get(listing=air_mail,
             author__user__username=username)
         model_access.delete_listing_review(username, review)
 

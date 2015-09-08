@@ -121,7 +121,7 @@ class ListingApiTest(APITestCase):
         user = generic_model_access.get_profile('wsmith').user
         self.client.force_authenticate(user=user)
         air_mail_id = models.Listing.objects.get(title='Air Mail').id
-        url = '/api/listing/%s/itemComment/' % air_mail_id
+        url = '/api/listing/%s/review/' % air_mail_id
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -129,7 +129,7 @@ class ListingApiTest(APITestCase):
         user = generic_model_access.get_profile('wsmith').user
         self.client.force_authenticate(user=user)
         air_mail_id = models.Listing.objects.get(title='Air Mail').id
-        url = '/api/listing/%s/itemComment/1/' % air_mail_id
+        url = '/api/listing/%s/review/1/' % air_mail_id
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertTrue('rate' in response.data)
@@ -142,12 +142,12 @@ class ListingApiTest(APITestCase):
         user = generic_model_access.get_profile('wsmith').user
         self.client.force_authenticate(user=user)
         air_mail_id = models.Listing.objects.get(title='Air Mail').id
-        url = '/api/listing/%s/itemComment/' % air_mail_id
+        url = '/api/listing/%s/review/' % air_mail_id
         data = {'rate': 4, 'text': 'winston test review'}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         created_id = response.data['id']
-        new_review = models.ItemComment.objects.get(id=created_id)
+        new_review = models.Review.objects.get(id=created_id)
         self.assertEqual(created_id, new_review.id)
 
         # creating a duplicate review should fail
@@ -164,7 +164,7 @@ class ListingApiTest(APITestCase):
         bread_basket_id = models.Listing.objects.get(title='Bread Basket').id
         user = generic_model_access.get_profile('rutherford').user
         self.client.force_authenticate(user=user)
-        url = '/api/listing/%s/itemComment/' % bread_basket_id
+        url = '/api/listing/%s/review/' % bread_basket_id
         data = {'rate': 4, 'text': 'rutherford test review'}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -174,12 +174,12 @@ class ListingApiTest(APITestCase):
         user = generic_model_access.get_profile('julia').user
         self.client.force_authenticate(user=user)
         air_mail_id = models.Listing.objects.get(title='Air Mail').id
-        url = '/api/listing/%s/itemComment/' % air_mail_id
+        url = '/api/listing/%s/review/' % air_mail_id
         data = {'rate': 3}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         created_id = response.data['id']
-        new_review = models.ItemComment.objects.get(id=created_id)
+        new_review = models.Review.objects.get(id=created_id)
         self.assertEqual(created_id, new_review.id)
 
     def test_update_review(self):
@@ -190,14 +190,14 @@ class ListingApiTest(APITestCase):
         user = generic_model_access.get_profile('wsmith').user
         self.client.force_authenticate(user=user)
         air_mail_id = models.Listing.objects.get(title='Air Mail').id
-        url = '/api/listing/%s/itemComment/' % air_mail_id
+        url = '/api/listing/%s/review/' % air_mail_id
         data = {'rate': 4, 'text': 'winston test review'}
         response = self.client.post(url, data, format='json')
-        comment_id = response.data['id']
+        review_id = response.data['id']
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
         # now update it
-        url = '/api/listing/%s/itemComment/%s/' % (air_mail_id, comment_id)
+        url = '/api/listing/%s/review/%s/' % (air_mail_id, review_id)
         data = {'rate': 4, 'text': 'winston test review'}
         response = self.client.put(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -211,8 +211,8 @@ class ListingApiTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertTrue(models.Action.REVIEW_EDITED in activiy_actions)
 
-        # try to edit a comment from another user - should fail
-        url = '/api/listing/%s/itemComment/1/' % air_mail_id
+        # try to edit a review from another user - should fail
+        url = '/api/listing/%s/review/1/' % air_mail_id
         data = {'rate': 4, 'text': 'winston test review'}
         response = self.client.put(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
@@ -222,14 +222,14 @@ class ListingApiTest(APITestCase):
         user = generic_model_access.get_profile('rutherford').user
         self.client.force_authenticate(user=user)
         air_mail_id = models.Listing.objects.get(title='Air Mail').id
-        url = '/api/listing/%s/itemComment/' % air_mail_id
+        url = '/api/listing/%s/review/' % air_mail_id
         data = {'rate': 4, 'text': 'rutherford test review'}
         response = self.client.post(url, data, format='json')
-        comment_id = response.data['id']
+        review_id = response.data['id']
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
         # now delete it
-        url = '/api/listing/%s/itemComment/%s/' % (air_mail_id, comment_id)
+        url = '/api/listing/%s/review/%s/' % (air_mail_id, review_id)
         response = self.client.delete(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
@@ -245,14 +245,14 @@ class ListingApiTest(APITestCase):
         user = generic_model_access.get_profile('wsmith').user
         self.client.force_authenticate(user=user)
         air_mail_id = models.Listing.objects.get(title='Air Mail').id
-        url = '/api/listing/%s/itemComment/' % air_mail_id
+        url = '/api/listing/%s/review/' % air_mail_id
         data = {'rate': 4, 'text': 'winston test review'}
         response = self.client.post(url, data, format='json')
-        comment_id = response.data['id']
+        review_id = response.data['id']
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
         # trying to delete it as a different user should fail...
-        url = '/api/listing/%s/itemComment/%s/' % (air_mail_id, comment_id)
+        url = '/api/listing/%s/review/%s/' % (air_mail_id, review_id)
         user = generic_model_access.get_profile('jones').user
         self.client.force_authenticate(user=user)
         response = self.client.delete(url, format='json')
@@ -275,7 +275,7 @@ class ListingApiTest(APITestCase):
         listing = models.Listing.objects.get(title=title)
         self.assertEqual(listing.avg_rate, 0.0)
         self.assertEqual(listing.total_votes, 0)
-        self.assertEqual(listing.total_comments, 0)
+        self.assertEqual(listing.total_reviews, 0)
         self.assertEqual(listing.total_rate1, 0)
         self.assertEqual(listing.total_rate2, 0)
         self.assertEqual(listing.total_rate3, 0)
@@ -283,7 +283,7 @@ class ListingApiTest(APITestCase):
         self.assertEqual(listing.total_rate5, 0)
 
         # add one review
-        url = '/api/listing/%s/itemComment/' % listing.id
+        url = '/api/listing/%s/review/' % listing.id
         data = {'rate': 1, 'text': 'winston test review'}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -292,7 +292,7 @@ class ListingApiTest(APITestCase):
         listing = models.Listing.objects.get(title=title)
         self.assertEqual(listing.avg_rate, 1.0)
         self.assertEqual(listing.total_votes, 1)
-        self.assertEqual(listing.total_comments, 1)
+        self.assertEqual(listing.total_reviews, 1)
         self.assertEqual(listing.total_rate1, 1)
         self.assertEqual(listing.total_rate2, 0)
         self.assertEqual(listing.total_rate3, 0)
@@ -302,55 +302,55 @@ class ListingApiTest(APITestCase):
         # add a few more reviews
         user = generic_model_access.get_profile('julia').user
         self.client.force_authenticate(user=user)
-        url = '/api/listing/%s/itemComment/' % listing.id
+        url = '/api/listing/%s/review/' % listing.id
         data = {'rate': 2, 'text': 'julia test review'}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
         user = generic_model_access.get_profile('charrington').user
         self.client.force_authenticate(user=user)
-        url = '/api/listing/%s/itemComment/' % listing.id
+        url = '/api/listing/%s/review/' % listing.id
         data = {'rate': 3, 'text': 'charrington test review'}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
         user = generic_model_access.get_profile('jones').user
         self.client.force_authenticate(user=user)
-        url = '/api/listing/%s/itemComment/' % listing.id
+        url = '/api/listing/%s/review/' % listing.id
         data = {'rate': 4, 'text': 'jones test review'}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
         user = generic_model_access.get_profile('rutherford').user
         self.client.force_authenticate(user=user)
-        url = '/api/listing/%s/itemComment/' % listing.id
+        url = '/api/listing/%s/review/' % listing.id
         data = {'rate': 5, 'text': 'rutherford test review'}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
         user = generic_model_access.get_profile('syme').user
         self.client.force_authenticate(user=user)
-        url = '/api/listing/%s/itemComment/' % listing.id
+        url = '/api/listing/%s/review/' % listing.id
         data = {'rate': 5, 'text': 'syme test review'}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        syme_comment_id = response.data['id']
+        syme_review_id = response.data['id']
 
-        # and one without a comment
+        # and one without a review
         user = generic_model_access.get_profile('tparsons').user
         self.client.force_authenticate(user=user)
-        url = '/api/listing/%s/itemComment/' % listing.id
+        url = '/api/listing/%s/review/' % listing.id
         data = {'rate': 4}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        tparsons_comment_id = response.data['id']
+        tparsons_review_id = response.data['id']
 
         # check calculations
         listing = models.Listing.objects.get(title=title)
         # (2*5 + 2*4 + 1*3 + 1*2 + 1*1)/7 = (24)/7 = 3.429
         self.assertEqual(listing.avg_rate, Decimal('3.4'))
         self.assertEqual(listing.total_votes, 7)
-        self.assertEqual(listing.total_comments, 6)
+        self.assertEqual(listing.total_reviews, 6)
         self.assertEqual(listing.total_rate1, 1)
         self.assertEqual(listing.total_rate2, 1)
         self.assertEqual(listing.total_rate3, 1)
@@ -360,8 +360,8 @@ class ListingApiTest(APITestCase):
         # update an existing review
         user = generic_model_access.get_profile('tparsons').user
         self.client.force_authenticate(user=user)
-        url = '/api/listing/%s/itemComment/%s/' % (listing.id,
-            tparsons_comment_id)
+        url = '/api/listing/%s/review/%s/' % (listing.id,
+            tparsons_review_id)
         data = {'rate': 2}
         response = self.client.put(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -371,7 +371,7 @@ class ListingApiTest(APITestCase):
         # (2*5 + 1*4 + 1*3 + 2*2 + 1*1)/7 = (22)/7 = 3.14
         self.assertEqual(listing.avg_rate, Decimal('3.1'))
         self.assertEqual(listing.total_votes, 7)
-        self.assertEqual(listing.total_comments, 6)
+        self.assertEqual(listing.total_reviews, 6)
         self.assertEqual(listing.total_rate1, 1)
         self.assertEqual(listing.total_rate2, 2)
         self.assertEqual(listing.total_rate3, 1)
@@ -382,7 +382,7 @@ class ListingApiTest(APITestCase):
         # delete an existing review
         user = generic_model_access.get_profile('syme').user
         self.client.force_authenticate(user=user)
-        url = '/api/listing/%s/itemComment/%s/' % (listing.id, syme_comment_id)
+        url = '/api/listing/%s/review/%s/' % (listing.id, syme_review_id)
         response = self.client.delete(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
@@ -391,7 +391,7 @@ class ListingApiTest(APITestCase):
         # (1*5 + 1*4 + 1*3 + 2*2 + 1*1)/6 = (17)/6 = 2.83
         self.assertEqual(listing.avg_rate, Decimal('2.8'))
         self.assertEqual(listing.total_votes, 6)
-        self.assertEqual(listing.total_comments, 5)
+        self.assertEqual(listing.total_reviews, 5)
         self.assertEqual(listing.total_rate1, 1)
         self.assertEqual(listing.total_rate2, 2)
         self.assertEqual(listing.total_rate3, 1)
@@ -567,7 +567,7 @@ class ListingApiTest(APITestCase):
         self.assertEqual(response.data['total_rate3'], 0)
         self.assertEqual(response.data['total_rate2'], 0)
         self.assertEqual(response.data['total_rate1'], 0)
-        self.assertEqual(response.data['total_comments'], 0)
+        self.assertEqual(response.data['total_reviews'], 0)
         self.assertEqual(response.data['singleton'], False)
         self.assertEqual(response.data['required_listings'], None)
 
@@ -747,7 +747,7 @@ class ListingApiTest(APITestCase):
         self.assertEqual(response.data['total_rate3'], 0)
         self.assertEqual(response.data['total_rate2'], 0)
         self.assertEqual(response.data['total_rate1'], 0)
-        self.assertEqual(response.data['total_comments'], 0)
+        self.assertEqual(response.data['total_reviews'], 0)
         self.assertEqual(response.data['singleton'], False)
         self.assertEqual(response.data['required_listings'], None)
 

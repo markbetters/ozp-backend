@@ -428,29 +428,29 @@ class Intent(models.Model):
     def __repr__(self):
         return '%s/%s' % (self.type, self.action)
 
-class AccessControlItemCommentManager(models.Manager):
+class AccessControlReviewManager(models.Manager):
     """
-    Use a custom manager to control access to ItemComments
+    Use a custom manager to control access to Reviews
 
-    Instead of using models.ItemComment.objects.all() or .filter(...) etc, use:
-    models.ItemComment.objects.for_user(user).all() or .filter(...) etc
+    Instead of using models.Review.objects.all() or .filter(...) etc, use:
+    models.Review.objects.for_user(user).all() or .filter(...) etc
 
     This way there is a single place to implement this 'tailored view' logic
-    for item comment queries
+    for review queries
     """
     def for_user(self, username):
-        # get all comments
-        all_comments = super(AccessControlItemCommentManager, self).get_queryset()
+        # get all reviews
+        all_reviews = super(AccessControlReviewManager, self).get_queryset()
         # get all listings for this user
         listings = Listing.objects.for_user(username).all()
-        # filter out item_comments for listings this user cannot see
-        filtered_comments = all_comments.filter(listing__in=listings)
-        return filtered_comments
+        # filter out reviews for listings this user cannot see
+        filtered_reviews = all_reviews.filter(listing__in=listings)
+        return filtered_reviews
 
 
-class ItemComment(models.Model):
+class Review(models.Model):
     """
-    A comment made on a Listing
+    A review made on a Listing
     """
     text = models.CharField(max_length=constants.MAX_VALUE_LENGTH,
         blank=True, null=True)
@@ -459,11 +459,11 @@ class ItemComment(models.Model):
         MaxValueValidator(5)
         ]
     )
-    listing = models.ForeignKey('Listing', related_name='item_comments')
-    author = models.ForeignKey('Profile', related_name='item_comments')
+    listing = models.ForeignKey('Listing', related_name='reviews')
+    author = models.ForeignKey('Profile', related_name='reviews')
 
-    # use a custom Manager class to limit returned ItemComments
-    objects = AccessControlItemCommentManager()
+    # use a custom Manager class to limit returned Reviews
+    objects = AccessControlReviewManager()
 
     def __repr__(self):
         return 'Author id %s: Rate %d Stars : %s' % (self.author_id,
@@ -713,7 +713,7 @@ class Listing(models.Model):
     total_rate3 = models.IntegerField(default=0)
     total_rate2 = models.IntegerField(default=0)
     total_rate1 = models.IntegerField(default=0)
-    total_comments = models.IntegerField(default=0)
+    total_reviews = models.IntegerField(default=0)
     singleton = models.BooleanField(default=False)
 
     contacts = models.ManyToManyField(
@@ -778,7 +778,7 @@ class AccessControlListingActivityManager(models.Manager):
     for ListingActivity queries
     """
     def for_user(self, username):
-        # get all comments
+        # get all activities
         all_activities = super(
             AccessControlListingActivityManager, self).get_queryset()
         # get all listings for this user

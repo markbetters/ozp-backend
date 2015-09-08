@@ -58,9 +58,9 @@ class DocUrlSerializer(serializers.ModelSerializer):
         model = models.DocUrl
         fields = ('name', 'url')
 
-class ItemCommentSerializer(serializers.ModelSerializer):
+class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
-        model = models.ItemComment
+        model = models.Review
         fields = ('text', 'rate')
 
 class ListingActivitySerializer(serializers.ModelSerializer):

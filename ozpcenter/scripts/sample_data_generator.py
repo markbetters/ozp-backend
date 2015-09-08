@@ -472,26 +472,26 @@ def run():
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     #                           Reviews
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    air_mail_comment_1 = models.ItemComment(
+    air_mail_review_1 = models.Review(
         text="This app is great - well designed and easy to use",
         rate=5,
         author=charrington,
         listing=listing)
-    air_mail_comment_1.save()
+    air_mail_review_1.save()
 
-    air_mail_comment_2 = models.ItemComment(
+    air_mail_review_2 = models.Review(
         text="Air mail is ok - does what it says and no more",
         rate=3,
         author=tparsons,
         listing=listing)
-    air_mail_comment_2.save()
+    air_mail_review_2.save()
 
-    air_mail_comment_3 = models.ItemComment(
+    air_mail_review_3 = models.Review(
         text="Air mail crashes all the time - it doesn't even support IE 6!",
         rate=1,
         author=syme,
         listing=listing)
-    air_mail_comment_3.save()
+    air_mail_review_3.save()
 
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     #                           Document URLs
@@ -561,12 +561,12 @@ def run():
     listing.tags.add(demo)
     listing.tags.add(example)
 
-    bread_basket_comment_1 = models.ItemComment(
+    bread_basket_review_1 = models.Review(
         text="This bread is stale!",
         rate=2,
         author=jones,
         listing=listing)
-    bread_basket_comment_1.save()
+    bread_basket_review_1.save()
 
     listing_model_access.create_listing(julia, listing)
     listing_model_access.submit_listing(julia, listing)

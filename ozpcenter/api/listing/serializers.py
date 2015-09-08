@@ -620,10 +620,10 @@ class ListingSerializer(serializers.ModelSerializer):
         return instance
 
 
-class ItemCommentSerializer(serializers.ModelSerializer):
+class ReviewSerializer(serializers.ModelSerializer):
     author = profile_serializers.ShortProfileSerializer()
     class Meta:
-        model = models.ItemComment
+        model = models.Review
         fields = ('author', 'listing', 'rate', 'text', 'id')
 
 

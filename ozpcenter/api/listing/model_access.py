@@ -82,18 +82,18 @@ def get_listings(username):
     else:
         return data
 
-def get_item_comments(username):
+def get_reviews(username):
     """
-    Get ItemComments this user can see
+    Get Reviews this user can see
 
-    Key: item_comments:<username>
+    Key: reviews:<username>
     """
     username = utils.make_keysafe(username)
-    key = 'item_comments:%s' % username
+    key = 'reviews:%s' % username
     data = cache.get(key)
     if data is None:
         try:
-            data = models.ItemComment.objects.for_user(username).all()
+            data = models.Review.objects.for_user(username).all()
             cache.set(key, data)
             return data
         except ObjectDoesNotExist:
@@ -105,14 +105,14 @@ def _update_rating(username, listing):
     """
     Invoked each time a review is created, deleted, or updated
     """
-    reviews = models.ItemComment.objects.filter(listing=listing)
+    reviews = models.Review.objects.filter(listing=listing)
     rate1 = reviews.filter(rate=1).count()
     rate2 = reviews.filter(rate=2).count()
     rate3 = reviews.filter(rate=3).count()
     rate4 = reviews.filter(rate=4).count()
     rate5 = reviews.filter(rate=5).count()
     total_votes = reviews.count()
-    total_comments = total_votes - reviews.filter(text=None).count()
+    total_reviews = total_votes - reviews.filter(text=None).count()
 
     # calculate weighted average
     avg_rate = (5*rate5 + 4*rate4 + 3*rate3 + 2*rate2 + rate1)/total_votes
@@ -124,7 +124,7 @@ def _update_rating(username, listing):
     listing.total_rate4 = rate4
     listing.total_rate5 = rate5
     listing.total_votes = total_votes
-    listing.total_comments = total_comments
+    listing.total_reviews = total_reviews
     listing.avg_rate = avg_rate
     listing.save()
     return listing
@@ -266,13 +266,13 @@ def create_listing_review(username, listing, rating, text=None):
             "text": text,
             "author": author.id,
             "listing": listing.id,
-            "id": comment.id
+            "id": review.id
         }
     """
     author = generic_model_access.get_profile(username)
-    comment = models.ItemComment(listing=listing, author=author,
+    review = models.Review(listing=listing, author=author,
                 rate=rating, text=text)
-    comment.save()
+    review.save()
     # update this listing's rating
     _update_rating(username, listing)
 
@@ -281,7 +281,7 @@ def create_listing_review(username, listing, rating, text=None):
         "text": text,
         "author": author.id,
         "listing": listing.id,
-        "id": comment.id
+        "id": review.id
     }
     return resp
 
@@ -291,7 +291,7 @@ def edit_listing_review(username, review, rate, text=None):
 
     Args:
         username: user making this request
-        review (models.ItemComment): review to modify
+        review (models.Review): review to modify
         rate (int): rating (1-5)
         text (Optional(str)): review text
 
@@ -333,7 +333,7 @@ def delete_listing_review(username, review):
 
     Args:
         username: user making this request
-        review (models.ItemComment): review to delete
+        review (models.Review): review to delete
 
     Returns: Listing associated with this review
     """

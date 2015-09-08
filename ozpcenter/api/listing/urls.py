@@ -2,7 +2,7 @@
 Urls
 
 Unlike most (maybe all) of the other resources, the Listing resource has several
-nested resources - item comments and activity, for example. To help generate
+nested resources - reviews and activity, for example. To help generate
 nested URLs for these resources, the drf-nested-routers package is used.
 """
 from django.conf.urls import url, include
@@ -31,8 +31,8 @@ router.register(r'listingtype', views.ListingTypeViewSet)
 # nested routes
 nested_router = routers.NestedSimpleRouter(router, r'listing',
     lookup='listing')
-nested_router.register(r'itemComment', views.ItemCommentViewSet,
-    base_name='itemcomment')
+nested_router.register(r'review', views.ReviewViewSet,
+    base_name='review')
 nested_router.register(r'activity', views.ListingActivityViewSet,
     base_name='activity')
 nested_router.register(r'rejection', views.ListingRejectionViewSet,
