@@ -14,17 +14,17 @@ import ozpcenter.utils as utils
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center')
 
-def get_all_access_controls():
+def get_all_contact_types():
     """
-    Get all models.AccessControl objects
+    Get all models.ContactType objects
 
-    key = access_control
+    key = contact_types
     """
-    key = 'access_control'
+    key = 'contact_types'
     data = cache.get(key)
     if data is None:
         try:
-            data = models.AccessControl.objects.all()
+            data = models.ContactType.objects.all()
             cache.set(key, data)
             return data
         except ObjectDoesNotExist:
@@ -32,15 +32,15 @@ def get_all_access_controls():
     else:
         return data
 
-def get_access_control_by_title(title):
+def get_contact_type_by_name(name):
     """
-    key = access_control:<title>
+    key = contact_type:<name>
     """
-    key = 'access_control:%s' % utils.make_keysafe(title)
+    key = 'contact_type:%s' % utils.make_keysafe(name)
     data = cache.get(key)
     if data is None:
         try:
-            data = models.AccessControl.objects.get(title=title)
+            data = models.ContactType.objects.get(name=name)
             cache.set(key, data)
             return data
         except ObjectDoesNotExist:

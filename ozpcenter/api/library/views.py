@@ -15,6 +15,7 @@ from rest_framework.response import Response
 
 import ozpcenter.api.library.serializers as serializers
 import ozpcenter.api.library.model_access as model_access
+import ozpcenter.api.listing.model_access as listing_model_access
 import ozpcenter.models as models
 import ozpcenter.permissions as permissions
 
@@ -31,7 +32,7 @@ class LibraryViewSet(viewsets.ModelViewSet):
     POST, PUT, PATCH, DELETE api/library/<id> - unallowed (for now)
     """
     permission_classes = (permissions.IsOrgSteward,)
-    queryset = models.ApplicationLibraryEntry.objects.all()
+    queryset = model_access.get_all_library_entries()
     serializer_class = serializers.LibrarySerializer
 
 class UserLibraryViewSet(viewsets.ViewSet):
@@ -107,7 +108,7 @@ class UserLibraryViewSet(viewsets.ViewSet):
         library_entry.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-    @list_route(methods=['put'])
+    @list_route(methods=['put'], permission_classes=[permissions.IsUser])
     def update_all(self, request):
         """
         Update ALL of the user's library entries
@@ -140,6 +141,7 @@ class UserLibraryViewSet(viewsets.ViewSet):
             query: replace
         omit_serializer: true
         """
+        username = request.user.username
         # This method is different than most. The ViewSet update method only
         # works on a single instance, hence the use of a special update_all
         # method. Serializers must be customized to support nested writable
@@ -154,9 +156,10 @@ class UserLibraryViewSet(viewsets.ViewSet):
 
         # update each instance
         for i in request.data:
-            instance = models.ApplicationLibraryEntry.objects.get(id=i['id'])
+            instance = model_access.get_library_entry_by_id(i['id'])
             instance.folder = i['folder']
-            instance.listing = models.Listing.objects.get(id=i['listing']['id'])
+            instance.listing = listing_model_access.get_listing_by_id(username,
+                i['listing']['id'])
             instance.save()
 
         # return original data

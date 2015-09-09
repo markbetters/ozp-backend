@@ -14,6 +14,53 @@ import ozpcenter.model_access as generic_model_access
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center')
 
+def get_screenshots_for_listing(listing):
+    """
+    Not worth caching
+    """
+    return models.Screenshot.objects.filter(listing=listing)
+
+def get_doc_urls_for_listing(listing):
+    """
+    Not worth caching
+    """
+    return models.DocUrl.objects.filter(listing=listing)
+
+def get_listing_type_by_title(title):
+    """
+    key: listing_type:<title>
+    """
+    key = 'listing_type:%s' % utils.make_keysafe(title)
+    data = cache.get(key)
+    if data is None:
+        try:
+            data = models.ListingType.objects.get(title=title)
+            cache.set(key, data)
+            return data
+        except ObjectDoesNotExist:
+            return None
+    else:
+        return data
+
+def get_listing_by_id(username, id):
+    """
+    Get Listing object by id
+
+    Key: listing:<id>:<username>
+    """
+    username = utils.make_keysafe(username)
+    key = 'listing:%s:%s' % (id, username)
+    data = cache.get(key)
+    if data is None:
+        try:
+            data = models.Listing.objects.for_user(username).get(id=id)
+            cache.set(key, data)
+            return data
+        except ObjectDoesNotExist:
+            return None
+    else:
+        return data
+
 def filter_listings(username, filter_params):
     """
     Filter Listings

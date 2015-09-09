@@ -67,8 +67,8 @@ it's highly customized (and thus unlikely to be used by other resources), it
 should live with its nested resource.
 
 ### Model Access and Caching
-`model_access.py` files should be used to encapsulate database queries. When
-reasonable, methods in these files should support a cache:
+`model_access.py` files should be used to encapsulate database queries and
+business logic. When reasonable, methods in these files should support a cache:
 ```
 data = cache.get('stuff')
 if data is None:
@@ -76,12 +76,21 @@ if data is None:
     cache.set('stuff', data)
 return data
 ```
+Note that we also need logic to invalidate specific caches when resources are
+modified. For example, if a Listing is updated, all cached items referring/using
+that listing's data should be invalidated. By far and large, this logic is not
+yet in place, so enabling the cache will likely lead to unexpected results
 
 In general, try to put the majority of the 'business logic' into model_access
 files, as opposed to putting this logic directly in the Views. This will make
 it easier to test and reuse. These methods are easier to use in sample data
 generators, and allows the complexity of Django Rest Framework to stay largely
 separate from the core application logic
+
+At times, this encapsulation is not strictly adhered to. For example, using
+methods like `get_or_create` in a Serializer, or `get_object_or_404` in a View.
+In cases such as these, the convenience of using the helper method outweighed
+the usefulness of encapsulating the logic in `model_access` files
 
 ### Models
 Regarding `__str__()`:
@@ -138,6 +147,10 @@ Nothing much special to say about views, except that we generally prefer to
 use class-based views and `ViewSet`s (`ModelViewSet`s in particular) just
 because it's less code (assuming you don't require a significant amount of
 customization)
+
+The use of the convenience method `get_object_or_404` breaks the encapsulation
+of database queries in the `model_access` files (and prevents caching). That
+might be something to look at later on.
 
 ### URLs
 All resource endpoints are defined in the resource's respective `urls.py` in

@@ -14,6 +14,12 @@ import ozpcenter.constants as constants
 import ozpcenter.api.listing.model_access as model_access
 import ozpcenter.api.profile.serializers as profile_serializers
 import ozpcenter.model_access as generic_model_access
+import ozpcenter.api.agency.model_access as agency_model_access
+import ozpcenter.api.access_control.model_access as ac_model_access
+import ozpcenter.api.image.model_access as image_model_access
+import ozpcenter.api.category.model_access as category_model_access
+import ozpcenter.api.intent.model_access as intent_model_access
+import ozpcenter.api.contact_type.model_access as contact_type_model_access
 import ozpcenter.errors as errors
 
 # Get an instance of a logger
@@ -205,8 +211,7 @@ class ListingSerializer(serializers.ModelSerializer):
         # agency
         agency_title = data.get('agency', None)
         if agency_title:
-            data['agency'] = models.Agency.objects.get(
-                title=agency_title['title'])
+            data['agency'] = agency_model_access.get_agency_by_title(agency_title['title'])
             if data['agency'] not in user.organizations.all():
                 raise errors.PermissionDenied('User is not in this organization')
         else:
@@ -215,48 +220,48 @@ class ListingSerializer(serializers.ModelSerializer):
         # acces_control
         access_control_title = data.get('access_control', None)
         if access_control_title:
-            data['access_control'] = models.AccessControl.objects.get(
-                title=data['access_control']['title'])
+            data['access_control'] = ac_model_access.get_access_control_by_title(
+                data['access_control']['title'])
         else:
             data['access_control'] = None
 
         # listing_type
         type_title = data.get('listing_type', None)
         if type_title:
-            data['listing_type'] = models.ListingType.objects.get(
-                title=data['listing_type']['title'])
+            data['listing_type'] = model_access.get_listing_type_by_title(
+                data['listing_type']['title'])
         else:
             data['listing_type'] = None
 
         # small_icon
         small_icon = data.get('small_icon', None)
         if small_icon:
-            data['small_icon'] = models.Image.objects.get(
-                id=data['small_icon']['id'])
+            data['small_icon'] = image_model_access.get_image_by_id(
+                data['small_icon']['id'])
         else:
             data['small_icon'] = None
 
         # large_icon
         large_icon = data.get('large_icon', None)
         if large_icon:
-            data['large_icon'] = models.Image.objects.get(
-                id=data['large_icon']['id'])
+            data['large_icon'] = image_model_access.get_image_by_id(
+                data['large_icon']['id'])
         else:
             data['large_icon'] = None
 
         # banner_icon
         banner_icon = data.get('banner_icon', None)
         if banner_icon:
-            data['banner_icon'] = models.Image.objects.get(
-                id=data['banner_icon']['id'])
+            data['banner_icon'] = image_model_access.get_image_by_id(
+                data['banner_icon']['id'])
         else:
             data['banner_icon'] = None
 
         # large_banner_icon
         large_banner_icon = data.get('large_banner_icon', None)
         if large_banner_icon:
-            data['large_banner_icon'] = models.Image.objects.get(
-                id=data['large_banner_icon']['id'])
+            data['large_banner_icon'] = image_model_access.get_image_by_id(
+                data['large_banner_icon']['id'])
         else:
             data['large_banner_icon'] = None
 
@@ -273,15 +278,15 @@ class ListingSerializer(serializers.ModelSerializer):
         owners = []
         if 'owners' in data:
             for owner in data['owners']:
-                owners.append(models.Profile.objects.get(
-                    user__username=owner['user']['username']))
+                owners.append(generic_model_access.get_profile(
+                    owner['user']['username']))
         data['owners'] = owners
 
         categories = []
         if 'categories' in data:
             for category in data['categories']:
-                categories.append(models.Category.objects.get(
-                    title=category['title']))
+                categories.append(category_model_access.get_category_by_title(
+                    category['title']))
         data['categories'] = categories
 
         # tags will be created (if necessary) in create()
@@ -291,8 +296,8 @@ class ListingSerializer(serializers.ModelSerializer):
         intents = []
         if 'intents' in data:
             for intent in data['intents']:
-                intents.append(models.Intent.objects.get(
-                    action=intent['action']))
+                intents.append(intent_model_access.get_intent_by_action(
+                    intent['action']))
         data['intents'] = intents
 
         # doc urls will be created in create()
@@ -314,8 +319,8 @@ class ListingSerializer(serializers.ModelSerializer):
 
         # assign a default access_control level if none is provided
         if not validated_data['access_control']:
-            validated_data['access_control'] = models.AccessControl.objects.get(
-                title=constants.DEFAULT_ACCESS_CONTROL)
+            validated_data['access_control'] = ac_model_access.get_access_control_by_title(
+                constants.DEFAULT_ACCESS_CONTROL)
 
         # TODO required_listings
         listing = models.Listing(title=title,
@@ -344,8 +349,7 @@ class ListingSerializer(serializers.ModelSerializer):
                     secure_phone=contact['secure_phone'],
                     unsecure_phone=contact['unsecure_phone'],
                     organization=contact.get('organization', None),
-                    contact_type=models.ContactType.objects.get(
-                        name=contact['contact_type']['name']))
+                    contact_type=contact_type_model_access.get_contact_type_by_name(contact['contact_type']['name']))
                 new_contact.save()
                 listing.contacts.add(new_contact)
 
@@ -382,8 +386,8 @@ class ListingSerializer(serializers.ModelSerializer):
         if 'screenshots' in validated_data:
             for s in validated_data['screenshots']:
                 screenshot = models.Screenshot(
-                    small_image=models.Image.objects.get(id=s['small_image']['id']),
-                    large_image=models.Image.objects.get(id=s['large_image']['id']),
+                    small_image=image_model_access.get_image_by_id(s['small_image']['id']),
+                    large_image=image_model_access.get_image_by_id(s['large_image']['id']),
                     listing=listing)
                 screenshot.save()
 
@@ -501,8 +505,8 @@ class ListingSerializer(serializers.ModelSerializer):
                         secure_phone=contact['secure_phone'],
                         unsecure_phone=contact['unsecure_phone'],
                         organization=contact.get('organization', None),
-                        contact_type=models.ContactType.objects.get(
-                            name=contact['contact_type']['name'])
+                        contact_type=contact_type_model_access.get_contact_type_by_name(
+                            contact['contact_type']['name'])
                     )
                     instance.contacts.add(obj)
 
@@ -561,8 +565,7 @@ class ListingSerializer(serializers.ModelSerializer):
 
         # doc_urls will be automatically created
         if 'doc_urls' in validated_data:
-            old_doc_url_instances = models.DocUrl.objects.filter(
-                listing=instance)
+            old_doc_url_instances = model_access.get_doc_urls_for_listing(instance)
             old_doc_urls = model_access.doc_urls_to_string(
                 old_doc_url_instances, True)
             new_doc_urls = model_access.doc_urls_to_string(
@@ -585,8 +588,7 @@ class ListingSerializer(serializers.ModelSerializer):
 
         # screenshots will be automatically created
         if 'screenshots' in validated_data:
-            old_screenshot_instances = models.Screenshot.objects.filter(
-                listing=instance)
+            old_screenshot_instances = model_access.get_screenshots_for_listing(instance)
             old_screenshots = model_access.screenshots_to_string(old_screenshot_instances, True)
             new_screenshots = model_access.screenshots_to_string(
                 validated_data['screenshots'])
@@ -597,10 +599,10 @@ class ListingSerializer(serializers.ModelSerializer):
             new_screenshot_instances = []
             for s in validated_data['screenshots']:
                 obj, created = models.Screenshot.objects.get_or_create(
-                    small_image=models.Image.objects.get(
-                        id=s['small_image']['id']),
-                    large_image=models.Image.objects.get(
-                        id=s['large_image']['id']),
+                    small_image=image_model_access.get_image_by_id(
+                        s['small_image']['id']),
+                    large_image=image_model_access.get_image_by_id(
+                        s['large_image']['id']),
                     listing=instance)
                 new_screenshot_instances.append(obj)
             for i in old_screenshot_instances:

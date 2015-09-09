@@ -62,3 +62,25 @@ def get_image_path(pk):
         logger.error('image for pk %d does not exist' % pk)
         # TODO: raise exception
         return '/does/not/exist'
+
+def get_image_by_id(id):
+    """
+    Returns models.Image object for given id
+
+    Since this is effectively only metadata about the image and not the image
+    itself, access control is not enforced here. That is done when the image
+    itself is served
+
+    key: image:<id>
+    """
+    key = 'image:%s' % id
+    data = cache.get(key)
+    if data is None:
+        try:
+            data = models.Image.objects.get(id=id)
+            cache.set(key, data)
+            return data
+        except ObjectDoesNotExist:
+            return None
+    else:
+        return data

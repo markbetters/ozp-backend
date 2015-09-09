@@ -1,5 +1,8 @@
 """
 Serializers
+
+Some of these serializers use the HyperlinkedModelSerializer base class, as that
+provides the 'url' field, which makes it easier for the front-end to consume
 """
 import logging
 

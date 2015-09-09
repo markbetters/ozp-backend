@@ -78,3 +78,23 @@ class LibraryApiTest(APITestCase):
         self.assertIn('title', response.data['listing'])
         self.assertIn('unique_name', response.data['listing'])
         self.assertIn('folder', response.data)
+
+    def test_update_library(self):
+        """
+        PUT self/library/update_all
+        """
+        user = generic_model_access.get_profile('wsmith').user
+        self.client.force_authenticate(user=user)
+        url = '/api/self/library/'
+        response = self.client.get(url, format='json')
+        put_data = []
+        for i in response.data:
+            data = {'id': i['id'], 'folder': 'test',
+                'listing': {'id': i['listing']['id']}}
+            put_data.append(data)
+
+        url = '/api/self/library/update_all/'
+        response = self.client.put(url, put_data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
