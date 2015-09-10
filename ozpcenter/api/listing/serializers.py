@@ -468,8 +468,12 @@ class ListingSerializer(serializers.ModelSerializer):
                 old_value = instance.listing_type.title
             else:
                 old_value = None
+            if validated_data['listing_type']:
+                new_value = validated_data['listing_type'].title
+            else:
+                new_value = None
             change_details.append({'old_value': old_value,
-                    'new_value': validated_data['listing_type'].title, 'field_name': 'listing_type'})
+                    'new_value': new_value, 'field_name': 'listing_type'})
             instance.listing_type = validated_data['listing_type']
 
         if instance.small_icon != validated_data['small_icon']:
@@ -477,9 +481,13 @@ class ListingSerializer(serializers.ModelSerializer):
                 old_value = instance.small_icon.id
             else:
                 old_value = None
+            if validated_data['small_icon']:
+                new_value = validated_data['small_icon'].id
+            else:
+                new_value = None
 
             change_details.append({'old_value': old_value,
-                    'new_value': validated_data['small_icon'].id, 'field_name': 'small_icon'})
+                    'new_value': new_value, 'field_name': 'small_icon'})
             instance.small_icon = validated_data['small_icon']
 
         if instance.large_icon != validated_data['large_icon']:
@@ -487,8 +495,12 @@ class ListingSerializer(serializers.ModelSerializer):
                 old_value = instance.large_icon.id
             else:
                 old_value = None
+            if validated_data['large_icon']:
+                new_value = validated_data['large_icon'].id
+            else:
+                new_value = None
             change_details.append({'old_value': old_value,
-                    'new_value': validated_data['large_icon'].id, 'field_name': 'large_icon'})
+                    'new_value': new_value, 'field_name': 'large_icon'})
             instance.large_icon = validated_data['large_icon']
 
         if instance.banner_icon != validated_data['banner_icon']:
@@ -496,8 +508,12 @@ class ListingSerializer(serializers.ModelSerializer):
                 old_value = instance.banner_icon.id
             else:
                 old_value = None
+            if validated_data['banner_icon']:
+                new_value = validated_data['banner_icon'].id
+            else:
+                new_value = None
             change_details.append({'old_value': old_value,
-                    'new_value': validated_data['banner_icon'].id, 'field_name': 'banner_icon'})
+                    'new_value': new_value, 'field_name': 'banner_icon'})
             instance.banner_icon = validated_data['banner_icon']
 
         if instance.large_banner_icon != validated_data['large_banner_icon']:
@@ -505,8 +521,12 @@ class ListingSerializer(serializers.ModelSerializer):
                 old_value = instance.large_banner_icon.id
             else:
                 old_value = None
+            if validated_data['large_banner_icon']:
+                new_value = validated_data['large_banner_icon'].id
+            else:
+                new_value = None
             change_details.append({'old_value': old_value,
-                    'new_value': validated_data['large_banner_icon'].id, 'field_name': 'large_banner_icon'})
+                    'new_value': new_value, 'field_name': 'large_banner_icon'})
             instance.large_banner_icon = validated_data['large_banner_icon']
 
         if 'contacts' in validated_data:
