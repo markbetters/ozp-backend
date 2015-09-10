@@ -17,13 +17,9 @@ from django.conf import settings
 from django.conf.urls import include, url
 from django.conf.urls.static import static
 from django.contrib import admin
-# from rest_framework import routers
 
-import ozpcenter.views as views
 
 urlpatterns = [
-    url(r'^$', views.APIRoot.as_view()),
-    #url(r'^api/', include(router.urls)),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^api/', include('ozpcenter.urls')),
