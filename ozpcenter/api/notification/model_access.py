@@ -50,3 +50,6 @@ def get_all_expired_notifications():
     expired_system_notifications = models.Notification.objects.filter(
         expires_date__lt=datetime.datetime.now(pytz.utc), listing__isnull=True)
     return expired_system_notifications
+
+def get_all_notifications():
+    return models.Notification.objects.all()

@@ -14,52 +14,26 @@ import ozpcenter.model_access as generic_model_access
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center')
 
+def get_all_doc_urls():
+    return models.DocUrl.objects.all()
+
+def get_all_contacts():
+    return models.Contact.objects.all()
+
 def get_screenshots_for_listing(listing):
-    """
-    Not worth caching
-    """
     return models.Screenshot.objects.filter(listing=listing)
 
 def get_doc_urls_for_listing(listing):
-    """
-    Not worth caching
-    """
     return models.DocUrl.objects.filter(listing=listing)
 
 def get_listing_type_by_title(title):
-    """
-    key: listing_type:<title>
-    """
-    key = 'listing_type:%s' % utils.make_keysafe(title)
-    data = cache.get(key)
-    if data is None:
-        try:
-            data = models.ListingType.objects.get(title=title)
-            cache.set(key, data)
-            return data
-        except ObjectDoesNotExist:
-            return None
-    else:
-        return data
+    return models.ListingType.objects.get(title=title)
 
 def get_listing_by_id(username, id):
-    """
-    Get Listing object by id
+    return models.Listing.objects.for_user(username).get(id=id)
 
-    Key: listing:<id>:<username>
-    """
-    username = utils.make_keysafe(username)
-    key = 'listing:%s:%s' % (id, username)
-    data = cache.get(key)
-    if data is None:
-        try:
-            data = models.Listing.objects.for_user(username).get(id=id)
-            cache.set(key, data)
-            return data
-        except ObjectDoesNotExist:
-            return None
-    else:
-        return data
+def get_listing_by_title(username, title):
+    return models.Listing.objects.for_user(username).get(title=title)
 
 def filter_listings(username, filter_params):
     """
@@ -147,6 +121,32 @@ def get_reviews(username):
             return None
     else:
         return data
+
+def get_review_by_id(id):
+    return models.Review.objects.get(id=id)
+
+def get_all_listing_types():
+    return models.ListingType.objects.all()
+
+def get_listing_activities_for_user(username):
+    """
+    Get all ListingActivities for listings that the user is an owner of
+    """
+    return models.ListingActivity.objects.for_user(username).filter(
+        listing__owners__user__username__exact=username)
+
+def get_all_listing_activities(username):
+    """
+    Get all ListingActivities visible to this user
+    """
+    return models.ListingActivity.objects.for_user(username).all()
+
+def get_all_tags():
+    return models.Tag.objects.all()
+
+def get_all_screenshots():
+    # access control enforced on images themselves, not the metadata
+    return models.Screenshot.objects.all()
 
 def _update_rating(username, listing):
     """

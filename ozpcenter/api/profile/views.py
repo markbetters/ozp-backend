@@ -12,7 +12,6 @@ TODO: DELETE api/profile/self/library/<id> - unbookmark a listing
 """
 import logging
 
-import django.contrib.auth
 from rest_framework import viewsets
 from rest_framework.decorators import api_view
 from rest_framework.decorators import permission_classes
@@ -33,18 +32,17 @@ class ProfileViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.ProfileSerializer
 
     def get_queryset(self):
-        queryset = models.Profile.objects.all()
+        queryset = model_access.get_all_profiles()
         role = self.request.query_params.get('role', None)
         if role:
-            queryset = models.Profile.objects.filter(
-                user__groups__name__exact=role)
+            queryset = model_access.get_profiles_by_role(role)
         # support starts-with matching for finding users in the
         # Submit/Edit Listing form
         username_starts_with = self.request.query_params.get(
             'username_starts_with', None)
         if username_starts_with:
-            queryset = queryset.filter(
-                user__username__startswith=username_starts_with)
+            queryset = model_access.filter_queryset_by_username_starts_with(
+                queryset, username_starts_with)
         return queryset
 
     def update(self, request, pk=None):
@@ -71,11 +69,11 @@ class ProfileViewSet(viewsets.ModelViewSet):
 
 class UserViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsOrgSteward,)
-    queryset = django.contrib.auth.models.User.objects.all()
+    queryset = model_access.get_all_users()
     serializer_class = serializers.UserSerializer
 
 class GroupViewSet(viewsets.ModelViewSet):
-    queryset = django.contrib.auth.models.Group.objects.all()
+    queryset = model_access.get_all_groups()
     serializer_class = serializers.GroupSerializer
 
 @api_view(['GET'])

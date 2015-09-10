@@ -9,6 +9,7 @@ from django.contrib.auth.models import User
 import ozpcenter.models as models
 import ozpcenter.errors as errors
 import ozpcenter.model_access as generic_model_access
+import ozpcenter.api.listing.model_access as listing_model_access
 
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center')
@@ -43,10 +44,12 @@ class NotificationSerializer(serializers.ModelSerializer):
             'listing', 'dismissed_by')
 
     def validate(self, data):
+        username = self.context['request'].user.username
         listing = data.get('listing', None)
         if listing:
-            data['listing'] = models.Listing.objects.get(
-                title=data['listing']['title'])
+            # TODO: title not guaranteed to be unique
+            data['listing'] = listing_model_access.get_listing_by_title(
+                username, data['listing']['title'])
         else:
             data['listing'] = None
         return data

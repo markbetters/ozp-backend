@@ -8,6 +8,8 @@ from rest_framework import serializers
 import ozpcenter.models as models
 import ozpcenter.api.profile.serializers as profile_serializers
 import ozpcenter.api.image.serializers as image_serializers
+import ozpcenter.api.listing.model_access as listing_model_access
+import ozpcenter.model_access as generic_model_access
 
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center')
@@ -60,9 +62,11 @@ class UserLibrarySerializer(serializers.ModelSerializer):
         return data
 
     def create(self, validated_data):
+        username = self.context['request'].user.username
         folder = validated_data.get('folder', '')
-        listing = models.Listing.objects.get(id=validated_data['listing']['id'])
-        owner = models.Profile.objects.get(user__username=self.context['request'].user.username)
+        listing = listing_model_access.get_listing_by_id(username,
+            validated_data['listing']['id'])
+        owner = generic_model_access.get_profile(username)
         entry = models.ApplicationLibraryEntry(listing=listing, owner=owner,
             folder=folder)
         entry.save()

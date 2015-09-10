@@ -8,6 +8,7 @@ import django.contrib.auth
 from rest_framework import serializers
 
 import ozpcenter.models as models
+import ozpcenter.api.agency.model_access as agency_model_access
 
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center')
@@ -59,8 +60,8 @@ class ProfileSerializer(serializers.ModelSerializer):
 
         if 'stewarded_organizations' in data:
             for org in data['stewarded_organizations']:
-                stewarded_organizations.append(models.Agency.objects.get(
-                    title=org['title']))
+                stewarded_organizations.append(agency_model_access.get_agency_by_title(
+                    org['title']))
         data['stewarded_organizations'] = stewarded_organizations
         return data
 

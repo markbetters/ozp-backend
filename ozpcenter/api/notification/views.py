@@ -24,12 +24,11 @@ import ozpcenter.model_access as generic_model_access
 logger = logging.getLogger('ozp-center')
 
 class NotificationViewSet(viewsets.ModelViewSet):
-    # queryset = models.Notification.objects.all()
     serializer_class = serializers.NotificationSerializer
     permission_classes = (permissions.IsUser,)
 
     def get_queryset(self):
-        return  models.Notification.objects.all()
+        return  model_access.get_all_notifications()
 
     def create(self, request):
         try:

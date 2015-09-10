@@ -51,11 +51,11 @@ import ozpcenter.model_access as generic_model_access
 logger = logging.getLogger('ozp-center')
 
 class ContactViewSet(viewsets.ModelViewSet):
-    queryset = models.Contact.objects.all()
+    queryset = model_access.get_all_contacts()
     serializer_class = serializers.ContactSerializer
 
 class DocUrlViewSet(viewsets.ModelViewSet):
-    queryset = models.DocUrl.objects.all()
+    queryset = model_access.get_all_doc_urls()
     serializer_class = serializers.DocUrlSerializer
 
 class ReviewViewSet(viewsets.ModelViewSet):
@@ -102,8 +102,10 @@ class ReviewViewSet(viewsets.ModelViewSet):
         Create a new review
         """
         try:
-            listing = models.Listing.objects.for_user(
-                request.user.username).get(id=listing_pk)
+            listing = model_access.get_listing_by_id(request.user.username,
+              listing_pk)
+            if listing is None:
+              raise Exception
         except Exception:
             return Response('Invalid listing',
                 status=status.HTTP_400_BAD_REQUEST)
@@ -130,7 +132,7 @@ class ReviewViewSet(viewsets.ModelViewSet):
         Update an existing review
         """
         try:
-            review = models.Review.objects.get(id=pk)
+            review = model_access.get_review_by_id(pk)
         except models.Review.DoesNotExist:
             return Response('Invalid review',
                 status=status.HTTP_400_BAD_REQUEST)
@@ -155,7 +157,7 @@ class ReviewViewSet(viewsets.ModelViewSet):
 
 
 class ListingTypeViewSet(viewsets.ModelViewSet):
-    queryset = models.ListingType.objects.all()
+    queryset = model_access.get_all_listing_types()
     serializer_class = serializers.ListingTypeSerializer
 
 
@@ -167,9 +169,8 @@ class ListingUserActivitiesViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.ListingActivitySerializer
 
     def get_queryset(self):
-        return models.ListingActivity.objects.for_user(
-            self.request.user.username).filter(
-              listing__owners__user__username__exact=self.request.user.username)
+        return model_access.get_listing_activities_for_user(
+            self.request.user.username)
 
     def list(self, request):
         queryset = self.get_queryset()
@@ -186,8 +187,8 @@ class ListingActivitiesViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.ListingActivitySerializer
 
     def get_queryset(self):
-        return models.ListingActivity.objects.for_user(
-            self.request.user.username).all()
+        return model_access.get_all_listing_activities(
+            self.request.user.username)
 
     def list(self, request):
         queryset = self.get_queryset()
@@ -204,8 +205,8 @@ class ListingActivityViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.ListingActivitySerializer
 
     def get_queryset(self):
-        return models.ListingActivity.objects.for_user(
-            self.request.user.username).all()
+        return model_access.get_all_listing_activities(
+            self.request.user.username)
 
     def list(self, request, listing_pk=None):
         queryset = self.get_queryset().filter(listing=listing_pk)
@@ -238,7 +239,8 @@ class ListingRejectionViewSet(viewsets.ModelViewSet):
     def create(self, request, listing_pk=None):
         try:
             user = generic_model_access.get_profile(request.user.username)
-            listing = models.Listing.objects.get(id=listing_pk)
+            listing = model_access.get_listing_by_id(request.user.username,
+                listing_pk)
             rejection_description = request.data['description']
             listing = model_access.reject_listing(user, listing,
                 rejection_description)
@@ -249,11 +251,11 @@ class ListingRejectionViewSet(viewsets.ModelViewSet):
                     status=status.HTTP_400_BAD_REQUEST)
 
 class ScreenshotViewSet(viewsets.ModelViewSet):
-    queryset = models.Screenshot.objects.all()
+    queryset = model_access.get_all_screenshots()
     serializer_class = serializers.ScreenshotSerializer
 
 class TagViewSet(viewsets.ModelViewSet):
-    queryset = models.Tag.objects.all()
+    queryset = model_access.get_all_tags()
     serializer_class = serializers.TagSerializer
 
 class ListingViewSet(viewsets.ModelViewSet):
@@ -274,8 +276,7 @@ class ListingViewSet(viewsets.ModelViewSet):
             else:
                 enabled = False
 
-        listings = models.Listing.objects.for_user(
-            self.request.user.username).all()
+        listings = model_access.get_listings(self.request.user.username)
         if approval_status:
             listings = listings.filter(approval_status=approval_status)
         if org:

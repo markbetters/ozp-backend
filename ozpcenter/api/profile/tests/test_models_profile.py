@@ -12,7 +12,6 @@ from django.db import transaction
 
 from django import forms
 from ozpcenter import models as models
-import ozpcenter.api.profile.model_forms as model_forms
 
 import ozpcenter.tests.factories as f
 
@@ -88,65 +87,6 @@ class ProfileTest(TestCase):
         self.assertEqual(1, user_found)
         # note that the model object was saved successfully even though some
         # "required" fields were not present
-
-    @unittest.skip('not working with nested ModelForm')
-    def test_model_form_validation(self):
-        """
-        Demonstrates how to use a ModelForm for validation purposes, even
-        though it is never rendered in a template to the client
-        """
-        agency = models.Agency.objects.get(short_name='TLA')
-        access_control = models.AccessControl.objects.get(title='UNCLASSIFIED//ABC')
-
-        # first, leave off the bio
-        data = {
-            'user__username': 'joey',
-            'display_name': 'joey m',
-            'user__email': 'joe@joe.com',
-            'organizations': [agency.id],
-            'access_control': access_control.id
-        }
-        bound_form = model_forms.ProfileForm(data=data)
-        self.assertFalse(bound_form.is_valid())
-        # print('errors: ' + bound_form.errors.as_json())
-        # after setting the bio, the form should be valid
-        data['bio'] = 'Some things about joe'
-        bound_form = model_forms.ProfileForm(data=data)
-        # print('errors: ' + bound_form.errors.as_json())
-        self.assertTrue(bound_form.is_valid())
-        bound_form.save()
-
-        # check that the many-to-many relationships worked correctly
-        user_joey = models.Profile.objects.get(username='joey')
-        self.assertIn(agency, user_joey.organizations.all())
-        # check that the agency's profiles relationship
-        agency = models.Agency.objects.get(short_name='TLA')
-        self.assertIn(user_joey, agency.profiles.all())
-
-    @unittest.skip('not working with nested ModelForm')
-    def test_basic_profile_form(self):
-        """
-        Similar to the previous example, but demonstrating how ModelForms
-        can be created that contain only a subset of the total model fields.
-
-        This has no impact on the database itself, it just controls which
-        fields get validated
-        """
-        data = {
-            'user__username': 'roy',
-            'user__email': 'roy@roy.com',
-        }
-        bound_form = model_forms.BasicProfileForm(data=data)
-        print('errors: %s' % bound_form.errors.as_json())
-        self.assertTrue(bound_form.is_valid())
-
-
-        # but if we remove a field that the ModelForm expects...
-        data = {
-            'user__username': 'roy'
-        }
-        bound_form = model_forms.BasicProfileForm(data=data)
-        self.assertFalse(bound_form.is_valid())
 
     def test_max_field_size(self):
         """
