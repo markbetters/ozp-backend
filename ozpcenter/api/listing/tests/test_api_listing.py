@@ -585,6 +585,39 @@ class ListingApiTest(APITestCase):
         response = self.client.delete(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
+    def test_update_listing_partial(self):
+        """
+        This was added to catch the case where a listing that didn't previously
+        have an icon was being updated, and the update method in the serializer
+        was invoking instance.small_icon.id to get the old value for the
+        change_details. There was no previous value, so accessing
+        instance.small_icon.id raised an exception. The same problem could exist
+        on any property that isn't a simple data type
+        """
+        user = generic_model_access.get_profile('julia').user
+        self.client.force_authenticate(user=user)
+        url = '/api/listing/1/'
+
+        listing = models.Listing.objects.get(id=1)
+        listing.small_icon = None
+        listing.large_icon = None
+        listing.banner_icon = None
+        listing.large_banner_icon = None
+        listing.listing_type = None
+        listing.save()
+
+        # now make another change to the listing
+        data = self.client.get(url, format='json').data
+        data['small_icon'] = {'id': 1}
+        data['large_icon'] = {'id': 1}
+        data['banner_icon'] = {'id': 1}
+        data['large_banner_icon'] = {'id': 1}
+        data['listing_type'] = {'title': 'web application'}
+        # and another update
+        response = self.client.put(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
     def test_update_listing_full(self):
         user = generic_model_access.get_profile('julia').user
         self.client.force_authenticate(user=user)
