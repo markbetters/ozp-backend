@@ -80,7 +80,7 @@ class ListingTest(TestCase):
         self.assertEqual(air_mail.last_activity.action,
             models.Action.CREATED)
         self.assertEqual(air_mail.approval_status,
-            models.ApprovalStatus.IN_PROGRESS)
+            models.Listing.IN_PROGRESS)
 
     def test_log_listing_modification(self):
         author = generic_model_access.get_profile('wsmith')

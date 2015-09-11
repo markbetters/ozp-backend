@@ -27,12 +27,12 @@ import ozpcenter.access_control as access_control
 logger = logging.getLogger('ozp-center')
 
 # Listing approval statuses
-class ApprovalStatus(enum.Enum):
-    IN_PROGRESS = 'IN_PROGRESS'
-    PENDING = 'PENDING'
-    APPROVED_ORG = 'APPROVED_BY_ORG'
-    APPROVED = 'APPROVED'
-    REJECTED = 'REJECTED'
+# class ApprovalStatus(enum.Enum):
+#     IN_PROGRESS = 'IN_PROGRESS'
+#     PENDING = 'PENDING'
+#     APPROVED_ORG = 'APPROVED_BY_ORG'
+#     APPROVED = 'APPROVED'
+#     REJECTED = 'REJECTED'
 
 
 # Action for a Listing Activity
@@ -698,6 +698,22 @@ class Listing(models.Model):
     in this model are nullable, even though that's not valid for a finalized
     listing
     """
+    # Approval Statuses
+    # This is the Djangoy mechanism for doing CHOICES fields:
+    # https://docs.djangoproject.com/en/1.8/ref/models/fields/#choices
+    IN_PROGRESS = 'IN_PROGRESS'
+    PENDING = 'PENDING'
+    APPROVED_ORG = 'APPROVED_BY_ORG'
+    APPROVED = 'APPROVED'
+    REJECTED = 'REJECTED'
+    APPROVAL_STATUS_CHOICES = (
+        (IN_PROGRESS, 'IN_PROGRESS'),
+        (PENDING, 'PENDING'),
+        (APPROVED_ORG, 'APPROVED_ORG'),
+        (APPROVED, 'APPROVED'),
+        (REJECTED, 'REJECTED')
+    )
+
     title = models.CharField(max_length=255, unique=True)
     approved_date = models.DateTimeField(null=True, blank=True)
     agency = models.ForeignKey(Agency, related_name='listings')
@@ -731,7 +747,7 @@ class Listing(models.Model):
     description_short = models.CharField(max_length=150, null=True, blank=True)
     requirements = models.CharField(max_length=1000, null=True, blank=True)
     approval_status = models.CharField(max_length=255,
-        default=ApprovalStatus.IN_PROGRESS) # one of enum ApprovalStatus
+        choices=APPROVAL_STATUS_CHOICES, default=IN_PROGRESS)
     is_enabled = models.BooleanField(default=True)
     is_featured = models.BooleanField(default=False)
     # a weighted average (5*total_rate5 + 4*total_rate4 + ...) / total_votes

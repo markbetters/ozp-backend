@@ -38,13 +38,13 @@ class StorefrontTest(TestCase):
 
         # test that only APPROVED listings are returned
         for i in data['featured']:
-            self.assertEqual(i.approval_status, models.ApprovalStatus.APPROVED)
+            self.assertEqual(i.approval_status, models.Listing.APPROVED)
 
         for i in data['recent']:
-            self.assertEqual(i.approval_status, models.ApprovalStatus.APPROVED)
+            self.assertEqual(i.approval_status, models.Listing.APPROVED)
 
         for i in data['most_popular']:
-            self.assertEqual(i.approval_status, models.ApprovalStatus.APPROVED)
+            self.assertEqual(i.approval_status, models.Listing.APPROVED)
 
     def test_get_metadata(self):
         """

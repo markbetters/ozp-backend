@@ -557,7 +557,7 @@ class ListingApiTest(APITestCase):
         # fields that should come back with default values
         self.assertEqual(response.data['approved_date'], None)
         self.assertEqual(response.data['approval_status'],
-            models.ApprovalStatus.IN_PROGRESS)
+            models.Listing.IN_PROGRESS)
         self.assertEqual(response.data['is_enabled'], True)
         self.assertEqual(response.data['is_featured'], False)
         self.assertEqual(response.data['avg_rate'], '0.0')
@@ -770,7 +770,7 @@ class ListingApiTest(APITestCase):
 
         self.assertEqual(response.data['approved_date'], None)
         self.assertEqual(response.data['approval_status'],
-            models.ApprovalStatus.APPROVED)
+            models.Listing.APPROVED)
         self.assertEqual(response.data['is_enabled'], False)
         self.assertEqual(response.data['is_featured'], False)
         self.assertEqual(response.data['avg_rate'], '0.0')
@@ -932,7 +932,7 @@ class ListingApiTest(APITestCase):
         self.assertEqual(response.data['approval_status'], 'IN_PROGRESS')
 
         data = response.data
-        data['approval_status'] = models.ApprovalStatus.APPROVED
+        data['approval_status'] = models.Listing.APPROVED
         listing_id = data['id']
 
         url = '/api/listing/%s/' %listing_id
@@ -943,7 +943,7 @@ class ListingApiTest(APITestCase):
         # TODO: listing doesn't exist?
         # url = '/api/listing/%s/' % listing_id
         # response = self.client.get(url, data, format='json')
-        # self.assertEqual(response.data['approval_status'], models.ApprovalStatus.IN_PROGRESS)
+        # self.assertEqual(response.data['approval_status'], models.Listing.IN_PROGRESS)
 
     def test_listing_activities(self):
         # CREATED
@@ -978,7 +978,7 @@ class ListingApiTest(APITestCase):
         self.assertTrue(models.Action.MODIFIED in activity_actions)
 
         # SUBMITTED
-        data['approval_status'] = models.ApprovalStatus.PENDING
+        data['approval_status'] = models.Listing.PENDING
         url = '/api/listing/%s/' % app_id
         response = self.client.put(url, data, format='json')
 

@@ -229,7 +229,7 @@ def create_listing(author, listing):
     Create a listing
     """
     listing = _add_listing_activity(author, listing, models.Action.CREATED)
-    listing.approval_status = models.ApprovalStatus.IN_PROGRESS
+    listing.approval_status = models.Listing.IN_PROGRESS
     listing.save()
     return listing
 
@@ -247,7 +247,7 @@ def submit_listing(author, listing):
     """
     # TODO: check that all required fields are set
     listing = _add_listing_activity(author, listing, models.Action.SUBMITTED)
-    listing.approval_status = models.ApprovalStatus.PENDING
+    listing.approval_status = models.Listing.PENDING
     listing.save()
     return listing
 
@@ -257,7 +257,7 @@ def approve_listing_by_org_steward(org_steward, listing):
     """
     listing = _add_listing_activity(org_steward, listing,
         models.Action.APPROVED_ORG)
-    listing.approval_status = models.ApprovalStatus.APPROVED_ORG
+    listing.approval_status = models.Listing.APPROVED_ORG
     listing.save()
     return listing
 
@@ -267,7 +267,7 @@ def approve_listing(steward, listing):
     """
     listing = _add_listing_activity(steward, listing,
         models.Action.APPROVED)
-    listing.approval_status = models.ApprovalStatus.APPROVED
+    listing.approval_status = models.Listing.APPROVED
     listing.save()
     return listing
 
@@ -277,7 +277,7 @@ def reject_listing(steward, listing, rejection_description):
     """
     listing = _add_listing_activity(steward, listing,
         models.Action.REJECTED, description=rejection_description)
-    listing.approval_status = models.ApprovalStatus.REJECTED
+    listing.approval_status = models.Listing.REJECTED
     listing.save()
     return listing
 

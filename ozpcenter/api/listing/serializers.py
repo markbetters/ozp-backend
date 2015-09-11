@@ -443,18 +443,18 @@ class ListingSerializer(serializers.ModelSerializer):
 
         s = validated_data['approval_status']
         if s and s != instance.approval_status:
-            if s == models.ApprovalStatus.APPROVED and user.highest_role() != 'APPS_MALL_STEWARD':
+            if s == models.Listing.APPROVED and user.highest_role() != 'APPS_MALL_STEWARD':
                 raise errors.PermissionDenied('Only an APPS_MALL_STEWARD can mark a listing as APPROVED')
-            if s == models.ApprovalStatus.APPROVED_ORG and user.highest_role() not in ['APPS_MALL_STEWARD', 'ORG_STEWARD']:
+            if s == models.Listing.APPROVED_ORG and user.highest_role() not in ['APPS_MALL_STEWARD', 'ORG_STEWARD']:
                 raise errors.PermissionDenied('Only stewards can mark a listing as APPROVED_ORG')
 
-            if s == models.ApprovalStatus.PENDING:
+            if s == models.Listing.PENDING:
                 model_access.submit_listing(user, instance)
-            if s == models.ApprovalStatus.APPROVED_ORG:
+            if s == models.Listing.APPROVED_ORG:
                 model_access.approve_listing_by_org_steward(user, instance)
-            if s == models.ApprovalStatus.APPROVED:
+            if s == models.Listing.APPROVED:
                 model_access.approve_listing(user, instance)
-            if s == models.ApprovalStatus.REJECTED:
+            if s == models.Listing.REJECTED:
                 # TODO: need to get the rejection text from somewhere
                 model_access.reject_listing(user, instance, 'TODO: rejection reason')
 
