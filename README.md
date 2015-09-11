@@ -225,7 +225,29 @@ TODO
 TODO
 
 ### Documentation
-TODO
+There are a number of different documentation resources available, depending
+on what you're looking for.
+
+DRF's Web Browsable API can be accessed by entering an endpoint in the browser,
+for example, `<rootUrl>/api/profile/`.  Limitations:
+ * the API Root doesn't have a list of all endpoints, so you need to know
+ what you're looking for
+ * although these pages include forms that could potentially support POST
+ requests, they don't work very well, making the browsable API mostly useless
+ for non-GET requests
+
+ Swagger docs are created via Django REST Swagger and served at
+ `<rootUrl>/docs/`. Swagger makes it easy to see all of the endpoints available.
+ Unlike the Browsable API docs, Swagger supports POST, PUT, and DELETE for most
+ of the endpoints as well. Limitations:
+  * POST api/image/ doesn't work from Swagger
+  * some of the more complicated endpoints (like POST api/listing/) might not
+  have forms that show all of the required and/or optional data that must or
+  could be included in the request
+
+ Postman was used extensively during the API's development, and perhaps someday
+ a Postman Collection of requests will be added to this repo
+
 
 ### Logging
 TODO
@@ -251,6 +273,15 @@ details
 ### API Input
 All POST, PUT, and PATCH endpoints should use JSON encoded input as per
 [this](http://www.vinaysahni.com/best-practices-for-a-pragmatic-restful-api#json-requests)
+
+### Django Admin Site
+The admin site is currently enabled in development (but will likely be
+disabled in production). It is accessible by both Apps Mall Stewards and
+Org Stewards. It has a number of limitations, including the inability to upload
+images (since images aren't stored in the database), and the fact that many
+operations (like editing reviews, approving listings, etc) should result in
+additional operations (like creating ListingActivity entries), but using
+the Admin interface directly bypasses that logic
 
 
 ## Controlling Access
