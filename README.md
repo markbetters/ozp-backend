@@ -219,7 +219,12 @@ In production, `django-ssl-client-auth` is used for the authentication backend
 to support PKI
 
 ### Tests
-TODO
+Generally speaking, each resource (listing, agency, profile, etc) may have
+two types of tests: business logic tests and API tests. The former typically
+tests code in `model_access.py` files, which is pure Python code and independent
+of Django or any "web stuff". The latter API tests, on the other hand, actually
+make HTTP requests using special testing clients and factories, and are more
+like end-to-end or integration tests
 
 ### Database
 TODO
@@ -248,9 +253,9 @@ for example, `<rootUrl>/api/profile/`.  Limitations:
  Postman was used extensively during the API's development, and perhaps someday
  a Postman Collection of requests will be added to this repo
 
-
 ### Logging
-TODO
+Currently, a single logger (`ozp-center`) is used throughout the application.
+See `settings.py` for details
 
 ### Static and Media Files
 Static files: JS, CSS, fonts, etc. Media files: images uploaded during app
