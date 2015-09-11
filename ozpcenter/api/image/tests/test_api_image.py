@@ -40,7 +40,7 @@ class ImageApiTest(APITestCase):
         url = '/api/image/'
         data = {
             'access_control': 'UNCLASSIFIED',
-            'image_type': 'listing_small_screenshot',
+            'image_type': 'small_screenshot',
             'file_extension': 'png',
             'image': open('ozpcenter/scripts/test_images/android.png', mode='rb')
         }

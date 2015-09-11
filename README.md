@@ -66,6 +66,22 @@ very generic, it should live in its respective resource package. If instead
 it's highly customized (and thus unlikely to be used by other resources), it
 should live with its nested resource.
 
+One annoyance with nested serializers is that, if doing a create/POST, DRF
+assumes that each nested resource should also be created. This causes validation
+errors to be raised when doing things like creating a new listing with an
+existing category, listing type, etc. The way around that problem is to
+explicitly remove all validation on any nested serializer fields that have
+unique constraints. For example, for a serializer with a `title` field:
+```
+extra_kwargs = {
+            'title': {'validators': []}
+        }
+```
+Because we don't want to remove the validator for the base resource (only when
+it's used in a nested fashion), some of the more complicated resources (namely
+Listing) have lots of nested serializers that are identical to their non-nested
+counterparts save for the removal of the unique field validators
+
 ### Model Access and Caching
 `model_access.py` files should be used to encapsulate more complex database
 queries and business logic (as opposed to placing it in Views and Serializers).

@@ -137,22 +137,22 @@ def run():
     ############################################################################
     # Note: these image sizes do not represent those that should be used in
     # production
-    small_icon_type = models.ImageType(name='listing_small_icon',
+    small_icon_type = models.ImageType(name='small_icon',
         max_size_bytes='4096')
     small_icon_type.save()
-    large_icon_type = models.ImageType(name='listing_large_icon',
+    large_icon_type = models.ImageType(name='large_icon',
         max_size_bytes='8192')
     large_icon_type.save()
-    banner_icon_type = models.ImageType(name='listing_banner_icon',
+    banner_icon_type = models.ImageType(name='banner_icon',
         max_size_bytes='2097152')
     banner_icon_type.save()
-    large_banner_icon_type = models.ImageType(name='listing_large_banner_icon',
+    large_banner_icon_type = models.ImageType(name='large_banner_icon',
         max_size_bytes='2097152')
     large_banner_icon_type.save()
-    small_screenshot_type = models.ImageType(name='listing_small_screenshot',
+    small_screenshot_type = models.ImageType(name='small_screenshot',
         max_size_bytes='1048576')
     small_screenshot_type.save()
-    large_screenshot_type = models.ImageType(name='listing_large_screenshot',
+    large_screenshot_type = models.ImageType(name='large_screenshot',
         max_size_bytes='1048576')
     large_screenshot_type.save()
     intent_icon_type = models.ImageType(name='intent_icon',

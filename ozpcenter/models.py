@@ -51,7 +51,22 @@ class ImageType(models.Model):
     listing_small_screenshot: 600x376
     listing_large_screenshot: 960x600
     """
-    name = models.CharField(max_length=32, unique=True)
+    SMALL_ICON = 'small_icon'
+    LARGE_ICON = 'large_icon'
+    BANNER_ICON = 'banner_icon'
+    LARGE_BANNER_ICON = 'large_banner_icon'
+    SMALL_SCREENSHOT = 'small_screenshot'
+    LARGE_SCREENSHOT = 'large_screenshot'
+    NAME_CHOICES = (
+        (SMALL_ICON, 'small_icon'),
+        (LARGE_ICON, 'large_icon'),
+        (BANNER_ICON, 'banner_icon'),
+        (LARGE_BANNER_ICON, 'large_banner_icon'),
+        (SMALL_SCREENSHOT, 'small_screenshot'),
+        (LARGE_SCREENSHOT, 'large_screenshot'),
+    )
+
+    name = models.CharField(max_length=64, choices=NAME_CHOICES, unique=True)
     max_size_bytes = models.IntegerField(default=1048576)
     max_width = models.IntegerField(default=2048)
     max_height = models.IntegerField(default=2048)
@@ -83,8 +98,8 @@ class AccessControlImageManager(models.Manager):
         images_to_exclude=[]
         for i in objects:
             if not access_control.has_access(user.access_control.title, i.access_control.title):
-                images_to_exclude.append(i.uuid)
-        objects = objects.exclude(uuid__in=images_to_exclude)
+                images_to_exclude.append(i.id)
+        objects = objects.exclude(id__in=images_to_exclude)
         return objects
 
 
@@ -93,7 +108,7 @@ class Image(models.Model):
     Image
 
     (Uploaded) images are stored in a flat directory on the server using a
-    randomly generated uuid as the filename
+    filename like <id>_<image_type>.png
 
     When creating a new image, use the Image.create_image method, do not
     use the Image.save() directly
@@ -102,7 +117,9 @@ class Image(models.Model):
     be statically served
     """
     # this is set automatically by the create_image method
-    # TODO: do we need a UUID?
+    # TODO: we don't use this, but removiing it causes problems (unit tests
+    # segfault. keeping it around doesn't hurt anything, and it could be
+    # useful later)
     uuid = models.CharField(max_length=36, unique=True)
     access_control = models.ForeignKey(AccessControl, related_name='images')
     file_extension = models.CharField(max_length=16, default='png')
@@ -149,7 +166,6 @@ class Image(models.Model):
         img.save()
 
         # write the image to the file system
-        # file_name = settings.MEDIA_ROOT + random_uuid + '.' + file_extension
         file_name = settings.MEDIA_ROOT + str(img.id) + '_' + img.image_type.name + '.' + file_extension
         # logger.debug('saving image %s' % file_name)
         pil_img.save(file_name)

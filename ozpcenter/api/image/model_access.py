@@ -23,7 +23,6 @@ def get_image_path(pk):
     Return absolute file path to an image given its id (pk)
     """
     image = models.Image.objects.get(id=pk)
-    # image_path = settings.MEDIA_ROOT + '/' + image.uuid + '.' + image.file_extension
     image_path = settings.MEDIA_ROOT + '/' + image.id + '_' + image.image_type.name + '.' + image.file_extension
     if os.path.isfile(image_path):
         return image_path
