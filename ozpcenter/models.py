@@ -101,6 +101,12 @@ class ImageType(models.Model):
     min_width = models.IntegerField(default=16)
     min_height = models.IntegerField(default=16)
 
+    def __repr__(self):
+        return self.name
+
+    def __str__(self):
+        return self.name
+
 
 class AccessControlImageManager(models.Manager):
     """
@@ -149,10 +155,10 @@ class Image(models.Model):
     objects = AccessControlImageManager()
 
     def __repr__(self):
-        return self.uuid
+        return str(self.id)
 
     def __str__(self):
-        return self.uuid
+        return str(self.id)
 
     @staticmethod
     def create_image(pil_img, **kwargs):
@@ -239,6 +245,9 @@ class Agency(models.Model):
     def __str__(self):
         return self.title
 
+    class Meta:
+        verbose_name_plural = "agencies"
+
 
 class ApplicationLibraryEntry(models.Model):
     """
@@ -266,6 +275,9 @@ class ApplicationLibraryEntry(models.Model):
         return '%s:%s:%s' % (self.folder, self.owner.user.username,
             self.listing.title)
 
+    class Meta:
+        verbose_name_plural = "application library entries"
+
 
 class Category(models.Model):
     """
@@ -281,6 +293,9 @@ class Category(models.Model):
 
     def __str__(self):
         return self.title
+
+    class Meta:
+        verbose_name_plural = "categories"
 
 
 class ChangeDetail(models.Model):
@@ -359,6 +374,9 @@ class Contact(models.Model):
 
         return val
 
+    def __str__(self):
+        return '%s: %s' % (self.name, self.email)
+
 
 class ContactType(models.Model):
     """
@@ -398,6 +416,9 @@ class DocUrl(models.Model):
     def __repr__(self):
         return '%s:%s' % (self.name, self.url)
 
+    def __str__(self):
+        return '%s: %s' % (self.name, self.url)
+
 
 class Intent(models.Model):
     """
@@ -427,6 +448,9 @@ class Intent(models.Model):
 
     def __repr__(self):
         return '%s/%s' % (self.type, self.action)
+
+    def __str__(self):
+        return self.action
 
 class AccessControlReviewManager(models.Manager):
     """
@@ -466,7 +490,11 @@ class Review(models.Model):
     objects = AccessControlReviewManager()
 
     def __repr__(self):
-        return 'Author id %s: Rate %d Stars : %s' % (self.author_id,
+        return '%s: rate: %d text: %s' % (self.author.user.username,
+                                                     self.rate, self.text)
+
+    def __str__(self):
+        return '%s: rate: %d text: %s' % (self.author.user.username,
                                                      self.rate, self.text)
 
     class Meta:
@@ -524,7 +552,7 @@ class Profile(models.Model):
         return 'Profile: %s' % self.user.username
 
     def __str__(self):
-        return 'Profile: %s' % self.user.username
+        return self.user.username
 
     @staticmethod
     def create_groups():
@@ -671,11 +699,11 @@ class Listing(models.Model):
     listing
     """
     title = models.CharField(max_length=255, unique=True)
-    approved_date = models.DateTimeField(null=True)
+    approved_date = models.DateTimeField(null=True, blank=True)
     agency = models.ForeignKey(Agency, related_name='listings')
     listing_type = models.ForeignKey('ListingType', related_name='listings',
-        null=True)
-    description = models.CharField(max_length=255, null=True)
+        null=True, blank=True)
+    description = models.CharField(max_length=255, null=True, blank=True)
     launch_url = models.CharField(
         max_length=constants.MAX_URL_SIZE,
         validators=[
@@ -683,24 +711,25 @@ class Listing(models.Model):
                 regex=constants.URL_REGEX,
                 message='launch_url must be a url',
                 code='invalid url')
-        ], null=True
+        ], null=True, blank=True
     )
-    version_name = models.CharField(max_length=255, null=True)
+    version_name = models.CharField(max_length=255, null=True, blank=True)
     # NOTE: replacing uuid with this - will need to add to the form
-    unique_name = models.CharField(max_length=255, unique=True, null=True)
+    unique_name = models.CharField(max_length=255, unique=True, null=True,
+        blank=True)
     small_icon = models.ForeignKey(Image, related_name='listing_small_icon',
-        null=True)
+        null=True, blank=True)
     large_icon = models.ForeignKey(Image, related_name='listing_large_icon',
-        null=True)
+        null=True, blank=True)
     banner_icon = models.ForeignKey(Image, related_name='listing_banner_icon',
-        null=True)
+        null=True, blank=True)
     large_banner_icon = models.ForeignKey(Image,
-        related_name='listing_large_banner_icon', null=True)
+        related_name='listing_large_banner_icon', null=True, blank=True)
 
 
-    what_is_new = models.CharField(max_length=255, null=True)
-    description_short = models.CharField(max_length=150, null=True)
-    requirements = models.CharField(max_length=1000, null=True)
+    what_is_new = models.CharField(max_length=255, null=True, blank=True)
+    description_short = models.CharField(max_length=150, null=True, blank=True)
+    requirements = models.CharField(max_length=1000, null=True, blank=True)
     approval_status = models.CharField(max_length=255,
         default=ApprovalStatus.IN_PROGRESS) # one of enum ApprovalStatus
     is_enabled = models.BooleanField(default=True)
@@ -740,10 +769,10 @@ class Listing(models.Model):
         db_table='tag_listing'
     )
 
-    required_listings = models.ForeignKey('self', null=True)
+    required_listings = models.ForeignKey('self', null=True, blank=True)
     # no reverse relationship - use '+'
     last_activity = models.OneToOneField('ListingActivity', related_name='+',
-        null=True)
+        null=True, blank=True)
 
     intents = models.ManyToManyField(
         'Intent',
@@ -752,7 +781,7 @@ class Listing(models.Model):
     )
 
     access_control = models.ForeignKey(AccessControl, related_name='listings',
-        null=True)
+        null=True, blank=True)
 
     # private listings can only be viewed by members of the same agency
     is_private = models.BooleanField(default=False)
@@ -817,6 +846,9 @@ class ListingActivity(models.Model):
         return '%s %s %s at %s' % (self.author.user.username, self.action,
             self.listing.title, self.activity_date)
 
+    class Meta:
+        verbose_name_plural = "listing activities"
+
 
 class Screenshot(models.Model):
     """
@@ -832,10 +864,10 @@ class Screenshot(models.Model):
     listing = models.ForeignKey('Listing', related_name='screenshots')
 
     def __repr__(self):
-        return '%s, %s' % (self.large_image_url, self.small_image_url)
+        return '%s: %s, %s' % (self.listing.title, self.large_image.id, self.small_image.id)
 
     def __str__(self):
-        return '%s, %s' % (self.large_image_url, self.small_image_url)
+        return '%s: %s, %s' % (self.listing.title, self.large_image.id, self.small_image.id)
 
 
 class ListingType(models.Model):
@@ -875,3 +907,9 @@ class Notification(models.Model):
     )
     listing = models.ForeignKey(Listing, related_name='notifications',
         null=True, blank=True)
+
+    def __repr__(self):
+        return '%s: %s' % (self.author.user.username, self.message)
+
+    def __str__(self):
+        return '%s: %s' % (self.author.user.username, self.message)
