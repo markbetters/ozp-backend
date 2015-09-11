@@ -209,7 +209,7 @@ class ListingApiTest(APITestCase):
         activiy_actions = [i['action'] for i in response.data]
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertTrue(models.Action.REVIEW_EDITED in activiy_actions)
+        self.assertTrue(models.ListingActivity.REVIEW_EDITED in activiy_actions)
 
         # try to edit a review from another user - should fail
         url = '/api/listing/%s/review/1/' % air_mail_id
@@ -238,7 +238,7 @@ class ListingApiTest(APITestCase):
         response = self.client.get(url, format='json')
         activiy_actions = [i['action'] for i in response.data]
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertTrue(models.Action.REVIEW_DELETED in activiy_actions)
+        self.assertTrue(models.ListingActivity.REVIEW_DELETED in activiy_actions)
 
     def test_delete_review(self):
         # create a new review
@@ -975,7 +975,7 @@ class ListingApiTest(APITestCase):
         response = self.client.get(url, format='json')
         activity_actions = [i['action'] for i in response.data]
         self.assertEqual(len(activity_actions), 2)
-        self.assertTrue(models.Action.MODIFIED in activity_actions)
+        self.assertTrue(models.ListingActivity.MODIFIED in activity_actions)
 
         # SUBMITTED
         data['approval_status'] = models.Listing.PENDING
@@ -987,7 +987,7 @@ class ListingApiTest(APITestCase):
         activity_actions = [i['action'] for i in response.data]
         self.assertTrue(len(activity_actions), 3)
         print('activity actions: %s' % activity_actions)
-        self.assertTrue(models.Action.SUBMITTED in activity_actions)
+        self.assertTrue(models.ListingActivity.SUBMITTED in activity_actions)
 
         # APPROVED_ORG
 
@@ -1002,7 +1002,7 @@ class ListingApiTest(APITestCase):
         response = self.client.get(url, format='json')
         activity_actions = [i['action'] for i in response.data]
         self.assertTrue(len(activity_actions), 4)
-        self.assertTrue(models.Action.DISABLED in activity_actions)
+        self.assertTrue(models.ListingActivity.DISABLED in activity_actions)
 
         # DISABLED
 

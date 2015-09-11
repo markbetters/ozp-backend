@@ -15,9 +15,6 @@ from django.db import models
 from django.forms import ModelForm
 from django.conf import settings
 
-# plugin for enum support https://github.com/5monkeys/django-enumfield
-from django_enumfield import enum
-
 from PIL import Image
 
 import ozpcenter.constants as constants
@@ -25,46 +22,6 @@ import ozpcenter.access_control as access_control
 
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center')
-
-# Listing approval statuses
-# class ApprovalStatus(enum.Enum):
-#     IN_PROGRESS = 'IN_PROGRESS'
-#     PENDING = 'PENDING'
-#     APPROVED_ORG = 'APPROVED_BY_ORG'
-#     APPROVED = 'APPROVED'
-#     REJECTED = 'REJECTED'
-
-
-# Action for a Listing Activity
-class Action(enum.Enum):
-    # listing is initially created
-    CREATED = 'CREATED'
-    # field of a listing is modified - has a corresponding ChangeDetail entry
-    MODIFIED = 'MODIFIED'
-    # listing is submitted for approval by org steward and apps mall steward
-    SUBMITTED = 'SUBMITTED'
-    # listing is approved by an org steward
-    APPROVED_ORG = 'APPROVED_ORG'
-    # listing is approved by apps mall steward (upon previous org steward
-        # approval) - it is now visible to users
-    APPROVED = 'APPROVED'
-    # listing is rejected for approval by org steward or apps mall steward
-    REJECTED = 'REJECTED'
-    # listing is enabled (visible to users)
-    ENABLED = 'ENABLED'
-    # listing is disabled (hidden from users)
-    DISABLED = 'DISABLED'
-    # a review for a listing has been modified
-    REVIEW_EDITED = 'REVIEW_EDITED'
-    # a review for a listing has been deleted
-    REVIEW_DELETED = 'REVIEW_DELETED'
-
-    # not sure if we'll use these or not
-    ADD_RELATED_TO_ITEM = 'ADD_RELATED_TO_ITEM'
-    REMOVE_RELATED_TO_ITEM = 'REMOVE_RELATED_TO_ITEM'
-    ADD_RELATED_ITEMS = 'ADD_RELATED_ITEMS'
-    REMOVE_RELATED_ITEMS = 'REMOVE_RELATED_ITEMS'
-
 
 class AccessControl(models.Model):
     """
@@ -838,7 +795,43 @@ class ListingActivity(models.Model):
     """
     Listing Activity
     """
-    action = models.CharField(max_length=255) # one of an enum of Action
+    # Actions
+    # listing is initially created
+    CREATED = 'CREATED'
+    # field of a listing is modified - has a corresponding ChangeDetail entry
+    MODIFIED = 'MODIFIED'
+    # listing is submitted for approval by org steward and apps mall steward
+    SUBMITTED = 'SUBMITTED'
+    # listing is approved by an org steward
+    APPROVED_ORG = 'APPROVED_ORG'
+    # listing is approved by apps mall steward (upon previous org steward
+        # approval) - it is now visible to users
+    APPROVED = 'APPROVED'
+    # listing is rejected for approval by org steward or apps mall steward
+    REJECTED = 'REJECTED'
+    # listing is enabled (visible to users)
+    ENABLED = 'ENABLED'
+    # listing is disabled (hidden from users)
+    DISABLED = 'DISABLED'
+    # a review for a listing has been modified
+    REVIEW_EDITED = 'REVIEW_EDITED'
+    # a review for a listing has been deleted
+    REVIEW_DELETED = 'REVIEW_DELETED'
+
+    ACTION_CHOICES = (
+        (CREATED, 'CREATED'),
+        (MODIFIED, 'MODIFIED'),
+        (SUBMITTED, 'SUBMITTED'),
+        (APPROVED_ORG, 'APPROVED_ORG'),
+        (APPROVED, 'APPROVED'),
+        (REJECTED, 'REJECTED'),
+        (ENABLED, 'ENABLED'),
+        (DISABLED, 'DISABLED'),
+        (REVIEW_EDITED, 'REVIEW_EDITED'),
+        (REVIEW_DELETED, 'REVIEW_DELETED')
+    )
+
+    action = models.CharField(max_length=128, choices=ACTION_CHOICES)
     activity_date = models.DateTimeField(auto_now=True)
     # an optional description of the activity (required if the action is
     #   REJECTED)

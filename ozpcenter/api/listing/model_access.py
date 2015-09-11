@@ -178,7 +178,7 @@ def _update_rating(username, listing):
 
 def get_rejection_listings(username):
     activities = models.ListingActivity.objects.for_user(username).filter(
-        action=models.Action.REJECTED)
+        action=models.ListingActivity.REJECTED)
     return activities
 
 def _add_listing_activity(author, listing, action, change_details=None,
@@ -228,7 +228,7 @@ def create_listing(author, listing):
     """
     Create a listing
     """
-    listing = _add_listing_activity(author, listing, models.Action.CREATED)
+    listing = _add_listing_activity(author, listing, models.ListingActivity.CREATED)
     listing.approval_status = models.Listing.IN_PROGRESS
     listing.save()
     return listing
@@ -237,7 +237,7 @@ def log_listing_modification(author, listing, change_details):
     """
     Log a listing modification
     """
-    listing = _add_listing_activity(author, listing, models.Action.MODIFIED,
+    listing = _add_listing_activity(author, listing, models.ListingActivity.MODIFIED,
         change_details)
     return listing
 
@@ -246,7 +246,7 @@ def submit_listing(author, listing):
     Submit a listing for approval
     """
     # TODO: check that all required fields are set
-    listing = _add_listing_activity(author, listing, models.Action.SUBMITTED)
+    listing = _add_listing_activity(author, listing, models.ListingActivity.SUBMITTED)
     listing.approval_status = models.Listing.PENDING
     listing.save()
     return listing
@@ -256,7 +256,7 @@ def approve_listing_by_org_steward(org_steward, listing):
     Give Org Steward approval to a listing
     """
     listing = _add_listing_activity(org_steward, listing,
-        models.Action.APPROVED_ORG)
+        models.ListingActivity.APPROVED_ORG)
     listing.approval_status = models.Listing.APPROVED_ORG
     listing.save()
     return listing
@@ -266,7 +266,7 @@ def approve_listing(steward, listing):
     Give final approval to a listing
     """
     listing = _add_listing_activity(steward, listing,
-        models.Action.APPROVED)
+        models.ListingActivity.APPROVED)
     listing.approval_status = models.Listing.APPROVED
     listing.save()
     return listing
@@ -276,7 +276,7 @@ def reject_listing(steward, listing, rejection_description):
     Reject a submitted listing
     """
     listing = _add_listing_activity(steward, listing,
-        models.Action.REJECTED, description=rejection_description)
+        models.ListingActivity.REJECTED, description=rejection_description)
     listing.approval_status = models.Listing.REJECTED
     listing.save()
     return listing
@@ -285,7 +285,7 @@ def enable_listing(user, listing):
     """
     Enable a listing
     """
-    listing = _add_listing_activity(user, listing, models.Action.ENABLED)
+    listing = _add_listing_activity(user, listing, models.ListingActivity.ENABLED)
     listing.is_enabled = True
     listing.save()
     return listing
@@ -294,7 +294,7 @@ def disable_listing(steward, listing):
     """
     Disable a listing
     """
-    listing = _add_listing_activity(steward, listing, models.Action.DISABLED)
+    listing = _add_listing_activity(steward, listing, models.ListingActivity.DISABLED)
     listing.is_enabled = False
     listing.save()
     return listing
@@ -364,7 +364,7 @@ def edit_listing_review(username, review, rate, text=None):
     ]
 
     listing = review.listing
-    listing = _add_listing_activity(user, listing, models.Action.REVIEW_EDITED,
+    listing = _add_listing_activity(user, listing, models.ListingActivity.REVIEW_EDITED,
         change_details=change_details)
 
     review.rate = rate
@@ -409,7 +409,7 @@ def delete_listing_review(username, review):
     # add this action to the log
     listing = review.listing
     listing = _add_listing_activity(review.author, listing,
-        models.Action.REVIEW_DELETED, change_details=change_details)
+        models.ListingActivity.REVIEW_DELETED, change_details=change_details)
 
     # delete the review
     review.delete()

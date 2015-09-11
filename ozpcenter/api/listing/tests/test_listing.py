@@ -78,7 +78,7 @@ class ListingTest(TestCase):
         air_mail = models.Listing.objects.for_user(author.user.username).get(
             title='Air Mail')
         self.assertEqual(air_mail.last_activity.action,
-            models.Action.CREATED)
+            models.ListingActivity.CREATED)
         self.assertEqual(air_mail.approval_status,
             models.Listing.IN_PROGRESS)
 
@@ -97,7 +97,7 @@ class ListingTest(TestCase):
         model_access.log_listing_modification(author, air_mail, change_details)
 
         listing_activities = air_mail.listing_activities.filter(
-            action=models.Action.MODIFIED)
+            action=models.ListingActivity.MODIFIED)
 
         modified_activity = listing_activities[0]
         self.assertEqual(modified_activity.author.user.username,
@@ -119,10 +119,10 @@ class ListingTest(TestCase):
         air_mail = models.Listing.objects.for_user(author.user.username).get(
             title='Air Mail')
         self.assertEqual(air_mail.last_activity.action,
-            models.Action.SUBMITTED)
+            models.ListingActivity.SUBMITTED)
 
         listing_activities = air_mail.listing_activities.filter(
-            action=models.Action.SUBMITTED)
+            action=models.ListingActivity.SUBMITTED)
         submitted_activity = listing_activities[0]
         self.assertEqual(submitted_activity.author.user.username,
             author.user.username)
@@ -138,10 +138,10 @@ class ListingTest(TestCase):
         air_mail = models.Listing.objects.for_user(username).get(
             title='Air Mail')
         self.assertEqual(air_mail.last_activity.action,
-            models.Action.APPROVED_ORG)
+            models.ListingActivity.APPROVED_ORG)
 
         listing_activities = air_mail.listing_activities.filter(
-            action=models.Action.APPROVED_ORG)
+            action=models.ListingActivity.APPROVED_ORG)
         approved_org_activity = listing_activities[0]
         self.assertEqual(approved_org_activity.author.user.username, username)
 
@@ -156,10 +156,10 @@ class ListingTest(TestCase):
         air_mail = models.Listing.objects.for_user(username).get(
             title='Air Mail')
         self.assertEqual(air_mail.last_activity.action,
-            models.Action.APPROVED)
+            models.ListingActivity.APPROVED)
 
         listing_activities = air_mail.listing_activities.filter(
-            action=models.Action.APPROVED)
+            action=models.ListingActivity.APPROVED)
         approved_org_activity = listing_activities[0]
         self.assertEqual(approved_org_activity.author.user.username, username)
 
@@ -176,10 +176,10 @@ class ListingTest(TestCase):
         air_mail = models.Listing.objects.for_user(username).get(
             title='Air Mail')
         self.assertEqual(air_mail.last_activity.action,
-            models.Action.REJECTED)
+            models.ListingActivity.REJECTED)
 
         listing_activities = air_mail.listing_activities.filter(
-            action=models.Action.REJECTED)
+            action=models.ListingActivity.REJECTED)
         rejected_activity = listing_activities[0]
         self.assertEqual(rejected_activity.author.user.username, username)
         self.assertEqual(rejected_activity.description, description)
@@ -194,10 +194,10 @@ class ListingTest(TestCase):
         model_access.enable_listing(user, air_mail)
 
         self.assertEqual(air_mail.last_activity.action,
-            models.Action.ENABLED)
+            models.ListingActivity.ENABLED)
 
         listing_activities = air_mail.listing_activities.filter(
-            action=models.Action.ENABLED)
+            action=models.ListingActivity.ENABLED)
         enabled_activity = listing_activities[0]
         self.assertEqual(enabled_activity.author.user.username, username)
         self.assertTrue(air_mail.is_enabled)
@@ -212,10 +212,10 @@ class ListingTest(TestCase):
         model_access.disable_listing(user, air_mail)
 
         self.assertEqual(air_mail.last_activity.action,
-            models.Action.DISABLED)
+            models.ListingActivity.DISABLED)
 
         listing_activities = air_mail.listing_activities.filter(
-            action=models.Action.DISABLED)
+            action=models.ListingActivity.DISABLED)
         enabled_activity = listing_activities[0]
         self.assertEqual(enabled_activity.author.user.username, username)
         self.assertFalse(air_mail.is_enabled)
@@ -233,10 +233,10 @@ class ListingTest(TestCase):
         air_mail = models.Listing.objects.for_user(username).get(
             title='Air Mail')
         self.assertEqual(air_mail.last_activity.action,
-            models.Action.REVIEW_EDITED)
+            models.ListingActivity.REVIEW_EDITED)
 
         listing_activities = air_mail.listing_activities.filter(
-            action=models.Action.REVIEW_EDITED)
+            action=models.ListingActivity.REVIEW_EDITED)
         enabled_activity = listing_activities[0]
         self.assertEqual(enabled_activity.author.user.username, username)
 
@@ -256,10 +256,10 @@ class ListingTest(TestCase):
         air_mail = models.Listing.objects.for_user(username).get(
             title='Air Mail')
         self.assertEqual(air_mail.last_activity.action,
-            models.Action.REVIEW_DELETED)
+            models.ListingActivity.REVIEW_DELETED)
 
         listing_activities = air_mail.listing_activities.filter(
-            action=models.Action.REVIEW_DELETED)
+            action=models.ListingActivity.REVIEW_DELETED)
         enabled_activity = listing_activities[0]
         self.assertEqual(enabled_activity.author.user.username, username)
 
