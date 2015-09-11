@@ -5,11 +5,7 @@ import datetime
 import logging
 import pytz
 
-from django.core.cache import cache
-from django.core.exceptions import ObjectDoesNotExist
-
 import ozpcenter.models as models
-import ozpcenter.utils as utils
 
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center')
@@ -22,8 +18,6 @@ def get_self_notifications(username):
         * have not been dismissed by this user
         * are regarding a listing in this user's library (if the
             notification is listing-specific)
-
-    Key: notifications:<username>
     """
     # get all notifications that have been dismissed by this user
     dismissed_notifications = models.Notification.objects.filter(

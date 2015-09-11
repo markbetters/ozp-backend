@@ -3,12 +3,9 @@ Model access
 """
 import logging
 
-from django.core.cache import cache
-from django.core.exceptions import ObjectDoesNotExist
 import django.contrib.auth
 
 import ozpcenter.models as models
-import ozpcenter.utils as utils
 import ozpcenter.model_access as generic_model_access
 
 # Get an instance of a logger

@@ -1,35 +1,5 @@
 """
 Views
-
-TODO: POST on api/listing, with all fields in models.Listing. images have
-uuids that identify them. Response header has Location set to this Listing's
-url, which includes the listing's db id (not uuid) that was generated when
-the listing was created, and which can be used to query for this listing later
-(I guess)
-
-TODO: GET on api/listing/<#>/activity - get all activity
-for this listing, including (list of these):
-  * listing data (title, agency, iconUrl, id)
-  * author data (displayName, username, id)
-  * activityDate
-  * changeDetails - as a list
-  * action
-  * id
-
-TODO: PUT on api/listing/<#> - sends all the same data as the POST to this
-  url, but updates an existing Listing
-
-NOTE: when an app is Published (submitted for approval), it's the same PUT
-  request as above, but with the approvalStatus changed from IN_PROGRESS to PENDING
-  A new ListingAction is also created, action: SUBMITTED
-
-TODO: GET api/listing/search? - see model_access.search_listings for params
-
-TODO DELETE api/listing/<id>
-
-TODO: GET api/listing/activity - params: offset, max
-
-TODO: GET api/listing - params: approvalStatus, offset, max, org, enabled
 """
 import logging
 

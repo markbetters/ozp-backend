@@ -3,7 +3,9 @@ Tests for access control utility functions
 """
 from django.test import TestCase
 
+from ozpcenter.scripts import sample_data_generator as data_gen
 import ozpcenter.access_control as access_control
+import ozpcenter.api.access_control.model_access as model_access
 
 class AccessControlTest(TestCase):
 
@@ -18,7 +20,7 @@ class AccessControlTest(TestCase):
         """
         Set up test data for the whole TestCase (only run once for the TestCase)
         """
-        pass
+        data_gen.run()
 
     def test_generate_access_controls(self):
         entitlement_data = {
@@ -130,3 +132,10 @@ class AccessControlTest(TestCase):
 
         required = 'INVALID LEVEL'
         self.assertFalse(access_control.has_access(user, required))
+
+    def test_get_by_title(self):
+        ac = model_access.get_access_control_by_title('UNCLASSIFIED')
+        self.assertEqual(ac.title, 'UNCLASSIFIED')
+
+        ac = model_access.get_access_control_by_title('DOESNTEXIST')
+        self.assertEqual(ac, None)
