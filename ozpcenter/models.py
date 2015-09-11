@@ -143,8 +143,14 @@ class Image(models.Model):
             return
         image_type = ImageType.objects.get(name=image_type)
 
+        # create database entry
+        img = Image(uuid=random_uuid, access_control=access_control,
+            file_extension=file_extension, image_type=image_type)
+        img.save()
+
         # write the image to the file system
-        file_name = settings.MEDIA_ROOT + random_uuid + '.' + file_extension
+        # file_name = settings.MEDIA_ROOT + random_uuid + '.' + file_extension
+        file_name = settings.MEDIA_ROOT + str(img.id) + '_' + img.image_type.name + '.' + file_extension
         # logger.debug('saving image %s' % file_name)
         pil_img.save(file_name)
 
@@ -158,10 +164,6 @@ class Image(models.Model):
 
         # TODO: check width and height
 
-        # create database entry
-        img = Image(uuid=random_uuid, access_control=access_control,
-            file_extension=file_extension, image_type=image_type)
-        img.save()
         return img
 
 
