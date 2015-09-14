@@ -257,7 +257,7 @@ for example, `<rootUrl>/api/profile/`.  Limitations:
  requests, they don't work very well, making the browsable API mostly useless
  for non-GET requests
 
- Swagger docs are created via Django REST Swagger and served at
+Swagger docs are created via Django REST Swagger and served at
  `<rootUrl>/docs/`. Swagger makes it easy to see all of the endpoints available.
  Unlike the Browsable API docs, Swagger supports POST, PUT, and DELETE for most
  of the endpoints as well. Limitations:
@@ -266,7 +266,7 @@ for example, `<rootUrl>/api/profile/`.  Limitations:
   have forms that show all of the required and/or optional data that must or
   could be included in the request
 
- Postman was used extensively during the API's development, and perhaps someday
+Postman was used extensively during the API's development, and perhaps someday
  a Postman Collection of requests will be added to this repo
 
 ### Logging
@@ -277,10 +277,14 @@ See `settings.py` for details
 Static files: JS, CSS, fonts, etc. Media files: images uploaded during app
 usage. Good explanation [here](http://timmyomahony.com/blog/static-vs-media-and-root-vs-path-in-django/)
 
-Production static file server: Nginx (TBD)
+Static files include html/css/js for:
+ * Django admin site
+ * DRF Browsable API
+ * Swagger docs
 
-NOTE: We can't serve /media files statically, as access control must be enforced
-on each of them
+Media files (uploaded images) have associated access controls that require
+enforcement on a per-user basis. For that reason, media files are not served
+statically as they typically are, but instead served by the wsgi app itself
 
 ### Scripts
 The `runscript` command is installed via the django-extensions package and used
