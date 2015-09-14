@@ -10,7 +10,7 @@
 #	* load sample data
 #	* start up the django dev server on port 8000
 
-export DJANGO_SETTINGS_MODULE=ozpv3.settings
+export DJANGO_SETTINGS_MODULE=ozp.settings
 
 # remove existing database and all migrations
 rm db.sqlite3
