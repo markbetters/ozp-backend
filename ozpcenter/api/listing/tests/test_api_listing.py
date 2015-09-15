@@ -1110,7 +1110,3 @@ class ListingApiTest(APITestCase):
         url = '/api/listing/1/'
         response = self.client.get(url, format='json')
         self.assertEqual(response.data['last_activity']['action'], 'REJECTED')
-
-
-
-

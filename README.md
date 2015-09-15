@@ -329,7 +329,8 @@ Apps Mall Stewards:
 
 image
 
-* global READ
+* global READ of metadata, but access_control enforcement on the images
+themselves
 * WRITE access allowed for all users, but the associated access_control level
 	cannot exceed that of the current user
 

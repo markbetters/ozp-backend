@@ -103,6 +103,10 @@ LOGGING = {
             'handlers': ['console'],
             'level': 'DEBUG',
         },
+        'ozp-iwc': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+        },
     },
 }
 
