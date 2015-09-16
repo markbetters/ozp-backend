@@ -136,7 +136,6 @@ STATIC_URL = '/static/'
 
 # MEDIA_ROOT is the absolute path to the folder that will hold user uploads
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
-#MEDIA_ROOT = '/Users/Alan/ozp-v3/ozpv3/ozp/media'
 
 # MEDIA_URL is the relative browser URL to be used when accessing media files
 #   from the browser
