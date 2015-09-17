@@ -47,6 +47,13 @@ class ReviewViewSet(viewsets.ModelViewSet):
 
     def list(self, request, listing_pk=None):
         queryset = self.get_queryset().filter(listing=listing_pk)
+        # it appears that because we override the queryset here, we must
+        # manually invoke the pagination methods
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = serializers.ReviewSerializer(page,
+                context={'request': request}, many=True)
+            return self.get_paginated_response(serializer.data)
         serializer = serializers.ReviewSerializer(queryset, many=True,
             context={'request': request})
         return Response(serializer.data)
@@ -180,6 +187,13 @@ class ListingActivityViewSet(viewsets.ModelViewSet):
 
     def list(self, request, listing_pk=None):
         queryset = self.get_queryset().filter(listing=listing_pk)
+        # it appears that because we override the queryset here, we must
+        # manually invoke the pagination methods
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = serializers.ListingActivitySerializer(page,
+                context={'request': request}, many=True)
+            return self.get_paginated_response(serializer.data)
         serializer = serializers.ListingActivitySerializer(queryset,
             context={'request': request}, many=True)
         return Response(serializer.data)
