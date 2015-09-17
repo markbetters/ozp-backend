@@ -150,8 +150,8 @@ class ListingUserActivitiesViewSet(viewsets.ModelViewSet):
             self.request.user.username)
 
     def list(self, request):
-        queryset = self.get_queryset()
-        serializer = serializers.ListingActivitySerializer(queryset,
+        # queryset = self.get_queryset()
+        serializer = serializers.ListingActivitySerializer(self.get_queryset(),
             context={'request': request}, many=True)
         return Response(serializer.data)
 
@@ -169,6 +169,13 @@ class ListingActivitiesViewSet(viewsets.ModelViewSet):
 
     def list(self, request):
         queryset = self.get_queryset()
+        # it appears that because we override the queryset here, we must
+        # manually invoke the pagination methods
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = serializers.ListingActivitySerializer(page,
+                context={'request': request}, many=True)
+            return self.get_paginated_response(serializer.data)
         serializer = serializers.ListingActivitySerializer(queryset,
             context={'request': request}, many=True)
         return Response(serializer.data)
