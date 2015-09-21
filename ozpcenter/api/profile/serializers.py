@@ -76,4 +76,4 @@ class ShortProfileSerializer(serializers.ModelSerializer):
     user = ShortUserSerializer()
     class Meta:
         model = models.Profile
-        fields = ('user', 'display_name')
+        fields = ('user', 'display_name', 'id')

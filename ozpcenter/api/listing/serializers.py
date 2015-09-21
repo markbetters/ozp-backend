@@ -673,7 +673,7 @@ class ReviewSerializer(serializers.ModelSerializer):
 class ShortListingSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Listing
-        fields = ('unique_name', 'title')
+        fields = ('unique_name', 'title', 'id')
 
 
 class ListingActivitySerializer(serializers.ModelSerializer):
