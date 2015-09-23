@@ -258,7 +258,8 @@ class ListingViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         approval_status = self.request.query_params.get('approval_status', None)
-        org = self.request.query_params.get('org', None)
+        # org = self.request.query_params.get('org', None)
+        orgs = self.request.query_params.getlist('org', False)
         enabled = self.request.query_params.get('enabled', None)
         if enabled:
             enabled = enabled.lower()
@@ -270,15 +271,29 @@ class ListingViewSet(viewsets.ModelViewSet):
         listings = model_access.get_listings(self.request.user.username)
         if approval_status:
             listings = listings.filter(approval_status=approval_status)
-        if org:
-            listings = listings.filter(agency__title=org)
+        if orgs:
+            listings = listings.filter(agency__title__in=orgs)
         if enabled is not None:
             listings = listings.filter(is_enabled=enabled)
 
         return listings
 
     def list(self, request):
-        return super(ListingViewSet, self).list(self, request)
+        queryset = self.get_queryset()
+        # it appears that because we override the queryset here, we must
+        # manually invoke the pagination methods
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = serializers.ListingSerializer(page,
+                context={'request': request}, many=True)
+            r = self.get_paginated_response(serializer.data)
+            r.data.append(model_access.put_counts_in_listings_endpoint(queryset))
+            return r
+        serializer = serializers.ListingSerializer(queryset,
+            context={'request': request}, many=True)
+        r = Response(serializer.data)
+        r.data.append(model_access.put_counts_in_listings_endpoint(queryset))
+        return r
 
     def create(self, request):
         """

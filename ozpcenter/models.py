@@ -678,7 +678,7 @@ class Listing(models.Model):
     # https://docs.djangoproject.com/en/1.8/ref/models/fields/#choices
     IN_PROGRESS = 'IN_PROGRESS'
     PENDING = 'PENDING'
-    APPROVED_ORG = 'APPROVED_BY_ORG'
+    APPROVED_ORG = 'APPROVED_ORG'
     APPROVED = 'APPROVED'
     REJECTED = 'REJECTED'
     APPROVAL_STATUS_CHOICES = (

@@ -435,6 +435,54 @@ def delete_listing(username, listing):
 
     listing.delete()
 
+def put_counts_in_listings_endpoint(queryset):
+    """
+    Add counts to the listing/ endpoint
+
+    Args:
+        querset: models.Listing queryset
+    Returns:
+        {
+            "counts": {
+                "total": <total listings>,
+                "organizations": {
+                    <org_id>: <count>,
+                    ...
+                },
+                "enabled": <enabled listings>,
+                "IN_PROGRESS": <num>,
+                "PENDING": <num>,
+                "REJECTED": <num>,
+                "APPROVED_ORG": <num>,
+                "APPROVED": <num>
+            }
+        }
+    """
+    data = {"counts": {"total": queryset.count(), "organizations": {}}}
+    num_enabled = queryset.filter(is_enabled=True).count()
+    num_in_progress = queryset.filter(
+        approval_status=models.Listing.IN_PROGRESS).count()
+    num_pending = queryset.filter(
+        approval_status=models.Listing.PENDING).count()
+    num_rejected = queryset.filter(
+        approval_status=models.Listing.REJECTED).count()
+    num_approved_org = queryset.filter(
+        approval_status=models.Listing.APPROVED_ORG).count()
+    num_approved = queryset.filter(
+        approval_status=models.Listing.APPROVED).count()
+    data['counts']['enabled'] = num_enabled
+    data['counts'][models.Listing.IN_PROGRESS] = num_in_progress
+    data['counts'][models.Listing.PENDING] = num_pending
+    data['counts'][models.Listing.REJECTED] = num_rejected
+    data['counts'][models.Listing.APPROVED_ORG] = num_approved_org
+    data['counts'][models.Listing.APPROVED] = num_approved
+
+    orgs = models.Agency.objects.all()
+    for i in orgs:
+        data['counts']['organizations'][str(i.id)] = queryset.filter(
+            agency__id=i.id).count()
+    return data
+
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 #   Methods to convert Response representations of objects to strings for use
 #   in the change_details of a listing's activity

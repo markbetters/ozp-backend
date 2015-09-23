@@ -386,4 +386,16 @@ class ListingTest(TestCase):
         out = model_access.owners_to_string(owners, True)
         self.assertEqual(out, "['jones', 'julia']")
 
+    def test_put_counts_in_listings_endpoint(self):
+        queryset = models.Listing.objects.all()
+        data = model_access.put_counts_in_listings_endpoint(queryset)
+        self.assertTrue(data['counts']['total'] > 5)
+        self.assertTrue(data['counts']['enabled'] > 2)
+        self.assertTrue(data['counts']['organizations']['1'] > 2)
+        self.assertTrue(data['counts']['IN_PROGRESS'] >= 0)
+        self.assertTrue(data['counts']['PENDING'] >= 0)
+        self.assertTrue(data['counts']['REJECTED'] >= 0)
+        self.assertTrue(data['counts']['APPROVED_ORG'] >= 0)
+        self.assertTrue(data['counts']['APPROVED'] >= 0)
+
 
