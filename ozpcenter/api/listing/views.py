@@ -280,6 +280,7 @@ class ListingViewSet(viewsets.ModelViewSet):
 
     def list(self, request):
         queryset = self.get_queryset()
+        counts_data = model_access.put_counts_in_listings_endpoint(queryset)
         # it appears that because we override the queryset here, we must
         # manually invoke the pagination methods
         page = self.paginate_queryset(queryset)
@@ -287,12 +288,15 @@ class ListingViewSet(viewsets.ModelViewSet):
             serializer = serializers.ListingSerializer(page,
                 context={'request': request}, many=True)
             r = self.get_paginated_response(serializer.data)
-            r.data.append(model_access.put_counts_in_listings_endpoint(queryset))
+            # add counts to response
+            r.data['counts'] = counts_data
             return r
         serializer = serializers.ListingSerializer(queryset,
             context={'request': request}, many=True)
         r = Response(serializer.data)
-        r.data.append(model_access.put_counts_in_listings_endpoint(queryset))
+        # add counts to response
+        counts = {'counts': counts_data}
+        r.data.append(counts)
         return r
 
     def create(self, request):

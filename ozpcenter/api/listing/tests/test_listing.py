@@ -389,13 +389,13 @@ class ListingTest(TestCase):
     def test_put_counts_in_listings_endpoint(self):
         queryset = models.Listing.objects.all()
         data = model_access.put_counts_in_listings_endpoint(queryset)
-        self.assertTrue(data['counts']['total'] > 5)
-        self.assertTrue(data['counts']['enabled'] > 2)
-        self.assertTrue(data['counts']['organizations']['1'] > 2)
-        self.assertTrue(data['counts']['IN_PROGRESS'] >= 0)
-        self.assertTrue(data['counts']['PENDING'] >= 0)
-        self.assertTrue(data['counts']['REJECTED'] >= 0)
-        self.assertTrue(data['counts']['APPROVED_ORG'] >= 0)
-        self.assertTrue(data['counts']['APPROVED'] >= 0)
+        self.assertTrue(data['total'] > 5)
+        self.assertTrue(data['enabled'] > 2)
+        self.assertTrue(data['organizations']['1'] > 2)
+        self.assertTrue(data['IN_PROGRESS'] >= 0)
+        self.assertTrue(data['PENDING'] >= 0)
+        self.assertTrue(data['REJECTED'] >= 0)
+        self.assertTrue(data['APPROVED_ORG'] >= 0)
+        self.assertTrue(data['APPROVED'] >= 0)
 
 
