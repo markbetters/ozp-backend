@@ -41,6 +41,7 @@ INSTALLED_APPS = (
     'django_extensions',
     'rest_framework_swagger',
     'ozpcenter',
+    'ozpiwc',
     'corsheaders'
 )
 
@@ -152,7 +153,12 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
     ),
     'DEFAULT_FILTER_BACKENDS': ('rest_framework.filters.DjangoFilterBackend',),
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination'
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'DEFAULT_PARSER_CLASSES': (
+        'rest_framework.parsers.JSONParser',
+        'rest_framework.parsers.MultiPartParser',
+        'rest_framework.parsers.FormParser'
+    )
 }
 
 # NOTE: In production, change this to memcached

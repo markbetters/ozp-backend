@@ -17,6 +17,7 @@ rm db.sqlite3
 rm -r ozpcenter/migrations/*
 # create new database with a single new migration
 python manage.py makemigrations ozpcenter
+python manage.py makemigrations ozpiwc
 python manage.py migrate
 # remove old static files
 rm -rf static/
