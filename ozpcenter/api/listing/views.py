@@ -235,7 +235,7 @@ class ListingRejectionViewSet(viewsets.ModelViewSet):
             rejection_description = request.data['description']
             listing = model_access.reject_listing(user, listing,
                 rejection_description)
-            return Response(data={"status": "success"},
+            return Response(data={"listing": {"id": listing.id}},
                 status=status.HTTP_201_CREATED)
         except Exception as e:
             return Response("Error rejecting listing",
