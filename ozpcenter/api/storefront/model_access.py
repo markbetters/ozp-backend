@@ -57,7 +57,7 @@ def get_storefront(username):
                 username).order_by(
                 'avg_rate').filter(
                     approval_status=models.Listing.APPROVED,
-                    is_enabled=True)[:36]
+                    is_enabled=True).order_by('-avg_rate')[:36]
 
             data = {
                 'featured': featured_listings,

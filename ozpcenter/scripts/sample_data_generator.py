@@ -472,26 +472,17 @@ def run():
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     #                           Reviews
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    air_mail_review_1 = models.Review(
-        text="This app is great - well designed and easy to use",
-        rate=5,
-        author=charrington,
-        listing=listing)
-    air_mail_review_1.save()
+    listing_model_access.create_listing_review(charrington.user.username,
+        listing, 5,
+        text="This app is great - well designed and easy to use")
 
-    air_mail_review_2 = models.Review(
-        text="Air mail is ok - does what it says and no more",
-        rate=3,
-        author=tparsons,
-        listing=listing)
-    air_mail_review_2.save()
+    listing_model_access.create_listing_review(tparsons.user.username,
+        listing, 3,
+        text="Air mail is ok - does what it says and no more")
 
-    air_mail_review_3 = models.Review(
-        text="Air mail crashes all the time - it doesn't even support IE 6!",
-        rate=1,
-        author=syme,
-        listing=listing)
-    air_mail_review_3.save()
+    listing_model_access.create_listing_review(syme.user.username,
+        listing, 1,
+        text="Air mail crashes all the time - it doesn't even support IE 6!")
 
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     #                           Document URLs
@@ -561,12 +552,13 @@ def run():
     listing.tags.add(demo)
     listing.tags.add(example)
 
-    bread_basket_review_1 = models.Review(
-        text="This bread is stale!",
-        rate=2,
-        author=jones,
-        listing=listing)
-    bread_basket_review_1.save()
+    listing_model_access.create_listing_review(jones.user.username,
+        listing, 2,
+        text="This bread is stale!")
+
+    listing_model_access.create_listing_review(julia.user.username,
+        listing, 5,
+        text="Yum!")
 
     listing_model_access.create_listing(julia, listing)
     listing_model_access.submit_listing(julia, listing)
@@ -909,6 +901,10 @@ def run():
     listing_model_access.submit_listing(winston, listing)
     listing_model_access.approve_listing_by_org_steward(winston, listing)
     listing_model_access.approve_listing(winston, listing)
+
+    listing_model_access.create_listing_review(charrington.user.username,
+        listing, 4,
+        text="I really like it")
 
     ############################################################################
     #                           Library

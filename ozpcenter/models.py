@@ -726,7 +726,7 @@ class Listing(models.Model):
     is_enabled = models.BooleanField(default=True)
     is_featured = models.BooleanField(default=False)
     # a weighted average (5*total_rate5 + 4*total_rate4 + ...) / total_votes
-    avg_rate = models.DecimalField(max_digits=2, decimal_places=1, default=0.0)
+    avg_rate = models.FloatField(default=0.0)
     total_votes = models.IntegerField(default=0)
     total_rate5 = models.IntegerField(default=0)
     total_rate4 = models.IntegerField(default=0)

@@ -348,7 +348,7 @@ class ListingApiTest(APITestCase):
         # check calculations
         listing = models.Listing.objects.get(title=title)
         # (2*5 + 2*4 + 1*3 + 1*2 + 1*1)/7 = (24)/7 = 3.429
-        self.assertEqual(listing.avg_rate, Decimal('3.4'))
+        self.assertEqual(listing.avg_rate, 3.4)
         self.assertEqual(listing.total_votes, 7)
         self.assertEqual(listing.total_reviews, 6)
         self.assertEqual(listing.total_rate1, 1)
@@ -369,7 +369,7 @@ class ListingApiTest(APITestCase):
         # check calculations
         listing = models.Listing.objects.get(title=title)
         # (2*5 + 1*4 + 1*3 + 2*2 + 1*1)/7 = (22)/7 = 3.14
-        self.assertEqual(listing.avg_rate, Decimal('3.1'))
+        self.assertEqual(listing.avg_rate, 3.1)
         self.assertEqual(listing.total_votes, 7)
         self.assertEqual(listing.total_reviews, 6)
         self.assertEqual(listing.total_rate1, 1)
@@ -389,7 +389,7 @@ class ListingApiTest(APITestCase):
         # check calculations
         listing = models.Listing.objects.get(title=title)
         # (1*5 + 1*4 + 1*3 + 2*2 + 1*1)/6 = (17)/6 = 2.83
-        self.assertEqual(listing.avg_rate, Decimal('2.8'))
+        self.assertEqual(listing.avg_rate, 2.8)
         self.assertEqual(listing.total_votes, 6)
         self.assertEqual(listing.total_reviews, 5)
         self.assertEqual(listing.total_rate1, 1)
@@ -560,7 +560,7 @@ class ListingApiTest(APITestCase):
             models.Listing.IN_PROGRESS)
         self.assertEqual(response.data['is_enabled'], True)
         self.assertEqual(response.data['is_featured'], False)
-        self.assertEqual(response.data['avg_rate'], '0.0')
+        self.assertEqual(response.data['avg_rate'], 0.0)
         self.assertEqual(response.data['total_votes'], 0)
         self.assertEqual(response.data['total_rate5'], 0)
         self.assertEqual(response.data['total_rate4'], 0)
@@ -773,14 +773,14 @@ class ListingApiTest(APITestCase):
             models.Listing.APPROVED)
         self.assertEqual(response.data['is_enabled'], False)
         self.assertEqual(response.data['is_featured'], False)
-        self.assertEqual(response.data['avg_rate'], '0.0')
-        self.assertEqual(response.data['total_votes'], 0)
-        self.assertEqual(response.data['total_rate5'], 0)
+        self.assertEqual(response.data['avg_rate'], 3.0)
+        self.assertEqual(response.data['total_votes'], 3)
+        self.assertEqual(response.data['total_rate5'], 1)
         self.assertEqual(response.data['total_rate4'], 0)
-        self.assertEqual(response.data['total_rate3'], 0)
+        self.assertEqual(response.data['total_rate3'], 1)
         self.assertEqual(response.data['total_rate2'], 0)
-        self.assertEqual(response.data['total_rate1'], 0)
-        self.assertEqual(response.data['total_reviews'], 0)
+        self.assertEqual(response.data['total_rate1'], 1)
+        self.assertEqual(response.data['total_reviews'], 3)
         self.assertEqual(response.data['singleton'], False)
         self.assertEqual(response.data['required_listings'], None)
 
