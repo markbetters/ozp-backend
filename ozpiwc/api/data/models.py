@@ -11,24 +11,17 @@ from django.db import models
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center')
 
-class DataResource(models.Model):
+class Data(models.Model):
     """
-    Data resource (data.api)
+    Data (data.api)
     """
     key = models.CharField(max_length=1024)
-    entity = models.CharField(max_length=1048576, blank=True, null=True)
-    content_type = models.CharField(max_length=1024, blank=True, null=True)
+    value = models.CharField(max_length=1048576)
     # a little bit of denormalization here. Eventually this model could live
     # in a different database (perhaps an actual key-value or document store),
     # so reference the actual username here instead of a FK to the Profile or
     # User table in ozpcenter
     username = models.CharField(max_length=128)
-
-    pattern = models.CharField(max_length=1024, blank=True, null=True)
-    collection = models.CharField(max_length=1024, blank=True, null=True)
-    permissions = models.CharField(max_length=1024, blank=True, null=True)
-    version = models.CharField(max_length=1024, blank=True, null=True)
-
 
     class Meta:
         unique_together = ('username', 'key')
