@@ -409,12 +409,21 @@ class ListingApiTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data['title'], title)
 
-        # trying to create an app without a title should fail
+    def test_create_listing_no_title(self):
+        # create a new listing with minimal data (title)
+        user = generic_model_access.get_profile('julia').user
+        self.client.force_authenticate(user=user)
+        url = '/api/listing/'
         data = {'description': 'text here'}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_create_listing_full(self):
+    # TODO: we have some strange inter-test dependency here. if  this test
+    # doesn't run last (or after some other unknown test), it segfaults. Naming
+    # the test 'test_z*' seems to make it run at the end. One could also run
+    # the tests with the --reverse flag (but then you'd need to change this test
+    # name to remove the _z)
+    def test_z_create_listing_full(self):
         user = generic_model_access.get_profile('julia').user
         self.client.force_authenticate(user=user)
         url = '/api/listing/'
@@ -570,6 +579,7 @@ class ListingApiTest(APITestCase):
         self.assertEqual(response.data['total_reviews'], 0)
         self.assertEqual(response.data['singleton'], False)
         self.assertEqual(response.data['required_listings'], None)
+        self.assertTrue(response.data['edited_date'])
 
     def test_delete_listing(self):
         user = generic_model_access.get_profile('wsmith').user
@@ -616,7 +626,7 @@ class ListingApiTest(APITestCase):
         # and another update
         response = self.client.put(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-
+        self.assertTrue(response.data['edited_date'])
 
     def test_update_listing_full(self):
         user = generic_model_access.get_profile('julia').user
@@ -768,7 +778,7 @@ class ListingApiTest(APITestCase):
         self.assertTrue(4 in screenshots_large)
 
 
-        self.assertEqual(response.data['approved_date'], None)
+        self.assertTrue(response.data['approved_date'])
         self.assertEqual(response.data['approval_status'],
             models.Listing.APPROVED)
         self.assertEqual(response.data['is_enabled'], False)
@@ -783,6 +793,7 @@ class ListingApiTest(APITestCase):
         self.assertEqual(response.data['total_reviews'], 3)
         self.assertEqual(response.data['singleton'], False)
         self.assertEqual(response.data['required_listings'], None)
+        self.assertTrue(response.data['edited_date'])
 
 
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -986,7 +997,6 @@ class ListingApiTest(APITestCase):
         response = self.client.get(url, format='json')
         activity_actions = [i['action'] for i in response.data]
         self.assertTrue(len(activity_actions), 3)
-        print('activity actions: %s' % activity_actions)
         self.assertTrue(models.ListingActivity.SUBMITTED in activity_actions)
 
         # APPROVED_ORG

@@ -688,9 +688,10 @@ class Listing(models.Model):
         (APPROVED, 'APPROVED'),
         (REJECTED, 'REJECTED')
     )
-
-    title = models.CharField(max_length=255, unique=True)
+    # title is not guaranteed to be unique
+    title = models.CharField(max_length=255)
     approved_date = models.DateTimeField(null=True, blank=True)
+    edited_date = models.DateTimeField(auto_now=True)
     agency = models.ForeignKey(Agency, related_name='listings')
     listing_type = models.ForeignKey('ListingType', related_name='listings',
         null=True, blank=True)
@@ -781,10 +782,10 @@ class Listing(models.Model):
     objects = AccessControlListingManager()
 
     def __repr__(self):
-        return self.title
+        return self.unique_name
 
     def __str__(self):
-        return self.title
+        return self.unique_name
 
 
 class AccessControlListingActivityManager(models.Manager):

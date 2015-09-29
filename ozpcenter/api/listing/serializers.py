@@ -1,7 +1,9 @@
 """
 Serializers
 """
+import datetime
 import logging
+import pytz
 
 import django.contrib.auth
 
@@ -308,6 +310,7 @@ class ListingSerializer(serializers.ModelSerializer):
         if 'screenshots' in data:
             pass
 
+        logger.debug('leaving ListingSerializer.validate')
         return data
 
     def create(self, validated_data):
@@ -660,6 +663,7 @@ class ListingSerializer(serializers.ModelSerializer):
         instance.save()
 
         model_access.log_listing_modification(user, instance, change_details)
+        instance.edited_date = datetime.datetime.now(pytz.utc)
         return instance
 
 

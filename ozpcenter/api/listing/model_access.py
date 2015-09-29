@@ -1,7 +1,9 @@
 """
 Model access
 """
+import datetime
 import logging
+import pytz
 
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
@@ -49,7 +51,8 @@ def filter_listings(username, filter_params):
 
     Too many variations to cache
     """
-    objects = models.Listing.objects.for_user(username).all()
+    objects = models.Listing.objects.for_user(username).filter(
+        approval_status=models.Listing.APPROVED)
     if 'categories' in filter_params:
         # TODO: this is OR logic not AND
         objects = objects.filter(
@@ -269,6 +272,7 @@ def approve_listing(steward, listing):
     listing = _add_listing_activity(steward, listing,
         models.ListingActivity.APPROVED)
     listing.approval_status = models.Listing.APPROVED
+    listing.approved_date = datetime.datetime.now(pytz.utc)
     listing.save()
     return listing
 
