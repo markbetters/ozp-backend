@@ -19,18 +19,24 @@ logger = logging.getLogger('ozp-iwc')
 @permission_classes((permissions.IsAuthenticated, ))
 def ListDataApiView(request):
     """
-    Data API
+    List all data entries for the user
     """
     listing_root_url = hal.get_abs_url_for_iwc(request)
 
     data = hal.create_base_structure(request)
 
+    keys = model_access.get_all_keys(request.user.username)
+    for k in keys:
+        # remove the leading /
+        k = k[1:]
+        url = hal.get_abs_url_for_iwc(request) + k
+        data = hal.add_link_item(url, data)
 
     logger.debug('DataApiView request to GET all items')
 
     return Response(data)
 
-@api_view(['GET', 'PUT'])
+@api_view(['GET', 'PUT', 'DELETE'])
 @permission_classes((permissions.IsAuthenticated, ))
 def DataApiView(request, key=None):
     """
@@ -78,12 +84,8 @@ def DataApiView(request, key=None):
                 resp = serializer.data
                 resp = hal.add_hal_structure(resp, request)
                 return Response(resp, status=status.HTTP_201_CREATED)
-
-            # data = model_access.set_data(request.user.username, key,
-            #     request.data)
-            # return Response(data, status=status.HTTP_200_OK)
-
         except Exception as e:
+            # TODO debug
             raise e
             return Response(str(e),
                 status=status.HTTP_400_BAD_REQUEST)
@@ -91,6 +93,8 @@ def DataApiView(request, key=None):
         try:
             instance = model_access.get_data_resource(request.user.username,
                 key)
+            if not instance:
+                return Response(status=status.HTTP_404_NOT_FOUND)
             serializer = serializers.DataResourceSerializer(instance,
                 data=request.data, context={'request': request, 'key': key},
                 partial=True)
@@ -101,13 +105,22 @@ def DataApiView(request, key=None):
             resp = serializer.data
             resp = hal.add_hal_structure(resp, request)
             return Response(resp, status=status.HTTP_200_OK)
-
-            # data = model_access.get_data(request.user.username, key)
-            # return Response(data)
         except Exception as e:
+            # TODO debug
             raise e
             return Response(str(e),
                 status=status.HTTP_400_BAD_REQUEST)
-
-
-
+    if request.method == 'DELETE':
+        try:
+            instance = model_access.get_data_resource(request.user.username,
+                key)
+            if instance:
+                instance.delete()
+            else:
+                return Response(status=status.HTTP_404_NOT_FOUND)
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except Exception as e:
+            # TODO debug
+            raise e
+            return Response(str(e),
+                status=status.HTTP_400_BAD_REQUEST)

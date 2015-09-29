@@ -62,3 +62,10 @@ def get_abs_url_for_profile(request, profile_id):
 def get_abs_url_for_iwc(request):
     root_url = request.build_absolute_uri('/')
     return '%siwc-api/' % root_url
+
+def add_link_item(url, data):
+    if 'item' not in data['_links']:
+        data['_links']['item'] = []
+    new_link = {'href': url}
+    data['_links']['item'].append(new_link)
+    return data

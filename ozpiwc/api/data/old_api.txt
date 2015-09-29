@@ -1,0 +1,140 @@
+================================================================================
+                                    data.api
+================================================================================
+
+################################################################################
+                            GET profile/<id>/data
+
+            Request Content-Type: application/vnd.ozp-iwc-data-objects-v1+json
+################################################################################
+
+{
+  "_links": {
+    "item": [
+      {
+        "href": "https:\/\/ci-develop.amlng.di2e.net:7799\/marketplace\/api\/profile\/4\/data\/locationLister\/listings"
+      },
+      {
+        "href": "https:\/\/ci-develop.amlng.di2e.net:7799\/marketplace\/api\/profile\/4\/data\/locationLister\/listings\/d2502a39"
+      },
+      {
+        "href": "https:\/\/ci-develop.amlng.di2e.net:7799\/marketplace\/api\/profile\/4\/data\/locationLister\/listings\/bfb1723"
+      }
+    ],
+    "self": {
+      "href": "https:\/\/ci-develop.amlng.di2e.net:7799\/marketplace\/api\/profile\/4\/data"
+    }
+  }
+}
+
+################################################################################
+                GET profile/<id>/data/locationLister/listings
+
+            Request Content-Type: application/vnd.ozp-iwc-data-object-v1+json
+################################################################################
+
+{
+  "entity": "{\"key\":\"\/locationLister\/listings\",\"collection\":[\"\/locationLister\/listings\/d2502a39\",\"\/locationLister\/listings\/bfb1723\"],\"pattern\":\"\/locationLister\/listings\/\",\"permissions\":{},\"version\":5,\"_links\":{\"self\":{\"href\":\"https:\/\/ci-develop.amlng.di2e.net:7799\/marketplace\/api\/profile\/4\/data\/locationLister\/listings\"}}}",
+  "contentType": "application\/vnd.ozp-iwc-data-object+json",
+  "key": "locationLister\/listings",
+  "_links": {
+    "self": {
+      "href": "https:\/\/ci-develop.amlng.di2e.net:7799\/marketplace\/api\/profile\/4\/data\/locationLister\/listings"
+    }
+  }
+}
+
+################################################################################
+                GET profile/<id>/data/locationLister/listings/d23483
+
+            Request Content-Type: application/vnd.ozp-iwc-data-object-v1+json
+################################################################################
+
+{
+  "entity": "{\"key\":\"\/locationLister\/listings\/d2502a39\",\"entity\":{\"title\":\"test\",\"coords\":{\"lat\":0,\"long\":0},\"description\":\"asdf\"},\"collection\":[],\"pattern\":\"\/locationLister\/listings\/d2502a39\/\",\"permissions\":{},\"version\":2,\"_links\":{\"self\":{\"href\":\"https:\/\/ci-develop.amlng.di2e.net:7799\/marketplace\/api\/profile\/4\/data\/locationLister\/listings\/d2502a39\"}}}",
+  "contentType": "application\/vnd.ozp-iwc-data-object+json",
+  "key": "locationLister\/listings\/d2502a39",
+  "_links": {
+    "self": {
+      "href": "https:\/\/ci-develop.amlng.di2e.net:7799\/marketplace\/api\/profile\/4\/data\/locationLister\/listings\/d2502a39"
+    }
+  }
+}
+
+################################################################################
+                PUT profile/<id>/data/locationLister/listings
+
+                Request Content-Type: application/vnd.ozp-iwc-data-object+json
+################################################################################
+
+Request payload:
+
+{
+  "key": "\/locationLister\/listings",
+  "collection": [
+    "\/locationLister\/listings\/bfb1723",
+    "\/locationLister\/listings\/d2502a39",
+    "\/locationLister\/listings\/57b70645",
+    "\/locationLister\/listings\/305618b2"
+  ],
+  "pattern": "\/locationLister\/listings\/",
+  "permissions": {
+
+  },
+  "version": 9,
+  "_links": {
+    "self": {
+      "href": "https:\/\/ci-develop.amlng.di2e.net:7799\/marketplace\/api\/profile\/4\/data\/locationLister\/listings"
+    }
+  }
+}
+
+Response: 204 (No Content)
+
+################################################################################
+                PUT profile/<id>/data/locationLister/listings/305618b2
+
+                Request Content-Type: application/vnd.ozp-iwc-data-object+json
+################################################################################
+
+Request payload:
+
+{
+  "key": "\/locationLister\/listings\/305618b2",
+  "entity": {
+    "title": "Baltimore",
+    "coords": {
+      "lat": 79,
+      "long": -76
+    },
+    "description": "home"
+  },
+  "collection": [
+
+  ],
+  "pattern": "\/locationLister\/listings\/305618b2\/",
+  "permissions": {
+
+  },
+  "version": 2,
+  "_links": {
+    "self": {
+      "href": "https:\/\/ci-develop.amlng.di2e.net:7799\/marketplace\/api\/profile\/4\/data\/locationLister\/listings\/305618b2"
+    }
+  }
+}
+
+Response: 204 (No Content)
+
+
+
+system.api
+=================
+
+
+intents.api
+=================
+
+
+names.api
+================
