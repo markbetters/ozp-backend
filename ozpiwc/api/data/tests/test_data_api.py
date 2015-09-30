@@ -83,6 +83,24 @@ class ApiTest(APITestCase):
         url = '/iwc-api/self/data/'
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue(key in response.data['_links']['item'][0]['href'])
+
+        # update an existing entry
+        new_pattern = '/new/pattern'
+        data['pattern'] = new_pattern
+        url = '/iwc-api/self/data' + key
+        response = self.client.put(url, data, format='json')
+        self.assertEqual(response.data['pattern'], new_pattern)
+
+        # delete an entry
+        response = self.client.delete(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+        # it should be gone now
+        response = self.client.get(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+
 
 
 

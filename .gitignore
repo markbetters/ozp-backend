@@ -5,3 +5,4 @@ __pycache__
 *.pyc
 media/
 static/
+old_api.txt
