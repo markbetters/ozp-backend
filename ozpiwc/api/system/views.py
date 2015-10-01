@@ -18,7 +18,7 @@ logger = logging.getLogger('ozp-iwc')
 
 @api_view(['GET'])
 @permission_classes((permissions.IsAuthenticated, ))
-def ApplicationListView(request, profile_id='0'):
+def ApplicationListView(request):
     """
     List of applications
     """
@@ -30,13 +30,13 @@ def ApplicationListView(request, profile_id='0'):
     for i in applications:
         item = {"href": '%slisting/%s/' % (listing_root_url, i.id)}
         items.append(item)
-    data["item"] = items
+    data['_links']['item'] = items
 
     return Response(data)
 
 @api_view(['GET'])
 @permission_classes((permissions.IsAuthenticated, ))
-def ApplicationView(request, app_id='0'):
+def ApplicationView(request, id='0'):
     """
     Single application
     """
@@ -48,21 +48,13 @@ def ApplicationView(request, app_id='0'):
 
     # This minimal definition of what a Listing object must have should be
     # advertised so that others can use IWC with their own systems
-    queryset = listing_model_access.get_listing_by_id(profile.user.username, app_id)
+    queryset = listing_model_access.get_listing_by_id(profile.user.username, id)
+    if not queryset:
+        return Response(status=status.HTTP_404_NOT_FOUND)
     serializer = listing_serializers.ListingSerializer(queryset,
             context={'request': request})
     data = serializer.data
     data = hal.add_hal_structure(data, request)
-
-    # TODO probably remove this
-    data[hal.APPLICATION_ACTIVITY_REL] = {
-        "href": '%slisting/%s/activity/' % (listing_root_url, app_id)
-    }
-
-    # TODO probably remove this
-    data[hal.APPLICATION_REVIEW_REL] = {
-        "href": '%slisting/%s/review/' % (listing_root_url, app_id)
-    }
 
     return Response(data)
 

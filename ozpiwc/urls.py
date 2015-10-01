@@ -9,8 +9,9 @@ import ozpiwc.views as views
 # Wire up our API using automatic URL routing.
 urlpatterns = [
     url(r'', include('ozpiwc.api.data.urls')),
-    # url(r'', include('ozpiwc.api.intent.urls')),
+    url(r'', include('ozpiwc.api.intent.urls')),
     url(r'', include('ozpiwc.api.system.urls')),
     # url(r'', include('ozpiwc.api.names.urls')),
+    url(r'^self/$', views.UserView),
     url(r'', views.RootApiView)
 ]

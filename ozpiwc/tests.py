@@ -39,5 +39,13 @@ class RootViewApiTest(APITestCase):
         self.assertTrue('_links' in response.data)
         self.assertTrue('_embedded' in response.data)
 
+        self.assertTrue('ozp:application' in response.data)
+        self.assertTrue( '/self/application/' in response.data['ozp:application']['href'])
+
+        self.assertTrue('ozp:system' in response.data)
+        self.assertTrue('ozp:user' in response.data)
+        self.assertTrue('ozp:intent' in response.data)
+        self.assertTrue('ozp:user-data' in response.data)
+
 
 

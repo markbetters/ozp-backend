@@ -24,19 +24,19 @@ def RootApiView(request):
     profile = model_access.get_profile(request.user.username)
     data = hal.create_base_structure(request)
     data[hal.APPLICATION_REL] = {
-        "href": '%sapplication/' % (hal.get_abs_url_for_profile(request, profile.id))
+        "href": '%sself/application/' % (hal.get_abs_url_for_iwc(request))
     }
     data[hal.INTENT_REL] = {
-        "href": '%sintent/' % (hal.get_abs_url_for_profile(request, profile.id))
+        "href": '%sself/intent/' % (hal.get_abs_url_for_iwc(request))
     }
     data[hal.SYSTEM_REL] = {
         "href": '%siwc-api/system/' % (root_url)
     }
     data[hal.USER_REL] = {
-        "href": '%s' % (hal.get_abs_url_for_profile(request, profile.id))
+        "href": '%sself/' % (hal.get_abs_url_for_iwc(request))
     }
     data[hal.USER_DATA_REL] = {
-        "href": '%sdata/' % (hal.get_abs_url_for_profile(request, profile.id))
+        "href": '%sself/data/' % (hal.get_abs_url_for_iwc(request))
     }
 
     # add embedded data
@@ -45,8 +45,20 @@ def RootApiView(request):
         "name": profile.display_name,
         "_links": {
             "self": {
-                "href": '%s' % (hal.get_abs_url_for_profile(request, profile.id))
+                "href": '%sself/' % (hal.get_abs_url_for_iwc(request))
             }
         }
     }
+    return Response(data)
+
+@api_view(['GET'])
+@permission_classes((permissions.IsAuthenticated, ))
+def UserView(request):
+    """
+    User info
+    """
+    profile = model_access.get_profile(request.user.username)
+    data = {'username': profile.user.username, 'id': profile.id,
+        'display_name': profile.display_name}
+    data = hal.add_hal_structure(data, request)
     return Response(data)

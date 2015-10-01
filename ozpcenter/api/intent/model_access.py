@@ -16,3 +16,9 @@ def get_intent_by_action(action):
         return models.Intent.objects.get(action=action)
     except models.Intent.DoesNotExist:
         return None
+
+def get_intent_by_id(id):
+    try:
+        return models.Intent.objects.get(id=id)
+    except models.Intent.DoesNotExist:
+        return None

@@ -32,7 +32,10 @@ def get_listing_type_by_title(title):
     return models.ListingType.objects.get(title=title)
 
 def get_listing_by_id(username, id):
-    return models.Listing.objects.for_user(username).get(id=id)
+    try:
+        return models.Listing.objects.for_user(username).get(id=id)
+    except models.Listing.DoesNotExist:
+        return None
 
 def get_listing_by_title(username, title):
     return models.Listing.objects.for_user(username).get(title=title)

@@ -16,7 +16,7 @@ import ozpiwc.api.data.views as views
 from ozpiwc import models as models
 from ozpcenter import model_access as generic_model_access
 
-class ApiTest(APITestCase):
+class DataApiTest(APITestCase):
 
     def setUp(self):
         """

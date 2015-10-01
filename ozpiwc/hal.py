@@ -9,10 +9,6 @@ APPLICATION_REL = "ozp:application"
 INTENT_REL = "ozp:intent"
 SYSTEM_REL = "ozp:system"
 USER_DATA_REL = "ozp:user-data"
-# TODO: probably get rid of these
-APPLICATION_LIBRARY_REL = "ozp:application-library"
-APPLICATION_ACTIVITY_REL = "ozp:activity"
-APPLICATION_REVIEW_REL = "ozp:review"
 
 
 def create_base_structure(request):

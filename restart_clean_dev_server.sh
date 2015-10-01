@@ -15,6 +15,7 @@ export DJANGO_SETTINGS_MODULE=ozp.settings
 # remove existing database and all migrations
 rm db.sqlite3
 rm -r ozpcenter/migrations/*
+rm -r ozpiwc/migrations/*
 # create new database with a single new migration
 python manage.py makemigrations ozpcenter
 python manage.py makemigrations ozpiwc
