@@ -28,11 +28,12 @@ class DataResourceSerializer(serializers.Serializer):
 
     def create(self, validated_data):
         username = self.context['request'].user.username
+        content_type = self.context['request'].content_type
         data_resource = models.DataResource(
             username=username,
             key=self.context['key'],
             entity=validated_data['entity'],
-            content_type=validated_data['content_type'],
+            content_type=content_type,
             version=validated_data['version'],
             pattern=validated_data['pattern'],
             collection=validated_data['collection'],
@@ -42,7 +43,6 @@ class DataResourceSerializer(serializers.Serializer):
 
     def update(self, instance, validated_data):
         instance.entity = validated_data['entity']
-        instance.content_type = validated_data['content_type']
         instance.version = validated_data['version']
         instance.pattern = validated_data['pattern']
         instance.collection = validated_data['collection']

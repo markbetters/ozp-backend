@@ -23,19 +23,19 @@ def RootApiView(request):
     root_url = request.build_absolute_uri('/')
     profile = model_access.get_profile(request.user.username)
     data = hal.create_base_structure(request)
-    data[hal.APPLICATION_REL] = {
+    data['_links'][hal.APPLICATION_REL] = {
         "href": '%sself/application/' % (hal.get_abs_url_for_iwc(request))
     }
-    data[hal.INTENT_REL] = {
+    data['_links'][hal.INTENT_REL] = {
         "href": '%sself/intent/' % (hal.get_abs_url_for_iwc(request))
     }
-    data[hal.SYSTEM_REL] = {
+    data['_links'][hal.SYSTEM_REL] = {
         "href": '%siwc-api/system/' % (root_url)
     }
-    data[hal.USER_REL] = {
+    data['_links'][hal.USER_REL] = {
         "href": '%sself/' % (hal.get_abs_url_for_iwc(request))
     }
-    data[hal.USER_DATA_REL] = {
+    data['_links'][hal.USER_DATA_REL] = {
         "href": '%sself/data/' % (hal.get_abs_url_for_iwc(request))
     }
 
@@ -46,6 +46,16 @@ def RootApiView(request):
         "_links": {
             "self": {
                 "href": '%sself/' % (hal.get_abs_url_for_iwc(request))
+            }
+        }
+    }
+
+    data["_embedded"][hal.SYSTEM_REL] = {
+        "version": '1.0',
+        "name": 'TBD',
+        "_links": {
+            "self": {
+                "href": '%ssystem/' % (hal.get_abs_url_for_iwc(request))
             }
         }
     }

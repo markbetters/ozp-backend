@@ -10,5 +10,5 @@ urlpatterns = [
     # this will capture things like food/pizza/cheese. In the view, the key
     # will be modified such that it always starts with a / and never ends
     # with one
-    url(r'^self/data/(?P<key>[a-zA-Z/]+)$', views.DataApiView)
+    url(r'^self/data/(?P<key>[a-zA-Z0-9/]+)$', views.DataApiView)
 ]
