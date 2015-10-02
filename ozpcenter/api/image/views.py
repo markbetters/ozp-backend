@@ -7,7 +7,7 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 
 from rest_framework import viewsets
-from rest_framework.parsers import MultiPartParser
+from rest_framework.parsers import MultiPartParser, JSONParser
 from rest_framework.response import Response
 from rest_framework import status
 
@@ -36,7 +36,7 @@ class ImageViewSet(viewsets.ModelViewSet):
 
     serializer_class = serializers.ImageSerializer
     permission_classes = (permissions.IsUser,)
-    parser_classes = (MultiPartParser,)
+    parser_classes = (MultiPartParser, JSONParser)
 
     def create(self, request):
         """
