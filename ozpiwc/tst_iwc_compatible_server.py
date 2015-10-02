@@ -18,7 +18,8 @@ class TestIwcBackend(unittest.TestCase):
     def make_get_request(self, url, expected_status=200):
         r = requests.get(url, auth=('wsmith', 'password'))
         self.assertEqual(r.status_code, expected_status)
-        return r.json()
+        if expected_status == 200:
+            return r.json()
 
     def make_put_request(self, url, data, expected_status=201):
         headers = {'content-type': 'application/vnd.ozp-iwc-data-object+json'}
@@ -100,18 +101,48 @@ class TestIwcBackend(unittest.TestCase):
             }
         }
 
-        key = '/transportation/truck'
+        key = '/transportation/truck3'
         url = '%s/self/data%s/' % (IWC_ROOT, key)
         # delete this entry, in case it already exists
         r = self.make_delete_request(url, True)
-        # r = self.make_put_request(url, data, 201)
-        # self.assertEqual(r['key'], key)
-        # self.assertEqual(r['entity'], str(data['entity']))
+        r = self.make_put_request(url, data, 201)
+        self.assertEqual(r['key'], key)
+        self.assertEqual(r['entity'], str(data['entity']))
 
+        # root data endpoint should list all data entries
+        r = self.make_get_request(IWC_ROOT)
+        url = r['_links']['ozp:user-data']['href']
+        r = self.make_get_request(url)
+        self.assertEqual(len(r['_links']['item']), 3)
+        self.assertTrue(len(r['_links']['item'][0]['href']))
 
+        # test deleting a key
+        url = '%s/self/data%s/' % (IWC_ROOT, key)
+        r = self.make_delete_request(url, 204)
+        # should now get a 404 trying to get this key
+        r = self.make_get_request(url, 404)
 
     def test_system_api(self):
-        pass
+        # test system api root
+        r = self.make_get_request(IWC_ROOT)
+        url = r['_links']['ozp:system']['href']
+        r = self.make_get_request(url)
+        self.assertTrue(r['version'])
+        self.assertTrue(r['name'])
+        self.assertEqual(r['_links']['self']['href'], url)
+
+        # test the application root
+        r = self.make_get_request(IWC_ROOT)
+        url = r['_links']['ozp:application']['href']
+        r = self.make_get_request(url)
+        self.assertTrue(r['_links']['item'])
+        self.assertEqual(r['_links']['self']['href'], url)
+
+        # test the first application
+        url = r['_links']['item'][0]['href']
+        r = self.make_get_request(url)
+        self.assertTrue(r['id'])
+        self.assertTrue(r['unique_name'])
 
     def test_intent_api(self):
         pass

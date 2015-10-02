@@ -24,6 +24,10 @@ class DataResourceSerializer(serializers.Serializer):
         model = models.DataResource
 
     def validate(self, data):
+        data['version'] = data.get('version', None)
+        data['pattern'] = data.get('pattern', None)
+        data['collection'] = data.get('collection', None)
+        data['permissions'] = data.get('permissions', None)
         return data
 
     def create(self, validated_data):

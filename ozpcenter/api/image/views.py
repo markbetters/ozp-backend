@@ -51,7 +51,14 @@ class ImageViewSet(viewsets.ModelViewSet):
         image = <file>
         ```
         """
-        # IE Hack
+        # This is a long story. The short version is that, when using HTTP
+        # Basic Auth, the client makes a request w/o auth credentials, and the
+        # server returns a 401, instructing the client to make the request with
+        # auth credentials. This usually works just fine under the covers, but
+        # in this particular case (using multipart/form-data with a file
+        # attachement), IE croaks. This dummy endpoint is used to 'prep' the
+        # client so that when it makes the real request to this endpoint, it
+        # already knows to set the necessary authentication header
         if 'cuz_ie' in request.data:
             return Response('IE made me do this', status=status.HTTP_200_OK)
         try:
