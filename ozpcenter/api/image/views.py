@@ -51,6 +51,9 @@ class ImageViewSet(viewsets.ModelViewSet):
         image = <file>
         ```
         """
+        # IE Hack
+        if 'cuz_ie' in request.data:
+            return Response('IE made me do this', status=status.HTTP_200_OK)
         try:
             serializer = serializers.ImageCreateSerializer(data=request.data,
                 context={'request': request})
