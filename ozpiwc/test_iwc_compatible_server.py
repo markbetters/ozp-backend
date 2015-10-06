@@ -1,4 +1,7 @@
 """
+Run this test against a service to determine if the service is IWC compliant
+
+Change IWC_ROOT to point to the API entry point before running this test
 """
 import json
 import requests
@@ -113,7 +116,7 @@ class TestIwcBackend(unittest.TestCase):
         r = self.make_get_request(IWC_ROOT)
         url = r['_links']['ozp:user-data']['href']
         r = self.make_get_request(url)
-        self.assertEqual(len(r['_links']['item']), 3)
+        self.assertTrue(len(r['_links']['item']) > 1)
         self.assertTrue(len(r['_links']['item'][0]['href']))
 
         # test deleting a key
@@ -143,9 +146,25 @@ class TestIwcBackend(unittest.TestCase):
         r = self.make_get_request(url)
         self.assertTrue(r['id'])
         self.assertTrue(r['unique_name'])
+        self.assertEqual(r['_links']['self']['href'], url)
 
     def test_intent_api(self):
-        pass
+        # test intent api root
+        r = self.make_get_request(IWC_ROOT)
+        url = r['_links']['ozp:intent']['href']
+        r = self.make_get_request(url)
+        self.assertTrue(len(r['_links']['item']) > 1)
+        self.assertEqual(r['_links']['self']['href'], url)
+
+        # test the first intent
+        url = r['_links']['item'][0]['href']
+        r = self.make_get_request(url)
+        self.assertTrue(r['id'])
+        self.assertTrue(r['media_type'])
+        self.assertTrue(r['action'])
+        self.assertTrue(r['label'])
+        self.assertTrue(r['icon'])
+        self.assertEqual(r['_links']['self']['href'], url)
 
     def test_names_api(self):
         pass
