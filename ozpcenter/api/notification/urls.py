@@ -17,6 +17,6 @@ router.register(r'self/notification', views.UserNotificationViewSet,
 # Wire up our API using automatic URL routing.
 urlpatterns = [
     url(r'^', include(router.urls)),
-    url(r'^notifications/pending/$', views.PendingNotificationView),
-    url(r'^notifications/expired/$', views.ExpiredNotificationView)
+    url(r'^notifications/pending/$', views.PendingNotificationView.as_view()),
+    url(r'^notifications/expired/$', views.ExpiredNotificationView.as_view())
 ]

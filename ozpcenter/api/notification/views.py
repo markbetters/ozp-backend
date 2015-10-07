@@ -7,8 +7,7 @@ import pytz
 
 from django.shortcuts import get_object_or_404
 
-from rest_framework.decorators import api_view
-from rest_framework.decorators import permission_classes
+from rest_framework import generics
 from rest_framework import status
 from rest_framework import viewsets
 from rest_framework.response import Response
@@ -93,25 +92,39 @@ class UserNotificationViewSet(viewsets.ModelViewSet):
         notification.dismissed_by.add(user)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+class PendingNotificationView(generics.ListCreateAPIView):
+    permission_classes = (permissions.IsOrgSteward,)
+    serializer_class = serializers.NotificationSerializer
 
-@api_view(['GET'])
-@permission_classes((permissions.IsOrgSteward, ))
-def PendingNotificationView(request):
-    """
-    Get all pending (unexpired) notifications
-    """
-    data = model_access.get_all_pending_notifications()
-    serializer = serializers.NotificationSerializer(data,
-        context={'request': request}, many=True)
-    return Response(serializer.data)
+    def get_queryset(self):
+        return model_access.get_all_pending_notifications()
 
-@api_view(['GET'])
-@permission_classes((permissions.IsOrgSteward, ))
-def ExpiredNotificationView(request):
-    """
-    Get all expired notifications
-    """
-    data = model_access.get_all_expired_notifications()
-    serializer = serializers.NotificationSerializer(data,
-        context={'request': request}, many=True)
-    return Response(serializer.data)
+    def list(self, request):
+        queryset = self.get_queryset()
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = serializers.NotificationSerializer(page,
+                context={'request': request}, many=True)
+            return self.get_paginated_response(serializer.data)
+        serializer = serializers.NotificationSerializer(queryset,
+            context={'request': request}, many=True)
+        return Response(serializer.data)
+
+
+class ExpiredNotificationView(generics.ListCreateAPIView):
+    permission_classes = (permissions.IsOrgSteward,)
+    serializer_class = serializers.NotificationSerializer
+
+    def get_queryset(self):
+        return model_access.get_all_expired_notifications()
+
+    def list(self, request):
+        queryset = self.get_queryset()
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = serializers.NotificationSerializer(page,
+                context={'request': request}, many=True)
+            return self.get_paginated_response(serializer.data)
+        serializer = serializers.NotificationSerializer(queryset,
+            context={'request': request}, many=True)
+        return Response(serializer.data)
