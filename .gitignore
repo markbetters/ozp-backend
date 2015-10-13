@@ -6,3 +6,9 @@ __pycache__
 media/
 static/
 old_api.txt
+wheelhouse
+*.egg-info
+dist
+build
+*.tar.gz
+logs.txt
