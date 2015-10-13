@@ -22,6 +22,10 @@ Use username `wsmith` password `password` when prompted for authentication info
 There's also the admin interface at `http://localhost:8000/admin`
 (username: `wsmith`, password: `password`)
 
+## Releasing
+Run `python release.py` to generate a tarball with Wheels for the application
+and all of its dependencies
+
 
 ## For Developers
 Understanding this project requires knowing a small-medium amount of Django and
