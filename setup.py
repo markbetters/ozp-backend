@@ -37,7 +37,14 @@ install_requires = [
     'wheel>=0.24.0'
 ]
 
-packages = ['ozp', 'ozpcenter', 'ozpiwc']
+# TODO: add all packages here
+packages = ['ozp', 'ozpcenter', 'ozpcenter.api', 'ozpcenter.scripts',
+    'ozpcenter.migrations', 'ozpcenter.api.access_control', 'ozpcenter.api.agency',
+    'ozpcenter.api.category','ozpcenter.api.contact_type','ozpcenter.api.image',
+    'ozpcenter.api.intent', 'ozpcenter.api.library','ozpcenter.api.listing',
+    'ozpcenter.api.notification', 'ozpcenter.api.profile', 'ozpcenter.api.storefront',
+    'ozpiwc', 'ozpiwc.migrations', 'ozpiwc.api', 'ozpiwc.api.data',
+    'ozpiwc.api.intent', 'ozpiwc.api.names', 'ozpiwc.api.system']
 package_data = {'': ['README.md', 'static']}
 
 setup(name=PKG,

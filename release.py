@@ -4,10 +4,38 @@ dependencies
 
 setuptools and wheel library must be installed in the current python
 environment before running this script
+
+NOTE: It's not yet clear whether we want to install a Wheel for the ozp_backend
+application itself, or if it will be better to install wheels for all of the
+dependencies, then use the source of ozp_backend for running the app.
+
+Installing ozp_backend as a wheel will place it in <python_env>/lib/Python3.4.3/site-packages/,
+which might not be as convenient as running from source.
+
+After running this script, the application can be deployed "from source"
+by doing:
+
+tar -xzf <release tarball>
+pip install --no-index --find-links=release/wheelhouse -r requirements.txt
+gunicorn ozp.wsgi ... (from the release directory referencing the local ozp package)
+
+Alternatively, the wheel for the application can be installed in the python
+env and the source is no longer needed:
+
+tar -xzf <release tarball>
+pip install --no-index --find-links=release/wheelhouse ozp_backend==1.0
+gunicorn ozp.wsgi ... (ozp.wsgi is installed in site-packages, so it can be run
+    from anywhere)
+
+One problem with the latter method is that it will only include the python
+packages (no static files, test data, etc). Theoretically we should be able
+to modify setup.py and specify those things in data_files, but that has not
+yet worked out
 """
 import argparse
 import datetime
 import glob
+import os
 import re
 import shutil
 from subprocess import call
@@ -42,7 +70,24 @@ def cleanup():
     shutil.rmtree("wheelhouse", ignore_errors=True)
     shutil.rmtree("dist", ignore_errors=True)
     shutil.rmtree("build", ignore_errors=True)
+    shutil.rmtree("release", ignore_errors=True)
     shutil.rmtree("%s.egg-info" % PACKAGE, ignore_errors=True)
+
+def create_release_dir():
+    """
+    Creates a directory for the release and moves files there
+    """
+    os.mkdir("release")
+    shutil.copytree("wheelhouse", "release/wheelhouse")
+    shutil.copytree("ozp", "release/ozp")
+    shutil.copytree("ozpcenter", "release/ozpcenter")
+    shutil.copytree("ozpiwc", "release/ozpiwc")
+    shutil.copytree("static", "release/static")
+    shutil.copy("_version.py", "release")
+    shutil.copy("manage.py", "release")
+    shutil.copy("README.md", "release")
+    shutil.copy("requirements.txt", "release")
+    shutil.copy("restart_clean_dev_server.sh", "release")
 
 
 def run():
@@ -67,22 +112,22 @@ def run():
     for file in glob.glob(r'dist/*.whl'):
         shutil.copy(file, "wheelhouse")
 
-    # tar up the wheelhouse
+    # create release directory including the wheelhouse (dependencies) and the
+    # relevant source for ozp_backend
+    create_release_dir()
+
+    # tar everything up
     if args.version:
         version = get_version()
-        call("tar -czf %s-%s-wheelhouse.tar.gz wheelhouse" % (PACKAGE, version),
+        call("tar -czf %s-%s.tar.gz release" % (PACKAGE, version),
             shell=True)
     else:
         date = get_date_time()
-        call("tar -czf %s-%s-wheelhouse.tar.gz wheelhouse" % (PACKAGE, date),
+        call("tar -czf %s-%s.tar.gz release" % (PACKAGE, date),
             shell=True)
 
     # cleanup build dirs
     cleanup()
-
-    # to install the backend in a new python virtualenv, run
-    # tar -xzf ozp_backend-<version||time>-wheelhouse.tar.gz
-    # pip install --no-index --find-links=wheelhouse ozp_backend==1.0
 
 
 if __name__ == "__main__":
