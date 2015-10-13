@@ -123,11 +123,11 @@ def run():
     # tar everything up
     if args.version:
         version = get_version()
-        call("tar -czf %s-%s.tar.gz release" % (PACKAGE, version),
+        call("tar -czf %s-%s.tar.gz release" % ('new-backend', version),
             shell=True)
     else:
         date = get_date_time()
-        call("tar -czf %s-%s.tar.gz release" % (PACKAGE, date),
+        call("tar -czf %s-%s.tar.gz release" % ('new-backend', date),
             shell=True)
 
     # cleanup build dirs
