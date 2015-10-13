@@ -102,6 +102,10 @@ def run():
     # clean up previous builds
     cleanup()
 
+    # collect static files
+    call("mkdir -p static", shell=True)
+    call("python manage.py collectstatic --noinput", shell=True)
+
     # build wheel for ozp_backend - creates wheel in dist/
     call("python setup.py bdist_wheel", shell=True)
 
