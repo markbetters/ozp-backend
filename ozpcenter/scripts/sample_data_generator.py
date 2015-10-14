@@ -209,7 +209,7 @@ def run():
     icon = models.Image.create_image(img, file_extension='png',
         access_control='UNCLASSIFIED', image_type='agency_icon')
     miniplenty = models.Agency(title='Ministry of Plenty',
-        short_name='Miniplenty', icon=icon)
+        short_name='Miniplen', icon=icon)
     miniplenty.save()
 
     ############################################################################
