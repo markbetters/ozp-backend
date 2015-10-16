@@ -2,7 +2,7 @@
 Running this script will generate Wheels for the ozp-backend django app and its
 dependencies
 
-setuptools and wheel library must be installed in the current python
+setuptools, wheel, and django libraries must be installed in the current python
 environment before running this script
 
 NOTE: It's not yet clear whether we want to install a Wheel for the ozp_backend
