@@ -7,4 +7,4 @@ class DataResourceParser(parsers.JSONParser):
 
     JSON data with specific media type
     """
-    media_type = 'application/vnd.ozp-iwc-data-object+json'
+    media_type = 'application/vnd.ozp-iwc-data-object-v2+json'
