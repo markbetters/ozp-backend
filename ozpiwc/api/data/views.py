@@ -51,6 +51,8 @@ def DataApiView(request, key=None):
     if key.endswith('/'):
         key = key[:-1]
 
+    logger.debug('Got IWC Data request for key %s' % key)
+
     listing_root_url = hal.get_abs_url_for_iwc(request)
     data = hal.create_base_structure(request)
 
@@ -75,9 +77,8 @@ def DataApiView(request, key=None):
                 serializer = serializers.DataResourceSerializer(
                     data=request.data, context={'request': request, 'key': key},
                     partial=True)
-
                 if not serializer.is_valid():
-                    logger.error('%s' % serializer.errors)
+                    logger.error('ERROR: %s' % serializer.errors)
                     return Response(serializer.errors,
                         status=status.HTTP_400_BAD_REQUEST)
                 serializer.save()
@@ -86,7 +87,7 @@ def DataApiView(request, key=None):
                 return Response(resp, status=status.HTTP_201_CREATED)
         except Exception as e:
             # TODO debug
-            raise e
+            # raise e
             return Response(str(e),
                 status=status.HTTP_400_BAD_REQUEST)
     if request.method == 'GET':

@@ -1,6 +1,7 @@
 """
 Tests for data.api endpoints
 """
+import json
 import unittest
 
 from django.db import transaction
@@ -43,7 +44,7 @@ class DataApiTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
         # Create a new entry
-        entity = {"detals": {"color": "black", "year": 2000}}
+        entity = {"details": {"color": "black", "year": 2000}}
         content_type = "vnd.acme-corp-car-v1+json.json"
         version = "1.0.2"
         pattern = "/something/else"
@@ -63,9 +64,12 @@ class DataApiTest(APITestCase):
         self.assertEqual(response.data['key'], key)
         self.assertEqual(response.data['version'], version)
         self.assertEqual(response.data['pattern'], pattern)
-        self.assertEqual(response.data['entity'], str(entity))
         self.assertEqual(response.data['collection'], str(collection))
         self.assertEqual(response.data['permissions'], str(permissions))
+
+        entity_resp = json.loads(response.data['entity'])
+        self.assertEqual(
+            entity_resp['details']['color'], entity['details']['color'])
 
         # now retrieve that entry
         response = self.client.get(url, format='json')
@@ -75,9 +79,12 @@ class DataApiTest(APITestCase):
         self.assertEqual(response.data['key'], key)
         self.assertEqual(response.data['version'], version)
         self.assertEqual(response.data['pattern'], pattern)
-        self.assertEqual(response.data['entity'], str(entity))
         self.assertEqual(response.data['collection'], str(collection))
         self.assertEqual(response.data['permissions'], str(permissions))
+
+        entity_resp = json.loads(response.data['entity'])
+        self.assertEqual(
+            entity_resp['details']['color'], entity['details']['color'])
 
         # test the list endpoint
         url = '/iwc-api/self/data/'
@@ -99,9 +106,3 @@ class DataApiTest(APITestCase):
         # it should be gone now
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
-
-
-
-
-
-
