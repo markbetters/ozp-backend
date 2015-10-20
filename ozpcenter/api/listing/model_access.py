@@ -168,7 +168,7 @@ def _update_rating(username, listing):
     total_reviews = total_votes - reviews.filter(text=None).count()
 
     # calculate weighted average
-    if total_votes = 0:
+    if total_votes == 0:
         avg_rate = 0
     else:
         avg_rate = (5*rate5 + 4*rate4 + 3*rate3 + 2*rate2 + rate1)/total_votes
