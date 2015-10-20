@@ -1120,3 +1120,7 @@ class ListingApiTest(APITestCase):
         url = '/api/listing/1/'
         response = self.client.get(url, format='json')
         self.assertEqual(response.data['last_activity']['action'], 'REJECTED')
+        current_rejection = response.data['current_rejection']
+        self.assertEqual(current_rejection['author']['user']['username'], 'wsmith')
+        self.assertTrue(current_rejection['description'])
+        self.assertTrue(current_rejection['author']['display_name'])

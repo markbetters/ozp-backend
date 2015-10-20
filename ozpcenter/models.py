@@ -765,6 +765,9 @@ class Listing(models.Model):
     # no reverse relationship - use '+'
     last_activity = models.OneToOneField('ListingActivity', related_name='+',
         null=True, blank=True)
+    # no reverse relationship - use '+'
+    current_rejection = models.OneToOneField('ListingActivity', related_name='+',
+        null=True, blank=True)
 
     intents = models.ManyToManyField(
         'Intent',

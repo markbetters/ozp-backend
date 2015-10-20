@@ -128,6 +128,14 @@ class ListingActivitySerializer(serializers.ModelSerializer):
         model = models.ListingActivity
         fields = ('action',)
 
+
+class RejectionListingActivitySerializer(serializers.ModelSerializer):
+    author = profile_serializers.ShortProfileSerializer()
+    class Meta:
+        model = models.ListingActivity
+        fields = ('action', 'activity_date', 'description', 'author')
+
+
 class IntentSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Intent
@@ -183,6 +191,8 @@ class ListingSerializer(serializers.ModelSerializer):
     large_banner_icon = ImageSerializer(required=False, allow_null=True)
     agency = AgencySerializer(required=False)
     last_activity = ListingActivitySerializer(required=False, read_only=True)
+    current_rejection = RejectionListingActivitySerializer(required=False,
+        read_only=True)
     listing_type = ListingTypeSerializer(required=False, allow_null=True)
 
     class Meta:
@@ -680,6 +690,7 @@ class ShortListingSerializer(serializers.ModelSerializer):
         fields = ('unique_name', 'title', 'id')
 
 
+# TODO: is this used?
 class ListingActivitySerializer(serializers.ModelSerializer):
     author = profile_serializers.ShortProfileSerializer()
     listing = ShortListingSerializer()

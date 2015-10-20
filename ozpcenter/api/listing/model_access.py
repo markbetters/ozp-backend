@@ -228,6 +228,8 @@ def _add_listing_activity(author, listing, action, change_details=None,
 
     # update the listing
     listing.last_activity = listing_activity
+    if listing_activity.action == models.ListingActivity.REJECTED:
+        listing.current_rejection = listing_activity
     listing.save()
     return listing
 
