@@ -46,7 +46,7 @@ class ReviewViewSet(viewsets.ModelViewSet):
         return model_access.get_reviews(self.request.user.username)
 
     def list(self, request, listing_pk=None):
-        queryset = self.get_queryset().filter(listing=listing_pk)
+        queryset = self.get_queryset().filter(listing=listing_pk).order_by('-edited_date')
         # it appears that because we override the queryset here, we must
         # manually invoke the pagination methods
         page = self.paginate_queryset(queryset)
@@ -165,7 +165,7 @@ class ListingActivitiesViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return model_access.get_all_listing_activities(
-            self.request.user.username)
+            self.request.user.username).order_by('-activity_date')
 
     def list(self, request):
         queryset = self.get_queryset()
@@ -190,7 +190,7 @@ class ListingActivityViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return model_access.get_all_listing_activities(
-            self.request.user.username)
+            self.request.user.username).order_by('-activity_date')
 
     def list(self, request, listing_pk=None):
         queryset = self.get_queryset().filter(listing=listing_pk)
