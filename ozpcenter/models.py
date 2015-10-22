@@ -463,6 +463,7 @@ class Review(models.Model):
 
     # use a custom Manager class to limit returned Reviews
     objects = AccessControlReviewManager()
+    edited_date = models.DateTimeField(auto_now=True)
 
     def __repr__(self):
         return '%s: rate: %d text: %s' % (self.author.user.username,

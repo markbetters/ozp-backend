@@ -382,6 +382,7 @@ def edit_listing_review(username, review, rate, text=None):
 
     review.rate = rate
     review.text = text
+    review.edited_date = datetime.datetime.now(pytz.utc)
     review.save()
 
     _update_rating(username, listing)

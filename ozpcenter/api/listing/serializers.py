@@ -681,7 +681,7 @@ class ReviewSerializer(serializers.ModelSerializer):
     author = profile_serializers.ShortProfileSerializer()
     class Meta:
         model = models.Review
-        fields = ('author', 'listing', 'rate', 'text', 'id')
+        fields = ('author', 'listing', 'rate', 'text', 'edited_date', 'id')
 
 
 class ShortListingSerializer(serializers.ModelSerializer):
