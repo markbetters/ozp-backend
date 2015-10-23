@@ -159,10 +159,23 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ('rest_framework.filters.DjangoFilterBackend',),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'DEFAULT_PARSER_CLASSES': (
+        'ozpiwc.parsers.DataResourceParser',
         'rest_framework.parsers.JSONParser',
         'rest_framework.parsers.MultiPartParser',
         'rest_framework.parsers.FormParser',
-        'ozpiwc.api.data.parsers.DataResourceParser'
+    ),
+    'DEFAULT_RENDERER_CLASSES': (
+        'ozpiwc.renderers.RootResourceRenderer',
+        'ozpiwc.renderers.UserResourceRenderer',
+        'ozpiwc.renderers.SystemResourceRenderer',
+        'ozpiwc.renderers.DataObjectResourceRenderer',
+        'ozpiwc.renderers.DataObjectListResourceRenderer',
+        'ozpiwc.renderers.ApplicationResourceRenderer',
+        'ozpiwc.renderers.ApplicationListResourceRenderer',
+        'ozpiwc.renderers.IntentResourceRenderer',
+        'ozpiwc.renderers.IntentListResourceRenderer',
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
     )
 }
 

@@ -4,11 +4,14 @@ import logging
 
 from rest_framework.decorators import api_view
 from rest_framework.decorators import permission_classes
+from rest_framework.decorators import renderer_classes
 from rest_framework import permissions
+from rest_framework import renderers as rf_renderers
 from rest_framework import generics, status
 from rest_framework.response import Response
 
 import ozpiwc.hal as hal
+import ozpiwc.renderers as renderers
 import ozpiwc.api.data.serializers as serializers
 import ozpiwc.api.data.model_access as model_access
 
@@ -17,6 +20,7 @@ logger = logging.getLogger('ozp-iwc')
 
 @api_view(['GET'])
 @permission_classes((permissions.IsAuthenticated, ))
+@renderer_classes((renderers.DataObjectListResourceRenderer, rf_renderers.JSONRenderer))
 def ListDataApiView(request):
     """
     List all data entries for the user
@@ -38,6 +42,7 @@ def ListDataApiView(request):
 
 @api_view(['GET', 'PUT', 'DELETE'])
 @permission_classes((permissions.IsAuthenticated, ))
+@renderer_classes((renderers.DataObjectResourceRenderer, rf_renderers.JSONRenderer))
 def DataApiView(request, key=None):
     """
     Data API

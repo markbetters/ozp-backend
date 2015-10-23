@@ -4,7 +4,9 @@ import logging
 
 from rest_framework.decorators import api_view
 from rest_framework.decorators import permission_classes
+from rest_framework.decorators import renderer_classes
 from rest_framework import permissions
+from rest_framework import renderers as rf_renderers
 from rest_framework import generics, status
 from rest_framework.response import Response
 
@@ -12,12 +14,14 @@ import ozpcenter.model_access as model_access
 import ozpcenter.api.listing.model_access as listing_model_access
 import ozpcenter.api.listing.serializers as listing_serializers
 import ozpiwc.hal as hal
+import ozpiwc.renderers as renderers
 
 # Get an instance of a logger
 logger = logging.getLogger('ozp-iwc')
 
 @api_view(['GET'])
 @permission_classes((permissions.IsAuthenticated, ))
+@renderer_classes((renderers.ApplicationListResourceRenderer, rf_renderers.JSONRenderer))
 def ApplicationListView(request):
     """
     List of applications
@@ -36,6 +40,7 @@ def ApplicationListView(request):
 
 @api_view(['GET'])
 @permission_classes((permissions.IsAuthenticated, ))
+@renderer_classes((renderers.ApplicationResourceRenderer, rf_renderers.JSONRenderer))
 def ApplicationView(request, id='0'):
     """
     Single application
@@ -60,6 +65,7 @@ def ApplicationView(request, id='0'):
 
 @api_view(['GET'])
 @permission_classes((permissions.IsAuthenticated, ))
+@renderer_classes((renderers.SystemResourceRenderer, rf_renderers.JSONRenderer))
 def SystemView(request):
     """
     System view - TODO

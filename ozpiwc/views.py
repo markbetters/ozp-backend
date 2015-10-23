@@ -4,11 +4,14 @@ import logging
 
 from rest_framework.decorators import api_view
 from rest_framework.decorators import permission_classes
+from rest_framework.decorators import renderer_classes
 from rest_framework import permissions
+from rest_framework import renderers as rf_renderers
 from rest_framework import generics, status
 from rest_framework.response import Response
 
 import ozpcenter.model_access as model_access
+import ozpiwc.renderers as renderers
 import ozpiwc.hal as hal
 
 # Get an instance of a logger
@@ -16,6 +19,7 @@ logger = logging.getLogger('ozp-iwc')
 
 @api_view(['GET'])
 @permission_classes((permissions.IsAuthenticated, ))
+@renderer_classes((renderers.RootResourceRenderer, rf_renderers.JSONRenderer))
 def RootApiView(request):
     """
     IWC Root
@@ -63,6 +67,7 @@ def RootApiView(request):
 
 @api_view(['GET'])
 @permission_classes((permissions.IsAuthenticated, ))
+@renderer_classes((renderers.UserResourceRenderer, rf_renderers.JSONRenderer))
 def UserView(request):
     """
     User info
