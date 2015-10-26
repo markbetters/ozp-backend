@@ -24,23 +24,38 @@ def RootApiView(request):
     """
     IWC Root
     """
+    if not hal.validate_version(request.META.get('HTTP_ACCEPT')):
+        return Response('Invalid version requested',
+            status=status.HTTP_406_NOT_ACCEPTABLE)
+
     root_url = request.build_absolute_uri('/')
     profile = model_access.get_profile(request.user.username)
-    data = hal.create_base_structure(request)
+    data = hal.create_base_structure(request,
+        hal.generate_content_type(request.accepted_media_type))
     data['_links'][hal.APPLICATION_REL] = {
-        "href": '%sself/application/' % (hal.get_abs_url_for_iwc(request))
+        "href": '%sself/application/' % (hal.get_abs_url_for_iwc(request)),
+        "type": hal.generate_content_type(
+            renderers.ApplicationListResourceRenderer.media_type)
     }
     data['_links'][hal.INTENT_REL] = {
-        "href": '%sself/intent/' % (hal.get_abs_url_for_iwc(request))
+        "href": '%sself/intent/' % (hal.get_abs_url_for_iwc(request)),
+        "type": hal.generate_content_type(
+            renderers.IntentListResourceRenderer.media_type)
     }
     data['_links'][hal.SYSTEM_REL] = {
-        "href": '%siwc-api/system/' % (root_url)
+        "href": '%siwc-api/system/' % (root_url),
+        "type": hal.generate_content_type(
+            renderers.SystemResourceRenderer.media_type)
     }
     data['_links'][hal.USER_REL] = {
-        "href": '%sself/' % (hal.get_abs_url_for_iwc(request))
+        "href": '%sself/' % (hal.get_abs_url_for_iwc(request)),
+        "type": hal.generate_content_type(
+            renderers.UserResourceRenderer.media_type)
     }
     data['_links'][hal.USER_DATA_REL] = {
-        "href": '%sself/data/' % (hal.get_abs_url_for_iwc(request))
+        "href": '%sself/data/' % (hal.get_abs_url_for_iwc(request)),
+        "type": hal.generate_content_type(
+            renderers.DataObjectListResourceRenderer.media_type)
     }
 
     # add embedded data
@@ -49,7 +64,9 @@ def RootApiView(request):
         "name": profile.display_name,
         "_links": {
             "self": {
-                "href": '%sself/' % (hal.get_abs_url_for_iwc(request))
+                "href": '%sself/' % (hal.get_abs_url_for_iwc(request)),
+                "type": hal.generate_content_type(
+                    renderers.UserResourceRenderer.media_type)
             }
         }
     }
@@ -59,7 +76,9 @@ def RootApiView(request):
         "name": 'TBD',
         "_links": {
             "self": {
-                "href": '%ssystem/' % (hal.get_abs_url_for_iwc(request))
+                "href": '%ssystem/' % (hal.get_abs_url_for_iwc(request)),
+                "type": hal.generate_content_type(
+                    renderers.SystemResourceRenderer.media_type)
             }
         }
     }
@@ -72,8 +91,14 @@ def UserView(request):
     """
     User info
     """
+    if not hal.validate_version(request.META.get('HTTP_ACCEPT')):
+        return Response('Invalid version requested',
+            status=status.HTTP_406_NOT_ACCEPTABLE)
+
     profile = model_access.get_profile(request.user.username)
     data = {'username': profile.user.username, 'id': profile.id,
         'display_name': profile.display_name}
-    data = hal.add_hal_structure(data, request)
+    data = hal.add_hal_structure(data, request,
+        hal.generate_content_type(
+            request.accepted_media_type))
     return Response(data)

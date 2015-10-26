@@ -1,6 +1,8 @@
 """
 HAL helpers
 """
+import re
+
 import ozpcenter.model_access as model_access
 
 #### Constants
@@ -11,7 +13,7 @@ SYSTEM_REL = "ozp:system"
 USER_DATA_REL = "ozp:user-data"
 
 
-def create_base_structure(request):
+def create_base_structure(request, type='application/json'):
     """
     Creates the initial HAL structure for a given request
     """
@@ -25,7 +27,8 @@ def create_base_structure(request):
                 "templated": True
             },
             "self": {
-                "href": '%s' % request.build_absolute_uri(request.path)
+                "href": '%s' % request.build_absolute_uri(request.path),
+                "type": type
             }
         },
         "_embedded": {
@@ -34,7 +37,7 @@ def create_base_structure(request):
     }
     return data
 
-def add_hal_structure(data, request):
+def add_hal_structure(data, request, type='application/json'):
     """
     Adds initial HAL structure to existing dictionary
     """
@@ -45,7 +48,8 @@ def add_hal_structure(data, request):
             "templated": True
         },
         "self": {
-            "href": '%s' % request.build_absolute_uri(request.path)
+            "href": '%s' % request.build_absolute_uri(request.path),
+            "type": type
         }
     }
     data["_embedded"] = {}
@@ -59,9 +63,41 @@ def get_abs_url_for_iwc(request):
     root_url = request.build_absolute_uri('/')
     return '%siwc-api/' % root_url
 
-def add_link_item(url, data):
+def add_link_item(url, data, type='application/json'):
     if 'item' not in data['_links']:
         data['_links']['item'] = []
-    new_link = {'href': url}
+    new_link = {'href': url, 'type': type}
     data['_links']['item'].append(new_link)
     return data
+
+def generate_content_type(type, version=2):
+    """
+    Generate the Content-Type header, including a version number
+
+    Content-Types look like: application/vnd.ozp-iwc+json;version=1
+    """
+    try:
+        version = re.findall(r'version=(\d+)', type)[0]
+        # version number found already - just use what's there
+        return type
+    except IndexError:
+        return '%s;version=%s' % (type, version)
+
+def validate_version(accept_header):
+    """
+    Ensure the client is requesting a valid version for this resource
+
+    It is valid to not specify a version (the latest will be used)
+    """
+    # Currently, this backend only supports one version for all resources
+    if not accept_header:
+        return True
+    accept_header = accept_header.replace(" ", "").lower()
+    try:
+        version = re.findall(r'version=(\d+)', accept_header)[0]
+        if version != '2':
+            return False
+    except IndexError:
+        pass
+
+    return True

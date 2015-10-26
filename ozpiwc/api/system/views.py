@@ -26,13 +26,19 @@ def ApplicationListView(request):
     """
     List of applications
     """
+    if not hal.validate_version(request.META.get('HTTP_ACCEPT')):
+        return Response('Invalid version requested',
+            status=status.HTTP_406_NOT_ACCEPTABLE)
+
     listing_root_url = hal.get_abs_url_for_iwc(request)
     profile = model_access.get_profile(request.user.username)
-    data = hal.create_base_structure(request)
+    data = hal.create_base_structure(request, hal.generate_content_type(
+        request.accepted_media_type))
     applications = listing_model_access.get_listings(profile.user.username)
     items = []
     for i in applications:
-        item = {"href": '%slisting/%s/' % (listing_root_url, i.id)}
+        item = {"href": '%slisting/%s/' % (listing_root_url, i.id),
+            "type": hal.generate_content_type(renderers.ApplicationResourceRenderer.media_type)}
         items.append(item)
     data['_links']['item'] = items
 
@@ -45,6 +51,10 @@ def ApplicationView(request, id='0'):
     """
     Single application
     """
+    if not hal.validate_version(request.META.get('HTTP_ACCEPT')):
+        return Response('Invalid version requested',
+            status=status.HTTP_406_NOT_ACCEPTABLE)
+
     listing_root_url = hal.get_abs_url_for_iwc(request)
     profile = model_access.get_profile(request.user.username)
 
@@ -59,7 +69,8 @@ def ApplicationView(request, id='0'):
     serializer = listing_serializers.ListingSerializer(queryset,
             context={'request': request})
     data = serializer.data
-    data = hal.add_hal_structure(data, request)
+    data = hal.add_hal_structure(data, request, hal.generate_content_type(
+        request.accepted_media_type))
 
     return Response(data)
 
@@ -70,10 +81,15 @@ def SystemView(request):
     """
     System view - TODO
     """
+    if not hal.validate_version(request.META.get('HTTP_ACCEPT')):
+        return Response('Invalid version requested',
+            status=status.HTTP_406_NOT_ACCEPTABLE)
+
     listing_root_url = hal.get_abs_url_for_iwc(request)
     profile = model_access.get_profile(request.user.username)
 
-    data = hal.create_base_structure(request)
+    data = hal.create_base_structure(request, hal.generate_content_type(
+        request.accepted_media_type))
     data["version"] = "1.0"
     data["name"] = "TBD"
     return Response(data)

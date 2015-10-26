@@ -165,6 +165,9 @@ REST_FRAMEWORK = {
         'rest_framework.parsers.FormParser',
     ),
     'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+        'rest_framework.renderers.StaticHTMLRenderer',
         'ozpiwc.renderers.RootResourceRenderer',
         'ozpiwc.renderers.UserResourceRenderer',
         'ozpiwc.renderers.SystemResourceRenderer',
@@ -173,9 +176,7 @@ REST_FRAMEWORK = {
         'ozpiwc.renderers.ApplicationResourceRenderer',
         'ozpiwc.renderers.ApplicationListResourceRenderer',
         'ozpiwc.renderers.IntentResourceRenderer',
-        'ozpiwc.renderers.IntentListResourceRenderer',
-        'rest_framework.renderers.JSONRenderer',
-        'rest_framework.renderers.BrowsableAPIRenderer',
+        'ozpiwc.renderers.IntentListResourceRenderer'
     )
 }
 

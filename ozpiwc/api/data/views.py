@@ -25,9 +25,14 @@ def ListDataApiView(request):
     """
     List all data entries for the user
     """
+    if not hal.validate_version(request.META.get('HTTP_ACCEPT')):
+        return Response('Invalid version requested',
+            status=status.HTTP_406_NOT_ACCEPTABLE)
+
     listing_root_url = hal.get_abs_url_for_iwc(request)
 
-    data = hal.create_base_structure(request)
+    data = hal.create_base_structure(request,
+        hal.generate_content_type(request.accepted_media_type))
 
     keys = model_access.get_all_keys(request.user.username)
     for k in keys:
@@ -58,8 +63,14 @@ def DataApiView(request, key=None):
 
     logger.debug('Got IWC Data request for key %s' % key)
 
+    if not hal.validate_version(request.META.get('HTTP_ACCEPT')):
+        return Response('Invalid version requested',
+            status=status.HTTP_406_NOT_ACCEPTABLE)
+
     listing_root_url = hal.get_abs_url_for_iwc(request)
-    data = hal.create_base_structure(request)
+    data = hal.create_base_structure(request,
+        hal.generate_content_type(
+            request.accepted_media_type))
 
     if request.method == 'PUT':
         try:
@@ -76,7 +87,9 @@ def DataApiView(request, key=None):
                         status=status.HTTP_400_BAD_REQUEST)
                 serializer.save()
                 resp = serializer.data
-                resp = hal.add_hal_structure(resp, request)
+                resp = hal.add_hal_structure(resp, request,
+                    hal.generate_content_type(
+                        request.accepted_media_type))
                 return Response(resp, status=status.HTTP_200_OK)
             else:
                 serializer = serializers.DataResourceSerializer(
@@ -88,7 +101,9 @@ def DataApiView(request, key=None):
                         status=status.HTTP_400_BAD_REQUEST)
                 serializer.save()
                 resp = serializer.data
-                resp = hal.add_hal_structure(resp, request)
+                resp = hal.add_hal_structure(resp, request,
+                    hal.generate_content_type(
+                        request.accepted_media_type))
                 return Response(resp, status=status.HTTP_201_CREATED)
         except Exception as e:
             # TODO debug
@@ -109,7 +124,9 @@ def DataApiView(request, key=None):
                 return Response(serializer.errors,
                     status=status.HTTP_400_BAD_REQUEST)
             resp = serializer.data
-            resp = hal.add_hal_structure(resp, request)
+            resp = hal.add_hal_structure(resp, request,
+                hal.generate_content_type(
+                    request.accepted_media_type))
             return Response(resp, status=status.HTTP_200_OK)
         except Exception as e:
             # TODO debug

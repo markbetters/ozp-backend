@@ -26,9 +26,14 @@ def IntentListView(request):
     """
     List of intents
     """
+    if not hal.validate_version(request.META.get('HTTP_ACCEPT')):
+        return Response('Invalid version requested',
+            status=status.HTTP_406_NOT_ACCEPTABLE)
+
     root_url = hal.get_abs_url_for_iwc(request)
     profile = model_access.get_profile(request.user.username)
-    data = hal.create_base_structure(request)
+    data = hal.create_base_structure(request,
+        hal.generate_content_type(request.accepted_media_type))
     intents = intent_model_access.get_all_intents()
     items = []
     for i in intents:
@@ -45,6 +50,10 @@ def IntentView(request, id='0'):
     """
     Single intent
     """
+    if not hal.validate_version(request.META.get('HTTP_ACCEPT')):
+        return Response('Invalid version requested',
+            status=status.HTTP_406_NOT_ACCEPTABLE)
+
     root_url = hal.get_abs_url_for_iwc(request)
     profile = model_access.get_profile(request.user.username)
 
@@ -54,6 +63,7 @@ def IntentView(request, id='0'):
     serializer = intent_serializers.IntentSerializer(queryset,
             context={'request': request})
     data = serializer.data
-    data = hal.add_hal_structure(data, request)
+    data = hal.add_hal_structure(data, request,
+        hal.generate_content_type(request.accepted_media_type))
 
     return Response(data)
