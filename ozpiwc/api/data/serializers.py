@@ -20,7 +20,6 @@ class DataResourceSerializer(serializers.Serializer):
     content_type = serializers.CharField(max_length=512, required=False)
     version = serializers.CharField(max_length=128, required=False)
     pattern = serializers.CharField(max_length=1024, required=False)
-    collection = serializers.CharField(max_length=8192, required=False)
     permissions = serializers.CharField(max_length=8192, required=False)
 
     class Meta:
@@ -29,7 +28,6 @@ class DataResourceSerializer(serializers.Serializer):
     def validate(self, data):
         data['version'] = data.get('version', None)
         data['pattern'] = data.get('pattern', None)
-        data['collection'] = data.get('collection', None)
         data['permissions'] = data.get('permissions', None)
         data['entity'] = data.get('entity', None)
 
@@ -45,7 +43,6 @@ class DataResourceSerializer(serializers.Serializer):
             content_type=content_type,
             version=validated_data['version'],
             pattern=validated_data['pattern'],
-            collection=validated_data['collection'],
             permissions=validated_data['permissions'])
         data_resource.save()
         logger.debug('saved NEW resource with key: %s, entity: %s' % (self.context['key'], validated_data['entity']))
@@ -55,7 +52,6 @@ class DataResourceSerializer(serializers.Serializer):
         instance.entity = validated_data['entity']
         instance.version = validated_data['version']
         instance.pattern = validated_data['pattern']
-        instance.collection = validated_data['collection']
         instance.permissions = validated_data['permissions']
         instance.save()
         logger.debug('saved EXISTING resource with key: %s, entity: %s' % (self.context['key'], validated_data['entity']))

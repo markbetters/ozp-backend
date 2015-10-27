@@ -25,7 +25,6 @@ class DataResource(models.Model):
     username = models.CharField(max_length=128)
 
     pattern = models.CharField(max_length=1024, blank=True, null=True)
-    collection = models.CharField(max_length=1024, blank=True, null=True)
     permissions = models.CharField(max_length=1024, blank=True, null=True)
     version = models.CharField(max_length=1024, blank=True, null=True)
 

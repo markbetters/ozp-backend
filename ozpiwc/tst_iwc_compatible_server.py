@@ -65,7 +65,6 @@ class TestIwcBackend(unittest.TestCase):
         }
         data['version'] = '1.0'
         data['pattern'] = '/transportation/car'
-        data['collection'] = ['one', 'two']
         data['permissions'] = {'name': 'security'}
 
         r = self.make_put_request(url, data)
@@ -76,7 +75,6 @@ class TestIwcBackend(unittest.TestCase):
         self.assertEqual(r['entity'], str(data['entity']))
         self.assertEqual(r['version'], data['version'])
         self.assertEqual(r['pattern'], data['pattern'])
-        self.assertEqual(r['collection'], str(data['collection']))
         self.assertEqual(r['permissions'], str(data['permissions']))
 
         # now get the same data using the HAL self link and ensure it matches
@@ -87,7 +85,6 @@ class TestIwcBackend(unittest.TestCase):
         self.assertEqual(r['entity'], str(data['entity']))
         self.assertEqual(r['version'], data['version'])
         self.assertEqual(r['pattern'], data['pattern'])
-        self.assertEqual(r['collection'], str(data['collection']))
         self.assertEqual(r['permissions'], str(data['permissions']))
 
         # update the data

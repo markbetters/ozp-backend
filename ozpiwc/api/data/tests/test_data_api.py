@@ -48,14 +48,12 @@ class DataApiTest(APITestCase):
         content_type = "vnd.acme-corp-car-v1+json.json"
         version = "1.0.2"
         pattern = "/something/else"
-        collection = ["/car/1", "/car/2"]
         permissions = {"id": 1, "name": "secure policy"}
         data = {
             "entity": entity,
             "content_type": content_type,
             "version": version,
             "pattern": pattern,
-            "collection": collection,
             "permissions": permissions
         }
         response = self.client.put(url, data, format='json')
@@ -64,7 +62,6 @@ class DataApiTest(APITestCase):
         self.assertEqual(response.data['key'], key)
         self.assertEqual(response.data['version'], version)
         self.assertEqual(response.data['pattern'], pattern)
-        self.assertEqual(response.data['collection'], str(collection))
         self.assertEqual(response.data['permissions'], str(permissions))
 
         entity_resp = json.loads(response.data['entity'])
@@ -79,7 +76,6 @@ class DataApiTest(APITestCase):
         self.assertEqual(response.data['key'], key)
         self.assertEqual(response.data['version'], version)
         self.assertEqual(response.data['pattern'], pattern)
-        self.assertEqual(response.data['collection'], str(collection))
         self.assertEqual(response.data['permissions'], str(permissions))
 
         entity_resp = json.loads(response.data['entity'])
