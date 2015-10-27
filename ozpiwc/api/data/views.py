@@ -39,7 +39,8 @@ def ListDataApiView(request):
         # remove the leading /
         k = k[1:]
         url = hal.get_abs_url_for_iwc(request) + 'self/data/' + k
-        data = hal.add_link_item(url, data)
+        data = hal.add_link_item(url, data, hal.generate_content_type(
+            renderers.DataObjectResourceRenderer.media_type))
 
     logger.debug('DataApiView request to GET all items')
 
