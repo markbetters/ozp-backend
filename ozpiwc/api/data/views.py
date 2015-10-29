@@ -35,6 +35,7 @@ def ListDataApiView(request):
         hal.generate_content_type(request.accepted_media_type))
 
     keys = model_access.get_all_keys(request.user.username)
+    embedded_items = []
     for k in keys:
         # remove the leading /
         k = k[1:]
@@ -42,7 +43,31 @@ def ListDataApiView(request):
         data = hal.add_link_item(url, data, hal.generate_content_type(
             renderers.DataObjectResourceRenderer.media_type))
 
-    logger.debug('DataApiView request to GET all items')
+        # add data items to _embedded
+        key = '/' + k
+        try:
+            instance = model_access.get_data_resource(request.user.username,
+                key)
+            if not instance:
+                return Response(status=status.HTTP_404_NOT_FOUND)
+            serializer = serializers.DataResourceSerializer(instance,
+                data=request.data, context={'request': request, 'key': key},
+                partial=True)
+            if not serializer.is_valid():
+                logger.error('%s' % serializer.errors)
+                return Response(serializer.errors,
+                    status=status.HTTP_400_BAD_REQUEST)
+            item = hal.add_hal_structure(serializer.data, request,
+                hal.generate_content_type(
+                    renderers.DataObjectResourceRenderer.media_type))
+            item['_links']['self']['href'] += k
+            embedded_items.append(item)
+        except Exception as e:
+            # TODO debug
+            raise e
+
+        data['_embedded']['item'] = embedded_items
+
 
     return Response(data)
 
