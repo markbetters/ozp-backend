@@ -36,11 +36,28 @@ def ApplicationListView(request):
         request.accepted_media_type))
     applications = listing_model_access.get_listings(profile.user.username)
     items = []
+    embedded_items = []
     for i in applications:
         item = {"href": '%slisting/%s/' % (listing_root_url, i.id),
             "type": hal.generate_content_type(renderers.ApplicationResourceRenderer.media_type)}
         items.append(item)
+
+        embedded = {'_links': {'self': item}}
+        embedded['id'] = i.id
+        embedded['title'] = i.title
+        embedded['unique_name'] = i.unique_name
+
+        intents = []
+        for j in i.intents.all():
+            intent = {'action': j.action, 'media_type': j.media_type,
+            'label': j.label, 'icon_id': j.icon.id}
+            intents.append(intent)
+
+        embedded['intents'] = intents
+        embedded_items.append(embedded)
+
     data['_links']['item'] = items
+    data['_embedded']['item'] = embedded_items
 
     return Response(data)
 
