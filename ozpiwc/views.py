@@ -58,6 +58,18 @@ def RootApiView(request):
             renderers.DataObjectListResourceRenderer.media_type)
     }
 
+    data['_links'][hal.DATA_ITEM_REL] = {
+        "href": '%sself/data/{+resource}/' % (hal.get_abs_url_for_iwc(request)),
+        "type": hal.generate_content_type(renderers.DataObjectResourceRenderer.media_type),
+        "templated": True
+    }
+
+    data['_links'][hal.APPLICATION_ITEM_REL] = {
+        "href": '%slisting/{+resource}/' % (hal.get_abs_url_for_iwc(request)),
+        "type": hal.generate_content_type(renderers.ApplicationResourceRenderer.media_type),
+        "templated": True
+    }
+
     # add embedded data
     data["_embedded"][hal.USER_REL] = {
         "username": profile.user.username,

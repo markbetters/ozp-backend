@@ -11,6 +11,8 @@ APPLICATION_REL = "ozp:application"
 INTENT_REL = "ozp:intent"
 SYSTEM_REL = "ozp:system"
 USER_DATA_REL = "ozp:user-data"
+DATA_ITEM_REL = "ozp:data-item"
+APPLICATION_ITEM_REL = "ozp:application-item"
 
 
 def create_base_structure(request, type='application/json'):
