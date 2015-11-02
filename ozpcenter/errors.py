@@ -10,3 +10,6 @@ class PermissionDenied(Exception):
 
 class InvalidInput(Exception):
     pass
+
+class AuthorizationFailure(Exception):
+    pass

@@ -500,6 +500,10 @@ class Profile(models.Model):
     #                                      backref='owner')
     display_name = models.CharField(max_length=255)
     bio = models.CharField(max_length=1000, blank=True)
+    # user's DN from PKI cert
+    dn = models.CharField(max_length=1000, blank=True)
+    # datetime when any authorization data becomes
+    auth_expires = models.DateTimeField(auto_now=True)
     organizations = models.ManyToManyField(
         Agency,
         related_name='profiles',

@@ -2,6 +2,7 @@
 Utility functions
 """
 import re
+import sys
 
 def make_keysafe(key):
     """
@@ -11,3 +12,7 @@ def make_keysafe(key):
     TODO: check for max length (250 chars by default for memcached)
     """
     return re.sub(r'\W+', '', key).lower()
+
+
+def str_to_class(str):
+    return reduce(getattr, str.split("."), sys.modules[__name__])

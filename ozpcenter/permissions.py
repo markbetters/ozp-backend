@@ -4,11 +4,21 @@ Custom permissions for API endpoints
 Can do things like if view.action == 'create'
 
 """
+from django.conf import settings
+
 from rest_framework import permissions
+import ozpcenter.utils as utils
 import ozpcenter.models as models
 import ozpcenter.model_access as model_access
 
 SAFE_METHODS = ['GET', 'HEAD', 'OPTIONS']
+
+class OzpBasePermission(permissions.BasePermission):
+    def has_permission(self, request, view):
+        if settings.OZP.USE_AUTH_SERVER:
+            auth = utils.str_to_class(settings.OZP.AUTH_CLASS)
+            return auth.authorization_update(request.user.username)
+
 
 class IsAppsMallStewardOrReadOnly(permissions.BasePermission):
     def has_permission(self, request, view):
