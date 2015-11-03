@@ -501,7 +501,7 @@ class Profile(models.Model):
     display_name = models.CharField(max_length=255)
     bio = models.CharField(max_length=1000, blank=True)
     # user's DN from PKI cert
-    dn = models.CharField(max_length=1000, blank=True)
+    dn = models.CharField(max_length=1000, unique=True)
     # datetime when any authorization data becomes
     auth_expires = models.DateTimeField(auto_now=True)
     organizations = models.ManyToManyField(
@@ -580,6 +580,7 @@ class Profile(models.Model):
             organizations (['org1_title', 'org2_title'])
             stewarded_organizations (['org1_title', 'org2_title'])
             groups (['group1_name', 'group2_name'])
+            dn
 
         """
         # TODO: what to make default password?
@@ -614,12 +615,14 @@ class Profile(models.Model):
         bio = kwargs.get('password', '')
         ac = kwargs.get('access_control', 'UNCLASSIFIED')
         access_control = AccessControl.objects.get(title=ac)
+        dn = kwargs.get('dn', username)
 
         # create the profile object and associate it with the User
         p = Profile(display_name=display_name,
             bio=bio,
             access_control=access_control,
-            user=user
+            user=user,
+            dn=dn
         )
         p.save()
 

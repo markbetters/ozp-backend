@@ -230,7 +230,8 @@ def run():
         access_control=ts_stn.title,
         organizations=['Ministry of Truth'],
         stewarded_organizations=['Ministry of Truth'],
-        groups=['ORG_STEWARD']
+        groups=['ORG_STEWARD'],
+        dn='Winston Smith wsmith'
     )
 
     julia = models.Profile.create_user('julia',
@@ -240,7 +241,8 @@ def run():
         access_control=ts_s.title,
         organizations=['Ministry of Truth'],
         stewarded_organizations=['Ministry of Truth', 'Ministry of Love'],
-        groups=['ORG_STEWARD']
+        groups=['ORG_STEWARD'],
+        dn='Julia Dixon jdixon'
     )
     obrien = models.Profile.create_user('obrien',
         email='obrien@oceania.gov',
@@ -249,7 +251,8 @@ def run():
         access_control=ts_stghn.title,
         organizations=['Ministry of Peace'],
         stewarded_organizations=['Ministry of Peace', 'Ministry of Plenty'],
-        groups=['ORG_STEWARD']
+        groups=['ORG_STEWARD'],
+        dn='O\'Brien obrien'
     )
 
     ############################################################################
@@ -262,7 +265,8 @@ def run():
         access_control=ts_stghn.title,
         organizations=['Ministry of Truth', 'Ministry of Love',
         'Ministry of Peace', 'Ministry of Plenty'],
-        groups=['APPS_MALL_STEWARD']
+        groups=['APPS_MALL_STEWARD'],
+        dn='Big Brother bigbrother'
     )
 
     big_brother2 = models.Profile.create_user('bigbrother2',
@@ -272,7 +276,8 @@ def run():
         access_control=ts_stghn.title,
         organizations=['Ministry of Truth', 'Ministry of Love',
         'Ministry of Peace', 'Ministry of Plenty'],
-        groups=['APPS_MALL_STEWARD']
+        groups=['APPS_MALL_STEWARD'],
+        dn='Big Brother2 bigbrother2'
     )
 
     ############################################################################
@@ -284,7 +289,8 @@ def run():
         bio='Nothing special',
         access_control=secret_n.title,
         organizations=['Ministry of Love'],
-        groups=['USER']
+        groups=['USER'],
+        dn='Aaronson aaronson'
     )
 
     jones = models.Profile.create_user('jones',
@@ -293,7 +299,8 @@ def run():
         bio='I am a normal person',
         access_control=secret_n.title,
         organizations=['Ministry of Truth'],
-        groups=['USER']
+        groups=['USER'],
+        dn='Jones jones'
     )
 
     rutherford = models.Profile.create_user('rutherford',
@@ -302,7 +309,8 @@ def run():
         bio='I am a normal person',
         access_control=secret.title,
         organizations=['Ministry of Plenty'],
-        groups=['USER']
+        groups=['USER'],
+        dn='Rutherford rutherford'
     )
 
     syme = models.Profile.create_user('syme',
@@ -311,7 +319,8 @@ def run():
         bio='I am too smart for my own good',
         access_control=ts_s.title,
         organizations=['Ministry of Peace'],
-        groups=['USER']
+        groups=['USER'],
+        dn='Syme syme'
     )
 
     tparsons = models.Profile.create_user('tparsons',
@@ -320,7 +329,8 @@ def run():
         bio='I am uneducated and loyal',
         access_control=unclass.title,
         organizations=['Ministry of Peace', 'Ministry of Love'],
-        groups=['USER']
+        groups=['USER'],
+        dn='Tparsons tparsons'
     )
 
     charrington = models.Profile.create_user('charrington',
@@ -330,7 +340,8 @@ def run():
         access_control=ts_stghn.title,
         organizations=['Ministry of Peace', 'Ministry of Love',
         'Ministry of Truth'],
-        groups=['USER']
+        groups=['USER'],
+        dn='Charrington charrington'
     )
 
     ############################################################################
