@@ -33,7 +33,7 @@ class ProfileTest(TestCase):
         f.GroupFactory.create(name='APPS_MALL_STEWARD')
         f.AccessControlFactory.create(title='UNCLASSIFIED//ABC')
         f.ProfileFactory.create(user__username='bob', display_name='Bob B',
-            user__email='bob@bob.com')
+            user__email='bob@bob.com', dn='bob')
         f.ProfileFactory.create(user__username='alice')
         unclass = models.AccessControl(title='UNCLASSIFIED')
         unclass.save()
@@ -62,7 +62,7 @@ class ProfileTest(TestCase):
 
         # email nor display name need be unique, so this should pass
         f.ProfileFactory.create(user__username='bob2', display_name='Bob B',
-            user__email='bob@bob.com')
+            user__email='bob@bob.com', dn='bob2')
 
     def test_non_factory_save(self):
         """

@@ -13,9 +13,9 @@ import datetime
 import logging
 import pytz
 
-import django.contrib.auth.models.Group as Group
+from django.contrib.auth.models import Group
 
-import ozpcenter.model_acccess as model_acccess
+import ozpcenter.model_access as model_access
 import ozpcenter.errors as errors
 import ozpcenter.models as models
 
@@ -40,31 +40,42 @@ class BaseAuthorization:
             'is_metrics_user': True
         }
         """
-        raise NotImplementedError('Auth class failed to implement authorization_update method')
+        raise NotImplementedError('Auth class failed to implement get_auth_data method')
 
-    def authorization_update(self, username):
+    def authorization_update(self, username, updated_auth_data=None):
         """
         Update authorization info for this user
 
+        Args:
+            username: username for which to update auth data
+            updated_auth_data: for testing purposes - if this is passed in,
+                the data is used instead of invoking the parent class's
+                get_auth_data() method
+
         Return True if update succeeds, False otherwise
         """
-        profile = model_acccess.get_profile(username)
+        profile = model_access.get_profile(username)
         if not profile:
             raise errors.NotFound('User %s was not found - cannot update authorization info' % username)
 
         # check profile.auth_expires. if auth_expires - now > 24 hours, raise an
         # exception (auth data should never be cached for more than 24 hours)
-        now = datetime.datetime.now()
-        if (profile.auth_expires - now) > datetime.timedelta(seconds=24*60*60):
-            logger.error()
+        now = datetime.datetime.now(pytz.utc)
+        logger.debug('profile for %s expires at %s' % (username, profile.auth_expires))
+        logger.debug('now is: %s' % now)
+        expires_in = profile.auth_expires - now
+        if expires_in.days >=1:
             raise errors.AuthorizationFailure('User %s had auth expires set to expire more than 24 hours from last check' % username)
+        else:
+            raise errors.AuthorizationFailure('wat? expires in: %s days, %s seconds' % (expires_in.days, expires_in.seconds))
 
         # if auth_data cache hasn't expired, we're good to go
         if now <= profile.auth_expires:
             return True
 
         # otherwise, auth data must be updated
-        updated_auth_data = self.get_auth_data(username)
+        if not updated_auth_data:
+            updated_auth_data = self.get_auth_data(username)
 
         # update the user's org (profile.organizations) from duty_org
         # validate the org
@@ -108,9 +119,3 @@ class BaseAuthorization:
         profile.auth_expires = now + datetime.timedelta(seconds=24*60*60)
         profile.save()
         return True
-
-
-
-
-
-
