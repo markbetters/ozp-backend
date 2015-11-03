@@ -65,7 +65,7 @@ def RootApiView(request):
     }
 
     data['_links'][hal.APPLICATION_ITEM_REL] = {
-        "href": '%slisting/{+resource}' % (hal.get_abs_url_for_iwc(request)),
+        "href": '%slisting/{+resource}/' % (hal.get_abs_url_for_iwc(request)),
         "type": hal.generate_content_type(renderers.ApplicationResourceRenderer.media_type),
         "templated": True
     }
