@@ -10,6 +10,7 @@ Checks models.Profile.auth_expires. If auth is expired, refresh it.
 - models.Profile.display_name (use CN)
 """
 import datetime
+import json
 import logging
 import pytz
 
@@ -21,7 +22,7 @@ import ozpcenter.models as models
 
 logger = logging.getLogger('ozp-center')
 
-class BaseAuthorization:
+class BaseAuthorization(object):
 
     def get_auth_data(self, username):
         """
@@ -61,13 +62,9 @@ class BaseAuthorization:
         # check profile.auth_expires. if auth_expires - now > 24 hours, raise an
         # exception (auth data should never be cached for more than 24 hours)
         now = datetime.datetime.now(pytz.utc)
-        logger.debug('profile for %s expires at %s' % (username, profile.auth_expires))
-        logger.debug('now is: %s' % now)
         expires_in = profile.auth_expires - now
         if expires_in.days >=1:
             raise errors.AuthorizationFailure('User %s had auth expires set to expire more than 24 hours from last check' % username)
-        else:
-            raise errors.AuthorizationFailure('wat? expires in: %s days, %s seconds' % (expires_in.days, expires_in.seconds))
 
         # if auth_data cache hasn't expired, we're good to go
         if now <= profile.auth_expires:
@@ -75,7 +72,7 @@ class BaseAuthorization:
 
         # otherwise, auth data must be updated
         if not updated_auth_data:
-            updated_auth_data = self.get_auth_data(username)
+            updated_auth_data = super(BaseAuthorization, self).get_auth_data(username)
 
         # update the user's org (profile.organizations) from duty_org
         # validate the org
@@ -89,23 +86,29 @@ class BaseAuthorization:
         org = models.Agency.objects.get(short_name=duty_org)
         profile.organizations.add(org)
 
-        if not updated_auth_data.is_org_steward:
+        if not updated_auth_data['is_org_steward']:
             # remove all profile.stewarded_orgs
             profile.stewarded_organizations.clear()
             # remove ORG_STEWARD from profile.user.groups
-            for g in profile.user.groups:
+            for g in profile.user.groups.all():
                 if g.name == 'ORG_STEWARD':
                     profile.user.groups.remove(g)
+            # add to USER group
+            g = Group.objects.get(name='USER')
+            profile.user.groups.add(g)
         else:
             # ensure ORG_STEWARD is in profile.user.groups
             g = Group.objects.get(name='ORG_STEWARD')
             profile.user.groups.add(g)
 
-        if not updated_auth_data.is_apps_mall_steward:
+        if not updated_auth_data['is_apps_mall_steward']:
             # ensure APPS_MALL_STEWARD is not in profile.user.groups
-            for g in profile.user.groups:
+            for g in profile.user.groups.all():
                 if g.name == 'APPS_MALL_STEWARD':
                     profile.user.groups.remove(g)
+            # add to USER group
+            g = Group.objects.get(name='USER')
+            profile.user.groups.add(g)
         else:
             # ensure APPS_MALL_STEWARD is in profile.user.groups
             g = Group.objects.get(name='APPS_MALL_STEWARD')
@@ -114,8 +117,10 @@ class BaseAuthorization:
         # TODO: handle metrics user
 
         # update profile.access_control:
-        profile.access_control = json.dumps(updated_auth_data)
+        # TODO - will need to make access_control simple strings - remove models.AccessControl
+        access_control = json.dumps(updated_auth_data)
+        # profile.access_control = access_control
         # reset profile.auth_expires to now + 24 hours
-        profile.auth_expires = now + datetime.timedelta(seconds=24*60*60)
+        profile.auth_expires = now + datetime.timedelta(days=1)
         profile.save()
         return True

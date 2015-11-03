@@ -503,7 +503,7 @@ class Profile(models.Model):
     # user's DN from PKI cert
     dn = models.CharField(max_length=1000, unique=True)
     # datetime when any authorization data becomes
-    auth_expires = models.DateTimeField(auto_now=True)
+    auth_expires = models.DateTimeField(auto_now_add=True)
     organizations = models.ManyToManyField(
         Agency,
         related_name='profiles',
@@ -935,7 +935,7 @@ class Notification(models.Model):
     'system-wide', and thus will be sent to all users
     """
     # TODO: created date
-    created_date = models.DateTimeField(auto_now=True)
+    created_date = models.DateTimeField(auto_now_add=True)
     message = models.CharField(max_length=1024)
     expires_date = models.DateTimeField()
     author = models.ForeignKey(Profile, related_name='authored_notifications')
