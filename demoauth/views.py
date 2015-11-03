@@ -28,7 +28,6 @@ def UserDnView(request, dn):
         return Response('User not found', status=status.HTTP_404_NOT_FOUND)
     return Response(user_data, status=status.HTTP_200_OK)
 
-# TODO: groups
 @api_view(['GET'])
 @permission_classes((permissions.AllowAny, ))
 def UserInGroupView(request, project, group, dn):
@@ -38,6 +37,6 @@ def UserInGroupView(request, project, group, dn):
         return Response('User not found', status=status.HTTP_404_NOT_FOUND)
 
     if utils.is_user_in_group(dn, group):
-        return Response({"is_member": True}, status=status.HTTP_200_OK)
+        return Response({"is_member": True, "project": project, "group": group}, status=status.HTTP_200_OK)
     else:
-        return Response({"is_member": False}, status=status.HTTP_200_OK)
+        return Response({"is_member": False, "project": project, "group": group}, status=status.HTTP_200_OK)
