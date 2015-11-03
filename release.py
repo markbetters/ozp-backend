@@ -82,6 +82,7 @@ def create_release_dir():
     shutil.copytree("ozp", "release/ozp")
     shutil.copytree("ozpcenter", "release/ozpcenter")
     shutil.copytree("ozpiwc", "release/ozpiwc")
+    shutil.copytree("demoauth", "release/demoauth")
     shutil.copytree("static", "release/static")
     shutil.copy("_version.py", "release")
     shutil.copy("manage.py", "release")
