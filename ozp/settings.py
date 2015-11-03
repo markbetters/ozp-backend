@@ -111,6 +111,10 @@ LOGGING = {
         'ozp-iwc': {
             'handlers': ['console'],
             'level': 'DEBUG',
+        },
+        'demo-auth': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
         }
     },
 }
@@ -200,9 +204,9 @@ OZP = {
     # if False, don't attempt to update the auth information in models.Profile
     'USE_AUTH_SERVER': True,
     'AUTH_CLASS': 'ozpcenter.auth.JsonAuthService',
-    'JSON_AUTH_SERVICE': {
+    'DEMO_AUTH_SERVICE': {
         'URL': 'http://localhost:8000/auth',
-        'JSON_FILE': os.path.join(BASE_DIR, 'ozpcenter/jsonauth/auth_data.json')
+        'JSON_FILE': os.path.join(BASE_DIR, 'demoauth/auth_data.json')
     },
     'EXTERNAL_AUTH_SERVICE': {
         'URL_1': 'http://www.google.com/auth',

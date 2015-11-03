@@ -7,99 +7,94 @@
             "duty_org": "minitrue",
             "clearances": ["U", "C", "S", "TS"],
             "formal_accesses": ["SIERRA", "TANGO"],
-            "visas": ["NOVEMBER"],
-            "is_org_steward": true,
-            "is_apps_mall_steward": false
+            "visas": ["NOVEMBER"]
         },
         {
             "dn": "Julia Dixon jdixon",
             "duty_org": "minitrue",
             "clearances": ["U", "C", "S", "TS"],
             "formal_accesses": ["SIERRA"],
-            "visas": [],
-            "is_org_steward": true,
-            "is_apps_mall_steward": false
+            "visas": []
         },
         {
             "dn": "O'brien obrien",
             "duty_org": "minipeac",
             "clearances": ["U", "C", "S", "TS"],
             "formal_accesses": ["SIERRA", "TANGO", "GOLF", "HOTEL"],
-            "visas": ["NOVEMBER"],
-            "is_org_steward": true,
-            "is_apps_mall_steward": false
+            "visas": ["NOVEMBER"]
         },
         {
             "dn": "Big Brother bigbrother",
             "duty_org": "minipeac",
             "clearances": ["U", "C", "S", "TS"],
             "formal_accesses": ["SIERRA", "TANGO", "GOLF", "HOTEL"],
-            "visas": ["NOVEMBER"],
-            "is_org_steward": false,
-            "is_apps_mall_steward": true
+            "visas": ["NOVEMBER"]
         },
         {
             "dn": "Big Brother 2 bigbrother2",
             "duty_org": "minitrue",
             "clearances": ["U", "C", "S", "TS"],
             "formal_accesses": ["SIERRA", "TANGO", "GOLF", "HOTEL"],
-            "visas": ["NOVEMBER"],
-            "is_org_steward": false,
-            "is_apps_mall_steward": true
+            "visas": ["NOVEMBER"]
         },
         {
             "dn": "Aaronson aaronson",
             "duty_org": "miniluv",
             "clearances": ["U", "C", "S"],
             "formal_accesses": [],
-            "visas": ["NOVEMBER"],
-            "is_org_steward": false,
-            "is_apps_mall_steward": false
+            "visas": ["NOVEMBER"]
         },
         {
             "dn": "Jones jones",
             "duty_org": "minitrue",
             "clearances": ["U", "C", "S"],
             "formal_accesses": [],
-            "visas": ["NOVEMBER"],
-            "is_org_steward": false,
-            "is_apps_mall_steward": false
+            "visas": ["NOVEMBER"]
         },
         {
             "dn": "Rutherford rutherford",
             "duty_org": "miniplen",
             "clearances": ["U", "C", "S"],
             "formal_accesses": [],
-            "visas": [],
-            "is_org_steward": false,
-            "is_apps_mall_steward": false
+            "visas": []
         },
         {
             "dn": "Syme syme",
             "duty_org": "minipeac",
             "clearances": ["U", "C", "S", "TS"],
             "formal_accesses": [],
-            "visas": ["NOVEMBER"],
-            "is_org_steward": false,
-            "is_apps_mall_steward": false
+            "visas": ["NOVEMBER"]
         },
         {
             "dn": "Tparsons tparsons",
             "duty_org": "minipeac",
             "clearances": ["U"],
             "formal_accesses": [],
-            "visas": [],
-            "is_org_steward": false,
-            "is_apps_mall_steward": false
+            "visas": []
         },
         {
             "dn": "Charrington charrington",
             "duty_org": "minipeac",
             "clearances": ["U", "C", "S", "TS"],
             "formal_accesses": ["SIERRA", "TANGO", "GOLF", "HOTEL"],
-            "visas": ["NOVEMBER"],
-            "is_org_steward": false,
-            "is_apps_mall_steward": false
+            "visas": ["NOVEMBER"]
+        }
+    ],
+    "groups": [
+        {
+            "name": "org_stewards",
+            "members": [
+                "Winston Smith wsmith1",
+                "Julia Dixon jdixon",
+                "O'brien obrien"
+            ]
+        },
+        {
+            "name": "apps_mall_stewards",
+            "members": [
+                "Big Brother bigbrother",
+                "Big Brother 2 bigbrother2"
+            ]
         }
     ]
 }
