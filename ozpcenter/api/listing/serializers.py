@@ -280,6 +280,10 @@ class ListingSerializer(serializers.ModelSerializer):
         if 'contacts' in data:
             required_fields = ['email', 'name', 'contact_type']
             for contact in data['contacts']:
+                if 'secure_phone' not in contact:
+                    contact['secure_phone'] = None
+                if 'unsecure_phone' not in contact:
+                    contact['unsecure_phone'] = None
                 for field in required_fields:
                     if field not in contact:
                         raise serializers.ValidationError(
