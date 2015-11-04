@@ -310,7 +310,8 @@ class Contact(models.Model):
                 regex=constants.PHONE_REGEX,
                 message='secure_phone must be a valid phone number',
                 code='invalid phone number')],
-        null=True
+        null=True,
+        blank=True
     )
     unsecure_phone = models.CharField(
         max_length=50,
@@ -319,7 +320,8 @@ class Contact(models.Model):
                 regex=constants.PHONE_REGEX,
                 message='unsecure_phone must be a valid phone number',
                 code='invalid phone number')],
-        null=True
+        null=True,
+        blank=True
     )
     email = models.CharField(
         max_length=100,
