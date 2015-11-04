@@ -278,8 +278,7 @@ class ListingSerializer(serializers.ModelSerializer):
             data['large_banner_icon'] = None
 
         if 'contacts' in data:
-            required_fields = ['email', 'secure_phone', 'unsecure_phone',
-            'name', 'contact_type']
+            required_fields = ['email', 'name', 'contact_type']
             for contact in data['contacts']:
                 for field in required_fields:
                     if field not in contact:
