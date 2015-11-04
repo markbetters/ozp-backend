@@ -201,15 +201,12 @@ CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
 
 OZP = {
-    # if False, don't attempt to update the auth information in models.Profile
     'USE_AUTH_SERVER': True,
-    'AUTH_CLASS': 'ozpcenter.auth.JsonAuthService',
     'DEMO_AUTH_SERVICE': {
-        'URL': 'http://localhost:8000/auth',
         'JSON_FILE': os.path.join(BASE_DIR, 'demoauth/auth_data.json')
     },
-    'EXTERNAL_AUTH_SERVICE': {
-        'URL_1': 'http://www.google.com/auth',
-        'URL_2': 'http://www.google.com/auth2'
+    'OZP_AUTHORIZATION': {
+        'ROOT_URL': 'http://localhost:8000/demo-auth',
+        'SECONDS_TO_CACHE_DATA': 60
     }
 }

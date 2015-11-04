@@ -43,6 +43,7 @@ class PkiAuthentication(authentication.BaseAuthentication):
         # TODO: do we need to preprocess/sanitize this in any way?
         dn = request.META.get('HTTP_X_SSL_USER_DN')
         profile = _get_profile_by_dn(dn)
+
         return (profile.user, None)
 
 def _get_profile_by_dn(dn):

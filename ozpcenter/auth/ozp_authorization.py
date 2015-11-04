@@ -1,5 +1,5 @@
 """
-All authorization classes must inherit from this base class
+Authorization for OZP using the DemoAuth service
 
 Checks models.Profile.auth_expires. If auth is expired, refresh it.
 
@@ -14,36 +14,66 @@ import json
 import logging
 import pytz
 
+import requests
+
+from django.conf import settings
 from django.contrib.auth.models import Group
 
-import ozpcenter.model_access as model_access
 import ozpcenter.errors as errors
+import ozpcenter.model_access as model_access
 import ozpcenter.models as models
 
 logger = logging.getLogger('ozp-center')
 
-class BaseAuthorization(object):
+def _get_auth_data(username):
+    """
+    Get authorization data for given user
 
-    def get_auth_data(self, username):
-        """
-        Get authorization data for given user
+    Return:
+    {
+        'dn': 'user DN',
+        'cn': 'user CN',
+        'clearances': ['U', 'S'],
+        'formal_accesses': ['AB', 'CD'],
+        'visas': ['ABC', 'XYZ'],
+        'duty_org': 'org',
+        'is_org_steward': False,
+        'is_apps_mall_steward': False,
+        'is_metrics_user': True
+    }
+    """
+    profile = model_access.get_profile(username)
+    # get user's basic data
+    base_url = settings.OZP['OZP_AUTHORIZATION']['ROOT_URL']
+    url = '%s/dn/%s/' % (base_url, profile.dn)
+    r = requests.get(url)
+    logger.debug('hitting url %s for user with dn %s' % (url, profile.dn))
 
-        Return:
-        {
-            'dn': 'user DN',
-            'cn': 'user CN',
-            'clearances': ['U', 'S'],
-            'formal_accesses': ['AB', 'CD'],
-            'visas': ['ABC', 'XYZ'],
-            'duty_org': 'org',
-            'is_org_steward': False,
-            'is_apps_mall_steward': False,
-            'is_metrics_user': True
-        }
-        """
-        raise NotImplementedError('Auth class failed to implement get_auth_data method')
+    if r.status_code != 200:
+        raise errors.AuthorizationFailure('Error contacting authorization server: %s' % r.text)
+    user_data = r.json()
 
-    def authorization_update(self, username, updated_auth_data=None):
+    # is user an org_steward
+    r = requests.get('%s/groups/ozp/%s/members/%s/' % (base_url, 'org_stewards', profile.dn))
+    if r.status_code != 200:
+        raise errors.AuthorizationFailure('Error contacting authorization server: %s' % r.text)
+    if r.json()['is_member'] == True:
+        user_data['is_org_steward'] = True
+    else:
+        user_data['is_org_steward'] = False
+
+    # is user an apps_mall_steward
+    r = requests.get('%s/groups/ozp/%s/members/%s/' % (base_url, 'apps_mall_stewards', profile.dn))
+    if r.status_code != 200:
+        raise errors.AuthorizationFailure('Error contacting authorization server: %s' % r.text)
+    if r.json()['is_member'] == True:
+        user_data['is_apps_mall_steward'] = True
+    else:
+        user_data['is_apps_mall_steward'] = False
+
+    return user_data
+
+def authorization_update(username, updated_auth_data=None):
         """
         Update authorization info for this user
 
@@ -55,6 +85,9 @@ class BaseAuthorization(object):
 
         Return True if update succeeds, False otherwise
         """
+        if not settings.OZP['USE_AUTH_SERVER']:
+            return True
+
         profile = model_access.get_profile(username)
         if not profile:
             raise errors.NotFound('User %s was not found - cannot update authorization info' % username)
@@ -62,17 +95,21 @@ class BaseAuthorization(object):
         # check profile.auth_expires. if auth_expires - now > 24 hours, raise an
         # exception (auth data should never be cached for more than 24 hours)
         now = datetime.datetime.now(pytz.utc)
+        seconds_to_cache_data = int(settings.OZP['OZP_AUTHORIZATION']['SECONDS_TO_CACHE_DATA'])
+        if seconds_to_cache_data > 24*3600:
+            raise errors.AuthorizationFailure('Cannot cache data for more than 1 day')
         expires_in = profile.auth_expires - now
-        if expires_in.days >=1:
-            raise errors.AuthorizationFailure('User %s had auth expires set to expire more than 24 hours from last check' % username)
+        if expires_in.days >= 1:
+            raise errors.AuthorizationFailure('User %s had auth expires set to expire in more than 24 hours' % username)
 
         # if auth_data cache hasn't expired, we're good to go
         if now <= profile.auth_expires:
+            logger.debug('no auth refresh required. Expires in %s seconds' % expires_in.seconds)
             return True
 
         # otherwise, auth data must be updated
         if not updated_auth_data:
-            updated_auth_data = super(BaseAuthorization, self).get_auth_data(username)
+            updated_auth_data = _get_auth_data(username)
 
         # update the user's org (profile.organizations) from duty_org
         # validate the org
@@ -121,6 +158,6 @@ class BaseAuthorization(object):
         access_control = json.dumps(updated_auth_data)
         # profile.access_control = access_control
         # reset profile.auth_expires to now + 24 hours
-        profile.auth_expires = now + datetime.timedelta(days=1)
+        profile.auth_expires = now + datetime.timedelta(seconds=seconds_to_cache_data)
         profile.save()
         return True

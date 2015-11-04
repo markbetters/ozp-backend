@@ -4,26 +4,21 @@ Custom permissions for API endpoints
 Can do things like if view.action == 'create'
 
 """
-from django.conf import settings
 
 from rest_framework import permissions
 import ozpcenter.utils as utils
 import ozpcenter.models as models
 import ozpcenter.model_access as model_access
+import ozpcenter.auth.ozp_authorization as ozp_authorization
 
 SAFE_METHODS = ['GET', 'HEAD', 'OPTIONS']
-
-class OzpBasePermission(permissions.BasePermission):
-    def has_permission(self, request, view):
-        if settings.OZP.USE_AUTH_SERVER:
-            auth = utils.str_to_class(settings.OZP.AUTH_CLASS)
-            return auth.authorization_update(request.user.username)
 
 
 class IsAppsMallStewardOrReadOnly(permissions.BasePermission):
     def has_permission(self, request, view):
         if not request.user.is_authenticated():
             return False
+        ozp_authorization.authorization_update(request.user.username)
         user_profile = model_access.get_profile(request.user.username)
         if (request.method in SAFE_METHODS or \
             user_profile.highest_role() in ['APPS_MALL_STEWARD']):
@@ -35,6 +30,7 @@ class IsOrgStewardOrReadOnly(permissions.BasePermission):
     def has_permission(self, request, view):
         if not request.user.is_authenticated():
             return False
+        ozp_authorization.authorization_update(request.user.username)
         user_profile = model_access.get_profile(request.user.username)
         if (request.method in SAFE_METHODS or \
             user_profile.highest_role() in ['APPS_MALL_STEWARD', 'ORG_STEWARD']):
@@ -50,6 +46,7 @@ class IsUser(permissions.BasePermission):
     def has_permission(self, request, view):
         if not request.user.is_authenticated():
             return False
+        ozp_authorization.authorization_update(request.user.username)
         profile = model_access.get_profile(request.user.username)
         if profile is None:
            return False
@@ -57,6 +54,7 @@ class IsUser(permissions.BasePermission):
             return True
         else:
             return False
+
 
 class IsOrgSteward(permissions.BasePermission):
     """
@@ -66,6 +64,7 @@ class IsOrgSteward(permissions.BasePermission):
     def has_permission(self, request, view):
         if not request.user.is_authenticated():
             return False
+        ozp_authorization.authorization_update(request.user.username)
         profile = model_access.get_profile(request.user.username)
         if profile is None:
             return False
@@ -73,6 +72,7 @@ class IsOrgSteward(permissions.BasePermission):
             return True
         else:
             return False
+
 
 class IsAppsMallSteward(permissions.BasePermission):
     """
@@ -82,6 +82,7 @@ class IsAppsMallSteward(permissions.BasePermission):
     def has_permission(self, request, view):
         if not request.user.is_authenticated():
             return False
+        ozp_authorization.authorization_update(request.user.username)
         profile = model_access.get_profile(request.user.username)
         if profile is None:
             return False

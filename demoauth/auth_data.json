@@ -3,78 +3,78 @@
     "name": "dummy auth server",
     "users": [
         {
-            "dn": "Winston Smith wsmith1",
-            "duty_org": "minitrue",
+            "dn": "Winston Smith wsmith",
+            "duty_org": "Minitrue",
             "clearances": ["U", "C", "S", "TS"],
             "formal_accesses": ["SIERRA", "TANGO"],
             "visas": ["NOVEMBER"]
         },
         {
             "dn": "Julia Dixon jdixon",
-            "duty_org": "minitrue",
+            "duty_org": "Minitrue",
             "clearances": ["U", "C", "S", "TS"],
             "formal_accesses": ["SIERRA"],
             "visas": []
         },
         {
             "dn": "O'brien obrien",
-            "duty_org": "minipeac",
+            "duty_org": "Minipeac",
             "clearances": ["U", "C", "S", "TS"],
             "formal_accesses": ["SIERRA", "TANGO", "GOLF", "HOTEL"],
             "visas": ["NOVEMBER"]
         },
         {
             "dn": "Big Brother bigbrother",
-            "duty_org": "minipeac",
+            "duty_org": "Minipeac",
             "clearances": ["U", "C", "S", "TS"],
             "formal_accesses": ["SIERRA", "TANGO", "GOLF", "HOTEL"],
             "visas": ["NOVEMBER"]
         },
         {
             "dn": "Big Brother 2 bigbrother2",
-            "duty_org": "minitrue",
+            "duty_org": "Minitrue",
             "clearances": ["U", "C", "S", "TS"],
             "formal_accesses": ["SIERRA", "TANGO", "GOLF", "HOTEL"],
             "visas": ["NOVEMBER"]
         },
         {
             "dn": "Aaronson aaronson",
-            "duty_org": "miniluv",
+            "duty_org": "Miniluv",
             "clearances": ["U", "C", "S"],
             "formal_accesses": [],
             "visas": ["NOVEMBER"]
         },
         {
             "dn": "Jones jones",
-            "duty_org": "minitrue",
+            "duty_org": "Minitrue",
             "clearances": ["U", "C", "S"],
             "formal_accesses": [],
             "visas": ["NOVEMBER"]
         },
         {
             "dn": "Rutherford rutherford",
-            "duty_org": "miniplen",
+            "duty_org": "Miniplen",
             "clearances": ["U", "C", "S"],
             "formal_accesses": [],
             "visas": []
         },
         {
             "dn": "Syme syme",
-            "duty_org": "minipeac",
+            "duty_org": "Minipeac",
             "clearances": ["U", "C", "S", "TS"],
             "formal_accesses": [],
             "visas": ["NOVEMBER"]
         },
         {
             "dn": "Tparsons tparsons",
-            "duty_org": "minipeac",
+            "duty_org": "Minipeac",
             "clearances": ["U"],
             "formal_accesses": [],
             "visas": []
         },
         {
             "dn": "Charrington charrington",
-            "duty_org": "minipeac",
+            "duty_org": "Minipeac",
             "clearances": ["U", "C", "S", "TS"],
             "formal_accesses": ["SIERRA", "TANGO", "GOLF", "HOTEL"],
             "visas": ["NOVEMBER"]
@@ -84,7 +84,7 @@
         {
             "name": "org_stewards",
             "members": [
-                "Winston Smith wsmith1",
+                "Winston Smith wsmith",
                 "Julia Dixon jdixon",
                 "O'brien obrien"
             ]

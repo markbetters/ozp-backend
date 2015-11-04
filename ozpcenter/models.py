@@ -503,6 +503,10 @@ class Profile(models.Model):
     display_name = models.CharField(max_length=255)
     bio = models.CharField(max_length=1000, blank=True)
     # user's DN from PKI cert
+    # ideally this wouldn't be here and in a system using PKI, the user's DN
+    # would be the username. DNs can be longer than Django's User.username
+    # allows (30 chars max) and can include characters not allowed in
+    # User.username
     dn = models.CharField(max_length=1000, unique=True)
     # datetime when any authorization data becomes
     auth_expires = models.DateTimeField(auto_now_add=True)

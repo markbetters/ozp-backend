@@ -5,15 +5,17 @@ import datetime
 import pytz
 import unittest
 
+from django.conf import settings
+
 from django.test import TestCase
 
 from ozpcenter.scripts import sample_data_generator as data_gen
-import ozpcenter.auth.base_authorization as base_authorization
+import ozpcenter.auth.ozp_authorization as ozp_authorization
 import ozpcenter.models as models
 import ozpcenter.model_access as model_access
 import ozpcenter.errors as errors
 
-class BaseAuthorizationTest(TestCase):
+class OzpAuthorizationTest(TestCase):
 
     def setUp(self):
         """
@@ -32,16 +34,16 @@ class BaseAuthorizationTest(TestCase):
         """
         If user's auth_expires is set too far ahead, authorization should fail
         """
-        auth = base_authorization.BaseAuthorization()
+        auth = ozp_authorization.OzpAuthorization()
         profile = model_access.get_profile('jones')
         # set auth cache to expire in 1+ days (against the rules!)
-        profile.auth_expires = datetime.datetime.now(pytz.utc) + datetime.timedelta(days=1, seconds=2)
+        profile.auth_expires = datetime.datetime.now(pytz.utc) + datetime.timedelta(days=1, seconds=5)
         profile.save()
         self.assertRaises(errors.AuthorizationFailure,
             auth.authorization_update, 'jones')
 
     def test_valid_cache(self):
-        auth = base_authorization.BaseAuthorization()
+        auth = ozp_authorization.OzpAuthorization()
         profile = model_access.get_profile('jones')
         # set auth cache to expire in 1 day
         profile.auth_expires = datetime.datetime.now(pytz.utc) + datetime.timedelta(days=1)
@@ -54,7 +56,7 @@ class BaseAuthorizationTest(TestCase):
         self.assertEqual(auth.authorization_update('jones'), True)
 
     def test_update_cache(self):
-        auth = base_authorization.BaseAuthorization()
+        auth = ozp_authorization.OzpAuthorization()
         profile = model_access.get_profile('jones')
         profile.auth_expires = datetime.datetime.now(pytz.utc)
         profile.save()
@@ -75,7 +77,8 @@ class BaseAuthorizationTest(TestCase):
         profile = model_access.get_profile('jones')
         auth_expires_in = profile.auth_expires - datetime.datetime.now(pytz.utc)
         # 86,400 seconds in a day
-        self.assertTrue(86398 < auth_expires_in.seconds < 86400)
+        min_sec = int(settings.OZP['OZP_AUTHORIZATION']['SECONDS_TO_CACHE_DATA']) - 2
+        self.assertTrue(min_sec < auth_expires_in.seconds < 86400)
 
         # TODO: test access_control
 
@@ -83,7 +86,7 @@ class BaseAuthorizationTest(TestCase):
         """
         A user's agency (organization) changes
         """
-        auth = base_authorization.BaseAuthorization()
+        auth = ozp_authorization.OzpAuthorization()
         profile = model_access.get_profile('rutherford')
         profile.auth_expires = datetime.datetime.now(pytz.utc)
         profile.save()
@@ -109,7 +112,7 @@ class BaseAuthorizationTest(TestCase):
         """
         A user who was an org steward is now a regular user
         """
-        auth = base_authorization.BaseAuthorization()
+        auth = ozp_authorization.OzpAuthorization()
         profile = model_access.get_profile('wsmith')
         profile.auth_expires = datetime.datetime.now(pytz.utc)
         profile.save()
@@ -142,7 +145,7 @@ class BaseAuthorizationTest(TestCase):
         """
         A user who was an apps mall steward is now a regular user
         """
-        auth = base_authorization.BaseAuthorization()
+        auth = ozp_authorization.OzpAuthorization()
         profile = model_access.get_profile('bigbrother')
         profile.auth_expires = datetime.datetime.now(pytz.utc)
         profile.save()
@@ -172,7 +175,7 @@ class BaseAuthorizationTest(TestCase):
         """
         A user who was an apps mall steward is now an org steward
         """
-        auth = base_authorization.BaseAuthorization()
+        auth = ozp_authorization.OzpAuthorization()
         profile = model_access.get_profile('bigbrother')
         profile.auth_expires = datetime.datetime.now(pytz.utc)
         profile.save()
@@ -201,7 +204,7 @@ class BaseAuthorizationTest(TestCase):
         """
         A user who was an org steward is now an apps mall steward
         """
-        auth = base_authorization.BaseAuthorization()
+        auth = ozp_authorization.OzpAuthorization()
         profile = model_access.get_profile('wsmith')
         profile.auth_expires = datetime.datetime.now(pytz.utc)
         profile.save()
@@ -234,7 +237,7 @@ class BaseAuthorizationTest(TestCase):
         """
         A user who was an org steward is now also an apps mall steward
         """
-        auth = base_authorization.BaseAuthorization()
+        auth = ozp_authorization.OzpAuthorization()
         profile = model_access.get_profile('wsmith')
         profile.auth_expires = datetime.datetime.now(pytz.utc)
         profile.save()
