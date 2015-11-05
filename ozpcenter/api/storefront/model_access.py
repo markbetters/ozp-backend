@@ -21,53 +21,37 @@ def get_storefront(username):
         * most popular listings (max=36?)
 
     NOTE: think about adding Bookmark status to this later on
-
-    TODO: how to deal with fact that many users will have different access
-    controls, making this key fairly inefficient
-
-    Key: storefront:<org_names>:<max_classification_level>
     """
     user = models.Profile.objects.get(user__username=username)
-    orgs = ''
-    for i in user.organizations.all():
-        orgs += '%s_' % i.title
-    orgs_key = utils.make_keysafe(orgs)
-    access_control_key = utils.make_keysafe(user.access_control.title)
+    try:
+        # get featured listings
+        featured_listings = models.Listing.objects.for_user(
+            username).filter(
+                is_featured=True,
+                approval_status=models.Listing.APPROVED,
+                is_enabled=True)[:12]
 
-    key = 'storefront:%s:%s' % (orgs_key, access_control_key)
-    data = cache.get(key)
-    if data is None:
-        try:
-            # get featured listings
-            featured_listings = models.Listing.objects.for_user(
-                username).filter(
-                    is_featured=True,
+        # get recent listings
+        recent_listings = models.Listing.objects.for_user(
+            username).order_by(
+                'approved_date').filter(
                     approval_status=models.Listing.APPROVED,
-                    is_enabled=True)[:12]
+                    is_enabled=True)[:24]
 
-            # get recent listings
-            recent_listings = models.Listing.objects.for_user(
-                username).order_by(
-                    'approved_date').filter(
-                        approval_status=models.Listing.APPROVED,
-                        is_enabled=True)[:24]
+        # get most popular listings via a weighted average
+        most_popular_listings = models.Listing.objects.for_user(
+            username).order_by(
+            'avg_rate').filter(
+                approval_status=models.Listing.APPROVED,
+                is_enabled=True).order_by('-avg_rate')[:36]
 
-            # get most popular listings via a weighted average
-            most_popular_listings = models.Listing.objects.for_user(
-                username).order_by(
-                'avg_rate').filter(
-                    approval_status=models.Listing.APPROVED,
-                    is_enabled=True).order_by('-avg_rate')[:36]
-
-            data = {
-                'featured': featured_listings,
-                'recent': recent_listings,
-                'most_popular': most_popular_listings
-            }
-
-            cache.set(key, data)
-        except Exception as e:
-            return {'error': True, 'msg': 'Error getting storefront: %s' % str(e)}
+        data = {
+            'featured': featured_listings,
+            'recent': recent_listings,
+            'most_popular': most_popular_listings
+        }
+    except Exception as e:
+        return {'error': True, 'msg': 'Error getting storefront: %s' % str(e)}
     return data
 
 

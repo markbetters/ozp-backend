@@ -300,16 +300,12 @@ class ListingTest(TestCase):
                 "small_image": {
                     "url": "http://localhost:8000/api/image/1/",
                     "id": 1,
-                    "access_control": {
-                        "title": "UNCLASSIFIED"
-                    }
+                    "security_marking": "UNCLASSIFIED"
                 },
                 "large_image": {
                     "url": "http://localhost:8000/api/image/2/",
                     "id": 2,
-                    "access_control": {
-                        "title": "UNCLASSIFIED"
-                    }
+                    "security_marking": "UNCLASSIFIED"
                 }
             }
         ]

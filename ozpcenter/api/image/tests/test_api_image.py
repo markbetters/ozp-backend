@@ -11,8 +11,6 @@ from rest_framework.test import APITestCase
 from rest_framework.test import APIRequestFactory
 from rest_framework.test import force_authenticate
 
-import ozpcenter.access_control as access_control
-
 from ozpcenter.scripts import sample_data_generator as data_gen
 import ozpcenter.api.agency.views as views
 from ozpcenter import models as models
@@ -39,7 +37,7 @@ class ImageApiTest(APITestCase):
         self.client.force_authenticate(user=user)
         url = '/api/image/'
         data = {
-            'access_control': 'UNCLASSIFIED',
+            'security_marking': 'UNCLASSIFIED',
             'image_type': 'small_screenshot',
             'file_extension': 'png',
             'image': open('ozpcenter/scripts/test_images/android.png', mode='rb')
@@ -47,5 +45,5 @@ class ImageApiTest(APITestCase):
         response = self.client.post(url, data, format='multipart')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertTrue('id' in response.data)
-        self.assertTrue('access_control' in response.data)
+        self.assertTrue('security_marking' in response.data)
 

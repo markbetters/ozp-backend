@@ -13,8 +13,6 @@ from rest_framework.test import APITestCase
 from rest_framework.test import APIRequestFactory
 from rest_framework.test import force_authenticate
 
-import ozpcenter.access_control as access_control
-
 from ozpcenter.scripts import sample_data_generator as data_gen
 import ozpcenter.api.listing.views as views
 import ozpcenter.api.listing.model_access as model_access
@@ -448,7 +446,7 @@ class ListingApiTest(APITestCase):
                     "contact_type": {"name": "Military"}
                 }
             ],
-            "access_control": {"title": "UNCLASSIFIED"},
+            "security_marking": "UNCLASSIFIED",
             "listing_type": {"title": "web application"},
             "small_icon": {"id": 1},
             "large_icon": {"id": 2},
@@ -509,8 +507,8 @@ class ListingApiTest(APITestCase):
             names.append(c['name'])
         self.assertTrue('me' in names)
         self.assertTrue('you' in names)
-        # access_control
-        self.assertEqual(response.data['access_control']['title'],
+        # security_marking
+        self.assertEqual(response.data['security_marking'],
             'UNCLASSIFIED')
         # listing_type
         self.assertEqual(response.data['listing_type']['title'],
@@ -655,7 +653,7 @@ class ListingApiTest(APITestCase):
                     "contact_type": {"name": "Military"}
                 }
             ],
-            "access_control": {"title": "SECRET"},
+            "security_marking": "SECRET",
             "listing_type": {"title": "widget"},
             "small_icon": {"id": 1},
             "large_icon": {"id": 2},
@@ -717,8 +715,8 @@ class ListingApiTest(APITestCase):
             names.append(c['name'])
         self.assertTrue('me' in names)
         self.assertTrue('you' in names)
-        # access_control
-        self.assertEqual(response.data['access_control']['title'],
+        # security_marking
+        self.assertEqual(response.data['security_marking'],
             'SECRET')
         # listing_type
         self.assertEqual(response.data['listing_type']['title'],
@@ -807,7 +805,7 @@ class ListingApiTest(APITestCase):
             'requirements', 'unique_name', 'what_is_new', 'launch_url',
             'is_enabled', 'is_featured', 'is_private', 'doc_urls', 'contacts',
             'screenshots', 'categories', 'owners', 'tags', 'small_icon',
-            'large_icon', 'banner_icon', 'large_banner_icon', 'access_control',
+            'large_icon', 'banner_icon', 'large_banner_icon', 'security_marking',
             'listing_type', 'approval_status', 'intents']
 
         total_found = 0
@@ -862,9 +860,9 @@ class ListingApiTest(APITestCase):
                         self.assertEqual(change['new_value'], data['listing_type']['title'])
                         self.assertEqual(change['old_value'], old_listing_data['listing_type']['title'])
                         total_found += 1
-                    if change['field_name'] == 'access_control':
-                        self.assertEqual(change['new_value'], data['access_control']['title'])
-                        self.assertEqual(change['old_value'], old_listing_data['access_control']['title'])
+                    if change['field_name'] == 'security_marking':
+                        self.assertEqual(change['new_value'], data['security_marking'])
+                        self.assertEqual(change['old_value'], old_listing_data['security_marking'])
                         total_found += 1
                     if change['field_name'] == 'small_icon':
                         self.assertEqual(change['new_value'], str(data['small_icon']['id']))

@@ -45,7 +45,7 @@ class ImageViewSet(viewsets.ModelViewSet):
         Use content_type = `application/form-data`
         Data (key = value) example:
         ```
-        access_control = UNCLASSIFIED
+        security_marking = UNCLASSIFIED
         image_type = listing_small_screenshot
         file_extension = jpg
         image = <file>
@@ -92,8 +92,8 @@ class ImageViewSet(viewsets.ModelViewSet):
         image_path = model_access.get_image_path(pk)
         # enforce access control
         user = generic_model_access.get_profile(self.request.user.username)
-        if not access_control.has_access(user.access_control.title,
-            image.access_control.title):
+        if not access_control.has_access(user.access_control,
+            image.security_marking):
             return Response(status=status.HTTP_403_FORBIDDEN)
         content_type = 'image/' + image.file_extension
         try:

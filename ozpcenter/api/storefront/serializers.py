@@ -7,7 +7,6 @@ import django.contrib.auth
 from rest_framework import serializers
 
 import ozpcenter.models as models
-import ozpcenter.api.access_control.serializers as access_control_serializers
 import ozpcenter.api.category.serializers as category_serializers
 import ozpcenter.api.image.serializers as image_serializers
 

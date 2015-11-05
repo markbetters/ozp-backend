@@ -17,7 +17,6 @@ import ozpcenter.api.listing.model_access as model_access
 import ozpcenter.api.profile.serializers as profile_serializers
 import ozpcenter.model_access as generic_model_access
 import ozpcenter.api.agency.model_access as agency_model_access
-import ozpcenter.api.access_control.model_access as ac_model_access
 import ozpcenter.api.image.model_access as image_model_access
 import ozpcenter.api.category.model_access as category_model_access
 import ozpcenter.api.intent.model_access as intent_model_access
@@ -50,13 +49,12 @@ class AccessControlSerializer(serializers.ModelSerializer):
         }
 
 class ImageSerializer(serializers.HyperlinkedModelSerializer):
-    access_control = AccessControlSerializer(required=False)
     class Meta:
         model = models.Image
-        fields = ('url', 'id', 'access_control')
+        fields = ('url', 'id', 'security_marking')
 
         extra_kwargs = {
-            'access_control': {'validators': []},
+            'security_marking': {'validators': []},
             "id": {
                 "read_only": False,
                 "required": False,
@@ -184,7 +182,6 @@ class ListingSerializer(serializers.ModelSerializer):
     tags = TagSerializer(many=True, required=False)
     contacts = ContactSerializer(many=True, required=False)
     intents = IntentSerializer(many=True, required=False)
-    access_control = AccessControlSerializer(required=False)
     small_icon = ImageSerializer(required=False, allow_null=True)
     large_icon = ImageSerializer(required=False, allow_null=True)
     banner_icon = ImageSerializer(required=False, allow_null=True)
@@ -214,6 +211,7 @@ class ListingSerializer(serializers.ModelSerializer):
         data['description_short'] = data.get('description_short', None)
         data['requirements'] = data.get('requirements', None)
         data['is_private'] = data.get('is_private', False)
+        data['security_marking'] = data.get('security_marking', None)
 
         # only checked on update, not create
         data['is_enabled'] = data.get('is_enabled', False)
@@ -228,14 +226,6 @@ class ListingSerializer(serializers.ModelSerializer):
                 raise errors.PermissionDenied('User is not in this organization')
         else:
             data['agency'] = user.organizations.all()[0]
-
-        # acces_control
-        access_control_title = data.get('access_control', None)
-        if access_control_title:
-            data['access_control'] = ac_model_access.get_access_control_by_title(
-                data['access_control']['title'])
-        else:
-            data['access_control'] = None
 
         # listing_type
         type_title = data.get('listing_type', None)
@@ -333,10 +323,9 @@ class ListingSerializer(serializers.ModelSerializer):
         logger.info('creating listing %s for user %s' % (title,
             user.user.username))
 
-        # assign a default access_control level if none is provided
-        if not validated_data['access_control']:
-            validated_data['access_control'] = ac_model_access.get_access_control_by_title(
-                constants.DEFAULT_ACCESS_CONTROL)
+        # assign a default security_marking level if none is provided
+        if not validated_data['security_marking']:
+            validated_data['security_marking'] = constants.DEFAULT_SECURITY_MARKING
 
         # TODO required_listings
         listing = models.Listing(title=title,
@@ -348,7 +337,7 @@ class ListingSerializer(serializers.ModelSerializer):
             what_is_new=validated_data['what_is_new'],
             description_short=validated_data['description_short'],
             requirements=validated_data['requirements'],
-            access_control=validated_data['access_control'],
+            security_marking=validated_data['security_marking'],
             listing_type=validated_data['listing_type'],
             small_icon=validated_data['small_icon'],
             large_icon=validated_data['large_icon'],
@@ -425,7 +414,7 @@ class ListingSerializer(serializers.ModelSerializer):
 
         simple_fields = ['title', 'description', 'description_short',
             'launch_url', 'version_name', 'requirements', 'unique_name',
-            'what_is_new']
+            'what_is_new', 'security_marking']
 
         for i in simple_fields:
             if getattr(instance, i) != validated_data[i]:
@@ -473,11 +462,6 @@ class ListingSerializer(serializers.ModelSerializer):
             if s == models.Listing.REJECTED:
                 # TODO: need to get the rejection text from somewhere
                 model_access.reject_listing(user, instance, 'TODO: rejection reason')
-
-        if instance.access_control != validated_data['access_control']:
-            change_details.append({'old_value': instance.access_control.title,
-                    'new_value': validated_data['access_control'].title, 'field_name': 'access_control'})
-            instance.access_control = validated_data['access_control']
 
         if instance.listing_type != validated_data['listing_type']:
             if instance.listing_type:

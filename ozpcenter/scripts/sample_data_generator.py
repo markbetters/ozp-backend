@@ -8,6 +8,7 @@ data!!
 ************************************WARNING************************************
 """
 import datetime
+import json
 import os
 import sys
 
@@ -33,31 +34,20 @@ def run():
     models.Profile.create_groups()
 
     ############################################################################
-    #                           Access Controls
+    #                           Security Markings
     ############################################################################
-    unclass = models.AccessControl(title='UNCLASSIFIED')
-    unclass.save()
-    secret = models.AccessControl(title='SECRET')
-    secret.save()
-    secret_n = models.AccessControl(title='SECRET//NOVEMBER')
-    secret_n.save()
-    ts = models.AccessControl(title='TOP SECRET')
-    ts.save()
-    ts_s = models.AccessControl(title='TOP SECRET//SIERRA')
-    ts_s.save()
-    ts_st = models.AccessControl(title='TOP SECRET//SIERRA//TANGO')
-    ts_st.save()
-    ts_stgh = models.AccessControl(title='TOP SECRET//SIERRA//TANGO//GOLF//HOTEL')
-    ts_stgh.save()
+    unclass = 'UNCLASSIFIED'
+    secret = 'SECRET'
+    secret_n = 'SECRET//NOVEMBER'
+    ts = 'TOP SECRET'
+    ts_s = 'TOP SECRET//SIERRA'
+    ts_st = 'TOP SECRET//SIERRA//TANGO'
+    ts_stgh = 'TOP SECRET//SIERRA//TANGO//GOLF//HOTEL'
 
-    ts_n = models.AccessControl(title='TOP SECRET//NOVEMBER')
-    ts_n.save()
-    ts_sn = models.AccessControl(title='TOP SECRET//SIERRA//NOVEMBER')
-    ts_sn.save()
-    ts_stn = models.AccessControl(title='TOP SECRET//SIERRA//TANGO//NOVEMBER')
-    ts_stn.save()
-    ts_stghn = models.AccessControl(title='TOP SECRET//SIERRA//TANGO//GOLF//HOTEL//NOVEMBER')
-    ts_stghn.save()
+    ts_n = 'TOP SECRET//NOVEMBER'
+    ts_sn = 'TOP SECRET//SIERRA//NOVEMBER'
+    ts_stn = 'TOP SECRET//SIERRA//TANGO//NOVEMBER'
+    ts_stghn = 'TOP SECRET//SIERRA//TANGO//GOLF//HOTEL//NOVEMBER'
 
     ############################################################################
     #                           Categories
@@ -168,7 +158,7 @@ def run():
     # TODO: more realistic data
     img = Image.open(TEST_IMG_PATH + 'android.png')
     icon = models.Image.create_image(img, file_extension='png',
-        access_control='UNCLASSIFIED', image_type=intent_icon_type.name)
+        security_marking='UNCLASSIFIED', image_type=intent_icon_type.name)
     i = models.Intent(action='/application/json/view',
         media_type='vnd.ozp-intent-v1+json.json',
         label='view',
@@ -186,28 +176,28 @@ def run():
     ############################################################################
     img = Image.open(TEST_IMG_PATH + 'ministry_of_truth.jpg')
     icon = models.Image.create_image(img, file_extension='jpg',
-        access_control='UNCLASSIFIED', image_type='agency_icon')
+        security_marking='UNCLASSIFIED', image_type='agency_icon')
     minitrue = models.Agency(title='Ministry of Truth', short_name='Minitrue',
         icon=icon)
     minitrue.save()
 
     img = Image.open(TEST_IMG_PATH + 'ministry_of_peace.png')
     icon = models.Image.create_image(img, file_extension='png',
-        access_control='UNCLASSIFIED', image_type='agency_icon')
+        security_marking='UNCLASSIFIED', image_type='agency_icon')
     minipax = models.Agency(title='Ministry of Peace', short_name='Minipax',
         icon=icon)
     minipax.save()
 
     img = Image.open(TEST_IMG_PATH + 'ministry_of_love.jpeg')
     icon = models.Image.create_image(img, file_extension='jpeg',
-        access_control='UNCLASSIFIED', image_type='agency_icon')
+        security_marking='UNCLASSIFIED', image_type='agency_icon')
     miniluv = models.Agency(title='Ministry of Love', short_name='Miniluv',
         icon=icon)
     miniluv.save()
 
     img = Image.open(TEST_IMG_PATH + 'ministry_of_plenty.png')
     icon = models.Image.create_image(img, file_extension='png',
-        access_control='UNCLASSIFIED', image_type='agency_icon')
+        security_marking='UNCLASSIFIED', image_type='agency_icon')
     miniplenty = models.Agency(title='Ministry of Plenty',
         short_name='Miniplen', icon=icon)
     miniplenty.save()
@@ -223,32 +213,48 @@ def run():
     ############################################################################
     #                               Org Stewards
     ############################################################################
+    access_control = json.dumps({
+        'clearances': ['U', 'C', 'S', 'TS'],
+        'formal_accesses': ['SIERRA', 'TANGO'],
+        'visas': ['NOVEMBER']
+    })
     winston = models.Profile.create_user('wsmith',
         email='wsmith@oceania.gov',
         display_name='Winston Smith',
         bio='I work at the Ministry of Truth',
-        access_control=ts_stn.title,
+        access_control=access_control,
         organizations=['Ministry of Truth'],
         stewarded_organizations=['Ministry of Truth'],
         groups=['ORG_STEWARD'],
         dn='Winston Smith wsmith'
     )
 
+    access_control = json.dumps({
+        'clearances': ['U', 'C', 'S', 'TS'],
+        'formal_accesses': ['SIERRA'],
+        'visas': []
+    })
     julia = models.Profile.create_user('julia',
         email='julia@oceania.gov',
         display_name='Julia Dixon',
         bio='An especially zealous propagandist',
-        access_control=ts_s.title,
+        access_control=access_control,
         organizations=['Ministry of Truth'],
         stewarded_organizations=['Ministry of Truth', 'Ministry of Love'],
         groups=['ORG_STEWARD'],
         dn='Julia Dixon jdixon'
     )
+
+    access_control = json.dumps({
+        'clearances': ['U', 'C', 'S', 'TS'],
+        'formal_accesses': ['SIERRA', 'TANGO', 'GOLF', 'HOTEL'],
+        'visas': ['NOVEMBER']
+    })
     obrien = models.Profile.create_user('obrien',
         email='obrien@oceania.gov',
         display_name='O\'brien',
         bio='I will find you, winston and julia',
-        access_control=ts_stghn.title,
+        access_control=access_control,
         organizations=['Ministry of Peace'],
         stewarded_organizations=['Ministry of Peace', 'Ministry of Plenty'],
         groups=['ORG_STEWARD'],
@@ -258,21 +264,32 @@ def run():
     ############################################################################
     #                               Apps Mall Stewards
     ############################################################################
+
+    access_control = json.dumps({
+        'clearances': ['U', 'C', 'S', 'TS'],
+        'formal_accesses': ['SIERRA', 'TANGO', 'GOLF', 'HOTEL'],
+        'visas': ['NOVEMBER']
+    })
     big_brother = models.Profile.create_user('bigbrother',
         email='bigbrother@oceania.gov',
         display_name='Big Brother',
         bio='I make everyones life better',
-        access_control=ts_stghn.title,
+        access_control=access_control,
         organizations=['Ministry of Peace'],
         groups=['APPS_MALL_STEWARD'],
         dn='Big Brother bigbrother'
     )
 
+    access_control = json.dumps({
+        'clearances': ['U', 'C', 'S', 'TS'],
+        'formal_accesses': ['SIERRA', 'TANGO', 'GOLF', 'HOTEL'],
+        'visas': ['NOVEMBER']
+    })
     big_brother2 = models.Profile.create_user('bigbrother2',
         email='bigbrother2@oceania.gov',
         display_name='Big Brother2',
         bio='I also make everyones life better',
-        access_control=ts_stghn.title,
+        access_control=access_control,
         organizations=['Ministry of Truth'],
         groups=['APPS_MALL_STEWARD'],
         dn='Big Brother2 bigbrother2'
@@ -281,61 +298,92 @@ def run():
     ############################################################################
     #                               Regular user
     ############################################################################
+
+    access_control = json.dumps({
+        'clearances': ['U', 'C', 'S'],
+        'formal_accesses': [],
+        'visas': ['NOVEMBER']
+    })
     aaronson = models.Profile.create_user('aaronson',
         email='aaronson@airstripone.com',
         display_name='Aaronson',
         bio='Nothing special',
-        access_control=secret_n.title,
+        access_control=access_control,
         organizations=['Ministry of Love'],
         groups=['USER'],
         dn='Aaronson aaronson'
     )
 
+    access_control = json.dumps({
+        'clearances': ['U', 'C', 'S'],
+        'formal_accesses': [],
+        'visas': ['NOVEMBER']
+    })
     jones = models.Profile.create_user('jones',
         email='jones@airstripone.com',
         display_name='Jones',
         bio='I am a normal person',
-        access_control=secret_n.title,
+        access_control=access_control,
         organizations=['Ministry of Truth'],
         groups=['USER'],
         dn='Jones jones'
     )
 
+    access_control = json.dumps({
+        'clearances': ['U', 'C', 'S'],
+        'formal_accesses': [],
+        'visas': []
+    })
     rutherford = models.Profile.create_user('rutherford',
         email='rutherford@airstripone.com',
         display_name='Rutherford',
         bio='I am a normal person',
-        access_control=secret.title,
+        access_control=access_control,
         organizations=['Ministry of Plenty'],
         groups=['USER'],
         dn='Rutherford rutherford'
     )
 
+    access_control = json.dumps({
+        'clearances': ['U', 'C', 'S', 'TS'],
+        'formal_accesses': ['SIERRA'],
+        'visas': []
+    })
     syme = models.Profile.create_user('syme',
         email='syme@airstripone.com',
         display_name='Syme',
         bio='I am too smart for my own good',
-        access_control=ts_s.title,
+        access_control=access_control,
         organizations=['Ministry of Peace'],
         groups=['USER'],
         dn='Syme syme'
     )
 
+    access_control = json.dumps({
+        'clearances': ['U'],
+        'formal_accesses': [],
+        'visas': []
+    })
     tparsons = models.Profile.create_user('tparsons',
         email='tparsons@airstripone.com',
         display_name='Tom Parsons',
         bio='I am uneducated and loyal',
-        access_control=unclass.title,
+        access_control=access_control,
         organizations=['Ministry of Peace', 'Ministry of Love'],
         groups=['USER'],
         dn='Tparsons tparsons'
     )
 
+    access_control = json.dumps({
+        'clearances': ['U', 'C', 'S', 'TS'],
+        'formal_accesses': ['SIERRA', 'TANGO', 'GOLF', 'HOTEL'],
+        'visas': ['NOVEMBER']
+    })
     charrington = models.Profile.create_user('charrington',
         email='charrington@airstripone.com',
         display_name='Charrington',
         bio='A member of the Thought Police',
-        access_control=ts_stghn.title,
+        access_control=access_control,
         organizations=['Ministry of Peace', 'Ministry of Love',
         'Ministry of Truth'],
         groups=['USER'],
@@ -403,16 +451,16 @@ def run():
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     img = Image.open(TEST_IMG_PATH + 'AirMail16.png')
     small_icon = models.Image.create_image(img, file_extension='png',
-        access_control=unclass.title, image_type=small_icon_type.name)
+        security_marking=unclass, image_type=small_icon_type.name)
     img = Image.open(TEST_IMG_PATH + 'AirMail32.png')
     large_icon = models.Image.create_image(img, file_extension='png',
-        access_control=unclass.title, image_type=large_icon_type.name)
+        security_marking=unclass, image_type=large_icon_type.name)
     img = Image.open(TEST_IMG_PATH + 'AirMail.png')
     banner_icon = models.Image.create_image(img, file_extension='png',
-        access_control=unclass.title, image_type=banner_icon_type.name)
+        security_marking=unclass, image_type=banner_icon_type.name)
     img = Image.open(TEST_IMG_PATH + 'AirMailFeatured.png')
     large_banner_icon = models.Image.create_image(img, file_extension='png',
-        access_control=unclass.title, image_type=large_banner_icon_type.name)
+        security_marking=unclass, image_type=large_banner_icon_type.name)
 
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     #                           Listing
@@ -435,7 +483,7 @@ def run():
         is_enabled=True,
         is_featured=True,
         singleton=False,
-        access_control=unclass
+        security_marking=unclass
     )
     listing.save()
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -463,10 +511,10 @@ def run():
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     img = Image.open(TEST_IMG_PATH + 'screenshot_small.png')
     small_img = models.Image.create_image(img, file_extension='png',
-        access_control=unclass.title, image_type=small_screenshot_type.name)
+        security_marking=unclass, image_type=small_screenshot_type.name)
     img = Image.open(TEST_IMG_PATH + 'screenshot_large.png')
     large_img = models.Image.create_image(img, file_extension='png',
-        access_control=unclass.title, image_type=large_screenshot_type.name)
+        security_marking=unclass, image_type=large_screenshot_type.name)
     screenshot = models.Screenshot(small_image=small_img,
         large_image=large_img,
         listing=listing)
@@ -516,16 +564,16 @@ def run():
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     img = Image.open(TEST_IMG_PATH + 'BreadBasket16.png')
     small_icon = models.Image.create_image(img, file_extension='png',
-        access_control=unclass.title, image_type=small_icon_type.name)
+        security_marking=unclass, image_type=small_icon_type.name)
     img = Image.open(TEST_IMG_PATH + 'BreadBasket32.png')
     large_icon = models.Image.create_image(img, file_extension='png',
-        access_control=unclass.title, image_type=large_icon_type.name)
+        security_marking=unclass, image_type=large_icon_type.name)
     img = Image.open(TEST_IMG_PATH + 'BreadBasket.png')
     banner_icon = models.Image.create_image(img, file_extension='png',
-        access_control=unclass.title, image_type=banner_icon_type.name)
+        security_marking=unclass, image_type=banner_icon_type.name)
     img = Image.open(TEST_IMG_PATH + 'BreadBasketFeatured.png')
     large_banner_icon = models.Image.create_image(img, file_extension='png',
-        access_control=unclass.title, image_type=large_banner_icon_type.name)
+        security_marking=unclass, image_type=large_banner_icon_type.name)
 
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     #                           Listing
@@ -549,7 +597,7 @@ def run():
         is_featured=True,
         singleton=False,
         is_private=True,
-        access_control=unclass
+        security_marking=unclass
     )
     listing.save()
 
@@ -582,16 +630,16 @@ def run():
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     img = Image.open(TEST_IMG_PATH + 'ChartCourse16.png')
     small_icon = models.Image.create_image(img, file_extension='png',
-        access_control=unclass.title, image_type=small_icon_type.name)
+        security_marking=unclass, image_type=small_icon_type.name)
     img = Image.open(TEST_IMG_PATH + 'ChartCourse32.png')
     large_icon = models.Image.create_image(img, file_extension='png',
-        access_control=unclass.title, image_type=large_icon_type.name)
+        security_marking=unclass, image_type=large_icon_type.name)
     img = Image.open(TEST_IMG_PATH + 'ChartCourse.png')
     banner_icon = models.Image.create_image(img, file_extension='png',
-        access_control=unclass.title, image_type=banner_icon_type.name)
+        security_marking=unclass, image_type=banner_icon_type.name)
     img = Image.open(TEST_IMG_PATH + 'ChartCourseFeatured.png')
     large_banner_icon = models.Image.create_image(img, file_extension='png',
-        access_control=unclass.title, image_type=large_banner_icon_type.name)
+        security_marking=unclass, image_type=large_banner_icon_type.name)
 
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     #                           Listing
@@ -616,7 +664,7 @@ def run():
         is_featured=True,
         singleton=False,
         is_private=False,
-        access_control=unclass
+        security_marking=unclass
     )
     listing.save()
     listing.contacts.add(rob_baratheon)
@@ -639,16 +687,16 @@ def run():
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     img = Image.open(TEST_IMG_PATH + 'ChatterBox16.png')
     small_icon = models.Image.create_image(img, file_extension='png',
-        access_control=unclass.title, image_type=small_icon_type.name)
+        security_marking=unclass, image_type=small_icon_type.name)
     img = Image.open(TEST_IMG_PATH + 'ChatterBox32.png')
     large_icon = models.Image.create_image(img, file_extension='png',
-        access_control=unclass.title, image_type=large_icon_type.name)
+        security_marking=unclass, image_type=large_icon_type.name)
     img = Image.open(TEST_IMG_PATH + 'ChatterBox.png')
     banner_icon = models.Image.create_image(img, file_extension='png',
-        access_control=unclass.title, image_type=banner_icon_type.name)
+        security_marking=unclass, image_type=banner_icon_type.name)
     img = Image.open(TEST_IMG_PATH + 'ChatterBoxFeatured.png')
     large_banner_icon = models.Image.create_image(img, file_extension='png',
-        access_control=unclass.title, image_type=large_banner_icon_type.name)
+        security_marking=unclass, image_type=large_banner_icon_type.name)
 
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     #                           Listing
@@ -673,7 +721,7 @@ def run():
         is_featured=True,
         singleton=False,
         is_private=False,
-        access_control=unclass
+        security_marking=unclass
     )
     listing.save()
     listing.contacts.add(rob_baratheon)
@@ -694,16 +742,16 @@ def run():
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     img = Image.open(TEST_IMG_PATH + 'Clipboard16.png')
     small_icon = models.Image.create_image(img, file_extension='png',
-        access_control=unclass.title, image_type=small_icon_type.name)
+        security_marking=unclass, image_type=small_icon_type.name)
     img = Image.open(TEST_IMG_PATH + 'Clipboard32.png')
     large_icon = models.Image.create_image(img, file_extension='png',
-        access_control=unclass.title, image_type=large_icon_type.name)
+        security_marking=unclass, image_type=large_icon_type.name)
     img = Image.open(TEST_IMG_PATH + 'Clipboard.png')
     banner_icon = models.Image.create_image(img, file_extension='png',
-        access_control=unclass.title, image_type=banner_icon_type.name)
+        security_marking=unclass, image_type=banner_icon_type.name)
     img = Image.open(TEST_IMG_PATH + 'ClipboardFeatured.png')
     large_banner_icon = models.Image.create_image(img, file_extension='png',
-        access_control=unclass.title, image_type=large_banner_icon_type.name)
+        security_marking=unclass, image_type=large_banner_icon_type.name)
 
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     #                           Listing
@@ -728,7 +776,7 @@ def run():
         is_featured=True,
         singleton=False,
         is_private=False,
-        access_control=unclass
+        security_marking=unclass
     )
     listing.save()
     listing.contacts.add(rob_baratheon)
@@ -750,16 +798,16 @@ def run():
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     img = Image.open(TEST_IMG_PATH + 'FrameIt16.png')
     small_icon = models.Image.create_image(img, file_extension='png',
-        access_control=unclass.title, image_type=small_icon_type.name)
+        security_marking=unclass, image_type=small_icon_type.name)
     img = Image.open(TEST_IMG_PATH + 'FrameIt32.png')
     large_icon = models.Image.create_image(img, file_extension='png',
-        access_control=unclass.title, image_type=large_icon_type.name)
+        security_marking=unclass, image_type=large_icon_type.name)
     img = Image.open(TEST_IMG_PATH + 'FrameIt.png')
     banner_icon = models.Image.create_image(img, file_extension='png',
-        access_control=unclass.title, image_type=banner_icon_type.name)
+        security_marking=unclass, image_type=banner_icon_type.name)
     img = Image.open(TEST_IMG_PATH + 'FrameItFeatured.png')
     large_banner_icon = models.Image.create_image(img, file_extension='png',
-        access_control=unclass.title, image_type=large_banner_icon_type.name)
+        security_marking=unclass, image_type=large_banner_icon_type.name)
 
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     #                           Listing
@@ -784,7 +832,7 @@ def run():
         is_featured=True,
         singleton=False,
         is_private=False,
-        access_control=unclass
+        security_marking=unclass
     )
     listing.save()
     listing.contacts.add(rob_baratheon)
@@ -806,16 +854,16 @@ def run():
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     img = Image.open(TEST_IMG_PATH + 'HatchLatch16.png')
     small_icon = models.Image.create_image(img, file_extension='png',
-        access_control=unclass.title, image_type=small_icon_type.name)
+        security_marking=unclass, image_type=small_icon_type.name)
     img = Image.open(TEST_IMG_PATH + 'HatchLatch32.png')
     large_icon = models.Image.create_image(img, file_extension='png',
-        access_control=unclass.title, image_type=large_icon_type.name)
+        security_marking=unclass, image_type=large_icon_type.name)
     img = Image.open(TEST_IMG_PATH + 'HatchLatch.png')
     banner_icon = models.Image.create_image(img, file_extension='png',
-        access_control=unclass.title, image_type=banner_icon_type.name)
+        security_marking=unclass, image_type=banner_icon_type.name)
     img = Image.open(TEST_IMG_PATH + 'HatchLatchFeatured.png')
     large_banner_icon = models.Image.create_image(img, file_extension='png',
-        access_control=unclass.title, image_type=large_banner_icon_type.name)
+        security_marking=unclass, image_type=large_banner_icon_type.name)
 
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     #                           Listing
@@ -840,7 +888,7 @@ def run():
         is_featured=True,
         singleton=False,
         is_private=False,
-        access_control=unclass
+        security_marking=unclass
     )
     listing.save()
     listing.contacts.add(rob_baratheon)
@@ -863,16 +911,16 @@ def run():
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     img = Image.open(TEST_IMG_PATH + 'JotSpot16.png')
     small_icon = models.Image.create_image(img, file_extension='png',
-        access_control=unclass.title, image_type=small_icon_type.name)
+        security_marking=unclass, image_type=small_icon_type.name)
     img = Image.open(TEST_IMG_PATH + 'JotSpot32.png')
     large_icon = models.Image.create_image(img, file_extension='png',
-        access_control=unclass.title, image_type=large_icon_type.name)
+        security_marking=unclass, image_type=large_icon_type.name)
     img = Image.open(TEST_IMG_PATH + 'JotSpot.png')
     banner_icon = models.Image.create_image(img, file_extension='png',
-        access_control=unclass.title, image_type=banner_icon_type.name)
+        security_marking=unclass, image_type=banner_icon_type.name)
     img = Image.open(TEST_IMG_PATH + 'JotSpotFeatured.png')
     large_banner_icon = models.Image.create_image(img, file_extension='png',
-        access_control=unclass.title, image_type=large_banner_icon_type.name)
+        security_marking=unclass, image_type=large_banner_icon_type.name)
 
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     #                           Listing
@@ -897,7 +945,7 @@ def run():
         is_featured=True,
         singleton=False,
         is_private=False,
-        access_control=unclass
+        security_marking=unclass
     )
     listing.save()
     listing.contacts.add(rob_baratheon)

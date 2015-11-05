@@ -4,6 +4,7 @@ Profile model tests
 Note: This is more verbose than most model tests, as it also serves as
 examples for how to test various things
 """
+import json
 import unittest
 
 from django.test import TestCase
@@ -42,7 +43,7 @@ class ProfileTest(TestCase):
         img_type.save()
 
         icon = models.Image(file_extension='png',
-            access_control=unclass,
+            security_marking=unclass,
             image_type=models.ImageType.objects.get(name='listing_small_icon'))
         icon.save()
 
@@ -80,7 +81,7 @@ class ProfileTest(TestCase):
         testUser = models.Profile.create_user(username='myname',
             display_name='My Name',
             email='myname@me.com',
-            access_control='SOMETHING//ABC')
+            access_control=json.dumps({'clearances': ['SOMETHING'], 'formal_accesses': ['ABC']}))
         testUser.save()
         # check that it was saved
         user_found = models.Profile.objects.filter(user__username='myname').count()
@@ -100,7 +101,7 @@ class ProfileTest(TestCase):
             with transaction.atomic():
                 uname_long = 'x' * 256
                 testUser = models.Profile.create_user(username=uname_long,
-                    access_control='UNCLASSIFIED//ABC')
+                    access_control=json.dumps({'clearances': ['U'], 'formal_accesses': ['ABC']}))
                 # this passes if we're using SQLite
                 testUser.save()
             # self.assertTrue(0, 'username of excess length allowed')
@@ -113,9 +114,9 @@ class ProfileTest(TestCase):
 
     def test_highest_role(self):
         testUser = models.Profile.create_user(username='newguy',
-            access_control='UNCLASSIFIED//ABC')
+            access_control=json.dumps({'clearances': ['U'], 'formal_accesses': ['ABC']}))
         testUser.save()
         testUser = models.Profile.objects.get(user__username='newguy',
-            access_control=models.AccessControl.objects.get(title='UNCLASSIFIED//ABC'))
+            access_control=json.dumps({'clearances': ['U'], 'formal_accesses': ['ABC']}))
         self.assertEqual(testUser.highest_role(), 'USER')
 

@@ -3,6 +3,7 @@
 model definitions for ozpcenter
 
 """
+import json
 import logging
 import os
 import uuid
@@ -97,7 +98,7 @@ class AccessControlImageManager(models.Manager):
         # filter out listings by user's access level
         images_to_exclude=[]
         for i in objects:
-            if not access_control.has_access(user.access_control.title, i.access_control.title):
+            if not access_control.has_access(user.access_control, i.security_marking):
                 images_to_exclude.append(i.id)
         objects = objects.exclude(id__in=images_to_exclude)
         return objects
@@ -121,7 +122,7 @@ class Image(models.Model):
     # segfault. keeping it around doesn't hurt anything, and it could be
     # useful later)
     uuid = models.CharField(max_length=36, unique=True)
-    access_control = models.ForeignKey(AccessControl, related_name='images')
+    security_marking = models.CharField(max_length=1024)
     file_extension = models.CharField(max_length=16, default='png')
     image_type = models.ForeignKey(ImageType, related_name='images')
 
@@ -144,8 +145,7 @@ class Image(models.Model):
         """
         # get DB info for image
         random_uuid = str(uuid.uuid4())
-        ac = kwargs.get('access_control', 'UNCLASSIFIED')
-        access_control = AccessControl.objects.get(title=ac)
+        security_marking = kwargs.get('security_marking', 'UNCLASSIFIED')
         file_extension = kwargs.get('file_extension', 'png')
         valid_extensions = constants.VALID_IMAGE_TYPES
         if file_extension not in valid_extensions:
@@ -161,7 +161,7 @@ class Image(models.Model):
         image_type = ImageType.objects.get(name=image_type)
 
         # create database entry
-        img = Image(uuid=random_uuid, access_control=access_control,
+        img = Image(uuid=random_uuid, security_marking=security_marking,
             file_extension=file_extension, image_type=image_type)
         img.save()
 
@@ -520,7 +520,7 @@ class Profile(models.Model):
         db_table='stewarded_agency_profile',
         blank=True)
 
-    access_control = models.ForeignKey(AccessControl, related_name='profiles')
+    access_control = models.CharField(max_length=1024)
 
     # instead of overriding the builtin Django User model used
     # for authentication, we extend it
@@ -582,7 +582,7 @@ class Profile(models.Model):
             password
             display_name
             bio
-            access_control (models.access_control.title)
+            access_control
             organizations (['org1_title', 'org2_title'])
             stewarded_organizations (['org1_title', 'org2_title'])
             groups (['group1_name', 'group2_name'])
@@ -619,8 +619,8 @@ class Profile(models.Model):
         # get additional profile information
         display_name = kwargs.get('display_name', username)
         bio = kwargs.get('password', '')
-        ac = kwargs.get('access_control', 'UNCLASSIFIED')
-        access_control = AccessControl.objects.get(title=ac)
+        ac = kwargs.get('access_control', json.dumps({'clearances': ['U']}))
+        access_control = ac
         dn = kwargs.get('dn', username)
 
         # create the profile object and associate it with the User
@@ -671,9 +671,9 @@ class AccessControlListingManager(models.Manager):
         # filter out listings by user's access level
         titles_to_exclude=[]
         for i in objects:
-            if not i.access_control:
-                logger.error('Listing %s has no access_control' % i.title)
-            if not access_control.has_access(user.access_control.title, i.access_control.title):
+            if not i.security_marking:
+                logger.error('Listing %s has no security_marking' % i.title)
+            if not access_control.has_access(user.access_control, i.security_marking):
                 titles_to_exclude.append(i.title)
         objects = objects.exclude(title__in=titles_to_exclude)
         return objects
@@ -789,7 +789,7 @@ class Listing(models.Model):
         db_table='intent_listing'
     )
 
-    access_control = models.ForeignKey(AccessControl, related_name='listings',
+    security_marking = models.CharField(max_length=1024,
         null=True, blank=True)
 
     # private listings can only be viewed by members of the same agency
