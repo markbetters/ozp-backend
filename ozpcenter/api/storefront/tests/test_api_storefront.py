@@ -7,8 +7,6 @@ from rest_framework.test import APITestCase
 from rest_framework.test import APIRequestFactory
 from rest_framework.test import force_authenticate
 
-import ozpcenter.access_control as access_control
-
 from ozpcenter.scripts import sample_data_generator as data_gen
 import ozpcenter.api.storefront.views as views
 from ozpcenter import models as models
