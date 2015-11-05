@@ -201,12 +201,15 @@ CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
 
 OZP = {
-    'USE_AUTH_SERVER': True,
+    # if set to False, never try and update authorization-related info from
+    # an external source
+    'USE_AUTH_SERVER': False,
     'DEMO_AUTH_SERVICE': {
         'JSON_FILE': os.path.join(BASE_DIR, 'demoauth/auth_data.json')
     },
     'OZP_AUTHORIZATION': {
         'ROOT_URL': 'http://localhost:8000/demo-auth',
-        'SECONDS_TO_CACHE_DATA': 60
+        # max value: 60*60*24 (1 day)
+        'SECONDS_TO_CACHE_DATA': 60*60*24
     }
 }

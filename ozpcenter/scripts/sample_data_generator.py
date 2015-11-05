@@ -263,8 +263,7 @@ def run():
         display_name='Big Brother',
         bio='I make everyones life better',
         access_control=ts_stghn.title,
-        organizations=['Ministry of Truth', 'Ministry of Love',
-        'Ministry of Peace', 'Ministry of Plenty'],
+        organizations=['Ministry of Peace'],
         groups=['APPS_MALL_STEWARD'],
         dn='Big Brother bigbrother'
     )
@@ -274,8 +273,7 @@ def run():
         display_name='Big Brother2',
         bio='I also make everyones life better',
         access_control=ts_stghn.title,
-        organizations=['Ministry of Truth', 'Ministry of Love',
-        'Ministry of Peace', 'Ministry of Plenty'],
+        organizations=['Ministry of Truth'],
         groups=['APPS_MALL_STEWARD'],
         dn='Big Brother2 bigbrother2'
     )

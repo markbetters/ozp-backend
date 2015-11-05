@@ -18,14 +18,14 @@
         },
         {
             "dn": "O'brien obrien",
-            "duty_org": "Minipeac",
+            "duty_org": "Minipax",
             "clearances": ["U", "C", "S", "TS"],
             "formal_accesses": ["SIERRA", "TANGO", "GOLF", "HOTEL"],
             "visas": ["NOVEMBER"]
         },
         {
             "dn": "Big Brother bigbrother",
-            "duty_org": "Minipeac",
+            "duty_org": "Minipax",
             "clearances": ["U", "C", "S", "TS"],
             "formal_accesses": ["SIERRA", "TANGO", "GOLF", "HOTEL"],
             "visas": ["NOVEMBER"]
@@ -60,21 +60,21 @@
         },
         {
             "dn": "Syme syme",
-            "duty_org": "Minipeac",
+            "duty_org": "Minipax",
             "clearances": ["U", "C", "S", "TS"],
             "formal_accesses": [],
             "visas": ["NOVEMBER"]
         },
         {
             "dn": "Tparsons tparsons",
-            "duty_org": "Minipeac",
+            "duty_org": "Minipax",
             "clearances": ["U"],
             "formal_accesses": [],
             "visas": []
         },
         {
             "dn": "Charrington charrington",
-            "duty_org": "Minipeac",
+            "duty_org": "Minipax",
             "clearances": ["U", "C", "S", "TS"],
             "formal_accesses": ["SIERRA", "TANGO", "GOLF", "HOTEL"],
             "visas": ["NOVEMBER"]

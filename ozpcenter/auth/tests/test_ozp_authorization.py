@@ -10,7 +10,7 @@ from django.conf import settings
 from django.test import TestCase
 
 from ozpcenter.scripts import sample_data_generator as data_gen
-import ozpcenter.auth.ozp_authorization as ozp_authorization
+import ozpcenter.auth.ozp_authorization as auth
 import ozpcenter.models as models
 import ozpcenter.model_access as model_access
 import ozpcenter.errors as errors
@@ -34,7 +34,8 @@ class OzpAuthorizationTest(TestCase):
         """
         If user's auth_expires is set too far ahead, authorization should fail
         """
-        auth = ozp_authorization.OzpAuthorization()
+        if not settings.OZP['USE_AUTH_SERVER']:
+            return
         profile = model_access.get_profile('jones')
         # set auth cache to expire in 1+ days (against the rules!)
         profile.auth_expires = datetime.datetime.now(pytz.utc) + datetime.timedelta(days=1, seconds=5)
@@ -43,7 +44,8 @@ class OzpAuthorizationTest(TestCase):
             auth.authorization_update, 'jones')
 
     def test_valid_cache(self):
-        auth = ozp_authorization.OzpAuthorization()
+        if not settings.OZP['USE_AUTH_SERVER']:
+            return
         profile = model_access.get_profile('jones')
         # set auth cache to expire in 1 day
         profile.auth_expires = datetime.datetime.now(pytz.utc) + datetime.timedelta(days=1)
@@ -56,7 +58,8 @@ class OzpAuthorizationTest(TestCase):
         self.assertEqual(auth.authorization_update('jones'), True)
 
     def test_update_cache(self):
-        auth = ozp_authorization.OzpAuthorization()
+        if not settings.OZP['USE_AUTH_SERVER']:
+            return
         profile = model_access.get_profile('jones')
         profile.auth_expires = datetime.datetime.now(pytz.utc)
         profile.save()
@@ -86,7 +89,8 @@ class OzpAuthorizationTest(TestCase):
         """
         A user's agency (organization) changes
         """
-        auth = ozp_authorization.OzpAuthorization()
+        if not settings.OZP['USE_AUTH_SERVER']:
+            return
         profile = model_access.get_profile('rutherford')
         profile.auth_expires = datetime.datetime.now(pytz.utc)
         profile.save()
@@ -112,7 +116,8 @@ class OzpAuthorizationTest(TestCase):
         """
         A user who was an org steward is now a regular user
         """
-        auth = ozp_authorization.OzpAuthorization()
+        if not settings.OZP['USE_AUTH_SERVER']:
+            return
         profile = model_access.get_profile('wsmith')
         profile.auth_expires = datetime.datetime.now(pytz.utc)
         profile.save()
@@ -145,7 +150,8 @@ class OzpAuthorizationTest(TestCase):
         """
         A user who was an apps mall steward is now a regular user
         """
-        auth = ozp_authorization.OzpAuthorization()
+        if not settings.OZP['USE_AUTH_SERVER']:
+            return
         profile = model_access.get_profile('bigbrother')
         profile.auth_expires = datetime.datetime.now(pytz.utc)
         profile.save()
@@ -175,7 +181,8 @@ class OzpAuthorizationTest(TestCase):
         """
         A user who was an apps mall steward is now an org steward
         """
-        auth = ozp_authorization.OzpAuthorization()
+        if not settings.OZP['USE_AUTH_SERVER']:
+            return
         profile = model_access.get_profile('bigbrother')
         profile.auth_expires = datetime.datetime.now(pytz.utc)
         profile.save()
@@ -204,7 +211,8 @@ class OzpAuthorizationTest(TestCase):
         """
         A user who was an org steward is now an apps mall steward
         """
-        auth = ozp_authorization.OzpAuthorization()
+        if not settings.OZP['USE_AUTH_SERVER']:
+            return
         profile = model_access.get_profile('wsmith')
         profile.auth_expires = datetime.datetime.now(pytz.utc)
         profile.save()
@@ -237,7 +245,8 @@ class OzpAuthorizationTest(TestCase):
         """
         A user who was an org steward is now also an apps mall steward
         """
-        auth = ozp_authorization.OzpAuthorization()
+        if not settings.OZP['USE_AUTH_SERVER']:
+            return
         profile = model_access.get_profile('wsmith')
         profile.auth_expires = datetime.datetime.now(pytz.utc)
         profile.save()
