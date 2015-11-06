@@ -208,12 +208,20 @@ OZP = {
         'JSON_FILE': os.path.join(BASE_DIR, 'demoauth/auth_data.json')
     },
     'OZP_AUTHORIZATION': {
-        'USER_INFO_URL': r'http://localhost:8000/demo-auth/users/dn/%s/',
+        # assumes the real URL is <root>/users/<DN>/
+        'USER_INFO_URL': r'http://localhost:8000/demo-auth/users/%s/',
+        # assumes the real URL is <root>/users/<DN>/groups/<PROJECT_NAME>/
         'USER_GROUPS_URL': r'http://localhost:8000/demo-auth/users/dn/%s/groups/%s/',
+        # name of the group in the auth service for apps mall stewards
         'APPS_MALL_STEWARD_GROUP_NAME': 'OZP_APPS_MALL_STEWARD',
+        # name of the group in the auth service for org stewards
         'ORG_STEWARD_GROUP_NAME': 'OZP_ORG_STEWARD',
+        # name of the group in the auth service for metrics users
         'METRICS_GROUP_NAME': 'OZP_METRICS_USER',
+        # name of the project in the auth serice
         'PROJECT_NAME': 'OZP',
+        # seconds to treat cached authorization data as valid before trying to
+        # update it
         # max value: 60*60*24 (1 day)
         'SECONDS_TO_CACHE_DATA': 5
     }
