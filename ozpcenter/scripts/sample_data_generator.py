@@ -214,7 +214,7 @@ def run():
     #                               Org Stewards
     ############################################################################
     access_control = json.dumps({
-        'clearances': ['U', 'C', 'S', 'TS'],
+        'clearances': ['UNCLASSIFIED', 'CONFIDENTIAL', 'SECRET', 'TOP SECRET'],
         'formal_accesses': ['SIERRA', 'TANGO'],
         'visas': ['NOVEMBER']
     })
@@ -230,7 +230,7 @@ def run():
     )
 
     access_control = json.dumps({
-        'clearances': ['U', 'C', 'S', 'TS'],
+        'clearances': ['UNCLASSIFIED', 'CONFIDENTIAL', 'SECRET', 'TOP SECRET'],
         'formal_accesses': ['SIERRA'],
         'visas': []
     })
@@ -246,7 +246,7 @@ def run():
     )
 
     access_control = json.dumps({
-        'clearances': ['U', 'C', 'S', 'TS'],
+        'clearances': ['UNCLASSIFIED', 'CONFIDENTIAL', 'SECRET', 'TOP SECRET'],
         'formal_accesses': ['SIERRA', 'TANGO', 'GOLF', 'HOTEL'],
         'visas': ['NOVEMBER']
     })
@@ -266,7 +266,7 @@ def run():
     ############################################################################
 
     access_control = json.dumps({
-        'clearances': ['U', 'C', 'S', 'TS'],
+        'clearances': ['UNCLASSIFIED', 'CONFIDENTIAL', 'SECRET', 'TOP SECRET'],
         'formal_accesses': ['SIERRA', 'TANGO', 'GOLF', 'HOTEL'],
         'visas': ['NOVEMBER']
     })
@@ -281,7 +281,7 @@ def run():
     )
 
     access_control = json.dumps({
-        'clearances': ['U', 'C', 'S', 'TS'],
+        'clearances': ['UNCLASSIFIED', 'CONFIDENTIAL', 'SECRET', 'TOP SECRET'],
         'formal_accesses': ['SIERRA', 'TANGO', 'GOLF', 'HOTEL'],
         'visas': ['NOVEMBER']
     })
@@ -300,7 +300,7 @@ def run():
     ############################################################################
 
     access_control = json.dumps({
-        'clearances': ['U', 'C', 'S'],
+        'clearances': ['UNCLASSIFIED', 'CONFIDENTIAL', 'SECRET'],
         'formal_accesses': [],
         'visas': ['NOVEMBER']
     })
@@ -315,7 +315,7 @@ def run():
     )
 
     access_control = json.dumps({
-        'clearances': ['U', 'C', 'S'],
+        'clearances': ['UNCLASSIFIED', 'CONFIDENTIAL', 'SECRET'],
         'formal_accesses': [],
         'visas': ['NOVEMBER']
     })
@@ -330,7 +330,7 @@ def run():
     )
 
     access_control = json.dumps({
-        'clearances': ['U', 'C', 'S'],
+        'clearances': ['UNCLASSIFIED', 'CONFIDENTIAL', 'SECRET'],
         'formal_accesses': [],
         'visas': []
     })
@@ -345,7 +345,7 @@ def run():
     )
 
     access_control = json.dumps({
-        'clearances': ['U', 'C', 'S', 'TS'],
+        'clearances': ['UNCLASSIFIED', 'CONFIDENTIAL', 'SECRET', 'TOP SECRET'],
         'formal_accesses': ['SIERRA'],
         'visas': []
     })
@@ -360,7 +360,7 @@ def run():
     )
 
     access_control = json.dumps({
-        'clearances': ['U'],
+        'clearances': ['UNCLASSIFIED'],
         'formal_accesses': [],
         'visas': []
     })
@@ -375,7 +375,7 @@ def run():
     )
 
     access_control = json.dumps({
-        'clearances': ['U', 'C', 'S', 'TS'],
+        'clearances': ['UNCLASSIFIED', 'CONFIDENTIAL', 'SECRET', 'TOP SECRET'],
         'formal_accesses': ['SIERRA', 'TANGO', 'GOLF', 'HOTEL'],
         'visas': ['NOVEMBER']
     })

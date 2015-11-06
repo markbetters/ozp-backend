@@ -25,6 +25,12 @@ import ozpcenter.models as models
 
 logger = logging.getLogger('ozp-center')
 
+def _find_between(s, start, end):
+    """
+    Return a string between two other strings
+    """
+    return (s.split(start))[1].split(end)[0]
+
 def _get_auth_data(username):
     """
     Get authorization data for given user
@@ -44,8 +50,7 @@ def _get_auth_data(username):
     """
     profile = model_access.get_profile(username)
     # get user's basic data
-    base_url = settings.OZP['OZP_AUTHORIZATION']['ROOT_URL']
-    url = '%s/dn/%s/' % (base_url, profile.dn)
+    url = settings.OZP['OZP_AUTHORIZATION']['USER_INFO_URL'] % profile.dn
     r = requests.get(url)
     logger.debug('hitting url %s for user with dn %s' % (url, profile.dn))
 
@@ -53,23 +58,32 @@ def _get_auth_data(username):
         raise errors.AuthorizationFailure('Error contacting authorization server: %s' % r.text)
     user_data = r.json()
 
-    # is user an org_steward
-    r = requests.get('%s/groups/ozp/%s/members/%s/' % (base_url, 'org_stewards', profile.dn))
-    if r.status_code != 200:
-        raise errors.AuthorizationFailure('Error contacting authorization server: %s' % r.text)
-    if r.json()['is_member'] == True:
-        user_data['is_org_steward'] = True
-    else:
-        user_data['is_org_steward'] = False
+    # convert dutyorg -> duty_org
+    user_data['duty_org'] = user_data['dutyorg']
+    user_data.pop('dutyorg', None)
 
-    # is user an apps_mall_steward
-    r = requests.get('%s/groups/ozp/%s/members/%s/' % (base_url, 'apps_mall_stewards', profile.dn))
+    # convert formalAcccesses -> formal_accesses
+    user_data['formal_accesses'] = user_data['formalAccesses']
+    user_data.pop('formalAccesses', None)
+
+    # get groups for user
+    url = settings.OZP['OZP_AUTHORIZATION']['USER_GROUPS_URL'] % (profile.dn, settings.OZP['OZP_AUTHORIZATION']['PROJECT_NAME'])
+    r = requests.get(url)
     if r.status_code != 200:
         raise errors.AuthorizationFailure('Error contacting authorization server: %s' % r.text)
-    if r.json()['is_member'] == True:
-        user_data['is_apps_mall_steward'] = True
-    else:
-        user_data['is_apps_mall_steward'] = False
+
+    groups = r.json()['groups']
+    user_data['is_org_steward'] = False
+    user_data['is_apps_mall_steward'] = False
+    user_data['is_metrics_user'] = False
+
+    for g in groups:
+        if settings.OZP['OZP_AUTHORIZATION']['APPS_MALL_STEWARD_GROUP_NAME'] == _find_between(g, 'cn=', ','):
+            user_data['is_apps_mall_steward'] = True
+        if settings.OZP['OZP_AUTHORIZATION']['ORG_STEWARD_GROUP_NAME'] == _find_between(g, 'cn=', ','):
+            user_data['is_org_steward'] = True
+        if settings.OZP['OZP_AUTHORIZATION']['METRICS_GROUP_NAME'] == _find_between(g, 'cn=', ','):
+            user_data['is_org_steward'] = True
 
     return user_data
 

@@ -203,13 +203,18 @@ CORS_ALLOW_CREDENTIALS = True
 OZP = {
     # if set to False, never try and update authorization-related info from
     # an external source
-    'USE_AUTH_SERVER': False,
+    'USE_AUTH_SERVER': True,
     'DEMO_AUTH_SERVICE': {
         'JSON_FILE': os.path.join(BASE_DIR, 'demoauth/auth_data.json')
     },
     'OZP_AUTHORIZATION': {
-        'ROOT_URL': 'http://localhost:8000/demo-auth',
+        'USER_INFO_URL': r'http://localhost:8000/demo-auth/users/dn/%s/',
+        'USER_GROUPS_URL': r'http://localhost:8000/demo-auth/users/dn/%s/groups/%s/',
+        'APPS_MALL_STEWARD_GROUP_NAME': 'OZP_APPS_MALL_STEWARD',
+        'ORG_STEWARD_GROUP_NAME': 'OZP_ORG_STEWARD',
+        'METRICS_GROUP_NAME': 'OZP_METRICS_USER',
+        'PROJECT_NAME': 'OZP',
         # max value: 60*60*24 (1 day)
-        'SECONDS_TO_CACHE_DATA': 60*60*24
+        'SECONDS_TO_CACHE_DATA': 5
     }
 }

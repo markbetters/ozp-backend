@@ -22,12 +22,3 @@ def get_auth_data(dn):
         if u['dn'] == dn:
             return u
     return None
-
-def is_user_in_group(dn, group):
-    auth_data = _load_json_file()
-    for g in auth_data['groups']:
-        if g['name'] == group:
-            for i in g['members']:
-                if i == dn:
-                    return True
-    return False

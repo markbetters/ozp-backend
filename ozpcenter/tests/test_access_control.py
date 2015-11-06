@@ -26,7 +26,7 @@ class AccessControlTest(TestCase):
     def test_has_access_unclass(self):
         user_accesses_json = json.dumps(
             {
-                "clearances": ["U"],
+                "clearances": ["UNCLASSIFIED"],
                 "formal_accesses": ["FOUO", "ABC"],
                 "visas": []
             }
@@ -37,7 +37,7 @@ class AccessControlTest(TestCase):
 
         user_accesses_json = json.dumps(
             {
-                "clearances": ["U"],
+                "clearances": ["UNCLASSIFIED"],
                 "formal_accesses": [],
                 "visas": []
             }
@@ -47,7 +47,7 @@ class AccessControlTest(TestCase):
 
         user_accesses_json = json.dumps(
             {
-                "clearances": ["U"],
+                "clearances": ["UNCLASSIFIED"],
                 "formal_accesses": ["FOUO"],
                 "visas": []
             }
@@ -56,7 +56,7 @@ class AccessControlTest(TestCase):
         self.assertFalse(access_control.has_access(user_accesses_json, marking))
         user_accesses_json = json.dumps(
             {
-                "clearances": ["U"],
+                "clearances": ["UNCLASSIFIED"],
                 "formal_accesses": ["FOUO"],
                 "visas": []
             }
@@ -73,7 +73,7 @@ class AccessControlTest(TestCase):
     def test_has_access_confidential(self):
         user_accesses_json = json.dumps(
             {
-                "clearances": ["U", "C"],
+                "clearances": ["UNCLASSIFIED", "CONFIDENTIAL"],
                 "formal_accesses": ["FOUO", "ABC"],
                 "visas": []
             }
@@ -82,7 +82,7 @@ class AccessControlTest(TestCase):
         self.assertTrue(access_control.has_access(user_accesses_json, marking))
         user_accesses_json = json.dumps(
             {
-                "clearances": ["U", "C"],
+                "clearances": ["UNCLASSIFIED", "CONFIDENTIAL"],
                 "formal_accesses": [],
                 "visas": []
             }
@@ -91,7 +91,7 @@ class AccessControlTest(TestCase):
         self.assertTrue(access_control.has_access(user_accesses_json, marking))
         user_accesses_json = json.dumps(
             {
-                "clearances": ["U", "C"],
+                "clearances": ["UNCLASSIFIED", "CONFIDENTIAL"],
                 "formal_accesses": ["FOUO", "ABC"],
                 "visas": []
             }
@@ -101,7 +101,7 @@ class AccessControlTest(TestCase):
 
         user_accesses_json = json.dumps(
             {
-                "clearances": ["U"],
+                "clearances": ["UNCLASSIFIED"],
                 "formal_accesses": ["FOUO"],
                 "visas": []
             }
@@ -118,7 +118,7 @@ class AccessControlTest(TestCase):
     def test_has_access_secret(self):
         user_accesses_json = json.dumps(
             {
-                "clearances": ["U", "C", "S"],
+                "clearances": ["UNCLASSIFIED", "CONFIDENTIAL", "SECRET"],
                 "formal_accesses": ["FOUO", "ABC"],
                 "visas": []
             }
@@ -127,7 +127,7 @@ class AccessControlTest(TestCase):
         self.assertTrue(access_control.has_access(user_accesses_json, marking))
         user_accesses_json = json.dumps(
             {
-                "clearances": ["U", "C", "S"],
+                "clearances": ["UNCLASSIFIED", "CONFIDENTIAL", "SECRET"],
                 "formal_accesses": ["FOUO", "ABC"],
                 "visas": []
             }
@@ -136,7 +136,7 @@ class AccessControlTest(TestCase):
         self.assertTrue(access_control.has_access(user_accesses_json, marking))
         user_accesses_json = json.dumps(
             {
-                "clearances": ["U", "C", "S"],
+                "clearances": ["UNCLASSIFIED", "CONFIDENTIAL", "SECRET"],
                 "formal_accesses": [],
                 "visas": []
             }
@@ -145,7 +145,7 @@ class AccessControlTest(TestCase):
         self.assertTrue(access_control.has_access(user_accesses_json, marking))
         user_accesses_json = json.dumps(
             {
-                "clearances": ["U", "C", "S"],
+                "clearances": ["UNCLASSIFIED", "CONFIDENTIAL", "SECRET"],
                 "formal_accesses": ["FOUO", "ABC"],
                 "visas": []
             }
@@ -155,7 +155,7 @@ class AccessControlTest(TestCase):
 
         user_accesses_json = json.dumps(
             {
-                "clearances": ["U", "C", "S"],
+                "clearances": ["UNCLASSIFIED", "CONFIDENTIAL", "SECRET"],
                 "formal_accesses": ["FOUO", "ABC"],
                 "visas": []
             }
@@ -171,7 +171,7 @@ class AccessControlTest(TestCase):
     def test_has_access_top_secret(self):
         user_accesses_json = json.dumps(
             {
-                "clearances": ["U", "C", "S", "TS"],
+                "clearances": ["UNCLASSIFIED", "CONFIDENTIAL", "SECRET", "TOP SECRET"],
                 "formal_accesses": ["FOUO", "ABC"],
                 "visas": []
             }
@@ -186,7 +186,7 @@ class AccessControlTest(TestCase):
         self.assertTrue(access_control.has_access(user_accesses_json, marking))
         user_accesses_json = json.dumps(
             {
-                "clearances": ["U", "C", "S", "TS"],
+                "clearances": ["UNCLASSIFIED", "CONFIDENTIAL", "SECRET", "TOP SECRET"],
                 "formal_accesses": [],
                 "visas": []
             }
@@ -196,7 +196,7 @@ class AccessControlTest(TestCase):
 
         user_accesses_json = json.dumps(
             {
-                "clearances": ["U", "C", "S", "TS"],
+                "clearances": ["UNCLASSIFIED", "CONFIDENTIAL", "SECRET", "TOP SECRET"],
                 "formal_accesses": ["FOUO", "ABC"],
                 "visas": []
             }

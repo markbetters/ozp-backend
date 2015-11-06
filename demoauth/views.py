@@ -26,17 +26,16 @@ def UserDnView(request, dn):
     user_data = utils.get_auth_data(dn)
     if not user_data:
         return Response('User not found', status=status.HTTP_404_NOT_FOUND)
+
+    # remove groups, since this doesn't come back in this HTTP endpoint in the
+    # actual authorization service
+    user_data.pop('groups', None)
     return Response(user_data, status=status.HTTP_200_OK)
 
 @api_view(['GET'])
 @permission_classes((permissions.AllowAny, ))
-def UserInGroupView(request, project, group, dn):
-    logger.debug('is user %s in project %s, group %s' % (dn, project, group))
-    user_data = utils.get_auth_data(dn)
+def UserGroupsView(request, dn, project):
+    user_data = {"groups": utils.get_auth_data(dn)['groups']}
     if not user_data:
         return Response('User not found', status=status.HTTP_404_NOT_FOUND)
-
-    if utils.is_user_in_group(dn, group):
-        return Response({"is_member": True, "project": project, "group": group}, status=status.HTTP_200_OK)
-    else:
-        return Response({"is_member": False, "project": project, "group": group}, status=status.HTTP_200_OK)
+    return Response(user_data, status=status.HTTP_200_OK)

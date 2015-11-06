@@ -44,19 +44,9 @@ def has_access(user_accesses_json, marking):
 
     # check clearances
     clearances = user_accesses['clearances']
-    clearances_full_names = []
     required_clearance = markings[0]
-    for i in clearances:
-        if i == 'U':
-            clearances_full_names.append('UNCLASSIFIED')
-        if i == 'C':
-            clearances_full_names.append('CONFIDENTIAL')
-        if i == 'S':
-            clearances_full_names.append('SECRET')
-        if i == 'TS':
-            clearances_full_names.append('TOP SECRET')
 
-    if required_clearance not in clearances_full_names:
+    if required_clearance not in clearances:
         return False
 
     # just combine all of the user's formal accesses and visas
