@@ -38,7 +38,6 @@ def _get_auth_data(username):
     Return:
     {
         'dn': 'user DN',
-        'cn': 'user CN',
         'clearances': ['U', 'S'],
         'formal_accesses': ['AB', 'CD'],
         'visas': ['ABC', 'XYZ'],

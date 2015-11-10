@@ -21,27 +21,28 @@ class PkiAuthentication(authentication.BaseAuthentication):
     def authenticate(self, request):
         # ensure we're using HTTPS
         if not request.is_secure():
-            logger.error('Insecure request: incompatible with PkiAuthentication')
+            logger.error('Insecure request (not HTTPS): incompatible with PkiAuthentication')
             return None
 
+        # get status of client authentication
         authentication_status = request.META.get('HTTP_X_SSL_AUTHENTICATED', None)
-
-        # ensure client authentication was successful and that the header
-        # containing the user's DN is present
+        if not authentication_status:
+            logger.error('Missing header: HTTP_X_SSL_AUTHENTICATED')
+            return None
 
         # this assumes that we're using nginx and that the value of
         # $ssl_client_verify was put into the HTTP_X_SSL_AUTHENTICATED header
-        if (authentication_status != 'SUCCESS' or
-                    'HTTP_X_SSL_USER_DN' not in request.META):
-            logger.error(
-                'HTTP_X_SSL_AUTHENTICATED marked failed or '
-                'HTTP_X_SSL_USER_DN '
-                'header missing')
+        if authentication_status != 'SUCCESS':
+            logger.error('Value of HTTP_X_SSL_AUTHENTICATED header not SUCCESS, got %s instead' % authentication_status)
             return None
 
-        # get the user's dn
+        # get the user's DN
+        dn = request.META.get('HTTP_X_SSL_USER_DN', None)
         # TODO: do we need to preprocess/sanitize this in any way?
-        dn = request.META.get('HTTP_X_SSL_USER_DN')
+        if not dn:
+            logger.error('HTTP_X_SSL_USER_DN missing from header')
+            return None
+
         profile = _get_profile_by_dn(dn)
 
         return (profile.user, None)
@@ -61,7 +62,8 @@ def _get_profile_by_dn(dn):
         return profile
     except models.Profile.DoesNotExist:
         logger.info('creating new user for dn: %s' % dn)
-        kwargs = {'display_name': dn}
+        # TODO: display_name should probably be CN instead
+        kwargs = {'display_name': dn, 'dn': dn}
         # sanitize username
         username = dn[:30] # limit to 30 chars
         username = username.replace(' ', '_') # no spaces
