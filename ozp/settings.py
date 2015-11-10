@@ -97,28 +97,23 @@ LOGGING = {
     'handlers': {
         'console': {
             'class': 'logging.StreamHandler',
-        },
-        'file': {
-            'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'filename': '/ozp/backend/ozp.log'
-        },
+        }
     },
     'loggers': {
         'django': {
-            'handlers': ['console', 'file'],
+            'handlers': ['console'],
             'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
         },
         'ozp-center': {
-            'handlers': ['console', 'file'],
+            'handlers': ['console'],
             'level': 'DEBUG',
         },
         'ozp-iwc': {
-            'handlers': ['console', 'file'],
+            'handlers': ['console'],
             'level': 'DEBUG',
         },
         'demo-auth': {
-            'handlers': ['console', 'file'],
+            'handlers': ['console'],
             'level': 'DEBUG',
         }
     },
@@ -157,6 +152,7 @@ MEDIA_URL='media/'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
+        #'ozpcenter.auth.pkiauth.PkiAuthentication'
         'rest_framework.authentication.BasicAuthentication'
         # 'rest_framework.authentication.SessionAuthentication',
     , ),

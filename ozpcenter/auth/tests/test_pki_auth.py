@@ -56,4 +56,4 @@ class PkiAuthenticationTest(TestCase):
         # this dn has an "'" in it, but that gets stripped out before creating
         # the new user
         profile = pkiauth._get_profile_by_dn('jones jones\'')
-        self.assertEqual(profile, None)
+        self.assertEqual(profile, 'jones_jones_2')

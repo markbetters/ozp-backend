@@ -70,18 +70,21 @@ def _get_profile_by_dn(dn):
         return profile
     except models.Profile.DoesNotExist:
         logger.info('creating new user for dn: %s' % dn)
-        cn = utils.find_between(dn, 'CN=', ',')
+        if 'CN=' in dn:
+            cn = utils.find_between(dn, 'CN=', ',')
+        else:
+            cn = dn
         kwargs = {'display_name': cn, 'dn': dn}
         # sanitize username
-        username = cn # limit to 30 chars
+        username = cn[0:30] # limit to 30 chars
         username = username.replace(' ', '_') # no spaces
         username = username.replace("'", "") # no apostrophes
         username = username.lower() # all lowercase
         # make sure this username doesn't exist
-        # TODO: find a unique username if this check fails
-        if User.objects.filter(username=username).first():
-            logger.error('Username collision for dn: %s' % dn)
-            return None
+        count = User.objects.filter(
+            username=username).count()
+        if count != 0:
+            username = '%s_%s' % (username, count + 1)
 
         profile = models.Profile.create_user(username, **kwargs)
         logger.debug('created new profile for user %s' % profile.user.username)
