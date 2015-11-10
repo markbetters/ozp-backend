@@ -98,22 +98,27 @@ LOGGING = {
         'console': {
             'class': 'logging.StreamHandler',
         },
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': '/ozp/backend/ozp.log'
+        },
     },
     'loggers': {
         'django': {
-            'handlers': ['console'],
+            'handlers': ['console', 'file'],
             'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
         },
         'ozp-center': {
-            'handlers': ['console'],
+            'handlers': ['console', 'file'],
             'level': 'DEBUG',
         },
         'ozp-iwc': {
-            'handlers': ['console'],
+            'handlers': ['console', 'file'],
             'level': 'DEBUG',
         },
         'demo-auth': {
-            'handlers': ['console'],
+            'handlers': ['console', 'file'],
             'level': 'DEBUG',
         }
     },

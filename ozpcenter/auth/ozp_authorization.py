@@ -22,14 +22,9 @@ from django.contrib.auth.models import Group
 import ozpcenter.errors as errors
 import ozpcenter.model_access as model_access
 import ozpcenter.models as models
+import ozpcenter.utils as utils
 
 logger = logging.getLogger('ozp-center')
-
-def _find_between(s, start, end):
-    """
-    Return a string between two other strings
-    """
-    return (s.split(start))[1].split(end)[0]
 
 def _get_auth_data(username):
     """
@@ -77,11 +72,11 @@ def _get_auth_data(username):
     user_data['is_metrics_user'] = False
 
     for g in groups:
-        if settings.OZP['OZP_AUTHORIZATION']['APPS_MALL_STEWARD_GROUP_NAME'] == _find_between(g, 'cn=', ','):
+        if settings.OZP['OZP_AUTHORIZATION']['APPS_MALL_STEWARD_GROUP_NAME'] == utils.find_between(g, 'cn=', ','):
             user_data['is_apps_mall_steward'] = True
-        if settings.OZP['OZP_AUTHORIZATION']['ORG_STEWARD_GROUP_NAME'] == _find_between(g, 'cn=', ','):
+        if settings.OZP['OZP_AUTHORIZATION']['ORG_STEWARD_GROUP_NAME'] == utils.find_between(g, 'cn=', ','):
             user_data['is_org_steward'] = True
-        if settings.OZP['OZP_AUTHORIZATION']['METRICS_GROUP_NAME'] == _find_between(g, 'cn=', ','):
+        if settings.OZP['OZP_AUTHORIZATION']['METRICS_GROUP_NAME'] == utils.find_between(g, 'cn=', ','):
             user_data['is_org_steward'] = True
 
     return user_data

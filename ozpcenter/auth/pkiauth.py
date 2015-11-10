@@ -7,6 +7,7 @@ from rest_framework import authentication
 from rest_framework import exceptions
 
 import ozpcenter.models as models
+import ozpcenter.utils as utils
 
 try:
     from django.contrib.auth import get_user_model
@@ -43,9 +44,16 @@ class PkiAuthentication(authentication.BaseAuthentication):
             logger.error('HTTP_X_SSL_USER_DN missing from header')
             return None
 
+        logger.debug('Attempting to authenticate user with dn: %s' % dn)
+
         profile = _get_profile_by_dn(dn)
 
-        return (profile.user, None)
+        if profile:
+            logger.debug('found user %s, authentication succeeded' % profile.user.username)
+            return (profile.user, None)
+        else:
+            logger.error('Failed to find/create user for dn %s. Authentication failed' % dn)
+            return None
 
 def _get_profile_by_dn(dn):
     """
@@ -62,10 +70,10 @@ def _get_profile_by_dn(dn):
         return profile
     except models.Profile.DoesNotExist:
         logger.info('creating new user for dn: %s' % dn)
-        # TODO: display_name should probably be CN instead
-        kwargs = {'display_name': dn, 'dn': dn}
+        cn = utils.find_between(dn, 'CN=', ',')
+        kwargs = {'display_name': cn, 'dn': dn}
         # sanitize username
-        username = dn[:30] # limit to 30 chars
+        username = cn # limit to 30 chars
         username = username.replace(' ', '_') # no spaces
         username = username.replace("'", "") # no apostrophes
         username = username.lower() # all lowercase
@@ -75,4 +83,6 @@ def _get_profile_by_dn(dn):
             logger.error('Username collision for dn: %s' % dn)
             return None
 
-        return models.Profile.create_user(username, **kwargs)
+        profile = models.Profile.create_user(username, **kwargs)
+        logger.debug('created new profile for user %s' % profile.user.username)
+        return profile
