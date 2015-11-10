@@ -32,12 +32,10 @@ class ProfileTest(TestCase):
         f.GroupFactory.create(name='USER')
         f.GroupFactory.create(name='ORG_STEWARD')
         f.GroupFactory.create(name='APPS_MALL_STEWARD')
-        f.AccessControlFactory.create(title='UNCLASSIFIED//ABC')
         f.ProfileFactory.create(user__username='bob', display_name='Bob B',
             user__email='bob@bob.com', dn='bob')
         f.ProfileFactory.create(user__username='alice')
-        unclass = models.AccessControl(title='UNCLASSIFIED')
-        unclass.save()
+        unclass = 'UNCLASSIFIED'
 
         img_type = models.ImageType(name='listing_small_icon')
         img_type.save()
@@ -76,8 +74,6 @@ class ProfileTest(TestCase):
         This is because "constraints" like blank=False apply only to form
         validation, not to the actual database
         """
-        c = models.AccessControl(title='SOMETHING//ABC')
-        c.save()
         testUser = models.Profile.create_user(username='myname',
             display_name='My Name',
             email='myname@me.com',

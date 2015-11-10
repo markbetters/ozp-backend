@@ -171,7 +171,6 @@ def authorization_update(username, updated_auth_data=None):
         # TODO: handle metrics user
 
         # update profile.access_control:
-        # TODO - will need to make access_control simple strings - remove models.AccessControl
         access_control = json.dumps(updated_auth_data)
         profile.access_control = access_control
         # reset profile.auth_expires to now + 24 hours

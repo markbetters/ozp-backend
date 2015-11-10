@@ -9,7 +9,6 @@ from django.contrib import admin
 import ozpcenter.models as models
 
 # Register models for admin interface
-admin.site.register(models.AccessControl)
 admin.site.register(models.Agency)
 admin.site.register(models.ApplicationLibraryEntry)
 admin.site.register(models.Category)

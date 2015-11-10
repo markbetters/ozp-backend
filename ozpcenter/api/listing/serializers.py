@@ -39,15 +39,6 @@ class AgencySerializer(serializers.ModelSerializer):
         }
 
 
-class AccessControlSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.AccessControl
-        fields = ('title',)
-
-        extra_kwargs = {
-            'title': {'validators': []}
-        }
-
 class ImageSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.Image

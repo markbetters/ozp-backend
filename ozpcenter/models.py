@@ -24,20 +24,6 @@ import ozpcenter.access_control as access_control
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center')
 
-class AccessControl(models.Model):
-    """
-    Access levels (classifications)
-
-    Format: <CLASSIFICATION>//CONTROL1//CONTROL2//...
-    """
-    title = models.CharField(max_length=1024, unique=True)
-
-    def __repr__(self):
-        return self.title
-
-    def __str__(self):
-        return self.title
-
 
 class ImageType(models.Model):
     """
