@@ -449,7 +449,7 @@ class ListingViewSet(viewsets.ModelViewSet):
            "type":"Web Application",
            "uuid":"e378c427-bba6-470c-b2f3-e550b9129504",
            "requirements":"None",
-           "singleton":false,
+           "iframe_compatible":false,
            "versionName":"1.0.0",
            "launchUrl":"http://www.google.com/myApp",
            "whatIsNew":"Nothing is new",

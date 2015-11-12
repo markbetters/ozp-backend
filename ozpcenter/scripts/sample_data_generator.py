@@ -482,7 +482,7 @@ def run():
         requirements='None',
         is_enabled=True,
         is_featured=True,
-        singleton=False,
+        iframe_compatible=False,
         security_marking=unclass
     )
     listing.save()
@@ -595,7 +595,7 @@ def run():
         requirements='None',
         is_enabled=True,
         is_featured=True,
-        singleton=False,
+        iframe_compatible=False,
         is_private=True,
         security_marking=unclass
     )
@@ -662,7 +662,7 @@ def run():
         requirements='None',
         is_enabled=True,
         is_featured=True,
-        singleton=False,
+        iframe_compatible=False,
         is_private=False,
         security_marking=unclass
     )
@@ -719,7 +719,7 @@ def run():
         requirements='None',
         is_enabled=True,
         is_featured=True,
-        singleton=False,
+        iframe_compatible=False,
         is_private=False,
         security_marking=unclass
     )
@@ -774,7 +774,7 @@ def run():
         requirements='None',
         is_enabled=True,
         is_featured=True,
-        singleton=False,
+        iframe_compatible=False,
         is_private=False,
         security_marking=unclass
     )
@@ -830,7 +830,7 @@ def run():
         requirements='None',
         is_enabled=True,
         is_featured=True,
-        singleton=False,
+        iframe_compatible=False,
         is_private=False,
         security_marking=unclass
     )
@@ -886,7 +886,7 @@ def run():
         requirements='None',
         is_enabled=True,
         is_featured=True,
-        singleton=False,
+        iframe_compatible=False,
         is_private=False,
         security_marking=unclass
     )
@@ -943,7 +943,7 @@ def run():
         requirements='None',
         is_enabled=True,
         is_featured=True,
-        singleton=False,
+        iframe_compatible=False,
         is_private=False,
         security_marking=unclass
     )

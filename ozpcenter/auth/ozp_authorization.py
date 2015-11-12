@@ -44,7 +44,7 @@ def _get_auth_data(username):
     """
     profile = model_access.get_profile(username)
     # get user's basic data
-    url = settings.OZP['OZP_AUTHORIZATION']['USER_INFO_URL'] % profile.dn
+    url = settings.OZP['OZP_AUTHORIZATION']['USER_INFO_URL'] % (profile.dn, profile.issuer_dn)
     r = requests.get(url)
     logger.debug('hitting url %s for user with dn %s' % (url, profile.dn))
 

@@ -35,4 +35,4 @@ echo 'Loading sample data...'
 python manage.py runscript sample_data_generator
 python manage.py runserver
 # production-ish
-# gunicorn --workers=2 ozp.wsgi -b localhost:8000 --daemon --access-logfile logs.txt --error-logfile logs.txt -p /ozp/gunicorn.pid
+# gunicorn --workers=2 ozp.wsgi -b localhost:8080 --daemon --access-logfile logs.txt --error-logfile logs.txt -p /ozp/gunicorn.pid

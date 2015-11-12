@@ -1,5 +1,10 @@
 """
 PKI Authentication
+
+nginx ssl_module vars in headers:
+$ssl_client_s_dn -> HTTP_X_SSL_USER_DN
+$ssl_client_i_dn -> HTTP_X_SSL_ISSUER_DN
+$ssl_client_verify -> HTTP_X_SSL_AUTHENTICATED
 """
 import logging
 
@@ -39,14 +44,20 @@ class PkiAuthentication(authentication.BaseAuthentication):
 
         # get the user's DN
         dn = request.META.get('HTTP_X_SSL_USER_DN', None)
+
+        # get the issuer DN:
+        issuer_dn = request.META.get('HTTP_X_SSL_ISSUER_DN', None)
         # TODO: do we need to preprocess/sanitize this in any way?
         if not dn:
             logger.error('HTTP_X_SSL_USER_DN missing from header')
             return None
+        if not issuer_dn:
+            logger.error('HTTP_X_SSL_ISSUER_DN missing from header')
+            return None
 
-        logger.debug('Attempting to authenticate user with dn: %s' % dn)
+        logger.debug('Attempting to authenticate user with dn: %s and issuer dn: %s' % (dn, issuer_dn))
 
-        profile = _get_profile_by_dn(dn)
+        profile = _get_profile_by_dn(dn, issuer_dn)
 
         if profile:
             logger.debug('found user %s, authentication succeeded' % profile.user.username)
@@ -55,7 +66,7 @@ class PkiAuthentication(authentication.BaseAuthentication):
             logger.error('Failed to find/create user for dn %s. Authentication failed' % dn)
             return None
 
-def _get_profile_by_dn(dn):
+def _get_profile_by_dn(dn, issuer_dn='default issuer dn'):
     """
     Returns a user profile for a given DN
 
@@ -74,7 +85,7 @@ def _get_profile_by_dn(dn):
             cn = utils.find_between(dn, 'CN=', ',')
         else:
             cn = dn
-        kwargs = {'display_name': cn, 'dn': dn}
+        kwargs = {'display_name': cn, 'dn': dn, 'issuer_dn': issuer_dn}
         # sanitize username
         username = cn[0:30] # limit to 30 chars
         username = username.replace(' ', '_') # no spaces

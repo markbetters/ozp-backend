@@ -210,7 +210,7 @@ OZP = {
     },
     'OZP_AUTHORIZATION': {
         # assumes the real URL is <root>/users/<DN>/
-        'USER_INFO_URL': r'http://localhost:8000/demo-auth/users/%s/',
+        'USER_INFO_URL': r'http://localhost:8000/demo-auth/users/%s/info.json?issuerDN=%s',
         # assumes the real URL is <root>/users/<DN>/groups/<PROJECT_NAME>/
         'USER_GROUPS_URL': r'http://localhost:8000/demo-auth/users/%s/groups/%s/',
         # name of the group in the auth service for apps mall stewards

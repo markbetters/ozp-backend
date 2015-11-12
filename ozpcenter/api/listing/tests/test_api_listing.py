@@ -575,7 +575,7 @@ class ListingApiTest(APITestCase):
         self.assertEqual(response.data['total_rate2'], 0)
         self.assertEqual(response.data['total_rate1'], 0)
         self.assertEqual(response.data['total_reviews'], 0)
-        self.assertEqual(response.data['singleton'], False)
+        self.assertEqual(response.data['iframe_compatible'], True)
         self.assertEqual(response.data['required_listings'], None)
         self.assertTrue(response.data['edited_date'])
 
@@ -789,7 +789,7 @@ class ListingApiTest(APITestCase):
         self.assertEqual(response.data['total_rate2'], 0)
         self.assertEqual(response.data['total_rate1'], 1)
         self.assertEqual(response.data['total_reviews'], 3)
-        self.assertEqual(response.data['singleton'], False)
+        self.assertEqual(response.data['iframe_compatible'], False)
         self.assertEqual(response.data['required_listings'], None)
         self.assertTrue(response.data['edited_date'])
 

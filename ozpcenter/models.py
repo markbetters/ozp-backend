@@ -494,6 +494,8 @@ class Profile(models.Model):
     # allows (30 chars max) and can include characters not allowed in
     # User.username
     dn = models.CharField(max_length=1000, unique=True)
+    # need to keep track of this as well for making auth calls
+    issuer_dn = models.CharField(max_length=1000, null=True, blank=True)
     # datetime when any authorization data becomes
     auth_expires = models.DateTimeField(auto_now_add=True)
     organizations = models.ManyToManyField(
@@ -573,6 +575,7 @@ class Profile(models.Model):
             stewarded_organizations (['org1_title', 'org2_title'])
             groups (['group1_name', 'group2_name'])
             dn
+            issuer_dn
 
         """
         # TODO: what to make default password?
@@ -608,13 +611,15 @@ class Profile(models.Model):
         ac = kwargs.get('access_control', json.dumps({'clearances': ['U']}))
         access_control = ac
         dn = kwargs.get('dn', username)
+        issuer_dn = kwargs.get('issuer_dn', None)
 
         # create the profile object and associate it with the User
         p = Profile(display_name=display_name,
             bio=bio,
             access_control=access_control,
             user=user,
-            dn=dn
+            dn=dn,
+            issuer_dn=issuer_dn
         )
         p.save()
 
@@ -735,7 +740,7 @@ class Listing(models.Model):
     total_rate2 = models.IntegerField(default=0)
     total_rate1 = models.IntegerField(default=0)
     total_reviews = models.IntegerField(default=0)
-    singleton = models.BooleanField(default=False)
+    iframe_compatible = models.BooleanField(default=True)
 
     contacts = models.ManyToManyField(
         'Contact',
