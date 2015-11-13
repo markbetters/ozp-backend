@@ -1,0 +1,53 @@
+Database migration strategy
+
+1. add test data to ci boxes and export sql from there - develop script low side
+2. export data, 1 file per table: mysqldump -u ozp -p ozp category > dump.sql --complete-insert --hex-blob
+3. python script reads data, one conversion method for each file and inserts
+it into new postgresql database via Django ORM
+4. will need to copy images over as well
+5. whole process (from exporting sql dumps to importing in new db) should be
+fully automated, as this process will be run many times
+6. icon/image ids are stored as binary --hex-blob converts to hex. need to convert to UUID
+
+old tables (30):
+
+not used (5):
+intent
+listing_intent
+scorecard
+service_item_score_card
+listing_listing
+
+no dependencies (5):
+agency (icon not used)
+category
+type (listing type)
+contact_type
+profile
+
+users (4):
+profile_agency
+iwc_data_object
+notification
+profile_dismissed_notification
+
+listing (base) (10):
+listing
+doc_url
+screenshot
+contact
+listing_category
+item_comment
+listing_profile
+listing_snapshot
+listing_tags
+application_library_entry
+
+listing (with activity) (6):
+change_detail
+listing_activity
+modify_relationship_activity (not sure what to do with this)
+rejection_activity
+rejection_listing
+relationship_activity_log
+
