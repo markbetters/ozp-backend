@@ -83,7 +83,8 @@ def get_values(table, column_count):
         while not current_entry_finished:
             # check for hex value
             if values_str[:2] == '0x':
-                val = '0x' + utils.find_between(values_str, '0x', ',')
+                val = re.findall(r'0x[0-9ABCDEF]*', values_str)[0]
+                # val = '0x' + utils.find_between(values_str, '0x', ',')
                 entry_values.append(val)
                 # remove extracted data from the original string
                 idx = len(val)
@@ -166,17 +167,21 @@ def get_values(table, column_count):
 def run():
     print('running db_migration!')
     migrate_category()
+    migrate_listing()
 
 def migrate_category():
     print('migrating categories')
     columns = get_columns('category')
     values = get_values('category', len(columns))
-
-
-
     print('category columns: %s' % columns)
     print('category values: %s' % values)
 
+def migrate_listing():
+    print('migrating listings')
+    columns = get_columns('listing')
+    values = get_values('listing', len(columns))
+    print('listing columns: %s' % columns)
+    print('listing values: %s' % values)
 
 if __name__ == "__main__":
     run()
