@@ -78,6 +78,11 @@ def _get_profile_by_dn(dn, issuer_dn='default issuer dn'):
         if not profile.user.is_active:
             logger.warning('User %s tried to login but is inactive' % dn)
             return None
+        # update the issuer_dn
+        if profile.issuer_dn != issuer_dn:
+            logger.info('updating issuer dn for user %s' % profile.user.username)
+            profile.issuer_dn = issuer_dn
+            profile.save()
         return profile
     except models.Profile.DoesNotExist:
         logger.info('creating new user for dn: %s' % dn)
