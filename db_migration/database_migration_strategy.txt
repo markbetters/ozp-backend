@@ -26,10 +26,10 @@ contact_type
 profile
 
 users (4):
-profile_agency
+profile_agency (don't need - auth module will do this)
 iwc_data_object
 notification
-profile_dismissed_notification
+profile_dismissed_notifications
 
 listing (base) (10):
 listing

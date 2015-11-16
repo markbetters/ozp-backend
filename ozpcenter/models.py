@@ -9,6 +9,7 @@ import os
 import uuid
 
 import django.contrib.auth
+from django.contrib.auth import models
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.core.validators import RegexValidator
@@ -20,6 +21,7 @@ from PIL import Image
 
 import ozpcenter.constants as constants
 import ozpcenter.access_control as access_control
+import ozpcenter.utils as utils
 
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center')
@@ -451,7 +453,9 @@ class Review(models.Model):
 
     # use a custom Manager class to limit returned Reviews
     objects = AccessControlReviewManager()
-    edited_date = models.DateTimeField(auto_now=True)
+    # TODO: change this back after the database migration
+    # edited_date = models.DateTimeField(auto_now=True)
+    edited_date = models.DateTimeField(default=utils.get_now_utc)
 
     def __repr__(self):
         return '%s: rate: %d text: %s' % (self.author.user.username,
@@ -497,7 +501,9 @@ class Profile(models.Model):
     # need to keep track of this as well for making auth calls
     issuer_dn = models.CharField(max_length=1000, null=True, blank=True)
     # datetime when any authorization data becomes
-    auth_expires = models.DateTimeField(auto_now_add=True)
+    # TODO: change this back after the migration
+    # auth_expires = models.DateTimeField(auto_now_add=True)
+    auth_expires = models.DateTimeField(default=utils.get_now_utc)
     organizations = models.ManyToManyField(
         Agency,
         related_name='profiles',
@@ -568,6 +574,7 @@ class Profile(models.Model):
 
         kwargs:
             password
+            email
             display_name
             bio
             access_control
@@ -696,7 +703,9 @@ class Listing(models.Model):
     # title is not guaranteed to be unique
     title = models.CharField(max_length=255)
     approved_date = models.DateTimeField(null=True, blank=True)
-    edited_date = models.DateTimeField(auto_now=True)
+    # TODO: change this back after the migration
+    # edited_date = models.DateTimeField(auto_now=True)
+    edited_date = models.DateTimeField(default=utils.get_now_utc)
     agency = models.ForeignKey(Agency, related_name='listings')
     listing_type = models.ForeignKey('ListingType', related_name='listings',
         null=True, blank=True)
@@ -859,7 +868,9 @@ class ListingActivity(models.Model):
     )
 
     action = models.CharField(max_length=128, choices=ACTION_CHOICES)
-    activity_date = models.DateTimeField(auto_now=True)
+    # TODO: change this back after the migration
+    # activity_date = models.DateTimeField(auto_now=True)
+    activity_date = models.DateTimeField(default=utils.get_now_utc)
     # an optional description of the activity (required if the action is
     #   REJECTED)
     description = models.CharField(max_length=2000, blank=True, null=True)
@@ -931,8 +942,9 @@ class Notification(models.Model):
     Notifications that do not have an associated listing are assumed to be
     'system-wide', and thus will be sent to all users
     """
-    # TODO: created date
-    created_date = models.DateTimeField(auto_now_add=True)
+    # TODO: change this back after the database migration
+    # created_date = models.DateTimeField(auto_now_add=True)
+    created_date = models.DateTimeField(default=utils.get_now_utc)
     message = models.CharField(max_length=1024)
     expires_date = models.DateTimeField()
     author = models.ForeignKey(Profile, related_name='authored_notifications')

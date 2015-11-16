@@ -1,9 +1,7 @@
 """
 Model access
 """
-import datetime
 import logging
-import pytz
 
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
@@ -183,6 +181,7 @@ def _update_rating(username, listing):
     listing.total_votes = total_votes
     listing.total_reviews = total_reviews
     listing.avg_rate = avg_rate
+    listing.edited_date = utils.get_now_utc()
     listing.save()
     return listing
 
@@ -233,6 +232,7 @@ def _add_listing_activity(author, listing, action, change_details=None,
     listing.last_activity = listing_activity
     if listing_activity.action == models.ListingActivity.REJECTED:
         listing.current_rejection = listing_activity
+    listing.edited_date = utils.get_now_utc()
     listing.save()
     return listing
 
@@ -260,6 +260,7 @@ def submit_listing(author, listing):
     # TODO: check that all required fields are set
     listing = _add_listing_activity(author, listing, models.ListingActivity.SUBMITTED)
     listing.approval_status = models.Listing.PENDING
+    listing.edited_date = utils.get_now_utc()
     listing.save()
     return listing
 
@@ -270,6 +271,7 @@ def approve_listing_by_org_steward(org_steward, listing):
     listing = _add_listing_activity(org_steward, listing,
         models.ListingActivity.APPROVED_ORG)
     listing.approval_status = models.Listing.APPROVED_ORG
+    listing.edited_date = utils.get_now_utc()
     listing.save()
     return listing
 
@@ -280,7 +282,8 @@ def approve_listing(steward, listing):
     listing = _add_listing_activity(steward, listing,
         models.ListingActivity.APPROVED)
     listing.approval_status = models.Listing.APPROVED
-    listing.approved_date = datetime.datetime.now(pytz.utc)
+    listing.approved_date = utils.get_now_utc()
+    listing.edited_date = utils.get_now_utc()
     listing.save()
     return listing
 
@@ -291,6 +294,7 @@ def reject_listing(steward, listing, rejection_description):
     listing = _add_listing_activity(steward, listing,
         models.ListingActivity.REJECTED, description=rejection_description)
     listing.approval_status = models.Listing.REJECTED
+    listing.edited_date = utils.get_now_utc()
     listing.save()
     return listing
 
@@ -300,6 +304,7 @@ def enable_listing(user, listing):
     """
     listing = _add_listing_activity(user, listing, models.ListingActivity.ENABLED)
     listing.is_enabled = True
+    listing.edited_date = utils.get_now_utc()
     listing.save()
     return listing
 
@@ -309,6 +314,7 @@ def disable_listing(steward, listing):
     """
     listing = _add_listing_activity(steward, listing, models.ListingActivity.DISABLED)
     listing.is_enabled = False
+    listing.edited_date = utils.get_now_utc()
     listing.save()
     return listing
 
@@ -382,7 +388,7 @@ def edit_listing_review(username, review, rate, text=None):
 
     review.rate = rate
     review.text = text
-    review.edited_date = datetime.datetime.now(pytz.utc)
+    review.edited_date = utils.get_now_utc()
     review.save()
 
     _update_rating(username, listing)
