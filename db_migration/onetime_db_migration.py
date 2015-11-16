@@ -33,6 +33,8 @@ SQL_FILE_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'sql_du
 # path to the images
 IMAGE_FILE_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'images')
 
+DEFAULT_SECURITY_MARKING = "TOP SECRET"
+
 def get_date_from_str(date_str):
     """
     Create a datetime object in UTC from a string
@@ -227,6 +229,9 @@ def run():
     migrate_profile_dismissed_notifications(profile_mapper, notification_mapper)
     listing_mapper = migrate_listing(category_mapper, agency_mapper, type_mapper,
         contact_type_mapper, profile_mapper)
+    migrate_application_library_entry(profile_mapper, listing_mapper)
+    migrate_doc_url(listing_mapper)
+    migrate_item_comment(profile_mapper, listing_mapper)
 
 def migrate_category():
     print('migrating categories...')
@@ -461,15 +466,15 @@ def migrate_image(image_uuid, image_type):
         return
 
     # set default security marking
-    default_security_marking = "TOP SECRET"
     image_type = models.ImageType.objects.get(name=image_type)
-    img = models.Image(uuid=image_uuid, security_marking=default_security_marking,
+    img = models.Image(uuid=image_uuid, security_marking=DEFAULT_SECURITY_MARKING,
             file_extension=file_extension, image_type=image_type)
     img.save()
 
     src = filename
     dest = settings.MEDIA_ROOT + str(img.id) + '_' + img.image_type.name + '.' + file_extension
     shutil.copy(src, dest)
+    return img
 
 def migrate_listing(category_mapper, agency_mapper, type_mapper,
         contact_type_mapper, profile_mapper):
@@ -541,26 +546,167 @@ def migrate_listing(category_mapper, agency_mapper, type_mapper,
             edited_by_id = i[10]
             edited_date = get_date_from_str(i[11])
             small_icon_id = i[12]
-            migrate_image(small_icon_id, 'small_icon')
+            small_icon = migrate_image(small_icon_id, 'small_icon')
             large_icon_id = i[13]
-            migrate_image(large_icon_id, 'large_icon')
+            large_icon = migrate_image(large_icon_id, 'large_icon')
             banner_icon_id = i[14]
-            migrate_image(banner_icon_id, 'banner_icon')
+            banner_icon = migrate_image(banner_icon_id, 'banner_icon')
             featured_banner_icon_id = i[15]
-            migrate_image(featured_banner_icon_id, 'large_banner_icon')
-
-
-            # expires_date = get_date_from_str(i[7])
+            large_banner_icon = migrate_image(featured_banner_icon_id, 'large_banner_icon')
+            is_enabled = i[16]
+            is_featured = i[17]
+            last_activity_id = i[18]
+            launch_url = i[19]
+            requirements = i[20]
+            total_comments = i[22]
+            total_rate1 = i[23]
+            total_rate2 = i[24]
+            total_rate3 = i[25]
+            total_rate4 = i[26]
+            total_rate5 = i[27]
+            total_votes = i[28]
+            listing_type = models.ListingType(id=type_mapper[i[29]])
+            uuid = i[30]
+            version_name = i[31]
+            what_is_new = i[32]
+            iframe_compatible = not i[34]
 
             print('adding listing id %s, title: %s' % (old_id, title))
+            # TODO: unique_name?
             listing = models.Listing(title=title, agency=agency,
                 approval_status=approval_status, approved_date=approved_date,
-                avg_rate=avg_rate, description=description,
-                description_short=description_short)
+                edited_date=edited_date, description=description,
+                description_short=description_short, is_enabled=is_enabled,
+                is_featured=is_featured, launch_url=launch_url,
+                listing_type=listing_type, version_name=version_name,
+                what_is_new=what_is_new, iframe_compatible=iframe_compatible,
+                requirements=requirements, small_icon=small_icon,
+                large_icon=large_icon, banner_icon=banner_icon,
+                large_banner_icon=large_banner_icon, avg_rate=avg_rate,
+                total_votes=total_votes, total_rate5=total_rate5,
+                total_rate4=total_rate4, total_rate3=total_rate3,
+                total_rate2=total_rate2, total_rate1=total_rate1,
+                total_reviews=total_comments, security_marking=DEFAULT_SECURITY_MARKING)
             listing.save()
-            listing_mapper[i[0]] = str(listing.id)
+            listing_mapper[old_id] = str(listing.id)
+
+            # TODO:
+            # current_rejection
+            # last_activity
         except Exception as e:
             print('Error processing listing %s: %s' % (title, str(e)))
+
+    return listing_mapper
+
+def migrate_application_library_entry(profile_mapper, listing_mapper):
+    print('migrating application_library_entry...')
+    columns = get_columns('application_library_entry')
+    # ['id', 'version', 'created_by_id', 'created_date', 'edited_by_id', 'edited_date', 'folder', 'listing_id', 'owner_id', 'application_library_idx']
+    assert columns[0] == 'id'
+    assert columns[1] == 'version'
+    assert columns[2] == 'created_by_id'
+    assert columns[3] == 'created_date'
+    assert columns[4] == 'edited_by_id'
+    assert columns[5] == 'edited_date'
+    assert columns[6] == 'folder'
+    assert columns[7] == 'listing_id'
+    assert columns[8] == 'owner_id'
+    values = get_values('application_library_entry', len(columns))
+    # print('category columns: %s' % columns)
+    print('number of application_library_entry entries: %s' % len(values))
+    for i in values:
+        try:
+            old_id = i[0]
+            folder = i[6]
+            listing_id = i[7]
+            listing = models.Listing.objects.get(id=listing_mapper[listing_id])
+            owner = models.Profile.objects.get(id=profile_mapper[i[8]])
+            print('adding application_library_entry for listing %s, owner %s' % (listing.title, owner.user.username))
+            entry = models.ApplicationLibraryEntry(folder=folder, listing=listing, owner=owner)
+            entry.save()
+        except Exception as e:
+            print('Error adding library entry: %s, values: %s' % (str(e), i))
+
+def migrate_doc_url(listing_mapper):
+    print('migrating doc_url...')
+    columns = get_columns('doc_url')
+    # ['id', 'version', 'listing_id', 'name', 'url']
+    assert columns[0] == 'id'
+    assert columns[1] == 'version'
+    assert columns[2] == 'listing_id'
+    assert columns[3] == 'name'
+    assert columns[4] == 'url'
+    values = get_values('doc_url', len(columns))
+    # print('category columns: %s' % columns)
+    print('number of doc_url entries: %s' % len(values))
+    for i in values:
+        try:
+            old_id = i[0]
+            listing_id = i[2]
+            name = i[3]
+            url = i[4]
+            listing = models.Listing.objects.get(id=listing_mapper[listing_id])
+            print('adding doc_url for listing %s, name %s' % (listing.title, name))
+            doc_url = models.DocUrl(name=name, url=url, listing=listing)
+            doc_url.save()
+        except Exception as e:
+            print('Error adding doc_url entry: %s, values: %s' % (str(e), i))
+
+def migrate_item_comment(profile_mapper, listing_mapper):
+    print('migrating item_comment...')
+    columns = get_columns('item_comment')
+    # ['id', 'version', 'listing_id', 'name', 'url']
+    assert columns[0] == 'id'
+    assert columns[1] == 'version'
+    assert columns[2] == 'author_id'
+    assert columns[3] == 'created_by_id'
+    assert columns[4] == 'created_date'
+    assert columns[5] == 'edited_by_id'
+    assert columns[6] == 'edited_date'
+    assert columns[7] == 'listing_id'
+    assert columns[8] == 'rate'
+    assert columns[9] == 'text'
+    values = get_values('item_comment', len(columns))
+    # print('category columns: %s' % columns)
+    print('number of item_comment entries: %s' % len(values))
+    for i in values:
+        try:
+            old_id = i[0]
+            listing = models.Listing.objects.get(id=listing_mapper[i[7]])
+            author = models.Profile.objects.get(id=profile_mapper[i[2]])
+            edited_date = get_date_from_str(i[6])
+            rate = i[8]
+            text = i[9]
+            review = models.Review(text=text, rate=rate,
+                edited_date=edited_date, author=author, listing=listing)
+            print('adding review for listing %s, rate: %s, text: %s' % (listing.title, rate, text))
+            review.save()
+        except Exception as e:
+            print('Error adding review entry: %s, values: %s' % (str(e), i))
+
+def migrate_iwc_data_object(profile_mapper):
+    pass
+
+def migrate_listing_category(listing_mapper):
+    pass
+
+def migrate_listing_profile(profile_mapper, listing_mapper):
+    # owners
+    pass
+
+def migrate_listing_screenshot(listing_mapper):
+    pass
+
+def migrate_listing_tags(listing_mapper):
+    pass
+
+def migrate_contact(listing_mapper, contact_type_mapper):
+    pass
+
+def migrate_listing_activities(profile_mapper, listing_mapper):
+    # includes change_details, rejection_listing, rejection_activity
+    pass
+
 
 
 if __name__ == "__main__":
