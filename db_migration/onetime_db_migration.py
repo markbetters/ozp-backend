@@ -242,6 +242,7 @@ def run():
     migrate_contact(listing_mapper, contact_type_mapper)
     listing_activity_mapper = migrate_listing_activities(profile_mapper, listing_mapper)
     migrate_change_detail(listing_activity_mapper)
+    migrate_rejection_data(listing_mapper, listing_activity_mapper)
 
 
 def migrate_category():
@@ -936,7 +937,18 @@ def migrate_change_detail(listing_activity_mapper):
             print('Error adding change_detail %s, values: %s' % (field_name, i))
 
 def migrate_rejection_data(listing_mapper, listing_activity_mapper):
-    pass
+    """
+    Set ListingActivity.description for all REJECTED activities
+    """
+    listing_activities = models.ListingActivity.objects.all()
+    for activity in listing_activities:
+        if activity.action == 'REJECTED':
+            try:
+                print('Found REJECTED action for listing %s' % activity.listing.title)
+            except Exception:
+                print('Error: Found REJECTED action for non-existent listing')
+                continue
+
 
 
 if __name__ == "__main__":
