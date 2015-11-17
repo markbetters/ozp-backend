@@ -240,6 +240,9 @@ def run():
     migrate_listing_screenshot(listing_mapper)
     migrate_listing_tags(listing_mapper)
     migrate_contact(listing_mapper, contact_type_mapper)
+    listing_activity_mapper = migrate_listing_activities(profile_mapper, listing_mapper)
+    migrate_change_detail(listing_activity_mapper)
+
 
 def migrate_category():
     print('migrating categories...')
@@ -866,9 +869,74 @@ def migrate_contact(listing_mapper, contact_type_mapper):
             print('Error adding contact entry: %s, values: %s' % (str(e), i))
 
 def migrate_listing_activities(profile_mapper, listing_mapper):
-    # includes change_details, rejection_listing, rejection_activity
-    pass
+    print('migrating listing_activity...')
+    columns = get_columns('listing_activity')
+    # ['id', 'version', 'created_by_id', 'created_date', 'edited_by_id', 'edited_date', 'email',
+    #   'listing_id', 'name', 'organization', 'secure_phone', 'type_id', 'unsecure_phone']
+    assert columns[0] == 'id'
+    assert columns[1] == 'version'
+    assert columns[2] == 'action'
+    assert columns[3] == 'activity_date'
+    assert columns[4] == 'author_id'
+    assert columns[5] == 'created_by_id'
+    assert columns[6] == 'created_date'
+    assert columns[7] == 'edited_by_id'
+    assert columns[8] == 'edited_date'
+    assert columns[9] == 'listing_id'
+    assert columns[10] == 'listing_activities_idx'
+    values = get_values('listing_activity', len(columns))
+    # print('category columns: %s' % columns)
+    print('number of listing_activity entries: %s' % len(values))
+    listing_activity_mapper = {}
+    for i in values:
+        try:
+            old_id = i[0]
+            action = i[2]
+            author_id = i[4]
+            listing_id = i[9]
+            activity_date = get_date_from_str(i[8])
+            author = models.Profile.objects.get(id=profile_mapper[author_id])
+            listing = models.Listing.objects.get(id=listing_mapper[listing_id])
+            print('adding listing_activity %s for listing %s' % (action, listing.title))
+            listing_activity = models.ListingActivity(action=action, activity_date=activity_date,
+                author=author, listing=listing)
+            listing_activity.save()
+            listing_activity_mapper[old_id] = str(listing_activity.id)
+        except Exception as e:
+            print('Error adding listing_activity entry: %s, values: %s' % (str(e), i))
 
+    return listing_activity_mapper
+
+def migrate_change_detail(listing_activity_mapper):
+    print('migrating change_detail...')
+    columns = get_columns('change_detail')
+    # ['id', 'version', 'field_name', 'new_value', 'old_value', 'service_item_activity_id']
+    assert columns[0] == 'id'
+    assert columns[1] == 'version'
+    assert columns[2] == 'field_name'
+    assert columns[3] == 'new_value'
+    assert columns[4] == 'old_value'
+    assert columns[5] == 'service_item_activity_id'
+    values = get_values('change_detail', len(columns))
+    # print('category columns: %s' % columns)
+    print('number of change_detail entries: %s' % len(values))
+    for i in values:
+        try:
+            field_name = i[2]
+            new_value = i[3]
+            old_value = i[4]
+            listing_activity_id = i[5]
+            listing_activity = models.ListingActivity.objects.get(id=listing_activity_mapper[listing_activity_id])
+            print('adding change_detail for listing %s, field_name %s' % (listing_activity.listing.title, field_name))
+            change_detail = models.ChangeDetail(field_name=field_name,
+                old_value=old_value, new_value=new_value)
+            change_detail.save()
+            listing_activity.change_details.add(change_detail)
+        except Exception as e:
+            print('Error adding change_detail %s, values: %s' % (field_name, i))
+
+def migrate_rejection_data(listing_mapper, listing_activity_mapper):
+    pass
 
 
 if __name__ == "__main__":
