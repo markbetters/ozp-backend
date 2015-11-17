@@ -5,12 +5,19 @@ Prereqs:
 * for each table in the old database, there is a corresponding file created
     via: mysqldump -u ozp -p ozp TABLENAME > TABLENAME.sql --complete-insert --hex-blob
 * all images have been copied to a local directory
+* the database referenced in settings.py is empty
 
 Usage:
-    Assumes that the database referenced in settings.py is empty
+    * acquire the sql dumps and images from the production server using the
+        generate_sql_dumps.sh script (or similar)
+    * update SQL_FILE_PATH, IMAGE_FILE_PATH, and DEFAULT_SECURITY_MARKING
+        as necessary
+    * if the attached database is not empty, run python manage.py flush
+    * python onetime_db_migration.py
 """
 import datetime
 import json
+import logging
 import os
 import pytz
 import re
@@ -36,6 +43,9 @@ SQL_FILE_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'sql_du
 IMAGE_FILE_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'images')
 
 DEFAULT_SECURITY_MARKING = "TOP SECRET"
+
+logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.INFO)
+# logging.basicConfig(filename='migration.log', format='%(levelname)s: %(message)s', level=logging.INFO)
 
 def get_date_from_str(date_str):
     """
@@ -85,12 +95,12 @@ def get_values(table, column_count):
     # extract the data we want
     values_str = utils.find_between(data, "VALUES ", ");") + ')'
 
-    # values can contain special chars like paranthesis and commas, so we
+    # values can contain special chars like parenthesis and commas, so we
     # have to be smart about how we extract the data
 
     while values_str:
         if values_str[0] != '(':
-            print('Error: each value must start with opening paranthesis')
+            logging.error('Error: each value must start with opening parenthesis')
             return None
         # remove leading '('
         values_str = values_str[1:]
@@ -113,10 +123,10 @@ def get_values(table, column_count):
                 idx = len(val)
                 values_str = values_str[idx:]
                 columns_processed += 1
-                # print('got hex value: %s' % val)
+                # logging.debug('got hex value: %s' % val)
                 # remove comma
                 if values_str[0] != ',' and columns_processed != column_count:
-                    print('Error: comma not found after extracting hex value')
+                    logging.error('Error: comma not found after extracting hex value')
                     return None
                 if columns_processed < column_count:
                     values_str = values_str[1:]
@@ -133,10 +143,10 @@ def get_values(table, column_count):
                 idx = len(val) + 1 # +1 for the trailing quote
                 values_str = values_str[idx:]
                 columns_processed += 1
-                # print('got string value: %s' % val)
+                # logging.debug('got string value: %s' % val)
                 # remove comma
                 if values_str[0] != ',' and columns_processed != column_count:
-                    print('Error: comma not found after extracting string value. string[0]: %s' % values_str[0])
+                    logging.error('Error: comma not found after extracting string value. string[0]: %s' % values_str[0])
                     return None
                 if columns_processed < column_count:
                     values_str = values_str[1:]
@@ -146,10 +156,10 @@ def get_values(table, column_count):
                 entry_values.append(val)
                 values_str = values_str[4:]
                 columns_processed += 1
-                # print('got NULL value: %s' % val)
+                # logging.debug('got NULL value: %s' % val)
                 # remove comma
                 if values_str[0] != ',' and columns_processed != column_count:
-                    print('Error: comma not found after extracting NULL value')
+                    logging.error('Error: comma not found after extracting NULL value')
                     return None
                 if columns_processed < column_count:
                     values_str = values_str[1:]
@@ -161,23 +171,23 @@ def get_values(table, column_count):
                 idx = len(val)
                 values_str = values_str[idx:]
                 columns_processed += 1
-                # print('got integer value: %s' % val)
+                # logging.debug('got integer value: %s' % val)
                 # remove comma
                 if values_str[0] != ',' and columns_processed != column_count:
-                    print('Error: comma not found after extracting integer value')
+                    logging.error('Error: comma not found after extracting integer value')
                     return None
                 if columns_processed < column_count:
                     values_str = values_str[1:]
             else:
-                print('Error: found invalid character in data: %s' % values_str[0])
+                logging.error('Error: found invalid character in data: %s' % values_str[0])
                 return None
 
             if columns_processed == column_count:
                 current_entry_finished = True
-                # print('completed processing of row')
+                # logging.debug('completed processing of row')
                 # remove closing parenthesis
                 if values_str[0] != ')':
-                    print('Error: closing parenthesis not found at end of row data')
+                    logging.error('Error: closing parenthesis not found at end of row data')
                     return None
                 values_str = values_str[1:]
                 # remove the comma between entries, unless this is the last entry
@@ -188,14 +198,16 @@ def get_values(table, column_count):
     return values
 
 def run():
-    print('running db_migration')
+    logging.info('running db_migration')
     # setup: http://stackoverflow.com/questions/25537905/django-1-7-throws-django-core-exceptions-appregistrynotready-models-arent-load
     django.setup()
 
     # first, create the default groups
      # Create Groups
+    logging.info('creating default groups')
     models.Profile.create_groups()
     # create default image types
+    logging.info('creating default image types')
     small_icon_type = models.ImageType(name='small_icon',
         max_size_bytes='4096')
     small_icon_type.save()
@@ -215,19 +227,12 @@ def run():
         max_size_bytes='1048576')
     large_screenshot_type.save()
 
-
     category_mapper = migrate_category()
-    print('category_mapper: %s' % category_mapper)
     agency_mapper = migrate_agency()
-    print('agency_mapper: %s' % agency_mapper)
     type_mapper = migrate_type()
-    print('type_mapper: %s' % type_mapper)
     contact_type_mapper = migrate_contact_type()
-    print('contact_type_mapper: %s' % contact_type_mapper)
     profile_mapper = migrate_profile()
-    print('profile_mapper: %s' % profile_mapper)
     notification_mapper = migrate_notification(profile_mapper)
-    print('notification_mapper: %s' % notification_mapper)
     migrate_profile_dismissed_notifications(profile_mapper, notification_mapper)
     listing_mapper = migrate_listing(category_mapper, agency_mapper, type_mapper,
         contact_type_mapper, profile_mapper)
@@ -246,7 +251,7 @@ def run():
 
 
 def migrate_category():
-    print('migrating categories...')
+    logging.debug('migrating categories...')
     columns = get_columns('category')
     # ['id', 'version', 'created_by_id', 'created_date', 'description', 'edited_by_id', 'edited_date', 'title']
     assert columns[0] == 'id'
@@ -258,23 +263,24 @@ def migrate_category():
     assert columns[6] == 'edited_date'
     assert columns[7] == 'title'
     values = get_values('category', len(columns))
-    # print('category columns: %s' % columns)
-    print('number of category entries: %s' % len(values))
-    # print('category values: %s' % values)
+    # logging.debug('category columns: %s' % columns)
+    logging.info('Categories to migrate: %s' % len(values))
+    # logging.debug('category values: %s' % values)
     # map old ids to new ones for future migrations: {'<old_id>': '<new_id>'}
     category_mapper = {}
+    logging.info('==========================')
     for i in values:
         old_id = i[0]
         description = i[4]
         title = i[7]
-        print('adding category id %s, title: %s, description: %s' % (old_id, title, description))
+        logging.info('Adding category title: %s, description: %s' % (title, description))
         cat = models.Category(description=description, title=title)
         cat.save()
         category_mapper[i[0]] = str(cat.id)
     return category_mapper
 
 def migrate_agency():
-    print('migrating agencies...')
+    logging.debug('migrating agencies...')
     columns = get_columns('agency')
     # ['id', 'version', 'created_by_id', 'created_date', 'edited_by_id', 'edited_date', 'icon_id', 'short_name', 'title']
     assert columns[0] == 'id'
@@ -287,23 +293,24 @@ def migrate_agency():
     assert columns[7] == 'short_name'
     assert columns[8] == 'title'
     values = get_values('agency', len(columns))
-    # print('category columns: %s' % columns)
-    print('number of agencies entries: %s' % len(values))
-    # print('agency values: %s' % values)
+    # logging.debug('category columns: %s' % columns)
+    logging.info('Agencies to migrate: %s' % len(values))
+    # logging.debug('agency values: %s' % values)
     # map old ids to new ones for future migrations: {'<old_id>': '<new_id>'}
     agency_mapper = {}
+    logging.info('==========================')
     for i in values:
         old_id = i[0]
         short_name = i[7]
         title = i[8]
-        print('adding agency id %s, title: %s, short_name: %s' % (old_id, title, short_name))
+        logging.info('Adding agency title: %s, short_name: %s' % (title, short_name))
         a = models.Agency(short_name=short_name, title=title)
         a.save()
         agency_mapper[i[0]] = str(a.id)
     return agency_mapper
 
 def migrate_type():
-    print('migrating type...')
+    logging.debug('migrating type...')
     columns = get_columns('type')
     # ['id', 'version', 'created_by_id', 'created_date', 'description', 'edited_by_id', 'edited_date', 'title']
     assert columns[0] == 'id'
@@ -315,23 +322,24 @@ def migrate_type():
     assert columns[6] == 'edited_date'
     assert columns[7] == 'title'
     values = get_values('type', len(columns))
-    # print('category columns: %s' % columns)
-    print('number of type entries: %s' % len(values))
-    # print('agency values: %s' % values)
+    # logging.debug('category columns: %s' % columns)
+    logging.info('Listing Types to migrate: %s' % len(values))
+    # logging.debug('agency values: %s' % values)
     # map old ids to new ones for future migrations: {'<old_id>': '<new_id>'}
     type_mapper = {}
+    logging.info('==========================')
     for i in values:
         old_id = i[0]
         description = i[4]
         title = i[7]
-        print('adding type id %s, title: %s, description: %s' % (old_id, title, description))
+        logging.info('Adding listing type title: %s, description: %s' % (title, description))
         t = models.ListingType(title=title, description=description)
         t.save()
         type_mapper[i[0]] = str(t.id)
     return type_mapper
 
 def migrate_contact_type():
-    print('migrating contact_type...')
+    logging.debug('migrating contact_type...')
     columns = get_columns('contact_type')
     # ['id', 'version', 'created_by_id', 'created_date', 'edited_by_id', 'edited_date', 'required', 'title']
     assert columns[0] == 'id'
@@ -343,23 +351,24 @@ def migrate_contact_type():
     assert columns[6] == 'required'
     assert columns[7] == 'title'
     values = get_values('contact_type', len(columns))
-    # print('category columns: %s' % columns)
-    print('number of type entries: %s' % len(values))
-    # print('agency values: %s' % values)
+    # logging.debug('category columns: %s' % columns)
+    logging.info('ContactTypes to migrate: %s' % len(values))
+    # logging.debug('agency values: %s' % values)
     # map old ids to new ones for future migrations: {'<old_id>': '<new_id>'}
     contact_type_mapper = {}
+    logging.info('==========================')
     for i in values:
         old_id = i[0]
         required = i[6]
         title = i[7]
-        print('adding contact_type id %s, title: %s, required: %s' % (old_id, title, required))
+        logging.info('Adding contact_type title: %s, required: %s' % (title, required))
         ct = models.ContactType(name=title, required=required)
         ct.save()
         contact_type_mapper[i[0]] = str(ct.id)
     return contact_type_mapper
 
 def migrate_profile():
-    print('migrating profile...')
+    logging.debug('migrating profile...')
     columns = get_columns('profile')
     # ['id', 'version', 'bio', 'created_by_id', 'created_date', 'display_name', 'edited_by_id', 'edited_date', 'email', 'highest_role', 'last_login', 'username', 'launch_in_webtop']
     assert columns[0] == 'id'
@@ -376,11 +385,12 @@ def migrate_profile():
     assert columns[11] == 'username'
     assert columns[12] == 'launch_in_webtop'
     values = get_values('profile', len(columns))
-    # print('category columns: %s' % columns)
-    print('number of type entries: %s' % len(values))
-    # print('agency values: %s' % values)
+    # logging.debug('category columns: %s' % columns)
+    logging.info('Profiles to migrate: %s' % len(values))
+    # logging.debug('agency values: %s' % values)
     # map old ids to new ones for future migrations: {'<old_id>': '<new_id>'}
     profile_mapper = {}
+    logging.info('==========================')
     for i in values:
         old_id = i[0]
         bio = i[2]
@@ -389,7 +399,6 @@ def migrate_profile():
         highest_role = i[9]
         last_login = i[10]
         username = i[11]
-        print('adding profile id %s, username: %s' % (old_id, username))
         if not display_name:
             display_name = username
         kwargs = {
@@ -410,11 +419,12 @@ def migrate_profile():
         # be done automatically the first time authorization is checked
         p = models.Profile.create_user(username, **kwargs)
 
+        logging.info('Adding profile username: %s, display_name: %s, dn: %s' % (p.user.username, p.display_name, p.dn))
         profile_mapper[i[0]] = str(p.id)
     return profile_mapper
 
 def migrate_notification(profile_mapper):
-    print('migrating notification...')
+    logging.debug('migrating notification...')
     columns = get_columns('notification')
     # ['id', 'version', 'created_by_id', 'created_date', 'edited_by_id', 'edited_date', 'message', 'expires_date']
     assert columns[0] == 'id'
@@ -426,18 +436,19 @@ def migrate_notification(profile_mapper):
     assert columns[6] == 'message'
     assert columns[7] == 'expires_date'
     values = get_values('notification', len(columns))
-    # print('category columns: %s' % columns)
-    print('number of type entries: %s' % len(values))
-    # print('agency values: %s' % values)
+    # logging.debug('category columns: %s' % columns)
+    logging.info('Notifications to migrate: %s' % len(values))
+    # logging.debug('agency values: %s' % values)
     # map old ids to new ones for future migrations: {'<old_id>': '<new_id>'}
     notification_mapper = {}
+    logging.info('==========================')
     for i in values:
         old_id = i[0]
         message = i[6]
         expires_date = get_date_from_str(i[7])
         created_date = get_date_from_str(i[3])
         created_by_id = i[2]
-        print('adding notification id %s, message: %s, expires_date: %s' % (old_id, message, expires_date))
+        logging.info('Adding notification message: %s, expires_date: %s' % (message, expires_date))
         p = models.Profile.objects.get(id=profile_mapper[created_by_id])
         n = models.Notification(message=message, expires_date=expires_date, created_date=created_date, author=p)
         n.save()
@@ -445,13 +456,13 @@ def migrate_notification(profile_mapper):
     return notification_mapper
 
 def migrate_profile_dismissed_notifications(profile_mapper, notification_mapper):
-    print('migrating migrate_profile_dismissed_notifications...')
+    logging.debug('migrating migrate_profile_dismissed_notifications...')
     columns = get_columns('profile_dismissed_notifications')
     # ['notification_id', 'profile_id']
     assert columns[0] == 'notification_id'
     assert columns[1] == 'profile_id'
     values = get_values('profile_dismissed_notifications', len(columns))
-    print('number of profile_dismissed_notifications entries: %s' % len(values))
+    logging.info('Dismissed notifications to migrate: %s' % len(values))
     for i in values:
         notification_id = i[0]
         profile_id = i[1]
@@ -474,7 +485,7 @@ def migrate_image(image_uuid, image_type):
             file_extension = i
             break
     if not file_extension:
-        print('Error: no file extension found for image %s' % image_uuid)
+        logging.error('Error: no file extension found for image %s' % image_uuid)
         return
 
     # set default security marking
@@ -486,13 +497,14 @@ def migrate_image(image_uuid, image_type):
     src = filename
     dest = settings.MEDIA_ROOT + str(img.id) + '_' + img.image_type.name + '.' + file_extension
     shutil.copy(src, dest)
+    logging.info('Migrated image: %s, type: %s' % (image_uuid, image_type))
     return img
 
 def migrate_listing(category_mapper, agency_mapper, type_mapper,
         contact_type_mapper, profile_mapper):
-    print('migrating listings')
+    logging.debug('migrating listings')
     columns = get_columns('listing')
-    print('listing columns: %s' % columns)
+    logging.debug('listing columns: %s' % columns)
     # ['id', 'version', 'agency_id', 'approval_status', 'approved_date', 'avg_rate',
     #   'created_by_id', 'created_date', 'description', 'description_short',
     #   'edited_by_id', 'edited_date', 'small_icon_id', 'large_icon_id',
@@ -538,10 +550,12 @@ def migrate_listing(category_mapper, agency_mapper, type_mapper,
     assert columns[34] == 'singleton'
     assert columns[35] == 'height'
     values = get_values('listing', len(columns))
-    print('listing values: %s' % values)
+    # logging.debug('listing values: %s' % values)
+    logging.info('Listings to migrate: %s' % len(values))
 
     # map old ids to new ones for future migrations: {'<old_id>': '<new_id>'}
     listing_mapper = {}
+    logging.info('==========================')
     for i in values:
         try:
             old_id = i[0]
@@ -583,7 +597,7 @@ def migrate_listing(category_mapper, agency_mapper, type_mapper,
             what_is_new = i[32]
             iframe_compatible = not i[34]
 
-            print('adding listing id %s, title: %s' % (old_id, title))
+            logging.info('Adding listing title: %s' % (title))
             # TODO: unique_name?
             listing = models.Listing(title=title, agency=agency,
                 approval_status=approval_status, approved_date=approved_date,
@@ -601,17 +615,13 @@ def migrate_listing(category_mapper, agency_mapper, type_mapper,
                 total_reviews=total_comments, security_marking=DEFAULT_SECURITY_MARKING)
             listing.save()
             listing_mapper[old_id] = str(listing.id)
-
-            # TODO:
-            # current_rejection
-            # last_activity
         except Exception as e:
-            print('Error processing listing %s: %s' % (title, str(e)))
+            logging.error('Error processing listing %s: %s' % (title, str(e)))
 
     return listing_mapper
 
 def migrate_application_library_entry(profile_mapper, listing_mapper):
-    print('migrating application_library_entry...')
+    logging.debug('migrating application_library_entry...')
     columns = get_columns('application_library_entry')
     # ['id', 'version', 'created_by_id', 'created_date', 'edited_by_id', 'edited_date', 'folder', 'listing_id', 'owner_id', 'application_library_idx']
     assert columns[0] == 'id'
@@ -624,8 +634,9 @@ def migrate_application_library_entry(profile_mapper, listing_mapper):
     assert columns[7] == 'listing_id'
     assert columns[8] == 'owner_id'
     values = get_values('application_library_entry', len(columns))
-    # print('category columns: %s' % columns)
-    print('number of application_library_entry entries: %s' % len(values))
+    # logging.debug('category columns: %s' % columns)
+    logging.info('Application Library Entries to migrate: %s' % len(values))
+    logging.info('==========================')
     for i in values:
         try:
             old_id = i[0]
@@ -633,14 +644,14 @@ def migrate_application_library_entry(profile_mapper, listing_mapper):
             listing_id = i[7]
             listing = models.Listing.objects.get(id=listing_mapper[listing_id])
             owner = models.Profile.objects.get(id=profile_mapper[i[8]])
-            print('adding application_library_entry for listing %s, owner %s' % (listing.title, owner.user.username))
+            logging.info('Adding application_library_entry for listing %s, owner %s' % (listing.title, owner.user.username))
             entry = models.ApplicationLibraryEntry(folder=folder, listing=listing, owner=owner)
             entry.save()
         except Exception as e:
-            print('Error adding library entry: %s, values: %s' % (str(e), i))
+            logging.error('Error adding library entry: %s, values: %s' % (str(e), i))
 
 def migrate_doc_url(listing_mapper):
-    print('migrating doc_url...')
+    logging.debug('migrating doc_url...')
     columns = get_columns('doc_url')
     # ['id', 'version', 'listing_id', 'name', 'url']
     assert columns[0] == 'id'
@@ -649,8 +660,9 @@ def migrate_doc_url(listing_mapper):
     assert columns[3] == 'name'
     assert columns[4] == 'url'
     values = get_values('doc_url', len(columns))
-    # print('category columns: %s' % columns)
-    print('number of doc_url entries: %s' % len(values))
+    # logging.debug('category columns: %s' % columns)
+    logging.info('Doc Urls to migrate: %s' % len(values))
+    logging.info('==========================')
     for i in values:
         try:
             old_id = i[0]
@@ -658,14 +670,14 @@ def migrate_doc_url(listing_mapper):
             name = i[3]
             url = i[4]
             listing = models.Listing.objects.get(id=listing_mapper[listing_id])
-            print('adding doc_url for listing %s, name %s' % (listing.title, name))
+            logging.info('Adding doc_url for listing %s, name %s' % (listing.title, name))
             doc_url = models.DocUrl(name=name, url=url, listing=listing)
             doc_url.save()
         except Exception as e:
-            print('Error adding doc_url entry: %s, values: %s' % (str(e), i))
+            logging.error('Error adding doc_url entry: %s, values: %s' % (str(e), i))
 
 def migrate_item_comment(profile_mapper, listing_mapper):
-    print('migrating item_comment...')
+    logging.debug('migrating item_comment...')
     columns = get_columns('item_comment')
     # ['id', 'version', 'listing_id', 'name', 'url']
     assert columns[0] == 'id'
@@ -679,8 +691,9 @@ def migrate_item_comment(profile_mapper, listing_mapper):
     assert columns[8] == 'rate'
     assert columns[9] == 'text'
     values = get_values('item_comment', len(columns))
-    # print('category columns: %s' % columns)
-    print('number of item_comment entries: %s' % len(values))
+    # logging.debug('category columns: %s' % columns)
+    logging.info('Reviews to migrate: %s' % len(values))
+    logging.info('==========================')
     for i in values:
         try:
             old_id = i[0]
@@ -691,13 +704,13 @@ def migrate_item_comment(profile_mapper, listing_mapper):
             text = i[9]
             review = models.Review(text=text, rate=rate,
                 edited_date=edited_date, author=author, listing=listing)
-            print('adding review for listing %s, rate: %s, text: %s' % (listing.title, rate, text))
+            logging.info('Adding review for listing %s, rate: %s, text: %s' % (listing.title, rate, text))
             review.save()
         except Exception as e:
-            print('Error adding review entry: %s, values: %s' % (str(e), i))
+            logging.error('Error adding review entry: %s, values: %s' % (str(e), i))
 
 def migrate_iwc_data_object(profile_mapper):
-    print('migrating iwc_data_object...')
+    logging.debug('migrating iwc_data_object...')
     columns = get_columns('iwc_data_object')
     # ['id', 'version', 'content_type', 'entity', 'key', 'profile_id']
     assert columns[0] == 'id'
@@ -707,8 +720,9 @@ def migrate_iwc_data_object(profile_mapper):
     assert columns[4] == 'key'
     assert columns[5] == 'profile_id'
     values = get_values('iwc_data_object', len(columns))
-    # print('category columns: %s' % columns)
-    print('number of iwc_data_object entries: %s' % len(values))
+    # logging.debug('category columns: %s' % columns)
+    logging.info('IWC data objects to migrate: %s' % len(values))
+    logging.info('==========================')
     for i in values:
         try:
             old_id = i[0]
@@ -719,55 +733,57 @@ def migrate_iwc_data_object(profile_mapper):
             # TODO: any modification here to match new api?
             data = iwc_models.DataResource(key=key, entity=entity,
                 content_type=content_type, username=profile.user.username)
-            print('adding iwc DataObject for user %s, key: %s, content_type: %s' % (
+            logging.info('Adding iwc DataObject for user %s, key: %s, content_type: %s' % (
                 profile.user.username, key, content_type))
             data.save()
         except Exception as e:
-            print('Error adding iwc DataObject entry: %s, values: %s' % (str(e), i))
+            logging.error('Error adding iwc DataObject entry: %s, values: %s' % (str(e), i))
 
 def migrate_listing_category(listing_mapper, category_mapper):
-    print('migrating listing_category...')
+    logging.debug('migrating listing_category...')
     columns = get_columns('listing_category')
     # ['listing_categories_id', 'category_id']
     assert columns[0] == 'listing_categories_id'
     assert columns[1] == 'category_id'
     values = get_values('listing_category', len(columns))
-    # print('category columns: %s' % columns)
-    print('number of listing_category entries: %s' % len(values))
+    # logging.debug('category columns: %s' % columns)
+    logging.info('listing_category associations to migrate: %s' % len(values))
+    logging.info('==========================')
     for i in values:
         try:
             listing_id = i[0]
             category_id = i[1]
             listing = models.Listing.objects.get(id=listing_mapper[listing_id])
             category = models.Category.objects.get(id=category_mapper[category_id])
-            print('adding category for listing %s, name %s' % (listing.title, category.title))
+            logging.info('Adding category for listing %s, name %s' % (listing.title, category.title))
             listing.categories.add(category)
         except Exception as e:
-            print('Error adding category %s to listing: %s, values: %s' % (category.title, listing.title, i))
+            logging.error('Error adding category %s to listing: %s, values: %s' % (category.title, listing.title, i))
 
 def migrate_listing_profile(profile_mapper, listing_mapper):
     # owners
-    print('migrating listing_profile...')
+    logging.debug('migrating listing_profile...')
     columns = get_columns('listing_profile')
     # ['listing_owners_id', 'profile_id']
     assert columns[0] == 'listing_owners_id'
     assert columns[1] == 'profile_id'
     values = get_values('listing_profile', len(columns))
-    # print('category columns: %s' % columns)
-    print('number of listing_profile entries: %s' % len(values))
+    # logging.debug('category columns: %s' % columns)
+    logging.info('listing_profile associations to migrate: %s' % len(values))
+    logging.info('==========================')
     for i in values:
         try:
             listing_id = i[0]
             profile_id = i[1]
             listing = models.Listing.objects.get(id=listing_mapper[listing_id])
             profile = models.Profile.objects.get(id=profile_mapper[profile_id])
-            print('adding owner for listing %s, username %s' % (listing.title, profile.user.username))
+            logging.info('Adding owner for listing %s, username %s' % (listing.title, profile.user.username))
             listing.owners.add(profile)
         except Exception as e:
-            print('Error adding owner %s to listing: %s, values: %s' % (profile.user.username, listing.title, i))
+            logging.error('Error adding owner %s to listing: %s, values: %s' % (profile.user.username, listing.title, i))
 
 def migrate_listing_screenshot(listing_mapper):
-    print('migrating screenshot...')
+    logging.debug('migrating screenshot...')
     columns = get_columns('screenshot')
     # ['id', 'version', 'listing_id', 'name', 'url']
     assert columns[0] == 'id'
@@ -781,8 +797,9 @@ def migrate_listing_screenshot(listing_mapper):
     assert columns[8] == 'small_image_id'
     assert columns[9] == 'ordinal'
     values = get_values('screenshot', len(columns))
-    # print('category columns: %s' % columns)
-    print('number of screenshot entries: %s' % len(values))
+    # logging.debug('category columns: %s' % columns)
+    logging.info('Screenshots to migrate: %s' % len(values))
+    logging.info('==========================')
     for i in values:
         try:
             old_id = i[0]
@@ -792,21 +809,22 @@ def migrate_listing_screenshot(listing_mapper):
             listing = models.Listing.objects.get(id=listing_mapper[listing_id])
             small_image = migrate_image(small_image_id, 'small_screenshot')
             large_image = migrate_image(large_image_id, 'large_screenshot')
-            print('adding screenshot for listing %s, large_image_id %s' % (listing.title, large_image_id))
+            logging.info('Adding screenshot for listing %s, large_image_id %s' % (listing.title, large_image_id))
             screenshot = models.Screenshot(small_image=small_image, large_image=large_image, listing=listing)
             screenshot.save()
         except Exception as e:
-            print('Error adding screenshot entry: %s, values: %s' % (str(e), i))
+            logging.error('Error adding screenshot entry: %s, values: %s' % (str(e), i))
 
 def migrate_listing_tags(listing_mapper):
-    print('migrating listing_tags...')
+    logging.debug('migrating listing_tags...')
     columns = get_columns('listing_tags')
     # ['listing_id', 'tags_string']
     assert columns[0] == 'listing_id'
     assert columns[1] == 'tags_string'
     values = get_values('listing_tags', len(columns))
-    # print('category columns: %s' % columns)
-    print('number of listing_tags entries: %s' % len(values))
+    # logging.debug('category columns: %s' % columns)
+    logging.info('Tags to migrate: %s' % len(values))
+    logging.info('==========================')
     for i in values:
         try:
             listing_id = i[0]
@@ -817,14 +835,14 @@ def migrate_listing_tags(listing_mapper):
                 tag.save()
             except Exception:
                 tag = models.Tag.objects.get(name=name)
-            print('adding tag for listing %s, name %s' % (listing.title, tag))
+            logging.info('Adding tag for listing %s, name %s' % (listing.title, tag))
             listing.tags.add(tag)
 
         except Exception as e:
-            print('Error adding tag entry: %s, values: %s' % (str(e), i))
+            logging.error('Error adding tag entry: %s, values: %s' % (str(e), i))
 
 def migrate_contact(listing_mapper, contact_type_mapper):
-    print('migrating contact...')
+    logging.debug('migrating contact...')
     columns = get_columns('contact')
     # ['id', 'version', 'created_by_id', 'created_date', 'edited_by_id', 'edited_date', 'email',
     #   'listing_id', 'name', 'organization', 'secure_phone', 'type_id', 'unsecure_phone']
@@ -843,8 +861,9 @@ def migrate_contact(listing_mapper, contact_type_mapper):
     assert columns[12] == 'unsecure_phone'
 
     values = get_values('contact', len(columns))
-    # print('category columns: %s' % columns)
-    print('number of contact entries: %s' % len(values))
+    # logging.debug('category columns: %s' % columns)
+    logging.info('Contacts to migrate: %s' % len(values))
+    logging.info('==========================')
     for i in values:
         try:
             email = i[6]
@@ -861,16 +880,16 @@ def migrate_contact(listing_mapper, contact_type_mapper):
                     unsecure_phone=unsecure_phone, contact_type=contact_type)
                 contact.save()
             except Exception:
-                print('Error: Found duplicate contact entry: %s' % name)
+                logging.warning('Error: Found duplicate contact entry: %s' % name)
                 contact = models.Tag.objects.get(name=name)
-            print('adding contact %s for listing %s' % (name, listing.title))
+            logging.info('Adding contact %s for listing %s' % (name, listing.title))
             listing.contacts.add(contact)
 
         except Exception as e:
-            print('Error adding contact entry: %s, values: %s' % (str(e), i))
+            logging.error('Error adding contact entry: %s, values: %s' % (str(e), i))
 
 def migrate_listing_activities(profile_mapper, listing_mapper):
-    print('migrating listing_activity...')
+    logging.debug('migrating listing_activity...')
     columns = get_columns('listing_activity')
     # ['id', 'version', 'created_by_id', 'created_date', 'edited_by_id', 'edited_date', 'email',
     #   'listing_id', 'name', 'organization', 'secure_phone', 'type_id', 'unsecure_phone']
@@ -886,9 +905,10 @@ def migrate_listing_activities(profile_mapper, listing_mapper):
     assert columns[9] == 'listing_id'
     assert columns[10] == 'listing_activities_idx'
     values = get_values('listing_activity', len(columns))
-    # print('category columns: %s' % columns)
-    print('number of listing_activity entries: %s' % len(values))
+    # logging.debug('category columns: %s' % columns)
+    logging.info('Listing Activities to migrate: %s' % len(values))
     listing_activity_mapper = {}
+    logging.info('==========================')
     for i in values:
         try:
             old_id = i[0]
@@ -898,18 +918,18 @@ def migrate_listing_activities(profile_mapper, listing_mapper):
             activity_date = get_date_from_str(i[8])
             author = models.Profile.objects.get(id=profile_mapper[author_id])
             listing = models.Listing.objects.get(id=listing_mapper[listing_id])
-            print('adding listing_activity %s for listing %s' % (action, listing.title))
+            logging.info('Adding listing_activity %s for listing %s' % (action, listing.title))
             listing_activity = models.ListingActivity(action=action, activity_date=activity_date,
                 author=author, listing=listing)
             listing_activity.save()
             listing_activity_mapper[old_id] = str(listing_activity.id)
         except Exception as e:
-            print('Error adding listing_activity entry: %s, values: %s' % (str(e), i))
+            logging.warning('Error adding listing_activity entry: %s, values: %s' % (str(e), i))
 
     return listing_activity_mapper
 
 def migrate_change_detail(listing_activity_mapper):
-    print('migrating change_detail...')
+    logging.debug('migrating change_detail...')
     columns = get_columns('change_detail')
     # ['id', 'version', 'field_name', 'new_value', 'old_value', 'service_item_activity_id']
     assert columns[0] == 'id'
@@ -919,8 +939,9 @@ def migrate_change_detail(listing_activity_mapper):
     assert columns[4] == 'old_value'
     assert columns[5] == 'service_item_activity_id'
     values = get_values('change_detail', len(columns))
-    # print('category columns: %s' % columns)
-    print('number of change_detail entries: %s' % len(values))
+    # logging.debug('category columns: %s' % columns)
+    logging.info('Change details to migrate: %s' % len(values))
+    logging.info('==========================')
     for i in values:
         try:
             field_name = i[2]
@@ -928,28 +949,28 @@ def migrate_change_detail(listing_activity_mapper):
             old_value = i[4]
             listing_activity_id = i[5]
             listing_activity = models.ListingActivity.objects.get(id=listing_activity_mapper[listing_activity_id])
-            print('adding change_detail for listing %s, field_name %s' % (listing_activity.listing.title, field_name))
+            logging.info('Adding change_detail for listing %s, field_name %s' % (listing_activity.listing.title, field_name))
             change_detail = models.ChangeDetail(field_name=field_name,
                 old_value=old_value, new_value=new_value)
             change_detail.save()
             listing_activity.change_details.add(change_detail)
         except Exception as e:
-            print('Error adding change_detail %s, values: %s' % (field_name, i))
+            logging.warning('Error adding change_detail %s, values: %s' % (field_name, i))
 
 def migrate_rejection_data(listing_mapper, listing_activity_mapper):
     """
     Set ListingActivity.description for all REJECTED activities
     """
-    print('getting data from rejection_activity...')
+    logging.debug('getting data from rejection_activity...')
     columns = get_columns('rejection_activity')
     # ['id', 'rejection_listing_id']
     assert columns[0] == 'id'
     assert columns[1] == 'rejection_listing_id'
     rejection_activity_values = get_values('rejection_activity', len(columns))
-    # print('category columns: %s' % columns)
-    print('number of rejection_activity entries: %s' % len(rejection_activity_values))
+    # logging.debug('category columns: %s' % columns)
+    logging.info('Rejection activities to migrate: %s' % len(rejection_activity_values))
 
-    print('getting data from rejection_listing...')
+    logging.debug('getting data from rejection_listing...')
     columns = get_columns('rejection_listing')
     # ['id', 'version', 'author_id', 'created_by_id', 'created_date', 'description',
     #   'edited_by_id', 'edited_date', 'service_item_id']
@@ -963,8 +984,8 @@ def migrate_rejection_data(listing_mapper, listing_activity_mapper):
     assert columns[7] == 'edited_date'
     assert columns[8] == 'service_item_id'
     rejection_listing_values = get_values('rejection_listing', len(columns))
-    # print('category columns: %s' % columns)
-    print('number of rejection_listing entries: %s' % len(rejection_listing_values))
+    # logging.debug('category columns: %s' % columns)
+    logging.info('Rejection listings to migrate: %s' % len(rejection_listing_values))
 
     inverse_listing_activity_mapper = {v: k for k, v in listing_activity_mapper.items()}
 
@@ -974,9 +995,9 @@ def migrate_rejection_data(listing_mapper, listing_activity_mapper):
         if activity.action == 'REJECTED':
             found_description = False
             try:
-                print('Found REJECTED action for listing %s' % activity.listing.title)
+                logging.info('Found REJECTED action for listing %s' % activity.listing.title)
             except Exception:
-                print('Error: Found REJECTED action for non-existent listing')
+                logging.warning('Error: Found REJECTED action for non-existent listing')
                 continue
             # find the corresponding rejection_activity
             old_listing_activity_id = inverse_listing_activity_mapper[str(activity.id)]
@@ -985,12 +1006,12 @@ def migrate_rejection_data(listing_mapper, listing_activity_mapper):
                     for rejection_listing in rejection_listing_values:
                         if rejection_listing[0] == rejection_activity[1]:
                             description = rejection_listing[5]
-                            print('Adding reason for rejection: %s' % description)
+                            logging.info('Adding reason for rejection: %s' % description)
                             activity.description = description
                             activity.save()
                             found_description = True
             if not found_description:
-                print('Error: Failed to find a description for a REJECTED activity')
+                logging.warning('Error: Failed to find a description for a REJECTED activity')
 
 
 if __name__ == "__main__":
