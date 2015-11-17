@@ -237,6 +237,9 @@ def run():
     migrate_iwc_data_object(profile_mapper)
     migrate_listing_category(listing_mapper, category_mapper)
     migrate_listing_profile(profile_mapper, listing_mapper)
+    migrate_listing_screenshot(listing_mapper)
+    migrate_listing_tags(listing_mapper)
+    migrate_contact(listing_mapper, contact_type_mapper)
 
 def migrate_category():
     print('migrating categories...')
@@ -760,13 +763,107 @@ def migrate_listing_profile(profile_mapper, listing_mapper):
             print('Error adding owner %s to listing: %s, values: %s' % (profile.user.username, listing.title, i))
 
 def migrate_listing_screenshot(listing_mapper):
-    pass
+    print('migrating screenshot...')
+    columns = get_columns('screenshot')
+    # ['id', 'version', 'listing_id', 'name', 'url']
+    assert columns[0] == 'id'
+    assert columns[1] == 'version'
+    assert columns[2] == 'created_by_id'
+    assert columns[3] == 'created_date'
+    assert columns[4] == 'edited_by_id'
+    assert columns[5] == 'edited_date'
+    assert columns[6] == 'large_image_id'
+    assert columns[7] == 'service_item_id'
+    assert columns[8] == 'small_image_id'
+    assert columns[9] == 'ordinal'
+    values = get_values('screenshot', len(columns))
+    # print('category columns: %s' % columns)
+    print('number of screenshot entries: %s' % len(values))
+    for i in values:
+        try:
+            old_id = i[0]
+            large_image_id= i[6]
+            small_image_id= i[8]
+            listing_id = i[7]
+            listing = models.Listing.objects.get(id=listing_mapper[listing_id])
+            small_image = migrate_image(small_image_id, 'small_screenshot')
+            large_image = migrate_image(large_image_id, 'large_screenshot')
+            print('adding screenshot for listing %s, large_image_id %s' % (listing.title, large_image_id))
+            screenshot = models.Screenshot(small_image=small_image, large_image=large_image, listing=listing)
+            screenshot.save()
+        except Exception as e:
+            print('Error adding screenshot entry: %s, values: %s' % (str(e), i))
 
 def migrate_listing_tags(listing_mapper):
-    pass
+    print('migrating listing_tags...')
+    columns = get_columns('listing_tags')
+    # ['listing_id', 'tags_string']
+    assert columns[0] == 'listing_id'
+    assert columns[1] == 'tags_string'
+    values = get_values('listing_tags', len(columns))
+    # print('category columns: %s' % columns)
+    print('number of listing_tags entries: %s' % len(values))
+    for i in values:
+        try:
+            listing_id = i[0]
+            name = i[1]
+            listing = models.Listing.objects.get(id=listing_mapper[listing_id])
+            try:
+                tag = models.Tag(name=name)
+                tag.save()
+            except Exception:
+                tag = models.Tag.objects.get(name=name)
+            print('adding tag for listing %s, name %s' % (listing.title, tag))
+            listing.tags.add(tag)
+
+        except Exception as e:
+            print('Error adding tag entry: %s, values: %s' % (str(e), i))
 
 def migrate_contact(listing_mapper, contact_type_mapper):
-    pass
+    print('migrating contact...')
+    columns = get_columns('contact')
+    # ['id', 'version', 'created_by_id', 'created_date', 'edited_by_id', 'edited_date', 'email',
+    #   'listing_id', 'name', 'organization', 'secure_phone', 'type_id', 'unsecure_phone']
+    assert columns[0] == 'id'
+    assert columns[1] == 'version'
+    assert columns[2] == 'created_by_id'
+    assert columns[3] == 'created_date'
+    assert columns[4] == 'edited_by_id'
+    assert columns[5] == 'edited_date'
+    assert columns[6] == 'email'
+    assert columns[7] == 'listing_id'
+    assert columns[8] == 'name'
+    assert columns[9] == 'organization'
+    assert columns[10] == 'secure_phone'
+    assert columns[11] == 'type_id'
+    assert columns[12] == 'unsecure_phone'
+
+    values = get_values('contact', len(columns))
+    # print('category columns: %s' % columns)
+    print('number of contact entries: %s' % len(values))
+    for i in values:
+        try:
+            email = i[6]
+            listing_id = i[7]
+            name = i[8]
+            organization = i[9]
+            secure_phone = i[10]
+            type_id = i[11]
+            contact_type = models.ContactType.objects.get(id=contact_type_mapper[type_id])
+            unsecure_phone = i[12]
+            listing = models.Listing.objects.get(id=listing_mapper[listing_id])
+            try:
+                contact = models.Contact(name=name, email=email, secure_phone=secure_phone,
+                    unsecure_phone=unsecure_phone, contact_type=contact_type)
+                contact.save()
+            except Exception:
+                print('Error: Found duplicate contact entry: %s' % name)
+                contact = models.Tag.objects.get(name=name)
+            print('adding contact %s for listing %s' % (name, listing.title))
+            listing.contacts.add(contact)
+
+        except Exception as e:
+            print('Error adding contact entry: %s, values: %s' % (str(e), i))
 
 def migrate_listing_activities(profile_mapper, listing_mapper):
     # includes change_details, rejection_listing, rejection_activity
