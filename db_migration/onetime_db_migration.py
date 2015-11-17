@@ -940,15 +940,57 @@ def migrate_rejection_data(listing_mapper, listing_activity_mapper):
     """
     Set ListingActivity.description for all REJECTED activities
     """
+    print('getting data from rejection_activity...')
+    columns = get_columns('rejection_activity')
+    # ['id', 'rejection_listing_id']
+    assert columns[0] == 'id'
+    assert columns[1] == 'rejection_listing_id'
+    rejection_activity_values = get_values('rejection_activity', len(columns))
+    # print('category columns: %s' % columns)
+    print('number of rejection_activity entries: %s' % len(rejection_activity_values))
+
+    print('getting data from rejection_listing...')
+    columns = get_columns('rejection_listing')
+    # ['id', 'version', 'author_id', 'created_by_id', 'created_date', 'description',
+    #   'edited_by_id', 'edited_date', 'service_item_id']
+    assert columns[0] == 'id'
+    assert columns[1] == 'version'
+    assert columns[2] == 'author_id'
+    assert columns[3] == 'created_by_id'
+    assert columns[4] == 'created_date'
+    assert columns[5] == 'description'
+    assert columns[6] == 'edited_by_id'
+    assert columns[7] == 'edited_date'
+    assert columns[8] == 'service_item_id'
+    rejection_listing_values = get_values('rejection_listing', len(columns))
+    # print('category columns: %s' % columns)
+    print('number of rejection_listing entries: %s' % len(rejection_listing_values))
+
+    inverse_listing_activity_mapper = {v: k for k, v in listing_activity_mapper.items()}
+
+
     listing_activities = models.ListingActivity.objects.all()
     for activity in listing_activities:
         if activity.action == 'REJECTED':
+            found_description = False
             try:
                 print('Found REJECTED action for listing %s' % activity.listing.title)
             except Exception:
                 print('Error: Found REJECTED action for non-existent listing')
                 continue
-
+            # find the corresponding rejection_activity
+            old_listing_activity_id = inverse_listing_activity_mapper[str(activity.id)]
+            for rejection_activity in rejection_activity_values:
+                if rejection_activity[0] == old_listing_activity_id:
+                    for rejection_listing in rejection_listing_values:
+                        if rejection_listing[0] == rejection_activity[1]:
+                            description = rejection_listing[5]
+                            print('Adding reason for rejection: %s' % description)
+                            activity.description = description
+                            activity.save()
+                            found_description = True
+            if not found_description:
+                print('Error: Failed to find a description for a REJECTED activity')
 
 
 if __name__ == "__main__":
