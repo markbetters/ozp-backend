@@ -28,6 +28,8 @@ from ozpcenter import models as models
 from ozpcenter import model_access
 from ozpcenter import utils
 
+from ozpiwc import models as iwc_models
+
 # path to the SQL dump files
 SQL_FILE_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'sql_dumps')
 # path to the images
@@ -232,6 +234,9 @@ def run():
     migrate_application_library_entry(profile_mapper, listing_mapper)
     migrate_doc_url(listing_mapper)
     migrate_item_comment(profile_mapper, listing_mapper)
+    migrate_iwc_data_object(profile_mapper)
+    migrate_listing_category(listing_mapper, category_mapper)
+    migrate_listing_profile(profile_mapper, listing_mapper)
 
 def migrate_category():
     print('migrating categories...')
@@ -685,14 +690,74 @@ def migrate_item_comment(profile_mapper, listing_mapper):
             print('Error adding review entry: %s, values: %s' % (str(e), i))
 
 def migrate_iwc_data_object(profile_mapper):
-    pass
+    print('migrating iwc_data_object...')
+    columns = get_columns('iwc_data_object')
+    # ['id', 'version', 'content_type', 'entity', 'key', 'profile_id']
+    assert columns[0] == 'id'
+    assert columns[1] == 'version'
+    assert columns[2] == 'content_type'
+    assert columns[3] == 'entity'
+    assert columns[4] == 'key'
+    assert columns[5] == 'profile_id'
+    values = get_values('iwc_data_object', len(columns))
+    # print('category columns: %s' % columns)
+    print('number of iwc_data_object entries: %s' % len(values))
+    for i in values:
+        try:
+            old_id = i[0]
+            profile = models.Profile.objects.get(id=profile_mapper[i[5]])
+            key = i[4]
+            content_type = i[2]
+            entity = i[3]
+            # TODO: any modification here to match new api?
+            data = iwc_models.DataResource(key=key, entity=entity,
+                content_type=content_type, username=profile.user.username)
+            print('adding iwc DataObject for user %s, key: %s, content_type: %s' % (
+                profile.user.username, key, content_type))
+            data.save()
+        except Exception as e:
+            print('Error adding iwc DataObject entry: %s, values: %s' % (str(e), i))
 
-def migrate_listing_category(listing_mapper):
-    pass
+def migrate_listing_category(listing_mapper, category_mapper):
+    print('migrating listing_category...')
+    columns = get_columns('listing_category')
+    # ['listing_categories_id', 'category_id']
+    assert columns[0] == 'listing_categories_id'
+    assert columns[1] == 'category_id'
+    values = get_values('listing_category', len(columns))
+    # print('category columns: %s' % columns)
+    print('number of listing_category entries: %s' % len(values))
+    for i in values:
+        try:
+            listing_id = i[0]
+            category_id = i[1]
+            listing = models.Listing.objects.get(id=listing_mapper[listing_id])
+            category = models.Category.objects.get(id=category_mapper[category_id])
+            print('adding category for listing %s, name %s' % (listing.title, category.title))
+            listing.categories.add(category)
+        except Exception as e:
+            print('Error adding category %s to listing: %s, values: %s' % (category.title, listing.title, i))
 
 def migrate_listing_profile(profile_mapper, listing_mapper):
     # owners
-    pass
+    print('migrating listing_profile...')
+    columns = get_columns('listing_profile')
+    # ['listing_owners_id', 'profile_id']
+    assert columns[0] == 'listing_owners_id'
+    assert columns[1] == 'profile_id'
+    values = get_values('listing_profile', len(columns))
+    # print('category columns: %s' % columns)
+    print('number of listing_profile entries: %s' % len(values))
+    for i in values:
+        try:
+            listing_id = i[0]
+            profile_id = i[1]
+            listing = models.Listing.objects.get(id=listing_mapper[listing_id])
+            profile = models.Profile.objects.get(id=profile_mapper[profile_id])
+            print('adding owner for listing %s, username %s' % (listing.title, profile.user.username))
+            listing.owners.add(profile)
+        except Exception as e:
+            print('Error adding owner %s to listing: %s, values: %s' % (profile.user.username, listing.title, i))
 
 def migrate_listing_screenshot(listing_mapper):
     pass
