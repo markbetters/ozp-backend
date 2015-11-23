@@ -111,10 +111,6 @@ LOGGING = {
         'ozp-iwc': {
             'handlers': ['console'],
             'level': 'DEBUG',
-        },
-        'demo-auth': {
-            'handlers': ['console'],
-            'level': 'DEBUG',
         }
     },
 }
@@ -205,9 +201,6 @@ OZP = {
     # if set to False, never try and update authorization-related info from
     # an external source
     'USE_AUTH_SERVER': False,
-    'DEMO_AUTH_SERVICE': {
-        'JSON_FILE': os.path.join(BASE_DIR, 'demoauth/auth_data.json')
-    },
     'OZP_AUTHORIZATION': {
         # assumes the real URL is <root>/users/<DN>/
         'USER_INFO_URL': r'http://localhost:8000/demo-auth/users/%s/info.json?issuerDN=%s',

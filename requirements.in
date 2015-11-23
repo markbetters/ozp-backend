@@ -13,6 +13,7 @@ gunicorn
 Markdown
 Pillow
 pip-tools
+psycopg2
 pytz
 pyyaml
 requests
