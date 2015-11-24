@@ -201,6 +201,7 @@ OZP = {
     # if set to False, never try and update authorization-related info from
     # an external source
     'USE_AUTH_SERVER': False,
+    'DN_SEPARATOR': r'/',
     'OZP_AUTHORIZATION': {
         # assumes the real URL is <root>/users/<DN>/
         'USER_INFO_URL': r'http://localhost:8000/demo-auth/users/%s/info.json?issuerDN=%s',

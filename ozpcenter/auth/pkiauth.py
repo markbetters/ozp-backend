@@ -8,6 +8,8 @@ $ssl_client_verify -> HTTP_X_SSL_AUTHENTICATED
 """
 import logging
 
+from django.conf import settings
+
 from rest_framework import authentication
 from rest_framework import exceptions
 
@@ -87,7 +89,7 @@ def _get_profile_by_dn(dn, issuer_dn='default issuer dn'):
     except models.Profile.DoesNotExist:
         logger.info('creating new user for dn: %s' % dn)
         if 'CN=' in dn:
-            cn = utils.find_between(dn, 'CN=', ',')
+            cn = utils.find_between(dn, 'CN=', settings.OZP['DN_SEPARATOR'])
         else:
             cn = dn
         kwargs = {'display_name': cn, 'dn': dn, 'issuer_dn': issuer_dn}
