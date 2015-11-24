@@ -62,6 +62,7 @@ def _get_auth_data(username):
 
     # get groups for user
     url = settings.OZP['OZP_AUTHORIZATION']['USER_GROUPS_URL'] % (profile.dn, settings.OZP['OZP_AUTHORIZATION']['PROJECT_NAME'])
+    logger.debug('hitting url %s for user with dn %s for group info' % (url, profile.dn))
     r = requests.get(url)
     if r.status_code != 200:
         raise errors.AuthorizationFailure('Error contacting authorization server: %s' % r.text)
