@@ -45,6 +45,7 @@ def _get_auth_data(username):
     profile = model_access.get_profile(username)
     # get user's basic data
     url = settings.OZP['OZP_AUTHORIZATION']['USER_INFO_URL'] % (profile.dn, profile.issuer_dn)
+    # TODO: might need to explicitly pass certificate: http://docs.python-requests.org/en/latest/user/advanced/#ssl-cert-verification
     r = requests.get(url)
     logger.debug('hitting url %s for user with dn %s' % (url, profile.dn))
 
@@ -63,6 +64,7 @@ def _get_auth_data(username):
     # get groups for user
     url = settings.OZP['OZP_AUTHORIZATION']['USER_GROUPS_URL'] % (profile.dn, settings.OZP['OZP_AUTHORIZATION']['PROJECT_NAME'])
     logger.debug('hitting url %s for user with dn %s for group info' % (url, profile.dn))
+    # TODO: might need to explicitly pass certificate: http://docs.python-requests.org/en/latest/user/advanced/#ssl-cert-verification
     r = requests.get(url)
     if r.status_code != 200:
         raise errors.AuthorizationFailure('Error contacting authorization server: %s' % r.text)
