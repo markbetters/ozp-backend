@@ -85,8 +85,8 @@ def _get_profile_by_dn(dn, issuer_dn='default issuer dn'):
     If a profile isn't found with the given DN, create one
     """
     # look up the user with this dn. if the user doesn't exist, create them
-    try:
-        profile = models.Profile.objects.get(dn=dn)
+    profile = models.Profile.objects.filter(dn=dn).first()
+    if profile:
         if not profile.user.is_active:
             logger.warning('User %s tried to login but is inactive' % dn)
             return None
@@ -96,7 +96,7 @@ def _get_profile_by_dn(dn, issuer_dn='default issuer dn'):
             profile.issuer_dn = issuer_dn
             profile.save()
         return profile
-    except models.Profile.DoesNotExist:
+    else:
         logger.info('creating new user for dn: %s' % dn)
         if 'CN=' in dn:
             cn = utils.find_between(dn, 'CN=', ',')
@@ -114,6 +114,13 @@ def _get_profile_by_dn(dn, issuer_dn='default issuer dn'):
             username=username).count()
         if count != 0:
             username = '%s_%s' % (username, count + 1)
+
+        # now check again - if this username exists, we have a problem
+        count = User.objects.filter(
+            username=username).count()
+        if count != 0:
+            logger.error('Cannot create new user for dn %s, username %s already exists' % (dn, username))
+            return None
 
         profile = models.Profile.create_user(username, **kwargs)
         logger.debug('created new profile for user %s' % profile.user.username)
