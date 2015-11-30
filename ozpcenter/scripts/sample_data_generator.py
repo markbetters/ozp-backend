@@ -967,6 +967,174 @@ def run():
         text="I really like it")
 
     ############################################################################
+    #                           Location Lister
+    ############################################################################
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    #                           Icons
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    img = Image.open(TEST_IMG_PATH + 'LocationLister16.png')
+    small_icon = models.Image.create_image(img, file_extension='png',
+        security_marking=unclass, image_type=small_icon_type.name)
+    img = Image.open(TEST_IMG_PATH + 'LocationLister32.png')
+    large_icon = models.Image.create_image(img, file_extension='png',
+        security_marking=unclass, image_type=large_icon_type.name)
+    img = Image.open(TEST_IMG_PATH + 'LocationLister.png')
+    banner_icon = models.Image.create_image(img, file_extension='png',
+        security_marking=unclass, image_type=banner_icon_type.name)
+    img = Image.open(TEST_IMG_PATH + 'LocationListerFeatured.png')
+    large_banner_icon = models.Image.create_image(img, file_extension='png',
+        security_marking=unclass, image_type=large_banner_icon_type.name)
+
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    #                           Listing
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+    listing = models.Listing(
+        title='LocationLister',
+        agency=minitrue,
+        listing_type=web_app,
+        description='List locations',
+        launch_url='%s/demo_apps/locationLister/index.html' % DEMO_APP_ROOT,
+        version_name='1.0.0',
+        unique_name='ozp.test.locationlister',
+        small_icon=small_icon,
+        large_icon=large_icon,
+        banner_icon=banner_icon,
+        large_banner_icon=large_banner_icon,
+        what_is_new='Nothing really new here',
+        description_short='List locations',
+        requirements='None',
+        is_enabled=True,
+        is_featured=True,
+        iframe_compatible=False,
+        is_private=False,
+        security_marking=unclass
+    )
+    listing.save()
+    listing.contacts.add(rob_baratheon)
+    listing.owners.add(winston)
+    listing.categories.add(tools)
+    listing.categories.add(education)
+    listing.tags.add(demo)
+
+    listing_model_access.create_listing(winston, listing)
+    listing_model_access.submit_listing(winston, listing)
+    listing_model_access.approve_listing_by_org_steward(winston, listing)
+    listing_model_access.approve_listing(winston, listing)
+
+    ############################################################################
+    #                           Location Viewer
+    ############################################################################
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    #                           Icons
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    img = Image.open(TEST_IMG_PATH + 'LocationViewer16.png')
+    small_icon = models.Image.create_image(img, file_extension='png',
+        security_marking=unclass, image_type=small_icon_type.name)
+    img = Image.open(TEST_IMG_PATH + 'LocationViewer32.png')
+    large_icon = models.Image.create_image(img, file_extension='png',
+        security_marking=unclass, image_type=large_icon_type.name)
+    img = Image.open(TEST_IMG_PATH + 'LocationViewer.png')
+    banner_icon = models.Image.create_image(img, file_extension='png',
+        security_marking=unclass, image_type=banner_icon_type.name)
+    img = Image.open(TEST_IMG_PATH + 'LocationViewerFeatured.png')
+    large_banner_icon = models.Image.create_image(img, file_extension='png',
+        security_marking=unclass, image_type=large_banner_icon_type.name)
+
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    #                           Listing
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+    listing = models.Listing(
+        title='LocationViewer',
+        agency=minitrue,
+        listing_type=web_app,
+        description='View locations',
+        launch_url='%s/demo_apps/locationViewer/index.html' % DEMO_APP_ROOT,
+        version_name='1.0.0',
+        unique_name='ozp.test.locationviewer',
+        small_icon=small_icon,
+        large_icon=large_icon,
+        banner_icon=banner_icon,
+        large_banner_icon=large_banner_icon,
+        what_is_new='Nothing really new here',
+        description_short='View locations',
+        requirements='None',
+        is_enabled=True,
+        is_featured=True,
+        iframe_compatible=False,
+        is_private=False,
+        security_marking=unclass
+    )
+    listing.save()
+    listing.contacts.add(rob_baratheon)
+    listing.owners.add(winston)
+    listing.categories.add(tools)
+    listing.categories.add(education)
+    listing.tags.add(demo)
+
+    listing_model_access.create_listing(winston, listing)
+    listing_model_access.submit_listing(winston, listing)
+    listing_model_access.approve_listing_by_org_steward(winston, listing)
+    listing_model_access.approve_listing(winston, listing)
+
+    ############################################################################
+    #                           Location Analyzer
+    ############################################################################
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    #                           Icons
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    img = Image.open(TEST_IMG_PATH + 'LocationAnalyzer16.png')
+    small_icon = models.Image.create_image(img, file_extension='png',
+        security_marking=unclass, image_type=small_icon_type.name)
+    img = Image.open(TEST_IMG_PATH + 'LocationAnalyzer32.png')
+    large_icon = models.Image.create_image(img, file_extension='png',
+        security_marking=unclass, image_type=large_icon_type.name)
+    img = Image.open(TEST_IMG_PATH + 'LocationAnalyzer.png')
+    banner_icon = models.Image.create_image(img, file_extension='png',
+        security_marking=unclass, image_type=banner_icon_type.name)
+    img = Image.open(TEST_IMG_PATH + 'LocationAnalyzerFeatured.png')
+    large_banner_icon = models.Image.create_image(img, file_extension='png',
+        security_marking=unclass, image_type=large_banner_icon_type.name)
+
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    #                           Listing
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+    listing = models.Listing(
+        title='LocationAnalyzer',
+        agency=minitrue,
+        listing_type=web_app,
+        description='Analyze locations',
+        launch_url='%s/demo_apps/locationAnalyzer/index.html' % DEMO_APP_ROOT,
+        version_name='1.0.0',
+        unique_name='ozp.test.locationanalyzer',
+        small_icon=small_icon,
+        large_icon=large_icon,
+        banner_icon=banner_icon,
+        large_banner_icon=large_banner_icon,
+        what_is_new='Nothing really new here',
+        description_short='Analyze locations',
+        requirements='None',
+        is_enabled=True,
+        is_featured=True,
+        iframe_compatible=False,
+        is_private=False,
+        security_marking=unclass
+    )
+    listing.save()
+    listing.contacts.add(rob_baratheon)
+    listing.owners.add(winston)
+    listing.categories.add(tools)
+    listing.categories.add(education)
+    listing.tags.add(demo)
+
+    listing_model_access.create_listing(winston, listing)
+    listing_model_access.submit_listing(winston, listing)
+    listing_model_access.approve_listing_by_org_steward(winston, listing)
+    listing_model_access.approve_listing(winston, listing)
+
+    ############################################################################
     #                           Library
     ############################################################################
     # bookmark listings
