@@ -198,6 +198,7 @@ CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
 
 OZP = {
+    'DEMO_APP_ROOT': 'https://localhost:8443',
     # if set to False, never try and update authorization-related info from
     # an external source
     'USE_AUTH_SERVER': False,

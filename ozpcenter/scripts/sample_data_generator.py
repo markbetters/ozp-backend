@@ -19,12 +19,15 @@ sys.path.insert(0, os.path.realpath(os.path.join(os.path.dirname(__file__), '../
 import pytz
 
 import django.contrib.auth
+from django.conf import settings
 
 from ozpcenter import models as models
 from ozpcenter import model_access
 import ozpcenter.api.listing.model_access as listing_model_access
 
 TEST_IMG_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'test_images') + '/'
+
+DEMO_APP_ROOT = settings.OZP['DEMO_APP_ROOT']
 
 def run():
     """
@@ -470,7 +473,7 @@ def run():
         agency=minitrue,
         listing_type=web_app,
         description='Sends mail via air',
-        launch_url='http://localhost/demo_apps/centerSampleListings/airMail/index.html',
+        launch_url='%s/demo_apps/centerSampleListings/airMail/index.html' % DEMO_APP_ROOT,
         version_name='1.0.0',
         unique_name='ozp.test.air_mail',
         small_icon=small_icon,
@@ -583,7 +586,7 @@ def run():
         agency=minitrue,
         listing_type=web_app,
         description='Carries delicious bread',
-        launch_url='http://localhost/demo_apps/centerSampleListings/breadBasket/index.html',
+        launch_url='%s/demo_apps/centerSampleListings/breadBasket/index.html' % DEMO_APP_ROOT,
         version_name='1.0.0',
         unique_name='ozp.test.bread_basket',
         small_icon=small_icon,
@@ -650,7 +653,7 @@ def run():
         agency=minitrue,
         listing_type=web_app,
         description='Chart your course',
-        launch_url='http://localhost/demo_apps/centerSampleListings/chartCourse/index.html',
+        launch_url='%s/demo_apps/centerSampleListings/chartCourse/index.html' % DEMO_APP_ROOT,
         version_name='1.0.0',
         unique_name='ozp.test.chartcourse',
         small_icon=small_icon,
@@ -707,7 +710,7 @@ def run():
         agency=miniluv,
         listing_type=web_app,
         description='Chat with people',
-        launch_url='http://localhost/demo_apps/centerSampleListings/chatterBox/index.html',
+        launch_url='%s/demo_apps/centerSampleListings/chatterBox/index.html' % DEMO_APP_ROOT,
         version_name='1.0.0',
         unique_name='ozp.test.chatterbox',
         small_icon=small_icon,
@@ -762,7 +765,7 @@ def run():
         agency=minitrue,
         listing_type=web_app,
         description='Clip stuff on a board',
-        launch_url='http://localhost/demo_apps/centerSampleListings/clipboard/index.html',
+        launch_url='%s/demo_apps/centerSampleListings/clipboard/index.html' % DEMO_APP_ROOT,
         version_name='1.0.0',
         unique_name='ozp.test.clipboard',
         small_icon=small_icon,
@@ -818,7 +821,7 @@ def run():
         agency=minitrue,
         listing_type=web_app,
         description='Show things in an iframe',
-        launch_url='http://localhost/demo_apps/frameit/index.html',
+        launch_url='%s/demo_apps/frameit/index.html' % DEMO_APP_ROOT,
         version_name='1.0.0',
         unique_name='ozp.test.frameit',
         small_icon=small_icon,
@@ -874,7 +877,7 @@ def run():
         agency=minitrue,
         listing_type=web_app,
         description='Hatch latches',
-        launch_url='http://localhost/demo_apps/centerSampleListings/hatchLatch/index.html',
+        launch_url='%s/demo_apps/centerSampleListings/hatchLatch/index.html' % DEMO_APP_ROOT,
         version_name='1.0.0',
         unique_name='ozp.test.hatchlatch',
         small_icon=small_icon,
@@ -931,7 +934,7 @@ def run():
         agency=minitrue,
         listing_type=web_app,
         description='Jot things down',
-        launch_url='http://localhost/demo_apps/centerSampleListings/jotSpot/index.html',
+        launch_url='%s/demo_apps/centerSampleListings/jotSpot/index.html' % DEMO_APP_ROOT,
         version_name='1.0.0',
         unique_name='ozp.test.jotspot',
         small_icon=small_icon,
