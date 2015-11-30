@@ -125,6 +125,8 @@ def authorization_update(username, updated_auth_data=None):
         # otherwise, auth data must be updated
         if not updated_auth_data:
             updated_auth_data = _get_auth_data(username)
+            if not updated_auth_data:
+                return False
 
         # update the user's org (profile.organizations) from duty_org
         # validate the org
@@ -134,9 +136,13 @@ def authorization_update(username, updated_auth_data=None):
             raise errors.AuthorizationFailure('User %s has invalid duty org %s' % (username, duty_org))
 
         # update the user's org
-        profile.organizations.clear()
-        org = models.Agency.objects.get(short_name=duty_org)
-        profile.organizations.add(org)
+        try:
+            profile.organizations.clear()
+            org = models.Agency.objects.get(short_name=duty_org)
+            profile.organizations.add(org)
+        except Exception as e:
+            logger.error('Failed to update organizations for user %s. Error: %s' % (username, str(e)))
+            return False
 
         if not updated_auth_data['is_org_steward']:
             # remove all profile.stewarded_orgs
