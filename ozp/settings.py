@@ -202,9 +202,11 @@ OZP = {
     # if set to False, never try and update authorization-related info from
     # an external source
     'USE_AUTH_SERVER': False,
-    # do some different processing of the DN if using demo certs
-    'USING_DEMO_CERTS': True,
+    # convert DNs read as /CN=My Name/OU=Something... to CN=My Name, OU=Something
+    'PREPROCESS_DN': True,
     'OZP_AUTHORIZATION': {
+        'SERVER_CRT': '/ozp/server.crt',
+        'SERVER_KEY': '/ozp/server.key',
         # assumes the real URL is <root>/users/<DN>/
         'USER_INFO_URL': r'http://localhost:8000/demo-auth/users/%s/info.json?issuerDN=%s',
         # assumes the real URL is <root>/users/<DN>/groups/<PROJECT_NAME>/

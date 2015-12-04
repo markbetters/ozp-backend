@@ -200,7 +200,7 @@ class Agency(models.Model):
     icon = models.ForeignKey(Image, related_name='agency', null=True,
         blank=True)
 
-    short_name = models.CharField(max_length=8, unique=True)
+    short_name = models.CharField(max_length=32, unique=True)
 
     def __repr__(self):
         return self.title
@@ -249,7 +249,7 @@ class Category(models.Model):
     TODO: Auditing for create, update, delete
     """
     title = models.CharField(max_length=50, unique=True)
-    description = models.CharField(max_length=255)
+    description = models.CharField(max_length=255, null=True, blank=True)
 
     def __repr__(self):
         return self.title
@@ -945,7 +945,7 @@ class Notification(models.Model):
     # TODO: change this back after the database migration
     # created_date = models.DateTimeField(auto_now_add=True)
     created_date = models.DateTimeField(default=utils.get_now_utc)
-    message = models.CharField(max_length=1024)
+    message = models.CharField(max_length=4096)
     expires_date = models.DateTimeField()
     author = models.ForeignKey(Profile, related_name='authored_notifications')
     dismissed_by = models.ManyToManyField(
