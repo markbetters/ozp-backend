@@ -514,7 +514,7 @@ class Profile(models.Model):
         db_table='stewarded_agency_profile',
         blank=True)
 
-    access_control = models.CharField(max_length=1024)
+    access_control = models.CharField(max_length=16384)
 
     # instead of overriding the builtin Django User model used
     # for authentication, we extend it
