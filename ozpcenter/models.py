@@ -662,8 +662,12 @@ class AccessControlListingManager(models.Manager):
         user = Profile.objects.get(user__username=username)
         user_orgs = user.organizations.all()
         user_orgs = [i.title for i in user_orgs]
-        # get all agencies for which this user is not a member
-        exclude_orgs = Agency.objects.exclude(title__in=user_orgs)
+        # get all agencies for which this user is not a member (unless they
+        # are an apps mall steward)
+        if user.highest_role() == 'APPS_MALL_STEWARD':
+            exclude_orgs = []
+        else:
+            exclude_orgs = Agency.objects.exclude(title__in=user_orgs)
         objects = objects.exclude(is_private=True,
             agency__in=exclude_orgs)
         # filter out listings by user's access level
