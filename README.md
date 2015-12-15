@@ -1,8 +1,40 @@
 ozp-backend
-=====================
-Django-based backend for OZP
+================================================================================
+Django-based backend API for the OZONE Platform (OZP). For those who just want
+to get OZP (Center, HUD, Webtop, IWC) up and running, use this
+[vagrant box](https://github.com/ozone-development/dev-tools/tree/master/vagrant/new-backend)
+
+## Background
+ozp-backend replaces [ozp-rest](https://github.com/ozone-development/ozp-rest)
+as the backend for Center, HUD, Webtop, and IWC. Notable differences include:
+* Python vs. Java/Groovy
+* Django, Django Rest Framework vs. Grails, JAX-RS
+* Postgres vs. MySQL
 
 ## Getting Started
+The recommended approach is to use the vagrant box referenced at the beginning
+of this README, which will create a production-esque deployment of OZP:
+
+* Postgres (vs. SQLite)
+* PKI (vs. HTTP Basic Auth)
+* Use of external authorization service
+* Enable HTTPS (via nginx reverse proxy)
+* Served via Gunicorn (vs. Django development server)
+
+To serve the application on your host machine with minimal external dependencies,
+do the following:
+
+1. Remove psycopg2 from requirements.txt (so that Postgres won't be required)
+2. Enable HTTP Basic Auth and disable PKI authentication. In settings.py,
+`REST_FRAMEWORK.DEFAULT_AUTHENTICATION_CLASSES` should be set to
+`'rest_framework.authentication.BasicAuthentication'`
+3. Disable the authorization service. In settings.py, set `OZP.USE_AUTH_SERVER`
+to `False`
+4. In settings.py, set `OZP.DEMO_APP_ROOT` to `localhost:8000` (or wherever
+the django app will be served at)
+
+Then, do the following:
+
 1. Install Python 3.4.3. Python can be installed by downloading the appropriate
 	files [here](https://www.python.org/downloads/release/python-343/). Note
 	that Python 3.4 includes both `pip` and `venv`, a built-in replacement
@@ -24,7 +56,7 @@ There's also the admin interface at `http://localhost:8000/admin`
 
 ## Releasing
 Run `python release.py` to generate a tarball with Wheels for the application
-and all of its dependencies
+and all of its dependencies. See `release.py` for details
 
 
 ## For Developers
@@ -33,7 +65,6 @@ a large amount of Django Rest Framework (DRF). From Django itself:
 * Object-relational mapper (ORM)
 * Authentication
 * `manage.py` utility (testing, database migration)
-* Caching
 * Logging
 * Settings
 
@@ -78,8 +109,8 @@ explicitly remove all validation on any nested serializer fields that have
 unique constraints. For example, for a serializer with a `title` field:
 ```
 extra_kwargs = {
-            'title': {'validators': []}
-        }
+    'title': {'validators': []}
+}
 ```
 Because we don't want to remove the validator for the base resource (only when
 it's used in a nested fashion), some of the more complicated resources (namely
@@ -89,11 +120,12 @@ counterparts save for the removal of the unique field validators
 ### Model Access and Caching
 `model_access.py` files should be used to encapsulate more complex database
 queries and business logic (as opposed to placing it in Views and Serializers).
-These methods are easier to use in sample data generators, and allows the
-complexity of Django Rest Framework to stay largely separate from the core
-application logic
+These methods are easier to use in sample data generators, easier to test,
+and allows the complexity of Django Rest Framework to stay largely separate
+from the core application logic
 
-This is also the layer to implement object/query caching, such as:
+Memcache is not currently used, but this is also the layer to implement
+object/query caching, such as:
 ```
 data = cache.get('stuff')
 if data is None:
@@ -104,7 +136,10 @@ return data
 Note that we also need logic to invalidate specific caches when resources are
 modified. For example, if a Listing is updated, all cached items referring/using
 that listing's data should be invalidated. By far and large, this logic is not
-yet in place, so enabling the cache will likely lead to unexpected results
+yet in place, so enabling the cache will likely lead to unexpected results.
+In addition, the requirement to support 'tailored views' reduces the value
+of caching, since most queries must be filtered against a user's particular
+access controls
 
 ### Models
 Regarding `__str__()`:
@@ -115,49 +150,12 @@ Note that on Python 2, `__unicode__()` should be defined instead.
 
 By default, fields cannot be null or blank
 
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-A note on model validation:
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-There are three steps involved in validating a model:
-
-1. Validate the model fields - `Model.clean_fields()`
-2. Validate the model as a whole - `Model.clean()`
-3. Validate the field uniqueness - `Model.validate_unique()`
-
-All three steps are performed when you call a model's `full_clean()` methods.
-
-When you use a `ModelForm`, the call to `is_valid()` will perform these validation
-steps for all the fields that are included on the form.
-
-Note that `full_clean()` will NOT be called automatically when you call your
-model's `save()` method. You can invoke that method manually when you want to
-run one-step model validation for your own models.
-
-Details: https://docs.djangoproject.com/en/1.8/ref/models/instances/#django.db.models.Model.validate_unique
-
-It seems odd at first that Django doesn't enforce model validations at the
-'model' level, but there are good reasons for it. Mainly - it's very hard.
-
-* not all ORM methods invoke `Model.save()` (e.g. `bulk_create` and `update`)
-* if you use defaults in your models, they will not be set even after
-	`Model.save()` returns, thus raising false validation errors
-* many things (like Django Admin) don't expect validation errors to occur when
-	invoking `Model.save()`, so apps may get 500 errors if you simply call
-	`Model.full_clean()` before each `Model.save()`
-
-* http://stackoverflow.com/questions/22587019/how-to-use-full-clean-for-data-validation-before-saving-in-django-1-5-graceful
-* http://stackoverflow.com/questions/4441539/why-doesnt-djangos-model-save-call-full-clean/4441740#4441740
-* http://stackoverflow.com/questions/13036315/correct-way-to-validate-django-model-objects/13039057#13039057
-
-The recommendation in the last link is to use the `ModelForm` abstraction for
-model validation, even if you never display the form in a template.
-
-Also note that although the `max_length` constraint is enforced at both the
-database and validation levels, SQLite does not enforce the length of a
-VARCHAR
+Some of the access control logic necessary to support tailored views lives
+in `models.py` as custom `models.Manager` classes (Reviews, Listings,
+ListingActivities, and Images)
 
 ### Views
-Nothing much special to say about views, except that we generally prefer to
+We generally prefer to
 use class-based views and `ViewSet`s (`ModelViewSet`s in particular) just
 because it's less code (assuming you don't require a significant amount of
 customization)
@@ -172,10 +170,13 @@ All resource endpoints are defined in the resource's respective `urls.py` in
 are given the `api/` prefix in the global `urls.py`
 
 DRF uses a browsable API, meaning that you can go to
-`localhost:8000/api/metadata` (for instance) in your browser. In general, the
-Swagger documentation is the recommended way to view and interact with the API
+`localhost:8000/api/metadata/` (for instance) in your browser. In general, the
+Swagger documentation is the recommended way to view and interact with the API.
+
+All URLs are currently set to use a trailing `/`
 
 ### Authentication and Authorization
+#### Overview
 Authentication and authorization is based on the default `django.contrib.auth`
 system built into Django, with numerous customizations.
 
@@ -207,7 +208,7 @@ Of these fields:
 * is_superuser is always set to False
 * is_staff is set to True for Org Stewards and Apps Mall Stewards
 * password is only used in development. On production, client SSL certs are
-	used, and so password is set to TODO: TBD
+	used, and so password is set to XXXXXXXX
 
 [Groups](https://docs.djangoproject.com/en/1.8/topics/auth/default/#groups) are
 used to categorize users as Users, Org Stewards, Apps Mall Stewards, etc. These
@@ -234,9 +235,12 @@ operations). For list queries where multiple resources are returned, these
 object-level permission checks are not used. Instead, filters and custom
 querysets are used to ensure only the appropriate data is returned.
 
-
-In production, `django-ssl-client-auth` is used for the authentication backend
-to support PKI
+#### Authentication
+The app currently supports two forms of authentication - HTTP Basic Auth and
+PKI (client SSL authentication). HTTP Basic Auth is used for development
+purposes only. PKI authentication is implemented in `ozpcenter/auth/pkiauth.py`.
+The method of authentication to use is controlled by
+`REST_FRAMEWORK.DEFAULT_AUTHENTICATION_CLASSES` in settings.py
 
 ### Tests
 Generally speaking, each resource (listing, agency, profile, etc) may have
@@ -249,7 +253,7 @@ like end-to-end or integration tests
 ### Database
 TODO
 
-### Documentation
+### API Documentation
 There are a number of different documentation resources available, depending
 on what you're looking for.
 

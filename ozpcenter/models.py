@@ -713,7 +713,7 @@ class Listing(models.Model):
     agency = models.ForeignKey(Agency, related_name='listings')
     listing_type = models.ForeignKey('ListingType', related_name='listings',
         null=True, blank=True)
-    description = models.CharField(max_length=255, null=True, blank=True)
+    description = models.CharField(max_length=8192, null=True, blank=True)
     launch_url = models.CharField(
         max_length=constants.MAX_URL_SIZE,
         validators=[

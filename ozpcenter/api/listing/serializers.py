@@ -408,10 +408,6 @@ class ListingSerializer(serializers.ModelSerializer):
             'what_is_new', 'security_marking']
 
         for i in simple_fields:
-            # TODO: remove this later when there is UI for this field in Center
-            if i == 'security_marking' and validated_data[i] == None:
-                # don't overwrite the default security_marking
-                continue
             if getattr(instance, i) != validated_data[i]:
                 change_details.append({'old_value': getattr(instance, i),
                     'new_value': validated_data[i], 'field_name': i})
