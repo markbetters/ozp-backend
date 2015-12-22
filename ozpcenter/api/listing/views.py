@@ -14,6 +14,7 @@ import ozpcenter.api.listing.serializers as serializers
 import ozpcenter.permissions as permissions
 import ozpcenter.models as models
 import ozpcenter.errors as errors
+import ozpcenter.pagination as pagination
 import ozpcenter.api.listing.model_access as model_access
 import ozpcenter.model_access as generic_model_access
 
@@ -41,6 +42,7 @@ class ReviewViewSet(viewsets.ModelViewSet):
     """
     permission_classes = (permissions.IsUser,)
     serializer_class = serializers.ReviewSerializer
+    pagination_class = pagination.StandardPagination
 
     def get_queryset(self):
         return model_access.get_reviews(self.request.user.username)

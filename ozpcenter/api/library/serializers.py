@@ -66,7 +66,7 @@ class UserLibrarySerializer(serializers.ModelSerializer):
         folder = validated_data.get('folder', '')
         listing = listing_model_access.get_listing_by_id(username,
             validated_data['listing']['id'])
-        print('listing: %s' % listing)
+        logger.debug('adding bookmark for %s' % listing.title)
         owner = generic_model_access.get_profile(username)
         entry = models.ApplicationLibraryEntry(listing=listing, owner=owner,
             folder=folder)
