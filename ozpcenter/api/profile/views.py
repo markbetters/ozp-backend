@@ -12,6 +12,7 @@ TODO: DELETE api/profile/self/library/<id> - unbookmark a listing
 """
 import logging
 
+from rest_framework import filters
 from rest_framework import viewsets
 from rest_framework.decorators import api_view
 from rest_framework.decorators import permission_classes
@@ -30,6 +31,8 @@ logger = logging.getLogger('ozp-center')
 class ProfileViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsOrgStewardOrReadOnly,)
     serializer_class = serializers.ProfileSerializer
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('dn',)
 
     def get_queryset(self):
         queryset = model_access.get_all_profiles()

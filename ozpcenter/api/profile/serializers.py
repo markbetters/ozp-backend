@@ -51,7 +51,7 @@ class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Profile
         fields = ('id', 'display_name', 'bio', 'organizations',
-            'stewarded_organizations', 'user', 'highest_role')
+            'stewarded_organizations', 'user', 'highest_role', 'dn')
         read_only_fields = ('id', 'bio', 'organizations', 'user',
             'highest_role')
 
@@ -76,4 +76,4 @@ class ShortProfileSerializer(serializers.ModelSerializer):
     user = ShortUserSerializer()
     class Meta:
         model = models.Profile
-        fields = ('user', 'display_name', 'id')
+        fields = ('user', 'display_name', 'id', 'dn')
