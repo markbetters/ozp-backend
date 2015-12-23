@@ -42,7 +42,7 @@ class ReviewViewSet(viewsets.ModelViewSet):
     """
     permission_classes = (permissions.IsUser,)
     serializer_class = serializers.ReviewSerializer
-    pagination_class = pagination.StandardPagination
+    # pagination_class = pagination.StandardPagination
 
     def get_queryset(self):
         return model_access.get_reviews(self.request.user.username)
