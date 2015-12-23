@@ -213,8 +213,8 @@ class ListingSerializer(serializers.ModelSerializer):
         agency_title = data.get('agency', None)
         if agency_title:
             data['agency'] = agency_model_access.get_agency_by_title(agency_title['title'])
-            if data['agency'] not in user.organizations.all():
-                raise errors.PermissionDenied('User is not in this organization')
+            if data['agency'] is None:
+                raise serializers.ValidationError('Invalid Agency')
         else:
             data['agency'] = user.organizations.all()[0]
 

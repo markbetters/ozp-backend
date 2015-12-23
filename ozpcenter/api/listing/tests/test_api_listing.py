@@ -1089,13 +1089,21 @@ class ListingApiTest(APITestCase):
         self.assertTrue(len(response.data) > 5)
         # TODO: more tests
 
-    def test_create_listing_with_invalid_agency(self):
+    def test_create_listing_with_different_agency(self):
         user = generic_model_access.get_profile('julia').user
         self.client.force_authenticate(user=user)
         url = '/api/listing/'
         data = {'title': 'test app', 'agency': {'title': 'Ministry of Plenty'}}
         response = self.client.post(url, data, format='json')
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_create_listing_with_invalid_agency(self):
+        user = generic_model_access.get_profile('julia').user
+        self.client.force_authenticate(user=user)
+        url = '/api/listing/'
+        data = {'title': 'test app', 'agency': {'title': 'Ministry of NONE'}}
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_reject_listing_normal_user(self):
         user = generic_model_access.get_profile('jones').user
