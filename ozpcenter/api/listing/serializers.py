@@ -10,6 +10,7 @@ import django.contrib.auth
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
+import ozpcenter.access_control as access_control
 import ozpcenter.models as models
 import ozpcenter.constants as constants
 
@@ -203,6 +204,12 @@ class ListingSerializer(serializers.ModelSerializer):
         data['requirements'] = data.get('requirements', None)
         data['is_private'] = data.get('is_private', False)
         data['security_marking'] = data.get('security_marking', None)
+        # don't allow user to select a security marking that is above
+        # their own access level
+        sm = data['security_marking']
+        if sm and not access_control.has_access(user.access_control, sm):
+            raise serializers.ValidationError(
+                'Security marking too high for this user')
 
         # only checked on update, not create
         data['is_enabled'] = data.get('is_enabled', False)
