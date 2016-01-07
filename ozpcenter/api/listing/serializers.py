@@ -53,6 +53,19 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
             }
         }
 
+    def validate_security_marking(self, value):
+        # don't allow user to select a security marking that is above
+        # their own access level
+        user = generic_model_access.get_profile(
+            self.context['request'].user.username)
+
+        if value:
+            if not access_control.has_access(user.access_control, value):
+                raise serializers.ValidationError(
+                    'Security marking too high for current user')
+        return value
+
+
 
 class ContactTypeSerializer(serializers.ModelSerializer):
     class Meta:
