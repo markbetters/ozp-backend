@@ -33,6 +33,8 @@ def has_access(user_accesses_json, marking):
         user_accesses_json (string): user accesses in json (clearances, formal_accesses, visas)
         marking: a valid (string): a valid security marking
     """
+    if not marking:
+        return False
     markings = marking.split('//')
     # get the user's access_control data
     try:

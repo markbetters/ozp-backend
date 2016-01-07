@@ -961,7 +961,8 @@ class ListingApiTest(APITestCase):
         url = '/api/listing/'
 
         data = {
-            "title": "mr jones app"
+            "title": "mr jones app",
+            "security_marking": "UNCLASSIFIED"
         }
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
