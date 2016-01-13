@@ -11,6 +11,8 @@ from rest_framework import serializers
 from PIL import Image
 
 import ozpcenter.models as models
+import ozpcenter.model_access as generic_model_access
+import ozpcenter.access_control as access_control
 
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center')
@@ -25,6 +27,20 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
         model = models.Image
         fields = ('url', 'id', 'security_marking')
 
+    def validate_security_marking(self, value):
+        # don't allow user to select a security marking that is above
+        # their own access level
+        user = generic_model_access.get_profile(
+            self.context['request'].user.username)
+        if value:
+            if not access_control.has_access(user.access_control, value):
+                raise serializers.ValidationError(
+                    'Security marking too high for current user')
+        else:
+            raise serializers.ValidationError(
+                'Security marking is required')
+
+        return value
 
 class ShortImageSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -32,9 +48,6 @@ class ShortImageSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('url', 'id', 'security_marking')
 
         extra_kwargs = {
-            'security_marking': {
-                'validators': [],
-                'required': False},
             "id": {
                 "read_only": False,
                 "required": False,
@@ -48,6 +61,21 @@ class ImageCreateSerializer(serializers.Serializer):
     image = serializers.ImageField()
     file_extension = serializers.CharField(max_length=10)
     security_marking = serializers.CharField(max_length=1024)
+
+    def validate_security_marking(self, value):
+        # don't allow user to select a security marking that is above
+        # their own access level
+        user = generic_model_access.get_profile(
+            self.context['request'].user.username)
+        if value:
+            if not access_control.has_access(user.access_control, value):
+                raise serializers.ValidationError(
+                    'Security marking too high for current user')
+        else:
+            raise serializers.ValidationError(
+                'Security marking is required')
+
+        return value
 
     def create(self, validated_data):
         img = Image.open(validated_data['image'])

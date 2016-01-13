@@ -402,7 +402,7 @@ class ListingApiTest(APITestCase):
         self.client.force_authenticate(user=user)
         url = '/api/listing/'
         title = 'julias app'
-        data = {'title': title}
+        data = {'title': title, 'security_marking': 'UNCLASSIFIED'}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data['title'], title)
@@ -934,7 +934,8 @@ class ListingApiTest(APITestCase):
 
         data = {
             "title": 'mr jones app',
-            "approval_status": "APPROVED"
+            "approval_status": "APPROVED",
+            "security_marking": "UNCLASSIFIED"
         }
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -1094,7 +1095,8 @@ class ListingApiTest(APITestCase):
         user = generic_model_access.get_profile('julia').user
         self.client.force_authenticate(user=user)
         url = '/api/listing/'
-        data = {'title': 'test app', 'agency': {'title': 'Ministry of Plenty'}}
+        data = {'title': 'test app', 'security_marking': 'UNCLASSIFIED',
+                'agency': {'title': 'Ministry of Plenty'}}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
@@ -1102,7 +1104,8 @@ class ListingApiTest(APITestCase):
         user = generic_model_access.get_profile('julia').user
         self.client.force_authenticate(user=user)
         url = '/api/listing/'
-        data = {'title': 'test app', 'agency': {'title': 'Ministry of NONE'}}
+        data = {'title': 'test app', 'security_marking': 'UNCLASSIFIED',
+            'agency': {'title': 'Ministry of NONE'}}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 

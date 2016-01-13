@@ -63,8 +63,11 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
             if not access_control.has_access(user.access_control, value):
                 raise serializers.ValidationError(
                     'Security marking too high for current user')
-        return value
+        else:
+            raise serializers.ValidationError(
+                'Security marking is required')
 
+        return value
 
 
 class ContactTypeSerializer(serializers.ModelSerializer):
@@ -216,6 +219,8 @@ class ListingSerializer(serializers.ModelSerializer):
         data['description_short'] = data.get('description_short', None)
         data['requirements'] = data.get('requirements', None)
         data['is_private'] = data.get('is_private', False)
+        if 'security_marking' not in data:
+            raise serializers.ValidationError('security_marking is required')
         data['security_marking'] = data.get('security_marking', None)
 
         # only checked on update, not create

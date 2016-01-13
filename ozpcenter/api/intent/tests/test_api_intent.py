@@ -59,7 +59,7 @@ class IntentApiTest(APITestCase):
         url = '/api/intent/'
         data = {'action': '/application/test',
             'media_type': 'vnd.ozp-intent-v1+json.json', 'label': 'test',
-            'icon': {'id': 1}}
+                'icon': {'id': 1, 'security_marking': 'UNCLASSIFIED'}}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         action = response.data['action']
@@ -70,7 +70,7 @@ class IntentApiTest(APITestCase):
         url = '/api/intent/1/'
         data = {'action': '/application/json/viewtest',
             'media_type': 'vnd.ozp-intent-v2+json.json', 'label': 'mylabel',
-            'icon': {'id': 1}}
+            'icon': {'id': 1, 'security_marking': 'UNCLASSIFIED'}}
         response = self.client.put(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         action = response.data['action']
