@@ -105,12 +105,14 @@ def run():
     # collect static files
     call("mkdir -p static", shell=True)
     call("python manage.py collectstatic --noinput", shell=True)
+    # make directory for wheelhouse
+    call("mkdir -p wheelhouse", shell=True)
 
     # build wheel for ozp_backend - creates wheel in dist/
     call("python setup.py bdist_wheel", shell=True)
 
     # build/collect wheels for dependencies (this will put wheels in wheelhouse/)
-    call("pip wheel -r requirements.txt", shell=True)
+    call("pip wheel -r requirements.txt --wheel-dir wheelhouse", shell=True)
 
     # add our wheel to the wheelhouse
     for file in glob.glob(r'dist/*.whl'):
