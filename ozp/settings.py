@@ -32,8 +32,10 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = (
     'django.contrib.admin',
-    'django.contrib.auth',
+    # put contenttypes above auth so that python manage.py flush works
+    # correctly: https://code.djangoproject.com/ticket/9207
     'django.contrib.contenttypes',
+    'django.contrib.auth',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
