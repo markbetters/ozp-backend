@@ -261,7 +261,7 @@ def run():
         organizations=['Ministry of Peace'],
         stewarded_organizations=['Ministry of Peace', 'Ministry of Plenty'],
         groups=['ORG_STEWARD'],
-        dn='O\'Brien obrien'
+        dn='OBrien obrien'
     )
 
     ############################################################################
@@ -295,7 +295,7 @@ def run():
         access_control=access_control,
         organizations=['Ministry of Truth'],
         groups=['APPS_MALL_STEWARD'],
-        dn='Big Brother2 bigbrother2'
+        dn='Big Brother 2 bigbrother2'
     )
 
     ############################################################################
