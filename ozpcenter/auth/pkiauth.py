@@ -105,7 +105,8 @@ def _get_profile_by_dn(dn, issuer_dn='default issuer dn'):
 
         kwargs = {'display_name': cn, 'dn': dn, 'issuer_dn': issuer_dn}
         # sanitize username
-        username = cn[0:30] # limit to 30 chars
+        username = cn[0:27] # limit to 30 chars (leave space for an underscore
+        # and two digits in case of duplicates)
         username = username.replace(' ', '_') # no spaces
         username = username.replace("'", "") # no apostrophes
         username = username.lower() # all lowercase
