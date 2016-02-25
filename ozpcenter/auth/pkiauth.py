@@ -67,6 +67,9 @@ class PkiAuthentication(authentication.BaseAuthentication):
             issuer_dn = issuer_dn.replace('/', ',')
             issuer_dn = issuer_dn[1:]
 
+        # TODO: if we're using nginx, reverse the elements of the DNs
+
+
         logger.debug('Attempting to authenticate user with dn: %s and issuer dn: %s' % (dn, issuer_dn))
 
         profile = _get_profile_by_dn(dn, issuer_dn)
