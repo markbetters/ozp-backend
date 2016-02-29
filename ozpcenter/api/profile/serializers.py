@@ -48,10 +48,12 @@ class ProfileSerializer(serializers.ModelSerializer):
     organizations = AgencySerializer(many=True)
     stewarded_organizations = AgencySerializer(many=True)
     user = UserSerializer()
+
     class Meta:
         model = models.Profile
         fields = ('id', 'display_name', 'bio', 'organizations',
-            'stewarded_organizations', 'user', 'highest_role', 'dn')
+            'stewarded_organizations', 'user', 'highest_role', 'dn',
+            'is_new_user')
         read_only_fields = ('id', 'bio', 'organizations', 'user',
             'highest_role')
 
@@ -66,14 +68,20 @@ class ProfileSerializer(serializers.ModelSerializer):
         return data
 
     def update(self, instance, validated_data):
-        if validated_data['stewarded_organizations']:
-            instance.stewarded_organizations.clear()
-            for org in validated_data['stewarded_organizations']:
-                instance.stewarded_organizations.add(org)
+        if 'is_new_user' in validated_data:
+            instance.is_new_user = validated_data['is_new_user']
+
+        if instance.highest_role() == 'APPS_MALL_STEWARD':
+            if validated_data['stewarded_organizations']:
+                instance.stewarded_organizations.clear()
+                for org in validated_data['stewarded_organizations']:
+                    instance.stewarded_organizations.add(org)
+        instance.save()
         return instance
 
 class ShortProfileSerializer(serializers.ModelSerializer):
     user = ShortUserSerializer()
+
     class Meta:
         model = models.Profile
         fields = ('user', 'display_name', 'id', 'dn')

@@ -16,5 +16,5 @@ router.register(r'group', views.GroupViewSet)
 # Wire up our API using automatic URL routing.
 urlpatterns = [
     url(r'^', include(router.urls)),
-    url(r'^self/profile/$', views.CurrentUserView)
+    url(r'^self/profile/$', views.CurrentUserViewSet.as_view({'get': 'list', 'put':'update', 'patch':'update'}))
 ]

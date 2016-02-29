@@ -1,13 +1,8 @@
 """
 Views
-
 TODO: GET api/profile?role=ORG_STEWARD for view (shown on create/edit listing page)
-
-
-
 TODO: POST api/profile/self/library - add listing to library (bookmark)
   params: listing id
-
 TODO: DELETE api/profile/self/library/<id> - unbookmark a listing
 """
 import logging
@@ -62,7 +57,6 @@ class ProfileViewSet(viewsets.ModelViewSet):
                     status=status.HTTP_400_BAD_REQUEST)
 
             serializer.save()
-
             return Response(serializer.data, status=status.HTTP_200_OK)
         except errors.PermissionDenied:
             return Response('Permission Denied',
@@ -79,14 +73,32 @@ class GroupViewSet(viewsets.ModelViewSet):
     queryset = model_access.get_all_groups()
     serializer_class = serializers.GroupSerializer
 
-@api_view(['GET'])
-@permission_classes((permissions.IsUser, ))
-def CurrentUserView(request):
+class CurrentUserViewSet(viewsets.ViewSet):
     """
-    ---
-    serializer: ozpcenter.api.profile.serializers.ProfileSerializer
+    A simple ViewSet for listing or retrieving users.
     """
-    profile = model_access.get_self(request.user.username)
-    serializer = serializers.ProfileSerializer(profile,
-        context={'request': request})
-    return Response(serializer.data)
+    permission_classes = (permissions.IsUser,)
+
+    def list(self, request):
+        profile = model_access.get_self(request.user.username)
+        serializer = serializers.ProfileSerializer(profile,
+            context={'request': request})
+        return Response(serializer.data)
+
+    def update(self, request):
+        try:
+            profile = model_access.get_self(request.user.username)
+            serializer = serializers.ProfileSerializer(profile,
+                data=request.data, context={'request': request}, partial=True)
+            if not serializer.is_valid():
+                logger.error('%s' % serializer.errors)
+                return Response(serializer.errors,
+                    status=status.HTTP_400_BAD_REQUEST)
+
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except errors.PermissionDenied:
+            return Response('Permission Denied',
+                status=status.HTTP_403_FORBIDDEN)
+        except Exception as e:
+            raise e
