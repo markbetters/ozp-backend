@@ -61,11 +61,8 @@ class PkiAuthentication(authentication.BaseAuthentication):
         # which is not url friendly and causes our demo authorization service
         # to choke. Replace these with commas instead
         if settings.OZP['PREPROCESS_DN']:
-            dn = dn.replace('/', ',')
-            # remove leading ,
-            dn = dn[1:]
-            issuer_dn = issuer_dn.replace('/', ',')
-            issuer_dn = issuer_dn[1:]
+            dn = _preprocess_dn(dn)
+            issuer_dn = _preprocess_dn(issuer_dn)
 
         logger.debug('Attempting to authenticate user with dn: %s and issuer dn: %s' % (dn, issuer_dn))
 
@@ -77,6 +74,17 @@ class PkiAuthentication(authentication.BaseAuthentication):
         else:
             logger.error('Failed to find/create user for dn %s. Authentication failed' % dn)
             return None
+
+def _preprocess_dn(original_dn):
+    """
+    Reverse the DN and replace slashes with commas
+    """
+    # remove leading slash
+    dn = original_dn[1:]
+    dn = dn.split('/')
+    dn = dn[::-1]
+    dn = ", ".join(dn)
+    return dn
 
 def _get_profile_by_dn(dn, issuer_dn='default issuer dn'):
     """
