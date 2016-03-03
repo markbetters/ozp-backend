@@ -27,6 +27,7 @@ import ozpcenter.errors as errors
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center')
 
+
 class AgencySerializer(serializers.ModelSerializer):
     # icon = image_serializers.ImageSerializer()
     class Meta:
@@ -79,11 +80,14 @@ class ContactTypeSerializer(serializers.ModelSerializer):
             'name': {'validators': []}
         }
 
+
 # contacts are only used in conjunction with Listings
 class ContactSerializer(serializers.ModelSerializer):
     contact_type = ContactTypeSerializer()
+
     class Meta:
         model = models.Contact
+
 
 class ListingTypeSerializer(serializers.ModelSerializer):
     class Meta:
@@ -109,6 +113,7 @@ class DocUrlSerializer(serializers.ModelSerializer):
 class ScreenshotSerializer(serializers.ModelSerializer):
     small_image = ImageSerializer()
     large_image = ImageSerializer()
+
     class Meta:
         model = models.Screenshot
         fields = ('small_image', 'large_image')
@@ -137,6 +142,7 @@ class ListingActivitySerializer(serializers.ModelSerializer):
 
 class RejectionListingActivitySerializer(serializers.ModelSerializer):
     author = profile_serializers.ShortProfileSerializer()
+
     class Meta:
         model = models.ListingActivity
         fields = ('action', 'activity_date', 'description', 'author')
@@ -175,6 +181,7 @@ class CreateListingUserSerializer(serializers.ModelSerializer):
 
 class CreateListingProfileSerializer(serializers.ModelSerializer):
     user = CreateListingUserSerializer()
+
     class Meta:
         model = models.Profile
         fields = ('user', 'display_name', 'id')
@@ -183,7 +190,7 @@ class CreateListingProfileSerializer(serializers.ModelSerializer):
 
 class ListingSerializer(serializers.ModelSerializer):
     screenshots = ScreenshotSerializer(many=True, required=False)
-    doc_urls  = DocUrlSerializer(many=True, required=False)
+    doc_urls = DocUrlSerializer(many=True, required=False)
     owners = CreateListingProfileSerializer(required=False, many=True)
     categories = CategorySerializer(many=True,
         required=False)
@@ -288,7 +295,6 @@ class ListingSerializer(serializers.ModelSerializer):
                     if field not in contact:
                         raise serializers.ValidationError(
                             'Contact requires a %s' % field)
-
 
         owners = []
         if 'owners' in data:
@@ -660,6 +666,7 @@ class ListingSerializer(serializers.ModelSerializer):
                     'new_value': new_screenshots, 'field_name': 'screenshots'})
 
             new_screenshot_instances = []
+
             for s in validated_data['screenshots']:
                 obj, created = models.Screenshot.objects.get_or_create(
                     small_image=image_model_access.get_image_by_id(
@@ -668,6 +675,7 @@ class ListingSerializer(serializers.ModelSerializer):
                         s['large_image']['id']),
                     listing=instance)
                 new_screenshot_instances.append(obj)
+
             for i in old_screenshot_instances:
                 if i not in new_screenshot_instances:
                     logger.info('Deleting screenshot: %s' % i.id)
@@ -688,6 +696,7 @@ class ListingSerializer(serializers.ModelSerializer):
 
 class ReviewSerializer(serializers.ModelSerializer):
     author = profile_serializers.ShortProfileSerializer()
+
     class Meta:
         model = models.Review
         fields = ('author', 'listing', 'rate', 'text', 'edited_date', 'id')
@@ -704,6 +713,7 @@ class ListingActivitySerializer(serializers.ModelSerializer):
     author = profile_serializers.ShortProfileSerializer()
     listing = ShortListingSerializer()
     change_details = ChangeDetailSerializer(many=True)
+
     class Meta:
         model = models.ListingActivity
         fields = ('action', 'activity_date', 'description', 'author', 'listing',

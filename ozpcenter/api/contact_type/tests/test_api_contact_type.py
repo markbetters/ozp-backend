@@ -80,4 +80,3 @@ class ContactTypeApiTest(APITestCase):
         url = '/api/contact_type/1/'
         response = self.client.delete(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-

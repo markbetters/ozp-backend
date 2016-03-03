@@ -6,6 +6,7 @@ import pytz
 import re
 import sys
 
+
 def make_keysafe(key):
     """
     given an input string, make it lower case and remove all non alpha-numeric
@@ -15,11 +16,13 @@ def make_keysafe(key):
     """
     return re.sub(r'\W+', '', key).lower()
 
+
 def find_between(s, start, end):
     """
     Return a string between two other strings
     """
     return (s.split(start))[1].split(end)[0]
+
 
 def get_now_utc():
     """

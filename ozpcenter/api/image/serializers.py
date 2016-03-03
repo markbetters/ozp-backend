@@ -17,10 +17,12 @@ import ozpcenter.access_control as access_control
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center')
 
+
 class ImageTypeSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.ImageType
         fields = ('name',)
+
 
 class ImageSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -41,6 +43,7 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
                 'Security marking is required')
 
         return value
+
 
 class ShortImageSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -94,4 +97,3 @@ class ImageCreateSerializer(serializers.Serializer):
             'id': obj.id,
             'security_marking': obj.security_marking
         }
-

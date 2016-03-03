@@ -8,8 +8,10 @@ import ozpcenter.models as models
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center')
 
+
 def get_all_agencies():
     return models.Agency.objects.all()
+
 
 def get_agency_by_title(title):
     try:

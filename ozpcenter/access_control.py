@@ -16,6 +16,7 @@ import logging
 
 logger = logging.getLogger('ozp-center')
 
+
 def has_access(user_accesses_json, marking):
     """
     Determine if a user has access to a given access control
@@ -42,7 +43,6 @@ def has_access(user_accesses_json, marking):
     except ValueError:
         logger.error('Error parsing JSON data: %s' % user_accesses_json)
         return False
-
 
     # check clearances
     clearances = user_accesses['clearances']

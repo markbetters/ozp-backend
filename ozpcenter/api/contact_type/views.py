@@ -13,6 +13,7 @@ import ozpcenter.api.contact_type.model_access as model_access
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center')
 
+
 class ContactTypeViewSet(viewsets.ModelViewSet):
     queryset = model_access.get_all_contact_types()
     serializer_class = serializers.ContactTypeSerializer

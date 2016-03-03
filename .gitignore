@@ -12,3 +12,6 @@ dist
 build
 *.tar.gz
 logs.txt
+cover
+.coverage
+env

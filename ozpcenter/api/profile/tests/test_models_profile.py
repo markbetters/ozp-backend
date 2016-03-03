@@ -16,6 +16,7 @@ from ozpcenter import models as models
 
 import ozpcenter.tests.factories as f
 
+
 class ProfileTest(TestCase):
 
     def setUp(self):
@@ -115,4 +116,3 @@ class ProfileTest(TestCase):
         testUser = models.Profile.objects.get(user__username='newguy',
             access_control=json.dumps({'clearances': ['U'], 'formal_accesses': ['ABC']}))
         self.assertEqual(testUser.highest_role(), 'USER')
-

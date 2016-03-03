@@ -68,7 +68,6 @@ class NotificationApiTest(APITestCase):
         response = self.client.delete(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
-
         # now get our notifications again, make sure the one was removed
         url = '/api/self/notification/'
         # test authorized user
@@ -147,4 +146,3 @@ class NotificationApiTest(APITestCase):
         data = {'expires_date': str(now)}
         response = self.client.put(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-

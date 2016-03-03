@@ -21,13 +21,16 @@ import ozpcenter.model_access as generic_model_access
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center')
 
+
 class ContactViewSet(viewsets.ModelViewSet):
     queryset = model_access.get_all_contacts()
     serializer_class = serializers.ContactSerializer
 
+
 class DocUrlViewSet(viewsets.ModelViewSet):
     queryset = model_access.get_all_doc_urls()
     serializer_class = serializers.DocUrlSerializer
+
 
 class ReviewViewSet(viewsets.ModelViewSet):
     """
@@ -82,9 +85,9 @@ class ReviewViewSet(viewsets.ModelViewSet):
         """
         try:
             listing = model_access.get_listing_by_id(request.user.username,
-              listing_pk)
+                listing_pk)
             if listing is None:
-              raise Exception
+                raise Exception
         except Exception:
             return Response('Invalid listing',
                 status=status.HTTP_400_BAD_REQUEST)
@@ -104,7 +107,6 @@ class ReviewViewSet(viewsets.ModelViewSet):
             raise e
             return Response('Bad request to create new review',
                 status=status.HTTP_400_BAD_REQUEST)
-
 
     def update(self, request, pk=None, listing_pk=None):
         """
@@ -243,13 +245,16 @@ class ListingRejectionViewSet(viewsets.ModelViewSet):
             return Response("Error rejecting listing",
                     status=status.HTTP_400_BAD_REQUEST)
 
+
 class ScreenshotViewSet(viewsets.ModelViewSet):
     queryset = model_access.get_all_screenshots()
     serializer_class = serializers.ScreenshotSerializer
 
+
 class TagViewSet(viewsets.ModelViewSet):
     queryset = model_access.get_all_tags()
     serializer_class = serializers.TagSerializer
+
 
 class ListingViewSet(viewsets.ModelViewSet):
     """
@@ -499,24 +504,26 @@ class ListingViewSet(viewsets.ModelViewSet):
         }
         """
         try:
-          logger.debug('inside ListingViewSet.update')
-          instance = self.get_queryset().get(pk=pk)
-          serializer = serializers.ListingSerializer(instance,
-            data=request.data, context={'request': request}, partial=True)
-          logger.debug('created ListingSerializer')
-          if not serializer.is_valid():
-              logger.error('%s' % serializer.errors)
-              return Response(serializer.errors,
-                  status=status.HTTP_400_BAD_REQUEST)
+            logger.debug('inside ListingViewSet.update')
 
-          serializer.save()
+            instance = self.get_queryset().get(pk=pk)
+            serializer = serializers.ListingSerializer(instance,
+                data=request.data, context={'request': request}, partial=True)
 
-          return Response(serializer.data, status=status.HTTP_200_OK)
+            logger.debug('created ListingSerializer')
+
+            if not serializer.is_valid():
+                logger.error('%s' % serializer.errors)
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+            serializer.save()
+
+            return Response(serializer.data, status=status.HTTP_200_OK)
         except errors.PermissionDenied:
             return Response('Permission Denied',
                 status=status.HTTP_403_FORBIDDEN)
         except Exception as e:
-          raise e
+            raise e
 
     def partial_update(self, request, pk=None):
         """

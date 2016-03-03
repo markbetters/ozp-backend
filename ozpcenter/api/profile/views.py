@@ -28,6 +28,7 @@ import ozpcenter.api.profile.model_access as model_access
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center')
 
+
 class ProfileViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsOrgStewardOrReadOnly,)
     serializer_class = serializers.ProfileSerializer
@@ -70,14 +71,17 @@ class ProfileViewSet(viewsets.ModelViewSet):
         except Exception as e:
             raise e
 
+
 class UserViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsOrgSteward,)
     queryset = model_access.get_all_users()
     serializer_class = serializers.UserSerializer
 
+
 class GroupViewSet(viewsets.ModelViewSet):
     queryset = model_access.get_all_groups()
     serializer_class = serializers.GroupSerializer
+
 
 @api_view(['GET'])
 @permission_classes((permissions.IsUser, ))

@@ -43,6 +43,7 @@ from subprocess import call
 VERSION_FILE = "_version.py"
 PACKAGE = 'ozp_backend'
 
+
 def get_version():
     """
     Get the version number from VERSION_FILE
@@ -54,13 +55,16 @@ def get_version():
         verstr = mo.group(1)
         return verstr
     else:
-        raise RuntimeError("Unable to find version string in %s." % (VERSION_FILE,))
+        raise RuntimeError(
+            "Unable to find version string in %s." % (VERSION_FILE,))
+
 
 def get_date_time():
     """
     Get current date/time string
     """
     return datetime.datetime.now().strftime('%m_%d_%Y-%H-%M')
+
 
 def cleanup():
     """
@@ -72,6 +76,7 @@ def cleanup():
     shutil.rmtree("build", ignore_errors=True)
     shutil.rmtree("release", ignore_errors=True)
     shutil.rmtree("%s.egg-info" % PACKAGE, ignore_errors=True)
+
 
 def create_release_dir():
     """
@@ -93,9 +98,9 @@ def create_release_dir():
 def run():
     parser = argparse.ArgumentParser()
     parser.add_argument('--version', dest='version', action='store_true',
-        help='Use the version number in the file output')
+                        help='Use the version number in the file output')
     parser.add_argument('--no-version', dest='version', action='store_false',
-        help='Use the current date/time in the file output')
+                        help='Use the current date/time in the file output')
     parser.set_defaults(version=False)
     args = parser.parse_args()
 
@@ -111,7 +116,8 @@ def run():
     # build wheel for ozp_backend - creates wheel in dist/
     call("python setup.py bdist_wheel", shell=True)
 
-    # build/collect wheels for dependencies (this will put wheels in wheelhouse/)
+    # build/collect wheels for dependencies (this will put wheels in
+    # wheelhouse/)
     call("pip wheel -r requirements.txt --wheel-dir wheelhouse", shell=True)
 
     # add our wheel to the wheelhouse
@@ -126,11 +132,11 @@ def run():
     if args.version:
         version = get_version()
         call("tar -czf %s-%s.tar.gz release" % ('backend', version),
-            shell=True)
+             shell=True)
     else:
         date = get_date_time()
         call("tar -czf %s-%s.tar.gz release" % ('backend', date),
-            shell=True)
+             shell=True)
 
     # cleanup build dirs
     cleanup()

@@ -12,6 +12,7 @@ import ozpcenter.utils as utils
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center')
 
+
 def get_all_library_entries():
     """
     Get all ApplicationLibrary objects
@@ -30,6 +31,7 @@ def get_all_library_entries():
     else:
         return data
 
+
 def get_library_entry_by_id(id):
     """
     Get ApplicationLibrary by id
@@ -47,6 +49,7 @@ def get_library_entry_by_id(id):
             return None
     else:
         return data
+
 
 def get_self_application_library(username):
     """

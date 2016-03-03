@@ -8,6 +8,7 @@ import ozpcenter.auth.pkiauth as pkiauth
 import ozpcenter.models as models
 import ozpcenter.model_access as model_access
 
+
 class PkiAuthenticationTest(TestCase):
 
     def setUp(self):

@@ -14,20 +14,26 @@ import ozpcenter.model_access as generic_model_access
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center')
 
+
 def get_all_doc_urls():
     return models.DocUrl.objects.all()
+
 
 def get_all_contacts():
     return models.Contact.objects.all()
 
+
 def get_screenshots_for_listing(listing):
     return models.Screenshot.objects.filter(listing=listing)
+
 
 def get_doc_urls_for_listing(listing):
     return models.DocUrl.objects.filter(listing=listing)
 
+
 def get_listing_type_by_title(title):
     return models.ListingType.objects.get(title=title)
+
 
 def get_listing_by_id(username, id):
     try:
@@ -35,8 +41,10 @@ def get_listing_by_id(username, id):
     except models.Listing.DoesNotExist:
         return None
 
+
 def get_listing_by_title(username, title):
     return models.Listing.objects.for_user(username).get(title=title)
+
 
 def filter_listings(username, filter_params):
     """
@@ -67,6 +75,7 @@ def filter_listings(username, filter_params):
 
     return objects
 
+
 def get_self_listings(username):
     """
     Get the Listings that belong to this user
@@ -88,6 +97,7 @@ def get_self_listings(username):
     else:
         return data
 
+
 def get_listings(username):
     """
     Get Listings this user can see
@@ -106,6 +116,7 @@ def get_listings(username):
             return None
     else:
         return data
+
 
 def get_reviews(username):
     """
@@ -126,11 +137,14 @@ def get_reviews(username):
     else:
         return data
 
+
 def get_review_by_id(id):
     return models.Review.objects.get(id=id)
 
+
 def get_all_listing_types():
     return models.ListingType.objects.all()
+
 
 def get_listing_activities_for_user(username):
     """
@@ -139,18 +153,22 @@ def get_listing_activities_for_user(username):
     return models.ListingActivity.objects.for_user(username).filter(
         listing__owners__user__username__exact=username)
 
+
 def get_all_listing_activities(username):
     """
     Get all ListingActivities visible to this user
     """
     return models.ListingActivity.objects.for_user(username).all()
 
+
 def get_all_tags():
     return models.Tag.objects.all()
+
 
 def get_all_screenshots():
     # access control enforced on images themselves, not the metadata
     return models.Screenshot.objects.all()
+
 
 def _update_rating(username, listing):
     """
@@ -169,7 +187,7 @@ def _update_rating(username, listing):
     if total_votes == 0:
         avg_rate = 0
     else:
-        avg_rate = (5*rate5 + 4*rate4 + 3*rate3 + 2*rate2 + rate1)/total_votes
+        avg_rate = (5 * rate5 + 4 * rate4 + 3 * rate3 + 2 * rate2 + rate1) / total_votes
         avg_rate = float('{0:.1f}'.format(avg_rate))
 
     # update listing
@@ -185,13 +203,15 @@ def _update_rating(username, listing):
     listing.save()
     return listing
 
+
 def get_rejection_listings(username):
     activities = models.ListingActivity.objects.for_user(username).filter(
         action=models.ListingActivity.REJECTED)
     return activities
 
+
 def _add_listing_activity(author, listing, action, change_details=None,
-    description=None):
+                          description=None):
     """
     Adds a ListingActivity
 
@@ -236,6 +256,7 @@ def _add_listing_activity(author, listing, action, change_details=None,
     listing.save()
     return listing
 
+
 def create_listing(author, listing):
     """
     Create a listing
@@ -245,6 +266,7 @@ def create_listing(author, listing):
     listing.save()
     return listing
 
+
 def log_listing_modification(author, listing, change_details):
     """
     Log a listing modification
@@ -252,6 +274,7 @@ def log_listing_modification(author, listing, change_details):
     listing = _add_listing_activity(author, listing, models.ListingActivity.MODIFIED,
         change_details)
     return listing
+
 
 def submit_listing(author, listing):
     """
@@ -264,6 +287,7 @@ def submit_listing(author, listing):
     listing.save()
     return listing
 
+
 def approve_listing_by_org_steward(org_steward, listing):
     """
     Give Org Steward approval to a listing
@@ -274,6 +298,7 @@ def approve_listing_by_org_steward(org_steward, listing):
     listing.edited_date = utils.get_now_utc()
     listing.save()
     return listing
+
 
 def approve_listing(steward, listing):
     """
@@ -287,6 +312,7 @@ def approve_listing(steward, listing):
     listing.save()
     return listing
 
+
 def reject_listing(steward, listing, rejection_description):
     """
     Reject a submitted listing
@@ -298,6 +324,7 @@ def reject_listing(steward, listing, rejection_description):
     listing.save()
     return listing
 
+
 def enable_listing(user, listing):
     """
     Enable a listing
@@ -308,6 +335,7 @@ def enable_listing(user, listing):
     listing.save()
     return listing
 
+
 def disable_listing(steward, listing):
     """
     Disable a listing
@@ -317,6 +345,7 @@ def disable_listing(steward, listing):
     listing.edited_date = utils.get_now_utc()
     listing.save()
     return listing
+
 
 def create_listing_review(username, listing, rating, text=None):
     """
@@ -350,6 +379,7 @@ def create_listing_review(username, listing, rating, text=None):
         "id": review.id
     }
     return resp
+
 
 def edit_listing_review(username, review, rate, text=None):
     """
@@ -394,6 +424,7 @@ def edit_listing_review(username, review, rate, text=None):
     _update_rating(username, listing)
     return review
 
+
 def delete_listing_review(username, review):
     """
     Delete an existing review
@@ -437,6 +468,7 @@ def delete_listing_review(username, review):
     _update_rating(username, listing)
     return listing
 
+
 def delete_listing(username, listing):
     """
     TODO: need a way to keep track of this listing as being deleted.
@@ -454,6 +486,7 @@ def delete_listing(username, listing):
         raise errors.PermissionDenied()
 
     listing.delete()
+
 
 def put_counts_in_listings_endpoint(queryset):
     """
@@ -501,6 +534,7 @@ def put_counts_in_listings_endpoint(queryset):
             agency__id=i.id).count()
     return data
 
+
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 #   Methods to convert Response representations of objects to strings for use
 #   in the change_details of a listing's activity
@@ -523,6 +557,7 @@ def doc_urls_to_string(doc_urls, queryset=False):
         new_doc_urls = [(i['name'], i['url']) for i in doc_urls]
     return str(sorted(new_doc_urls))
 
+
 def screenshots_to_string(screenshots, queryset=False):
     """
     Args:
@@ -536,6 +571,7 @@ def screenshots_to_string(screenshots, queryset=False):
     else:
         new_screenshots = [(i['small_image']['id'], i['large_image']['id']) for i in screenshots]
     return str(sorted(new_screenshots))
+
 
 def contacts_to_string(contacts, queryset=False):
     """
@@ -557,6 +593,7 @@ def contacts_to_string(contacts, queryset=False):
         new_contacts = [(i['name'], i['email']) for i in contacts]
     return str(sorted(new_contacts))
 
+
 def intents_to_string(intents, queryset=False):
     """
     Args:
@@ -570,6 +607,7 @@ def intents_to_string(intents, queryset=False):
     else:
         new_intents = [i['action'] for i in intents]
     return str(sorted(new_intents))
+
 
 def categories_to_string(categories, queryset=False):
     """
@@ -585,6 +623,7 @@ def categories_to_string(categories, queryset=False):
         new_categories = [i['title'] for i in categories]
     return str(sorted(new_categories))
 
+
 def tags_to_string(tags, queryset=False):
     """
     Args:
@@ -598,6 +637,7 @@ def tags_to_string(tags, queryset=False):
     else:
         new_tags = [i['name'] for i in tags]
     return str(sorted(new_tags))
+
 
 def owners_to_string(owners, queryset=False):
     """

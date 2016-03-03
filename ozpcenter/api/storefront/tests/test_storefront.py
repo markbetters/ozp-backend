@@ -9,6 +9,7 @@ from ozpcenter import models as models
 import ozpcenter.api.storefront.model_access as model_access
 from ozpcenter.scripts import sample_data_generator as data_gen
 
+
 class StorefrontTest(TestCase):
 
     def setUp(self):
@@ -75,4 +76,3 @@ class StorefrontTest(TestCase):
         keys = list(listing_types[0].keys()).sort()
         expected_keys = ['title', 'description'].sort()
         self.assertEqual(keys, expected_keys)
-

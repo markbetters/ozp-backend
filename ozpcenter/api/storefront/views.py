@@ -20,6 +20,7 @@ import ozpcenter.api.storefront.model_access as model_access
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center')
 
+
 @api_view(['GET'])
 @permission_classes((permissions.IsUser, ))
 def MetadataView(request):
@@ -29,6 +30,7 @@ def MetadataView(request):
     """
     data = model_access.get_metadata(request.user.username)
     return Response(data)
+
 
 @api_view(['GET'])
 @permission_classes((permissions.IsUser, ))
