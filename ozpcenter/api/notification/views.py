@@ -22,12 +22,13 @@ import ozpcenter.model_access as generic_model_access
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center')
 
+
 class NotificationViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.NotificationSerializer
     permission_classes = (permissions.IsUser,)
 
     def get_queryset(self):
-        return  model_access.get_all_notifications()
+        return model_access.get_all_notifications()
 
     def create(self, request):
         try:
@@ -44,14 +45,13 @@ class NotificationViewSet(viewsets.ModelViewSet):
             return Response('Permission Denied',
                 status=status.HTTP_403_FORBIDDEN)
         except Exception as e:
-          raise e
+            raise e
 
     def update(self, request, pk=None):
         """
         update is used only change the expiration date of the message
         """
         try:
-
             instance = self.get_queryset().get(pk=pk)
             serializer = serializers.NotificationSerializer(instance,
                 data=request.data, context={'request': request}, partial=True)
@@ -68,8 +68,7 @@ class NotificationViewSet(viewsets.ModelViewSet):
             return Response('Permission Denied',
                 status=status.HTTP_403_FORBIDDEN)
         except Exception as e:
-          raise e
-
+            raise e
 
 
 class UserNotificationViewSet(viewsets.ModelViewSet):
@@ -91,6 +90,7 @@ class UserNotificationViewSet(viewsets.ModelViewSet):
         user = generic_model_access.get_profile(self.request.user.username)
         notification.dismissed_by.add(user)
         return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 class PendingNotificationView(generics.ListCreateAPIView):
     permission_classes = (permissions.IsOrgSteward,)

@@ -9,6 +9,7 @@ from ozpcenter import models as models
 import ozpcenter.api.notification.model_access as model_access
 from ozpcenter.scripts import sample_data_generator as data_gen
 
+
 class ListingTest(TestCase):
 
     def setUp(self):
@@ -47,4 +48,3 @@ class ListingTest(TestCase):
         #   * 1 unexpired, undismissed system-wide notification
         #   * nothing else
         pass
-

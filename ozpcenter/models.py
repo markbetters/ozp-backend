@@ -79,12 +79,13 @@ class AccessControlImageManager(models.Manager):
     This way there is a single place to implement this 'tailored view' logic
     for image queries
     """
+
     def for_user(self, username):
         # get all images
         objects = super(AccessControlImageManager, self).get_queryset()
         user = Profile.objects.get(user__username=username)
         # filter out listings by user's access level
-        images_to_exclude=[]
+        images_to_exclude = []
         for i in objects:
             if not access_control.has_access(user.access_control, i.security_marking):
                 images_to_exclude.append(i.id)
@@ -150,7 +151,7 @@ class Image(models.Model):
 
         # create database entry
         img = Image(uuid=random_uuid, security_marking=security_marking,
-            file_extension=file_extension, image_type=image_type)
+                    file_extension=file_extension, image_type=image_type)
         img.save()
 
         # write the image to the file system
@@ -198,7 +199,7 @@ class Agency(models.Model):
     """
     title = models.CharField(max_length=255, unique=True)
     icon = models.ForeignKey(Image, related_name='agency', null=True,
-        blank=True)
+                             blank=True)
 
     short_name = models.CharField(max_length=32, unique=True)
 
@@ -227,16 +228,18 @@ class ApplicationLibraryEntry(models.Model):
         in different folders)?
     """
     folder = models.CharField(max_length=255, blank=True, null=True)
-    owner = models.ForeignKey('Profile', related_name='application_library_entries')
-    listing = models.ForeignKey('Listing', related_name='application_library_entries')
+    owner = models.ForeignKey(
+        'Profile', related_name='application_library_entries')
+    listing = models.ForeignKey(
+        'Listing', related_name='application_library_entries')
 
     def __str__(self):
         return '%s:%s:%s' % (self.folder, self.owner.user.username,
-            self.listing.title)
+                             self.listing.title)
 
     def __repr__(self):
         return '%s:%s:%s' % (self.folder, self.owner.user.username,
-            self.listing.title)
+                             self.listing.title)
 
     class Meta:
         verbose_name_plural = "application library entries"
@@ -273,9 +276,9 @@ class ChangeDetail(models.Model):
     """
     field_name = models.CharField(max_length=255)
     old_value = models.CharField(max_length=constants.MAX_VALUE_LENGTH,
-        blank=True, null=True)
+                                 blank=True, null=True)
     new_value = models.CharField(max_length=constants.MAX_VALUE_LENGTH,
-        blank=True, null=True)
+                                 blank=True, null=True)
 
     def __repr__(self):
         return "id:%d field %s was %s now is %s" % (
@@ -417,6 +420,7 @@ class Intent(models.Model):
     def __str__(self):
         return self.action
 
+
 class AccessControlReviewManager(models.Manager):
     """
     Use a custom manager to control access to Reviews
@@ -427,6 +431,7 @@ class AccessControlReviewManager(models.Manager):
     This way there is a single place to implement this 'tailored view' logic
     for review queries
     """
+
     def for_user(self, username):
         # get all reviews
         all_reviews = super(AccessControlReviewManager, self).get_queryset()
@@ -442,11 +447,11 @@ class Review(models.Model):
     A review made on a Listing
     """
     text = models.CharField(max_length=constants.MAX_VALUE_LENGTH,
-        blank=True, null=True)
+                            blank=True, null=True)
     rate = models.IntegerField(validators=[
         MinValueValidator(1),
         MaxValueValidator(5)
-        ]
+    ]
     )
     listing = models.ForeignKey('Listing', related_name='reviews')
     author = models.ForeignKey('Profile', related_name='reviews')
@@ -459,11 +464,11 @@ class Review(models.Model):
 
     def __repr__(self):
         return '%s: rate: %d text: %s' % (self.author.user.username,
-                                                     self.rate, self.text)
+                                          self.rate, self.text)
 
     def __str__(self):
         return '%s: rate: %d text: %s' % (self.author.user.username,
-                                                     self.rate, self.text)
+                                          self.rate, self.text)
 
     class Meta:
         # a user can only have one review per listing
@@ -488,7 +493,7 @@ class Profile(models.Model):
 
     TODO: Auditing for create, update, delete
     """
-    #application_library = db.relationship('ApplicationLibraryEntry',
+    # application_library = db.relationship('ApplicationLibraryEntry',
     #                                      backref='owner')
     display_name = models.CharField(max_length=255)
     bio = models.CharField(max_length=1000, blank=True)
@@ -520,7 +525,7 @@ class Profile(models.Model):
     # for authentication, we extend it
     # https://docs.djangoproject.com/en/1.8/topics/auth/customizing/#extending-the-existing-user-model
     user = models.OneToOneField(settings.AUTH_USER_MODEL, null=True,
-        blank=True)
+                                blank=True)
 
     # TODO
     # iwc_data_objects = db.relationship('IwcDataObject', backref='profile')
@@ -622,12 +627,12 @@ class Profile(models.Model):
 
         # create the profile object and associate it with the User
         p = Profile(display_name=display_name,
-            bio=bio,
-            access_control=access_control,
-            user=user,
-            dn=dn,
-            issuer_dn=issuer_dn
-        )
+                    bio=bio,
+                    access_control=access_control,
+                    user=user,
+                    dn=dn,
+                    issuer_dn=issuer_dn
+                    )
         p.save()
 
         # add organizations
@@ -655,6 +660,7 @@ class AccessControlListingManager(models.Manager):
     This way there is a single place to implement this 'tailored view' logic
     for listing queries
     """
+
     def for_user(self, username):
         # get all listings
         objects = super(AccessControlListingManager, self).get_queryset()
@@ -672,10 +678,10 @@ class AccessControlListingManager(models.Manager):
             exclude_orgs = Agency.objects.exclude(title__in=user_orgs)
 
         objects = objects.exclude(is_private=True,
-            agency__in=exclude_orgs)
+                                  agency__in=exclude_orgs)
 
         # filter out listings by user's access level
-        titles_to_exclude=[]
+        titles_to_exclude = []
         for i in objects:
             if not i.security_marking:
                 logger.error('Listing %s has no security_marking' % i.title)
@@ -716,7 +722,7 @@ class Listing(models.Model):
     edited_date = models.DateTimeField(default=utils.get_now_utc)
     agency = models.ForeignKey(Agency, related_name='listings')
     listing_type = models.ForeignKey('ListingType', related_name='listings',
-        null=True, blank=True)
+                                     null=True, blank=True)
     description = models.CharField(max_length=8192, null=True, blank=True)
     launch_url = models.CharField(
         max_length=constants.MAX_URL_SIZE,
@@ -730,22 +736,21 @@ class Listing(models.Model):
     version_name = models.CharField(max_length=255, null=True, blank=True)
     # NOTE: replacing uuid with this - will need to add to the form
     unique_name = models.CharField(max_length=255, unique=True, null=True,
-        blank=True)
+                                   blank=True)
     small_icon = models.ForeignKey(Image, related_name='listing_small_icon',
-        null=True, blank=True)
+                                   null=True, blank=True)
     large_icon = models.ForeignKey(Image, related_name='listing_large_icon',
-        null=True, blank=True)
+                                   null=True, blank=True)
     banner_icon = models.ForeignKey(Image, related_name='listing_banner_icon',
-        null=True, blank=True)
+                                    null=True, blank=True)
     large_banner_icon = models.ForeignKey(Image,
-        related_name='listing_large_banner_icon', null=True, blank=True)
-
+                                          related_name='listing_large_banner_icon', null=True, blank=True)
 
     what_is_new = models.CharField(max_length=255, null=True, blank=True)
     description_short = models.CharField(max_length=150, null=True, blank=True)
     requirements = models.CharField(max_length=1000, null=True, blank=True)
     approval_status = models.CharField(max_length=255,
-        choices=APPROVAL_STATUS_CHOICES, default=IN_PROGRESS)
+                                       choices=APPROVAL_STATUS_CHOICES, default=IN_PROGRESS)
     is_enabled = models.BooleanField(default=True)
     is_featured = models.BooleanField(default=False)
     # a weighted average (5*total_rate5 + 4*total_rate4 + ...) / total_votes
@@ -786,10 +791,10 @@ class Listing(models.Model):
     required_listings = models.ForeignKey('self', null=True, blank=True)
     # no reverse relationship - use '+'
     last_activity = models.OneToOneField('ListingActivity', related_name='+',
-        null=True, blank=True)
+                                         null=True, blank=True)
     # no reverse relationship - use '+'
     current_rejection = models.OneToOneField('ListingActivity', related_name='+',
-        null=True, blank=True)
+                                             null=True, blank=True)
 
     intents = models.ManyToManyField(
         'Intent',
@@ -798,7 +803,7 @@ class Listing(models.Model):
     )
 
     security_marking = models.CharField(max_length=1024,
-        null=True, blank=True)
+                                        null=True, blank=True)
 
     # private listings can only be viewed by members of the same agency
     is_private = models.BooleanField(default=False)
@@ -823,6 +828,7 @@ class AccessControlListingActivityManager(models.Manager):
     This way there is a single place to implement this 'tailored view' logic
     for ListingActivity queries
     """
+
     def for_user(self, username):
         # get all activities
         all_activities = super(
@@ -849,7 +855,7 @@ class ListingActivity(models.Model):
     # listing is approved by an org steward
     APPROVED_ORG = 'APPROVED_ORG'
     # listing is approved by apps mall steward (upon previous org steward
-        # approval) - it is now visible to users
+    # approval) - it is now visible to users
     APPROVED = 'APPROVED'
     # listing is rejected for approval by org steward or apps mall steward
     REJECTED = 'REJECTED'
@@ -895,11 +901,11 @@ class ListingActivity(models.Model):
 
     def __repr__(self):
         return '%s %s %s at %s' % (self.author.user.username, self.action,
-            self.listing.title, self.activity_date)
+                                   self.listing.title, self.activity_date)
 
     def __str__(self):
         return '%s %s %s at %s' % (self.author.user.username, self.action,
-            self.listing.title, self.activity_date)
+                                   self.listing.title, self.activity_date)
 
     class Meta:
         verbose_name_plural = "listing activities"
@@ -962,7 +968,7 @@ class Notification(models.Model):
         db_table='notification_profile'
     )
     listing = models.ForeignKey(Listing, related_name='notifications',
-        null=True, blank=True)
+                                null=True, blank=True)
 
     def __repr__(self):
         return '%s: %s' % (self.author.user.username, self.message)

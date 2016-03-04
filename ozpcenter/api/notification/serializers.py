@@ -14,16 +14,20 @@ import ozpcenter.api.listing.model_access as listing_model_access
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center')
 
+
 class ShortUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('username',)
 
+
 class ShortProfileSerializer(serializers.ModelSerializer):
     user = ShortUserSerializer()
+
     class Meta:
         model = models.Profile
         fields = ('user',)
+
 
 class NotificationListingSerializer(serializers.ModelSerializer):
     class Meta:
@@ -34,10 +38,12 @@ class NotificationListingSerializer(serializers.ModelSerializer):
             'title': {'validators': []}
         }
 
+
 class NotificationSerializer(serializers.ModelSerializer):
     author = ShortProfileSerializer(required=False)
     listing = NotificationListingSerializer(required=False)
     dismissed_by = ShortProfileSerializer(required=False, many=True)
+
     class Meta:
         model = models.Notification
         fields = ('id', 'created_date', 'message', 'expires_date', 'author',

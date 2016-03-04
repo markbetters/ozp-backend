@@ -12,6 +12,7 @@ import ozpcenter.api.image.model_access as image_model_access
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center')
 
+
 class IntentSerializer(serializers.ModelSerializer):
     icon = image_serializers.ShortImageSerializer()
     class Meta:
@@ -26,4 +27,3 @@ class IntentSerializer(serializers.ModelSerializer):
         else:
             data['icon'] = None
         return data
-

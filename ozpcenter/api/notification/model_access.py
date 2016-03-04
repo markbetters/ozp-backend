@@ -10,6 +10,7 @@ import ozpcenter.models as models
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center')
 
+
 def get_self_notifications(username):
     """
     Get notifications for current user
@@ -35,15 +36,18 @@ def get_self_notifications(username):
 
     return notifications
 
+
 def get_all_pending_notifications():
     unexpired_system_notifications = models.Notification.objects.filter(
         expires_date__gt=datetime.datetime.now(pytz.utc), listing__isnull=True)
     return unexpired_system_notifications
 
+
 def get_all_expired_notifications():
     expired_system_notifications = models.Notification.objects.filter(
         expires_date__lt=datetime.datetime.now(pytz.utc), listing__isnull=True)
     return expired_system_notifications
+
 
 def get_all_notifications():
     return models.Notification.objects.all()

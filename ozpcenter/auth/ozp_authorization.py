@@ -26,6 +26,7 @@ import ozpcenter.utils as utils
 
 logger = logging.getLogger('ozp-center')
 
+
 def _get_auth_data(username):
     """
     Get authorization data for given user
@@ -84,6 +85,7 @@ def _get_auth_data(username):
 
     return user_data
 
+
 def authorization_update(username, updated_auth_data=None):
         """
         Update authorization info for this user
@@ -107,7 +109,7 @@ def authorization_update(username, updated_auth_data=None):
         # exception (auth data should never be cached for more than 24 hours)
         now = datetime.datetime.now(pytz.utc)
         seconds_to_cache_data = int(settings.OZP['OZP_AUTHORIZATION']['SECONDS_TO_CACHE_DATA'])
-        if seconds_to_cache_data > 24*3600:
+        if seconds_to_cache_data > 24 * 3600:
             raise errors.AuthorizationFailure('Cannot cache data for more than 1 day')
         expires_in = profile.auth_expires - now
         if expires_in.days >= 1:

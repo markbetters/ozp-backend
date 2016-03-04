@@ -11,6 +11,7 @@ import ozpcenter.api.listing.model_access as model_access
 import ozpcenter.model_access as generic_model_access
 from ozpcenter.scripts import sample_data_generator as data_gen
 
+
 class ListingTest(TestCase):
 
     def setUp(self):
@@ -393,5 +394,3 @@ class ListingTest(TestCase):
         self.assertTrue(data['REJECTED'] >= 0)
         self.assertTrue(data['APPROVED_ORG'] >= 0)
         self.assertTrue(data['APPROVED'] >= 0)
-
-

@@ -25,6 +25,7 @@ except ImportError:
 
 logger = logging.getLogger('ozp-center')
 
+
 class PkiAuthentication(authentication.BaseAuthentication):
     def authenticate(self, request):
         # ensure we're using HTTPS
@@ -75,6 +76,7 @@ class PkiAuthentication(authentication.BaseAuthentication):
             logger.error('Failed to find/create user for dn %s. Authentication failed' % dn)
             return None
 
+
 def _preprocess_dn(original_dn):
     """
     Reverse the DN and replace slashes with commas
@@ -85,6 +87,7 @@ def _preprocess_dn(original_dn):
     dn = dn[::-1]
     dn = ", ".join(dn)
     return dn
+
 
 def _get_profile_by_dn(dn, issuer_dn='default issuer dn'):
     """
@@ -114,9 +117,9 @@ def _get_profile_by_dn(dn, issuer_dn='default issuer dn'):
         kwargs = {'display_name': cn, 'dn': dn, 'issuer_dn': issuer_dn}
         # sanitize username
         username = cn[0:30]
-        username = username.replace(' ', '_') # no spaces
-        username = username.replace("'", "") # no apostrophes
-        username = username.lower() # all lowercase
+        username = username.replace(' ', '_')  # no spaces
+        username = username.replace("'", "")  # no apostrophes
+        username = username.lower()  # all lowercase
         # make sure this username doesn't exist
         count = User.objects.filter(username=username).count()
         if count != 0:

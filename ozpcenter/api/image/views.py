@@ -23,6 +23,7 @@ import ozpcenter.errors as errors
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center')
 
+
 class ImageTypeViewSet(viewsets.ModelViewSet):
     queryset = model_access.get_all_image_types()
     serializer_class = serializers.ImageTypeSerializer
@@ -93,7 +94,7 @@ class ImageViewSet(viewsets.ModelViewSet):
         # enforce access control
         user = generic_model_access.get_profile(self.request.user.username)
         if not access_control.has_access(user.access_control,
-            image.security_marking):
+                image.security_marking):
             return Response(status=status.HTTP_403_FORBIDDEN)
         content_type = 'image/' + image.file_extension
         try:
