@@ -94,5 +94,3 @@ class LibraryApiTest(APITestCase):
         url = '/api/self/library/update_all/'
         response = self.client.put(url, put_data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-

@@ -14,6 +14,7 @@ import ozpcenter.models as models
 
 fake = Factory.create()
 
+
 class GroupFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = django.contrib.auth.models.Group
@@ -21,6 +22,7 @@ class GroupFactory(factory.django.DjangoModelFactory):
         django_get_or_create = ('name',)
 
     name = 'USER'
+
 
 class UserFactory(factory.django.DjangoModelFactory):
     class Meta:

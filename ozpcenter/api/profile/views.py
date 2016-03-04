@@ -1,8 +1,13 @@
 """
 Views
+
 TODO: GET api/profile?role=ORG_STEWARD for view (shown on create/edit listing page)
+
+
+
 TODO: POST api/profile/self/library - add listing to library (bookmark)
   params: listing id
+
 TODO: DELETE api/profile/self/library/<id> - unbookmark a listing
 """
 import logging
@@ -22,6 +27,7 @@ import ozpcenter.api.profile.model_access as model_access
 
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center')
+
 
 class ProfileViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsOrgStewardOrReadOnly,)
@@ -57,6 +63,7 @@ class ProfileViewSet(viewsets.ModelViewSet):
                     status=status.HTTP_400_BAD_REQUEST)
 
             serializer.save()
+
             return Response(serializer.data, status=status.HTTP_200_OK)
         except errors.PermissionDenied:
             return Response('Permission Denied',
@@ -64,10 +71,12 @@ class ProfileViewSet(viewsets.ModelViewSet):
         except Exception as e:
             raise e
 
+
 class UserViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsOrgSteward,)
     queryset = model_access.get_all_users()
     serializer_class = serializers.UserSerializer
+
 
 class GroupViewSet(viewsets.ModelViewSet):
     queryset = model_access.get_all_groups()

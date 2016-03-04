@@ -12,6 +12,7 @@ import ozpcenter.utils as utils
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center')
 
+
 def get_profile(username):
     """
     get a user's Profile

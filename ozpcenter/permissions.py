@@ -20,8 +20,8 @@ class IsAppsMallStewardOrReadOnly(permissions.BasePermission):
             return False
         ozp_authorization.authorization_update(request.user.username)
         user_profile = model_access.get_profile(request.user.username)
-        if (request.method in SAFE_METHODS or \
-            user_profile.highest_role() in ['APPS_MALL_STEWARD']):
+        if (request.method in SAFE_METHODS or
+                user_profile.highest_role() in ['APPS_MALL_STEWARD']):
             return True
         return False
 
@@ -32,8 +32,8 @@ class IsOrgStewardOrReadOnly(permissions.BasePermission):
             return False
         ozp_authorization.authorization_update(request.user.username)
         user_profile = model_access.get_profile(request.user.username)
-        if (request.method in SAFE_METHODS or \
-            user_profile.highest_role() in ['APPS_MALL_STEWARD', 'ORG_STEWARD']):
+        if (request.method in SAFE_METHODS or
+                user_profile.highest_role() in ['APPS_MALL_STEWARD', 'ORG_STEWARD']):
             return True
         return False
 
@@ -49,7 +49,7 @@ class IsUser(permissions.BasePermission):
         ozp_authorization.authorization_update(request.user.username)
         profile = model_access.get_profile(request.user.username)
         if profile is None:
-           return False
+            return False
         if profile.highest_role() in ['USER', 'ORG_STEWARD', 'APPS_MALL_STEWARD']:
             return True
         else:

@@ -27,6 +27,15 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# Use nose to run all tests
+TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+
+# Tell nose to measure coverage on the ozp, ozpcenter, ozpiwc  apps
+NOSE_ARGS = [
+    '--with-coverage',
+    '--cover-html',
+    '--cover-package=ozp,ozpcenter,ozpiwc',
+]
 
 # Application definition
 
@@ -146,14 +155,14 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 # MEDIA_URL is the relative browser URL to be used when accessing media files
 #   from the browser
-MEDIA_URL='media/'
+MEDIA_URL = 'media/'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        #'ozpcenter.auth.pkiauth.PkiAuthentication'
-        'rest_framework.authentication.BasicAuthentication'
+        # 'ozpcenter.auth.pkiauth.PkiAuthentication'
+        'rest_framework.authentication.BasicAuthentication',
         # 'rest_framework.authentication.SessionAuthentication',
-    , ),
+        ),
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
     'DEFAULT_PERMISSION_CLASSES': (
@@ -187,7 +196,7 @@ REST_FRAMEWORK = {
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
-        'TIMEOUT': 300, # 5 minutes
+        'TIMEOUT': 300,  # 5 minutes
         'OPTIONS': {
             'MAX_ENTRIES': 10000
         }

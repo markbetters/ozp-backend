@@ -14,6 +14,7 @@ import ozpcenter.model_access as generic_model_access
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center')
 
+
 class LibrarySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.ApplicationLibraryEntry
@@ -23,6 +24,7 @@ class LibraryListingSerializer(serializers.HyperlinkedModelSerializer):
     small_icon = image_serializers.ImageSerializer(required=False)
     large_icon = image_serializers.ImageSerializer(required=False)
     banner_icon = image_serializers.ImageSerializer(required=False)
+
     class Meta:
         model = models.Listing
         fields = ('id', 'title', 'unique_name', 'launch_url', 'small_icon',
@@ -47,6 +49,7 @@ class UserLibrarySerializer(serializers.ModelSerializer):
     Serializer for self/library - owner is always current user
     """
     listing = LibraryListingSerializer()
+
     class Meta:
         model = models.ApplicationLibraryEntry
         fields = ('listing', 'folder', 'id')

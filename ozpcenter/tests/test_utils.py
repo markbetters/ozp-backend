@@ -9,6 +9,7 @@ from ozpcenter import models as models
 from ozpcenter import utils as utils
 from ozpcenter.scripts import sample_data_generator as data_gen
 
+
 class UtilsTest(TestCase):
 
     def setUp(self):

@@ -8,8 +8,10 @@ import ozpcenter.models as models
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center')
 
+
 def get_all_contact_types():
     return models.ContactType.objects.all()
+
 
 def get_contact_type_by_name(name):
     try:

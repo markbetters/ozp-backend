@@ -9,6 +9,7 @@ from django.db import transaction
 from ozpcenter import models as models
 from ozpcenter.scripts import sample_data_generator as data_gen
 
+
 class SampleDataGeneratorTest(TestCase):
 
     def setUp(self):

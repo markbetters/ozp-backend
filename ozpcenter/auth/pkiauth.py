@@ -25,6 +25,7 @@ except ImportError:
 
 logger = logging.getLogger('ozp-center')
 
+
 class PkiAuthentication(authentication.BaseAuthentication):
     def authenticate(self, request):
         # ensure we're using HTTPS
@@ -61,11 +62,8 @@ class PkiAuthentication(authentication.BaseAuthentication):
         # which is not url friendly and causes our demo authorization service
         # to choke. Replace these with commas instead
         if settings.OZP['PREPROCESS_DN']:
-            dn = dn.replace('/', ',')
-            # remove leading ,
-            dn = dn[1:]
-            issuer_dn = issuer_dn.replace('/', ',')
-            issuer_dn = issuer_dn[1:]
+            dn = _preprocess_dn(dn)
+            issuer_dn = _preprocess_dn(issuer_dn)
 
         logger.debug('Attempting to authenticate user with dn: %s and issuer dn: %s' % (dn, issuer_dn))
 
@@ -77,6 +75,19 @@ class PkiAuthentication(authentication.BaseAuthentication):
         else:
             logger.error('Failed to find/create user for dn %s. Authentication failed' % dn)
             return None
+
+
+def _preprocess_dn(original_dn):
+    """
+    Reverse the DN and replace slashes with commas
+    """
+    # remove leading slash
+    dn = original_dn[1:]
+    dn = dn.split('/')
+    dn = dn[::-1]
+    dn = ", ".join(dn)
+    return dn
+
 
 def _get_profile_by_dn(dn, issuer_dn='default issuer dn'):
     """
@@ -105,15 +116,17 @@ def _get_profile_by_dn(dn, issuer_dn='default issuer dn'):
 
         kwargs = {'display_name': cn, 'dn': dn, 'issuer_dn': issuer_dn}
         # sanitize username
-        username = cn[0:30] # limit to 30 chars
-        username = username.replace(' ', '_') # no spaces
-        username = username.replace("'", "") # no apostrophes
-        username = username.lower() # all lowercase
+        username = cn[0:30]
+        username = username.replace(' ', '_')  # no spaces
+        username = username.replace("'", "")  # no apostrophes
+        username = username.lower()  # all lowercase
         # make sure this username doesn't exist
-        count = User.objects.filter(
-            username=username).count()
+        count = User.objects.filter(username=username).count()
         if count != 0:
-            username = '%s_%s' % (username, count + 1)
+            new_username = username[0:27]
+            count = User.objects.filter(username__startswith=new_username).count()
+            new_username = '%s_%s' % (new_username, count + 1)
+            username = new_username
 
         # now check again - if this username exists, we have a problem
         count = User.objects.filter(

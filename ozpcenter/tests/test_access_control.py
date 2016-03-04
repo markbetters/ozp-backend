@@ -8,6 +8,7 @@ from django.test import TestCase
 
 import ozpcenter.access_control as access_control
 
+
 class AccessControlTest(TestCase):
 
     def setUp(self):

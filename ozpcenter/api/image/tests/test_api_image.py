@@ -46,4 +46,3 @@ class ImageApiTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertTrue('id' in response.data)
         self.assertTrue('security_marking' in response.data)
-

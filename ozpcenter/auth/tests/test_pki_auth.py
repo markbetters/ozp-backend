@@ -8,6 +8,7 @@ import ozpcenter.auth.pkiauth as pkiauth
 import ozpcenter.models as models
 import ozpcenter.model_access as model_access
 
+
 class PkiAuthenticationTest(TestCase):
 
     def setUp(self):
@@ -57,3 +58,8 @@ class PkiAuthenticationTest(TestCase):
         # the new user
         profile = pkiauth._get_profile_by_dn('jones jones\'')
         self.assertEqual(profile.user.username, 'jones_jones_2')
+
+    def test_preprocess_dn(self):
+        dn = '/THIRD=c/SECOND=b/FIRST=a'
+        dn = pkiauth._preprocess_dn(dn)
+        self.assertEqual(dn, 'FIRST=a, SECOND=b, THIRD=c')

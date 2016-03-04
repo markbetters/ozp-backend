@@ -22,6 +22,7 @@ import ozpcenter.permissions as permissions
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center')
 
+
 class LibraryViewSet(viewsets.ModelViewSet):
     """
     ModelViewSet for getting all library entries for all users
@@ -34,6 +35,7 @@ class LibraryViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsOrgSteward,)
     queryset = model_access.get_all_library_entries()
     serializer_class = serializers.LibrarySerializer
+
 
 class UserLibraryViewSet(viewsets.ViewSet):
     """
