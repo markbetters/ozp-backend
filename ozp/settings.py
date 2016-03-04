@@ -30,7 +30,7 @@ ALLOWED_HOSTS = []
 # Use nose to run all tests
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
-# Tell nose to measure coverage on the 'foo' and 'bar' apps
+# Tell nose to measure coverage on the ozp, ozpcenter, ozpiwc  apps
 NOSE_ARGS = [
     '--with-coverage',
     '--cover-html',
