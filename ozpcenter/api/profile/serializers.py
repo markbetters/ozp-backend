@@ -8,7 +8,9 @@ import django.contrib.auth
 from rest_framework import serializers
 
 import ozpcenter.models as models
+import ozpcenter.model_access as generic_model_access
 import ozpcenter.api.agency.model_access as agency_model_access
+
 
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center')
@@ -73,17 +75,19 @@ class ProfileSerializer(serializers.ModelSerializer):
         data['stewarded_organizations'] = stewarded_organizations
         return data
 
-    def update(self, instance, validated_data):
+    def update(self, profile_instance, validated_data):
         if 'is_new_user' in validated_data:
-            instance.is_new_user = validated_data['is_new_user']
+            profile_instance.is_new_user = validated_data['is_new_user']
 
-        if instance.highest_role() == 'APPS_MALL_STEWARD':
+        current_request_profile = generic_model_access.get_profile(self.context['request'].user.username)
+
+        if current_request_profile.highest_role() == 'APPS_MALL_STEWARD':
             if validated_data['stewarded_organizations']:
-                instance.stewarded_organizations.clear()
+                profile_instance.stewarded_organizations.clear()
                 for org in validated_data['stewarded_organizations']:
-                    instance.stewarded_organizations.add(org)
-        instance.save()
-        return instance
+                    profile_instance.stewarded_organizations.add(org)
+        profile_instance.save()
+        return profile_instance
 
 
 class ShortProfileSerializer(serializers.ModelSerializer):

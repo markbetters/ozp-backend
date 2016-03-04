@@ -51,11 +51,11 @@ class ProfileViewSet(viewsets.ModelViewSet):
 
     def update(self, request, pk=None):
         try:
-            profile = model_access.get_self(request.user.username)
-            if profile.highest_role() != 'APPS_MALL_STEWARD':
+            current_request_profile = model_access.get_self(request.user.username)
+            if current_request_profile.highest_role() != 'APPS_MALL_STEWARD':
                 raise errors.PermissionDenied
-            instance = self.get_queryset().get(pk=pk)
-            serializer = serializers.ProfileSerializer(instance,
+            profile_instance = self.get_queryset().get(pk=pk)
+            serializer = serializers.ProfileSerializer(profile_instance,
                 data=request.data, context={'request': request}, partial=True)
             if not serializer.is_valid():
                 logger.error('%s' % serializer.errors)
@@ -88,16 +88,16 @@ class CurrentUserViewSet(viewsets.ViewSet):
     """
     permission_classes = (permissions.IsUser,)
 
-    def list(self, request):
-        profile = model_access.get_self(request.user.username)
-        serializer = serializers.ProfileSerializer(profile,
+    def retrieve(self, request):
+        current_request_profile = model_access.get_self(request.user.username)
+        serializer = serializers.ProfileSerializer(current_request_profile,
             context={'request': request})
         return Response(serializer.data)
 
     def update(self, request):
         try:
-            profile = model_access.get_self(request.user.username)
-            serializer = serializers.ProfileSerializer(profile,
+            current_request_profile = model_access.get_self(request.user.username)
+            serializer = serializers.ProfileSerializer(current_request_profile,
                 data=request.data, context={'request': request}, partial=True)
             if not serializer.is_valid():
                 logger.error('%s' % serializer.errors)
