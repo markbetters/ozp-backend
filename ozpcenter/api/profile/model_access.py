@@ -29,7 +29,6 @@ def filter_queryset_by_username_starts_with(queryset, starts_with):
     return queryset.filter(user__username__startswith=starts_with)
 
 
-
 def get_all_users():
     return django.contrib.auth.models.User.objects.all()
 
