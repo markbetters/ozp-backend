@@ -8,6 +8,7 @@ from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 import ozpcenter.models as models
 import ozpcenter.utils as utils
+import ozpcenter.api.storefront.serializers as serializers
 
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center')
@@ -44,6 +45,10 @@ def get_storefront(username):
             'avg_rate').filter(
                 approval_status=models.Listing.APPROVED,
                 is_enabled=True).order_by('-avg_rate')[:36]
+
+        featured_listings = serializers.ListingSerializer.setup_eager_loading(featured_listings)
+        recent_listings = serializers.ListingSerializer.setup_eager_loading(recent_listings)
+        most_popular_listings = serializers.ListingSerializer.setup_eager_loading(most_popular_listings)
 
         data = {
             'featured': featured_listings,
