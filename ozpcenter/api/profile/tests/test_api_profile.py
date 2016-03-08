@@ -144,8 +144,8 @@ class ProfileApiTest(APITestCase):
         user = generic_model_access.get_profile('bigbrother').user
         self.client.force_authenticate(user=user)
         url = '/api/self/profile/'
-        response = self.client.get(url, format='json')
 
+        response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['id'], 4)
         self.assertEqual(response.data['display_name'], 'Big Brother')
@@ -161,8 +161,11 @@ class ProfileApiTest(APITestCase):
         self.client.force_authenticate(user=user)
         url = '/api/self/profile/'
         data = {'id':5,'is_new_user':False}
-        response = self.client.put(url, data, format='json')
 
+        response = self.client.get(url, format='json')
+        self.assertEqual(response.data['is_new_user'], True)
+
+        response = self.client.put(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['id'], 4)
         self.assertEqual(response.data['display_name'], 'Big Brother')
@@ -223,8 +226,10 @@ class ProfileApiTest(APITestCase):
         data = {'id':5,'is_new_user':False, 'stewarded_organizations': [
             {'title': 'Ministry of Truth'}, {'title': 'Ministry of Love'}]}
 
-        response = self.client.put(url, data, format='json')
+        response = self.client.get(url, format='json')
+        self.assertEqual(response.data['is_new_user'], True)
 
+        response = self.client.put(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['id'], 1)
         self.assertEqual(response.data['display_name'], 'Winston Smith')
@@ -242,8 +247,8 @@ class ProfileApiTest(APITestCase):
         user = generic_model_access.get_profile('jones').user
         self.client.force_authenticate(user=user)
         url = '/api/self/profile/'
-        response = self.client.get(url, format='json')
 
+        response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['id'], 7)
         self.assertEqual(response.data['display_name'], 'Jones')
@@ -261,8 +266,10 @@ class ProfileApiTest(APITestCase):
         data = {'id':5, 'is_new_user':False, 'stewarded_organizations': [
             {'title': 'Ministry of Truth'}, {'title': 'Ministry of Love'}]}
 
-        response = self.client.put(url, data, format='json')
+        response = self.client.get(url, format='json')
+        self.assertEqual(response.data['is_new_user'], True)
 
+        response = self.client.put(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['id'], 7)
         self.assertEqual(response.data['display_name'], 'Jones')

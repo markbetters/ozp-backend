@@ -36,10 +36,11 @@ class ProfileViewSet(viewsets.ModelViewSet):
     search_fields = ('dn',)
 
     def get_queryset(self):
-        queryset = model_access.get_all_profiles()
         role = self.request.query_params.get('role', None)
         if role:
             queryset = model_access.get_profiles_by_role(role)
+        else:
+            queryset = model_access.get_all_profiles()
         # support starts-with matching for finding users in the
         # Submit/Edit Listing form
         username_starts_with = self.request.query_params.get(
