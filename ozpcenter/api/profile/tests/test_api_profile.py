@@ -140,62 +140,71 @@ class ProfileApiTest(APITestCase):
         self.assertTrue('jones' in usernames)
         self.assertTrue('bigbrother' not in usernames)
 
-    def test_get_self_for_apps_mall_steward_level(self):
+    '''
+    Testing /api/self/profile endpoint
+    '''
+    def test_get_update_self_for_apps_mall_steward_level(self):
         user = generic_model_access.get_profile('bigbrother').user
         self.client.force_authenticate(user=user)
         url = '/api/self/profile/'
 
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['id'], 4)
-        self.assertEqual(response.data['display_name'], 'Big Brother')
-        self.assertEqual(response.data['organizations'], [{'short_name':'Minipax','title':'Ministry of Peace'}])
-        self.assertEqual(response.data['stewarded_organizations'], [])
-        self.assertEqual(response.data['user']['username'], 'bigbrother')
-        self.assertEqual(response.data['user']['groups'], [{'name':'APPS_MALL_STEWARD'}])
-        self.assertEqual(response.data['highest_role'], 'APPS_MALL_STEWARD')
-        self.assertEqual(response.data['is_new_user'], True)
+        self.assertEqual(response.data.get('id'), 4)
+        self.assertEqual(response.data.get('display_name'), 'Big Brother')
+        self.assertEqual(response.data.get('organizations'), [{'short_name':'Minipax','title':'Ministry of Peace'}])
+        self.assertEqual(response.data.get('stewarded_organizations'), [])
+        self.assertEqual(response.data.get('user').get('username'), 'bigbrother')
+        self.assertEqual(response.data.get('user').get('groups'), [{'name':'APPS_MALL_STEWARD'}])
+        self.assertEqual(response.data.get('highest_role'), 'APPS_MALL_STEWARD')
+        self.assertEqual(response.data.get('center_tour_flag'), True)
+        self.assertEqual(response.data.get('hud_tour_flag'), True)
+        self.assertEqual(response.data.get('webtop_tour_flag'), True)
 
-    def test_update_self_for_apps_mall_steward_level(self):
-        user = generic_model_access.get_profile('bigbrother').user
-        self.client.force_authenticate(user=user)
-        url = '/api/self/profile/'
-        data = {'id':5,'is_new_user':False}
+        combinations = [[0, 0, 0], [0, 0, 1], [0, 1, 0], [0, 1, 1],
+                        [1, 0, 0], [1, 0, 1], [1, 1, 0], [1, 1, 1]]
 
-        response = self.client.get(url, format='json')
-        self.assertEqual(response.data['is_new_user'], True)
+        for combination in combinations:
+            center_tour_flag = bool(combination[0])
+            webtop_tour_flag = bool(combination[1])
+            stewarded_organizations = bool(combination[2])
 
-        response = self.client.put(url, data, format='json')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['id'], 4)
-        self.assertEqual(response.data['display_name'], 'Big Brother')
-        self.assertEqual(response.data['organizations'], [{'short_name':'Minipax','title':'Ministry of Peace'}])
-        self.assertEqual(response.data['stewarded_organizations'], [])
-        self.assertEqual(response.data['user']['username'], 'bigbrother')
-        self.assertEqual(response.data['user']['groups'], [{'name':'APPS_MALL_STEWARD'}])
-        self.assertEqual(response.data['highest_role'], 'APPS_MALL_STEWARD')
-        self.assertEqual(response.data['is_new_user'], False)
+            data = {'id':5,'center_tour_flag':center_tour_flag, 'hud_tour_flag':webtop_tour_flag,
+                    'webtop_tour_flag':stewarded_organizations}
+            response = self.client.put(url, data, format='json')
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            self.assertEqual(response.data.get('id'), 4)
+            self.assertEqual(response.data.get('display_name'), 'Big Brother')
+            self.assertEqual(response.data.get('organizations'), [{'short_name':'Minipax','title':'Ministry of Peace'}])
+            self.assertEqual(response.data.get('stewarded_organizations'), [])
+            self.assertEqual(response.data.get('user').get('username'), 'bigbrother')
+            self.assertEqual(response.data.get('user').get('groups'), [{'name':'APPS_MALL_STEWARD'}])
+            self.assertEqual(response.data.get('highest_role'), 'APPS_MALL_STEWARD')
+            self.assertEqual(response.data.get('center_tour_flag'), center_tour_flag)
+            self.assertEqual(response.data.get('hud_tour_flag'), webtop_tour_flag)
+            self.assertEqual(response.data.get('webtop_tour_flag'), stewarded_organizations)
 
-        response = self.client.get(url, format='json')
-        self.assertEqual(response.data['is_new_user'], False)
-
+            response = self.client.get(url, format='json')
+            self.assertEqual(response.data.get('center_tour_flag'), center_tour_flag)
+            self.assertEqual(response.data.get('hud_tour_flag'), webtop_tour_flag)
+            self.assertEqual(response.data.get('webtop_tour_flag'), stewarded_organizations)
 
     def test_update_self_for_apps_mall_steward_level_serializer_exception(self):
         user = generic_model_access.get_profile('bigbrother').user
         self.client.force_authenticate(user=user)
         url = '/api/self/profile/'
-        data = {'id':5,'is_new_user':4}
+        data = {'id':5,'center_tour_flag':4}
         response = self.client.put(url, data, format='json')
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-        expected_data = {'is_new_user': ['"4" is not a valid boolean.']}
+        expected_data = {'center_tour_flag': ['"4" is not a valid boolean.']}
         self.assertEqual(response.data, expected_data)
 
     def test_update_self_for_apps_mall_steward_level_invalid_user(self):
         self.client.login(username='invalid', password='invalid')
         url = '/api/self/profile/'
-        data = {'id':5,'is_new_user': False}
+        data = {'id':5,'center_tour_flag': False}
         response = self.client.put(url, data, format='json')
 
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
@@ -203,86 +212,101 @@ class ProfileApiTest(APITestCase):
         expected_data = {'detail': 'Authentication credentials were not provided.'}
         self.assertEqual(response.data, expected_data)
 
-    def test_get_self_for_org_steward_level(self):
+    def test_get_update_self_for_org_steward_level(self):
         user = generic_model_access.get_profile('wsmith').user
         self.client.force_authenticate(user=user)
         url = '/api/self/profile/'
-        response = self.client.get(url, format='json')
-
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['id'], 1)
-        self.assertEqual(response.data['display_name'], 'Winston Smith')
-        self.assertEqual(response.data['organizations'], [{"short_name":"Minitrue","title":"Ministry of Truth"}])
-        self.assertEqual(response.data['stewarded_organizations'], [{"short_name":"Minitrue","title":"Ministry of Truth"}])
-        self.assertEqual(response.data['user']['username'], 'wsmith')
-        self.assertEqual(response.data['user']['groups'], [{"name":"ORG_STEWARD"}])
-        self.assertEqual(response.data['highest_role'], 'ORG_STEWARD')
-        self.assertEqual(response.data['is_new_user'], True)
-
-    def test_update_self_for_org_steward_level(self):
-        user = generic_model_access.get_profile('wsmith').user
-        self.client.force_authenticate(user=user)
-        url = '/api/self/profile/'
-        data = {'id':5,'is_new_user':False, 'stewarded_organizations': [
-            {'title': 'Ministry of Truth'}, {'title': 'Ministry of Love'}]}
-
-        response = self.client.get(url, format='json')
-        self.assertEqual(response.data['is_new_user'], True)
-
-        response = self.client.put(url, data, format='json')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['id'], 1)
-        self.assertEqual(response.data['display_name'], 'Winston Smith')
-        self.assertEqual(response.data['organizations'], [{"short_name":"Minitrue","title":"Ministry of Truth"}])
-        self.assertEqual(response.data['stewarded_organizations'], [{"short_name":"Minitrue","title":"Ministry of Truth"}])
-        self.assertEqual(response.data['user']['username'], 'wsmith')
-        self.assertEqual(response.data['user']['groups'], [{"name":"ORG_STEWARD"}])
-        self.assertEqual(response.data['highest_role'], 'ORG_STEWARD')
-        self.assertEqual(response.data['is_new_user'], False)
-
-        response = self.client.get(url, format='json')
-        self.assertEqual(response.data['is_new_user'], False)
-
-    def test_get_self_for_user_level(self):
-        user = generic_model_access.get_profile('jones').user
-        self.client.force_authenticate(user=user)
-        url = '/api/self/profile/'
 
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['id'], 7)
-        self.assertEqual(response.data['display_name'], 'Jones')
-        self.assertEqual(response.data['organizations'], [{"short_name":"Minitrue","title":"Ministry of Truth"}])
-        self.assertEqual(response.data['stewarded_organizations'], [])
-        self.assertEqual(response.data['user']['username'], 'jones')
-        self.assertEqual(response.data['user']['groups'], [{'name':'USER'}])
-        self.assertEqual(response.data['highest_role'], 'USER')
-        self.assertEqual(response.data['is_new_user'], True)
+        self.assertEqual(response.data.get('id'), 1)
+        self.assertEqual(response.data.get('display_name'), 'Winston Smith')
+        self.assertEqual(response.data.get('organizations'), [{"short_name":"Minitrue","title":"Ministry of Truth"}])
+        self.assertEqual(response.data.get('stewarded_organizations'), [{"short_name":"Minitrue","title":"Ministry of Truth"}])
+        self.assertEqual(response.data.get('user').get('username'), 'wsmith')
+        self.assertEqual(response.data.get('user').get('groups'), [{"name":"ORG_STEWARD"}])
+        self.assertEqual(response.data.get('highest_role'), 'ORG_STEWARD')
+        self.assertEqual(response.data.get('center_tour_flag'), True)
+        self.assertEqual(response.data.get('hud_tour_flag'), True)
+        self.assertEqual(response.data.get('webtop_tour_flag'), True)
+
+        combinations = [[0, 0, 0], [0, 0, 1], [0, 1, 0], [0, 1, 1],
+                        [1, 0, 0], [1, 0, 1], [1, 1, 0], [1, 1, 1]]
+
+        for combination in combinations:
+            center_tour_flag = bool(combination[0])
+            webtop_tour_flag = bool(combination[1])
+            stewarded_organizations = bool(combination[2])
+
+            data = {'id':5,'center_tour_flag':center_tour_flag, 'hud_tour_flag':webtop_tour_flag,
+                    'webtop_tour_flag':stewarded_organizations,
+                    'stewarded_organizations': [{'title': 'Ministry of Truth'},
+                                                {'title': 'Ministry of Love'}]}
+            response = self.client.put(url, data, format='json')
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            self.assertEqual(response.data.get('id'), 1)
+            self.assertEqual(response.data.get('display_name'), 'Winston Smith')
+            self.assertEqual(response.data.get('organizations'), [{"short_name":"Minitrue","title":"Ministry of Truth"}])
+            self.assertEqual(response.data.get('stewarded_organizations'), [{"short_name":"Minitrue","title":"Ministry of Truth"}])
+            self.assertEqual(response.data.get('user').get('username'), 'wsmith')
+            self.assertEqual(response.data.get('user').get('groups'), [{"name":"ORG_STEWARD"}])
+            self.assertEqual(response.data.get('highest_role'), 'ORG_STEWARD')
+            self.assertEqual(response.data.get('center_tour_flag'), center_tour_flag)
+            self.assertEqual(response.data.get('hud_tour_flag'), webtop_tour_flag)
+            self.assertEqual(response.data.get('webtop_tour_flag'), stewarded_organizations)
+
+            response = self.client.get(url, format='json')
+            self.assertEqual(response.data.get('center_tour_flag'), center_tour_flag)
+            self.assertEqual(response.data.get('hud_tour_flag'), webtop_tour_flag)
+            self.assertEqual(response.data.get('webtop_tour_flag'), stewarded_organizations)
 
     def test_update_self_for_user_level(self):
         user = generic_model_access.get_profile('jones').user
         self.client.force_authenticate(user=user)
         url = '/api/self/profile/'
-        data = {'id':5, 'is_new_user':False, 'stewarded_organizations': [
-            {'title': 'Ministry of Truth'}, {'title': 'Ministry of Love'}]}
 
         response = self.client.get(url, format='json')
-        self.assertEqual(response.data['is_new_user'], True)
-
-        response = self.client.put(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['id'], 7)
-        self.assertEqual(response.data['display_name'], 'Jones')
-        self.assertEqual(response.data['organizations'], [{"short_name":"Minitrue","title":"Ministry of Truth"}])
-        self.assertEqual(response.data['stewarded_organizations'], [])
-        self.assertEqual(response.data['user']['username'], 'jones')
-        self.assertEqual(response.data['user']['groups'], [{'name':'USER'}])
-        self.assertEqual(response.data['highest_role'], 'USER')
-        self.assertEqual(response.data['is_new_user'], False)
+        self.assertEqual(response.data.get('id'), 7)
+        self.assertEqual(response.data.get('display_name'), 'Jones')
+        self.assertEqual(response.data.get('organizations'), [{"short_name":"Minitrue","title":"Ministry of Truth"}])
+        self.assertEqual(response.data.get('stewarded_organizations'), [])
+        self.assertEqual(response.data.get('user').get('username'), 'jones')
+        self.assertEqual(response.data.get('user').get('groups'), [{'name':'USER'}])
+        self.assertEqual(response.data.get('highest_role'), 'USER')
+        self.assertEqual(response.data.get('center_tour_flag'), True)
+        self.assertEqual(response.data.get('hud_tour_flag'), True)
+        self.assertEqual(response.data.get('webtop_tour_flag'), True)
 
-        response = self.client.get(url, format='json')
-        self.assertEqual(response.data['is_new_user'], False)
+        combinations = [[0, 0, 0], [0, 0, 1], [0, 1, 0], [0, 1, 1],
+                        [1, 0, 0], [1, 0, 1], [1, 1, 0], [1, 1, 1]]
 
+        for combination in combinations:
+            center_tour_flag = bool(combination[0])
+            webtop_tour_flag = bool(combination[1])
+            stewarded_organizations = bool(combination[2])
+
+            data = {'id':5,'center_tour_flag':center_tour_flag, 'hud_tour_flag':webtop_tour_flag,
+                    'webtop_tour_flag':stewarded_organizations,
+                    'stewarded_organizations': [{'title': 'Ministry of Truth'},
+                                                {'title': 'Ministry of Love'}]}
+            response = self.client.put(url, data, format='json')
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            self.assertEqual(response.data.get('id'), 7)
+            self.assertEqual(response.data.get('display_name'), 'Jones')
+            self.assertEqual(response.data.get('organizations'), [{"short_name":"Minitrue","title":"Ministry of Truth"}])
+            self.assertEqual(response.data.get('stewarded_organizations'), [])
+            self.assertEqual(response.data.get('user').get('username'), 'jones')
+            self.assertEqual(response.data.get('user').get('groups'), [{'name':'USER'}])
+            self.assertEqual(response.data.get('highest_role'), 'USER')
+            self.assertEqual(response.data.get('center_tour_flag'), center_tour_flag)
+            self.assertEqual(response.data.get('hud_tour_flag'), webtop_tour_flag)
+            self.assertEqual(response.data.get('webtop_tour_flag'), stewarded_organizations)
+
+            response = self.client.get(url, format='json')
+            self.assertEqual(response.data.get('center_tour_flag'), center_tour_flag)
+            self.assertEqual(response.data.get('hud_tour_flag'), webtop_tour_flag)
+            self.assertEqual(response.data.get('webtop_tour_flag'), stewarded_organizations)
 
     def test_update_stewarded_orgs_for_apps_mall_steward_level(self):
         user = generic_model_access.get_profile('bigbrother').user
@@ -293,7 +317,7 @@ class ProfileApiTest(APITestCase):
         response = self.client.put(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        orgs = [i['title'] for i in response.data['stewarded_organizations']]
+        orgs = [i['title'] for i in response.data.get('stewarded_organizations')]
         self.assertTrue('Ministry of Truth' in orgs)
         self.assertTrue('Ministry of Love' in orgs)
         self.assertEqual(len(orgs), 2)

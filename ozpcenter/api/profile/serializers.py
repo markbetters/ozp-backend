@@ -61,7 +61,8 @@ class ProfileSerializer(serializers.ModelSerializer):
         model = models.Profile
         fields = ('id', 'display_name', 'bio', 'organizations',
             'stewarded_organizations', 'user', 'highest_role', 'dn',
-            'is_new_user')
+            'center_tour_flag', 'hud_tour_flag', 'webtop_tour_flag')
+
         read_only_fields = ('id', 'bio', 'organizations', 'user',
             'highest_role')
 
@@ -76,8 +77,14 @@ class ProfileSerializer(serializers.ModelSerializer):
         return data
 
     def update(self, profile_instance, validated_data):
-        if 'is_new_user' in validated_data:
-            profile_instance.is_new_user = validated_data['is_new_user']
+        if 'center_tour_flag' in validated_data:
+            profile_instance.center_tour_flag = validated_data['center_tour_flag']
+
+        if 'hud_tour_flag' in validated_data:
+            profile_instance.hud_tour_flag = validated_data['hud_tour_flag']
+
+        if 'webtop_tour_flag' in validated_data:
+            profile_instance.webtop_tour_flag = validated_data['webtop_tour_flag']
 
         current_request_profile = generic_model_access.get_profile(self.context['request'].user.username)
 

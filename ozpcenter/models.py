@@ -497,7 +497,9 @@ class Profile(models.Model):
     #                                      backref='owner')
     display_name = models.CharField(max_length=255)
     bio = models.CharField(max_length=1000, blank=True)
-    is_new_user = models.BooleanField(default=True)
+    center_tour_flag = models.BooleanField(default=True)
+    hud_tour_flag = models.BooleanField(default=True)
+    webtop_tour_flag = models.BooleanField(default=True)
     # user's DN from PKI cert
     # ideally this wouldn't be here and in a system using PKI, the user's DN
     # would be the username. DNs can be longer than Django's User.username
