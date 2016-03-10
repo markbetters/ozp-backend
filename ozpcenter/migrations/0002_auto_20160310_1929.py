@@ -11,10 +11,10 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RenameField(
+        migrations.AddField(
             model_name='profile',
-            old_name='is_new_user',
-            new_name='center_tour_flag',
+            name='center_tour_flag',
+            field=models.BooleanField(default=True),
         ),
         migrations.AddField(
             model_name='profile',
