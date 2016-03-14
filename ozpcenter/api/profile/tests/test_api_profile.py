@@ -166,11 +166,11 @@ class ProfileApiTest(APITestCase):
 
         for combination in combinations:
             center_tour_flag = bool(combination[0])
-            webtop_tour_flag = bool(combination[1])
-            stewarded_organizations = bool(combination[2])
+            hud_tour_flag = bool(combination[1])
+            webtop_tour_flag = bool(combination[2])
 
-            data = {'id':5,'center_tour_flag':center_tour_flag, 'hud_tour_flag':webtop_tour_flag,
-                    'webtop_tour_flag':stewarded_organizations}
+            data = {'id':5,'center_tour_flag':center_tour_flag, 'hud_tour_flag':hud_tour_flag,
+                    'webtop_tour_flag':webtop_tour_flag}
             response = self.client.put(url, data, format='json')
             self.assertEqual(response.status_code, status.HTTP_200_OK)
             self.assertEqual(response.data.get('id'), 4)
@@ -181,13 +181,13 @@ class ProfileApiTest(APITestCase):
             self.assertEqual(response.data.get('user').get('groups'), [{'name':'APPS_MALL_STEWARD'}])
             self.assertEqual(response.data.get('highest_role'), 'APPS_MALL_STEWARD')
             self.assertEqual(response.data.get('center_tour_flag'), center_tour_flag)
-            self.assertEqual(response.data.get('hud_tour_flag'), webtop_tour_flag)
-            self.assertEqual(response.data.get('webtop_tour_flag'), stewarded_organizations)
+            self.assertEqual(response.data.get('hud_tour_flag'), hud_tour_flag)
+            self.assertEqual(response.data.get('webtop_tour_flag'), webtop_tour_flag)
 
             response = self.client.get(url, format='json')
             self.assertEqual(response.data.get('center_tour_flag'), center_tour_flag)
-            self.assertEqual(response.data.get('hud_tour_flag'), webtop_tour_flag)
-            self.assertEqual(response.data.get('webtop_tour_flag'), stewarded_organizations)
+            self.assertEqual(response.data.get('hud_tour_flag'), hud_tour_flag)
+            self.assertEqual(response.data.get('webtop_tour_flag'), webtop_tour_flag)
 
     def test_update_self_for_apps_mall_steward_level_serializer_exception(self):
         user = generic_model_access.get_profile('bigbrother').user
@@ -235,11 +235,11 @@ class ProfileApiTest(APITestCase):
 
         for combination in combinations:
             center_tour_flag = bool(combination[0])
-            webtop_tour_flag = bool(combination[1])
-            stewarded_organizations = bool(combination[2])
+            hud_tour_flag = bool(combination[1])
+            webtop_tour_flag = bool(combination[2])
 
-            data = {'id':5,'center_tour_flag':center_tour_flag, 'hud_tour_flag':webtop_tour_flag,
-                    'webtop_tour_flag':stewarded_organizations,
+            data = {'id':5,'center_tour_flag':center_tour_flag, 'hud_tour_flag':hud_tour_flag,
+                    'webtop_tour_flag':webtop_tour_flag,
                     'stewarded_organizations': [{'title': 'Ministry of Truth'},
                                                 {'title': 'Ministry of Love'}]}
             response = self.client.put(url, data, format='json')
@@ -252,13 +252,13 @@ class ProfileApiTest(APITestCase):
             self.assertEqual(response.data.get('user').get('groups'), [{"name":"ORG_STEWARD"}])
             self.assertEqual(response.data.get('highest_role'), 'ORG_STEWARD')
             self.assertEqual(response.data.get('center_tour_flag'), center_tour_flag)
-            self.assertEqual(response.data.get('hud_tour_flag'), webtop_tour_flag)
-            self.assertEqual(response.data.get('webtop_tour_flag'), stewarded_organizations)
+            self.assertEqual(response.data.get('hud_tour_flag'), hud_tour_flag)
+            self.assertEqual(response.data.get('webtop_tour_flag'), webtop_tour_flag)
 
             response = self.client.get(url, format='json')
             self.assertEqual(response.data.get('center_tour_flag'), center_tour_flag)
-            self.assertEqual(response.data.get('hud_tour_flag'), webtop_tour_flag)
-            self.assertEqual(response.data.get('webtop_tour_flag'), stewarded_organizations)
+            self.assertEqual(response.data.get('hud_tour_flag'), hud_tour_flag)
+            self.assertEqual(response.data.get('webtop_tour_flag'), webtop_tour_flag)
 
     def test_update_self_for_user_level(self):
         user = generic_model_access.get_profile('jones').user
@@ -283,11 +283,11 @@ class ProfileApiTest(APITestCase):
 
         for combination in combinations:
             center_tour_flag = bool(combination[0])
-            webtop_tour_flag = bool(combination[1])
-            stewarded_organizations = bool(combination[2])
+            hud_tour_flag = bool(combination[1])
+            webtop_tour_flag = bool(combination[2])
 
-            data = {'id':5,'center_tour_flag':center_tour_flag, 'hud_tour_flag':webtop_tour_flag,
-                    'webtop_tour_flag':stewarded_organizations,
+            data = {'id':5,'center_tour_flag':center_tour_flag, 'hud_tour_flag':hud_tour_flag,
+                    'webtop_tour_flag':webtop_tour_flag,
                     'stewarded_organizations': [{'title': 'Ministry of Truth'},
                                                 {'title': 'Ministry of Love'}]}
             response = self.client.put(url, data, format='json')
@@ -300,13 +300,13 @@ class ProfileApiTest(APITestCase):
             self.assertEqual(response.data.get('user').get('groups'), [{'name':'USER'}])
             self.assertEqual(response.data.get('highest_role'), 'USER')
             self.assertEqual(response.data.get('center_tour_flag'), center_tour_flag)
-            self.assertEqual(response.data.get('hud_tour_flag'), webtop_tour_flag)
-            self.assertEqual(response.data.get('webtop_tour_flag'), stewarded_organizations)
+            self.assertEqual(response.data.get('hud_tour_flag'), hud_tour_flag)
+            self.assertEqual(response.data.get('webtop_tour_flag'), webtop_tour_flag)
 
             response = self.client.get(url, format='json')
             self.assertEqual(response.data.get('center_tour_flag'), center_tour_flag)
-            self.assertEqual(response.data.get('hud_tour_flag'), webtop_tour_flag)
-            self.assertEqual(response.data.get('webtop_tour_flag'), stewarded_organizations)
+            self.assertEqual(response.data.get('hud_tour_flag'), hud_tour_flag)
+            self.assertEqual(response.data.get('webtop_tour_flag'), webtop_tour_flag)
 
     def test_update_stewarded_orgs_for_apps_mall_steward_level(self):
         user = generic_model_access.get_profile('bigbrother').user
