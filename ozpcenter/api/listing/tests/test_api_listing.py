@@ -43,7 +43,7 @@ class ListingApiTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         titles = [i['title'] for i in response.data]
         self.assertTrue('Hatch Latch' in titles)
-        self.assertEqual(len(titles), 2)
+        self.assertEqual(len(titles), 20)
 
     def test_search_categories_multiple_with_space(self):
         user = generic_model_access.get_profile('wsmith').user
@@ -63,7 +63,7 @@ class ListingApiTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         titles = [i['title'] for i in response.data]
         self.assertTrue('Air Mail' in titles)
-        self.assertEqual(len(titles), 1)
+        self.assertEqual(len(titles), 10)
 
     def test_search_type(self):
         user = generic_model_access.get_profile('wsmith').user
