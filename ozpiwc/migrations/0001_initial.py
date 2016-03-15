@@ -13,14 +13,14 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='DataResource',
             fields=[
-                ('id', models.AutoField(primary_key=True, auto_created=True, serialize=False, verbose_name='ID')),
+                ('id', models.AutoField(verbose_name='ID', primary_key=True, serialize=False, auto_created=True)),
                 ('key', models.CharField(max_length=1024)),
-                ('entity', models.CharField(blank=True, max_length=1048576, null=True)),
-                ('content_type', models.CharField(blank=True, max_length=1024, null=True)),
+                ('entity', models.CharField(null=True, max_length=1048576, blank=True)),
+                ('content_type', models.CharField(null=True, max_length=1024, blank=True)),
                 ('username', models.CharField(max_length=128)),
-                ('pattern', models.CharField(blank=True, max_length=1024, null=True)),
-                ('permissions', models.CharField(blank=True, max_length=1024, null=True)),
-                ('version', models.CharField(blank=True, max_length=1024, null=True)),
+                ('pattern', models.CharField(null=True, max_length=1024, blank=True)),
+                ('permissions', models.CharField(null=True, max_length=1024, blank=True)),
+                ('version', models.CharField(null=True, max_length=1024, blank=True)),
             ],
         ),
         migrations.AlterUniqueTogether(

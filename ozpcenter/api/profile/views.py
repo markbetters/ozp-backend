@@ -36,10 +36,11 @@ class ProfileViewSet(viewsets.ModelViewSet):
     search_fields = ('dn',)
 
     def get_queryset(self):
-        queryset = model_access.get_all_profiles()
         role = self.request.query_params.get('role', None)
         if role:
             queryset = model_access.get_profiles_by_role(role)
+        else:
+            queryset = model_access.get_all_profiles()
         # support starts-with matching for finding users in the
         # Submit/Edit Listing form
         username_starts_with = self.request.query_params.get(
@@ -51,11 +52,11 @@ class ProfileViewSet(viewsets.ModelViewSet):
 
     def update(self, request, pk=None):
         try:
-            profile = model_access.get_self(request.user.username)
-            if profile.highest_role() != 'APPS_MALL_STEWARD':
+            current_request_profile = model_access.get_self(request.user.username)
+            if current_request_profile.highest_role() != 'APPS_MALL_STEWARD':
                 raise errors.PermissionDenied
-            instance = self.get_queryset().get(pk=pk)
-            serializer = serializers.ProfileSerializer(instance,
+            profile_instance = self.get_queryset().get(pk=pk)
+            serializer = serializers.ProfileSerializer(profile_instance,
                 data=request.data, context={'request': request}, partial=True)
             if not serializer.is_valid():
                 logger.error('%s' % serializer.errors)
@@ -82,15 +83,32 @@ class GroupViewSet(viewsets.ModelViewSet):
     queryset = model_access.get_all_groups()
     serializer_class = serializers.GroupSerializer
 
+class CurrentUserViewSet(viewsets.ViewSet):
+    """
+    A simple ViewSet for listing or retrieving users.
+    """
+    permission_classes = (permissions.IsUser,)
 
-@api_view(['GET'])
-@permission_classes((permissions.IsUser, ))
-def CurrentUserView(request):
-    """
-    ---
-    serializer: ozpcenter.api.profile.serializers.ProfileSerializer
-    """
-    profile = model_access.get_self(request.user.username)
-    serializer = serializers.ProfileSerializer(profile,
-        context={'request': request})
-    return Response(serializer.data)
+    def retrieve(self, request):
+        current_request_profile = model_access.get_self(request.user.username)
+        serializer = serializers.ProfileSerializer(current_request_profile,
+            context={'request': request})
+        return Response(serializer.data)
+
+    def update(self, request):
+        try:
+            current_request_profile = model_access.get_self(request.user.username)
+            serializer = serializers.ProfileSerializer(current_request_profile,
+                data=request.data, context={'request': request}, partial=True)
+            if not serializer.is_valid():
+                logger.error('%s' % serializer.errors)
+                return Response(serializer.errors,
+                    status=status.HTTP_400_BAD_REQUEST)
+
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except errors.PermissionDenied:
+            return Response('Permission Denied',
+                status=status.HTTP_403_FORBIDDEN)
+        except Exception as e:
+            raise e
