@@ -445,694 +445,697 @@ def run():
     #                           Listings
     ############################################################################
     ############################################################################
-
-    ############################################################################
-    #                           Air Mail
-    ############################################################################
-    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    #                           Icons
-    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    img = Image.open(TEST_IMG_PATH + 'AirMail16.png')
-    small_icon = models.Image.create_image(img, file_extension='png',
-        security_marking=unclass, image_type=small_icon_type.name)
-    img = Image.open(TEST_IMG_PATH + 'AirMail32.png')
-    large_icon = models.Image.create_image(img, file_extension='png',
-        security_marking=unclass, image_type=large_icon_type.name)
-    img = Image.open(TEST_IMG_PATH + 'AirMail.png')
-    banner_icon = models.Image.create_image(img, file_extension='png',
-        security_marking=unclass, image_type=banner_icon_type.name)
-    img = Image.open(TEST_IMG_PATH + 'AirMailFeatured.png')
-    large_banner_icon = models.Image.create_image(img, file_extension='png',
-        security_marking=unclass, image_type=large_banner_icon_type.name)
-
-    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    #                           Listing
-    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    listing = models.Listing(
-        title='Air Mail',
-        agency=minitrue,
-        listing_type=web_app,
-        description='Sends mail via air',
-        launch_url='%s/demo_apps/centerSampleListings/airMail/index.html' % DEMO_APP_ROOT,
-        version_name='1.0.0',
-        unique_name='ozp.test.air_mail',
-        small_icon=small_icon,
-        large_icon=large_icon,
-        banner_icon=banner_icon,
-        large_banner_icon=large_banner_icon,
-        what_is_new='Nothing really new here',
-        description_short='Sends airmail',
-        requirements='None',
-        is_enabled=True,
-        is_featured=True,
-        iframe_compatible=False,
-        security_marking=unclass
-    )
-    listing.save()
-    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    #                           Contacts
-    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    listing.contacts.add(osha)
-    listing.contacts.add(brienne)
-
-    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    #                           Owners
-    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    listing.owners.add(winston)
-    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    #                           Categories
-    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    listing.categories.add(communication)
-    listing.categories.add(productivity)
-    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    #                           Tags
-    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    listing.tags.add(demo)
-    listing.tags.add(example)
-    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    #                           Screenshots
-    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    img = Image.open(TEST_IMG_PATH + 'screenshot_small.png')
-    small_img = models.Image.create_image(img, file_extension='png',
-        security_marking=unclass, image_type=small_screenshot_type.name)
-    img = Image.open(TEST_IMG_PATH + 'screenshot_large.png')
-    large_img = models.Image.create_image(img, file_extension='png',
-        security_marking=unclass, image_type=large_screenshot_type.name)
-    screenshot = models.Screenshot(small_image=small_img,
-        large_image=large_img,
-        listing=listing)
-    screenshot.save()
-    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    #                           Notifications
-    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    notification1 = models.Notification(message='Air Mail update next week',
-        expires_date=next_week, listing=listing, author=winston)
-    notification1.save()
-
-    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    #                           Reviews
-    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    listing_model_access.create_listing_review(charrington.user.username,
-        listing, 5,
-        text="This app is great - well designed and easy to use")
-
-    listing_model_access.create_listing_review(tparsons.user.username,
-        listing, 3,
-        text="Air mail is ok - does what it says and no more")
-
-    listing_model_access.create_listing_review(syme.user.username,
-        listing, 1,
-        text="Air mail crashes all the time - it doesn't even support IE 6!")
-
-    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    #                           Document URLs
-    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    wiki = models.DocUrl(name='wiki', url='http://www.google.com/wiki',
-        listing=listing)
-    wiki.save()
-    guide = models.DocUrl(name='guide', url='http://www.google.com/guide',
-        listing=listing)
-    guide.save()
-
-    listing_model_access.create_listing(winston, listing)
-    listing_model_access.submit_listing(winston, listing)
-    listing_model_access.approve_listing_by_org_steward(winston, listing)
-    listing_model_access.approve_listing(winston, listing)
-
-    ############################################################################
-    #                           Bread Basket
-    ############################################################################
-    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    #                           Icons
-    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    img = Image.open(TEST_IMG_PATH + 'BreadBasket16.png')
-    small_icon = models.Image.create_image(img, file_extension='png',
-        security_marking=unclass, image_type=small_icon_type.name)
-    img = Image.open(TEST_IMG_PATH + 'BreadBasket32.png')
-    large_icon = models.Image.create_image(img, file_extension='png',
-        security_marking=unclass, image_type=large_icon_type.name)
-    img = Image.open(TEST_IMG_PATH + 'BreadBasket.png')
-    banner_icon = models.Image.create_image(img, file_extension='png',
-        security_marking=unclass, image_type=banner_icon_type.name)
-    img = Image.open(TEST_IMG_PATH + 'BreadBasketFeatured.png')
-    large_banner_icon = models.Image.create_image(img, file_extension='png',
-        security_marking=unclass, image_type=large_banner_icon_type.name)
-
-    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    #                           Listing
-    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    listing = models.Listing(
-        title='Bread Basket',
-        agency=minitrue,
-        listing_type=web_app,
-        description='Carries delicious bread',
-        launch_url='%s/demo_apps/centerSampleListings/breadBasket/index.html' % DEMO_APP_ROOT,
-        version_name='1.0.0',
-        unique_name='ozp.test.bread_basket',
-        small_icon=small_icon,
-        large_icon=large_icon,
-        banner_icon=banner_icon,
-        large_banner_icon=large_banner_icon,
-        what_is_new='Nothing really new here',
-        description_short='Carries bread',
-        requirements='None',
-        is_enabled=True,
-        is_featured=True,
-        iframe_compatible=False,
-        is_private=True,
-        security_marking=unclass
-    )
-    listing.save()
-
-    listing.contacts.add(osha)
-    listing.owners.add(julia)
-    listing.categories.add(health_fitness)
-    listing.categories.add(shopping)
-
-    listing.tags.add(demo)
-    listing.tags.add(example)
-
-    listing_model_access.create_listing_review(jones.user.username,
-        listing, 2,
-        text="This bread is stale!")
-
-    listing_model_access.create_listing_review(julia.user.username,
-        listing, 5,
-        text="Yum!")
-
-    listing_model_access.create_listing(julia, listing)
-    listing_model_access.submit_listing(julia, listing)
-    listing_model_access.approve_listing_by_org_steward(winston, listing)
-    listing_model_access.approve_listing(winston, listing)
-
-    ############################################################################
-    #                           Chart Course
-    ############################################################################
-    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    #                           Icons
-    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    img = Image.open(TEST_IMG_PATH + 'ChartCourse16.png')
-    small_icon = models.Image.create_image(img, file_extension='png',
-        security_marking=unclass, image_type=small_icon_type.name)
-    img = Image.open(TEST_IMG_PATH + 'ChartCourse32.png')
-    large_icon = models.Image.create_image(img, file_extension='png',
-        security_marking=unclass, image_type=large_icon_type.name)
-    img = Image.open(TEST_IMG_PATH + 'ChartCourse.png')
-    banner_icon = models.Image.create_image(img, file_extension='png',
-        security_marking=unclass, image_type=banner_icon_type.name)
-    img = Image.open(TEST_IMG_PATH + 'ChartCourseFeatured.png')
-    large_banner_icon = models.Image.create_image(img, file_extension='png',
-        security_marking=unclass, image_type=large_banner_icon_type.name)
-
-    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    #                           Listing
-    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-    listing = models.Listing(
-        title='Chart Course',
-        agency=minitrue,
-        listing_type=web_app,
-        description='Chart your course',
-        launch_url='%s/demo_apps/centerSampleListings/chartCourse/index.html' % DEMO_APP_ROOT,
-        version_name='1.0.0',
-        unique_name='ozp.test.chartcourse',
-        small_icon=small_icon,
-        large_icon=large_icon,
-        banner_icon=banner_icon,
-        large_banner_icon=large_banner_icon,
-        what_is_new='Nothing really new here',
-        description_short='Chart your course',
-        requirements='None',
-        is_enabled=True,
-        is_featured=True,
-        iframe_compatible=False,
-        is_private=False,
-        security_marking=unclass
-    )
-    listing.save()
-    listing.contacts.add(rob_baratheon)
-    listing.owners.add(winston)
-    listing.categories.add(tools)
-    listing.categories.add(education)
-    listing.tags.add(demo)
-
-    listing_model_access.create_listing(winston, listing)
-    listing_model_access.submit_listing(winston, listing)
-    listing_model_access.approve_listing_by_org_steward(winston, listing)
-    listing_model_access.approve_listing(winston, listing)
-
-
-    ############################################################################
-    #                           Chatter Box
-    ############################################################################
-    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    #                           Icons
-    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    img = Image.open(TEST_IMG_PATH + 'ChatterBox16.png')
-    small_icon = models.Image.create_image(img, file_extension='png',
-        security_marking=unclass, image_type=small_icon_type.name)
-    img = Image.open(TEST_IMG_PATH + 'ChatterBox32.png')
-    large_icon = models.Image.create_image(img, file_extension='png',
-        security_marking=unclass, image_type=large_icon_type.name)
-    img = Image.open(TEST_IMG_PATH + 'ChatterBox.png')
-    banner_icon = models.Image.create_image(img, file_extension='png',
-        security_marking=unclass, image_type=banner_icon_type.name)
-    img = Image.open(TEST_IMG_PATH + 'ChatterBoxFeatured.png')
-    large_banner_icon = models.Image.create_image(img, file_extension='png',
-        security_marking=unclass, image_type=large_banner_icon_type.name)
-
-    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    #                           Listing
-    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-    listing = models.Listing(
-        title='Chatter Box',
-        agency=miniluv,
-        listing_type=web_app,
-        description='Chat with people',
-        launch_url='%s/demo_apps/centerSampleListings/chatterBox/index.html' % DEMO_APP_ROOT,
-        version_name='1.0.0',
-        unique_name='ozp.test.chatterbox',
-        small_icon=small_icon,
-        large_icon=large_icon,
-        banner_icon=banner_icon,
-        large_banner_icon=large_banner_icon,
-        what_is_new='Nothing really new here',
-        description_short='Chat in a box',
-        requirements='None',
-        is_enabled=True,
-        is_featured=True,
-        iframe_compatible=False,
-        is_private=False,
-        security_marking=unclass
-    )
-    listing.save()
-    listing.contacts.add(rob_baratheon)
-    listing.owners.add(julia)
-    listing.categories.add(communication)
-    listing.tags.add(demo)
-
-    listing_model_access.create_listing(julia, listing)
-    listing_model_access.submit_listing(julia, listing)
-    listing_model_access.approve_listing_by_org_steward(winston, listing)
-    listing_model_access.approve_listing(winston, listing)
-
-    ############################################################################
-    #                           Clipboard
-    ############################################################################
-    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    #                           Icons
-    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    img = Image.open(TEST_IMG_PATH + 'Clipboard16.png')
-    small_icon = models.Image.create_image(img, file_extension='png',
-        security_marking=unclass, image_type=small_icon_type.name)
-    img = Image.open(TEST_IMG_PATH + 'Clipboard32.png')
-    large_icon = models.Image.create_image(img, file_extension='png',
-        security_marking=unclass, image_type=large_icon_type.name)
-    img = Image.open(TEST_IMG_PATH + 'Clipboard.png')
-    banner_icon = models.Image.create_image(img, file_extension='png',
-        security_marking=unclass, image_type=banner_icon_type.name)
-    img = Image.open(TEST_IMG_PATH + 'ClipboardFeatured.png')
-    large_banner_icon = models.Image.create_image(img, file_extension='png',
-        security_marking=unclass, image_type=large_banner_icon_type.name)
-
-    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    #                           Listing
-    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-    listing = models.Listing(
-        title='Clipboard',
-        agency=minitrue,
-        listing_type=web_app,
-        description='Clip stuff on a board',
-        launch_url='%s/demo_apps/centerSampleListings/clipboard/index.html' % DEMO_APP_ROOT,
-        version_name='1.0.0',
-        unique_name='ozp.test.clipboard',
-        small_icon=small_icon,
-        large_icon=large_icon,
-        banner_icon=banner_icon,
-        large_banner_icon=large_banner_icon,
-        what_is_new='Nothing really new here',
-        description_short='Its a clipboard',
-        requirements='None',
-        is_enabled=True,
-        is_featured=True,
-        iframe_compatible=False,
-        is_private=False,
-        security_marking=unclass
-    )
-    listing.save()
-    listing.contacts.add(rob_baratheon)
-    listing.owners.add(winston)
-    listing.categories.add(tools)
-    listing.categories.add(education)
-    listing.tags.add(demo)
-
-    listing_model_access.create_listing(winston, listing)
-    listing_model_access.submit_listing(winston, listing)
-    listing_model_access.approve_listing_by_org_steward(winston, listing)
-    listing_model_access.approve_listing(winston, listing)
-
-    ############################################################################
-    #                           FrameIt
-    ############################################################################
-    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    #                           Icons
-    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    img = Image.open(TEST_IMG_PATH + 'FrameIt16.png')
-    small_icon = models.Image.create_image(img, file_extension='png',
-        security_marking=unclass, image_type=small_icon_type.name)
-    img = Image.open(TEST_IMG_PATH + 'FrameIt32.png')
-    large_icon = models.Image.create_image(img, file_extension='png',
-        security_marking=unclass, image_type=large_icon_type.name)
-    img = Image.open(TEST_IMG_PATH + 'FrameIt.png')
-    banner_icon = models.Image.create_image(img, file_extension='png',
-        security_marking=unclass, image_type=banner_icon_type.name)
-    img = Image.open(TEST_IMG_PATH + 'FrameItFeatured.png')
-    large_banner_icon = models.Image.create_image(img, file_extension='png',
-        security_marking=unclass, image_type=large_banner_icon_type.name)
-
-    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    #                           Listing
-    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-    listing = models.Listing(
-        title='FrameIt',
-        agency=minitrue,
-        listing_type=web_app,
-        description='Show things in an iframe',
-        launch_url='%s/demo_apps/frameit/index.html' % DEMO_APP_ROOT,
-        version_name='1.0.0',
-        unique_name='ozp.test.frameit',
-        small_icon=small_icon,
-        large_icon=large_icon,
-        banner_icon=banner_icon,
-        large_banner_icon=large_banner_icon,
-        what_is_new='Nothing really new here',
-        description_short='Its an iframe',
-        requirements='None',
-        is_enabled=True,
-        is_featured=True,
-        iframe_compatible=False,
-        is_private=False,
-        security_marking=unclass
-    )
-    listing.save()
-    listing.contacts.add(rob_baratheon)
-    listing.owners.add(winston)
-    listing.categories.add(tools)
-    listing.categories.add(education)
-    listing.tags.add(demo)
-
-    listing_model_access.create_listing(winston, listing)
-    listing_model_access.submit_listing(winston, listing)
-    listing_model_access.approve_listing_by_org_steward(winston, listing)
-    listing_model_access.approve_listing(winston, listing)
-
-    ############################################################################
-    #                           Hatch Latch
-    ############################################################################
-    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    #                           Icons
-    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    img = Image.open(TEST_IMG_PATH + 'HatchLatch16.png')
-    small_icon = models.Image.create_image(img, file_extension='png',
-        security_marking=unclass, image_type=small_icon_type.name)
-    img = Image.open(TEST_IMG_PATH + 'HatchLatch32.png')
-    large_icon = models.Image.create_image(img, file_extension='png',
-        security_marking=unclass, image_type=large_icon_type.name)
-    img = Image.open(TEST_IMG_PATH + 'HatchLatch.png')
-    banner_icon = models.Image.create_image(img, file_extension='png',
-        security_marking=unclass, image_type=banner_icon_type.name)
-    img = Image.open(TEST_IMG_PATH + 'HatchLatchFeatured.png')
-    large_banner_icon = models.Image.create_image(img, file_extension='png',
-        security_marking=unclass, image_type=large_banner_icon_type.name)
-
-    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    #                           Listing
-    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-    listing = models.Listing(
-        title='Hatch Latch',
-        agency=minitrue,
-        listing_type=web_app,
-        description='Hatch latches',
-        launch_url='%s/demo_apps/centerSampleListings/hatchLatch/index.html' % DEMO_APP_ROOT,
-        version_name='1.0.0',
-        unique_name='ozp.test.hatchlatch',
-        small_icon=small_icon,
-        large_icon=large_icon,
-        banner_icon=banner_icon,
-        large_banner_icon=large_banner_icon,
-        what_is_new='Nothing really new here',
-        description_short='Its a hatch latch',
-        requirements='None',
-        is_enabled=True,
-        is_featured=True,
-        iframe_compatible=False,
-        is_private=False,
-        security_marking=unclass
-    )
-    listing.save()
-    listing.contacts.add(rob_baratheon)
-    listing.owners.add(winston)
-    listing.categories.add(tools)
-    listing.categories.add(education)
-    listing.categories.add(health_fitness)
-    listing.tags.add(demo)
-
-    listing_model_access.create_listing(winston, listing)
-    listing_model_access.submit_listing(winston, listing)
-    listing_model_access.approve_listing_by_org_steward(winston, listing)
-    listing_model_access.approve_listing(winston, listing)
-
-    ############################################################################
-    #                           Jot Spot
-    ############################################################################
-    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    #                           Icons
-    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    img = Image.open(TEST_IMG_PATH + 'JotSpot16.png')
-    small_icon = models.Image.create_image(img, file_extension='png',
-        security_marking=unclass, image_type=small_icon_type.name)
-    img = Image.open(TEST_IMG_PATH + 'JotSpot32.png')
-    large_icon = models.Image.create_image(img, file_extension='png',
-        security_marking=unclass, image_type=large_icon_type.name)
-    img = Image.open(TEST_IMG_PATH + 'JotSpot.png')
-    banner_icon = models.Image.create_image(img, file_extension='png',
-        security_marking=unclass, image_type=banner_icon_type.name)
-    img = Image.open(TEST_IMG_PATH + 'JotSpotFeatured.png')
-    large_banner_icon = models.Image.create_image(img, file_extension='png',
-        security_marking=unclass, image_type=large_banner_icon_type.name)
-
-    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    #                           Listing
-    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-    listing = models.Listing(
-        title='JotSpot',
-        agency=minitrue,
-        listing_type=web_app,
-        description='Jot things down',
-        launch_url='%s/demo_apps/centerSampleListings/jotSpot/index.html' % DEMO_APP_ROOT,
-        version_name='1.0.0',
-        unique_name='ozp.test.jotspot',
-        small_icon=small_icon,
-        large_icon=large_icon,
-        banner_icon=banner_icon,
-        large_banner_icon=large_banner_icon,
-        what_is_new='Nothing really new here',
-        description_short='Jot stuff down',
-        requirements='None',
-        is_enabled=True,
-        is_featured=True,
-        iframe_compatible=False,
-        is_private=False,
-        security_marking=unclass
-    )
-    listing.save()
-    listing.contacts.add(rob_baratheon)
-    listing.owners.add(winston)
-    listing.categories.add(tools)
-    listing.categories.add(education)
-    listing.tags.add(demo)
-
-    listing_model_access.create_listing(winston, listing)
-    listing_model_access.submit_listing(winston, listing)
-    listing_model_access.approve_listing_by_org_steward(winston, listing)
-    listing_model_access.approve_listing(winston, listing)
-
-    listing_model_access.create_listing_review(charrington.user.username,
-        listing, 4,
-        text="I really like it")
-
-    ############################################################################
-    #                           Location Lister
-    ############################################################################
-    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    #                           Icons
-    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    img = Image.open(TEST_IMG_PATH + 'LocationLister16.png')
-    small_icon = models.Image.create_image(img, file_extension='png',
-        security_marking=unclass, image_type=small_icon_type.name)
-    img = Image.open(TEST_IMG_PATH + 'LocationLister32.png')
-    large_icon = models.Image.create_image(img, file_extension='png',
-        security_marking=unclass, image_type=large_icon_type.name)
-    img = Image.open(TEST_IMG_PATH + 'LocationLister.png')
-    banner_icon = models.Image.create_image(img, file_extension='png',
-        security_marking=unclass, image_type=banner_icon_type.name)
-    img = Image.open(TEST_IMG_PATH + 'LocationListerFeatured.png')
-    large_banner_icon = models.Image.create_image(img, file_extension='png',
-        security_marking=unclass, image_type=large_banner_icon_type.name)
-
-    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    #                           Listing
-    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-    listing = models.Listing(
-        title='LocationLister',
-        agency=minitrue,
-        listing_type=web_app,
-        description='List locations',
-        launch_url='%s/demo_apps/locationLister/index.html' % DEMO_APP_ROOT,
-        version_name='1.0.0',
-        unique_name='ozp.test.locationlister',
-        small_icon=small_icon,
-        large_icon=large_icon,
-        banner_icon=banner_icon,
-        large_banner_icon=large_banner_icon,
-        what_is_new='Nothing really new here',
-        description_short='List locations',
-        requirements='None',
-        is_enabled=True,
-        is_featured=True,
-        iframe_compatible=False,
-        is_private=False,
-        security_marking=unclass
-    )
-    listing.save()
-    listing.contacts.add(rob_baratheon)
-    listing.owners.add(winston)
-    listing.categories.add(tools)
-    listing.categories.add(education)
-    listing.tags.add(demo)
-
-    listing_model_access.create_listing(winston, listing)
-    listing_model_access.submit_listing(winston, listing)
-    listing_model_access.approve_listing_by_org_steward(winston, listing)
-    listing_model_access.approve_listing(winston, listing)
-
-    ############################################################################
-    #                           Location Viewer
-    ############################################################################
-    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    #                           Icons
-    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    img = Image.open(TEST_IMG_PATH + 'LocationViewer16.png')
-    small_icon = models.Image.create_image(img, file_extension='png',
-        security_marking=unclass, image_type=small_icon_type.name)
-    img = Image.open(TEST_IMG_PATH + 'LocationViewer32.png')
-    large_icon = models.Image.create_image(img, file_extension='png',
-        security_marking=unclass, image_type=large_icon_type.name)
-    img = Image.open(TEST_IMG_PATH + 'LocationViewer.png')
-    banner_icon = models.Image.create_image(img, file_extension='png',
-        security_marking=unclass, image_type=banner_icon_type.name)
-    img = Image.open(TEST_IMG_PATH + 'LocationViewerFeatured.png')
-    large_banner_icon = models.Image.create_image(img, file_extension='png',
-        security_marking=unclass, image_type=large_banner_icon_type.name)
-
-    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    #                           Listing
-    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-    listing = models.Listing(
-        title='LocationViewer',
-        agency=minitrue,
-        listing_type=web_app,
-        description='View locations',
-        launch_url='%s/demo_apps/locationViewer/index.html' % DEMO_APP_ROOT,
-        version_name='1.0.0',
-        unique_name='ozp.test.locationviewer',
-        small_icon=small_icon,
-        large_icon=large_icon,
-        banner_icon=banner_icon,
-        large_banner_icon=large_banner_icon,
-        what_is_new='Nothing really new here',
-        description_short='View locations',
-        requirements='None',
-        is_enabled=True,
-        is_featured=True,
-        iframe_compatible=False,
-        is_private=False,
-        security_marking=unclass
-    )
-    listing.save()
-    listing.contacts.add(rob_baratheon)
-    listing.owners.add(winston)
-    listing.categories.add(tools)
-    listing.categories.add(education)
-    listing.tags.add(demo)
-
-    listing_model_access.create_listing(winston, listing)
-    listing_model_access.submit_listing(winston, listing)
-    listing_model_access.approve_listing_by_org_steward(winston, listing)
-    listing_model_access.approve_listing(winston, listing)
-
-    ############################################################################
-    #                           Location Analyzer
-    ############################################################################
-    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    #                           Icons
-    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    img = Image.open(TEST_IMG_PATH + 'LocationAnalyzer16.png')
-    small_icon = models.Image.create_image(img, file_extension='png',
-        security_marking=unclass, image_type=small_icon_type.name)
-    img = Image.open(TEST_IMG_PATH + 'LocationAnalyzer32.png')
-    large_icon = models.Image.create_image(img, file_extension='png',
-        security_marking=unclass, image_type=large_icon_type.name)
-    img = Image.open(TEST_IMG_PATH + 'LocationAnalyzer.png')
-    banner_icon = models.Image.create_image(img, file_extension='png',
-        security_marking=unclass, image_type=banner_icon_type.name)
-    img = Image.open(TEST_IMG_PATH + 'LocationAnalyzerFeatured.png')
-    large_banner_icon = models.Image.create_image(img, file_extension='png',
-        security_marking=unclass, image_type=large_banner_icon_type.name)
-
-    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    #                           Listing
-    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-    listing = models.Listing(
-        title='LocationAnalyzer',
-        agency=minitrue,
-        listing_type=web_app,
-        description='Analyze locations',
-        launch_url='%s/demo_apps/locationAnalyzer/index.html' % DEMO_APP_ROOT,
-        version_name='1.0.0',
-        unique_name='ozp.test.locationanalyzer',
-        small_icon=small_icon,
-        large_icon=large_icon,
-        banner_icon=banner_icon,
-        large_banner_icon=large_banner_icon,
-        what_is_new='Nothing really new here',
-        description_short='Analyze locations',
-        requirements='None',
-        is_enabled=True,
-        is_featured=True,
-        iframe_compatible=False,
-        is_private=False,
-        security_marking=unclass
-    )
-    listing.save()
-    listing.contacts.add(rob_baratheon)
-    listing.owners.add(winston)
-    listing.categories.add(tools)
-    listing.categories.add(education)
-    listing.tags.add(demo)
-
-    listing_model_access.create_listing(winston, listing)
-    listing_model_access.submit_listing(winston, listing)
-    listing_model_access.approve_listing_by_org_steward(winston, listing)
-    listing_model_access.approve_listing(winston, listing)
+    
+    # Looping for more sample results
+    for i in range (0, 10):
+         
+        ############################################################################
+        #                           Air Mail
+        ############################################################################
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        #                           Icons
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        img = Image.open(TEST_IMG_PATH + 'AirMail16.png')
+        small_icon = models.Image.create_image(img, file_extension='png',
+            security_marking=unclass, image_type=small_icon_type.name)
+        img = Image.open(TEST_IMG_PATH + 'AirMail32.png')
+        large_icon = models.Image.create_image(img, file_extension='png',
+            security_marking=unclass, image_type=large_icon_type.name)
+        img = Image.open(TEST_IMG_PATH + 'AirMail.png')
+        banner_icon = models.Image.create_image(img, file_extension='png',
+            security_marking=unclass, image_type=banner_icon_type.name)
+        img = Image.open(TEST_IMG_PATH + 'AirMailFeatured.png')
+        large_banner_icon = models.Image.create_image(img, file_extension='png',
+            security_marking=unclass, image_type=large_banner_icon_type.name)
+    
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        #                           Listing
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        listing = models.Listing(
+            title='Air Mail %s' % i,
+            agency=minitrue,
+            listing_type=web_app,
+            description='Sends mail via air',
+            launch_url='%s/demo_apps/centerSampleListings/airMail/index.html' % DEMO_APP_ROOT,
+            version_name='1.0.0',
+            unique_name='ozp.test.air_mail.%s' % i,
+            small_icon=small_icon,
+            large_icon=large_icon,
+            banner_icon=banner_icon,
+            large_banner_icon=large_banner_icon,
+            what_is_new='Nothing really new here',
+            description_short='Sends airmail',
+            requirements='None',
+            is_enabled=True,
+            is_featured=True,
+            iframe_compatible=False,
+            security_marking=unclass
+        )
+        listing.save()
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        #                           Contacts
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        listing.contacts.add(osha)
+        listing.contacts.add(brienne)
+    
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        #                           Owners
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        listing.owners.add(winston)
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        #                           Categories
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        listing.categories.add(communication)
+        listing.categories.add(productivity)
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        #                           Tags
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        listing.tags.add(demo)
+        listing.tags.add(example)
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        #                           Screenshots
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        img = Image.open(TEST_IMG_PATH + 'screenshot_small.png')
+        small_img = models.Image.create_image(img, file_extension='png',
+            security_marking=unclass, image_type=small_screenshot_type.name)
+        img = Image.open(TEST_IMG_PATH + 'screenshot_large.png')
+        large_img = models.Image.create_image(img, file_extension='png',
+            security_marking=unclass, image_type=large_screenshot_type.name)
+        screenshot = models.Screenshot(small_image=small_img,
+            large_image=large_img,
+            listing=listing)
+        screenshot.save()
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        #                           Notifications
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        notification1 = models.Notification(message='Air Mail update next week',
+            expires_date=next_week, listing=listing, author=winston)
+        notification1.save()
+    
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        #                           Reviews
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        listing_model_access.create_listing_review(charrington.user.username,
+            listing, 5,
+            text="This app is great - well designed and easy to use")
+    
+        listing_model_access.create_listing_review(tparsons.user.username,
+            listing, 3,
+            text="Air mail is ok - does what it says and no more")
+    
+        listing_model_access.create_listing_review(syme.user.username,
+            listing, 1,
+            text="Air mail crashes all the time - it doesn't even support IE 6!")
+    
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        #                           Document URLs
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        wiki = models.DocUrl(name='wiki', url='http://www.google.com/wiki',
+            listing=listing)
+        wiki.save()
+        guide = models.DocUrl(name='guide', url='http://www.google.com/guide',
+            listing=listing)
+        guide.save()
+    
+        listing_model_access.create_listing(winston, listing)
+        listing_model_access.submit_listing(winston, listing)
+        listing_model_access.approve_listing_by_org_steward(winston, listing)
+        listing_model_access.approve_listing(winston, listing)
+    
+        ############################################################################
+        #                           Bread Basket
+        ############################################################################
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        #                           Icons
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        img = Image.open(TEST_IMG_PATH + 'BreadBasket16.png')
+        small_icon = models.Image.create_image(img, file_extension='png',
+            security_marking=unclass, image_type=small_icon_type.name)
+        img = Image.open(TEST_IMG_PATH + 'BreadBasket32.png')
+        large_icon = models.Image.create_image(img, file_extension='png',
+            security_marking=unclass, image_type=large_icon_type.name)
+        img = Image.open(TEST_IMG_PATH + 'BreadBasket.png')
+        banner_icon = models.Image.create_image(img, file_extension='png',
+            security_marking=unclass, image_type=banner_icon_type.name)
+        img = Image.open(TEST_IMG_PATH + 'BreadBasketFeatured.png')
+        large_banner_icon = models.Image.create_image(img, file_extension='png',
+            security_marking=unclass, image_type=large_banner_icon_type.name)
+    
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        #                           Listing
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        listing = models.Listing(
+            title='Bread Basket %s' % i,
+            agency=minitrue,
+            listing_type=web_app,
+            description='Carries delicious bread',
+            launch_url='%s/demo_apps/centerSampleListings/breadBasket/index.html' % DEMO_APP_ROOT,
+            version_name='1.0.0',
+            unique_name='ozp.test.bread_basket.%s' % i,
+            small_icon=small_icon,
+            large_icon=large_icon,
+            banner_icon=banner_icon,
+            large_banner_icon=large_banner_icon,
+            what_is_new='Nothing really new here',
+            description_short='Carries bread',
+            requirements='None',
+            is_enabled=True,
+            is_featured=True,
+            iframe_compatible=False,
+            is_private=True,
+            security_marking=unclass
+        )
+        listing.save()
+    
+        listing.contacts.add(osha)
+        listing.owners.add(julia)
+        listing.categories.add(health_fitness)
+        listing.categories.add(shopping)
+    
+        listing.tags.add(demo)
+        listing.tags.add(example)
+    
+        listing_model_access.create_listing_review(jones.user.username,
+            listing, 2,
+            text="This bread is stale!")
+    
+        listing_model_access.create_listing_review(julia.user.username,
+            listing, 5,
+            text="Yum!")
+    
+        listing_model_access.create_listing(julia, listing)
+        listing_model_access.submit_listing(julia, listing)
+        listing_model_access.approve_listing_by_org_steward(winston, listing)
+        listing_model_access.approve_listing(winston, listing)
+    
+        ############################################################################
+        #                           Chart Course
+        ############################################################################
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        #                           Icons
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        img = Image.open(TEST_IMG_PATH + 'ChartCourse16.png')
+        small_icon = models.Image.create_image(img, file_extension='png',
+            security_marking=unclass, image_type=small_icon_type.name)
+        img = Image.open(TEST_IMG_PATH + 'ChartCourse32.png')
+        large_icon = models.Image.create_image(img, file_extension='png',
+            security_marking=unclass, image_type=large_icon_type.name)
+        img = Image.open(TEST_IMG_PATH + 'ChartCourse.png')
+        banner_icon = models.Image.create_image(img, file_extension='png',
+            security_marking=unclass, image_type=banner_icon_type.name)
+        img = Image.open(TEST_IMG_PATH + 'ChartCourseFeatured.png')
+        large_banner_icon = models.Image.create_image(img, file_extension='png',
+            security_marking=unclass, image_type=large_banner_icon_type.name)
+    
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        #                           Listing
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    
+        listing = models.Listing(
+            title='Chart Course %s' % i,
+            agency=minitrue,
+            listing_type=web_app,
+            description='Chart your course',
+            launch_url='%s/demo_apps/centerSampleListings/chartCourse/index.html' % DEMO_APP_ROOT,
+            version_name='1.0.0',
+            unique_name='ozp.test.chartcourse.%s' % i,
+            small_icon=small_icon,
+            large_icon=large_icon,
+            banner_icon=banner_icon,
+            large_banner_icon=large_banner_icon,
+            what_is_new='Nothing really new here',
+            description_short='Chart your course',
+            requirements='None',
+            is_enabled=True,
+            is_featured=True,
+            iframe_compatible=False,
+            is_private=False,
+            security_marking=unclass
+        )
+        listing.save()
+        listing.contacts.add(rob_baratheon)
+        listing.owners.add(winston)
+        listing.categories.add(tools)
+        listing.categories.add(education)
+        listing.tags.add(demo)
+    
+        listing_model_access.create_listing(winston, listing)
+        listing_model_access.submit_listing(winston, listing)
+        listing_model_access.approve_listing_by_org_steward(winston, listing)
+        listing_model_access.approve_listing(winston, listing)
+    
+    
+        ############################################################################
+        #                           Chatter Box
+        ############################################################################
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        #                           Icons
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        img = Image.open(TEST_IMG_PATH + 'ChatterBox16.png')
+        small_icon = models.Image.create_image(img, file_extension='png',
+            security_marking=unclass, image_type=small_icon_type.name)
+        img = Image.open(TEST_IMG_PATH + 'ChatterBox32.png')
+        large_icon = models.Image.create_image(img, file_extension='png',
+            security_marking=unclass, image_type=large_icon_type.name)
+        img = Image.open(TEST_IMG_PATH + 'ChatterBox.png')
+        banner_icon = models.Image.create_image(img, file_extension='png',
+            security_marking=unclass, image_type=banner_icon_type.name)
+        img = Image.open(TEST_IMG_PATH + 'ChatterBoxFeatured.png')
+        large_banner_icon = models.Image.create_image(img, file_extension='png',
+            security_marking=unclass, image_type=large_banner_icon_type.name)
+    
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        #                           Listing
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    
+        listing = models.Listing(
+            title='Chatter Box %s' % i,
+            agency=miniluv,
+            listing_type=web_app,
+            description='Chat with people',
+            launch_url='%s/demo_apps/centerSampleListings/chatterBox/index.html' % DEMO_APP_ROOT,
+            version_name='1.0.0',
+            unique_name='ozp.test.chatterbox.%s' % i,
+            small_icon=small_icon,
+            large_icon=large_icon,
+            banner_icon=banner_icon,
+            large_banner_icon=large_banner_icon,
+            what_is_new='Nothing really new here',
+            description_short='Chat in a box',
+            requirements='None',
+            is_enabled=True,
+            is_featured=True,
+            iframe_compatible=False,
+            is_private=False,
+            security_marking=unclass
+        )
+        listing.save()
+        listing.contacts.add(rob_baratheon)
+        listing.owners.add(julia)
+        listing.categories.add(communication)
+        listing.tags.add(demo)
+    
+        listing_model_access.create_listing(julia, listing)
+        listing_model_access.submit_listing(julia, listing)
+        listing_model_access.approve_listing_by_org_steward(winston, listing)
+        listing_model_access.approve_listing(winston, listing)
+    
+        ############################################################################
+        #                           Clipboard
+        ############################################################################
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        #                           Icons
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        img = Image.open(TEST_IMG_PATH + 'Clipboard16.png')
+        small_icon = models.Image.create_image(img, file_extension='png',
+            security_marking=unclass, image_type=small_icon_type.name)
+        img = Image.open(TEST_IMG_PATH + 'Clipboard32.png')
+        large_icon = models.Image.create_image(img, file_extension='png',
+            security_marking=unclass, image_type=large_icon_type.name)
+        img = Image.open(TEST_IMG_PATH + 'Clipboard.png')
+        banner_icon = models.Image.create_image(img, file_extension='png',
+            security_marking=unclass, image_type=banner_icon_type.name)
+        img = Image.open(TEST_IMG_PATH + 'ClipboardFeatured.png')
+        large_banner_icon = models.Image.create_image(img, file_extension='png',
+            security_marking=unclass, image_type=large_banner_icon_type.name)
+    
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        #                           Listing
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    
+        listing = models.Listing(
+            title='Clipboard %s' % i,
+            agency=minitrue,
+            listing_type=web_app,
+            description='Clip stuff on a board',
+            launch_url='%s/demo_apps/centerSampleListings/clipboard/index.html' % DEMO_APP_ROOT,
+            version_name='1.0.0',
+            unique_name='ozp.test.clipboard.%s' % i,
+            small_icon=small_icon,
+            large_icon=large_icon,
+            banner_icon=banner_icon,
+            large_banner_icon=large_banner_icon,
+            what_is_new='Nothing really new here',
+            description_short='Its a clipboard',
+            requirements='None',
+            is_enabled=True,
+            is_featured=True,
+            iframe_compatible=False,
+            is_private=False,
+            security_marking=unclass
+        )
+        listing.save()
+        listing.contacts.add(rob_baratheon)
+        listing.owners.add(winston)
+        listing.categories.add(tools)
+        listing.categories.add(education)
+        listing.tags.add(demo)
+    
+        listing_model_access.create_listing(winston, listing)
+        listing_model_access.submit_listing(winston, listing)
+        listing_model_access.approve_listing_by_org_steward(winston, listing)
+        listing_model_access.approve_listing(winston, listing)
+    
+        ############################################################################
+        #                           FrameIt
+        ############################################################################
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        #                           Icons
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        img = Image.open(TEST_IMG_PATH + 'FrameIt16.png')
+        small_icon = models.Image.create_image(img, file_extension='png',
+            security_marking=unclass, image_type=small_icon_type.name)
+        img = Image.open(TEST_IMG_PATH + 'FrameIt32.png')
+        large_icon = models.Image.create_image(img, file_extension='png',
+            security_marking=unclass, image_type=large_icon_type.name)
+        img = Image.open(TEST_IMG_PATH + 'FrameIt.png')
+        banner_icon = models.Image.create_image(img, file_extension='png',
+            security_marking=unclass, image_type=banner_icon_type.name)
+        img = Image.open(TEST_IMG_PATH + 'FrameItFeatured.png')
+        large_banner_icon = models.Image.create_image(img, file_extension='png',
+            security_marking=unclass, image_type=large_banner_icon_type.name)
+    
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        #                           Listing
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    
+        listing = models.Listing(
+            title='FrameIt %s' % i,
+            agency=minitrue,
+            listing_type=web_app,
+            description='Show things in an iframe',
+            launch_url='%s/demo_apps/frameit/index.html' % DEMO_APP_ROOT,
+            version_name='1.0.0',
+            unique_name='ozp.test.frameit.%s' % i,
+            small_icon=small_icon,
+            large_icon=large_icon,
+            banner_icon=banner_icon,
+            large_banner_icon=large_banner_icon,
+            what_is_new='Nothing really new here',
+            description_short='Its an iframe',
+            requirements='None',
+            is_enabled=True,
+            is_featured=True,
+            iframe_compatible=False,
+            is_private=False,
+            security_marking=unclass
+        )
+        listing.save()
+        listing.contacts.add(rob_baratheon)
+        listing.owners.add(winston)
+        listing.categories.add(tools)
+        listing.categories.add(education)
+        listing.tags.add(demo)
+    
+        listing_model_access.create_listing(winston, listing)
+        listing_model_access.submit_listing(winston, listing)
+        listing_model_access.approve_listing_by_org_steward(winston, listing)
+        listing_model_access.approve_listing(winston, listing)
+    
+        ############################################################################
+        #                           Hatch Latch
+        ############################################################################
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        #                           Icons
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        img = Image.open(TEST_IMG_PATH + 'HatchLatch16.png')
+        small_icon = models.Image.create_image(img, file_extension='png',
+            security_marking=unclass, image_type=small_icon_type.name)
+        img = Image.open(TEST_IMG_PATH + 'HatchLatch32.png')
+        large_icon = models.Image.create_image(img, file_extension='png',
+            security_marking=unclass, image_type=large_icon_type.name)
+        img = Image.open(TEST_IMG_PATH + 'HatchLatch.png')
+        banner_icon = models.Image.create_image(img, file_extension='png',
+            security_marking=unclass, image_type=banner_icon_type.name)
+        img = Image.open(TEST_IMG_PATH + 'HatchLatchFeatured.png')
+        large_banner_icon = models.Image.create_image(img, file_extension='png',
+            security_marking=unclass, image_type=large_banner_icon_type.name)
+    
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        #                           Listing
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    
+        listing = models.Listing(
+            title='Hatch Latch %s' % i,
+            agency=minitrue,
+            listing_type=web_app,
+            description='Hatch latches',
+            launch_url='%s/demo_apps/centerSampleListings/hatchLatch/index.html' % DEMO_APP_ROOT,
+            version_name='1.0.0',
+            unique_name='ozp.test.hatchlatch.%s' % i,
+            small_icon=small_icon,
+            large_icon=large_icon,
+            banner_icon=banner_icon,
+            large_banner_icon=large_banner_icon,
+            what_is_new='Nothing really new here',
+            description_short='Its a hatch latch',
+            requirements='None',
+            is_enabled=True,
+            is_featured=True,
+            iframe_compatible=False,
+            is_private=False,
+            security_marking=unclass
+        )
+        listing.save()
+        listing.contacts.add(rob_baratheon)
+        listing.owners.add(winston)
+        listing.categories.add(tools)
+        listing.categories.add(education)
+        listing.categories.add(health_fitness)
+        listing.tags.add(demo)
+    
+        listing_model_access.create_listing(winston, listing)
+        listing_model_access.submit_listing(winston, listing)
+        listing_model_access.approve_listing_by_org_steward(winston, listing)
+        listing_model_access.approve_listing(winston, listing)
+    
+        ############################################################################
+        #                           Jot Spot
+        ############################################################################
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        #                           Icons
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        img = Image.open(TEST_IMG_PATH + 'JotSpot16.png')
+        small_icon = models.Image.create_image(img, file_extension='png',
+            security_marking=unclass, image_type=small_icon_type.name)
+        img = Image.open(TEST_IMG_PATH + 'JotSpot32.png')
+        large_icon = models.Image.create_image(img, file_extension='png',
+            security_marking=unclass, image_type=large_icon_type.name)
+        img = Image.open(TEST_IMG_PATH + 'JotSpot.png')
+        banner_icon = models.Image.create_image(img, file_extension='png',
+            security_marking=unclass, image_type=banner_icon_type.name)
+        img = Image.open(TEST_IMG_PATH + 'JotSpotFeatured.png')
+        large_banner_icon = models.Image.create_image(img, file_extension='png',
+            security_marking=unclass, image_type=large_banner_icon_type.name)
+    
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        #                           Listing
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    
+        listing = models.Listing(
+            title='JotSpot %s' % i,
+            agency=minitrue,
+            listing_type=web_app,
+            description='Jot things down',
+            launch_url='%s/demo_apps/centerSampleListings/jotSpot/index.html' % DEMO_APP_ROOT,
+            version_name='1.0.0',
+            unique_name='ozp.test.jotspot.%s' % i,
+            small_icon=small_icon,
+            large_icon=large_icon,
+            banner_icon=banner_icon,
+            large_banner_icon=large_banner_icon,
+            what_is_new='Nothing really new here',
+            description_short='Jot stuff down',
+            requirements='None',
+            is_enabled=True,
+            is_featured=True,
+            iframe_compatible=False,
+            is_private=False,
+            security_marking=unclass
+        )
+        listing.save()
+        listing.contacts.add(rob_baratheon)
+        listing.owners.add(winston)
+        listing.categories.add(tools)
+        listing.categories.add(education)
+        listing.tags.add(demo)
+    
+        listing_model_access.create_listing(winston, listing)
+        listing_model_access.submit_listing(winston, listing)
+        listing_model_access.approve_listing_by_org_steward(winston, listing)
+        listing_model_access.approve_listing(winston, listing)
+    
+        listing_model_access.create_listing_review(charrington.user.username,
+            listing, 4,
+            text="I really like it")
+    
+        ############################################################################
+        #                           Location Lister
+        ############################################################################
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        #                           Icons
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        img = Image.open(TEST_IMG_PATH + 'LocationLister16.png')
+        small_icon = models.Image.create_image(img, file_extension='png',
+            security_marking=unclass, image_type=small_icon_type.name)
+        img = Image.open(TEST_IMG_PATH + 'LocationLister32.png')
+        large_icon = models.Image.create_image(img, file_extension='png',
+            security_marking=unclass, image_type=large_icon_type.name)
+        img = Image.open(TEST_IMG_PATH + 'LocationLister.png')
+        banner_icon = models.Image.create_image(img, file_extension='png',
+            security_marking=unclass, image_type=banner_icon_type.name)
+        img = Image.open(TEST_IMG_PATH + 'LocationListerFeatured.png')
+        large_banner_icon = models.Image.create_image(img, file_extension='png',
+            security_marking=unclass, image_type=large_banner_icon_type.name)
+    
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        #                           Listing
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    
+        listing = models.Listing(
+            title='LocationLister %s' % i,
+            agency=minitrue,
+            listing_type=web_app,
+            description='List locations',
+            launch_url='%s/demo_apps/locationLister/index.html' % DEMO_APP_ROOT,
+            version_name='1.0.0',
+            unique_name='ozp.test.locationlister.%s' % i,
+            small_icon=small_icon,
+            large_icon=large_icon,
+            banner_icon=banner_icon,
+            large_banner_icon=large_banner_icon,
+            what_is_new='Nothing really new here',
+            description_short='List locations',
+            requirements='None',
+            is_enabled=True,
+            is_featured=True,
+            iframe_compatible=False,
+            is_private=False,
+            security_marking=unclass
+        )
+        listing.save()
+        listing.contacts.add(rob_baratheon)
+        listing.owners.add(winston)
+        listing.categories.add(tools)
+        listing.categories.add(education)
+        listing.tags.add(demo)
+    
+        listing_model_access.create_listing(winston, listing)
+        listing_model_access.submit_listing(winston, listing)
+        listing_model_access.approve_listing_by_org_steward(winston, listing)
+        listing_model_access.approve_listing(winston, listing)
+    
+        ############################################################################
+        #                           Location Viewer
+        ############################################################################
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        #                           Icons
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        img = Image.open(TEST_IMG_PATH + 'LocationViewer16.png')
+        small_icon = models.Image.create_image(img, file_extension='png',
+            security_marking=unclass, image_type=small_icon_type.name)
+        img = Image.open(TEST_IMG_PATH + 'LocationViewer32.png')
+        large_icon = models.Image.create_image(img, file_extension='png',
+            security_marking=unclass, image_type=large_icon_type.name)
+        img = Image.open(TEST_IMG_PATH + 'LocationViewer.png')
+        banner_icon = models.Image.create_image(img, file_extension='png',
+            security_marking=unclass, image_type=banner_icon_type.name)
+        img = Image.open(TEST_IMG_PATH + 'LocationViewerFeatured.png')
+        large_banner_icon = models.Image.create_image(img, file_extension='png',
+            security_marking=unclass, image_type=large_banner_icon_type.name)
+    
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        #                           Listing
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    
+        listing = models.Listing(
+            title='LocationViewer %s' % i,
+            agency=minitrue,
+            listing_type=web_app,
+            description='View locations',
+            launch_url='%s/demo_apps/locationViewer/index.html' % DEMO_APP_ROOT,
+            version_name='1.0.0',
+            unique_name='ozp.test.locationviewer.%s' % i,
+            small_icon=small_icon,
+            large_icon=large_icon,
+            banner_icon=banner_icon,
+            large_banner_icon=large_banner_icon,
+            what_is_new='Nothing really new here',
+            description_short='View locations',
+            requirements='None',
+            is_enabled=True,
+            is_featured=True,
+            iframe_compatible=False,
+            is_private=False,
+            security_marking=unclass
+        )
+        listing.save()
+        listing.contacts.add(rob_baratheon)
+        listing.owners.add(winston)
+        listing.categories.add(tools)
+        listing.categories.add(education)
+        listing.tags.add(demo)
+    
+        listing_model_access.create_listing(winston, listing)
+        listing_model_access.submit_listing(winston, listing)
+        listing_model_access.approve_listing_by_org_steward(winston, listing)
+        listing_model_access.approve_listing(winston, listing)
+    
+        ############################################################################
+        #                           Location Analyzer
+        ############################################################################
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        #                           Icons
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        img = Image.open(TEST_IMG_PATH + 'LocationAnalyzer16.png')
+        small_icon = models.Image.create_image(img, file_extension='png',
+            security_marking=unclass, image_type=small_icon_type.name)
+        img = Image.open(TEST_IMG_PATH + 'LocationAnalyzer32.png')
+        large_icon = models.Image.create_image(img, file_extension='png',
+            security_marking=unclass, image_type=large_icon_type.name)
+        img = Image.open(TEST_IMG_PATH + 'LocationAnalyzer.png')
+        banner_icon = models.Image.create_image(img, file_extension='png',
+            security_marking=unclass, image_type=banner_icon_type.name)
+        img = Image.open(TEST_IMG_PATH + 'LocationAnalyzerFeatured.png')
+        large_banner_icon = models.Image.create_image(img, file_extension='png',
+            security_marking=unclass, image_type=large_banner_icon_type.name)
+    
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        #                           Listing
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    
+        listing = models.Listing(
+            title='LocationAnalyzer %s' % i,
+            agency=minitrue,
+            listing_type=web_app,
+            description='Analyze locations',
+            launch_url='%s/demo_apps/locationAnalyzer/index.html' % DEMO_APP_ROOT,
+            version_name='1.0.0',
+            unique_name='ozp.test.locationanalyzer.%s' % i,
+            small_icon=small_icon,
+            large_icon=large_icon,
+            banner_icon=banner_icon,
+            large_banner_icon=large_banner_icon,
+            what_is_new='Nothing really new here',
+            description_short='Analyze locations',
+            requirements='None',
+            is_enabled=True,
+            is_featured=True,
+            iframe_compatible=False,
+            is_private=False,
+            security_marking=unclass
+        )
+        listing.save()
+        listing.contacts.add(rob_baratheon)
+        listing.owners.add(winston)
+        listing.categories.add(tools)
+        listing.categories.add(education)
+        listing.tags.add(demo)
+    
+        listing_model_access.create_listing(winston, listing)
+        listing_model_access.submit_listing(winston, listing)
+        listing_model_access.approve_listing_by_org_steward(winston, listing)
+        listing_model_access.approve_listing(winston, listing)
 
     ############################################################################
     #                           Library
