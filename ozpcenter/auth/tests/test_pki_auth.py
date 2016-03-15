@@ -51,13 +51,18 @@ class PkiAuthenticationTest(TestCase):
         for the given dn, it maps to one that already exists
         """
         # create a new user
-        profile = pkiauth._get_profile_by_dn('jones jones')
+        profile = pkiauth._get_profile_by_dn('Jones_jones')
         self.assertEqual(profile.user.username, 'jones_jones')
 
         # this dn has an "'" in it, but that gets stripped out before creating
         # the new user
         profile = pkiauth._get_profile_by_dn('jones jones\'')
         self.assertEqual(profile.user.username, 'jones_jones_2')
+
+    def test_case_username(self):
+        # DN with mixed case should match
+        profile = pkiauth._get_profile_by_dn('JoNeS jOnEs')
+        self.assertEqual(profile.user.username, 'jones')
 
     def test_preprocess_dn(self):
         dn = '/THIRD=c/SECOND=b/FIRST=a'
