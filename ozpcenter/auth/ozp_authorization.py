@@ -134,8 +134,12 @@ def authorization_update(username, updated_auth_data=None):
         # validate the org
         duty_org = updated_auth_data['duty_org']
         orgs = models.Agency.objects.values_list('short_name', flat=True)
+
         if duty_org not in orgs:
-            raise errors.AuthorizationFailure('User %s has invalid duty org %s' % (username, duty_org))
+            if (hasattr(settings, 'DEFAULT_AGENCY') and (settings.DEFAULT_AGENCY != '')):
+                duty_org = settings.DEFAULT_AGENCY
+            else:
+                raise errors.AuthorizationFailure('User %s has invalid duty org %s' % (username, duty_org))
 
         # update the user's org
         try:

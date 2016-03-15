@@ -236,3 +236,8 @@ OZP = {
         'SECONDS_TO_CACHE_DATA': 5
     }
 }
+
+# Set to empty string if no default agency exists
+# If a default agency exists, set it to the agency's short name
+DEFAULT_AGENCY = ''
+
