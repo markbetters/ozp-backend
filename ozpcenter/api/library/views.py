@@ -44,8 +44,12 @@ class UserLibraryViewSet(viewsets.ViewSet):
     permission_classes = (permissions.IsUser,)
 
     def get_queryset(self):
-        return model_access.get_self_application_library(
-            self.request.user.username)
+        listing_type = self.request.query_params.get('type', None)
+        if listing_type:
+            queryset = model_access.get_self_application_library_by_listing_type(self.request.user.username, listing_type)
+        else:
+            queryset = model_access.get_self_application_library(self.request.user.username)
+        return queryset
 
     def create(self, request):
         """

@@ -56,11 +56,39 @@ class LibraryApiTest(APITestCase):
         url = '/api/self/library/'
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(2, len(response.data))
         self.assertIn('listing', response.data[0])
         self.assertIn('id', response.data[0]['listing'])
         self.assertIn('title', response.data[0]['listing'])
         self.assertIn('unique_name', response.data[0]['listing'])
         self.assertIn('folder', response.data[0])
+
+    def test_get_library_list_listing_type(self):
+        """
+        GET /self/library
+        """
+        user = generic_model_access.get_profile('wsmith').user
+        self.client.force_authenticate(user=user)
+        url = '/api/self/library/?type=web application'
+        response = self.client.get(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(2, len(response.data))
+        self.assertIn('listing', response.data[0])
+        self.assertIn('id', response.data[0]['listing'])
+        self.assertIn('title', response.data[0]['listing'])
+        self.assertIn('unique_name', response.data[0]['listing'])
+        self.assertIn('folder', response.data[0])
+
+    def test_get_library_list_listing_type_empty(self):
+        """
+        GET /self/library
+        """
+        user = generic_model_access.get_profile('wsmith').user
+        self.client.force_authenticate(user=user)
+        url = '/api/self/library/?type=widget'
+        response = self.client.get(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(0, len(response.data))
 
     def test_get_library_pk(self):
         """
