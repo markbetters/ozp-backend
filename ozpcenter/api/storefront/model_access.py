@@ -4,6 +4,7 @@ model access
 import logging
 import re
 
+from django.db.models.functions import Lower
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 import ozpcenter.models as models
@@ -77,7 +78,7 @@ def get_metadata(username):
         try:
             data = {}
             data['categories'] = models.Category.objects.all().values(
-                'title', 'description')
+                'title', 'description').order_by(Lower('title'))
             data['listing_types'] = models.ListingType.objects.all().values(
                 'title', 'description')
             data['agencies'] = models.Agency.objects.all().values(
