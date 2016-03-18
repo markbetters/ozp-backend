@@ -18,6 +18,9 @@ logger = logging.getLogger('ozp-center')
 
 
 def has_access(user_accesses_json, marking):
+    return True
+
+def future_has_access(user_accesses_json, marking):
     """
     Determine if a user has access to a given access control
 
