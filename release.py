@@ -92,7 +92,7 @@ def create_release_dir():
     shutil.copy("manage.py", "release")
     shutil.copy("README.md", "release")
     shutil.copy("requirements.txt", "release")
-    shutil.copy("restart_clean_dev_server.sh", "release")
+    shutil.copy("Makefile", "release")
 
 
 def run():
