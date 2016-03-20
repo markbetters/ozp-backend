@@ -73,6 +73,7 @@ def filter_listings(username, filter_params):
         objects = objects.filter(
             listing_type__title__in=filter_params['listing_types'])
 
+    objects = objects.order_by('-avg_rate','-total_reviews')
     return objects
 
 

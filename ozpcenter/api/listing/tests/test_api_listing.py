@@ -91,7 +91,7 @@ class ListingApiTest(APITestCase):
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         titles = [i['title'] for i in response.data['results']]
-        self.assertTrue('Air Mail' in titles)
+        self.assertTrue('JotSpot' in titles)
         self.assertEqual(len(titles), 1)
 
     def test_search_offset_limit(self):
@@ -101,7 +101,7 @@ class ListingApiTest(APITestCase):
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         titles = [i['title'] for i in response.data['results']]
-        self.assertTrue('Bread Basket' in titles)
+        self.assertTrue('JotSpot 1' in titles)
         self.assertEqual(len(titles), 1)
 
     def test_self_listing(self):
@@ -630,7 +630,7 @@ class ListingApiTest(APITestCase):
         user = generic_model_access.get_profile('julia').user
         self.client.force_authenticate(user=user)
         url = '/api/listing/1/'
-        title = 'julias app'
+        title = 'julias app 2'
         data = {
             "title": title,
             "description": "description of app",
@@ -687,8 +687,8 @@ class ListingApiTest(APITestCase):
         }
         # for checking Activity status later on
         old_listing_data = self.client.get(url, format='json').data
-
         response = self.client.put(url, data, format='json')
+
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         # title
         self.assertEqual(response.data['title'], data['title'])
