@@ -589,9 +589,13 @@ def contacts_to_string(contacts, queryset=False):
         [('name', 'email'), ...]
     """
     if queryset:
-        new_contacts = [(i.name, i.email) for i in contacts]
+        new_contacts = [(i.name, i.email, i.secure_phone,
+                        i.unsecure_phone, i.organization,
+                        i.contact_type.name) for i in contacts]
     else:
-        new_contacts = [(i['name'], i['email']) for i in contacts]
+        new_contacts = [(i['name'], i['email'], i.get('secure_phone'),
+                         i.get('unsecure_phone'), i.get('organization'),
+                         i.get('contact_type',{}).get('name') ) for i in contacts]
     return str(sorted(new_contacts))
 
 

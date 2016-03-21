@@ -579,6 +579,7 @@ class ListingApiTest(APITestCase):
         self.assertEqual(response.data['required_listings'], None)
         self.assertTrue(response.data['edited_date'])
 
+
     def test_delete_listing(self):
         user = generic_model_access.get_profile('wsmith').user
         self.client.force_authenticate(user=user)
@@ -925,6 +926,149 @@ class ListingApiTest(APITestCase):
 
 
         self.assertEqual(total_found, len(fields)-1)    # -1 for approved_status
+
+    def test_z_create_update(self):
+        user = generic_model_access.get_profile('julia').user
+        self.client.force_authenticate(user=user)
+        url = '/api/listing/'
+        data = {
+          "title": "test",
+          "screenshots": [],
+          "contacts": [
+            {
+              "name": "test1",
+              "email": "test1@domain.com",
+              "secure_phone": "240-544-8777",
+              "contact_type": {
+                "name": "Civillian"
+              }
+            },
+            {
+              "name": "test2",
+              "email": "test2@domain.com",
+              "secure_phone": "240-888-7477",
+              "contact_type": {
+                "name": "Civillian"
+              }
+            }
+          ],
+          "tags": [],
+          "owners": [
+            {
+              "display_name": "Big Brother",
+              "id": 4,
+              "user": {
+                "username": "bigbrother"
+              }
+            }
+          ],
+          "agency": {
+            "short_name": "Miniluv",
+            "title": "Ministry of Love"
+          },
+          "categories": [
+            {
+              "title": "Books and Reference"
+            }
+          ],
+          "intents": [],
+          "doc_urls": [],
+          "security_marking": "UNCLASSIFIED//FOR OFFICIAL USE ONLY//ABCDE",
+          "listing_type": {
+            "title": "web application"
+          },
+          "last_activity": {
+            "action": "APPROVED"
+          },
+          "required_listings": None
+        }
+
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data['approval_status'], 'IN_PROGRESS')
+        listing_id = response.data['id']
+
+        data = {
+          "id": listing_id,
+          "title": "test",
+          "description": None,
+          "description_short": None,
+          "screenshots": [],
+          "contacts": [
+            {
+              "id": 4,
+              "contact_type": {
+                "name": "Government"
+              },
+              "secure_phone": "240-544-8777",
+              "unsecure_phone": None,
+              "email": "test1@domain.com",
+              "name": "test15",
+              "organization": None
+            },
+            {
+              "id": 5,
+              "contact_type": {
+                "name": "Civillian"
+              },
+              "secure_phone": "240-888-7477",
+              "unsecure_phone": None,
+              "email": "test2@domain.com",
+              "name": "test2",
+              "organization": None
+            }
+          ],
+          "avg_rate": 0,
+          "total_votes": 0,
+          "tags": [],
+          "requirements": None,
+          "version_name": None,
+          "launch_url": None,
+          "what_is_new": None,
+          "owners": [
+            {
+              "display_name": "Big Brother",
+              "id": 4,
+              "user": {
+                "username": "bigbrother"
+              }
+            }
+          ],
+          "agency": {
+            "short_name": "Miniluv",
+            "title": "Ministry of Love"
+          },
+          "is_enabled": True,
+          "categories": [
+            {
+              "title": "Books and Reference"
+            }
+          ],
+          "intents": [],
+          "doc_urls": [],
+          "approval_status": "IN_PROGRESS",
+          "is_featured": False,
+          "is_private": False,
+          "security_marking": "UNCLASSIFIED//FOR OFFICIAL USE ONLY//ABCDE",
+          "listing_type": {
+            "title": "web application"
+          },
+          "unique_name": None,
+          "last_activity": {
+            "action": "APPROVED"
+          },
+          "required_listings": None
+        }
+
+
+        url = '/api/listing/%s/' % listing_id
+        response = self.client.put(url, data, format='json')
+
+        contacts = response.data['contacts']
+        contact_types = [i['contact_type']['name'] for i in contacts]
+        self.assertEqual(str(contact_types), str(['Civillian', 'Government']))
+
+
 
     def test_update_listing_approval_status_deny_user(self):
         # a standard user cannot update the approval_status

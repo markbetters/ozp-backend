@@ -563,11 +563,20 @@ class ListingSerializer(serializers.ModelSerializer):
                 old_contact_instances, True)
             new_contacts = model_access.contacts_to_string(
                 validated_data['contacts'])
+
             if old_contacts != new_contacts:
                 change_details.append({'old_value': old_contacts,
                     'new_value': new_contacts, 'field_name': 'contacts'})
                 instance.contacts.clear()
                 for contact in validated_data['contacts']:
+                    # TODO: Smarter Handling of Duplicates Contact Records
+                    # A contact with the same name and email should be the same contact
+                    # in the backend.
+                    # Person1(name='N1',email='n2@n2.com') and
+                    #    Person1' (name='N1',email='n2@n2.com',secure_phone = '414-444-444')
+                    # The two people above should be one contact
+                    # if approval_status: "IN_PROGRESS" then it should be using
+                    # contact model ids' since it is temporary contacts
                     obj, created = models.Contact.objects.get_or_create(
                         name=contact['name'],
                         email=contact['email'],
