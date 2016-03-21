@@ -338,11 +338,19 @@ class ListingTest(TestCase):
         ]
 
         out = model_access.contacts_to_string(contacts)
-        self.assertEqual(out, "[('me', 'me@google.com'), ('you', 'you@google.com')]")
+
+        ext = ("[('me', 'me@google.com', '111-222-3434', '444-555-4545', None, 'Government'), " +
+                "('you', 'you@google.com', '111-222-3434', '444-555-4545', None, 'Military')]")
+
+        self.assertEqual(out, ext)
 
         contacts = models.Contact.objects.filter(organization='House Stark')
         out = model_access.contacts_to_string(contacts, True)
-        self.assertEqual(out, "[('Brienne Tarth', 'brienne@stark.com'), ('Osha', 'osha@stark.com')]")
+
+        ext = ("[('Brienne Tarth', 'brienne@stark.com', None, '222-324-3846', 'House Stark', 'Military'),"+
+               " ('Osha', 'osha@stark.com', None, '321-123-7894', 'House Stark', 'Civillian')]")
+
+        self.assertEqual(out, ext)
 
     def test_categories_to_string(self):
         categories = [
