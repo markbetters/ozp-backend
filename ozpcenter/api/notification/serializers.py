@@ -42,12 +42,11 @@ class NotificationListingSerializer(serializers.ModelSerializer):
 class NotificationSerializer(serializers.ModelSerializer):
     author = ShortProfileSerializer(required=False)
     listing = NotificationListingSerializer(required=False)
-    dismissed_by = ShortProfileSerializer(required=False, many=True)
 
     class Meta:
         model = models.Notification
         fields = ('id', 'created_date', 'message', 'expires_date', 'author',
-            'listing', 'dismissed_by')
+            'listing')
 
     def validate(self, data):
         username = self.context['request'].user.username

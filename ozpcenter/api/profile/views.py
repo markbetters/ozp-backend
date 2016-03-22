@@ -67,9 +67,9 @@ class ProfileViewSet(viewsets.ModelViewSet):
 
             return Response(serializer.data, status=status.HTTP_200_OK)
         except errors.PermissionDenied:
-            return Response('Permission Denied',
-                status=status.HTTP_403_FORBIDDEN)
+            return Response({'detail':'Permission Denied'}, status=status.HTTP_403_FORBIDDEN)
         except Exception as e:
+            logger.error('Exception: {}'.format(e.message))
             raise e
 
 
@@ -108,7 +108,7 @@ class CurrentUserViewSet(viewsets.ViewSet):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         except errors.PermissionDenied:
-            return Response('Permission Denied',
-                status=status.HTTP_403_FORBIDDEN)
+            return Response({'detail':'Permission Denied'}, status=status.HTTP_403_FORBIDDEN)
         except Exception as e:
+            logger.error('Exception: {}'.format(e.message))
             raise e
