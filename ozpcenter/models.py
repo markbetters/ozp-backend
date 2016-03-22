@@ -161,9 +161,13 @@ class Image(models.Model):
 
         # check size requirements
         size_bytes = os.path.getsize(file_name)
-        if size_bytes > image_type.max_size_bytes:
+
+        # TODO: PIL saved images can be larger than submitted images.
+        # To avoid unexpected image save error, make the max_size_bytes
+        # larger than we expect
+        if size_bytes > (image_type.max_size_bytes * 2):
             logger.error('Image size is %d bytes, which is larger than the max \
-                allowed %d bytes' % (size_bytes, image_type.max_size_bytes))
+                allowed %d bytes' % (size_bytes, 2 * image_type.max_size_bytes))
             # TODO raise exception and remove file
             return
 
