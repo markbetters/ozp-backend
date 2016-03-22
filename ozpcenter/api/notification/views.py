@@ -42,9 +42,9 @@ class NotificationViewSet(viewsets.ModelViewSet):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         except errors.PermissionDenied:
-            return Response('Permission Denied',
-                status=status.HTTP_403_FORBIDDEN)
+            return Response({'detail':'Permission Denied'}, status=status.HTTP_403_FORBIDDEN)
         except Exception as e:
+            logger.error('Exception: {}'.format(e.message))
             raise e
 
     def update(self, request, pk=None):
@@ -65,10 +65,28 @@ class NotificationViewSet(viewsets.ModelViewSet):
 
             return Response(serializer.data, status=status.HTTP_200_OK)
         except errors.PermissionDenied:
-            return Response('Permission Denied',
-                status=status.HTTP_403_FORBIDDEN)
+            return Response({'detail':'Permission Denied'}, status=status.HTTP_403_FORBIDDEN)
         except Exception as e:
+            logger.error('Exception: {}'.format(e.message))
             raise e
+
+    def destroy(self, request, pk=None):
+        try:
+            current_request_profile = model_access.get_self(request.user.username)
+
+            if current_request_profile.highest_role() not in ['APPS_MALL_STEWARD', 'ORG_STEWARD']:
+                raise errors.PermissionDenied
+
+            queryset = self.get_queryset()
+            notification_instance = get_object_or_404(queryset, pk=pk)
+            notification_instance.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except errors.PermissionDenied:
+                return Response({'detail':'Permission Denied'}, status=status.HTTP_403_FORBIDDEN)
+        except Exception as e:
+            logger.error('Exception: {}'.format(e.message))
+            raise e
+
 
 
 class UserNotificationViewSet(viewsets.ModelViewSet):
