@@ -377,7 +377,7 @@ class ListingSerializer(serializers.ModelSerializer):
 
         if 'contacts' in validated_data:
             for contact in validated_data['contacts']:
-                new_contact = models.Contact(name=contact['name'],
+                new_contact, created = models.Contact.objects.get_or_create(name=contact['name'],
                     email=contact['email'],
                     secure_phone=contact['secure_phone'],
                     unsecure_phone=contact['unsecure_phone'],
