@@ -48,7 +48,6 @@ class NotificationApiTest(APITestCase):
         self.assertIn('created_date', first_notification)
         self.assertIn('message', first_notification)
         self.assertIn('expires_date', first_notification)
-        self.assertIn('dismissed_by', first_notification)
 
     def test_dismiss_self_notification(self):
         url = '/api/self/notification/'
