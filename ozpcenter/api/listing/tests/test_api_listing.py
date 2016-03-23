@@ -618,14 +618,18 @@ class ListingApiTest(APITestCase):
         # now make another change to the listing
         data = self.client.get(url, format='json').data
         data['small_icon'] = {'id': 1}
-        data['large_icon'] = {'id': 1}
-        data['banner_icon'] = {'id': 1}
-        data['large_banner_icon'] = {'id': 1}
+        data['large_icon'] = {'id': 2}
+        data['banner_icon'] = {'id': 3}
+        data['large_banner_icon'] = {'id': 4}
         data['listing_type'] = {'title': 'web application'}
         # and another update
         response = self.client.put(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertTrue(response.data['edited_date'])
+        self.assertEqual(response.data['small_icon']['id'], 1)
+        self.assertEqual(response.data['large_icon']['id'], 2)
+        self.assertEqual(response.data['banner_icon']['id'], 3)
+        self.assertEqual(response.data['large_banner_icon']['id'], 4)
 
     def test_update_listing_full(self):
         user = generic_model_access.get_profile('julia').user
@@ -866,20 +870,20 @@ class ListingApiTest(APITestCase):
                         self.assertEqual(change['old_value'], old_listing_data['security_marking'])
                         total_found += 1
                     if change['field_name'] == 'small_icon':
-                        self.assertEqual(change['new_value'], str(data['small_icon']['id']))
-                        self.assertEqual(change['old_value'], str(old_listing_data['small_icon']['id']))
+                        self.assertEqual(change['new_value'], str(data['small_icon']['id'])+'.UNCLASSIFIED')
+                        self.assertEqual(change['old_value'], str(old_listing_data['small_icon']['id'])+'.UNCLASSIFIED')
                         total_found += 1
                     if change['field_name'] == 'large_icon':
-                        self.assertEqual(change['new_value'], str(data['large_icon']['id']))
-                        self.assertEqual(change['old_value'], str(old_listing_data['large_icon']['id']))
+                        self.assertEqual(change['new_value'], str(data['large_icon']['id'])+'.UNCLASSIFIED')
+                        self.assertEqual(change['old_value'], str(old_listing_data['large_icon']['id'])+'.UNCLASSIFIED')
                         total_found += 1
                     if change['field_name'] == 'banner_icon':
-                        self.assertEqual(change['new_value'], str(data['banner_icon']['id']))
-                        self.assertEqual(change['old_value'], str(old_listing_data['banner_icon']['id']))
+                        self.assertEqual(change['new_value'], str(data['banner_icon']['id'])+'.UNCLASSIFIED')
+                        self.assertEqual(change['old_value'], str(old_listing_data['banner_icon']['id'])+'.UNCLASSIFIED')
                         total_found += 1
                     if change['field_name'] == 'large_banner_icon':
-                        self.assertEqual(change['new_value'], str(data['large_banner_icon']['id']))
-                        self.assertEqual(change['old_value'], str(old_listing_data['large_banner_icon']['id']))
+                        self.assertEqual(change['new_value'], str(data['large_banner_icon']['id'])+'.UNCLASSIFIED')
+                        self.assertEqual(change['old_value'], str(old_listing_data['large_banner_icon']['id'])+'.UNCLASSIFIED')
                         total_found += 1
                     if change['field_name'] == 'doc_urls':
                         self.assertEqual(change['new_value'],

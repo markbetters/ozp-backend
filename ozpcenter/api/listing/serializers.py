@@ -24,6 +24,7 @@ import ozpcenter.api.intent.model_access as intent_model_access
 import ozpcenter.api.contact_type.model_access as contact_type_model_access
 import ozpcenter.errors as errors
 
+
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center')
 
@@ -215,7 +216,8 @@ class ListingSerializer(serializers.ModelSerializer):
         logger.debug('inside ListingSerializer.validate')
         user = generic_model_access.get_profile(
             self.context['request'].user.username)
-        if 'title' not in data:
+
+        if not data.get('title', None):
             raise serializers.ValidationError('Title is required')
 
         data['description'] = data.get('description', None)
@@ -252,37 +254,78 @@ class ListingSerializer(serializers.ModelSerializer):
         else:
             data['listing_type'] = None
 
+
         # small_icon
         small_icon = data.get('small_icon', None)
         if small_icon:
-            data['small_icon'] = image_model_access.get_image_by_id(
-                data['small_icon']['id'])
+            if 'id' not in small_icon:
+                raise serializers.ValidationError('Image(small_icon) requires a %s' % 'id')
+            if small_icon.get('security_marking') is None:
+                small_icon['security_marking'] = constants.DEFAULT_SECURITY_MARKING
         else:
             data['small_icon'] = None
 
         # large_icon
         large_icon = data.get('large_icon', None)
         if large_icon:
-            data['large_icon'] = image_model_access.get_image_by_id(
-                data['large_icon']['id'])
+            if 'id' not in large_icon:
+                raise serializers.ValidationError('Image(large_icon) requires a %s' % 'id')
+            if large_icon.get('security_marking') is None:
+                large_icon['security_marking'] = constants.DEFAULT_SECURITY_MARKING
         else:
             data['large_icon'] = None
 
         # banner_icon
         banner_icon = data.get('banner_icon', None)
         if banner_icon:
-            data['banner_icon'] = image_model_access.get_image_by_id(
-                data['banner_icon']['id'])
+            if 'id' not in banner_icon:
+                raise serializers.ValidationError('Image(banner_icon) requires a %s' % 'id')
+            if banner_icon.get('security_marking') is None:
+                banner_icon['security_marking'] = constants.DEFAULT_SECURITY_MARKING
         else:
             data['banner_icon'] = None
 
         # large_banner_icon
         large_banner_icon = data.get('large_banner_icon', None)
         if large_banner_icon:
-            data['large_banner_icon'] = image_model_access.get_image_by_id(
-                data['large_banner_icon']['id'])
+            if 'id' not in large_banner_icon:
+                raise serializers.ValidationError('Image(large_banner_icon) requires a %s' % 'id')
+            if large_banner_icon.get('security_marking') is None:
+                large_banner_icon['security_marking'] = constants.DEFAULT_SECURITY_MARKING
         else:
             data['large_banner_icon'] = None
+
+        # Screenshot
+        screenshots = data.get('screenshots', None)
+        if screenshots is not None:
+            screenshots_out = []
+            image_require_fields = ['id']
+            for screenshot_set in screenshots:
+                if ('small_image' not in screenshot_set or
+                        'large_image' not in screenshot_set):
+                    raise serializers.ValidationError(
+                                        'Screenshot Set requires %s fields' % 'small_image, large_icon')
+                screenshot_small_image = screenshot_set.get('small_image')
+                screenshot_large_image = screenshot_set.get('large_image')
+
+                for field in image_require_fields:
+                    if field not in screenshot_small_image:
+                        raise serializers.ValidationError('Screenshot Small Image requires a %s' % field)
+
+                for field in image_require_fields:
+                    if field not in screenshot_large_image:
+                        raise serializers.ValidationError('Screenshot Large Image requires a %s' % field)
+
+                if not screenshot_small_image.get('security_marking'):
+                    screenshot_small_image['security_marking'] = constants.DEFAULT_SECURITY_MARKING
+
+                if not screenshot_large_image.get('security_marking'):
+                    screenshot_large_image['security_marking'] = constants.DEFAULT_SECURITY_MARKING
+
+                screenshots_out.append(screenshot_set)
+                data['screenshots'] = screenshots_out
+        else:
+            data['screenshots'] = None
 
         if 'contacts' in data:
             required_fields = ['email', 'name', 'contact_type']
@@ -325,10 +368,6 @@ class ListingSerializer(serializers.ModelSerializer):
         if 'doc_urls' in data:
             pass
 
-        # screenshots will be created in create()
-        if 'screenshots' in data:
-            pass
-
         logger.debug('leaving ListingSerializer.validate')
         return data
 
@@ -345,6 +384,7 @@ class ListingSerializer(serializers.ModelSerializer):
         return value
 
     def create(self, validated_data):
+        logger.debug('inside ListingSerializer.create')
         title = validated_data['title']
         user = generic_model_access.get_profile(
             self.context['request'].user.username)
@@ -352,7 +392,8 @@ class ListingSerializer(serializers.ModelSerializer):
             user.user.username))
 
         # assign a default security_marking level if none is provided
-        if not validated_data['security_marking']:
+
+        if not validated_data.get('security_marking', None):
             validated_data['security_marking'] = constants.DEFAULT_SECURITY_MARKING
 
         # TODO required_listings
@@ -367,15 +408,28 @@ class ListingSerializer(serializers.ModelSerializer):
             requirements=validated_data['requirements'],
             security_marking=validated_data['security_marking'],
             listing_type=validated_data['listing_type'],
-            small_icon=validated_data['small_icon'],
-            large_icon=validated_data['large_icon'],
-            banner_icon=validated_data['banner_icon'],
-            large_banner_icon=validated_data['large_banner_icon'],
             is_private=validated_data['is_private'])
+
+        image_keys = ['small_icon', 'large_icon', 'banner_icon', 'large_banner_icon']
+        for image_key in image_keys:
+            if validated_data[image_key]:
+                new_value_image = image_model_access.get_image_by_id(validated_data[image_key].get('id'))
+
+                if new_value_image is None:
+                    raise errors.InvalidInput('Error while saving, can not find image by id')
+
+                if image_key == 'small_icon':
+                    listing.small_icon = new_value_image
+                elif image_key == 'large_icon':
+                    listing.large_icon = new_value_image
+                elif image_key == 'banner_icon':
+                    listing.banner_icon = new_value_image
+                elif image_key == 'large_banner_icon':
+                    listing.large_banner_icon = new_value_image
 
         listing.save()
 
-        if 'contacts' in validated_data:
+        if validated_data.get('contacts', None) is not None:
             for contact in validated_data['contacts']:
                 new_contact, created = models.Contact.objects.get_or_create(name=contact['name'],
                     email=contact['email'],
@@ -386,7 +440,7 @@ class ListingSerializer(serializers.ModelSerializer):
                 new_contact.save()
                 listing.contacts.add(new_contact)
 
-        if 'owners' in validated_data:
+        if validated_data.get('owners', None) is not None:
             if validated_data['owners']:
                 for owner in validated_data['owners']:
                     listing.owners.add(owner)
@@ -394,29 +448,29 @@ class ListingSerializer(serializers.ModelSerializer):
                 # if no owners are specified, just add the current user
                 listing.owners.add(user)
 
-        if 'categories' in validated_data:
+        if validated_data.get('categories', None) is not None:
             for category in validated_data['categories']:
                 listing.categories.add(category)
 
         # tags will be automatically created if necessary
-        if 'tags' in validated_data:
+        if validated_data.get('tags', None) is not None:
             for tag in validated_data['tags']:
                 obj, created = models.Tag.objects.get_or_create(
                     name=tag['name'])
                 listing.tags.add(obj)
 
-        if 'intents' in validated_data:
+        if validated_data.get('intents', None) is not None:
             for intent in validated_data['intents']:
                 listing.intents.add(intent)
 
         # doc_urls will be automatically created
-        if 'doc_urls' in validated_data:
+        if validated_data.get('doc_urls', None) is not None:
             for d in validated_data['doc_urls']:
                 doc_url = models.DocUrl(name=d['name'], url=d['url'], listing=listing)
                 doc_url.save()
 
         # screenshots will be automatically created
-        if 'screenshots' in validated_data:
+        if validated_data.get('screenshots', None) is not None:
             for s in validated_data['screenshots']:
                 screenshot = models.Screenshot(
                     small_image=image_model_access.get_image_by_id(s['small_image']['id']),
@@ -430,6 +484,7 @@ class ListingSerializer(serializers.ModelSerializer):
         return listing
 
     def update(self, instance, validated_data):
+        logger.debug('inside ListingSerializer.update')
         user = generic_model_access.get_profile(
             self.context['request'].user.username)
 
@@ -504,58 +559,39 @@ class ListingSerializer(serializers.ModelSerializer):
                     'new_value': new_value, 'field_name': 'listing_type'})
             instance.listing_type = validated_data['listing_type']
 
-        if instance.small_icon != validated_data['small_icon']:
-            if instance.small_icon:
-                old_value = instance.small_icon.id
-            else:
-                old_value = None
-            if validated_data['small_icon']:
-                new_value = validated_data['small_icon'].id
-            else:
-                new_value = None
+        image_keys = ['small_icon', 'large_icon', 'banner_icon', 'large_banner_icon']
+        for image_key in image_keys:
+            if validated_data[image_key]:
+                old_value = model_access.image_to_string(getattr(instance, image_key), True, 'old_value(%s)'%image_key)
+                new_value = model_access.image_to_string(validated_data[image_key], False, 'new_value(%s)'%image_key)
 
-            change_details.append({'old_value': old_value,
-                    'new_value': new_value, 'field_name': 'small_icon'})
-            instance.small_icon = validated_data['small_icon']
+                if old_value != new_value:
+                    new_value_image = None
 
-        if instance.large_icon != validated_data['large_icon']:
-            if instance.large_icon:
-                old_value = instance.large_icon.id
-            else:
-                old_value = None
-            if validated_data['large_icon']:
-                new_value = validated_data['large_icon'].id
-            else:
-                new_value = None
-            change_details.append({'old_value': old_value,
-                    'new_value': new_value, 'field_name': 'large_icon'})
-            instance.large_icon = validated_data['large_icon']
+                    old_image_id = None
+                    if old_value is not None:
+                        old_image_id = getattr(instance, image_key).id
+                    if validated_data[image_key].get('id') == old_image_id:
+                        new_value_image = getattr(instance, image_key)
+                        new_value_image.security_marking = validated_data[image_key].get('security_marking')
+                        new_value_image.save()
+                    else:
+                        new_value_image = image_model_access.get_image_by_id(validated_data[image_key].get('id'))
 
-        if instance.banner_icon != validated_data['banner_icon']:
-            if instance.banner_icon:
-                old_value = instance.banner_icon.id
-            else:
-                old_value = None
-            if validated_data['banner_icon']:
-                new_value = validated_data['banner_icon'].id
-            else:
-                new_value = None
-            change_details.append({'old_value': old_value,
-                    'new_value': new_value, 'field_name': 'banner_icon'})
-            instance.banner_icon = validated_data['banner_icon']
+                        if new_value_image is None:
+                            raise errors.InvalidInput('Error while saving, can not find image by id')
 
-        if instance.large_banner_icon != validated_data['large_banner_icon']:
-            if instance.large_banner_icon:
-                old_value = instance.large_banner_icon.id
-            else:
-                old_value = None
-            if validated_data['large_banner_icon']:
-                new_value = validated_data['large_banner_icon'].id
-            else:
-                new_value = None
-            change_details.append({'old_value': old_value,
-                    'new_value': new_value, 'field_name': 'large_banner_icon'})
-            instance.large_banner_icon = validated_data['large_banner_icon']
+                    change_details.append({'old_value': old_value,
+                            'new_value': new_value, 'field_name': image_key})
+
+                    if image_key == 'small_icon':
+                        instance.small_icon = new_value_image
+                    elif image_key == 'large_icon':
+                        instance.large_icon = new_value_image
+                    elif image_key == 'banner_icon':
+                        instance.banner_icon = new_value_image
+                    elif image_key == 'large_banner_icon':
+                        instance.large_banner_icon = new_value_image
 
         if 'contacts' in validated_data:
             old_contact_instances = instance.contacts.all()
@@ -668,8 +704,7 @@ class ListingSerializer(serializers.ModelSerializer):
         if 'screenshots' in validated_data:
             old_screenshot_instances = model_access.get_screenshots_for_listing(instance)
             old_screenshots = model_access.screenshots_to_string(old_screenshot_instances, True)
-            new_screenshots = model_access.screenshots_to_string(
-                validated_data['screenshots'])
+            new_screenshots = model_access.screenshots_to_string(validated_data['screenshots'])
             if old_screenshots != new_screenshots:
                 change_details.append({'old_value': old_screenshots,
                     'new_value': new_screenshots, 'field_name': 'screenshots'})
@@ -677,12 +712,21 @@ class ListingSerializer(serializers.ModelSerializer):
             new_screenshot_instances = []
 
             for s in validated_data['screenshots']:
+
+                new_small_image = image_model_access.get_image_by_id(s['small_image']['id'])
+                new_small_image.security_marking = s['small_image']['security_marking']
+                new_small_image.save()
+
+                new_large_image = image_model_access.get_image_by_id(s['large_image']['id'])
+                new_large_image.security_marking = s['large_image']['security_marking']
+                new_large_image.save()
+
                 obj, created = models.Screenshot.objects.get_or_create(
-                    small_image=image_model_access.get_image_by_id(
-                        s['small_image']['id']),
-                    large_image=image_model_access.get_image_by_id(
-                        s['large_image']['id']),
+                    small_image=new_small_image,
+                    large_image=new_large_image,
                     listing=instance)
+
+
                 new_screenshot_instances.append(obj)
 
             for i in old_screenshot_instances:

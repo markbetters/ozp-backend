@@ -104,7 +104,6 @@ class ReviewViewSet(viewsets.ModelViewSet):
                 listing, rate, text)
             return Response(resp, status=status.HTTP_201_CREATED)
         except Exception as e:
-            logger.error('Exception: {}'.format(e.message))
             raise e
             return Response('Bad request to create new review',
                 status=status.HTTP_400_BAD_REQUEST)
@@ -243,7 +242,7 @@ class ListingRejectionViewSet(viewsets.ModelViewSet):
             return Response(data={"listing": {"id": listing.id}},
                 status=status.HTTP_201_CREATED)
         except Exception as e:
-            logger.error('Exception: {}'.format(e.message))
+            logger.error('Exception: {}'.format(e))
             return Response("Error rejecting listing",
                     status=status.HTTP_400_BAD_REQUEST)
 
@@ -391,11 +390,11 @@ class ListingViewSet(viewsets.ModelViewSet):
                     status=status.HTTP_400_BAD_REQUEST)
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-
         except errors.PermissionDenied:
             return Response({'detail':'Permission Denied'}, status=status.HTTP_403_FORBIDDEN)
+        except errors.InvalidInput as err:
+                return Response({'detail': '{}'.format(err)}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
-            logger.error('Exception: {}'.format(e.message))
             raise e
 
     def retrieve(self, request, pk=None):
@@ -519,12 +518,12 @@ class ListingViewSet(viewsets.ModelViewSet):
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
             serializer.save()
-
             return Response(serializer.data, status=status.HTTP_200_OK)
         except errors.PermissionDenied:
             return Response({'detail':'Permission Denied'}, status=status.HTTP_403_FORBIDDEN)
+        except errors.InvalidInput as err:
+            return Response({'detail': '{}'.format(err)}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
-            logger.error('Exception: {}'.format(e.message))
             raise e
 
     def partial_update(self, request, pk=None):

@@ -10,6 +10,7 @@ import ozpcenter.models as models
 import ozpcenter.errors as errors
 import ozpcenter.utils as utils
 import ozpcenter.model_access as generic_model_access
+import ozpcenter.constants as constants
 
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center')
@@ -568,10 +569,32 @@ def screenshots_to_string(screenshots, queryset=False):
         "[(<small_image_id>, <large_image_id>), ...]"
     """
     if queryset:
-        new_screenshots = [(i.small_image.id, i.large_image.id) for i in screenshots]
+        new_screenshots = [(i.small_image.id,
+                            i.small_image.security_marking,
+                            i.large_image.id,
+                            i.large_image.security_marking) for i in screenshots]
     else:
-        new_screenshots = [(i['small_image']['id'], i['large_image']['id']) for i in screenshots]
+        new_screenshots = [(i['small_image']['id'],
+                            i['small_image'].get('security_marking', constants.DEFAULT_SECURITY_MARKING),
+                            i['large_image']['id'],
+                            i['large_image'].get('security_marking', constants.DEFAULT_SECURITY_MARKING)) for i in screenshots]
     return str(sorted(new_screenshots))
+
+def image_to_string(image, queryset=False, extra_str=None):
+    """
+    Args:
+
+    Returns:
+
+    """
+    if image is None:
+        return None
+
+    if queryset:
+        image_str = '%s.%s' % (image.id, image.security_marking)
+    else:
+        image_str = '%s.%s' % (image.get('id'), image.get('security_marking', constants.DEFAULT_SECURITY_MARKING))
+    return image_str
 
 
 def contacts_to_string(contacts, queryset=False):
