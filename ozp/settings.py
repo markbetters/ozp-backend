@@ -118,7 +118,7 @@ LOGGING = {
     },
     'formatters':{
     'json':{
-        '()': 'json_log_formatter.JSONFormatter',}
+        '()': 'ozp.logging_formatter.CustomisedJSONFormatter',}
     },
     'loggers': {
         'django': {
@@ -250,4 +250,3 @@ OZP = {
 # Set to empty string if no default agency exists
 # If a default agency exists, set it to the agency's short name
 DEFAULT_AGENCY = ''
-

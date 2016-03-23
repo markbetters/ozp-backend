@@ -75,7 +75,6 @@ class ImageViewSet(viewsets.ModelViewSet):
         except errors.PermissionDenied:
             return Response({'detail':'Permission Denied'}, status=status.HTTP_403_FORBIDDEN)
         except Exception as e:
-            logger.error('Exception: {}'.format(e.message))
             raise e
 
     def list(self, request):
