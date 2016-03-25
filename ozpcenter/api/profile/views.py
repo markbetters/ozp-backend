@@ -21,6 +21,7 @@ from rest_framework.response import Response
 
 import ozpcenter.errors as errors
 import ozpcenter.api.profile.serializers as serializers
+import ozpcenter.api.listing.serializers as listing_serializers
 import ozpcenter.models as models
 import ozpcenter.permissions as permissions
 import ozpcenter.api.profile.model_access as model_access
@@ -71,6 +72,49 @@ class ProfileViewSet(viewsets.ModelViewSet):
         except Exception as e:
             raise e
 
+class ProfileListingViewSet(viewsets.ModelViewSet):
+    """
+    Get all listings owned by this user
+    """
+    permission_classes = (permissions.IsUser,)
+    serializer_class = listing_serializers.ListingSerializer
+
+    def get_queryset(self, profile_pk=None, listing_pk=None):
+        if listing_pk:
+            queryset = model_access.get_listing_by_id_for_profile_by_id(profile_pk, listing_pk)
+        else:
+            queryset = model_access.get_all_listings_for_profile_by_id(profile_pk)
+        return queryset
+
+    def list(self, request, profile_pk=None):
+        queryset = self.get_queryset(profile_pk)
+        if queryset:
+            serializer = listing_serializers.ListingSerializer(queryset,
+                context={'request': request},many=True)
+            return Response(serializer.data)
+        else:
+            return Response({'detail':'Not Found'}, status=status.HTTP_404_NOT_FOUND)
+
+    def retrieve(self, request, profile_pk=None):
+        queryset = self.get_queryset(profile_pk, pk)
+        if queryset:
+            serializer = listing_serializers.ListingSerializer(queryset,
+                context={'request': request})
+            return Response(serializer.data)
+        else:
+            return Response({'detail':'Not Found'}, status=status.HTTP_404_NOT_FOUND)
+
+    def create(self, request, profile_pk=None):
+        return Response({'detail':'HTTP Verb(POST) Not Supported'}, status=status.HTTP_501_NOT_IMPLEMENTED)
+
+    def update(self, request, pk=None, profile_pk=None):
+        return Response({'detail':'HTTP Verb(PUT) Not Supported'}, status=status.HTTP_501_NOT_IMPLEMENTED)
+
+    def partial_update(self, request, pk=None, profile_pk=None):
+        return Response({'detail':'HTTP Verb(PATCH) Not Supported'}, status=status.HTTP_501_NOT_IMPLEMENTED)
+
+    def destroy(self, request,  pk=None, profile_pk=None):
+        return Response({'detail':'HTTP Verb(DELETE) Not Supported'}, status=status.HTTP_501_NOT_IMPLEMENTED)
 
 class UserViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsOrgSteward,)

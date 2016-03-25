@@ -528,7 +528,7 @@ class ListingViewSet(viewsets.ModelViewSet):
 
     def partial_update(self, request, pk=None):
         """
-        TODO: probobly don't use this (PATCH)
+        TODO: Probably don't use this (PATCH)
         """
         pass
 
