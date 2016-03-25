@@ -2,6 +2,7 @@
 Tests for Profile endpoints
 """
 import unittest
+import logging
 
 from django.db import transaction
 from django.db.utils import IntegrityError
@@ -16,6 +17,7 @@ import ozpcenter.api.contact_type.views as views
 from ozpcenter import models as models
 from ozpcenter import model_access as generic_model_access
 
+logger = logging.getLogger('ozp-center')
 
 class ProfileApiTest(APITestCase):
 
@@ -42,6 +44,9 @@ class ProfileApiTest(APITestCase):
         self.assertTrue('bigbrother' in usernames)
         self.assertTrue('julia' not in usernames)
         self.assertTrue('jones' not in usernames)
+        logger.debug(response.data)
+        displaynames = [i['display_name'] for i in response.data]
+        self.assertEqual(displaynames, sorted(displaynames))
 
     def test_get_apps_mall_stewards_for_org_steward_level(self):
         user = generic_model_access.get_profile('wsmith').user
@@ -53,6 +58,8 @@ class ProfileApiTest(APITestCase):
         self.assertTrue('bigbrother' in usernames)
         self.assertTrue('julia' not in usernames)
         self.assertTrue('jones' not in usernames)
+        displaynames = [i['display_name'] for i in response.data]
+        self.assertEqual(displaynames, sorted(displaynames))
 
     def test_get_apps_mall_stewards_for_user_level(self):
         user = generic_model_access.get_profile('jones').user
@@ -64,6 +71,8 @@ class ProfileApiTest(APITestCase):
         self.assertTrue('bigbrother' in usernames)
         self.assertTrue('julia' not in usernames)
         self.assertTrue('jones' not in usernames)
+        displaynames = [i['display_name'] for i in response.data]
+        self.assertEqual(displaynames, sorted(displaynames))
 
     def test_get_org_stewards_for_apps_mall_steward_level(self):
         user = generic_model_access.get_profile('bigbrother').user
@@ -76,6 +85,8 @@ class ProfileApiTest(APITestCase):
         self.assertTrue('julia' in usernames)
         self.assertTrue('jones' not in usernames)
         self.assertTrue('bigbrother' not in usernames)
+        displaynames = [i['display_name'] for i in response.data]
+        self.assertEqual(displaynames, sorted(displaynames))
 
     def test_get_org_stewards_for_org_steward_level(self):
         user = generic_model_access.get_profile('wsmith').user
@@ -88,6 +99,8 @@ class ProfileApiTest(APITestCase):
         self.assertTrue('julia' in usernames)
         self.assertTrue('jones' not in usernames)
         self.assertTrue('bigbrother' not in usernames)
+        displaynames = [i['display_name'] for i in response.data]
+        self.assertEqual(displaynames, sorted(displaynames))
 
     def test_get_org_stewards_for_user_level(self):
         user = generic_model_access.get_profile('jones').user
@@ -100,6 +113,8 @@ class ProfileApiTest(APITestCase):
         self.assertTrue('julia' in usernames)
         self.assertTrue('jones' not in usernames)
         self.assertTrue('bigbrother' not in usernames)
+        displaynames = [i['display_name'] for i in response.data]
+        self.assertEqual(displaynames, sorted(displaynames))
 
     def test_get_users_for_apps_mall_steward_level(self):
         user = generic_model_access.get_profile('bigbrother').user
@@ -113,6 +128,8 @@ class ProfileApiTest(APITestCase):
         self.assertTrue('julia' not in usernames)
         self.assertTrue('jones' in usernames)
         self.assertTrue('bigbrother' not in usernames)
+        displaynames = [i['display_name'] for i in response.data]
+        self.assertEqual(displaynames, sorted(displaynames))
 
     def test_get_users_for_org_steward_level(self):
         user = generic_model_access.get_profile('wsmith').user
@@ -126,6 +143,8 @@ class ProfileApiTest(APITestCase):
         self.assertTrue('julia' not in usernames)
         self.assertTrue('jones' in usernames)
         self.assertTrue('bigbrother' not in usernames)
+        displaynames = [i['display_name'] for i in response.data]
+        self.assertEqual(displaynames, sorted(displaynames))
 
     def test_get_users_for_user_level(self):
         user = generic_model_access.get_profile('jones').user
@@ -139,6 +158,8 @@ class ProfileApiTest(APITestCase):
         self.assertTrue('julia' not in usernames)
         self.assertTrue('jones' in usernames)
         self.assertTrue('bigbrother' not in usernames)
+        displaynames = [i['display_name'] for i in response.data]
+        self.assertEqual(displaynames, sorted(displaynames))
 
     '''
     Testing /api/self/profile endpoint
