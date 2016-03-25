@@ -17,7 +17,6 @@ import ozpcenter.api.contact_type.views as views
 from ozpcenter import models as models
 from ozpcenter import model_access as generic_model_access
 
-logger = logging.getLogger('ozp-center')
 
 class ProfileApiTest(APITestCase):
 
@@ -44,7 +43,6 @@ class ProfileApiTest(APITestCase):
         self.assertTrue('bigbrother' in usernames)
         self.assertTrue('julia' not in usernames)
         self.assertTrue('jones' not in usernames)
-        logger.debug(response.data)
         displaynames = [i['display_name'] for i in response.data]
         self.assertEqual(displaynames, sorted(displaynames))
 
