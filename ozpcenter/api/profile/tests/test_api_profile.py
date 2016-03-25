@@ -2,7 +2,6 @@
 Tests for Profile endpoints
 """
 import unittest
-import logging
 
 from django.db import transaction
 from django.db.utils import IntegrityError
