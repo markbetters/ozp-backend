@@ -3,8 +3,6 @@ Views
 
 TODO: GET api/profile?role=ORG_STEWARD for view (shown on create/edit listing page)
 
-
-
 TODO: POST api/profile/self/library - add listing to library (bookmark)
   params: listing id
 
@@ -74,20 +72,24 @@ class ProfileViewSet(viewsets.ModelViewSet):
 
 class ProfileListingViewSet(viewsets.ModelViewSet):
     """
-    Get all listings owned by this user
+    Get all listings owned by a specific user
     """
     permission_classes = (permissions.IsUser,)
     serializer_class = listing_serializers.ListingSerializer
 
-    def get_queryset(self, profile_pk=None, listing_pk=None):
+    def get_queryset(self, current_request_username, profile_pk=None, listing_pk=None):
         if listing_pk:
-            queryset = model_access.get_listing_by_id_for_profile_by_id(profile_pk, listing_pk)
+            queryset = model_access.get_listing_by_id_for_profile_by_id(current_request_username, profile_pk, listing_pk)
         else:
-            queryset = model_access.get_all_listings_for_profile_by_id(profile_pk)
+            queryset = model_access.get_all_listings_for_profile_by_id(current_request_username, profile_pk)
         return queryset
 
     def list(self, request, profile_pk=None):
-        queryset = self.get_queryset(profile_pk)
+        """
+        Retrieves all listings for a specific profile
+        """
+        current_request_username = request.user.username
+        queryset = self.get_queryset(current_request_username, profile_pk)
         if queryset:
             serializer = listing_serializers.ListingSerializer(queryset,
                 context={'request': request},many=True)
@@ -95,8 +97,12 @@ class ProfileListingViewSet(viewsets.ModelViewSet):
         else:
             return Response({'detail':'Not Found'}, status=status.HTTP_404_NOT_FOUND)
 
-    def retrieve(self, request, profile_pk=None):
-        queryset = self.get_queryset(profile_pk, pk)
+    def retrieve(self, request, pk, profile_pk=None):
+        """
+        Retrieves a specific listing for a specific profile
+        """
+        current_request_username = request.user.username
+        queryset = self.get_queryset(current_request_username, profile_pk, pk)
         if queryset:
             serializer = listing_serializers.ListingSerializer(queryset,
                 context={'request': request})
@@ -105,15 +111,27 @@ class ProfileListingViewSet(viewsets.ModelViewSet):
             return Response({'detail':'Not Found'}, status=status.HTTP_404_NOT_FOUND)
 
     def create(self, request, profile_pk=None):
+        """
+        This method is not supported
+        """
         return Response({'detail':'HTTP Verb(POST) Not Supported'}, status=status.HTTP_501_NOT_IMPLEMENTED)
 
     def update(self, request, pk=None, profile_pk=None):
+        """
+        This method is not supported
+        """
         return Response({'detail':'HTTP Verb(PUT) Not Supported'}, status=status.HTTP_501_NOT_IMPLEMENTED)
 
     def partial_update(self, request, pk=None, profile_pk=None):
+        """
+        This method is not supported
+        """
         return Response({'detail':'HTTP Verb(PATCH) Not Supported'}, status=status.HTTP_501_NOT_IMPLEMENTED)
 
     def destroy(self, request,  pk=None, profile_pk=None):
+        """
+        This method is not supported
+        """
         return Response({'detail':'HTTP Verb(DELETE) Not Supported'}, status=status.HTTP_501_NOT_IMPLEMENTED)
 
 class UserViewSet(viewsets.ModelViewSet):

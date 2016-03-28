@@ -697,6 +697,62 @@ class AccessControlListingManager(models.Manager):
         objects = objects.exclude(title__in=titles_to_exclude)
         return objects
 
+    def for_user_with_user_point_of_view(self, current_request_username, target_username):
+        # get all listings
+        objects = super(AccessControlListingManager, self).get_queryset()
+
+        # filter out listings by target current_request_username's access level
+        request_profile = Profile.objects.get(user__username=current_request_username)
+        if request_profile.highest_role() == 'APPS_MALL_STEWARD':
+            exclude_orgs = []
+        elif request_profile.highest_role() == 'ORG_STEWARD':
+            user_orgs = request_profile.stewarded_organizations.all()
+            user_orgs = [i.title for i in user_orgs]
+            exclude_orgs = Agency.objects.exclude(title__in=user_orgs)
+        else:
+            user_orgs = request_profile.organizations.all()
+            user_orgs = [i.title for i in user_orgs]
+            exclude_orgs = Agency.objects.exclude(title__in=user_orgs)
+
+        objects = objects.exclude(is_private=True,
+                                  agency__in=exclude_orgs)
+
+        # filter out listings by target current_request_username's access level
+        titles_to_exclude = []
+        for i in objects:
+            if not i.security_marking:
+                logger.error('Listing %s has no security_marking' % i.title)
+            if not access_control.has_access(request_profile.access_control, i.security_marking):
+                titles_to_exclude.append(i.title)
+        objects = objects.exclude(title__in=titles_to_exclude)
+
+        # filter out private listings and agencies for target username
+        target_profile = Profile.objects.get(user__username=target_username)
+        if target_profile.highest_role() == 'APPS_MALL_STEWARD':
+            exclude_orgs = []
+        elif target_profile.highest_role() == 'ORG_STEWARD':
+            user_orgs = target_profile.stewarded_organizations.all()
+            user_orgs = [i.title for i in user_orgs]
+            exclude_orgs = Agency.objects.exclude(title__in=user_orgs)
+        else:
+            user_orgs = target_profile.organizations.all()
+            user_orgs = [i.title for i in user_orgs]
+            exclude_orgs = Agency.objects.exclude(title__in=user_orgs)
+
+        objects = objects.exclude(is_private=True,
+                                  agency__in=exclude_orgs)
+
+        # filter out listings by target target_profile's access level
+        titles_to_exclude = []
+        for i in objects:
+            if not i.security_marking:
+                logger.error('Listing %s has no security_marking' % i.title)
+            if not access_control.has_access(target_profile.access_control, i.security_marking):
+                titles_to_exclude.append(i.title)
+        objects = objects.exclude(title__in=titles_to_exclude)
+
+        return objects
+
 
 class Listing(models.Model):
     """

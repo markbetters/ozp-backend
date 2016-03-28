@@ -27,26 +27,32 @@ def get_profile_by_id(profile_id):
         return None
 
 
-def get_all_listings_for_profile_by_id(profile_id):
+def get_all_listings_for_profile_by_id(current_request_username, profile_id):
     try:
-        profile_instance = models.Profile.objects.get(id=profile_id).user
+        if profile_id == 'self':
+            profile_instance = models.Profile.objects.get(user__username=current_request_username).user
+        else:
+            profile_instance = models.Profile.objects.get(id=profile_id).user
     except models.Profile.DoesNotExist:
         return None
 
     try:
-        return models.Listing.objects.for_user(profile_instance.username).all()
+        return models.Listing.objects.for_user_with_user_point_of_view(current_request_username, profile_instance.username).all()  #TODO Change METHOD
     except models.Listing.DoesNotExist:
         return None
 
 
-def get_listing_by_id_for_profile_by_id(profile_id, listing_id):
+def get_listing_by_id_for_profile_by_id(current_request_username, profile_id, listing_id):
     try:
-        profile_instance = models.Profile.objects.get(id=profile_id).user
+        if profile_id == 'self':
+            profile_instance = models.Profile.objects.get(user__username=current_request_username).user
+        else:
+            profile_instance = models.Profile.objects.get(id=profile_id).user
     except models.Listing.DoesNotExist:
         return None
 
     try:
-        return models.Listing.objects.for_user(profile_instance.username).get(id=listing_id)
+        return models.Listing.objects.for_user_with_user_point_of_view(current_request_username, profile_instance.username).get(id=listing_id)   #TODO Change METHOD
     except models.Listing.DoesNotExist:
         return None
 
