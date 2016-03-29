@@ -177,6 +177,8 @@ class ProfileApiTest(APITestCase):
                 self.assertEquals('bigbrother' in usernames, bool(combo[0]))
                 self.assertEquals('julia' in usernames, bool(combo[1]))
                 self.assertEquals('jones' in usernames, bool(combo[2]))
+                displaynames = [i['display_name'] for i in response.data]
+                self.assertEqual(displaynames, sorted(displaynames))
 
     def test_get_update_self_for_all_access_control_levels(self):
         """

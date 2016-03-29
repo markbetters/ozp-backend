@@ -17,7 +17,7 @@ def get_self(username):
 
 
 def get_all_profiles():
-    return models.Profile.objects.all()
+    return models.Profile.objects.all().order_by('display_name')
 
 
 def get_profile_by_id(profile_id):
@@ -59,7 +59,7 @@ def get_listing_by_id_for_profile_by_id(current_request_username, profile_id, li
 
 def get_profiles_by_role(role):
     return models.Profile.objects.filter(
-        user__groups__name__exact=role)
+        user__groups__name__exact=role).order_by('display_name')
 
 
 def filter_queryset_by_username_starts_with(queryset, starts_with):
