@@ -21,6 +21,7 @@ import ozpcenter.errors as errors
 import ozpcenter.api.profile.serializers as serializers
 import ozpcenter.api.listing.serializers as listing_serializers
 import ozpcenter.models as models
+import ozpcenter.pagination as pagination
 import ozpcenter.permissions as permissions
 import ozpcenter.api.profile.model_access as model_access
 
@@ -79,27 +80,42 @@ class ProfileListingViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self, current_request_username, profile_pk=None, listing_pk=None):
         if listing_pk:
-            queryset = model_access.get_listing_by_id_for_profile_by_id(current_request_username, profile_pk, listing_pk)
+            queryset = model_access.get_all_listings_for_profile_by_id(current_request_username, profile_pk, listing_pk)
         else:
             queryset = model_access.get_all_listings_for_profile_by_id(current_request_username, profile_pk)
         return queryset
 
     def list(self, request, profile_pk=None):
         """
-        Retrieves all listings for a specific profile
+        Retrieves all listings for a specific profile that they own
         """
-        current_request_username = request.user.username
-        queryset = self.get_queryset(current_request_username, profile_pk)
-        if queryset:
-            serializer = listing_serializers.ListingSerializer(queryset,
-                context={'request': request},many=True)
-            return Response(serializer.data)
-        else:
-            return Response({'detail':'Not Found'}, status=status.HTTP_404_NOT_FOUND)
+        try:
+            current_request_username = request.user.username
+            queryset = self.get_queryset(current_request_username, profile_pk)
+
+            if queryset:
+                page = self.paginate_queryset(queryset)
+
+                if page is not None:
+                    serializer = listing_serializers.ListingSerializer(page,
+                        context={'request': request}, many=True)
+                    response = self.get_paginated_response(serializer.data)
+                    return response
+
+                serializer = listing_serializers.ListingSerializer(queryset,
+                    context={'request': request},many=True)
+                return Response(serializer.data)
+            else:
+                return Response({'detail':'Not Found'}, status=status.HTTP_404_NOT_FOUND)
+
+        except errors.PermissionDenied:
+            return Response({'detail':'Permission Denied'}, status=status.HTTP_403_FORBIDDEN)
+        except Exception as e:
+            raise e
 
     def retrieve(self, request, pk, profile_pk=None):
         """
-        Retrieves a specific listing for a specific profile
+        Retrieves a specific listing for a specific profile that they own
         """
         current_request_username = request.user.username
         queryset = self.get_queryset(current_request_username, profile_pk, pk)

@@ -60,8 +60,7 @@ class ProfileApiTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         ids = [i['id'] for i in response.data]
         self.assertTrue(1 in ids)
-        self.assertEquals(len(ids), 110)
-
+        self.assertEquals(len(ids), 90)
 
     def test_one_listing_for_self_profile(self):
         """
@@ -75,66 +74,63 @@ class ProfileApiTest(APITestCase):
         data = response.data
         self.assertEquals(data['id'], 1)
 
-    def test_all_listing_for_minitrue_profile_from_minitrue_profile(self):
+    def test_all_listing_for_minitrue_profile_from_multi_org_profile(self):
         """
         Testing GET /api/profile/1/listing/ endpoint
 
         Getting
             wsmith (minitrue, stewarded_orgs: minitrue) - Winston Smith - 1
         From
-            jones (minitrue) - Jones - 7
+            charrington (minipax, miniluv, minitrue) - Charrington - 11
         """
-        user = generic_model_access.get_profile('jones').user
+        user = generic_model_access.get_profile('charrington').user
         self.client.force_authenticate(user=user)
         url = '/api/profile/1/listing/'
         response = self.client.get(url, format='json')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
         data = response.data
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         ids = [i['id'] for i in response.data]
-        self.assertTrue(1 in ids)
-        self.assertEquals(len(ids), 110)
+        self.assertTrue(110 in ids)
+        self.assertEquals(len(ids), 90)
 
-    def test_all_listing_for_miniplenty_profile_from_minitrue_profile(self):
+    def test_all_listing_for_app_profile_from_multi_org_profile(self):
         """
         Testing GET /api/profile/1/listing/ endpoint
 
         Getting
-            rutherford (miniplenty) - Rutherford - 8
+            wsmith (minitrue, stewarded_orgs: minitrue) - Winston Smith - 1
+        From
+            bigbrother (minipax) - Big Brother - 4
+        """
+        user = generic_model_access.get_profile('bigbrother').user
+        self.client.force_authenticate(user=user)
+        url = '/api/profile/1/listing/'
+        response = self.client.get(url, format='json')
+        data = response.data
+        ##print(data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        ids = [i['id'] for i in response.data]
+        self.assertTrue(110 in ids)
+        self.assertEquals(len(ids), 90)
+
+    def test_all_listing_for_minitrue_profile_from_minitrue_profile(self):
+        """
+        Testing GET /api/profile/2/listing/ endpoint
+
+        Getting
+            julia (minitrue, stewarded_orgs: minitrue, miniluv) - Julia Dixon - 2
         From
             jones (minitrue) - Jones - 7
         """
-        pass
         user = generic_model_access.get_profile('jones').user
         self.client.force_authenticate(user=user)
-        url = '/api/profile/8/listing/'
+        url = '/api/profile/2/listing/'
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         data = response.data
         ids = [i['id'] for i in response.data]
-        self.assertTrue(1 in ids)
-        self.assertEquals(len(ids), 100)
-
-    def test_all_listing_for_miniplenty_profile_from_minitrue_app_mall_steward_profile(self):
-        """
-        Testing GET /api/profile/1/listing/ endpoint
-
-        Getting
-            rutherford (miniplenty) - Rutherford - 8
-        From
-            bigbrother2 (minitrue) - Big Brother2 - 5
-        """
-        pass
-        user = generic_model_access.get_profile('bigbrother2').user
-        self.client.force_authenticate(user=user)
-        url = '/api/profile/8/listing/'
-        response = self.client.get(url, format='json')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        data = response.data
-        ids = [i['id'] for i in response.data]
-        self.assertTrue(1 in ids)
-        self.assertEquals(len(ids), 100)
-
-    # TODO: TEST for testing ACCESS CONTROL more strictly
+        self.assertTrue(59 in ids)
+        self.assertEquals(len(ids), 10)
 
     def test_username_starts_with(self):
         """
