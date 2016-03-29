@@ -496,6 +496,7 @@ class Profile(models.Model):
             are used, and so password is set to TODO: TBD
 
     TODO: Auditing for create, update, delete
+        https://github.com/ozone-development/ozp-backend/issues/61
     """
     # application_library = db.relationship('ApplicationLibraryEntry',
     #                                      backref='owner')
