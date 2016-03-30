@@ -496,6 +496,7 @@ class Profile(models.Model):
             are used, and so password is set to TODO: TBD
 
     TODO: Auditing for create, update, delete
+        https://github.com/ozone-development/ozp-backend/issues/61
     """
     # application_library = db.relationship('ApplicationLibraryEntry',
     #                                      backref='owner')
@@ -697,7 +698,6 @@ class AccessControlListingManager(models.Manager):
         objects = objects.exclude(title__in=titles_to_exclude)
         return objects
 
-
 class Listing(models.Model):
     """
     Listing
@@ -819,10 +819,10 @@ class Listing(models.Model):
     objects = AccessControlListingManager()
 
     def __repr__(self):
-        return self.unique_name
+        return '(%s-%s)'%(self.unique_name, [owner.user.username for owner in self.owners.all()])
 
     def __str__(self):
-        return self.unique_name
+        return '(%s-%s)'%(self.unique_name, [owner.user.username for owner in self.owners.all()])
 
 
 class AccessControlListingActivityManager(models.Manager):
