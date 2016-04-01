@@ -62,7 +62,7 @@ def filter_listings(username, filter_params):
     Too many variations to cache
     """
     objects = models.Listing.objects.for_user(username).filter(
-        approval_status=models.Listing.APPROVED)
+        approval_status=models.Listing.APPROVED).filter(is_enabled=True)
     if 'categories' in filter_params:
         # TODO: this is OR logic not AND
         objects = objects.filter(

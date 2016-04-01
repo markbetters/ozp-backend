@@ -75,6 +75,90 @@ class ListingApiTest(APITestCase):
         self.assertTrue('Air Mail' in titles)
         self.assertTrue(len(titles) > 7)
 
+    def test_search_is_enable(self):
+        user = generic_model_access.get_profile('wsmith').user
+        self.client.force_authenticate(user=user)
+        url = '/api/listings/search/?search=airmail&type=web application'
+        response = self.client.get(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        ids = [record.get('id') for record in response.data]
+        self.assertEqual(ids, [1, 12, 23, 34, 45, 56, 67, 78, 89, 100])
+
+        # Disable one app
+        user = generic_model_access.get_profile('bigbrother').user
+        self.client.force_authenticate(user=user)
+
+        url = '/api/listing/1/'
+        title = 'airmail_disabled'
+
+        data =   {
+                "title": title,
+                "description": "description of app",
+                "launch_url": "http://www.google.com/launch",
+                "version_name": "1.0.0",
+                "unique_name": "org.apps.julia-one",
+                "what_is_new": "nothing is new",
+                "description_short": "a shorter description",
+                "requirements": "None",
+                "is_private": "true",
+                "is_enable": "false",
+                "contacts": [
+                    {"email": "a@a.com", "secure_phone": "111-222-3434",
+                        "unsecure_phone": "444-555-4545", "name": "me",
+                        "contact_type": {"name": "Government"}
+                    },
+                    {"email": "b@b.com", "secure_phone": "222-222-3333",
+                        "unsecure_phone": "555-555-5555", "name": "you",
+                        "contact_type": {"name": "Military"}
+                    }
+                ],
+                "security_marking": "UNCLASSIFIED",
+                "listing_type": {"title": "web application"},
+                "small_icon": {"id": 1},
+                "large_icon": {"id": 2},
+                "banner_icon": {"id": 3},
+                "large_banner_icon": {"id": 4},
+                "categories": [
+                    {"title": "Business"},
+                    {"title": "Education"}
+                ],
+                "owners": [
+                    {"user": {"username": "wsmith"}},
+                    {"user": {"username": "julia"}}
+                ],
+                "tags": [
+                    {"name": "demo"},
+                    {"name": "map"}
+                ],
+                "intents": [
+                    {"action": "/application/json/view"},
+                    {"action": "/application/json/edit"}
+                ],
+                "doc_urls": [
+                    {"name": "wiki", "url": "http://www.google.com/wiki"},
+                    {"name": "guide", "url": "http://www.google.com/guide"}
+                ],
+                "screenshots": [
+                    {"small_image": {"id": 1}, "large_image": {"id": 2}},
+                    {"small_image": {"id": 3}, "large_image": {"id": 4}}
+                ]
+
+            }
+
+        response = self.client.put(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        #Check
+        user = generic_model_access.get_profile('wsmith').user
+        self.client.force_authenticate(user=user)
+        url = '/api/listings/search/?search=airmail&type=web application'
+        response = self.client.get(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        ids = [record.get('id') for record in response.data]
+        self.assertEqual(ids, [12, 23, 34, 45, 56, 67, 78, 89, 100])
+
     def test_search_agency(self):
         user = generic_model_access.get_profile('wsmith').user
         self.client.force_authenticate(user=user)
