@@ -46,7 +46,7 @@ def get_all_listings_for_profile_by_id(current_request_username, profile_id, lis
         titles_to_exclude = []
         for i in listings:
             if not i.security_marking:
-                logger.error('Listing %s has no security_marking' % i.title)
+                logger.debug('Listing %s has no security_marking' % i.title)
             if not access_control.has_access(current_profile_instance.access_control, i.security_marking):
                 titles_to_exclude.append(i.title)
         listings = listings.exclude(title__in=titles_to_exclude) #TODO: Base it on ids

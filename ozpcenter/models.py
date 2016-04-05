@@ -692,7 +692,7 @@ class AccessControlListingManager(models.Manager):
         titles_to_exclude = []
         for i in objects:
             if not i.security_marking:
-                logger.error('Listing %s has no security_marking' % i.title)
+                logger.debug('Listing %s has no security_marking' % i.title)
             if not access_control.has_access(user.access_control, i.security_marking):
                 titles_to_exclude.append(i.title)
         objects = objects.exclude(title__in=titles_to_exclude)
