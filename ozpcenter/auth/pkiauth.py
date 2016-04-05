@@ -65,12 +65,12 @@ class PkiAuthentication(authentication.BaseAuthentication):
             dn = _preprocess_dn(dn)
             issuer_dn = _preprocess_dn(issuer_dn)
 
-        logger.debug('Attempting to authenticate user with dn: %s and issuer dn: %s' % (dn, issuer_dn))
+        logger.info('Attempting to authenticate user with dn: %s and issuer dn: %s' % (dn, issuer_dn))
 
         profile = _get_profile_by_dn(dn, issuer_dn)
 
         if profile:
-            logger.debug('found user %s, authentication succeeded' % profile.user.username)
+            logger.info('found user %s, authentication succeeded' % profile.user.username)
             return (profile.user, None)
         else:
             logger.error('Failed to find/create user for dn %s. Authentication failed' % dn)
@@ -136,5 +136,5 @@ def _get_profile_by_dn(dn, issuer_dn='default issuer dn'):
             return None
 
         profile = models.Profile.create_user(username, **kwargs)
-        logger.debug('created new profile for user %s' % profile.user.username)
+        logger.info('created new profile for user %s' % profile.user.username)
         return profile
