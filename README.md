@@ -321,6 +321,7 @@ the Admin interface directly bypasses that logic
 Anonymous users have no access - all must have a valid username/password (dev)
 or valid certificate (production) to be granted any access
 
+
 A few endpoints only provide READ access:
 
 * storefront
@@ -386,6 +387,117 @@ listing
 * READ access to /self/listing to return listings that current user owns (?)
 
 
+|Permission Types  | Description |
+|:-----------|:------------|
+|read | The Read permission refers to a user's capability to read the contents of the endpoint.|
+|write | The Write permission refers to a user's capability to write contents to the endpoint.|
+|access_control enforcement flag | access_control level cannot exceed that of the current user|
 
 
+| Reference	| Class	| Description |
+|:-----------|------------:|:------------:|
+| u | owner | file's owner |
+|g |group |users who are members of the file's group|
+|o |others |users who are neither the file's owner nor members of the file's group|
+|a |all | all three of the above, same as ugo|
 
+Self - Org Steward - Apps Mall Steward
+
+
+<table>
+	<tr>
+		<th>ozp-center</th>
+		<th colspan="4">Access Control</th>
+	</tr>
+
+	<tr>
+		<th>Endpoint</th>
+		<th>Anonymous Users</th>
+		<th>Self</th>
+		<th>Org Steward</th>
+		<th>Apps Mall Steward </th>
+	</tr>
+
+	<tr>
+		<td>agency</td>
+		<td>---</td>
+		<td>r--</td>
+		<td>r--</td>
+		<td>rw-</td>
+	</tr>
+
+	<tr>
+		<td>category</td>
+		<td>---</td>
+		<td>r--</td>
+		<td>r--</td>
+		<td>rw-</td>
+	</tr>
+
+	<tr>
+		<td>contact_type</td>
+		<td>---</td>
+		<td>r--</td>
+		<td>r--</td>
+		<td>rw-</td>
+	</tr>
+
+	<tr>
+		<td>image</td>
+		<td>NO</td>
+		<td>YES (only Read)</td>
+		<td>?</td>
+	</tr>
+
+	<tr>
+		<td>intent</td>
+		<td>NO</td>
+		<td>YES (only Read)</td>
+		<td>?</td>
+	</tr>
+
+	<tr>
+		<td>library</td>
+		<td>NO</td>
+		<td>YES (only Read)</td>
+		<td>?</td>
+	</tr>
+
+	<tr>
+		<td>listing</td>
+		<td>NO</td>
+		<td>YES (only Read)</td>
+		<td>?</td>
+	</tr>
+
+	<tr>
+		<td>notification</td>
+		<td>NO</td>
+		<td>YES (only Read)</td>
+		<td>?</td>
+	</tr>
+
+	<tr>
+		<td>profile</td>
+		<td>NO</td>
+		<td>YES (only Read)</td>
+		<td>?</td>
+	</tr>
+
+	<tr>
+		<td>storefront</td>
+		<td>NO</td>
+		<td>R--</td>
+		<td>---</td>
+		<td>---</td>
+	</tr>
+
+	<tr>
+		<td>metadata (for self)</td>
+		<td>NO</td>
+		<td>R--</td>
+		<td>---</td>
+		<td>---</td>
+	</tr>
+
+</table>
