@@ -393,29 +393,30 @@ listing
 |write | The Write permission refers to a user's capability to write contents to the endpoint.|
 |access_control enforcement flag | access_control level cannot exceed that of the current user|
 
-
-| Reference	| Class	| Description |
-|:-----------|------------:|:------------:|
-| u | owner | file's owner |
-|g |group |users who are members of the file's group|
-|o |others |users who are neither the file's owner nor members of the file's group|
-|a |all | all three of the above, same as ugo|
-
-Self - Org Steward - Apps Mall Steward
-
-
 <table>
 	<tr>
 		<th>ozp-center</th>
-		<th colspan="4">Access Control</th>
+		<th colspan="5">Access Control</th>
 	</tr>
 
 	<tr>
 		<th>Endpoint</th>
 		<th>Anonymous Users</th>
 		<th>Self</th>
+		<th>Other</th>
 		<th>Org Steward</th>
 		<th>Apps Mall Steward </th>
+		<th>Notes</th>
+	</tr>
+
+	<tr>
+		<td>access_control (?)</td>
+		<td>---</td>
+		<td>r--</td>
+		<td></td>
+		<td>r--</td>
+		<td>rw-</td>
+		<td></td>
 	</tr>
 
 	<tr>
@@ -423,7 +424,9 @@ Self - Org Steward - Apps Mall Steward
 		<td>---</td>
 		<td>r--</td>
 		<td>r--</td>
+		<td>r--</td>
 		<td>rw-</td>
+		<td></td>
 	</tr>
 
 	<tr>
@@ -431,7 +434,9 @@ Self - Org Steward - Apps Mall Steward
 		<td>---</td>
 		<td>r--</td>
 		<td>r--</td>
+		<td>r--</td>
 		<td>rw-</td>
+		<td></td>
 	</tr>
 
 	<tr>
@@ -439,65 +444,129 @@ Self - Org Steward - Apps Mall Steward
 		<td>---</td>
 		<td>r--</td>
 		<td>r--</td>
+		<td>r--</td>
 		<td>rw-</td>
+		<td></td>
 	</tr>
 
 	<tr>
-		<td>image</td>
-		<td>NO</td>
-		<td>YES (only Read)</td>
-		<td>?</td>
+		<td>image (metadata)</td>
+		<td>---</td>
+		<td>rwa</td>
+		<td>rwa</td>
+		<td>rwa</td>
+		<td>rwa</td>
+		<td>Read: access_control enforcement on the images themselves, Write: associated access_control level cannot exceed that of the current user</td>
 	</tr>
 
 	<tr>
 		<td>intent</td>
-		<td>NO</td>
-		<td>YES (only Read)</td>
-		<td>?</td>
+		<td>---</td>
+		<td>rwa</td>
+		<td>rwa</td>
+		<td>rwa</td>
+		<td>rwa</td>
+		<td>associated intent.icon.access_control cannot exceed that of the current user</td>
 	</tr>
 
 	<tr>
 		<td>library</td>
-		<td>NO</td>
-		<td>YES (only Read)</td>
-		<td>?</td>
+		<td>---</td>
+		<td>r--</td>
+		<td>r--</td>
+		<td>r--</td>
+		<td>r--</td>
+		<td></td>
+	</tr>
+
+	<tr>
+		<td>library (self)</td>
+		<td>---</td>
+		<td>rw-</td>
+		<td>---</td>
+		<td>---</td>
+		<td>---</td>
+		<td></td>
 	</tr>
 
 	<tr>
 		<td>listing</td>
-		<td>NO</td>
-		<td>YES (only Read)</td>
-		<td>?</td>
+		<td>---</td>
+		<td>r-a</td>
+		<td>---</td>
+		<td>rw-</td>
+		<td>rw-</td>
+		<td></td>
+	</tr>
+
+	<tr>
+		<td>listing (self)</td>
+		<td>---</td>
+		<td>rw-</td>
+		<td>---</td>
+		<td>---</td>
+		<td>---</td>
+		<td></td>
+	</tr>
+
+	<tr>
+		<td>listing_type (?)</td>
+		<td>---</td>
+		<td>r--</td>
+		<td>---</td>
+		<td>r--</td>
+		<td>rw-</td>
+		<td></td>
 	</tr>
 
 	<tr>
 		<td>notification</td>
-		<td>NO</td>
-		<td>YES (only Read)</td>
-		<td>?</td>
+		<td>---</td>
+		<td>rw-</td>
+		<td>r--</td>
+		<td>rw-</td>
+		<td>rw-</td>
+		<td></td>
 	</tr>
 
 	<tr>
 		<td>profile</td>
-		<td>NO</td>
-		<td>YES (only Read)</td>
-		<td>?</td>
+		<td>---</td>
+		<td>---</td>
+		<td>---</td>
+		<td>rw-</td>
+		<td>rw-</td>
+		<td>users cannot create, modify, or delete users other than themselves</td>
+	</tr>
+
+	<tr>
+		<td>profile (self route)</td>
+		<td>---</td>
+		<td>rw-</td>
+		<td>---</td>
+		<td>---</td>
+		<td>---</td>
+		<td>Self</td>
 	</tr>
 
 	<tr>
 		<td>storefront</td>
-		<td>NO</td>
+		<td>---</td>
 		<td>R--</td>
 		<td>---</td>
 		<td>---</td>
+		<td>---</td>
+		<td>Get Storefront for current user</td>
 	</tr>
 
 	<tr>
-		<td>metadata (for self)</td>
-		<td>NO</td>
+		<td>metadata</td>
+		<td>---</td>
 		<td>R--</td>
 		<td>---</td>
 		<td>---</td>
+		<td>---</td>
+		<td>Get metadata for current user</td>
 	</tr>
 
 </table>
