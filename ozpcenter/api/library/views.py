@@ -1,8 +1,20 @@
 """
-Library views
+Library Views
 
-GET /self/library
-return the id and unique name of each listing in the user's library
+Requirements
+============
+* The user shall be able to
+
+
+
+GET /api/self/library
+Summary:
+    return The id and unique name of each listing in the user's library
+
+POST /api/self/library/import/{folder_id}
+Summary:
+    return The id and unique name of each listing in the user's library
+
 
 """
 import logging
@@ -27,9 +39,27 @@ class LibraryViewSet(viewsets.ModelViewSet):
     """
     ModelViewSet for getting all library entries for all users
 
+    Access Control
+    ===============
     Must be an Org Steward to access this endpoint
 
-    GET api/library - return a list of all user's libraries
+    URIs
+    ======
+    GET /api/library
+    Summary:
+        Get a list of all user's Application Library Entries
+
+    Response:
+        200 - Successful operation - [LibrarySerializer]
+
+    GET /api/library/{pk}
+    Summary:
+        Find an Application Library Entry by ID
+
+    DELETE /api/library/{pk}
+    Summary:
+        Delete an Application Library Entry by ID
+
     POST, PUT, PATCH, DELETE api/library/<id> - unallowed (for now)
     """
     permission_classes = (permissions.IsOrgSteward,)
@@ -40,6 +70,14 @@ class LibraryViewSet(viewsets.ModelViewSet):
 class UserLibraryViewSet(viewsets.ViewSet):
     """
     Listings that have been bookmarked by the current user
+
+    Access Control
+    ===============
+    User - only for current request user
+
+    URI
+    ======
+    /api/self/library
     """
     permission_classes = (permissions.IsUser,)
 
@@ -53,7 +91,9 @@ class UserLibraryViewSet(viewsets.ViewSet):
 
     def create(self, request):
         """
-        Bookmark a Listing for the current user. POST JSON data:
+        Bookmark a Listing for the current user.
+
+        POST JSON data:
         {
             "listing":
                 {

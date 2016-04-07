@@ -62,11 +62,15 @@ class UserLibrarySerializer(serializers.ModelSerializer):
             raise serializers.ValidationError('No listing provided')
         if 'id' not in data['listing']:
             raise serializers.ValidationError('No listing id provided')
+        if 'folder' in data:
+            if not data.get('folder'):
+                data['folder'] = None
+
         return data
 
     def create(self, validated_data):
         username = self.context['request'].user.username
-        folder = validated_data.get('folder', '')
+        folder = validated_data.get('folder', None)
         listing = listing_model_access.get_listing_by_id(username,
             validated_data['listing']['id'])
         logger.debug('adding bookmark for %s' % listing.title)

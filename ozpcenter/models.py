@@ -216,6 +216,20 @@ class Agency(models.Model):
     class Meta:
         verbose_name_plural = "agencies"
 
+# TODO
+# class ApplicationLibraryFolder(models.Model):
+#     """
+#     A change made to a field of a Listing
+#
+#     Additional db.relationships:
+#         * ListingActivity (ManyToMany)
+#     """
+#     folder_name = models.CharField(max_length=255)
+#
+#
+#     def __repr__(self):
+#         return "id:%d field %s was %s now is %s" % (
+#             self.id, self.field_name, self.old_value, self.new_value)
 
 class ApplicationLibraryEntry(models.Model):
     """

@@ -25,6 +25,49 @@ logger = logging.getLogger('ozp-center')
 
 
 class ImageTypeViewSet(viewsets.ModelViewSet):
+    """
+    ModelViewSet for getting all ImageType entries for all users
+
+    Access Control
+    ===============
+    - All users can read
+    - AppMallSteward can view
+
+    URIs
+    ======
+    GET /api/imagetype
+    Summary:
+        Get a list of all system-wide ImageType
+
+    Response:
+        200 - Successful operation - [ImageTypeSerializer]
+
+    POST /api/imagetype/
+    Summary:
+        Add an ImageType
+    Request:
+        data: ImageTypeSerializer Schema
+    Response:
+        200 - Successful operation - ImageTypeSerializer
+
+    GET /api/imagetype/{pk}
+    Summary:
+        Find an ImageType Entry by ID
+    Response:
+        200 - Successful operation - ImageTypeSerializer
+
+    PUT /api/imagetype/{pk}
+    Summary:
+        Update an ImageType Entry by ID
+
+    PATCH /api/imagetype/{pk}
+    Summary:
+        Update (Partial) an ImageType Entry by ID
+
+    DELETE /api/imagetype/{pk}
+    Summary:
+        Delete an ImageType Entry by ID
+    """
     queryset = model_access.get_all_image_types()
     serializer_class = serializers.ImageTypeSerializer
     permission_classes = (permissions.IsAppsMallStewardOrReadOnly,)
@@ -32,6 +75,20 @@ class ImageTypeViewSet(viewsets.ModelViewSet):
 
 
 class ImageViewSet(viewsets.ModelViewSet):
+    """
+    ModelViewSet for getting all Image entries for all users
+
+    Access Control
+    ===============
+    - All users can read
+    - AppMallSteward can view
+
+    URIs
+    ======
+    GET,POST /api/image
+    GET, DELETE /api/image/{pk}
+    """
+
     def get_queryset(self):
         return model_access.get_all_images(self.request.user.username)
 
