@@ -349,19 +349,23 @@ Execution time: 0.000472s [Database: default]
 Results:
 1 database call
 
-#### Debugging Storefront serializers
+#### Debugging Storefront Serializer
 ````python
+from rest_framework.response import Response
 import ozpcenter.api.storefront.model_access as ma
 import ozpcenter.api.storefront.serializers as se
+import timeit
 from django.test.client import RequestFactory
+
 rf = RequestFactory()
 get_request = rf.get('/hello/')
 
-
-data = ma.get_storefront('bigbrother')  # Database calls
+data = ma.get_storefront('bigbrother') # Database calls
 sea = se.StorefrontSerializer(data,context={'request':get_request})
-sea.data   # Database calls
-sea.data.get('')  # Database calls
+start = timeit.timeit(); r= Response(sea.data) ; end = timeit.timeit() # Database calls
+print('Time: %s' % end)
+
+
 
 ````
 
