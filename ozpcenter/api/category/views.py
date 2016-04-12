@@ -15,6 +15,49 @@ logger = logging.getLogger('ozp-center')
 
 
 class CategoryViewSet(viewsets.ModelViewSet):
+    """
+    ModelViewSet for getting all category entries for all users
+
+    Access Control
+    ===============
+    - All users can read
+    - AppMallSteward can view
+
+    URIs
+    ======
+    GET /api/category
+    Summary:
+        Get a list of all system-wide categories
+
+    Response:
+        200 - Successful operation - [CategorySerializer]
+
+    POST /api/category/
+    Summary:
+        Add an category
+    Request:
+        data: CategorySerializer Schema
+    Response:
+        200 - Successful operation - CategorySerializer
+
+    GET /api/category/{pk}
+    Summary:
+        Find an category Entry by ID
+    Response:
+        200 - Successful operation - CategorySerializer
+
+    PUT /api/category/{pk}
+    Summary:
+        Update an category Entry by ID
+
+    PATCH /api/category/{pk}
+    Summary:
+        Update (Partial) an category Entry by ID
+
+    DELETE /api/category/{pk}
+    Summary:
+        Delete an category Entry by ID
+    """
     queryset = model_access.get_all_categories()
     serializer_class = serializers.CategorySerializer
     filter_fields = ('title',)
