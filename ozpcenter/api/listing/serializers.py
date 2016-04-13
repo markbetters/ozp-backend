@@ -742,7 +742,10 @@ class ListingSerializer(serializers.ModelSerializer):
 
         instance.save()
 
-        model_access.log_listing_modification(user, instance, change_details)
+        # If the listing was modified add an entry showing changes
+        if change_details:
+            model_access.log_listing_modification(user, instance, change_details)
+
         instance.edited_date = datetime.datetime.now(pytz.utc)
         return instance
 
@@ -756,9 +759,11 @@ class ReviewSerializer(serializers.ModelSerializer):
 
 
 class ShortListingSerializer(serializers.ModelSerializer):
+    agency = AgencySerializer(required=False)
+
     class Meta:
         model = models.Listing
-        fields = ('unique_name', 'title', 'id')
+        fields = ('unique_name', 'title', 'id', 'agency')
 
 
 # TODO: is this used?
