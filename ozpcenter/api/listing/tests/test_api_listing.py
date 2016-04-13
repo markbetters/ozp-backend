@@ -934,10 +934,6 @@ class ListingApiTest(APITestCase):
                         self.assertEqual(change['new_value'], data['launch_url'])
                         self.assertEqual(change['old_value'], old_listing_data['launch_url'])
                         total_found += 1
-                    if change['field_name'] == 'is_enabled':
-                        self.assertEqual(change['new_value'], data['is_enabled'])
-                        self.assertEqual(change['old_value'], model_access.bool_to_string(old_listing_data['is_enabled']))
-                        total_found += 1
                     if change['field_name'] == 'is_private':
                         self.assertEqual(change['new_value'], data['is_private'])
                         self.assertEqual(change['old_value'], model_access.bool_to_string(old_listing_data['is_private']))
@@ -1014,7 +1010,7 @@ class ListingApiTest(APITestCase):
                         total_found += 1
 
 
-        self.assertEqual(total_found, len(fields)-1)    # -1 for approved_status
+        self.assertEqual(total_found, len(fields)-2)    # (-1 for approved_status) + (-1 for is_enabled)
 
     def test_z_create_update(self):
         user = generic_model_access.get_profile('julia').user
@@ -1260,9 +1256,8 @@ class ListingApiTest(APITestCase):
         response = self.client.get(url, format='json')
 
         activity_actions = [i['action'] for i in response.data]
-        self.assertEquals(len(activity_actions), 5)
+        self.assertEquals(len(activity_actions), 4)
         action_log.insert(0, models.ListingActivity.DISABLED)
-        action_log.insert(0, models.ListingActivity.MODIFIED)
         self.assertEqual(activity_actions , action_log)
         activity_agency = [i['listing']['agency'] for i in response.data]
         self.assertEquals(json.dumps(activity_agency[0]), '{"title": "Ministry of Truth", "short_name": "Minitrue"}')
@@ -1275,9 +1270,8 @@ class ListingApiTest(APITestCase):
         url = '/api/listing/%s/activity/' % app_id
         response = self.client.get(url, format='json')
         activity_actions = [i['action'] for i in response.data]
-        self.assertEquals(len(activity_actions), 7)
+        self.assertEquals(len(activity_actions), 5)
         action_log.insert(0, models.ListingActivity.ENABLED)
-        action_log.insert(0, models.ListingActivity.MODIFIED)
         self.assertEqual(activity_actions , action_log)
         activity_agency = [i['listing']['agency'] for i in response.data]
         self.assertEquals(json.dumps(activity_agency[0]), '{"title": "Ministry of Truth", "short_name": "Minitrue"}')

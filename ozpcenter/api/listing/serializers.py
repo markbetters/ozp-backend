@@ -508,12 +508,8 @@ class ListingSerializer(serializers.ModelSerializer):
         if validated_data['is_enabled'] != instance.is_enabled:
             if validated_data['is_enabled']:
                 model_access.enable_listing(user, instance)
-                change_details.append({'field_name': 'is_enabled',
-                    'old_value': 'false', 'new_value': 'true'})
             else:
                 model_access.disable_listing(user, instance)
-                change_details.append({'field_name': 'is_enabled',
-                    'old_value': 'true', 'new_value': 'false'})
 
             instance.is_enabled = validated_data['is_enabled']
 
