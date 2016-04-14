@@ -508,12 +508,8 @@ class ListingSerializer(serializers.ModelSerializer):
         if validated_data['is_enabled'] != instance.is_enabled:
             if validated_data['is_enabled']:
                 model_access.enable_listing(user, instance)
-                change_details.append({'field_name': 'is_enabled',
-                    'old_value': 'false', 'new_value': 'true'})
             else:
                 model_access.disable_listing(user, instance)
-                change_details.append({'field_name': 'is_enabled',
-                    'old_value': 'true', 'new_value': 'false'})
 
             instance.is_enabled = validated_data['is_enabled']
 
@@ -742,7 +738,10 @@ class ListingSerializer(serializers.ModelSerializer):
 
         instance.save()
 
-        model_access.log_listing_modification(user, instance, change_details)
+        # If the listing was modified add an entry showing changes
+        if change_details:
+            model_access.log_listing_modification(user, instance, change_details)
+
         instance.edited_date = datetime.datetime.now(pytz.utc)
         return instance
 
@@ -756,9 +755,11 @@ class ReviewSerializer(serializers.ModelSerializer):
 
 
 class ShortListingSerializer(serializers.ModelSerializer):
+    agency = AgencySerializer(required=False)
+
     class Meta:
         model = models.Listing
-        fields = ('unique_name', 'title', 'id')
+        fields = ('unique_name', 'title', 'id', 'agency')
 
 
 # TODO: is this used?
