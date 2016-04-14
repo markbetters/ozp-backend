@@ -1,5 +1,4 @@
-ozp-backend  [![Build Status](https://travis-ci.org/ozone-development/ozp-backend.svg?branch=master)](https://travis-ci.org/ozone-development/ozp-backend)
-================================================================================
+# ozp-backend  [![Build Status](https://travis-ci.org/ozone-development/ozp-backend.svg?branch=master)](https://travis-ci.org/ozone-development/ozp-backend)
 Django-based backend API for the OZONE Platform (OZP). For those who just want
 to get OZP (Center, HUD, Webtop, IWC) up and running, use this
 [vagrant box](https://github.com/ozone-development/dev-tools/tree/master/vagrant/new-backend)
@@ -36,16 +35,16 @@ the django app will be served at)
 Then, do the following:
 
 1. Install Python 3.4.3. Python can be installed by downloading the appropriate
-	files [here](https://www.python.org/downloads/release/python-343/). Note
-	that Python 3.4 includes both `pip` and `venv`, a built-in replacement
-	for the `virtualenv` package
+    files [here](https://www.python.org/downloads/release/python-343/). Note
+    that Python 3.4 includes both `pip` and `venv`, a built-in replacement
+    for the `virtualenv` package
 2. Create a new python environment using python 3.4.x. First, create a new
-	directory where this environment will live, for example, in
-	`~/python_envs/ozp`. Now create a new environment there:
-	`python3.4 -m venv ENV` (where `ENV` is the path you used above)
+    directory where this environment will live, for example, in
+    `~/python_envs/ozp`. Now create a new environment there:
+    `python3.4 -m venv ENV` (where `ENV` is the path you used above)
 3. Active the new environment: `source ENV/bin/activate`
 4. Install the necessary dependencies into this python environment:
-	`pip install -r requirements.txt`
+    `pip install -r requirements.txt`
 5. Run the server: `./restart_clean_dev_server.sh`
 
 Swagger documentation for the api is available at `http://localhost:8000/docs/`
@@ -57,7 +56,6 @@ There's also the admin interface at `http://localhost:8000/admin`
 ## Releasing
 Run `python release.py` to generate a tarball with Wheels for the application
 and all of its dependencies. See `release.py` for details
-
 
 ## For Developers
 Understanding this project requires knowing a small-medium amount of Django and
@@ -196,9 +194,9 @@ model has the following fields:
 * user_permissions (many-to-many relationship to Permission)
 * is_staff (Boolean. Designates whether this user can access the admin site)
 * is_active (Boolean. Designates whether this user account should be considered
-	active)
+    active)
 * is_superuser (Boolean. Designates that this user has all permissions without
-	explicitly assigning them)
+    explicitly assigning them)
 * last_login (a datetime of the user's last login)
 * date_joined (a datetime designating when the account was created)
 
@@ -208,7 +206,7 @@ Of these fields:
 * is_superuser is always set to False
 * is_staff is set to True for Org Stewards and Apps Mall Stewards
 * password is only used in development. On production, client SSL certs are
-	used, and so password is set to XXXXXXXX
+    used, and so password is set to XXXXXXXX
 
 [Groups](https://docs.djangoproject.com/en/1.8/topics/auth/default/#groups) are
 used to categorize users as Users, Org Stewards, Apps Mall Stewards, etc. These
@@ -251,7 +249,7 @@ make HTTP requests using special testing clients and factories, and are more
 like end-to-end or integration tests
 
 ### Database
-TODO
+System uses Postgres in Production and Sqlite3 in Development
 
 #### Performance Debugging
 We check the performance of a Database model using shell_plus command for manage.py.
@@ -364,12 +362,7 @@ data = ma.get_storefront('bigbrother') # Database calls
 sea = se.StorefrontSerializer(data,context={'request':get_request})
 start = timeit.timeit(); r= Response(sea.data) ; end = timeit.timeit() # Database calls
 print('Time: %s' % end)
-
-
-
 ````
-
-
 
 ### API Documentation
 There are a number of different documentation resources available, depending
@@ -434,11 +427,25 @@ operations (like editing reviews, approving listings, etc) should result in
 additional operations (like creating ListingActivity entries), but using
 the Admin interface directly bypasses that logic
 
+### Tracing REST Call
+This section describes the life of a REST call.
+Developer should have knownledge of
+* [Django's URL Dispatcher](https://docs.djangoproject.com/es/1.9/topics/http/urls/)
+* [Django Rest Framework's Viewsets](http://www.django-rest-framework.org/api-guide/viewsets/)
+* [Django Rest Framework's Serializer](http://www.django-rest-framework.org/api-guide/serializers/)
+
+Example trace for a GET Request for getting a user's profile for an authenticated user
+````GET /api/self/profile````
+* Entry Point for all REST Calls - ozp/urls.py. All /api/* calls get re-routed to ozpcenter/urls.py file
+* ozpcenter/urls.py add REST access points for all the views for the resources (agency, category, etc...)
+  * This line of code **url(r'', include('ozpcenter.api.profile.urls'))** adds endpoints related to profile REST Calls
+* ozpcenter/api/profile/user.py - 'self/profile/' route points to current user's profile (Using CurrentUserViewSet in ozpcenter/api/profile/views.py)
+* ozpcenter/api/profile/views.py - For GET Request for this route it will call the 'retrieve' method
+  * Before allowing user to access the endpoint it will make sure user is authenticated and has the correct role using 'permission_classes = (permissions.IsUser,)'
 
 ## Controlling Access
 Anonymous users have no access - all must have a valid username/password (dev)
 or valid certificate (production) to be granted any access
-
 
 A few endpoints only provide READ access:
 
@@ -454,56 +461,56 @@ Apps Mall Stewards:
 * contact_type
 * listing_type
 
-image
+**image**
 
 * global READ of metadata, but access_control enforcement on the images
 themselves
 * WRITE access allowed for all users, but the associated access_control level
-	cannot exceed that of the current user
+    cannot exceed that of the current user
 
-intent
+**intent**
 
 * global READ and WRITE allowed, but associated intent.icon.access_control
-	cannot exceed that of the current user
+    cannot exceed that of the current user
 
-library
+**library**
 
 * READ access for ORG stewards and above
 * no WRITE access
 * READ and WRITE access to /self/library for the current user
 
-notification
+**notification**
 
 * global READ access
 * WRITE access restricted to Org Stewards and above, unless the notification
-	is associated with a Listing owned by this user
+    is associated with a Listing owned by this user
 * READ and WRITE access to /self/notification for the current user
 
-profile
+**profile**
 
 * READ access restricted to Org Stewards and above
 * WRITE access restricted to the associated user (users cannot create, modify,
-	or delete users other than themselves)
+    or delete users other than themselves)
 * READ and WRITE access to /self/profile for the current user
 
-
-listing
+**listing**
 
 * READ access restricted by agency (if listing is private) and by access_control
-	level
+    level
 * WRITE access:
-	* global WRITE access to create/modify/delete a listing in the draft or
-		pending state ONLY
-	* Org Stewards and above can change the state to published/approved or
-		rejected, and change state to enabled/disabled, but must respect
-		Organization (an Org Steward cannot modify
-		a listing for which they are not the owner and/or not a member of
-		the listing's agency)
-	* global WRITE access to create/modify/delete reviews (item_comment) for
-		any listing (must respect organization (if private) and access_control
-		)
+    * global WRITE access to create/modify/delete a listing in the draft or
+        pending state ONLY
+    * Org Stewards and above can change the state to published/approved or
+        rejected, and change state to enabled/disabled, but must respect
+        Organization (an Org Steward cannot modify
+        a listing for which they are not the owner and/or not a member of
+        the listing's agency)
+    * global WRITE access to create/modify/delete reviews (item_comment) for
+        any listing (must respect organization (if private) and access_control
+        )
 * READ access to /self/listing to return listings that current user owns (?)
 
+**Permission Types**
 
 |Permission Types  | Description |
 |:-----------|:------------|
@@ -511,180 +518,208 @@ listing
 |write | The Write permission refers to a user's capability to write contents to the endpoint.|
 |access_control enforcement flag | access_control level cannot exceed that of the current user|
 
+**Access Control Matrix**
 <table>
-	<tr>
-		<th>ozp-center</th>
-		<th colspan="5">Access Control</th>
-	</tr>
+    <tr>
+        <th>ozp-center</th>
+        <th colspan="5">Access Control</th>
+    </tr>
 
-	<tr>
-		<th>Endpoint</th>
-		<th>Anonymous Users</th>
-		<th>Self</th>
-		<th>Other</th>
-		<th>Org Steward</th>
-		<th>Apps Mall Steward </th>
-		<th>Notes</th>
-	</tr>
+    <tr>
+        <th>Endpoint</th>
+        <th>Anonymous Users</th>
+        <th>Self</th>
+        <th>Other</th>
+        <th>Org Steward</th>
+        <th>Apps Mall Steward </th>
+        <th>Notes</th>
+    </tr>
 
-	<tr>
-		<td>access_control (?)</td>
-		<td>---</td>
-		<td>r--</td>
-		<td></td>
-		<td>r--</td>
-		<td>rw-</td>
-		<td></td>
-	</tr>
+    <tr>
+        <td>access_control (?)</td>
+        <td>---</td>
+        <td>r--</td>
+        <td></td>
+        <td>r--</td>
+        <td>rw-</td>
+        <td></td>
+    </tr>
 
-	<tr>
-		<td>agency</td>
-		<td>---</td>
-		<td>r--</td>
-		<td>r--</td>
-		<td>r--</td>
-		<td>rw-</td>
-		<td></td>
-	</tr>
+    <tr>
+        <td>agency</td>
+        <td>---</td>
+        <td>r--</td>
+        <td>r--</td>
+        <td>r--</td>
+        <td>rw-</td>
+        <td></td>
+    </tr>
 
-	<tr>
-		<td>category</td>
-		<td>---</td>
-		<td>r--</td>
-		<td>r--</td>
-		<td>r--</td>
-		<td>rw-</td>
-		<td></td>
-	</tr>
+    <tr>
+        <td>category</td>
+        <td>---</td>
+        <td>r--</td>
+        <td>r--</td>
+        <td>r--</td>
+        <td>rw-</td>
+        <td></td>
+    </tr>
 
-	<tr>
-		<td>contact_type</td>
-		<td>---</td>
-		<td>r--</td>
-		<td>r--</td>
-		<td>r--</td>
-		<td>rw-</td>
-		<td></td>
-	</tr>
+    <tr>
+        <td>contact_type</td>
+        <td>---</td>
+        <td>r--</td>
+        <td>r--</td>
+        <td>r--</td>
+        <td>rw-</td>
+        <td></td>
+    </tr>
 
-	<tr>
-		<td>image (metadata)</td>
-		<td>---</td>
-		<td>rwa</td>
-		<td>rwa</td>
-		<td>rwa</td>
-		<td>rwa</td>
-		<td>Read: access_control enforcement on the images themselves, Write: associated access_control level cannot exceed that of the current user</td>
-	</tr>
+    <tr>
+        <td>image (metadata)</td>
+        <td>---</td>
+        <td>rwa</td>
+        <td>rwa</td>
+        <td>rwa</td>
+        <td>rwa</td>
+        <td>Read: access_control enforcement on the images themselves, Write: associated access_control level cannot exceed that of the current user</td>
+    </tr>
 
-	<tr>
-		<td>intent</td>
-		<td>---</td>
-		<td>rwa</td>
-		<td>rwa</td>
-		<td>rwa</td>
-		<td>rwa</td>
-		<td>associated intent.icon.access_control cannot exceed that of the current user</td>
-	</tr>
+    <tr>
+        <td>intent</td>
+        <td>---</td>
+        <td>rwa</td>
+        <td>rwa</td>
+        <td>rwa</td>
+        <td>rwa</td>
+        <td>associated intent.icon.access_control cannot exceed that of the current user</td>
+    </tr>
 
-	<tr>
-		<td>library</td>
-		<td>---</td>
-		<td>r--</td>
-		<td>r--</td>
-		<td>r--</td>
-		<td>r--</td>
-		<td></td>
-	</tr>
+    <tr>
+        <td>library</td>
+        <td>---</td>
+        <td>r--</td>
+        <td>r--</td>
+        <td>r--</td>
+        <td>r--</td>
+        <td></td>
+    </tr>
 
-	<tr>
-		<td>library (self)</td>
-		<td>---</td>
-		<td>rw-</td>
-		<td>---</td>
-		<td>---</td>
-		<td>---</td>
-		<td></td>
-	</tr>
+    <tr>
+        <td>library (self)</td>
+        <td>---</td>
+        <td>rw-</td>
+        <td>---</td>
+        <td>---</td>
+        <td>---</td>
+        <td></td>
+    </tr>
 
-	<tr>
-		<td>listing</td>
-		<td>---</td>
-		<td>r-a</td>
-		<td>---</td>
-		<td>rw-</td>
-		<td>rw-</td>
-		<td></td>
-	</tr>
+    <tr>
+        <td>listing</td>
+        <td>---</td>
+        <td>r-a</td>
+        <td>---</td>
+        <td>rw-</td>
+        <td>rw-</td>
+        <td></td>
+    </tr>
 
-	<tr>
-		<td>listing (self)</td>
-		<td>---</td>
-		<td>rw-</td>
-		<td>---</td>
-		<td>---</td>
-		<td>---</td>
-		<td></td>
-	</tr>
+    <tr>
+        <td>listing (self)</td>
+        <td>---</td>
+        <td>rw-</td>
+        <td>---</td>
+        <td>---</td>
+        <td>---</td>
+        <td></td>
+    </tr>
 
-	<tr>
-		<td>listing_type (?)</td>
-		<td>---</td>
-		<td>r--</td>
-		<td>---</td>
-		<td>r--</td>
-		<td>rw-</td>
-		<td></td>
-	</tr>
+    <tr>
+        <td>listing_type (?)</td>
+        <td>---</td>
+        <td>r--</td>
+        <td>---</td>
+        <td>r--</td>
+        <td>rw-</td>
+        <td></td>
+    </tr>
 
-	<tr>
-		<td>notification</td>
-		<td>---</td>
-		<td>rw-</td>
-		<td>r--</td>
-		<td>rw-</td>
-		<td>rw-</td>
-		<td></td>
-	</tr>
+    <tr>
+        <td>notification</td>
+        <td>---</td>
+        <td>rw-</td>
+        <td>r--</td>
+        <td>rw-</td>
+        <td>rw-</td>
+        <td></td>
+    </tr>
 
-	<tr>
-		<td>profile</td>
-		<td>---</td>
-		<td>---</td>
-		<td>---</td>
-		<td>rw-</td>
-		<td>rw-</td>
-		<td>users cannot create, modify, or delete users other than themselves</td>
-	</tr>
+    <tr>
+        <td>profile</td>
+        <td>---</td>
+        <td>---</td>
+        <td>---</td>
+        <td>rw-</td>
+        <td>rw-</td>
+        <td>users cannot create, modify, or delete users other than themselves</td>
+    </tr>
 
-	<tr>
-		<td>profile (self route)</td>
-		<td>---</td>
-		<td>rw-</td>
-		<td>---</td>
-		<td>---</td>
-		<td>---</td>
-		<td>Self</td>
-	</tr>
+    <tr>
+        <td>profile (self route)</td>
+        <td>---</td>
+        <td>rw-</td>
+        <td>---</td>
+        <td>---</td>
+        <td>---</td>
+        <td>Self</td>
+    </tr>
 
-	<tr>
-		<td>storefront</td>
-		<td>---</td>
-		<td>R--</td>
-		<td>---</td>
-		<td>---</td>
-		<td>---</td>
-		<td>Get Storefront for current user</td>
-	</tr>
+    <tr>
+        <td>storefront</td>
+        <td>---</td>
+        <td>R--</td>
+        <td>---</td>
+        <td>---</td>
+        <td>---</td>
+        <td>Get Storefront for current user</td>
+    </tr>
 
-	<tr>
-		<td>metadata</td>
-		<td>---</td>
-		<td>R--</td>
-		<td>---</td>
-		<td>---</td>
-		<td>---</td>
-		<td>Get metadata for current user</td>
-	</tr>
+    <tr>
+        <td>metadata</td>
+        <td>---</td>
+        <td>R--</td>
+        <td>---</td>
+        <td>---</td>
+        <td>---</td>
+        <td>Get metadata for current user</td>
+    </tr>
 
 </table>
+
+## Domain Knowledge
+### The life of a submitted listing
+Description on how listings get submitted. API endpoint: ````/api/listing````
+* User: A User submits a listing
+  * State
+    * User: Submitted Listing
+    * Org Steward: Needs Action (Approve Listing or return listing to user)
+    * Admin: Pending
+* Org Steward: An Org Steward will approve user's listing or return back to the user with a comment)
+  * State: If Approved
+    * User: Pending
+    * Org Steward: Org Approved
+    * Admin: Needs Action
+  * State: If Returned to the user
+    * User: Needs Action
+    * Org Steward: Returned
+    * Admin: Returned
+* Admin: An admin will approve or reject listing for a org
+  * State: If approved the listing will be published
+    * User: Done
+    * Org Steward: Org Approved
+    * Admin: Admin Approved (Listing Published)
+  * State: If rejected
+    * User: Needs Action
+    * Org Steward: Returned
+    * Admin: Returned
