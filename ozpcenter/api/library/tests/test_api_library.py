@@ -63,6 +63,60 @@ class LibraryApiTest(APITestCase):
         self.assertIn('unique_name', response.data[0]['listing'])
         self.assertIn('folder', response.data[0])
 
+    def _edit_listing(self, id, input_data):
+        """
+        Helper Method to modify a listing
+        """
+        user = generic_model_access.get_profile('bigbrother').user
+        self.client.force_authenticate(user=user)
+        url = '/api/listing/%s/' % id
+        #GET Listing
+        data = self.client.get(url, format='json').data
+
+        for current_key in input_data:
+            if current_key in data:
+                data[current_key] = input_data[current_key]
+
+        #PUT the Modification
+        response = self.client.put(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_get_self_library_when_listing_disabled_enabled(self):
+        """
+        GET /self/library
+        """
+        user = generic_model_access.get_profile('wsmith').user
+        self.client.force_authenticate(user=user)
+        url = '/api/self/library/'
+        response = self.client.get(url, format='json')
+        listing_ids = [record['listing']['id'] for record in response.data]
+        first_listing_id = listing_ids[0] # Should be 2
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(listing_ids, [2, 1], 'Comparing Ids #1')
+
+
+        # Get Library for current user after listing was disabled
+        self._edit_listing(first_listing_id, {'is_enabled': False})
+
+        user = generic_model_access.get_profile('wsmith').user
+        self.client.force_authenticate(user=user)
+        url = '/api/self/library/'
+        response = self.client.get(url, format='json')
+        listing_ids = [record['listing']['id'] for record in response.data]
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(listing_ids, [1], 'Comparing Ids #2')
+
+        # Get Library for current user after listing was Enable
+        self._edit_listing(first_listing_id, {'is_enabled': True})
+
+        user = generic_model_access.get_profile('wsmith').user
+        self.client.force_authenticate(user=user)
+        url = '/api/self/library/'
+        response = self.client.get(url, format='json')
+        listing_ids = [record['listing']['id'] for record in response.data]
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(listing_ids, [2, 1],  'Comparings Ids #3')
+
     def test_get_library_list_listing_type(self):
         """
         GET /self/library
