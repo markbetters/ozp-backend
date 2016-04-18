@@ -1,7 +1,7 @@
 # ozp-backend  [![Build Status](https://travis-ci.org/ozone-development/ozp-backend.svg?branch=master)](https://travis-ci.org/ozone-development/ozp-backend)
 Django-based backend API for the OZONE Platform (OZP). For those who just want
-to get OZP (Center, HUD, Webtop, IWC) up and running, use this
-[vagrant box](https://github.com/ozone-development/dev-tools/tree/master/vagrant/new-backend)
+to get OZP (Center, HUD, Webtop, IWC) up and running, see the
+[quickstart](https://github.com/ozone-development/ozp-ansible#quickstart) of the [ozp-ansible](https://github.com/ozone-development/ozp-ansible) project.
 
 ## Background
 ozp-backend replaces [ozp-rest](https://github.com/ozone-development/ozp-rest)
