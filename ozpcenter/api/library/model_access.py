@@ -63,7 +63,8 @@ def get_self_application_library(username):
     if data is None:
         try:
             data = models.ApplicationLibraryEntry.objects.filter(
-                owner__user__username=username)
+                owner__user__username=username).filter(listing__is_enabled=True)
+
             cache.set(key, data)
             return data
         except ObjectDoesNotExist:
@@ -85,7 +86,7 @@ def get_self_application_library_by_listing_type(username, listing_type):
     if data is None:
         try:
             data = models.ApplicationLibraryEntry.objects.filter(
-                owner__user__username=username).filter(listing__listing_type__title=listing_type)
+                owner__user__username=username).filter(listing__listing_type__title=listing_type).filter(listing__is_enabled=True)
             cache.set(key, data)
             return data
         except ObjectDoesNotExist:
