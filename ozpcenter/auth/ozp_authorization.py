@@ -120,6 +120,7 @@ def authorization_update(username, updated_auth_data=None):
         # (or something like that)
         # and if so, try to preemptively update user's credentials. This would
         # help to alleviate errors due to the authorization service being down
+        # Example: '2016-04-18 15:57:09.275093+00:00' <= '2016-04-18 16:36:05.825269+00:00' = True
         if now <= profile.auth_expires:
             logger.debug('no auth refresh required. Expires in %s seconds' % expires_in.seconds)
             return True

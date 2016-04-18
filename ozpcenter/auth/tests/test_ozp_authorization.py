@@ -22,7 +22,17 @@ class OzpAuthorizationTest(TestCase):
         """
         setUp is invoked before each test method
         """
-        pass
+        # Store the orginal value of USE_AUTH_SERVER
+        self.USE_AUTH_SERVER_ORGINAL = settings.OZP['USE_AUTH_SERVER']
+        # Setting USE_AUTH_SERVER to True makes the test run
+        settings.OZP['USE_AUTH_SERVER'] = True
+
+    def tearDown(self):
+        """
+        tearDown is invoked after each test method
+        """
+        # Set the value of USE_AUTH_SERVER to the orginal value
+        settings.OZP['USE_AUTH_SERVER'] = self.USE_AUTH_SERVER_ORGINAL
 
     @classmethod
     def setUpTestData(cls):
@@ -35,8 +45,6 @@ class OzpAuthorizationTest(TestCase):
         """
         If user's auth_expires is set too far ahead, authorization should fail
         """
-        if not settings.OZP['USE_AUTH_SERVER']:
-            return
         profile = model_access.get_profile('jones')
         # set auth cache to expire in 1+ days (against the rules!)
         profile.auth_expires = datetime.datetime.now(pytz.utc) + datetime.timedelta(days=1, seconds=5)
@@ -45,8 +53,6 @@ class OzpAuthorizationTest(TestCase):
             auth.authorization_update, 'jones')
 
     def test_valid_cache(self):
-        if not settings.OZP['USE_AUTH_SERVER']:
-            return
         profile = model_access.get_profile('jones')
         # set auth cache to expire in 1 day
         profile.auth_expires = datetime.datetime.now(pytz.utc) + datetime.timedelta(days=1)
@@ -59,8 +65,6 @@ class OzpAuthorizationTest(TestCase):
         self.assertEqual(auth.authorization_update('jones'), True)
 
     def test_update_cache(self):
-        if not settings.OZP['USE_AUTH_SERVER']:
-            return
         profile = model_access.get_profile('jones')
         profile.auth_expires = datetime.datetime.now(pytz.utc)
         profile.save()
@@ -90,8 +94,6 @@ class OzpAuthorizationTest(TestCase):
         """
         A user's agency (organization) changes
         """
-        if not settings.OZP['USE_AUTH_SERVER']:
-            return
         profile = model_access.get_profile('rutherford')
         profile.auth_expires = datetime.datetime.now(pytz.utc)
         profile.save()
@@ -117,8 +119,6 @@ class OzpAuthorizationTest(TestCase):
         """
         A user who was an org steward is now a regular user
         """
-        if not settings.OZP['USE_AUTH_SERVER']:
-            return
         profile = model_access.get_profile('wsmith')
         profile.auth_expires = datetime.datetime.now(pytz.utc)
         profile.save()
@@ -151,8 +151,6 @@ class OzpAuthorizationTest(TestCase):
         """
         A user who was an apps mall steward is now a regular user
         """
-        if not settings.OZP['USE_AUTH_SERVER']:
-            return
         profile = model_access.get_profile('bigbrother')
         profile.auth_expires = datetime.datetime.now(pytz.utc)
         profile.save()
@@ -182,8 +180,6 @@ class OzpAuthorizationTest(TestCase):
         """
         A user who was an apps mall steward is now an org steward
         """
-        if not settings.OZP['USE_AUTH_SERVER']:
-            return
         profile = model_access.get_profile('bigbrother')
         profile.auth_expires = datetime.datetime.now(pytz.utc)
         profile.save()
@@ -212,8 +208,6 @@ class OzpAuthorizationTest(TestCase):
         """
         A user who was an org steward is now an apps mall steward
         """
-        if not settings.OZP['USE_AUTH_SERVER']:
-            return
         profile = model_access.get_profile('wsmith')
         profile.auth_expires = datetime.datetime.now(pytz.utc)
         profile.save()
@@ -246,8 +240,6 @@ class OzpAuthorizationTest(TestCase):
         """
         A user who was an org steward is now also an apps mall steward
         """
-        if not settings.OZP['USE_AUTH_SERVER']:
-            return
         profile = model_access.get_profile('wsmith')
         profile.auth_expires = datetime.datetime.now(pytz.utc)
         profile.save()
