@@ -2,6 +2,7 @@
 Tests for Profile endpoints
 """
 import unittest
+from unittest.mock import MagicMock, patch
 
 from django.db import transaction
 from django.db.utils import IntegrityError
@@ -15,6 +16,7 @@ from ozpcenter.scripts import sample_data_generator as data_gen
 import ozpcenter.api.contact_type.views as views
 from ozpcenter import models as models
 from ozpcenter import model_access as generic_model_access
+from ozp.tests import helper
 
 
 class ProfileApiTest(APITestCase):
@@ -49,7 +51,8 @@ class ProfileApiTest(APITestCase):
         """
         data_gen.run()
 
-    def test_all_listing_for_self_profile(self):
+    #@patch('ozpcenter.auth.ozp_authorization.requests.get',  side_effect=helper.mocked_requests_get)
+    def test_all_listing_for_self_profile(self): #, mock_request
         """
         Testing GET /api/profile/self/listing endpoint
         """

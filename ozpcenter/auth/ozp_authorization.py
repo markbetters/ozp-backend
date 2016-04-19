@@ -55,6 +55,11 @@ def _get_auth_data(username):
         raise errors.AuthorizationFailure('Error contacting authorization server: %s' % r.text)
     user_data = r.json()
 
+    user_json_keys = ['dn', 'formalAccesses', 'clearances', 'dutyorg', 'visas']
+    for user_key in user_json_keys:
+        if user_key not in user_data:
+            raise ValueError('Endpoint %s not return value output - missing key: %s' % (url, user_key))
+
     # convert dutyorg -> duty_org
     user_data['duty_org'] = user_data['dutyorg']
     user_data.pop('dutyorg', None)
@@ -69,8 +74,12 @@ def _get_auth_data(username):
     r = requests.get(url, cert=(server_crt, server_key), verify=False)
     if r.status_code != 200:
         raise errors.AuthorizationFailure('Error contacting authorization server: %s' % r.text)
+    group_data = r.json()
 
-    groups = r.json()['groups']
+    if 'groups' not in group_data:
+        raise ValueError('Endpoint %s not return value output - missing key: %s' % (url, 'groups'))
+
+    groups = group_data['groups']
     user_data['is_org_steward'] = False
     user_data['is_apps_mall_steward'] = False
     user_data['is_metrics_user'] = False
