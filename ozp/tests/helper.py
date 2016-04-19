@@ -73,7 +73,6 @@ class Router(object):
 
     def execute(self, url):
         p = '(?P<protocol>http[s]?://)(?P<host>[^/ ]+)(?P<path>.*)'
-        print(url)
         m = re.search(p,url)
         protocol = m.group('protocol')
         host = m.group('host')

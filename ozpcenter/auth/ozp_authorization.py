@@ -160,6 +160,8 @@ def authorization_update(username, updated_auth_data=None):
             logger.error('Failed to update organizations for user %s. Error: %s' % (username, str(e)))
             return False
 
+        is_user_flag = True
+
         if not updated_auth_data['is_org_steward']:
             # remove all profile.stewarded_orgs
             profile.stewarded_organizations.clear()
@@ -167,26 +169,31 @@ def authorization_update(username, updated_auth_data=None):
             for g in profile.user.groups.all():
                 if g.name == 'ORG_STEWARD':
                     profile.user.groups.remove(g)
-            # add to USER group
-            g = Group.objects.get(name='USER')
-            profile.user.groups.add(g)
         else:
             # ensure ORG_STEWARD is in profile.user.groups
             g = Group.objects.get(name='ORG_STEWARD')
             profile.user.groups.add(g)
+            is_user_flag = False
 
         if not updated_auth_data['is_apps_mall_steward']:
             # ensure APPS_MALL_STEWARD is not in profile.user.groups
             for g in profile.user.groups.all():
                 if g.name == 'APPS_MALL_STEWARD':
                     profile.user.groups.remove(g)
-            # add to USER group
-            g = Group.objects.get(name='USER')
-            profile.user.groups.add(g)
         else:
             # ensure APPS_MALL_STEWARD is in profile.user.groups
             g = Group.objects.get(name='APPS_MALL_STEWARD')
             profile.user.groups.add(g)
+            is_user_flag = False
+
+        if is_user_flag:
+            # add to USER group
+            g = Group.objects.get(name='USER')
+            profile.user.groups.add(g)
+        else:
+            for g in profile.user.groups.all():
+                if g.name == 'USER':
+                    profile.user.groups.remove(g)
 
         # TODO: handle metrics user
 
