@@ -232,6 +232,9 @@ class ListingSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError('security_marking is required')
         data['security_marking'] = data.get('security_marking', None)
 
+        if not access_control.validate_marking(data['security_marking']):
+            raise errors.InvalidInput('security_marking is invalid')
+
         # only checked on update, not create
         data['is_enabled'] = data.get('is_enabled', False)
         data['is_featured'] = data.get('is_featured', False)
@@ -262,6 +265,8 @@ class ListingSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError('Image(small_icon) requires a %s' % 'id')
             if small_icon.get('security_marking') is None:
                 small_icon['security_marking'] = constants.DEFAULT_SECURITY_MARKING
+            if not access_control.validate_marking(small_icon['security_marking']):
+                raise errors.InvalidInput('security_marking is invalid')
         else:
             data['small_icon'] = None
 
@@ -272,6 +277,8 @@ class ListingSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError('Image(large_icon) requires a %s' % 'id')
             if large_icon.get('security_marking') is None:
                 large_icon['security_marking'] = constants.DEFAULT_SECURITY_MARKING
+            if not access_control.validate_marking(large_icon['security_marking']):
+                raise errors.InvalidInput('security_marking is invalid')
         else:
             data['large_icon'] = None
 
@@ -282,6 +289,8 @@ class ListingSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError('Image(banner_icon) requires a %s' % 'id')
             if banner_icon.get('security_marking') is None:
                 banner_icon['security_marking'] = constants.DEFAULT_SECURITY_MARKING
+            if not access_control.validate_marking(banner_icon['security_marking']):
+                raise errors.InvalidInput('security_marking is invalid')
         else:
             data['banner_icon'] = None
 
@@ -292,6 +301,8 @@ class ListingSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError('Image(large_banner_icon) requires a %s' % 'id')
             if large_banner_icon.get('security_marking') is None:
                 large_banner_icon['security_marking'] = constants.DEFAULT_SECURITY_MARKING
+            if not access_control.validate_marking(large_banner_icon['security_marking']):
+                raise errors.InvalidInput('security_marking is invalid')
         else:
             data['large_banner_icon'] = None
 
@@ -318,9 +329,13 @@ class ListingSerializer(serializers.ModelSerializer):
 
                 if not screenshot_small_image.get('security_marking'):
                     screenshot_small_image['security_marking'] = constants.DEFAULT_SECURITY_MARKING
+                if not access_control.validate_marking(screenshot_small_image['security_marking']):
+                    raise errors.InvalidInput('security_marking is invalid')
 
                 if not screenshot_large_image.get('security_marking'):
                     screenshot_large_image['security_marking'] = constants.DEFAULT_SECURITY_MARKING
+                if not access_control.validate_marking(screenshot_large_image['security_marking']):
+                    raise errors.InvalidInput('security_marking is invalid')
 
                 screenshots_out.append(screenshot_set)
                 data['screenshots'] = screenshots_out

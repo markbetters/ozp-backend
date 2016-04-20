@@ -24,6 +24,45 @@ class AccessControlTest(TestCase):
         """
         pass
 
+    def test_split_tokens(self):
+        marking = 'UNCLASSIFIED//FOUO//ABC'
+        tokens = access_control._split_tokens(marking)
+
+        actual_value = str(tokens)
+        expected_value = '[ClassificationToken(Unclassified), DisseminationControlToken(FOR OFFICIAL USE ONLY), UnknownToken(ABC)]'
+
+        self.assertEquals(actual_value, expected_value)
+
+        marking = 'UNCLASSIFIED'
+        tokens = access_control._split_tokens(marking)
+
+        actual_value = str(tokens)
+        expected_value = '[ClassificationToken(Unclassified)]'
+
+        self.assertEquals(actual_value, expected_value)
+
+
+    def test_validate_marking(self):
+        marking = 'UNCLASSIFIED'
+        validated = access_control.validate_marking(marking)
+        self.assertTrue(validated)
+
+        marking = 'UNCLASSIFIED//FOUO//ABC'
+        validated = access_control.validate_marking(marking)
+        self.assertTrue(validated)
+
+        marking = 'Invalid//FOUO//ABC'
+        validated = access_control.validate_marking(marking)
+        self.assertFalse(validated)
+
+        marking = ''
+        validated = access_control.validate_marking(marking)
+        self.assertFalse(validated)
+
+        marking = None
+        validated = access_control.validate_marking(marking)
+        self.assertFalse(validated)
+
     def test_has_access_unclass(self):
         user_accesses_json = json.dumps(
             {
