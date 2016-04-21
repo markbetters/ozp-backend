@@ -265,30 +265,24 @@ class ProfileApiTest(APITestCase):
         user_combo_list = [
             # bigbrother (minipax)
             {'id': 4, 'username': 'bigbrother', 'display_name': 'Big Brother',
-                #'organizations': [{'short_name':'Minipax','title':'Ministry of Peace'}],
                 'stewarded_organizations': [] ,
                 'groups': [{'name':'APPS_MALL_STEWARD'}],
                 'highest_role': 'APPS_MALL_STEWARD',
                 'test_data_input_stewarded_organizations': False},
             # bigbrother2 (minitrue)
             {'id': 5, 'username': 'bigbrother2', 'display_name': 'Big Brother2',
-                #'organizations': [{'short_name':'Minitrue','title':'Ministry of Truth'}],
                 'stewarded_organizations': [] ,
                 'groups': [{'name':'APPS_MALL_STEWARD'}],
                 'highest_role': 'APPS_MALL_STEWARD',
                 'test_data_input_stewarded_organizations': False},
             # wsmith (minitrue, stewarded_orgs: minitrue) - Org Steward Level
             {'id': 1, 'username': 'wsmith', 'display_name': 'Winston Smith',
-                #'organizations': [{"short_name":"Minitrue","title":"Ministry of Truth"}],
                 'stewarded_organizations': [{"short_name":"Minitrue","title":"Ministry of Truth"}],
                 'groups': [{"name":"ORG_STEWARD"}],
                 'highest_role': 'ORG_STEWARD',
                 'test_data_input_stewarded_organizations': True},
             # charrington (minipax, miniluv, minitrue) - User Level
             {'id': 11, 'username': 'charrington', 'display_name': 'Charrington',
-                #'organizations': [{'short_name':'Minitrue','title':'Ministry of Truth'},
-                #                  {"short_name":"Minipax","title":"Ministry of Peace"},
-                #                  {"short_name":"Miniluv","title":"Ministry of Love"}],
                 'stewarded_organizations': [],
                 'groups': [{'name':'USER'}],
                 'highest_role': 'USER',
@@ -297,7 +291,6 @@ class ProfileApiTest(APITestCase):
             {'id': 7,
                 'username': 'jones',
                 'display_name': 'Jones',
-                #'organizations':  [{"short_name":"Minitrue","title":"Ministry of Truth"}],
                 'stewarded_organizations': [] ,
                 'groups': [{'name':'USER'}],
                 'highest_role': 'USER',
@@ -308,7 +301,6 @@ class ProfileApiTest(APITestCase):
             current_id = current_user_info['id']
             current_username = current_user_info['username']
             current_display_name = current_user_info['display_name']
-            #current_organizations = current_user_info['organizations']
             current_stewarded_organizations = current_user_info['stewarded_organizations']
             current_groups = current_user_info['groups']
             current_highest_role = current_user_info['highest_role']
@@ -322,7 +314,6 @@ class ProfileApiTest(APITestCase):
             self.assertEqual(response.status_code, status.HTTP_200_OK)
             self.assertEqual(response.data.get('id'), current_id)
             self.assertEqual(response.data.get('display_name'), current_display_name)
-            #self.assertEqual(response.data.get('organizations'), current_organizations)
             self.assertEqual(response.data.get('stewarded_organizations'), current_stewarded_organizations)
             self.assertEqual(response.data.get('user').get('username'), current_username)
             self.assertEqual(response.data.get('user').get('groups'), current_groups)
@@ -355,7 +346,6 @@ class ProfileApiTest(APITestCase):
                 self.assertEqual(response.status_code, status.HTTP_200_OK)
                 self.assertEqual(response.data.get('id'), current_id)
                 self.assertEqual(response.data.get('display_name'), current_display_name)
-                #self.assertEqual(response.data.get('organizations'), current_organizations)
                 self.assertEqual(response.data.get('stewarded_organizations'), current_stewarded_organizations)
                 self.assertEqual(response.data.get('user').get('username'), current_username)
                 self.assertEqual(response.data.get('user').get('groups'), current_groups)
