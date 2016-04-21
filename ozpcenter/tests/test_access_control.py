@@ -41,6 +41,14 @@ class AccessControlTest(TestCase):
 
         self.assertEquals(actual_value, expected_value)
 
+        marking = 'UNcLaSsIfied'
+        tokens = access_control._split_tokens(marking)
+
+        actual_value = str(tokens)
+        expected_value = '[ClassificationToken(Unclassified)]'
+
+        self.assertEquals(actual_value, expected_value)
+
 
     def test_validate_marking(self):
         marking = 'UNCLASSIFIED'

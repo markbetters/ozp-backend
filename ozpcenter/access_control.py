@@ -140,10 +140,10 @@ def _split_tokens(input_marking, delimiter='//'):
         current_token = None
 
         if marking.upper() in long_name_lookup:
-            current_token = long_name_lookup[marking]
+            current_token = long_name_lookup[marking.upper()]
         else:
             if marking.upper() in short_name_lookup:
-                current_token = short_name_lookup[marking]
+                current_token = short_name_lookup[marking.upper()]
             else:
                 current_token = UnknownToken(long_name=marking)
 
