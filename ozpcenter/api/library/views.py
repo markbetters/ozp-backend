@@ -32,7 +32,7 @@ import ozpcenter.models as models
 import ozpcenter.permissions as permissions
 
 # Get an instance of a logger
-logger = logging.getLogger('ozp-center')
+logger = logging.getLogger('ozp-center.'+str(__name__))
 
 
 class LibraryViewSet(viewsets.ModelViewSet):

@@ -8,4 +8,25 @@ class CustomisedJSONFormatter(json_log_formatter.JSONFormatter):
             extra['time'] = django.utils.timezone.now()
         extra['level'] = record.levelname
         extra['message'] = message
+        extra['logger'] = record.name
+
+        if 'request' in extra:
+            request = extra['request']
+            if extra.get('request'):
+                extra['user'] = request.user.username
+            else:
+                extra['user'] = 'system'
+            del extra['request']
+        else:
+            extra['user'] = 'system'
+
+
+        if 'method' in extra:
+            method = extra['method']
+            delete_method_key = True
+            if extra.get('method'):
+                delete_method_key = False
+            if delete_method_key:
+                del extra['method']
+
         return extra

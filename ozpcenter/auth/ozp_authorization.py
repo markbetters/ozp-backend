@@ -24,10 +24,10 @@ import ozpcenter.model_access as model_access
 import ozpcenter.models as models
 import ozpcenter.utils as utils
 
-logger = logging.getLogger('ozp-center')
+logger = logging.getLogger('ozp-center.'+str(__name__))
 
 
-def _get_auth_data(username):
+def _get_auth_data(username, request=None):
     """
     Get authorization data for given user
 
@@ -49,7 +49,7 @@ def _get_auth_data(username):
     server_crt = settings.OZP['OZP_AUTHORIZATION']['SERVER_CRT']
     server_key = settings.OZP['OZP_AUTHORIZATION']['SERVER_KEY']
     r = requests.get(url, cert=(server_crt, server_key), verify=False)
-    logger.debug('hitting url %s for user with dn %s' % (url, profile.dn))
+    #logger.debug('hitting url %s for user with dn %s' % (url, profile.dn), extra={'request':request})
 
     if r.status_code != 200:
         raise errors.AuthorizationFailure('Error contacting authorization server: %s' % r.text)
@@ -70,7 +70,7 @@ def _get_auth_data(username):
 
     # get groups for user
     url = settings.OZP['OZP_AUTHORIZATION']['USER_GROUPS_URL'] % (profile.dn, settings.OZP['OZP_AUTHORIZATION']['PROJECT_NAME'])
-    logger.debug('hitting url %s for user with dn %s for group info' % (url, profile.dn))
+    #logger.debug('hitting url %s for user with dn %s for group info' % (url, profile.dn), extra={'request':request})
     r = requests.get(url, cert=(server_crt, server_key), verify=False)
     if r.status_code != 200:
         raise errors.AuthorizationFailure('Error contacting authorization server: %s' % r.text)
@@ -95,7 +95,7 @@ def _get_auth_data(username):
     return user_data
 
 
-def authorization_update(username, updated_auth_data=None):
+def authorization_update(username, updated_auth_data=None, request=None, method=None):
         """
         Update authorization info for this user
 
@@ -131,12 +131,13 @@ def authorization_update(username, updated_auth_data=None):
         # help to alleviate errors due to the authorization service being down
         # Example: '2016-04-18 15:57:09.275093+00:00' <= '2016-04-18 16:36:05.825269+00:00' = True
         if now <= profile.auth_expires:
-            logger.debug('no auth refresh required. Expires in %s seconds' % expires_in.seconds)
+            logger.debug('no auth refresh required. Expires in %s seconds' % expires_in.seconds,
+                            extra={'request':request, 'method':method})
             return True
 
         # otherwise, auth data must be updated
         if not updated_auth_data:
-            updated_auth_data = _get_auth_data(username)
+            updated_auth_data = _get_auth_data(username, request=request)
             if not updated_auth_data:
                 return False
 
@@ -157,7 +158,8 @@ def authorization_update(username, updated_auth_data=None):
             org = models.Agency.objects.get(short_name=duty_org)
             profile.organizations.add(org)
         except Exception as e:
-            logger.error('Failed to update organizations for user %s. Error: %s' % (username, str(e)))
+            logger.error('Failed to update organizations for user %s. Error: %s' % (username, str(e)),
+                            extra={'request':request, 'method':method})
             return False
 
         is_user_flag = True

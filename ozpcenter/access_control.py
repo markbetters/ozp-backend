@@ -14,7 +14,7 @@ This simple logic is this: for a user to have access:
 import json
 import logging
 
-logger = logging.getLogger('ozp-center')
+logger = logging.getLogger('ozp-center.'+str(__name__))
 
 
 def has_access(user_accesses_json, marking):

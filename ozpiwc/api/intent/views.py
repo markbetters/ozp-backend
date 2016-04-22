@@ -17,7 +17,7 @@ import ozpiwc.hal as hal
 import ozpiwc.renderers as renderers
 
 # Get an instance of a logger
-logger = logging.getLogger('ozp-iwc')
+logger = logging.getLogger('ozp-iwc.'+str(__name__))
 
 @api_view(['GET'])
 @permission_classes((permissions.IsAuthenticated, ))

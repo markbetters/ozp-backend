@@ -26,7 +26,7 @@ import ozpcenter.permissions as permissions
 import ozpcenter.api.profile.model_access as model_access
 
 # Get an instance of a logger
-logger = logging.getLogger('ozp-center')
+logger = logging.getLogger('ozp-center.'+str(__name__))
 
 
 class ProfileViewSet(viewsets.ModelViewSet):

@@ -11,7 +11,7 @@ import ozpcenter.api.category.serializers as category_serializers
 import ozpcenter.api.image.serializers as image_serializers
 
 # Get an instance of a logger
-logger = logging.getLogger('ozp-center')
+logger = logging.getLogger('ozp-center.'+str(__name__))
 
 
 class AgencySerializer(serializers.ModelSerializer):

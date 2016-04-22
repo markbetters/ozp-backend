@@ -23,7 +23,7 @@ try:
 except ImportError:
     from django.contrib.auth.models import User
 
-logger = logging.getLogger('ozp-center')
+logger = logging.getLogger('ozp-center.'+str(__name__))
 
 
 class PkiAuthentication(authentication.BaseAuthentication):
@@ -70,7 +70,7 @@ class PkiAuthentication(authentication.BaseAuthentication):
         profile = _get_profile_by_dn(dn, issuer_dn)
 
         if profile:
-            logger.info('found user %s, authentication succeeded' % profile.user.username)
+            logger.info('found user %s, authentication succeeded' % profile.user.username, extra={'user', profile.user.username})
             return (profile.user, None)
         else:
             logger.error('Failed to find/create user for dn %s. Authentication failed' % dn)

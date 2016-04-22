@@ -24,7 +24,7 @@ import ozpcenter.access_control as access_control
 import ozpcenter.utils as utils
 
 # Get an instance of a logger
-logger = logging.getLogger('ozp-center')
+logger = logging.getLogger('ozp-center.'+str(__name__))
 
 
 class ImageType(models.Model):

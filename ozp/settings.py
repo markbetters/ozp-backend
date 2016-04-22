@@ -243,7 +243,7 @@ OZP = {
         # seconds to treat cached authorization data as valid before trying to
         # update it
         # max value: 60*60*24 (1 day)
-        'SECONDS_TO_CACHE_DATA': 60
+        'SECONDS_TO_CACHE_DATA': 5
     }
 }
 
