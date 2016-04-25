@@ -19,7 +19,7 @@ import ozpcenter.api.listing.model_access as model_access
 import ozpcenter.model_access as generic_model_access
 
 # Get an instance of a logger
-logger = logging.getLogger('ozp-center')
+logger = logging.getLogger('ozp-center.'+str(__name__))
 
 
 class ContactViewSet(viewsets.ModelViewSet):
@@ -242,7 +242,7 @@ class ListingRejectionViewSet(viewsets.ModelViewSet):
             return Response(data={"listing": {"id": listing.id}},
                 status=status.HTTP_201_CREATED)
         except Exception as e:
-            logger.error('Exception: {}'.format(e))
+            logger.error('Exception: {}'.format(e), extra={'request': request})
             return Response("Error rejecting listing",
                     status=status.HTTP_400_BAD_REQUEST)
 
@@ -381,11 +381,11 @@ class ListingViewSet(viewsets.ModelViewSet):
         omit_serializer: true
         """
         try:
-            logger.debug('inside ListingViewSet.create')
+            #logger.debug('inside ListingViewSet.create', extra={'request': request})
             serializer = serializers.ListingSerializer(data=request.data,
                 context={'request': request}, partial=True)
             if not serializer.is_valid():
-                logger.error('%s' % serializer.errors)
+                logger.error('%s' % serializer.errors, extra={'request': request})
                 return Response(serializer.errors,
                     status=status.HTTP_400_BAD_REQUEST)
             serializer.save()
@@ -505,16 +505,16 @@ class ListingViewSet(viewsets.ModelViewSet):
         }
         """
         try:
-            logger.debug('inside ListingViewSet.update')
+            #logger.debug('inside ListingViewSet.update', extra={'request': request})
 
             instance = self.get_queryset().get(pk=pk)
             serializer = serializers.ListingSerializer(instance,
                 data=request.data, context={'request': request}, partial=True)
 
-            logger.debug('created ListingSerializer')
+            #logger.debug('created ListingSerializer', extra={'request': request})
 
             if not serializer.is_valid():
-                logger.error('%s' % serializer.errors)
+                logger.error('%s' % serializer.errors, extra={'request': request})
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
             serializer.save()

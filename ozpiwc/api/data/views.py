@@ -16,7 +16,7 @@ import ozpiwc.api.data.serializers as serializers
 import ozpiwc.api.data.model_access as model_access
 
 # Get an instance of a logger
-logger = logging.getLogger('ozp-iwc')
+logger = logging.getLogger('ozp-iwc.'+str(__name__))
 
 @api_view(['GET'])
 @permission_classes((permissions.IsAuthenticated, ))

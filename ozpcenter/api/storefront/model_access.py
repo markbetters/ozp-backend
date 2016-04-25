@@ -12,7 +12,7 @@ import ozpcenter.utils as utils
 import ozpcenter.api.storefront.serializers as serializers
 
 # Get an instance of a logger
-logger = logging.getLogger('ozp-center')
+logger = logging.getLogger('ozp-center.'+str(__name__))
 
 
 def get_storefront(username):

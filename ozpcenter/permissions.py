@@ -18,7 +18,7 @@ class IsAppsMallStewardOrReadOnly(permissions.BasePermission):
     def has_permission(self, request, view):
         if not request.user.is_authenticated():
             return False
-        ozp_authorization.authorization_update(request.user.username)
+        ozp_authorization.authorization_update(request.user.username, request=request)
         user_profile = model_access.get_profile(request.user.username)
         if (request.method in SAFE_METHODS or
                 user_profile.highest_role() in ['APPS_MALL_STEWARD']):
@@ -30,7 +30,7 @@ class IsOrgStewardOrReadOnly(permissions.BasePermission):
     def has_permission(self, request, view):
         if not request.user.is_authenticated():
             return False
-        ozp_authorization.authorization_update(request.user.username)
+        ozp_authorization.authorization_update(request.user.username, request=request)
         user_profile = model_access.get_profile(request.user.username)
         if (request.method in SAFE_METHODS or
                 user_profile.highest_role() in ['APPS_MALL_STEWARD', 'ORG_STEWARD']):
@@ -46,7 +46,7 @@ class IsUser(permissions.BasePermission):
     def has_permission(self, request, view):
         if not request.user.is_authenticated():
             return False
-        ozp_authorization.authorization_update(request.user.username)
+        ozp_authorization.authorization_update(request.user.username, request=request)
         profile = model_access.get_profile(request.user.username)
         if profile is None:
             return False
@@ -64,7 +64,7 @@ class IsOrgSteward(permissions.BasePermission):
     def has_permission(self, request, view):
         if not request.user.is_authenticated():
             return False
-        ozp_authorization.authorization_update(request.user.username)
+        ozp_authorization.authorization_update(request.user.username, request=request)
         profile = model_access.get_profile(request.user.username)
         if profile is None:
             return False
@@ -82,7 +82,7 @@ class IsAppsMallSteward(permissions.BasePermission):
     def has_permission(self, request, view):
         if not request.user.is_authenticated():
             return False
-        ozp_authorization.authorization_update(request.user.username)
+        ozp_authorization.authorization_update(request.user.username, request=request)
         profile = model_access.get_profile(request.user.username)
         if profile is None:
             return False
