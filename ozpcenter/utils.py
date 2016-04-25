@@ -14,7 +14,7 @@ def make_keysafe(key):
 
     TODO: check for max length (250 chars by default for memcached)
     """
-    return re.sub(r'[^a-zA-Z0-9_-]+', '', key).lower()
+    return re.sub(r'[^a-zA-Z0-9_."`-]+', '', key).lower()
 
 
 def find_between(s, start, end):
