@@ -21,7 +21,7 @@ import ozpcenter.errors as errors
 
 
 # Get an instance of a logger
-logger = logging.getLogger('ozp-center')
+logger = logging.getLogger('ozp-center.'+str(__name__))
 
 
 class ImageTypeViewSet(viewsets.ModelViewSet):

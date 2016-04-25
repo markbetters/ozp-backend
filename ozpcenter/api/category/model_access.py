@@ -7,7 +7,7 @@ from django.db.models.functions import Lower
 import ozpcenter.models as models
 
 # Get an instance of a logger
-logger = logging.getLogger('ozp-center')
+logger = logging.getLogger('ozp-center.'+str(__name__))
 
 
 def get_all_categories():

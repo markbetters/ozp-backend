@@ -10,7 +10,7 @@ import ozpcenter.model_access as generic_model_access
 import ozpcenter.access_control as access_control
 
 # Get an instance of a logger
-logger = logging.getLogger('ozp-center')
+logger = logging.getLogger('ozp-center.'+str(__name__))
 
 
 def get_self(username):

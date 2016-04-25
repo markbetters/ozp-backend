@@ -18,7 +18,7 @@ import ozpcenter.models as models
 import ozpcenter.api.storefront.model_access as model_access
 
 # Get an instance of a logger
-logger = logging.getLogger('ozp-center')
+logger = logging.getLogger('ozp-center.'+str(__name__))
 
 
 @api_view(['GET'])

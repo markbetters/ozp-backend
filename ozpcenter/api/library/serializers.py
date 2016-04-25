@@ -12,7 +12,7 @@ import ozpcenter.api.listing.model_access as listing_model_access
 import ozpcenter.model_access as generic_model_access
 
 # Get an instance of a logger
-logger = logging.getLogger('ozp-center')
+logger = logging.getLogger('ozp-center.'+str(__name__))
 
 
 class LibrarySerializer(serializers.HyperlinkedModelSerializer):
@@ -73,7 +73,7 @@ class UserLibrarySerializer(serializers.ModelSerializer):
         folder = validated_data.get('folder', None)
         listing = listing_model_access.get_listing_by_id(username,
             validated_data['listing']['id'])
-        logger.debug('adding bookmark for %s' % listing.title)
+        logger.debug('adding bookmark for %s' % listing.title, extra={'request':self.context.get('request')})
         owner = generic_model_access.get_profile(username)
         entry = models.ApplicationLibraryEntry(listing=listing, owner=owner,
             folder=folder)
