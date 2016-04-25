@@ -1184,25 +1184,44 @@ class ListingApiTest(APITestCase):
         # response = self.client.get(url, data, format='json')
         # self.assertEqual(response.data['approval_status'], models.Listing.IN_PROGRESS)
 
+    def _request_helper(self, url, method, data=None, username='bigbrother', status_code=200):
+        user = generic_model_access.get_profile(username).user
+        self.client.force_authenticate(user=user)
+
+        response = None
+
+        if method.upper() == 'GET':
+            response = self.client.get(url, format='json')
+        elif method.upper() == 'POST':
+            response = self.client.post(url, data, format='json')
+        elif method.upper() == 'PUT':
+            response = self.client.put(url, data, format='json')
+
+        if response:
+            if status_code == 200:
+                self.assertEqual(response.status_code, status.HTTP_200_OK)
+            elif status_code == 201:
+                self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        return response
+
     def test_listing_activities(self):
         action_log = []
-
         # CREATED
-        user = generic_model_access.get_profile('jones').user
-        self.client.force_authenticate(user=user)
         url = '/api/listing/'
 
         data = {
-            "title": "mr jones app",
-            "security_marking": "UNCLASSIFIED"
+            'title': 'mr jones app',
+            'security_marking': 'UNCLASSIFIED'
         }
-        response = self.client.post(url, data, format='json')
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        response = self._request_helper(url, 'POST', data=data, username='jones', status_code=201)
         app_id = response.data['id']
         data = response.data
 
+        # VERIFY that is was created
         url = '/api/listing/%s/activity/' % app_id
-        response = self.client.get(url, format='json')
+        response = self._request_helper(url, 'GET', username='jones', status_code=200)
 
         activity_actions = [i['action'] for i in response.data]
         self.assertEqual(len(activity_actions), 1)
@@ -1210,15 +1229,18 @@ class ListingApiTest(APITestCase):
         self.assertEqual(activity_actions , action_log)
         activity_agency = [i['listing']['agency'] for i in response.data]
         self.assertEquals(json.dumps(activity_agency[0]), '{"title": "Ministry of Truth", "short_name": "Minitrue"}')
+        for entry in response.data:
+            self.assertTrue('small_icon' in entry['listing'])
 
         # MODIFIED
         data['title'] = "mr jones mod app"
         url = '/api/listing/%s/' % app_id
-        response = self.client.put(url, data, format='json')
+        response = self._request_helper(url, 'PUT', data=data, username='jones', status_code=200)
         data = response.data
 
+        # VERIFY that is was modified
         url = '/api/listing/%s/activity/' % app_id
-        response = self.client.get(url, format='json')
+        response = self._request_helper(url, 'GET', username='jones', status_code=200)
 
         activity_actions = [i['action'] for i in response.data]
         self.assertEqual(len(activity_actions), 2)
@@ -1226,14 +1248,17 @@ class ListingApiTest(APITestCase):
         self.assertEqual(activity_actions , action_log)
         activity_agency = [i['listing']['agency'] for i in response.data]
         self.assertEquals(json.dumps(activity_agency[0]), '{"title": "Ministry of Truth", "short_name": "Minitrue"}')
+        for entry in response.data:
+            self.assertTrue('small_icon' in entry['listing'])
 
         # SUBMITTED
         data['approval_status'] = models.Listing.PENDING
         url = '/api/listing/%s/' % app_id
-        response = self.client.put(url, data, format='json')
+        response = self._request_helper(url, 'PUT', data=data, username='jones', status_code=200)
 
+        # Verify that is was submitted
         url = '/api/listing/%s/activity/' % app_id
-        response = self.client.get(url, format='json')
+        response = self._request_helper(url, 'GET', username='jones', status_code=200)
 
         activity_actions = [i['action'] for i in response.data]
         self.assertEquals(len(activity_actions), 3)
@@ -1242,6 +1267,8 @@ class ListingApiTest(APITestCase):
         self.assertTrue(models.ListingActivity.SUBMITTED in activity_actions)
         activity_agency = [i['listing']['agency'] for i in response.data]
         self.assertEquals(json.dumps(activity_agency[0]), '{"title": "Ministry of Truth", "short_name": "Minitrue"}')
+        for entry in response.data:
+            self.assertTrue('small_icon' in entry['listing'])
 
         # APPROVED_ORG
 
@@ -1250,31 +1277,36 @@ class ListingApiTest(APITestCase):
         # DISABLE
         data['is_enabled'] = False
         url = '/api/listing/%s/' % app_id
-        response = self.client.put(url, data, format='json')
+        response = self._request_helper(url, 'PUT', data=data, username='jones', status_code=200)
 
+        #Verify that it was disabled
         url = '/api/listing/%s/activity/' % app_id
-        response = self.client.get(url, format='json')
-
+        response = self._request_helper(url, 'GET', username='jones', status_code=200)
         activity_actions = [i['action'] for i in response.data]
         self.assertEquals(len(activity_actions), 4)
         action_log.insert(0, models.ListingActivity.DISABLED)
         self.assertEqual(activity_actions , action_log)
         activity_agency = [i['listing']['agency'] for i in response.data]
         self.assertEquals(json.dumps(activity_agency[0]), '{"title": "Ministry of Truth", "short_name": "Minitrue"}')
+        for entry in response.data:
+            self.assertTrue('small_icon' in entry['listing'])
 
         # ENABLED
         data['is_enabled'] = True
         url = '/api/listing/%s/' % app_id
-        response = self.client.put(url, data, format='json')
+        response = self._request_helper(url, 'PUT', data=data, username='jones', status_code=200)
 
+        #Verify that it was enabled
         url = '/api/listing/%s/activity/' % app_id
-        response = self.client.get(url, format='json')
+        response = self._request_helper(url, 'GET', username='jones', status_code=200)
         activity_actions = [i['action'] for i in response.data]
         self.assertEquals(len(activity_actions), 5)
         action_log.insert(0, models.ListingActivity.ENABLED)
         self.assertEqual(activity_actions , action_log)
         activity_agency = [i['listing']['agency'] for i in response.data]
         self.assertEquals(json.dumps(activity_agency[0]), '{"title": "Ministry of Truth", "short_name": "Minitrue"}')
+        for entry in response.data:
+            self.assertTrue('small_icon' in entry['listing'])
 
     def test_get_all_listing_activities(self):
         """
