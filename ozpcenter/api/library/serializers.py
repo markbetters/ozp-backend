@@ -12,7 +12,7 @@ import ozpcenter.api.listing.model_access as listing_model_access
 import ozpcenter.model_access as generic_model_access
 
 # Get an instance of a logger
-logger = logging.getLogger('ozp-center')
+logger = logging.getLogger('ozp-center.'+str(__name__))
 
 
 class LibrarySerializer(serializers.HyperlinkedModelSerializer):
@@ -60,6 +60,17 @@ class UserLibrarySerializer(serializers.ModelSerializer):
         """
         if 'listing' not in data:
             raise serializers.ValidationError('No listing provided')
+
+        username = self.context['request'].user.username
+        listing = listing_model_access.get_listing_by_id(username,
+            data['listing']['id'])
+
+        if listing:
+            if not listing.is_enabled:
+                raise serializers.ValidationError('Can not bookmark apps that are disabled')
+        else:
+            raise serializers.ValidationError('Listing id entry not found')
+
         if 'id' not in data['listing']:
             raise serializers.ValidationError('No listing id provided')
         if 'folder' in data:
@@ -73,7 +84,7 @@ class UserLibrarySerializer(serializers.ModelSerializer):
         folder = validated_data.get('folder', None)
         listing = listing_model_access.get_listing_by_id(username,
             validated_data['listing']['id'])
-        logger.debug('adding bookmark for %s' % listing.title)
+        logger.debug('adding bookmark for %s' % listing.title, extra={'request':self.context.get('request')})
         owner = generic_model_access.get_profile(username)
         entry = models.ApplicationLibraryEntry(listing=listing, owner=owner,
             folder=folder)
