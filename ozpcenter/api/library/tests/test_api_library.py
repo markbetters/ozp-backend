@@ -39,6 +39,28 @@ class LibraryApiTest(APITestCase):
         """
         POST to /self/library
         """
+        # Listing is Enabled
+        user = generic_model_access.get_profile('wsmith').user
+        self.client.force_authenticate(user=user)
+        url = '/api/self/library/'
+        data = {'listing': {'id': '1'}, 'folder': ''}
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data['listing']['id'], 1)
+
+        # Disable Listing
+        self._edit_listing(1, {'is_enabled': False}, 'wsmith')
+        # POST to /self/library after listing disabled
+        user = generic_model_access.get_profile('wsmith').user
+        self.client.force_authenticate(user=user)
+        url = '/api/self/library/'
+        data = {'listing': {'id': '1'}, 'folder': ''}
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+        # Enabled Listing
+        self._edit_listing(1, {'is_enabled': True}, 'wsmith')
+        # POST to /self/library after listing disabled
         user = generic_model_access.get_profile('wsmith').user
         self.client.force_authenticate(user=user)
         url = '/api/self/library/'
@@ -63,11 +85,11 @@ class LibraryApiTest(APITestCase):
         self.assertIn('unique_name', response.data[0]['listing'])
         self.assertIn('folder', response.data[0])
 
-    def _edit_listing(self, id, input_data):
+    def _edit_listing(self, id, input_data, default_user='bigbrother'):
         """
         Helper Method to modify a listing
         """
-        user = generic_model_access.get_profile('bigbrother').user
+        user = generic_model_access.get_profile(default_user).user
         self.client.force_authenticate(user=user)
         url = '/api/listing/%s/' % id
         #GET Listing
