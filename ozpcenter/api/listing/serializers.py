@@ -769,15 +769,14 @@ class ReviewSerializer(serializers.ModelSerializer):
         fields = ('author', 'listing', 'rate', 'text', 'edited_date', 'id')
 
 
-class ShortListingSerializer(serializers.ModelSerializer):
+class ShortListingSerializer(serializers.HyperlinkedModelSerializer):
     agency = AgencySerializer(required=False)
 
     class Meta:
         model = models.Listing
-        fields = ('unique_name', 'title', 'id', 'agency')
+        fields = ('unique_name', 'title', 'id', 'agency', 'small_icon')
 
 
-# TODO: is this used?
 class ListingActivitySerializer(serializers.ModelSerializer):
     author = profile_serializers.ShortProfileSerializer()
     listing = ShortListingSerializer()
