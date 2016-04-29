@@ -508,6 +508,10 @@ class ListingSerializer(serializers.ModelSerializer):
                 raise errors.PermissionDenied(
                     'User (%s) is not an owner of this listing' % user.username)
 
+        if instance.is_deleted == True:
+            raise errors.PermissionDenied(
+                'Cannot update a previously deleted listing')
+
         change_details = []
 
         simple_fields = ['title', 'description', 'description_short',
@@ -774,7 +778,7 @@ class ShortListingSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = models.Listing
-        fields = ('unique_name', 'title', 'id', 'agency', 'small_icon')
+        fields = ('unique_name', 'title', 'id', 'agency', 'small_icon', 'is_deleted')
 
 
 class ListingActivitySerializer(serializers.ModelSerializer):

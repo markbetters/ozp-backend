@@ -23,7 +23,7 @@ def get_all_library_entries():
     data = cache.get(key)
     if data is None:
         try:
-            data = models.ApplicationLibraryEntry.objects.all()
+            data = models.ApplicationLibraryEntry.objects.filter(listing__is_deleted=False).all()
             cache.set(key, data)
             return data
         except ObjectDoesNotExist:
@@ -42,7 +42,7 @@ def get_library_entry_by_id(id):
     data = cache.get(key)
     if data is None:
         try:
-            data = models.ApplicationLibraryEntry.objects.get(id=id)
+            data = models.ApplicationLibraryEntry.objects.get(id=id) # Is this need filter(listing__is_deleted=False)
             cache.set(key, data)
             return data
         except ObjectDoesNotExist:
@@ -63,7 +63,8 @@ def get_self_application_library(username):
     if data is None:
         try:
             data = models.ApplicationLibraryEntry.objects.filter(
-                owner__user__username=username).filter(listing__is_enabled=True)
+                owner__user__username=username).filter(listing__is_enabled=True) \
+                    .filter(listing__is_deleted=False)
 
             cache.set(key, data)
             return data
@@ -86,7 +87,9 @@ def get_self_application_library_by_listing_type(username, listing_type):
     if data is None:
         try:
             data = models.ApplicationLibraryEntry.objects.filter(
-                owner__user__username=username).filter(listing__listing_type__title=listing_type).filter(listing__is_enabled=True)
+                owner__user__username=username).filter(listing__listing_type__title=listing_type) \
+                    .filter(listing__is_enabled=True) \
+                    .filter(listing__is_deleted=False)
             cache.set(key, data)
             return data
         except ObjectDoesNotExist:
