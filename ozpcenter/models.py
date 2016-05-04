@@ -7,6 +7,7 @@ import json
 import logging
 import os
 import uuid
+from PIL import Image
 
 import django.contrib.auth
 from django.contrib.auth import models
@@ -17,10 +18,8 @@ from django.db import models
 from django.forms import ModelForm
 from django.conf import settings
 
-from PIL import Image
-
 import ozpcenter.constants as constants
-import ozpcenter.access_control as access_control
+from plugins_util import plugin_manager
 import ozpcenter.utils as utils
 
 # Get an instance of a logger
@@ -81,13 +80,14 @@ class AccessControlImageManager(models.Manager):
     """
 
     def for_user(self, username):
+        access_control_instance = plugin_manager.get_system_access_control_plugin()
         # get all images
         objects = super(AccessControlImageManager, self).get_queryset()
         user = Profile.objects.get(user__username=username)
         # filter out listings by user's access level
         images_to_exclude = []
         for i in objects:
-            if not access_control.has_access(user.access_control, i.security_marking):
+            if not access_control_instance.has_access(user.access_control, i.security_marking):
                 images_to_exclude.append(i.id)
         objects = objects.exclude(id__in=images_to_exclude)
         return objects
@@ -702,12 +702,14 @@ class AccessControlListingManager(models.Manager):
         objects = objects.exclude(is_private=True,
                                   agency__in=exclude_orgs)
 
+        access_control_instance = plugin_manager.get_system_access_control_plugin()
+
         # filter out listings by user's access level
         titles_to_exclude = []
         for i in objects:
             if not i.security_marking:
                 logger.debug('Listing %s has no security_marking' % i.title)
-            if not access_control.has_access(user.access_control, i.security_marking):
+            if not access_control_instance.has_access(user.access_control, i.security_marking):
                 titles_to_exclude.append(i.title)
         objects = objects.exclude(title__in=titles_to_exclude)
         return objects

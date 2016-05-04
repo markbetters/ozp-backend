@@ -10,9 +10,13 @@ from django.conf import settings
 from django.test import TestCase
 
 from ozpcenter.scripts import sample_data_generator as data_gen
-import ozpcenter.auth.ozp_authorization as auth
+#import ozpcenter.self.auth.ozp_authorization as auth
+import plugins.default_authorization.main as auth
 import ozpcenter.models as models
 import ozpcenter.model_access as model_access
+
+from plugins.default_authorization.main import PluginMain
+
 import ozpcenter.errors as errors
 
 
@@ -26,6 +30,7 @@ class OzpAuthorizationTest(TestCase):
         self.USE_AUTH_SERVER_ORGINAL = settings.OZP['USE_AUTH_SERVER']
         # Setting USE_AUTH_SERVER to True makes the test run
         settings.OZP['USE_AUTH_SERVER'] = True
+        self.auth = PluginMain()
 
     def tearDown(self):
         """
@@ -50,19 +55,19 @@ class OzpAuthorizationTest(TestCase):
         profile.auth_expires = datetime.datetime.now(pytz.utc) + datetime.timedelta(days=1, seconds=5)
         profile.save()
         self.assertRaises(errors.AuthorizationFailure,
-            auth.authorization_update, 'jones',  method='test_invalid_auth_cache')
+            self.auth.authorization_update, 'jones',  method='test_invalid_auth_cache')
 
     def test_valid_cache(self):
         profile = model_access.get_profile('jones')
         # set auth cache to expire in 1 day
         profile.auth_expires = datetime.datetime.now(pytz.utc) + datetime.timedelta(days=1)
         profile.save()
-        self.assertEqual(auth.authorization_update('jones', method='test_valid_cache'), True)
+        self.assertEqual(self.auth.authorization_update('jones', method='test_valid_cache'), True)
 
         # try again with cache almost expired
         profile.auth_expires = datetime.datetime.now(pytz.utc) + datetime.timedelta(seconds=2)
         profile.save()
-        self.assertEqual(auth.authorization_update('jones', method='test_valid_cache'), True)
+        self.assertEqual(self.auth.authorization_update('jones', method='test_valid_cache'), True)
 
     def test_update_cache(self):
         profile = model_access.get_profile('jones')
@@ -79,7 +84,7 @@ class OzpAuthorizationTest(TestCase):
             'is_apps_mall_steward': False,
             'is_metrics_user': False
         }
-        a = auth.authorization_update('jones', auth_data, method='test_update_cache')
+        a = self.auth.authorization_update('jones', auth_data, method='test_update_cache')
         self.assertEqual(a, True)
         # auth_expires should be rest to ~1 day from now
         profile = model_access.get_profile('jones')
@@ -110,7 +115,7 @@ class OzpAuthorizationTest(TestCase):
             'is_apps_mall_steward': False,
             'is_metrics_user': False
         }
-        a = auth.authorization_update('rutherford', auth_data, method='test_org_change')
+        a = self.auth.authorization_update('rutherford', auth_data, method='test_org_change')
         profile = model_access.get_profile('rutherford')
         org = profile.organizations.values_list('title', flat=True)[0]
         self.assertEqual(org, 'Ministry of Love')
@@ -138,7 +143,7 @@ class OzpAuthorizationTest(TestCase):
             'is_apps_mall_steward': False,
             'is_metrics_user': False
         }
-        a = auth.authorization_update('wsmith', auth_data, method='test_org_steward_to_user')
+        a = self.auth.authorization_update('wsmith', auth_data, method='test_org_steward_to_user')
         profile = model_access.get_profile('wsmith')
         stewarded_orgs = profile.stewarded_organizations.values_list('title', flat=True)
         self.assertTrue(len(stewarded_orgs) == 0)
@@ -169,7 +174,7 @@ class OzpAuthorizationTest(TestCase):
             'is_apps_mall_steward': False,
             'is_metrics_user': False
         }
-        a = auth.authorization_update('bigbrother', auth_data, method='test_apps_mall_steward_to_user')
+        a = self.auth.authorization_update('bigbrother', auth_data, method='test_apps_mall_steward_to_user')
         profile = model_access.get_profile('bigbrother')
         groups = profile.user.groups.values_list('name', flat=True)
         self.assertTrue('USER' in groups)
@@ -198,7 +203,7 @@ class OzpAuthorizationTest(TestCase):
             'is_apps_mall_steward': False,
             'is_metrics_user': False
         }
-        a = auth.authorization_update('bigbrother', auth_data, method='test_org_steward_to_apps_mall_steward')
+        a = self.auth.authorization_update('bigbrother', auth_data, method='test_org_steward_to_apps_mall_steward')
         profile = model_access.get_profile('bigbrother')
         groups = profile.user.groups.values_list('name', flat=True)
         self.assertTrue('ORG_STEWARD' in groups)
@@ -227,7 +232,7 @@ class OzpAuthorizationTest(TestCase):
             'is_apps_mall_steward': True,
             'is_metrics_user': False
         }
-        a = auth.authorization_update('wsmith', auth_data,
+        a = self.auth.authorization_update('wsmith', auth_data,
                     method='test_org_steward_to_apps_mall_steward_only')
         profile = model_access.get_profile('wsmith')
         stewarded_orgs = profile.stewarded_organizations.values_list('title', flat=True)
@@ -260,7 +265,7 @@ class OzpAuthorizationTest(TestCase):
             'is_apps_mall_steward': True,
             'is_metrics_user': False
         }
-        a = auth.authorization_update('wsmith', auth_data, method='test_org_steward_to_apps_mall_steward')
+        a = self.auth.authorization_update('wsmith', auth_data, method='test_org_steward_to_apps_mall_steward')
         profile = model_access.get_profile('wsmith')
         stewarded_orgs = profile.stewarded_organizations.values_list('title', flat=True)
         self.assertTrue('Ministry of Truth' in stewarded_orgs)

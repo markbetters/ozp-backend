@@ -7,7 +7,8 @@ import django.contrib.auth
 
 import ozpcenter.models as models
 import ozpcenter.model_access as generic_model_access
-import ozpcenter.access_control as access_control
+
+from plugins_util import plugin_manager
 
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center.'+str(__name__))
@@ -29,6 +30,7 @@ def get_profile_by_id(profile_id):
 
 
 def get_all_listings_for_profile_by_id(current_request_username, profile_id, listing_id = None):
+    access_control_instance = plugin_manager.get_system_access_control_plugin()
     try:
         if profile_id == 'self':
             profile_instance = models.Profile.objects.get(user__username=current_request_username).user
@@ -47,7 +49,7 @@ def get_all_listings_for_profile_by_id(current_request_username, profile_id, lis
         for i in listings:
             if not i.security_marking:
                 logger.debug('Listing %s has no security_marking' % i.title)
-            if not access_control.has_access(current_profile_instance.access_control, i.security_marking):
+            if not access_control_instance.has_access(current_profile_instance.access_control, i.security_marking):
                 titles_to_exclude.append(i.title)
         listings = listings.exclude(title__in=titles_to_exclude) #TODO: Base it on ids
 

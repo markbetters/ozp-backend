@@ -10,7 +10,6 @@ import django.contrib.auth
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
-import ozpcenter.access_control as access_control
 import ozpcenter.models as models
 import ozpcenter.constants as constants
 
@@ -23,6 +22,8 @@ import ozpcenter.api.category.model_access as category_model_access
 import ozpcenter.api.intent.model_access as intent_model_access
 import ozpcenter.api.contact_type.model_access as contact_type_model_access
 import ozpcenter.errors as errors
+
+from plugins_util import plugin_manager
 
 
 # Get an instance of a logger
@@ -61,8 +62,9 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
         user = generic_model_access.get_profile(
             self.context['request'].user.username)
 
+        access_control_instance = plugin_manager.get_system_access_control_plugin()
         if value:
-            if not access_control.has_access(user.access_control, value):
+            if not access_control_instance.has_access(user.access_control, value):
                 raise serializers.ValidationError(
                     'Security marking too high for current user')
         else:
@@ -213,6 +215,7 @@ class ListingSerializer(serializers.ModelSerializer):
         depth = 2
 
     def validate(self, data):
+        access_control_instance = plugin_manager.get_system_access_control_plugin()
         #logger.debug('inside ListingSerializer.validate', extra={'request':self.context.get('request')})
         user = generic_model_access.get_profile(
             self.context['request'].user.username)
@@ -232,7 +235,7 @@ class ListingSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError('security_marking is required')
         data['security_marking'] = data.get('security_marking', None)
 
-        if not access_control.validate_marking(data['security_marking']):
+        if not access_control_instance.validate_marking(data['security_marking']):
             raise errors.InvalidInput('security_marking is invalid')
 
         # only checked on update, not create
@@ -265,7 +268,7 @@ class ListingSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError('Image(small_icon) requires a %s' % 'id')
             if small_icon.get('security_marking') is None:
                 small_icon['security_marking'] = constants.DEFAULT_SECURITY_MARKING
-            if not access_control.validate_marking(small_icon['security_marking']):
+            if not access_control_instance.validate_marking(small_icon['security_marking']):
                 raise errors.InvalidInput('security_marking is invalid')
         else:
             data['small_icon'] = None
@@ -277,7 +280,7 @@ class ListingSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError('Image(large_icon) requires a %s' % 'id')
             if large_icon.get('security_marking') is None:
                 large_icon['security_marking'] = constants.DEFAULT_SECURITY_MARKING
-            if not access_control.validate_marking(large_icon['security_marking']):
+            if not access_control_instance.validate_marking(large_icon['security_marking']):
                 raise errors.InvalidInput('security_marking is invalid')
         else:
             data['large_icon'] = None
@@ -289,7 +292,7 @@ class ListingSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError('Image(banner_icon) requires a %s' % 'id')
             if banner_icon.get('security_marking') is None:
                 banner_icon['security_marking'] = constants.DEFAULT_SECURITY_MARKING
-            if not access_control.validate_marking(banner_icon['security_marking']):
+            if not access_control_instance.validate_marking(banner_icon['security_marking']):
                 raise errors.InvalidInput('security_marking is invalid')
         else:
             data['banner_icon'] = None
@@ -301,7 +304,7 @@ class ListingSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError('Image(large_banner_icon) requires a %s' % 'id')
             if large_banner_icon.get('security_marking') is None:
                 large_banner_icon['security_marking'] = constants.DEFAULT_SECURITY_MARKING
-            if not access_control.validate_marking(large_banner_icon['security_marking']):
+            if not access_control_instance.validate_marking(large_banner_icon['security_marking']):
                 raise errors.InvalidInput('security_marking is invalid')
         else:
             data['large_banner_icon'] = None
@@ -329,12 +332,12 @@ class ListingSerializer(serializers.ModelSerializer):
 
                 if not screenshot_small_image.get('security_marking'):
                     screenshot_small_image['security_marking'] = constants.DEFAULT_SECURITY_MARKING
-                if not access_control.validate_marking(screenshot_small_image['security_marking']):
+                if not access_control_instance.validate_marking(screenshot_small_image['security_marking']):
                     raise errors.InvalidInput('security_marking is invalid')
 
                 if not screenshot_large_image.get('security_marking'):
                     screenshot_large_image['security_marking'] = constants.DEFAULT_SECURITY_MARKING
-                if not access_control.validate_marking(screenshot_large_image['security_marking']):
+                if not access_control_instance.validate_marking(screenshot_large_image['security_marking']):
                     raise errors.InvalidInput('security_marking is invalid')
 
                 screenshots_out.append(screenshot_set)
@@ -387,13 +390,14 @@ class ListingSerializer(serializers.ModelSerializer):
         return data
 
     def validate_security_marking(self, value):
+        access_control_instance = plugin_manager.get_system_access_control_plugin()
         # don't allow user to select a security marking that is above
         # their own access level
         user = generic_model_access.get_profile(
             self.context['request'].user.username)
 
         if value:
-            if not access_control.has_access(user.access_control, value):
+            if not access_control_instance.has_access(user.access_control, value):
                 raise serializers.ValidationError(
                     'Security marking too high for current user')
         return value

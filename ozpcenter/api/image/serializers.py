@@ -12,7 +12,7 @@ from PIL import Image
 
 import ozpcenter.models as models
 import ozpcenter.model_access as generic_model_access
-import ozpcenter.access_control as access_control
+from plugins_util import plugin_manager
 
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center.'+str(__name__))
@@ -34,8 +34,10 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
         # their own access level
         user = generic_model_access.get_profile(
             self.context['request'].user.username)
+
+        access_control_instance = plugin_manager.get_system_access_control_plugin()
         if value:
-            if not access_control.has_access(user.access_control, value):
+            if not access_control_instance.has_access(user.access_control, value):
                 raise serializers.ValidationError(
                     'Security marking too high for current user')
         else:
@@ -70,8 +72,10 @@ class ImageCreateSerializer(serializers.Serializer):
         # their own access level
         user = generic_model_access.get_profile(
             self.context['request'].user.username)
+
+        access_control_instance = plugin_manager.get_system_access_control_plugin()
         if value:
-            if not access_control.has_access(user.access_control, value):
+            if not access_control_instance.has_access(user.access_control, value):
                 raise serializers.ValidationError(
                     'Security marking too high for current user')
         else:
