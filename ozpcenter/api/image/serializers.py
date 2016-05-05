@@ -15,16 +15,18 @@ import ozpcenter.model_access as generic_model_access
 from plugins_util import plugin_manager
 
 # Get an instance of a logger
-logger = logging.getLogger('ozp-center.'+str(__name__))
+logger = logging.getLogger('ozp-center.' + str(__name__))
 
 
 class ImageTypeSerializer(serializers.HyperlinkedModelSerializer):
+
     class Meta:
         model = models.ImageType
         fields = ('name',)
 
 
 class ImageSerializer(serializers.HyperlinkedModelSerializer):
+
     class Meta:
         model = models.Image
         fields = ('url', 'id', 'security_marking')
@@ -48,6 +50,7 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class ShortImageSerializer(serializers.HyperlinkedModelSerializer):
+
     class Meta:
         model = models.Image
         fields = ('url', 'id', 'security_marking')

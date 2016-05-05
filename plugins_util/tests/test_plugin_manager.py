@@ -41,7 +41,7 @@ class PluginManagerTest(TestCase):
         """
         Set up test data for the whole TestCase (only run once for the TestCase)
         """
-        #data_gen.run()
+        # data_gen.run()
 
     # TODO FINISH UNIT TEST
     # def test_invalid_auth_cache(self):

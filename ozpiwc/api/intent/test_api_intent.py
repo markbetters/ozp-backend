@@ -15,6 +15,7 @@ from ozpcenter.scripts import sample_data_generator as data_gen
 from ozpiwc import models as models
 from ozpcenter import model_access as generic_model_access
 
+
 class IntentApiTest(APITestCase):
 
     def setUp(self):
@@ -29,7 +30,6 @@ class IntentApiTest(APITestCase):
         Set up test data for the whole TestCase (only run once for the TestCase)
         """
         data_gen.run()
-
 
     def test_intent_api(self):
         user = generic_model_access.get_profile('wsmith').user

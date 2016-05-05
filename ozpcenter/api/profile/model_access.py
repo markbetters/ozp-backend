@@ -11,7 +11,7 @@ import ozpcenter.model_access as generic_model_access
 from plugins_util import plugin_manager
 
 # Get an instance of a logger
-logger = logging.getLogger('ozp-center.'+str(__name__))
+logger = logging.getLogger('ozp-center.' + str(__name__))
 
 
 def get_self(username):
@@ -29,7 +29,7 @@ def get_profile_by_id(profile_id):
         return None
 
 
-def get_all_listings_for_profile_by_id(current_request_username, profile_id, listing_id = None):
+def get_all_listings_for_profile_by_id(current_request_username, profile_id, listing_id=None):
     access_control_instance = plugin_manager.get_system_access_control_plugin()
     try:
         if profile_id == 'self':
@@ -51,10 +51,10 @@ def get_all_listings_for_profile_by_id(current_request_username, profile_id, lis
                 logger.debug('Listing %s has no security_marking' % i.title)
             if not access_control_instance.has_access(current_profile_instance.access_control, i.security_marking):
                 titles_to_exclude.append(i.title)
-        listings = listings.exclude(title__in=titles_to_exclude) #TODO: Base it on ids
+        listings = listings.exclude(title__in=titles_to_exclude)  # TODO: Base it on ids
 
         if listing_id:
-            filtered_listing= listings.get(id=listing_id)
+            filtered_listing = listings.get(id=listing_id)
         else:
             filtered_listing = listings.all()
 

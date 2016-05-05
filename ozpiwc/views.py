@@ -15,7 +15,8 @@ import ozpiwc.renderers as renderers
 import ozpiwc.hal as hal
 
 # Get an instance of a logger
-logger = logging.getLogger('ozp-iwc.'+str(__name__))
+logger = logging.getLogger('ozp-iwc.' + str(__name__))
+
 
 @api_view(['GET'])
 @permission_classes((permissions.IsAuthenticated, ))
@@ -95,6 +96,7 @@ def RootApiView(request):
         }
     }
     return Response(data)
+
 
 @api_view(['GET'])
 @permission_classes((permissions.IsAuthenticated, ))

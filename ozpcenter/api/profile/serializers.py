@@ -13,10 +13,11 @@ import ozpcenter.api.agency.model_access as agency_model_access
 
 
 # Get an instance of a logger
-logger = logging.getLogger('ozp-center.'+str(__name__))
+logger = logging.getLogger('ozp-center.' + str(__name__))
 
 
 class AgencySerializer(serializers.ModelSerializer):
+
     class Meta:
         model = models.Agency
         fields = ('short_name', 'title')
@@ -27,6 +28,7 @@ class AgencySerializer(serializers.ModelSerializer):
 
 
 class GroupSerializer(serializers.HyperlinkedModelSerializer):
+
     class Meta:
         model = django.contrib.auth.models.Group
         fields = ('name',)
@@ -44,6 +46,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class ShortUserSerializer(serializers.ModelSerializer):
+
     class Meta:
         # TODO: not supposed to reference Django's User model directly, but
         # using settings.AUTH_USER_MODEL here doesn't not work

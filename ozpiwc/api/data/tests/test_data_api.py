@@ -17,6 +17,7 @@ import ozpiwc.api.data.views as views
 from ozpiwc import models as models
 from ozpcenter import model_access as generic_model_access
 
+
 class DataApiTest(APITestCase):
 
     def setUp(self):
@@ -31,7 +32,6 @@ class DataApiTest(APITestCase):
         Set up test data for the whole TestCase (only run once for the TestCase)
         """
         data_gen.run()
-
 
     def test_data_api(self):
         user = generic_model_access.get_profile('wsmith').user

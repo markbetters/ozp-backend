@@ -23,10 +23,11 @@ try:
 except ImportError:
     from django.contrib.auth.models import User
 
-logger = logging.getLogger('ozp-center.'+str(__name__))
+logger = logging.getLogger('ozp-center.' + str(__name__))
 
 
 class PkiAuthentication(authentication.BaseAuthentication):
+
     def authenticate(self, request):
         # ensure we're using HTTPS
         if not request.is_secure():

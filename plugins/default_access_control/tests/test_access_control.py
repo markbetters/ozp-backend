@@ -50,7 +50,6 @@ class AccessControlTest(TestCase):
 
         self.assertEquals(actual_value, expected_value)
 
-
     def test_validate_marking(self):
         marking = 'UNCLASSIFIED'
         validated = self.access_control_instance.validate_marking(marking)
@@ -82,7 +81,6 @@ class AccessControlTest(TestCase):
         )
         marking = 'UNCLASSIFIED//FOUO//ABC'
         self.assertTrue(self.access_control_instance.future_has_access(user_accesses_json, marking))
-
 
         user_accesses_json = json.dumps(
             {

@@ -34,7 +34,7 @@ TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 NOSE_ARGS = [
     '--with-coverage',
     '--cover-html',
-    '--cover-package=ozp,ozpcenter,ozpiwc',
+    '--cover-package=ozp,ozpcenter,ozpiwc,plugins,plugins_util',
 ]
 
 # Application definition
@@ -116,9 +116,9 @@ LOGGING = {
             'formatter': 'json',
         }
     },
-    'formatters':{
-    'json':{
-        '()': 'ozp.logging_formatter.CustomisedJSONFormatter',}
+    'formatters': {
+        'json': {
+           '()': 'ozp.logging_formatter.CustomisedJSONFormatter', }
     },
     'loggers': {
         'django': {
@@ -247,7 +247,7 @@ OZP = {
     }
 }
 
-#Plugin Info
+# Plugin Info
 ACCESS_CONTROL_PLUGIN = 'default_access_control'
 AUTHORIZATION_PLUGIN = 'default_authorization'
 

@@ -22,7 +22,7 @@ import ozpcenter.errors as errors
 from plugins_util import plugin_manager
 
 # Get an instance of a logger
-logger = logging.getLogger('ozp-center.'+str(__name__))
+logger = logging.getLogger('ozp-center.' + str(__name__))
 
 
 class ImageTypeViewSet(viewsets.ModelViewSet):
@@ -131,7 +131,7 @@ class ImageViewSet(viewsets.ModelViewSet):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         except errors.PermissionDenied:
-            return Response({'detail':'Permission Denied'}, status=status.HTTP_403_FORBIDDEN)
+            return Response({'detail': 'Permission Denied'}, status=status.HTTP_403_FORBIDDEN)
         except Exception as e:
             raise e
 

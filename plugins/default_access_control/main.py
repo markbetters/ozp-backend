@@ -21,35 +21,35 @@ import logging
 
 from . import tokens as all_tokens
 
-logger = logging.getLogger('ozp-center.'+str(__name__))
+logger = logging.getLogger('ozp-center.' + str(__name__))
 
 
 tokens_list = [
     # Classification Tokens
-    {'type':'Classification',
-     'data':{'short_name':'U',
-             'long_name':'Unclassified',
+    {'type': 'Classification',
+     'data': {'short_name': 'U',
+             'long_name': 'Unclassified',
              'level': 1}
     },
-    {'type':'Classification',
-     'data':{'short_name':'C',
-             'long_name':'Confidential',
+    {'type': 'Classification',
+     'data': {'short_name': 'C',
+             'long_name': 'Confidential',
              'level': 2}
     },
-    {'type':'Classification',
-     'data':{'short_name':'S',
-             'long_name':'Secret',
+    {'type': 'Classification',
+     'data': {'short_name': 'S',
+             'long_name': 'Secret',
              'level': 3}
     },
-    {'type':'Classification',
-     'data':{'short_name':'TS',
-             'long_name':'Top Secret',
+    {'type': 'Classification',
+     'data': {'short_name': 'TS',
+             'long_name': 'Top Secret',
              'level': 4}
     },
     # Dissemination Control Tokens
-    {'type':'DisseminationControl',
-     'data':{'short_name':'FOUO',
-             'long_name':'FOR OFFICIAL USE ONLY'}
+    {'type': 'DisseminationControl',
+     'data': {'short_name': 'FOUO',
+             'long_name': 'FOR OFFICIAL USE ONLY'}
     }
 ]
 
@@ -66,7 +66,7 @@ class PluginMain(object):
         self.settings = settings
         self.requests = requests
 
-        self.tokens = [ self._convert_dict_to_token(input) for input in tokens_list]
+        self.tokens = [self._convert_dict_to_token(input) for input in tokens_list]
 
     def _convert_dict_to_token(self, input):
         """
@@ -76,14 +76,14 @@ class PluginMain(object):
         data = input.get('data')
 
         if type is None or data is None:
-            return  all_tokens.InvalidFormatToken()
+            return all_tokens.InvalidFormatToken()
 
-        tokenTypeClass =  all_tokens.InvalidFormatToken
+        tokenTypeClass = all_tokens.InvalidFormatToken
 
         if type == 'Classification':
-            tokenTypeClass =  all_tokens.ClassificationToken
+            tokenTypeClass = all_tokens.ClassificationToken
         elif type == 'DisseminationControl':
-            tokenTypeClass =  all_tokens.DisseminationControlToken
+            tokenTypeClass = all_tokens.DisseminationControlToken
         else:
             return tokenTypeClass()
 
@@ -178,7 +178,7 @@ class PluginMain(object):
             return False
         tokens = self._split_tokens(marking)
 
-        if not isinstance(tokens[0],  all_tokens.ClassificationToken):
+        if not isinstance(tokens[0], all_tokens.ClassificationToken):
             return False
 
         return True

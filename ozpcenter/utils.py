@@ -27,7 +27,7 @@ def find_between(s, start, end):
 def get_now_utc():
     """
     Return current datetime in UTC
-    
+
     Format: YYYY-MM-DD HH:MM[:ss[.uuuuuu]][TZ]
     """
     return datetime.datetime.now(pytz.utc)

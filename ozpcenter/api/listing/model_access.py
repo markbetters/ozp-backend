@@ -13,7 +13,7 @@ import ozpcenter.model_access as generic_model_access
 import ozpcenter.constants as constants
 
 # Get an instance of a logger
-logger = logging.getLogger('ozp-center.'+str(__name__))
+logger = logging.getLogger('ozp-center.' + str(__name__))
 
 
 def get_all_doc_urls():
@@ -74,7 +74,7 @@ def filter_listings(username, filter_params):
         objects = objects.filter(
             listing_type__title__in=filter_params['listing_types'])
 
-    objects = objects.order_by('-avg_rate','-total_reviews')
+    objects = objects.order_by('-avg_rate', '-total_reviews')
     return objects
 
 
@@ -580,6 +580,7 @@ def screenshots_to_string(screenshots, queryset=False):
                             i['large_image'].get('security_marking', constants.DEFAULT_SECURITY_MARKING)) for i in screenshots]
     return str(sorted(new_screenshots))
 
+
 def image_to_string(image, queryset=False, extra_str=None):
     """
     Args:
@@ -618,7 +619,7 @@ def contacts_to_string(contacts, queryset=False):
     else:
         new_contacts = [(i['name'], i['email'], i.get('secure_phone'),
                          i.get('unsecure_phone'), i.get('organization'),
-                         i.get('contact_type',{}).get('name') ) for i in contacts]
+                         i.get('contact_type', {}).get('name')) for i in contacts]
     return str(sorted(new_contacts))
 
 

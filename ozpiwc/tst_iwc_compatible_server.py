@@ -12,11 +12,12 @@ IWC_ROOT = 'http://localhost:8000/iwc-api'
 TOP_LEVEL_LINKS = ['ozp:user-data', 'ozp:application', 'ozp:user',
 'ozp:system', 'ozp:intent']
 
+
 class TestIwcBackend(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-       pass
+        pass
 
     def make_get_request(self, url, expected_status=200):
         r = requests.get(url, auth=('wsmith', 'password'))

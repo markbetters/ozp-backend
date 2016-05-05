@@ -2,6 +2,7 @@
 Tokens File
 """
 
+
 class Token(object):
 
     def __init__(self, short_name=None, long_name=None):
@@ -24,6 +25,7 @@ class InvalidFormatToken(Token):
         super(InvalidFormatToken, self).__init__(**kwargs)
         self.token_type = 'InvalidFormatToken'
 
+
 class UnknownToken(Token):
 
     def __init__(self, **kwargs):
@@ -41,6 +43,6 @@ class ClassificationToken(Token):
 
 class DisseminationControlToken(Token):
 
-    def __init__(self,  **kwargs):
+    def __init__(self, **kwargs):
         super(DisseminationControlToken, self).__init__(**kwargs)
         self.token_type = 'DisseminationControlToken'

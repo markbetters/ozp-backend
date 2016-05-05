@@ -8,8 +8,9 @@ from ozp.tests.helper import MockResponse
 
 TEST_BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+
 def _load_json_file():
-    with open('%s/%s'%(TEST_BASE_DIR,'tests/auth_data.json')) as json_data:
+    with open('%s/%s' % (TEST_BASE_DIR, 'tests/auth_data.json')) as json_data:
         auth_data = json.load(json_data)
         return auth_data
 
@@ -19,12 +20,13 @@ def get_auth_data(dn):
     Get updated authorization data from a JSON file
     """
     auth_data = _load_json_file()
-        # pprint(auth_data)
+    # pprint(auth_data)
     user_auth_data = auth_data['users']
     for u in user_auth_data:
         if u['dn'] == dn:
             return u
     return None
+
 
 class DemoAuthView(object):
 

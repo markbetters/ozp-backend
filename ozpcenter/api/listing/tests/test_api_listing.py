@@ -93,56 +93,56 @@ class ListingApiTest(APITestCase):
         url = '/api/listing/1/'
         title = 'airmail_disabled'
 
-        data =   {
-                "title": title,
-                "description": "description of app",
-                "launch_url": "http://www.google.com/launch",
-                "version_name": "1.0.0",
-                "unique_name": "org.apps.julia-one",
-                "what_is_new": "nothing is new",
-                "description_short": "a shorter description",
-                "requirements": "None",
-                "is_private": "true",
-                "is_enable": "false",
-                "contacts": [
-                    {"email": "a@a.com", "secure_phone": "111-222-3434",
-                        "unsecure_phone": "444-555-4545", "name": "me",
-                        "contact_type": {"name": "Government"}
+        data = {
+            "title": title,
+            "description": "description of app",
+            "launch_url": "http://www.google.com/launch",
+            "version_name": "1.0.0",
+            "unique_name": "org.apps.julia-one",
+            "what_is_new": "nothing is new",
+            "description_short": "a shorter description",
+            "requirements": "None",
+            "is_private": "true",
+            "is_enable": "false",
+            "contacts": [
+                {"email": "a@a.com", "secure_phone": "111-222-3434",
+                 "unsecure_phone": "444-555-4545", "name": "me",
+                 "contact_type": {"name": "Government"}
                     },
-                    {"email": "b@b.com", "secure_phone": "222-222-3333",
-                        "unsecure_phone": "555-555-5555", "name": "you",
-                        "contact_type": {"name": "Military"}
+                {"email": "b@b.com", "secure_phone": "222-222-3333",
+                 "unsecure_phone": "555-555-5555", "name": "you",
+                 "contact_type": {"name": "Military"}
                     }
                 ],
-                "security_marking": "UNCLASSIFIED",
-                "listing_type": {"title": "web application"},
-                "small_icon": {"id": 1},
-                "large_icon": {"id": 2},
-                "banner_icon": {"id": 3},
-                "large_banner_icon": {"id": 4},
-                "categories": [
-                    {"title": "Business"},
-                    {"title": "Education"}
+            "security_marking": "UNCLASSIFIED",
+            "listing_type": {"title": "web application"},
+            "small_icon": {"id": 1},
+            "large_icon": {"id": 2},
+            "banner_icon": {"id": 3},
+            "large_banner_icon": {"id": 4},
+            "categories": [
+                {"title": "Business"},
+                {"title": "Education"}
                 ],
-                "owners": [
-                    {"user": {"username": "wsmith"}},
-                    {"user": {"username": "julia"}}
+            "owners": [
+                {"user": {"username": "wsmith"}},
+                {"user": {"username": "julia"}}
                 ],
-                "tags": [
-                    {"name": "demo"},
-                    {"name": "map"}
+            "tags": [
+                {"name": "demo"},
+                {"name": "map"}
                 ],
-                "intents": [
-                    {"action": "/application/json/view"},
-                    {"action": "/application/json/edit"}
+            "intents": [
+                {"action": "/application/json/view"},
+                {"action": "/application/json/edit"}
                 ],
-                "doc_urls": [
-                    {"name": "wiki", "url": "http://www.google.com/wiki"},
-                    {"name": "guide", "url": "http://www.google.com/guide"}
+            "doc_urls": [
+                {"name": "wiki", "url": "http://www.google.com/wiki"},
+                {"name": "guide", "url": "http://www.google.com/guide"}
                 ],
-                "screenshots": [
-                    {"small_image": {"id": 1}, "large_image": {"id": 2}},
-                    {"small_image": {"id": 3}, "large_image": {"id": 4}}
+            "screenshots": [
+                {"small_image": {"id": 1}, "large_image": {"id": 2}},
+                {"small_image": {"id": 3}, "large_image": {"id": 4}}
                 ]
 
             }
@@ -150,7 +150,7 @@ class ListingApiTest(APITestCase):
         response = self.client.put(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        #Check
+        # Check
         user = generic_model_access.get_profile('wsmith').user
         self.client.force_authenticate(user=user)
         url = '/api/listings/search/?search=airmail&type=web application'
@@ -461,7 +461,6 @@ class ListingApiTest(APITestCase):
         self.assertEqual(listing.total_rate4, 1)
         self.assertEqual(listing.total_rate5, 2)
 
-
         # delete an existing review
         user = generic_model_access.get_profile('syme').user
         self.client.force_authenticate(user=user)
@@ -664,7 +663,6 @@ class ListingApiTest(APITestCase):
         self.assertEqual(response.data['required_listings'], None)
         self.assertTrue(response.data['edited_date'])
 
-
     def test_delete_listing(self):
         user = generic_model_access.get_profile('wsmith').user
         self.client.force_authenticate(user=user)
@@ -865,7 +863,6 @@ class ListingApiTest(APITestCase):
         self.assertTrue(2 in screenshots_large)
         self.assertTrue(4 in screenshots_large)
 
-
         self.assertTrue(response.data['approved_date'])
         self.assertEqual(response.data['approval_status'],
             models.Listing.APPROVED)
@@ -882,7 +879,6 @@ class ListingApiTest(APITestCase):
         self.assertEqual(response.data['iframe_compatible'], False)
         self.assertEqual(response.data['required_listings'], None)
         self.assertTrue(response.data['edited_date'])
-
 
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         #                   verify change_details
@@ -951,20 +947,20 @@ class ListingApiTest(APITestCase):
                         self.assertEqual(change['old_value'], old_listing_data['security_marking'])
                         total_found += 1
                     if change['field_name'] == 'small_icon':
-                        self.assertEqual(change['new_value'], str(data['small_icon']['id'])+'.UNCLASSIFIED')
-                        self.assertEqual(change['old_value'], str(old_listing_data['small_icon']['id'])+'.UNCLASSIFIED')
+                        self.assertEqual(change['new_value'], str(data['small_icon']['id']) + '.UNCLASSIFIED')
+                        self.assertEqual(change['old_value'], str(old_listing_data['small_icon']['id']) + '.UNCLASSIFIED')
                         total_found += 1
                     if change['field_name'] == 'large_icon':
-                        self.assertEqual(change['new_value'], str(data['large_icon']['id'])+'.UNCLASSIFIED')
-                        self.assertEqual(change['old_value'], str(old_listing_data['large_icon']['id'])+'.UNCLASSIFIED')
+                        self.assertEqual(change['new_value'], str(data['large_icon']['id']) + '.UNCLASSIFIED')
+                        self.assertEqual(change['old_value'], str(old_listing_data['large_icon']['id']) + '.UNCLASSIFIED')
                         total_found += 1
                     if change['field_name'] == 'banner_icon':
-                        self.assertEqual(change['new_value'], str(data['banner_icon']['id'])+'.UNCLASSIFIED')
-                        self.assertEqual(change['old_value'], str(old_listing_data['banner_icon']['id'])+'.UNCLASSIFIED')
+                        self.assertEqual(change['new_value'], str(data['banner_icon']['id']) + '.UNCLASSIFIED')
+                        self.assertEqual(change['old_value'], str(old_listing_data['banner_icon']['id']) + '.UNCLASSIFIED')
                         total_found += 1
                     if change['field_name'] == 'large_banner_icon':
-                        self.assertEqual(change['new_value'], str(data['large_banner_icon']['id'])+'.UNCLASSIFIED')
-                        self.assertEqual(change['old_value'], str(old_listing_data['large_banner_icon']['id'])+'.UNCLASSIFIED')
+                        self.assertEqual(change['new_value'], str(data['large_banner_icon']['id']) + '.UNCLASSIFIED')
+                        self.assertEqual(change['old_value'], str(old_listing_data['large_banner_icon']['id']) + '.UNCLASSIFIED')
                         total_found += 1
                     if change['field_name'] == 'doc_urls':
                         self.assertEqual(change['new_value'],
@@ -1009,8 +1005,7 @@ class ListingApiTest(APITestCase):
                             model_access.owners_to_string(old_listing_data['owners']))
                         total_found += 1
 
-
-        self.assertEqual(total_found, len(fields)-2)    # (-1 for approved_status) + (-1 for is_enabled)
+        self.assertEqual(total_found, len(fields) - 2)    # (-1 for approved_status) + (-1 for is_enabled)
 
     def test_z_create_update(self):
         user = generic_model_access.get_profile('julia').user
@@ -1145,15 +1140,12 @@ class ListingApiTest(APITestCase):
           "required_listings": None
         }
 
-
         url = '/api/listing/%s/' % listing_id
         response = self.client.put(url, data, format='json')
 
         contacts = response.data['contacts']
         contact_types = [i['contact_type']['name'] for i in contacts]
         self.assertEqual(str(contact_types), str(['Civillian', 'Government']))
-
-
 
     def test_update_listing_approval_status_deny_user(self):
         # a standard user cannot update the approval_status
@@ -1174,7 +1166,7 @@ class ListingApiTest(APITestCase):
         data['approval_status'] = models.Listing.APPROVED
         listing_id = data['id']
 
-        url = '/api/listing/%s/' %listing_id
+        url = '/api/listing/%s/' % listing_id
         response = self.client.put(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
@@ -1226,7 +1218,7 @@ class ListingApiTest(APITestCase):
         activity_actions = [i['action'] for i in response.data]
         self.assertEqual(len(activity_actions), 1)
         action_log.insert(0, models.ListingActivity.CREATED)
-        self.assertEqual(activity_actions , action_log)
+        self.assertEqual(activity_actions, action_log)
         activity_agency = [i['listing']['agency'] for i in response.data]
         self.assertEquals(json.dumps(activity_agency[0]), '{"title": "Ministry of Truth", "short_name": "Minitrue"}')
         for entry in response.data:
@@ -1245,7 +1237,7 @@ class ListingApiTest(APITestCase):
         activity_actions = [i['action'] for i in response.data]
         self.assertEqual(len(activity_actions), 2)
         action_log.insert(0, models.ListingActivity.MODIFIED)
-        self.assertEqual(activity_actions , action_log)
+        self.assertEqual(activity_actions, action_log)
         activity_agency = [i['listing']['agency'] for i in response.data]
         self.assertEquals(json.dumps(activity_agency[0]), '{"title": "Ministry of Truth", "short_name": "Minitrue"}')
         for entry in response.data:
@@ -1263,7 +1255,7 @@ class ListingApiTest(APITestCase):
         activity_actions = [i['action'] for i in response.data]
         self.assertEquals(len(activity_actions), 3)
         action_log.insert(0, models.ListingActivity.SUBMITTED)
-        self.assertEqual(activity_actions , action_log)
+        self.assertEqual(activity_actions, action_log)
         self.assertTrue(models.ListingActivity.SUBMITTED in activity_actions)
         activity_agency = [i['listing']['agency'] for i in response.data]
         self.assertEquals(json.dumps(activity_agency[0]), '{"title": "Ministry of Truth", "short_name": "Minitrue"}')
@@ -1279,13 +1271,13 @@ class ListingApiTest(APITestCase):
         url = '/api/listing/%s/' % app_id
         response = self._request_helper(url, 'PUT', data=data, username='jones', status_code=200)
 
-        #Verify that it was disabled
+        # Verify that it was disabled
         url = '/api/listing/%s/activity/' % app_id
         response = self._request_helper(url, 'GET', username='jones', status_code=200)
         activity_actions = [i['action'] for i in response.data]
         self.assertEquals(len(activity_actions), 4)
         action_log.insert(0, models.ListingActivity.DISABLED)
-        self.assertEqual(activity_actions , action_log)
+        self.assertEqual(activity_actions, action_log)
         activity_agency = [i['listing']['agency'] for i in response.data]
         self.assertEquals(json.dumps(activity_agency[0]), '{"title": "Ministry of Truth", "short_name": "Minitrue"}')
         for entry in response.data:
@@ -1296,13 +1288,13 @@ class ListingApiTest(APITestCase):
         url = '/api/listing/%s/' % app_id
         response = self._request_helper(url, 'PUT', data=data, username='jones', status_code=200)
 
-        #Verify that it was enabled
+        # Verify that it was enabled
         url = '/api/listing/%s/activity/' % app_id
         response = self._request_helper(url, 'GET', username='jones', status_code=200)
         activity_actions = [i['action'] for i in response.data]
         self.assertEquals(len(activity_actions), 5)
         action_log.insert(0, models.ListingActivity.ENABLED)
-        self.assertEqual(activity_actions , action_log)
+        self.assertEqual(activity_actions, action_log)
         activity_agency = [i['listing']['agency'] for i in response.data]
         self.assertEquals(json.dumps(activity_agency[0]), '{"title": "Ministry of Truth", "short_name": "Minitrue"}')
         for entry in response.data:
@@ -1351,7 +1343,7 @@ class ListingApiTest(APITestCase):
                 print('checking for app %s' % i)
                 self.assertTrue(i in titles)
                 counter += 1
-        self.assertEqual(counter, len(expected_titles)-1)
+        self.assertEqual(counter, len(expected_titles) - 1)
 
     def test_get_self_listing_activities(self):
         """

@@ -6,7 +6,7 @@ import logging
 import ozpcenter.models as models
 
 # Get an instance of a logger
-logger = logging.getLogger('ozp-center.'+str(__name__))
+logger = logging.getLogger('ozp-center.' + str(__name__))
 
 
 def get_all_intents():

@@ -20,7 +20,7 @@ import ozpcenter.api.notification.model_access as model_access
 import ozpcenter.model_access as generic_model_access
 
 # Get an instance of a logger
-logger = logging.getLogger('ozp-center.'+str(__name__))
+logger = logging.getLogger('ozp-center.' + str(__name__))
 
 
 class NotificationViewSet(viewsets.ModelViewSet):
@@ -42,7 +42,7 @@ class NotificationViewSet(viewsets.ModelViewSet):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         except errors.PermissionDenied:
-            return Response({'detail':'Permission Denied'}, status=status.HTTP_403_FORBIDDEN)
+            return Response({'detail': 'Permission Denied'}, status=status.HTTP_403_FORBIDDEN)
         except Exception as e:
             raise e
 
@@ -64,7 +64,7 @@ class NotificationViewSet(viewsets.ModelViewSet):
 
             return Response(serializer.data, status=status.HTTP_200_OK)
         except errors.PermissionDenied:
-            return Response({'detail':'Permission Denied'}, status=status.HTTP_403_FORBIDDEN)
+            return Response({'detail': 'Permission Denied'}, status=status.HTTP_403_FORBIDDEN)
         except Exception as e:
             raise e
 
@@ -80,10 +80,9 @@ class NotificationViewSet(viewsets.ModelViewSet):
             notification_instance.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
         except errors.PermissionDenied:
-                return Response({'detail':'Permission Denied'}, status=status.HTTP_403_FORBIDDEN)
+            return Response({'detail': 'Permission Denied'}, status=status.HTTP_403_FORBIDDEN)
         except Exception as e:
             raise e
-
 
 
 class UserNotificationViewSet(viewsets.ModelViewSet):

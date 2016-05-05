@@ -16,6 +16,7 @@ fake = Factory.create()
 
 
 class GroupFactory(factory.django.DjangoModelFactory):
+
     class Meta:
         model = django.contrib.auth.models.Group
         # http://joequery.me/code/factory-boy-handle-unique-constraints/
@@ -25,6 +26,7 @@ class GroupFactory(factory.django.DjangoModelFactory):
 
 
 class UserFactory(factory.django.DjangoModelFactory):
+
     class Meta:
         model = django.contrib.auth.models.User
         # http://joequery.me/code/factory-boy-handle-unique-constraints/
@@ -35,6 +37,7 @@ class UserFactory(factory.django.DjangoModelFactory):
 
 
 class ProfileFactory(factory.django.DjangoModelFactory):
+
     class Meta:
         model = models.Profile
 
@@ -44,6 +47,7 @@ class ProfileFactory(factory.django.DjangoModelFactory):
 
 
 class AgencyFactory(factory.django.DjangoModelFactory):
+
     class Meta:
         model = models.Agency
 

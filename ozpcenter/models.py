@@ -23,7 +23,7 @@ from plugins_util import plugin_manager
 import ozpcenter.utils as utils
 
 # Get an instance of a logger
-logger = logging.getLogger('ozp-center.'+str(__name__))
+logger = logging.getLogger('ozp-center.' + str(__name__))
 
 
 class ImageType(models.Model):
@@ -230,6 +230,7 @@ class Agency(models.Model):
 #     def __repr__(self):
 #         return "id:%d field %s was %s now is %s" % (
 #             self.id, self.field_name, self.old_value, self.new_value)
+
 
 class ApplicationLibraryEntry(models.Model):
     """
@@ -714,6 +715,7 @@ class AccessControlListingManager(models.Manager):
         objects = objects.exclude(title__in=titles_to_exclude)
         return objects
 
+
 class Listing(models.Model):
     """
     Listing
@@ -835,10 +837,10 @@ class Listing(models.Model):
     objects = AccessControlListingManager()
 
     def __repr__(self):
-        return '(%s-%s)'%(self.unique_name, [owner.user.username for owner in self.owners.all()])
+        return '(%s-%s)' % (self.unique_name, [owner.user.username for owner in self.owners.all()])
 
     def __str__(self):
-        return '(%s-%s)'%(self.unique_name, [owner.user.username for owner in self.owners.all()])
+        return '(%s-%s)' % (self.unique_name, [owner.user.username for owner in self.owners.all()])
 
 
 class AccessControlListingActivityManager(models.Manager):

@@ -2,7 +2,7 @@
 Urls
 """
 from django.conf.urls import url, include
-#from rest_framework import routers
+# from rest_framework import routers
 # use drf-nested-routers extension
 from rest_framework_nested import routers
 
@@ -23,5 +23,5 @@ profile_router.register(r'listing', views.ProfileListingViewSet, base_name='list
 urlpatterns = [
     url(r'^', include(router.urls)),
     url(r'^', include(profile_router.urls)),
-    url(r'^self/profile/$', views.CurrentUserViewSet.as_view({'get': 'retrieve', 'put':'update', 'patch':'update'}))
+    url(r'^self/profile/$', views.CurrentUserViewSet.as_view({'get': 'retrieve', 'put': 'update', 'patch': 'update'}))
 ]

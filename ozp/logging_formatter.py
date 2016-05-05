@@ -1,7 +1,9 @@
 import django
 import json_log_formatter
 
+
 class CustomisedJSONFormatter(json_log_formatter.JSONFormatter):
+
     def json_record(self, message, extra, record):
         # https://docs.python.org/2/library/logging.html#logrecord-objects
         if 'time' not in extra:
@@ -19,7 +21,6 @@ class CustomisedJSONFormatter(json_log_formatter.JSONFormatter):
             del extra['request']
         else:
             extra['user'] = 'system'
-
 
         if 'method' in extra:
             method = extra['method']

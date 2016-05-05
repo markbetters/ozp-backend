@@ -24,7 +24,8 @@ import json
 import logging
 import pytz
 
-logger = logging.getLogger('ozp-center.'+str(__name__))
+logger = logging.getLogger('ozp-center.' + str(__name__))
+
 
 class PluginMain(object):
     plugin_name = 'default_authorization'
@@ -60,7 +61,7 @@ class PluginMain(object):
         server_crt = self.settings.OZP['OZP_AUTHORIZATION']['SERVER_CRT']
         server_key = self.settings.OZP['OZP_AUTHORIZATION']['SERVER_KEY']
         r = self.requests.get(url, cert=(server_crt, server_key), verify=False)
-        #logger.debug('hitting url %s for user with dn %s' % (url, profile.dn), extra={'request':request})
+        # logger.debug('hitting url %s for user with dn %s' % (url, profile.dn), extra={'request':request})
 
         if r.status_code != 200:
             raise errors.AuthorizationFailure('Error contacting authorization server: %s' % r.text)
@@ -81,7 +82,7 @@ class PluginMain(object):
 
         # get groups for user
         url = self.settings.OZP['OZP_AUTHORIZATION']['USER_GROUPS_URL'] % (profile.dn, self.settings.OZP['OZP_AUTHORIZATION']['PROJECT_NAME'])
-        #logger.debug('hitting url %s for user with dn %s for group info' % (url, profile.dn), extra={'request':request})
+        # logger.debug('hitting url %s for user with dn %s for group info' % (url, profile.dn), extra={'request':request})
         r = self.requests.get(url, cert=(server_crt, server_key), verify=False)
         if r.status_code != 200:
             raise errors.AuthorizationFailure('Error contacting authorization server: %s' % r.text)
@@ -142,12 +143,12 @@ class PluginMain(object):
         # Example: '2016-04-18 15:57:09.275093+00:00' <= '2016-04-18 16:36:05.825269+00:00' = True
         if now <= profile.auth_expires:
             logger.debug('no auth refresh required. Expires in %s seconds' % expires_in.seconds,
-                            extra={'request':request, 'method':method})
+                         extra={'request': request, 'method': method})
             return True
 
         # otherwise, auth data must be updated
         if not updated_auth_data:
-            updated_auth_data = self._get_auth_data(username) #, request=request)
+            updated_auth_data = self._get_auth_data(username)  # , request=request)
             if not updated_auth_data:
                 return False
 
@@ -169,7 +170,7 @@ class PluginMain(object):
             profile.organizations.add(org)
         except Exception as e:
             logger.error('Failed to update organizations for user %s. Error: %s' % (username, str(e)),
-                            extra={'request':request, 'method':method})
+                         extra={'request': request, 'method': method})
             return False
 
         is_user_flag = True

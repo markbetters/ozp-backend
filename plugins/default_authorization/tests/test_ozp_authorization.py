@@ -10,7 +10,7 @@ from django.conf import settings
 from django.test import TestCase
 
 from ozpcenter.scripts import sample_data_generator as data_gen
-#import ozpcenter.self.auth.ozp_authorization as auth
+# import ozpcenter.self.auth.ozp_authorization as auth
 import plugins.default_authorization.main as auth
 import ozpcenter.models as models
 import ozpcenter.model_access as model_access
@@ -55,7 +55,7 @@ class OzpAuthorizationTest(TestCase):
         profile.auth_expires = datetime.datetime.now(pytz.utc) + datetime.timedelta(days=1, seconds=5)
         profile.save()
         self.assertRaises(errors.AuthorizationFailure,
-            self.auth.authorization_update, 'jones',  method='test_invalid_auth_cache')
+            self.auth.authorization_update, 'jones', method='test_invalid_auth_cache')
 
     def test_valid_cache(self):
         profile = model_access.get_profile('jones')

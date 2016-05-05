@@ -95,7 +95,6 @@ class CategoryApiTest(APITestCase):
         titles = [i['title'] for i in response.data]
         self.assertEqual(titles[0], 'AAA new category')
 
-
     def test_delete_category(self):
         user = generic_model_access.get_profile('bigbrother').user
         self.client.force_authenticate(user=user)

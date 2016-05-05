@@ -12,7 +12,7 @@ import ozpcenter.utils as utils
 import ozpcenter.api.storefront.serializers as serializers
 
 # Get an instance of a logger
-logger = logging.getLogger('ozp-center.'+str(__name__))
+logger = logging.getLogger('ozp-center.' + str(__name__))
 
 
 def get_storefront(username):
@@ -44,7 +44,7 @@ def get_storefront(username):
         most_popular_listings = models.Listing.objects.for_user(
             username).filter(
                 approval_status=models.Listing.APPROVED,
-                is_enabled=True).order_by('-avg_rate','-total_reviews')[:36]
+                is_enabled=True).order_by('-avg_rate', '-total_reviews')[:36]
 
         featured_listings = serializers.ListingSerializer.setup_eager_loading(featured_listings)
         recent_listings = serializers.ListingSerializer.setup_eager_loading(recent_listings)

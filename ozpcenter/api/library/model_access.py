@@ -10,7 +10,7 @@ import ozpcenter.models as models
 import ozpcenter.utils as utils
 
 # Get an instance of a logger
-logger = logging.getLogger('ozp-center.'+str(__name__))
+logger = logging.getLogger('ozp-center.' + str(__name__))
 
 
 def get_all_library_entries():

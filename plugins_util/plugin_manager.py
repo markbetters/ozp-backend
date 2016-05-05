@@ -16,16 +16,17 @@ import requests
 from django.conf import settings
 
 
-logger = logging.getLogger('ozp-center.'+str(__name__))
+logger = logging.getLogger('ozp-center.' + str(__name__))
 
 BASE_PLUGIN_DIRECTORY = ('%s/%s') % (os.path.realpath(os.path.join(os.path.dirname(__file__), '../')), 'plugins')
 
 
-#sys.path.insert(0, BASE_DIRECTORY)
+# sys.path.insert(0, BASE_DIRECTORY)
 class DynamicImporterWrapper(object):
     """
     Dynamic Importer Wrapper
     """
+
     def _validate(self):
         if not isinstance(self.input_module, ModuleType):
             raise TypeError('Input module not of type module')
@@ -70,7 +71,7 @@ def dynamic_importer(name, class_name=None):
         loaded_module = current_module.loader.load_module()
     except Exception as e:
         traceback.print_exc()
-        return DynamicImporterWrapper(None, None, 'Error Loading module: %s - Reason:%s' % (name,str(e.__traceback__)))
+        return DynamicImporterWrapper(None, None, 'Error Loading module: %s - Reason:%s' % (name, str(e.__traceback__)))
 
     if class_name:
         if getattr(loaded_module, class_name, None):
@@ -90,7 +91,7 @@ def dynamic_directory_importer(path=BASE_PLUGIN_DIRECTORY):
     listing = os.listdir(path)
     for infile in listing:
         if os.path.isdir(os.path.join(path, infile)):
-            if(os.path.isfile(os.path.join(path, infile,'main.py'))):
+            if(os.path.isfile(os.path.join(path, infile, 'main.py'))):
                 current_importer = dynamic_importer('plugins.%s.main' % infile, 'PluginMain')
                 output_list.append(current_importer)
     return output_list
@@ -105,7 +106,7 @@ def dynamic_mock_service_importer(path=BASE_PLUGIN_DIRECTORY):
     listing = os.listdir(path)
     for infile in listing:
         if os.path.isdir(os.path.join(path, infile)):
-            if(os.path.isfile(os.path.join(path, infile,'tests','mock.py'))):
+            if(os.path.isfile(os.path.join(path, infile, 'tests', 'mock.py'))):
                 current_importer = dynamic_importer('plugins.%s.tests.mock' % infile)
                 output_list.append(current_importer)
     return output_list
@@ -130,7 +131,7 @@ class PluginManager(object):
         """
         if not self.instances and not self.loaded:
             self.loaded = True
-            #Load plugins
+            # Load plugins
             self.instances = {}
 
             for importer_wrapper in dynamic_directory_importer(path):
@@ -172,8 +173,7 @@ class PluginManager(object):
             if hasattr(current_module, 'urls'):
                 # Found Urls in
                 router_instance.add_urls(current_module.urls)
-                logger.info('Loaded Mock Services for %s ' %  current_module)
-
+                logger.info('Loaded Mock Services for %s ' % current_module)
 
     def get_plugin_instance(self, plugin_name, path=BASE_PLUGIN_DIRECTORY):
         """
@@ -193,7 +193,7 @@ plugin_manager_instance = PluginManager()
 # Import helper for the mock services
 from ozp.tests import helper
 
-if hasattr(settings,'ACCESS_CONTROL_PLUGIN'):
+if hasattr(settings, 'ACCESS_CONTROL_PLUGIN'):
     ACCESS_CONTROL_PLUGIN = settings.ACCESS_CONTROL_PLUGIN
 else:
     ACCESS_CONTROL_PLUGIN = 'default_access_control'
@@ -203,8 +203,10 @@ if hasattr(settings, 'AUTHORIZATION_PLUGIN'):
 else:
     AUTHORIZATION_PLUGIN = 'default_access_control'
 
+
 def get_system_access_control_plugin():
     return plugin_manager_instance.get_plugin_instance(ACCESS_CONTROL_PLUGIN)
+
 
 def get_system_authorization_plugin():
     return plugin_manager_instance.get_plugin_instance(AUTHORIZATION_PLUGIN)

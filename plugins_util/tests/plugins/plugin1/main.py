@@ -13,7 +13,8 @@ Checks models.Profile.auth_expires. If auth is expired, refresh it.
 """
 import logging
 
-logger = logging.getLogger('ozp-center.'+str(__name__))
+logger = logging.getLogger('ozp-center.' + str(__name__))
+
 
 class PluginMain(object):
     plugin_name = 'plugin1'
