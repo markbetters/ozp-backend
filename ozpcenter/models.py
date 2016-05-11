@@ -728,12 +728,14 @@ class Listing(models.Model):
     APPROVED_ORG = 'APPROVED_ORG'
     APPROVED = 'APPROVED'
     REJECTED = 'REJECTED'
+    DELETED = 'DELETED'
     APPROVAL_STATUS_CHOICES = (
         (IN_PROGRESS, 'IN_PROGRESS'),
         (PENDING, 'PENDING'),
         (APPROVED_ORG, 'APPROVED_ORG'),
         (APPROVED, 'APPROVED'),
-        (REJECTED, 'REJECTED')
+        (REJECTED, 'REJECTED'),
+        (DELETED, 'DELETED')
     )
     # title is not guaranteed to be unique
     title = models.CharField(max_length=255)
@@ -774,6 +776,7 @@ class Listing(models.Model):
                                        choices=APPROVAL_STATUS_CHOICES, default=IN_PROGRESS)
     is_enabled = models.BooleanField(default=True)
     is_featured = models.BooleanField(default=False)
+    is_deleted = models.BooleanField(default=False)
     # a weighted average (5*total_rate5 + 4*total_rate4 + ...) / total_votes
     avg_rate = models.FloatField(default=0.0)
     total_votes = models.IntegerField(default=0)
@@ -884,6 +887,8 @@ class ListingActivity(models.Model):
     ENABLED = 'ENABLED'
     # listing is disabled (hidden from users)
     DISABLED = 'DISABLED'
+    # listing is deleted (hidden from users)
+    DELETED = 'DELETED'
     # a review for a listing has been modified
     REVIEW_EDITED = 'REVIEW_EDITED'
     # a review for a listing has been deleted
@@ -898,6 +903,7 @@ class ListingActivity(models.Model):
         (REJECTED, 'REJECTED'),
         (ENABLED, 'ENABLED'),
         (DISABLED, 'DISABLED'),
+        (DELETED, 'DELETED'),
         (REVIEW_EDITED, 'REVIEW_EDITED'),
         (REVIEW_DELETED, 'REVIEW_DELETED')
     )

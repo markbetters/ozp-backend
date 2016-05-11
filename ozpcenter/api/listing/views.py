@@ -390,8 +390,8 @@ class ListingViewSet(viewsets.ModelViewSet):
                     status=status.HTTP_400_BAD_REQUEST)
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        except errors.PermissionDenied:
-            return Response({'detail':'Permission Denied'}, status=status.HTTP_403_FORBIDDEN)
+        except errors.PermissionDenied as e:
+            return Response({'detail':'Permission Denied', 'reason': str(e)}, status=status.HTTP_403_FORBIDDEN)
         except errors.InvalidInput as err:
                 return Response({'detail': '{}'.format(err)}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
@@ -414,9 +414,8 @@ class ListingViewSet(viewsets.ModelViewSet):
         listing = get_object_or_404(queryset, pk=pk)
         try:
             model_access.delete_listing(request.user.username, listing)
-        except errors.PermissionDenied:
-            return Response('Permission Denied',
-                status=status.HTTP_403_FORBIDDEN)
+        except errors.PermissionDenied as e:
+            return Response({'detail':'Permission Denied', 'reason': str(e)}, status=status.HTTP_403_FORBIDDEN)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     def update(self, request, pk=None):
@@ -519,8 +518,8 @@ class ListingViewSet(viewsets.ModelViewSet):
 
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
-        except errors.PermissionDenied:
-            return Response({'detail':'Permission Denied'}, status=status.HTTP_403_FORBIDDEN)
+        except errors.PermissionDenied as e:
+            return Response({'detail':'Permission Denied', 'reason': str(e)}, status=status.HTTP_403_FORBIDDEN)
         except errors.InvalidInput as err:
             return Response({'detail': '{}'.format(err)}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
