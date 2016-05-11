@@ -31,20 +31,23 @@ def get_storefront(username):
             username).filter(
                 is_featured=True,
                 approval_status=models.Listing.APPROVED,
-                is_enabled=True)[:12]
+                is_enabled=True,
+                is_deleted=False)[:12]
 
         # get recent listings
         recent_listings = models.Listing.objects.for_user(
             username).order_by(
                 '-approved_date').filter(
                     approval_status=models.Listing.APPROVED,
-                    is_enabled=True)[:24]
+                    is_enabled=True,
+                    is_deleted=False)[:24]
 
         # get most popular listings via a weighted average
         most_popular_listings = models.Listing.objects.for_user(
             username).filter(
                 approval_status=models.Listing.APPROVED,
-                is_enabled=True).order_by('-avg_rate', '-total_reviews')[:36]
+                is_enabled=True,
+                is_deleted=False).order_by('-avg_rate','-total_reviews')[:36]
 
         featured_listings = serializers.ListingSerializer.setup_eager_loading(featured_listings)
         recent_listings = serializers.ListingSerializer.setup_eager_loading(recent_listings)

@@ -269,8 +269,10 @@ class ListingTest(TestCase):
         air_mail = models.Listing.objects.for_user(username).get(
             title='Air Mail')
         model_access.delete_listing(username, air_mail)
-        self.assertEquals(0, models.Listing.objects.for_user(username).filter(
+        self.assertEquals(1, models.Listing.objects.for_user(username).filter(
             title='Air Mail').count())
+        self.assertTrue(models.Listing.objects.for_user(username).filter(
+            title='Air Mail').first().is_deleted)
 
     def test_delete_listing_no_permission(self):
         username = 'jones'

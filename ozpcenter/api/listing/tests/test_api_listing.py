@@ -664,11 +664,16 @@ class ListingApiTest(APITestCase):
         self.assertTrue(response.data['edited_date'])
 
     def test_delete_listing(self):
-        user = generic_model_access.get_profile('wsmith').user
-        self.client.force_authenticate(user=user)
         url = '/api/listing/1/'
-        response = self.client.delete(url, format='json')
-        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        response = self._request_helper(url, 'GET', username='wsmith', status_code=200)
+        self.assertFalse(response.data.get('is_deleted'))
+
+        url = '/api/listing/1/'
+        response = self._request_helper(url, 'DELETE', username='wsmith', status_code=204)
+
+        url = '/api/listing/1/'
+        response = self._request_helper(url, 'GET', username='wsmith', status_code=200)
+        self.assertTrue(response.data.get('is_deleted'))
 
     def test_delete_listing_permission_denied(self):
         user = generic_model_access.get_profile('jones').user
@@ -1188,12 +1193,20 @@ class ListingApiTest(APITestCase):
             response = self.client.post(url, data, format='json')
         elif method.upper() == 'PUT':
             response = self.client.put(url, data, format='json')
+        elif method.upper() == 'DELETE':
+            response = self.client.delete(url, format='json')
+        else:
+            raise Exception('method is not supported')
 
         if response:
             if status_code == 200:
                 self.assertEqual(response.status_code, status.HTTP_200_OK)
             elif status_code == 201:
                 self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+            elif status_code == 204:
+                self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+            else:
+                raise Exception('status code is not supported')
 
         return response
 

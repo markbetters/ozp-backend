@@ -487,7 +487,18 @@ def delete_listing(username, listing):
     elif username not in app_owners:
         raise errors.PermissionDenied()
 
-    listing.delete()
+    if listing.is_deleted == True:
+        raise errors.PermissionDenied('The listing has already been deleted')
+
+    listing = _add_listing_activity(user, listing, models.ListingActivity.DELETED)
+    listing.is_deleted = True
+    listing.is_enabled = False
+    listing.approval_status = models.Listing.DELETED
+
+    # TODO Delete the values of other field
+    # Keep lisiting as shell listing for history
+    listing.save()
+    #listing.delete()
 
 
 def put_counts_in_listings_endpoint(queryset):
