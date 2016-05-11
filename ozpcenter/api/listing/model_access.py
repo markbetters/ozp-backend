@@ -487,7 +487,7 @@ def delete_listing(username, listing):
     elif username not in app_owners:
         raise errors.PermissionDenied()
 
-    if listing.is_deleted == True:
+    if listing.is_deleted:
         raise errors.PermissionDenied('The listing has already been deleted')
 
     listing = _add_listing_activity(user, listing, models.ListingActivity.DELETED)
