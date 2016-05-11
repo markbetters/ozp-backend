@@ -145,6 +145,7 @@ class ChangeDetailSerializer(serializers.ModelSerializer):
 
 
 class ListingActivitySerializer(serializers.ModelSerializer):
+
     class Meta:
         model = models.ListingActivity
         fields = ('action',)
@@ -159,6 +160,7 @@ class RejectionListingActivitySerializer(serializers.ModelSerializer):
 
 
 class IntentSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = models.Intent
         # TODO: is action the right thing?
@@ -170,6 +172,7 @@ class IntentSerializer(serializers.ModelSerializer):
 
 
 class CategorySerializer(serializers.ModelSerializer):
+
     class Meta:
         model = models.Category
         fields = ('title', 'description')
@@ -180,6 +183,7 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class CreateListingUserSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = django.contrib.auth.models.User
         fields = ('username',)
@@ -266,7 +270,6 @@ class ListingSerializer(serializers.ModelSerializer):
         else:
             data['listing_type'] = None
 
-
         # small_icon
         small_icon = data.get('small_icon', None)
         if small_icon:
@@ -324,7 +327,7 @@ class ListingSerializer(serializers.ModelSerializer):
                 if ('small_image' not in screenshot_set or
                         'large_image' not in screenshot_set):
                     raise serializers.ValidationError(
-                                        'Screenshot Set requires %s fields' % 'small_image, large_icon')
+                        'Screenshot Set requires %s fields' % 'small_image, large_icon')
                 screenshot_small_image = screenshot_set.get('small_image')
                 screenshot_large_image = screenshot_set.get('large_image')
 
@@ -413,7 +416,7 @@ class ListingSerializer(serializers.ModelSerializer):
         user = generic_model_access.get_profile(
             self.context['request'].user.username)
         logger.info('creating listing %s for user %s' % (title,
-            user.user.username), extra={'request':self.context.get('request')})
+            user.user.username), extra={'request': self.context.get('request')})
 
         # assign a default security_marking level if none is provided
 
@@ -750,7 +753,6 @@ class ListingSerializer(serializers.ModelSerializer):
                     large_image=new_large_image,
                     listing=instance)
 
-
                 new_screenshot_instances.append(obj)
 
             for i in old_screenshot_instances:
@@ -780,4 +782,3 @@ class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Review
         fields = ('author', 'listing', 'rate', 'text', 'edited_date', 'id')
-

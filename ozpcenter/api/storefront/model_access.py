@@ -47,7 +47,7 @@ def get_storefront(username):
             username).filter(
                 approval_status=models.Listing.APPROVED,
                 is_enabled=True,
-                is_deleted=False).order_by('-avg_rate','-total_reviews')[:36]
+                is_deleted=False).order_by('-avg_rate', '-total_reviews')[:36]
 
         featured_listings = serializers.ListingSerializer.setup_eager_loading(featured_listings)
         recent_listings = serializers.ListingSerializer.setup_eager_loading(recent_listings)

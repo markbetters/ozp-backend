@@ -498,7 +498,7 @@ def delete_listing(username, listing):
     # TODO Delete the values of other field
     # Keep lisiting as shell listing for history
     listing.save()
-    #listing.delete()
+    # listing.delete()
 
 
 def put_counts_in_listings_endpoint(queryset):

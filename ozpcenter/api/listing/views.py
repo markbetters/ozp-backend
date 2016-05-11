@@ -415,7 +415,7 @@ class ListingViewSet(viewsets.ModelViewSet):
         try:
             model_access.delete_listing(request.user.username, listing)
         except errors.PermissionDenied as e:
-            return Response({'detail':'Permission Denied', 'reason': str(e)}, status=status.HTTP_403_FORBIDDEN)
+            return Response({'detail': 'Permission Denied', 'reason': str(e)}, status=status.HTTP_403_FORBIDDEN)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     def update(self, request, pk=None):
