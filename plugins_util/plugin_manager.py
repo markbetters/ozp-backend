@@ -196,12 +196,14 @@ from ozp.tests import helper
 if hasattr(settings, 'ACCESS_CONTROL_PLUGIN'):
     ACCESS_CONTROL_PLUGIN = settings.ACCESS_CONTROL_PLUGIN
 else:
+    logger.warn('Loaded default plugin for access control')
     ACCESS_CONTROL_PLUGIN = 'default_access_control'
 
 if hasattr(settings, 'AUTHORIZATION_PLUGIN'):
     AUTHORIZATION_PLUGIN = settings.AUTHORIZATION_PLUGIN
 else:
-    AUTHORIZATION_PLUGIN = 'default_access_control'
+    logger.warn('Loaded default plugin for authorization')
+    AUTHORIZATION_PLUGIN = 'default_authorization'
 
 
 def get_system_access_control_plugin():
