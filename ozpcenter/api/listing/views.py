@@ -19,7 +19,7 @@ import ozpcenter.api.listing.model_access as model_access
 import ozpcenter.model_access as generic_model_access
 
 # Get an instance of a logger
-logger = logging.getLogger('ozp-center.'+str(__name__))
+logger = logging.getLogger('ozp-center.' + str(__name__))
 
 
 class ContactViewSet(viewsets.ModelViewSet):
@@ -381,7 +381,7 @@ class ListingViewSet(viewsets.ModelViewSet):
         omit_serializer: true
         """
         try:
-            #logger.debug('inside ListingViewSet.create', extra={'request': request})
+            # logger.debug('inside ListingViewSet.create', extra={'request': request})
             serializer = serializers.ListingSerializer(data=request.data,
                 context={'request': request}, partial=True)
             if not serializer.is_valid():
@@ -390,10 +390,10 @@ class ListingViewSet(viewsets.ModelViewSet):
                     status=status.HTTP_400_BAD_REQUEST)
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        except errors.PermissionDenied as e:
-            return Response({'detail':'Permission Denied', 'reason': str(e)}, status=status.HTTP_403_FORBIDDEN)
+        except errors.PermissionDenied:
+            return Response({'detail': 'Permission Denied'}, status=status.HTTP_403_FORBIDDEN)
         except errors.InvalidInput as err:
-                return Response({'detail': '{}'.format(err)}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'detail': '{}'.format(err)}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             raise e
 
@@ -415,7 +415,7 @@ class ListingViewSet(viewsets.ModelViewSet):
         try:
             model_access.delete_listing(request.user.username, listing)
         except errors.PermissionDenied as e:
-            return Response({'detail':'Permission Denied', 'reason': str(e)}, status=status.HTTP_403_FORBIDDEN)
+            return Response({'detail': 'Permission Denied', 'reason': str(e)}, status=status.HTTP_403_FORBIDDEN)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     def update(self, request, pk=None):
@@ -504,13 +504,13 @@ class ListingViewSet(viewsets.ModelViewSet):
         }
         """
         try:
-            #logger.debug('inside ListingViewSet.update', extra={'request': request})
+            # logger.debug('inside ListingViewSet.update', extra={'request': request})
 
             instance = self.get_queryset().get(pk=pk)
             serializer = serializers.ListingSerializer(instance,
                 data=request.data, context={'request': request}, partial=True)
 
-            #logger.debug('created ListingSerializer', extra={'request': request})
+            # logger.debug('created ListingSerializer', extra={'request': request})
 
             if not serializer.is_valid():
                 logger.error('%s' % serializer.errors, extra={'request': request})
@@ -518,8 +518,8 @@ class ListingViewSet(viewsets.ModelViewSet):
 
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
-        except errors.PermissionDenied as e:
-            return Response({'detail':'Permission Denied', 'reason': str(e)}, status=status.HTTP_403_FORBIDDEN)
+        except errors.PermissionDenied:
+            return Response({'detail': 'Permission Denied'}, status=status.HTTP_403_FORBIDDEN)
         except errors.InvalidInput as err:
             return Response({'detail': '{}'.format(err)}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:

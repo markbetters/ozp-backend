@@ -69,6 +69,13 @@ a large amount of Django Rest Framework (DRF). From Django itself:
 Most of the URLs and Views are done with DRF, and very little is done with
 templating, forms, and the admin site
 
+### Plugins
+TODO Add documentation
+* How does it work
+* How do make a new plugin
+
+
+
 ### Serializers
 Serialization = Python obj -> JSON
 

@@ -321,11 +321,11 @@ class ListingTest(TestCase):
         self.assertEqual(out, "[(10, 'UNCLASSIFIED', 11, 'UNCLASSIFIED')]")
 
     def test_image_to_string(self):
-        image ={
-                    "url": "http://localhost:8000/api/image/2/",
-                    "id": 2,
-                    "security_marking": "UNCLASSIFIED"
-                }
+        image = {
+            "url": "http://localhost:8000/api/image/2/",
+            "id": 2,
+            "security_marking": "UNCLASSIFIED"
+            }
 
         out = model_access.image_to_string(image)
         self.assertEqual(out, "2.UNCLASSIFIED")
@@ -333,7 +333,6 @@ class ListingTest(TestCase):
         image = models.Image.objects.get(id=1)
         out = model_access.image_to_string(image, True)
         self.assertEqual(out, "1.UNCLASSIFIED")
-
 
     def test_contacts_to_string(self):
         contacts = [
@@ -358,14 +357,14 @@ class ListingTest(TestCase):
         out = model_access.contacts_to_string(contacts)
 
         ext = ("[('me', 'me@google.com', '111-222-3434', '444-555-4545', None, 'Government'), " +
-                "('you', 'you@google.com', '111-222-3434', '444-555-4545', None, 'Military')]")
+               "('you', 'you@google.com', '111-222-3434', '444-555-4545', None, 'Military')]")
 
         self.assertEqual(out, ext)
 
         contacts = models.Contact.objects.filter(organization='House Stark')
         out = model_access.contacts_to_string(contacts, True)
 
-        ext = ("[('Brienne Tarth', 'brienne@stark.com', None, '222-324-3846', 'House Stark', 'Military'),"+
+        ext = ("[('Brienne Tarth', 'brienne@stark.com', None, '222-324-3846', 'House Stark', 'Military')," +
                " ('Osha', 'osha@stark.com', None, '321-123-7894', 'House Stark', 'Civillian')]")
 
         self.assertEqual(out, ext)

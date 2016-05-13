@@ -29,6 +29,7 @@ TEST_IMG_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'test_i
 
 DEMO_APP_ROOT = settings.OZP['DEMO_APP_ROOT']
 
+
 def run():
     """
     Creates basic sample data
@@ -100,7 +101,6 @@ def run():
     weather = models.Category(title="Weather",
         description="Get the temperature")
     weather.save()
-
 
     ############################################################################
     #                           Contact Types
@@ -208,7 +208,7 @@ def run():
     ############################################################################
     #                               Tags
     ############################################################################
-    demo =  models.Tag(name='demo')
+    demo = models.Tag(name='demo')
     demo.save()
     example = models.Tag(name='example')
     example.save()
@@ -447,7 +447,7 @@ def run():
     ############################################################################
 
     # Looping for more sample results
-    for i in range (0, 10):
+    for i in range(0, 10):
 
         postfix_space = "" if (i == 0) else " " + str(i)
         postfix_dot = "" if (i == 0) else "." + str(i)
@@ -686,7 +686,6 @@ def run():
         listing_model_access.submit_listing(winston, listing)
         listing_model_access.approve_listing_by_org_steward(winston, listing)
         listing_model_access.approve_listing(winston, listing)
-
 
         ############################################################################
         #                           Chatter Box

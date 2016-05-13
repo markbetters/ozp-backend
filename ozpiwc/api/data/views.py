@@ -16,7 +16,8 @@ import ozpiwc.api.data.serializers as serializers
 import ozpiwc.api.data.model_access as model_access
 
 # Get an instance of a logger
-logger = logging.getLogger('ozp-iwc.'+str(__name__))
+logger = logging.getLogger('ozp-iwc.' + str(__name__))
+
 
 @api_view(['GET'])
 @permission_classes((permissions.IsAuthenticated, ))
@@ -68,8 +69,8 @@ def ListDataApiView(request):
 
         data['_embedded']['item'] = embedded_items
 
-
     return Response(data)
+
 
 @api_view(['GET', 'PUT', 'DELETE'])
 @permission_classes((permissions.IsAuthenticated, ))

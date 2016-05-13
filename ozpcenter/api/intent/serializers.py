@@ -10,11 +10,12 @@ import ozpcenter.api.image.serializers as image_serializers
 import ozpcenter.api.image.model_access as image_model_access
 
 # Get an instance of a logger
-logger = logging.getLogger('ozp-center.'+str(__name__))
+logger = logging.getLogger('ozp-center.' + str(__name__))
 
 
 class IntentSerializer(serializers.ModelSerializer):
     icon = image_serializers.ShortImageSerializer()
+
     class Meta:
         model = models.Intent
         depth = 1

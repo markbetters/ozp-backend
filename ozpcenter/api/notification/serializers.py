@@ -12,10 +12,11 @@ import ozpcenter.model_access as generic_model_access
 import ozpcenter.api.listing.model_access as listing_model_access
 
 # Get an instance of a logger
-logger = logging.getLogger('ozp-center.'+str(__name__))
+logger = logging.getLogger('ozp-center.' + str(__name__))
 
 
 class ShortUserSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = User
         fields = ('username',)
@@ -30,6 +31,7 @@ class ShortProfileSerializer(serializers.ModelSerializer):
 
 
 class NotificationListingSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = models.Listing
         fields = ('title',)

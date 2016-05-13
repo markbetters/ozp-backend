@@ -11,7 +11,8 @@ import ozpiwc.models as models
 import ozpiwc.serializer_fields as serializer_fields
 
 # Get an instance of a logger
-logger = logging.getLogger('ozp-iwc.'+str(__name__))
+logger = logging.getLogger('ozp-iwc.' + str(__name__))
+
 
 class DataResourceSerializer(serializers.Serializer):
     username = serializers.CharField(max_length=128, read_only=True)
