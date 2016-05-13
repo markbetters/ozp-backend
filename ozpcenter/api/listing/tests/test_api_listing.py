@@ -1400,23 +1400,23 @@ class ListingApiTest(APITestCase):
         data = response.data
         last_item = data[-1]
 
-        expected_item =  { "counts": {
-                             "organizations": {
-                                    "4": 0,
-                                    "2": 0,
-                                    "1": 100,
-                                    "3": 10
-                                },
-                                "REJECTED": 0,
-                                "enabled": 110,
-                                "APPROVED_ORG": 0,
-                                "total": 110,
-                                "APPROVED": 110,
-                                "PENDING": 0,
-                                "IN_PROGRESS": 0,
-                                "DELETED": 0
-                            }
-                }
+        expected_item = {"counts": {
+            "organizations": {
+                "4": 0,
+                "2": 0,
+                "1": 100,
+                "3": 10
+                },
+            "REJECTED": 0,
+            "enabled": 110,
+            "APPROVED_ORG": 0,
+            "total": 110,
+            "APPROVED": 110,
+            "PENDING": 0,
+            "IN_PROGRESS": 0,
+            "DELETED": 0
+            }
+            }
         self.assertEquals(last_item, expected_item)
 
     def test_create_listing_with_different_agency(self):
