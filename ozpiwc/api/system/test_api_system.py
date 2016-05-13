@@ -64,7 +64,3 @@ class SystemApiTest(APITestCase):
         self.assertTrue('_embedded' in response.data)
         self.assertTrue('version' in response.data)
         self.assertTrue('name' in response.data)
-
-
-
-

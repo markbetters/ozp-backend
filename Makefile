@@ -26,6 +26,9 @@ run:
 runp:
 	gunicorn --workers=`nproc` ozp.wsgi -b localhost:8000 --access-logfile logs.txt --error-logfile logs.txt -p gunicorn.pid
 
+pep8:
+	pep8 ozp ozpcenter ozpiwc plugins plugins_util --ignore=E501,E123,E128,E121,E124,E711,E402 --exclude=ozpcenter/scripts/* --show-source
+
 dev: clean pre create_static
 	python manage.py makemigrations ozpcenter
 	python manage.py makemigrations ozpiwc

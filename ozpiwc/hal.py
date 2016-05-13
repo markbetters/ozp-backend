@@ -5,7 +5,7 @@ import re
 
 import ozpcenter.model_access as model_access
 
-#### Constants
+# Constants
 USER_REL = "ozp:user"
 APPLICATION_REL = "ozp:application"
 INTENT_REL = "ozp:intent"
@@ -39,6 +39,7 @@ def create_base_structure(request, type='application/json'):
     }
     return data
 
+
 def add_hal_structure(data, request, type='application/json'):
     """
     Adds initial HAL structure to existing dictionary
@@ -57,13 +58,16 @@ def add_hal_structure(data, request, type='application/json'):
     data["_embedded"] = {}
     return data
 
+
 def get_abs_url_for_profile(request, profile_id):
     root_url = request.build_absolute_uri('/')
     return '%siwc-api/profile/%s/' % (root_url, profile_id)
 
+
 def get_abs_url_for_iwc(request):
     root_url = request.build_absolute_uri('/')
     return '%siwc-api/' % root_url
+
 
 def add_link_item(url, data, type='application/json'):
     if 'item' not in data['_links']:
@@ -71,6 +75,7 @@ def add_link_item(url, data, type='application/json'):
     new_link = {'href': url, 'type': type}
     data['_links']['item'].append(new_link)
     return data
+
 
 def generate_content_type(type, version=2):
     """
@@ -84,6 +89,7 @@ def generate_content_type(type, version=2):
         return type
     except IndexError:
         return '%s;version=%s' % (type, version)
+
 
 def validate_version(accept_header):
     """

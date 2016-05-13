@@ -6,6 +6,7 @@ import unittest
 from django.test import TestCase
 from django.conf import settings
 
+
 class SettingsTest(TestCase):
 
     def setUp(self):
@@ -23,9 +24,9 @@ class SettingsTest(TestCase):
         # Testing to make sure keys exist
         ozp = settings.OZP
         ozp_level_keys = ['DEMO_APP_ROOT',
-                            'USE_AUTH_SERVER',
-                            'PREPROCESS_DN',
-                            'OZP_AUTHORIZATION']
+                          'USE_AUTH_SERVER',
+                          'PREPROCESS_DN',
+                          'OZP_AUTHORIZATION']
         for current_key in ozp_level_keys:
             self.assertTrue(current_key in ozp)
 

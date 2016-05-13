@@ -9,11 +9,12 @@ import ozpcenter.api.image.serializers as image_serializers
 import ozpcenter.models as models
 
 # Get an instance of a logger
-logger = logging.getLogger('ozp-center.'+str(__name__))
+logger = logging.getLogger('ozp-center.' + str(__name__))
 
 
 class AgencySerializer(serializers.ModelSerializer):
     # icon = image_serializers.ImageSerializer()
+
     class Meta:
         model = models.Agency
         depth = 2
@@ -21,6 +22,7 @@ class AgencySerializer(serializers.ModelSerializer):
 
 
 class MinimalAgencySerializer(serializers.ModelSerializer):
+
     class Meta:
         model = models.Agency
         fields = ('short_name',)

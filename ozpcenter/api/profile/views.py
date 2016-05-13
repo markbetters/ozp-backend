@@ -26,7 +26,7 @@ import ozpcenter.permissions as permissions
 import ozpcenter.api.profile.model_access as model_access
 
 # Get an instance of a logger
-logger = logging.getLogger('ozp-center.'+str(__name__))
+logger = logging.getLogger('ozp-center.' + str(__name__))
 
 
 class ProfileViewSet(viewsets.ModelViewSet):
@@ -67,9 +67,10 @@ class ProfileViewSet(viewsets.ModelViewSet):
 
             return Response(serializer.data, status=status.HTTP_200_OK)
         except errors.PermissionDenied:
-            return Response({'detail':'Permission Denied'}, status=status.HTTP_403_FORBIDDEN)
+            return Response({'detail': 'Permission Denied'}, status=status.HTTP_403_FORBIDDEN)
         except Exception as e:
             raise e
+
 
 class ProfileListingViewSet(viewsets.ModelViewSet):
     """
@@ -103,13 +104,13 @@ class ProfileListingViewSet(viewsets.ModelViewSet):
                     return response
 
                 serializer = listing_serializers.ListingSerializer(queryset,
-                    context={'request': request},many=True)
+                    context={'request': request}, many=True)
                 return Response(serializer.data)
             else:
-                return Response({'detail':'Not Found'}, status=status.HTTP_404_NOT_FOUND)
+                return Response({'detail': 'Not Found'}, status=status.HTTP_404_NOT_FOUND)
 
         except errors.PermissionDenied:
-            return Response({'detail':'Permission Denied'}, status=status.HTTP_403_FORBIDDEN)
+            return Response({'detail': 'Permission Denied'}, status=status.HTTP_403_FORBIDDEN)
         except Exception as e:
             raise e
 
@@ -124,31 +125,32 @@ class ProfileListingViewSet(viewsets.ModelViewSet):
                 context={'request': request})
             return Response(serializer.data)
         else:
-            return Response({'detail':'Not Found'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'detail': 'Not Found'}, status=status.HTTP_404_NOT_FOUND)
 
     def create(self, request, profile_pk=None):
         """
         This method is not supported
         """
-        return Response({'detail':'HTTP Verb(POST) Not Supported'}, status=status.HTTP_501_NOT_IMPLEMENTED)
+        return Response({'detail': 'HTTP Verb(POST) Not Supported'}, status=status.HTTP_501_NOT_IMPLEMENTED)
 
     def update(self, request, pk=None, profile_pk=None):
         """
         This method is not supported
         """
-        return Response({'detail':'HTTP Verb(PUT) Not Supported'}, status=status.HTTP_501_NOT_IMPLEMENTED)
+        return Response({'detail': 'HTTP Verb(PUT) Not Supported'}, status=status.HTTP_501_NOT_IMPLEMENTED)
 
     def partial_update(self, request, pk=None, profile_pk=None):
         """
         This method is not supported
         """
-        return Response({'detail':'HTTP Verb(PATCH) Not Supported'}, status=status.HTTP_501_NOT_IMPLEMENTED)
+        return Response({'detail': 'HTTP Verb(PATCH) Not Supported'}, status=status.HTTP_501_NOT_IMPLEMENTED)
 
-    def destroy(self, request,  pk=None, profile_pk=None):
+    def destroy(self, request, pk=None, profile_pk=None):
         """
         This method is not supported
         """
-        return Response({'detail':'HTTP Verb(DELETE) Not Supported'}, status=status.HTTP_501_NOT_IMPLEMENTED)
+        return Response({'detail': 'HTTP Verb(DELETE) Not Supported'}, status=status.HTTP_501_NOT_IMPLEMENTED)
+
 
 class UserViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsOrgSteward,)
@@ -159,6 +161,7 @@ class UserViewSet(viewsets.ModelViewSet):
 class GroupViewSet(viewsets.ModelViewSet):
     queryset = model_access.get_all_groups()
     serializer_class = serializers.GroupSerializer
+
 
 class CurrentUserViewSet(viewsets.ViewSet):
     """
@@ -185,6 +188,6 @@ class CurrentUserViewSet(viewsets.ViewSet):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         except errors.PermissionDenied:
-            return Response({'detail':'Permission Denied'}, status=status.HTTP_403_FORBIDDEN)
+            return Response({'detail': 'Permission Denied'}, status=status.HTTP_403_FORBIDDEN)
         except Exception as e:
             raise e

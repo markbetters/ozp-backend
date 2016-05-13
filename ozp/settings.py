@@ -34,7 +34,7 @@ TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 NOSE_ARGS = [
     '--with-coverage',
     '--cover-html',
-    '--cover-package=ozp,ozpcenter,ozpiwc',
+    '--cover-package=ozp,ozpcenter,ozpiwc,plugins,plugins_util',
 ]
 
 # Application definition
@@ -116,9 +116,9 @@ LOGGING = {
             'formatter': 'json',
         }
     },
-    'formatters':{
-    'json':{
-        '()': 'ozp.logging_formatter.CustomisedJSONFormatter',}
+    'formatters': {
+        'json': {
+           '()': 'ozp.logging_formatter.CustomisedJSONFormatter', }
     },
     'loggers': {
         'django': {
@@ -246,6 +246,10 @@ OZP = {
         'SECONDS_TO_CACHE_DATA': 5
     }
 }
+
+# Plugin Info
+ACCESS_CONTROL_PLUGIN = 'default_access_control'
+AUTHORIZATION_PLUGIN = 'default_authorization'
 
 # Set to empty string if no default agency exists
 # If a default agency exists, set it to the agency's short name

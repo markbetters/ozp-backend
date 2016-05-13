@@ -10,7 +10,6 @@ import django.contrib.auth
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
-import ozpcenter.access_control as access_control
 import ozpcenter.models as models
 import ozpcenter.constants as constants
 
@@ -24,13 +23,16 @@ import ozpcenter.api.intent.model_access as intent_model_access
 import ozpcenter.api.contact_type.model_access as contact_type_model_access
 import ozpcenter.errors as errors
 
+from plugins_util import plugin_manager
+
 
 # Get an instance of a logger
-logger = logging.getLogger('ozp-center.'+str(__name__))
+logger = logging.getLogger('ozp-center.' + str(__name__))
 
 
 class AgencySerializer(serializers.ModelSerializer):
     # icon = image_serializers.ImageSerializer()
+
     class Meta:
         model = models.Agency
         depth = 2
@@ -43,6 +45,7 @@ class AgencySerializer(serializers.ModelSerializer):
 
 
 class ImageSerializer(serializers.HyperlinkedModelSerializer):
+
     class Meta:
         model = models.Image
         fields = ('url', 'id', 'security_marking')
@@ -56,13 +59,15 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
         }
 
     def validate_security_marking(self, value):
+        access_control_instance = plugin_manager.get_system_access_control_plugin()
         # don't allow user to select a security marking that is above
         # their own access level
         user = generic_model_access.get_profile(
             self.context['request'].user.username)
 
+        access_control_instance = plugin_manager.get_system_access_control_plugin()
         if value:
-            if not access_control.has_access(user.access_control, value):
+            if not access_control_instance.has_access(user.access_control, value):
                 raise serializers.ValidationError(
                     'Security marking too high for current user')
         else:
@@ -73,6 +78,7 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class ContactTypeSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = models.ContactType
         fields = ('name',)
@@ -91,6 +97,7 @@ class ContactSerializer(serializers.ModelSerializer):
 
 
 class ListingTypeSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = models.ListingType
         fields = ('title',)
@@ -101,6 +108,7 @@ class ListingTypeSerializer(serializers.ModelSerializer):
 
 
 class DocUrlSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = models.DocUrl
         fields = ('name', 'url')
@@ -121,6 +129,7 @@ class ScreenshotSerializer(serializers.ModelSerializer):
 
 
 class TagSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = models.Tag
         fields = ('name',)
@@ -131,14 +140,28 @@ class TagSerializer(serializers.ModelSerializer):
 
 
 class ChangeDetailSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = models.ChangeDetail
 
 
+class ShortListingSerializer(serializers.HyperlinkedModelSerializer):
+    agency = AgencySerializer(required=False)
+
+    class Meta:
+        model = models.Listing
+        fields = ('unique_name', 'title', 'id', 'agency', 'small_icon', 'is_deleted')
+
+
 class ListingActivitySerializer(serializers.ModelSerializer):
+    author = profile_serializers.ShortProfileSerializer()
+    listing = ShortListingSerializer()
+    change_details = ChangeDetailSerializer(many=True)
+
     class Meta:
         model = models.ListingActivity
-        fields = ('action',)
+        fields = ('action', 'activity_date', 'description', 'author', 'listing',
+            'change_details')
 
 
 class RejectionListingActivitySerializer(serializers.ModelSerializer):
@@ -150,6 +173,7 @@ class RejectionListingActivitySerializer(serializers.ModelSerializer):
 
 
 class IntentSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = models.Intent
         # TODO: is action the right thing?
@@ -161,6 +185,7 @@ class IntentSerializer(serializers.ModelSerializer):
 
 
 class CategorySerializer(serializers.ModelSerializer):
+
     class Meta:
         model = models.Category
         fields = ('title', 'description')
@@ -171,6 +196,7 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class CreateListingUserSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = django.contrib.auth.models.User
         fields = ('username',)
@@ -213,7 +239,8 @@ class ListingSerializer(serializers.ModelSerializer):
         depth = 2
 
     def validate(self, data):
-        #logger.debug('inside ListingSerializer.validate', extra={'request':self.context.get('request')})
+        access_control_instance = plugin_manager.get_system_access_control_plugin()
+        # logger.debug('inside ListingSerializer.validate', extra={'request':self.context.get('request')})
         user = generic_model_access.get_profile(
             self.context['request'].user.username)
 
@@ -232,7 +259,7 @@ class ListingSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError('security_marking is required')
         data['security_marking'] = data.get('security_marking', None)
 
-        if not access_control.validate_marking(data['security_marking']):
+        if not access_control_instance.validate_marking(data['security_marking']):
             raise errors.InvalidInput('security_marking is invalid')
 
         # only checked on update, not create
@@ -257,7 +284,6 @@ class ListingSerializer(serializers.ModelSerializer):
         else:
             data['listing_type'] = None
 
-
         # small_icon
         small_icon = data.get('small_icon', None)
         if small_icon:
@@ -265,7 +291,7 @@ class ListingSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError('Image(small_icon) requires a %s' % 'id')
             if small_icon.get('security_marking') is None:
                 small_icon['security_marking'] = constants.DEFAULT_SECURITY_MARKING
-            if not access_control.validate_marking(small_icon['security_marking']):
+            if not access_control_instance.validate_marking(small_icon['security_marking']):
                 raise errors.InvalidInput('security_marking is invalid')
         else:
             data['small_icon'] = None
@@ -277,7 +303,7 @@ class ListingSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError('Image(large_icon) requires a %s' % 'id')
             if large_icon.get('security_marking') is None:
                 large_icon['security_marking'] = constants.DEFAULT_SECURITY_MARKING
-            if not access_control.validate_marking(large_icon['security_marking']):
+            if not access_control_instance.validate_marking(large_icon['security_marking']):
                 raise errors.InvalidInput('security_marking is invalid')
         else:
             data['large_icon'] = None
@@ -289,7 +315,7 @@ class ListingSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError('Image(banner_icon) requires a %s' % 'id')
             if banner_icon.get('security_marking') is None:
                 banner_icon['security_marking'] = constants.DEFAULT_SECURITY_MARKING
-            if not access_control.validate_marking(banner_icon['security_marking']):
+            if not access_control_instance.validate_marking(banner_icon['security_marking']):
                 raise errors.InvalidInput('security_marking is invalid')
         else:
             data['banner_icon'] = None
@@ -301,7 +327,7 @@ class ListingSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError('Image(large_banner_icon) requires a %s' % 'id')
             if large_banner_icon.get('security_marking') is None:
                 large_banner_icon['security_marking'] = constants.DEFAULT_SECURITY_MARKING
-            if not access_control.validate_marking(large_banner_icon['security_marking']):
+            if not access_control_instance.validate_marking(large_banner_icon['security_marking']):
                 raise errors.InvalidInput('security_marking is invalid')
         else:
             data['large_banner_icon'] = None
@@ -315,7 +341,7 @@ class ListingSerializer(serializers.ModelSerializer):
                 if ('small_image' not in screenshot_set or
                         'large_image' not in screenshot_set):
                     raise serializers.ValidationError(
-                                        'Screenshot Set requires %s fields' % 'small_image, large_icon')
+                        'Screenshot Set requires %s fields' % 'small_image, large_icon')
                 screenshot_small_image = screenshot_set.get('small_image')
                 screenshot_large_image = screenshot_set.get('large_image')
 
@@ -329,12 +355,12 @@ class ListingSerializer(serializers.ModelSerializer):
 
                 if not screenshot_small_image.get('security_marking'):
                     screenshot_small_image['security_marking'] = constants.DEFAULT_SECURITY_MARKING
-                if not access_control.validate_marking(screenshot_small_image['security_marking']):
+                if not access_control_instance.validate_marking(screenshot_small_image['security_marking']):
                     raise errors.InvalidInput('security_marking is invalid')
 
                 if not screenshot_large_image.get('security_marking'):
                     screenshot_large_image['security_marking'] = constants.DEFAULT_SECURITY_MARKING
-                if not access_control.validate_marking(screenshot_large_image['security_marking']):
+                if not access_control_instance.validate_marking(screenshot_large_image['security_marking']):
                     raise errors.InvalidInput('security_marking is invalid')
 
                 screenshots_out.append(screenshot_set)
@@ -383,28 +409,29 @@ class ListingSerializer(serializers.ModelSerializer):
         if 'doc_urls' in data:
             pass
 
-        #logger.debug('leaving ListingSerializer.validate', extra={'request':self.context.get('request')})
+        # logger.debug('leaving ListingSerializer.validate', extra={'request':self.context.get('request')})
         return data
 
     def validate_security_marking(self, value):
+        access_control_instance = plugin_manager.get_system_access_control_plugin()
         # don't allow user to select a security marking that is above
         # their own access level
         user = generic_model_access.get_profile(
             self.context['request'].user.username)
 
         if value:
-            if not access_control.has_access(user.access_control, value):
+            if not access_control_instance.has_access(user.access_control, value):
                 raise serializers.ValidationError(
                     'Security marking too high for current user')
         return value
 
     def create(self, validated_data):
-        #logger.debug('inside ListingSerializer.create', extra={'request':self.context.get('request')})
+        # logger.debug('inside ListingSerializer.create', extra={'request':self.context.get('request')})
         title = validated_data['title']
         user = generic_model_access.get_profile(
             self.context['request'].user.username)
         logger.info('creating listing %s for user %s' % (title,
-            user.user.username), extra={'request':self.context.get('request')})
+            user.user.username), extra={'request': self.context.get('request')})
 
         # assign a default security_marking level if none is provided
 
@@ -499,7 +526,7 @@ class ListingSerializer(serializers.ModelSerializer):
         return listing
 
     def update(self, instance, validated_data):
-        #logger.debug('inside ListingSerializer.update', extra={'request':self.context.get('request')})
+        # logger.debug('inside ListingSerializer.update', extra={'request':self.context.get('request')})
         user = generic_model_access.get_profile(
             self.context['request'].user.username)
 
@@ -508,7 +535,7 @@ class ListingSerializer(serializers.ModelSerializer):
                 raise errors.PermissionDenied(
                     'User (%s) is not an owner of this listing' % user.username)
 
-        if instance.is_deleted == True:
+        if instance.is_deleted:
             raise errors.PermissionDenied(
                 'Cannot update a previously deleted listing')
 
@@ -577,8 +604,8 @@ class ListingSerializer(serializers.ModelSerializer):
         image_keys = ['small_icon', 'large_icon', 'banner_icon', 'large_banner_icon']
         for image_key in image_keys:
             if validated_data[image_key]:
-                old_value = model_access.image_to_string(getattr(instance, image_key), True, 'old_value(%s)'%image_key)
-                new_value = model_access.image_to_string(validated_data[image_key], False, 'new_value(%s)'%image_key)
+                old_value = model_access.image_to_string(getattr(instance, image_key), True, 'old_value(%s)' % image_key)
+                new_value = model_access.image_to_string(validated_data[image_key], False, 'new_value(%s)' % image_key)
 
                 if old_value != new_value:
                     new_value_image = None
@@ -712,7 +739,7 @@ class ListingSerializer(serializers.ModelSerializer):
                     new_doc_url_instances.append(obj)
                 for i in old_doc_url_instances:
                     if i not in new_doc_url_instances:
-                        logger.info('Deleting doc_url: %s' % i.id, extra={'request':self.context.get('request')})
+                        logger.info('Deleting doc_url: %s' % i.id, extra={'request': self.context.get('request')})
                         i.delete()
 
         # screenshots will be automatically created
@@ -741,12 +768,11 @@ class ListingSerializer(serializers.ModelSerializer):
                     large_image=new_large_image,
                     listing=instance)
 
-
                 new_screenshot_instances.append(obj)
 
             for i in old_screenshot_instances:
                 if i not in new_screenshot_instances:
-                    logger.info('Deleting screenshot: %s' % i.id, extra={'request':self.context.get('request')})
+                    logger.info('Deleting screenshot: %s' % i.id, extra={'request': self.context.get('request')})
                     i.delete()
 
         if 'agency' in validated_data:
@@ -771,22 +797,3 @@ class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Review
         fields = ('author', 'listing', 'rate', 'text', 'edited_date', 'id')
-
-
-class ShortListingSerializer(serializers.HyperlinkedModelSerializer):
-    agency = AgencySerializer(required=False)
-
-    class Meta:
-        model = models.Listing
-        fields = ('unique_name', 'title', 'id', 'agency', 'small_icon', 'is_deleted')
-
-
-class ListingActivitySerializer(serializers.ModelSerializer):
-    author = profile_serializers.ShortProfileSerializer()
-    listing = ShortListingSerializer()
-    change_details = ChangeDetailSerializer(many=True)
-
-    class Meta:
-        model = models.ListingActivity
-        fields = ('action', 'activity_date', 'description', 'author', 'listing',
-            'change_details')

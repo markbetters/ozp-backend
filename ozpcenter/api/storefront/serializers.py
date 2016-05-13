@@ -11,22 +11,25 @@ import ozpcenter.api.category.serializers as category_serializers
 import ozpcenter.api.image.serializers as image_serializers
 
 # Get an instance of a logger
-logger = logging.getLogger('ozp-center.'+str(__name__))
+logger = logging.getLogger('ozp-center.' + str(__name__))
 
 
 class AgencySerializer(serializers.ModelSerializer):
+
     class Meta:
         model = models.Agency
         fields = ('short_name', 'title')
 
 
 class GroupSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = django.contrib.auth.models.Group
         fields = ('name',)
 
 
 class UserSerializer(serializers.ModelSerializer):
+
     class Meta:
         # TODO: not supposed to reference Django's User model directly, but
         # using settings.AUTH_USER_MODEL here doesn't not work
@@ -44,6 +47,7 @@ class ProfileSerializer(serializers.ModelSerializer):
 
 
 class ContactTypeSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = models.ContactType
         fields = ('name',)
@@ -57,24 +61,28 @@ class ContactSerializer(serializers.ModelSerializer):
 
 
 class ListingTypeSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = models.ListingType
         fields = ('title', 'description')
 
 
 class DocUrlSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = models.DocUrl
         fields = ('name', 'url')
 
 
 class ReviewSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = models.Review
         fields = ('text', 'rate')
 
 
 class ListingActivitySerializer(serializers.ModelSerializer):
+
     class Meta:
         model = models.ListingActivity
         fields = ('action', 'activity_date')
@@ -95,6 +103,7 @@ class ScreenshotSerializer(serializers.ModelSerializer):
 
 
 class TagSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = models.Tag
         fields = ('name',)

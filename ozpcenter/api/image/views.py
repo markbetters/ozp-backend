@@ -11,7 +11,7 @@ from rest_framework.parsers import MultiPartParser, JSONParser
 from rest_framework.response import Response
 from rest_framework import status
 
-import ozpcenter.access_control as access_control
+
 import ozpcenter.permissions as permissions
 import ozpcenter.model_access as generic_model_access
 import ozpcenter.api.image.model_access as model_access
@@ -19,9 +19,10 @@ import ozpcenter.api.image.serializers as serializers
 import ozpcenter.models as models
 import ozpcenter.errors as errors
 
+from plugins_util import plugin_manager
 
 # Get an instance of a logger
-logger = logging.getLogger('ozp-center.'+str(__name__))
+logger = logging.getLogger('ozp-center.' + str(__name__))
 
 
 class ImageTypeViewSet(viewsets.ModelViewSet):
@@ -130,7 +131,7 @@ class ImageViewSet(viewsets.ModelViewSet):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         except errors.PermissionDenied:
-            return Response({'detail':'Permission Denied'}, status=status.HTTP_403_FORBIDDEN)
+            return Response({'detail': 'Permission Denied'}, status=status.HTTP_403_FORBIDDEN)
         except Exception as e:
             raise e
 
@@ -149,7 +150,9 @@ class ImageViewSet(viewsets.ModelViewSet):
         image_path = model_access.get_image_path(pk)
         # enforce access control
         user = generic_model_access.get_profile(self.request.user.username)
-        if not access_control.has_access(user.access_control,
+
+        access_control_instance = plugin_manager.get_system_access_control_plugin()
+        if not access_control_instance.has_access(user.access_control,
                 image.security_marking):
             return Response(status=status.HTTP_403_FORBIDDEN)
         content_type = 'image/' + image.file_extension

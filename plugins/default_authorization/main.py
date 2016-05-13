@@ -1,4 +1,6 @@
 """
+This is the plugin that accesses the Authorization Server
+
 Authorization for OZP using the DemoAuth service
 
 Checks models.Profile.auth_expires. If auth is expired, refresh it.
@@ -9,13 +11,6 @@ Checks models.Profile.auth_expires. If auth is expired, refresh it.
 - models.Profile.access_control
 - models.Profile.display_name (use CN)
 """
-import datetime
-import json
-import logging
-import pytz
-
-import requests
-
 from django.conf import settings
 from django.contrib.auth.models import Group
 
@@ -24,78 +19,94 @@ import ozpcenter.model_access as model_access
 import ozpcenter.models as models
 import ozpcenter.utils as utils
 
-logger = logging.getLogger('ozp-center.'+str(__name__))
+import datetime
+import json
+import logging
+import pytz
+
+logger = logging.getLogger('ozp-center.' + str(__name__))
 
 
-def _get_auth_data(username, request=None):
-    """
-    Get authorization data for given user
+class PluginMain(object):
+    plugin_name = 'default_authorization'
+    plugin_description = 'DefaultAuthorizationPlugin'
+    plugin_type = 'authorization'
 
-    Return:
-    {
-        'dn': 'user DN',
-        'clearances': ['U', 'S'],
-        'formal_accesses': ['AB', 'CD'],
-        'visas': ['ABC', 'XYZ'],
-        'duty_org': 'org',
-        'is_org_steward': False,
-        'is_apps_mall_steward': False,
-        'is_metrics_user': True
-    }
-    """
-    profile = model_access.get_profile(username)
-    # get user's basic data
-    url = settings.OZP['OZP_AUTHORIZATION']['USER_INFO_URL'] % (profile.dn, profile.issuer_dn)
-    server_crt = settings.OZP['OZP_AUTHORIZATION']['SERVER_CRT']
-    server_key = settings.OZP['OZP_AUTHORIZATION']['SERVER_KEY']
-    r = requests.get(url, cert=(server_crt, server_key), verify=False)
-    #logger.debug('hitting url %s for user with dn %s' % (url, profile.dn), extra={'request':request})
+    def __init__(self, settings=None, requests=None):
+        '''
+        Settings: Object reference to ozp settings
+        '''
+        self.settings = settings
+        self.requests = requests
 
-    if r.status_code != 200:
-        raise errors.AuthorizationFailure('Error contacting authorization server: %s' % r.text)
-    user_data = r.json()
+    def _get_auth_data(self, username):
+        """
+        Get authorization data for given user
 
-    user_json_keys = ['dn', 'formalAccesses', 'clearances', 'dutyorg', 'visas']
-    for user_key in user_json_keys:
-        if user_key not in user_data:
-            raise ValueError('Endpoint %s not return value output - missing key: %s' % (url, user_key))
+        Return:
+        {
+            'dn': 'user DN',
+            'clearances': ['U', 'S'],
+            'formal_accesses': ['AB', 'CD'],
+            'visas': ['ABC', 'XYZ'],
+            'duty_org': 'org',
+            'is_org_steward': False,
+            'is_apps_mall_steward': False,
+            'is_metrics_user': True
+        }
+        """
+        profile = model_access.get_profile(username)
+        # get user's basic data
+        url = self.settings.OZP['OZP_AUTHORIZATION']['USER_INFO_URL'] % (profile.dn, profile.issuer_dn)
+        server_crt = self.settings.OZP['OZP_AUTHORIZATION']['SERVER_CRT']
+        server_key = self.settings.OZP['OZP_AUTHORIZATION']['SERVER_KEY']
+        r = self.requests.get(url, cert=(server_crt, server_key), verify=False)
+        # logger.debug('hitting url %s for user with dn %s' % (url, profile.dn), extra={'request':request})
 
-    # convert dutyorg -> duty_org
-    user_data['duty_org'] = user_data['dutyorg']
-    user_data.pop('dutyorg', None)
+        if r.status_code != 200:
+            raise errors.AuthorizationFailure('Error contacting authorization server: %s' % r.text)
+        user_data = r.json()
 
-    # convert formalAcccesses -> formal_accesses
-    user_data['formal_accesses'] = user_data['formalAccesses']
-    user_data.pop('formalAccesses', None)
+        user_json_keys = ['dn', 'formalAccesses', 'clearances', 'dutyorg', 'visas']
+        for user_key in user_json_keys:
+            if user_key not in user_data:
+                raise ValueError('Endpoint %s not return value output - missing key: %s' % (url, user_key))
 
-    # get groups for user
-    url = settings.OZP['OZP_AUTHORIZATION']['USER_GROUPS_URL'] % (profile.dn, settings.OZP['OZP_AUTHORIZATION']['PROJECT_NAME'])
-    #logger.debug('hitting url %s for user with dn %s for group info' % (url, profile.dn), extra={'request':request})
-    r = requests.get(url, cert=(server_crt, server_key), verify=False)
-    if r.status_code != 200:
-        raise errors.AuthorizationFailure('Error contacting authorization server: %s' % r.text)
-    group_data = r.json()
+        # convert dutyorg -> duty_org
+        user_data['duty_org'] = user_data['dutyorg']
+        user_data.pop('dutyorg', None)
 
-    if 'groups' not in group_data:
-        raise ValueError('Endpoint %s not return value output - missing key: %s' % (url, 'groups'))
+        # convert formalAcccesses -> formal_accesses
+        user_data['formal_accesses'] = user_data['formalAccesses']
+        user_data.pop('formalAccesses', None)
 
-    groups = group_data['groups']
-    user_data['is_org_steward'] = False
-    user_data['is_apps_mall_steward'] = False
-    user_data['is_metrics_user'] = False
+        # get groups for user
+        url = self.settings.OZP['OZP_AUTHORIZATION']['USER_GROUPS_URL'] % (profile.dn, self.settings.OZP['OZP_AUTHORIZATION']['PROJECT_NAME'])
+        # logger.debug('hitting url %s for user with dn %s for group info' % (url, profile.dn), extra={'request':request})
+        r = self.requests.get(url, cert=(server_crt, server_key), verify=False)
+        if r.status_code != 200:
+            raise errors.AuthorizationFailure('Error contacting authorization server: %s' % r.text)
+        group_data = r.json()
 
-    for g in groups:
-        if settings.OZP['OZP_AUTHORIZATION']['APPS_MALL_STEWARD_GROUP_NAME'] == utils.find_between(g, 'cn=', ','):
-            user_data['is_apps_mall_steward'] = True
-        if settings.OZP['OZP_AUTHORIZATION']['ORG_STEWARD_GROUP_NAME'] == utils.find_between(g, 'cn=', ','):
-            user_data['is_org_steward'] = True
-        if settings.OZP['OZP_AUTHORIZATION']['METRICS_GROUP_NAME'] == utils.find_between(g, 'cn=', ','):
-            user_data['is_org_steward'] = True
+        if 'groups' not in group_data:
+            raise ValueError('Endpoint %s not return value output - missing key: %s' % (url, 'groups'))
 
-    return user_data
+        groups = group_data['groups']
+        user_data['is_org_steward'] = False
+        user_data['is_apps_mall_steward'] = False
+        user_data['is_metrics_user'] = False
 
+        for g in groups:
+            if self.settings.OZP['OZP_AUTHORIZATION']['APPS_MALL_STEWARD_GROUP_NAME'] == utils.find_between(g, 'cn=', ','):
+                user_data['is_apps_mall_steward'] = True
+            if self.settings.OZP['OZP_AUTHORIZATION']['ORG_STEWARD_GROUP_NAME'] == utils.find_between(g, 'cn=', ','):
+                user_data['is_org_steward'] = True
+            if self.settings.OZP['OZP_AUTHORIZATION']['METRICS_GROUP_NAME'] == utils.find_between(g, 'cn=', ','):
+                user_data['is_org_steward'] = True
 
-def authorization_update(username, updated_auth_data=None, request=None, method=None):
+        return user_data
+
+    def authorization_update(self, username, updated_auth_data=None, request=None, method=None):
         """
         Update authorization info for this user
 
@@ -132,12 +143,12 @@ def authorization_update(username, updated_auth_data=None, request=None, method=
         # Example: '2016-04-18 15:57:09.275093+00:00' <= '2016-04-18 16:36:05.825269+00:00' = True
         if now <= profile.auth_expires:
             logger.debug('no auth refresh required. Expires in %s seconds' % expires_in.seconds,
-                            extra={'request':request, 'method':method})
+                         extra={'request': request, 'method': method})
             return True
 
         # otherwise, auth data must be updated
         if not updated_auth_data:
-            updated_auth_data = _get_auth_data(username, request=request)
+            updated_auth_data = self._get_auth_data(username)  # , request=request)
             if not updated_auth_data:
                 return False
 
@@ -159,7 +170,7 @@ def authorization_update(username, updated_auth_data=None, request=None, method=
             profile.organizations.add(org)
         except Exception as e:
             logger.error('Failed to update organizations for user %s. Error: %s' % (username, str(e)),
-                            extra={'request':request, 'method':method})
+                         extra={'request': request, 'method': method})
             return False
 
         is_user_flag = True

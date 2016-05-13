@@ -11,7 +11,7 @@ import ozpcenter.models as models
 import ozpcenter.api.contact_type.model_access as model_access
 
 # Get an instance of a logger
-logger = logging.getLogger('ozp-center.'+str(__name__))
+logger = logging.getLogger('ozp-center.' + str(__name__))
 
 
 class ContactTypeViewSet(viewsets.ModelViewSet):

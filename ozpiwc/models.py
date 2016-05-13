@@ -9,7 +9,8 @@ import logging
 from django.db import models
 
 # Get an instance of a logger
-logger = logging.getLogger('ozp-iwc.'+str(__name__))
+logger = logging.getLogger('ozp-iwc.' + str(__name__))
+
 
 class DataResource(models.Model):
     """
@@ -27,7 +28,6 @@ class DataResource(models.Model):
     pattern = models.CharField(max_length=1024, blank=True, null=True)
     permissions = models.CharField(max_length=1024, blank=True, null=True)
     version = models.CharField(max_length=1024, blank=True, null=True)
-
 
     class Meta:
         unique_together = ('username', 'key')
