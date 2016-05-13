@@ -1395,6 +1395,37 @@ class ListingApiTest(APITestCase):
         self.assertTrue(len(response.data) > 5)
         # TODO: more tests
 
+    def test_counts_in_listings(self):
+        """
+        Supported query params: org (agency title), approval_status, enabled
+        """
+        user = generic_model_access.get_profile('julia').user
+        self.client.force_authenticate(user=user)
+        url = '/api/listing/'
+        response = self.client.get(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        data = response.data
+        last_item = data[-1]
+
+        expected_item =  { "counts": {
+                             "organizations": {
+                                    "4": 0,
+                                    "2": 0,
+                                    "1": 100,
+                                    "3": 10
+                                },
+                                "REJECTED": 0,
+                                "enabled": 110,
+                                "APPROVED_ORG": 0,
+                                "total": 110,
+                                "APPROVED": 110,
+                                "PENDING": 0,
+                                "IN_PROGRESS": 0,
+                                "DELETED": 0
+                            }
+                }
+        self.assertEquals(last_item, expected_item)
+
     def test_create_listing_with_different_agency(self):
         user = generic_model_access.get_profile('julia').user
         self.client.force_authenticate(user=user)

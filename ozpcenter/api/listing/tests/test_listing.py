@@ -420,3 +420,4 @@ class ListingTest(TestCase):
         self.assertTrue(data['REJECTED'] >= 0)
         self.assertTrue(data['APPROVED_ORG'] >= 0)
         self.assertTrue(data['APPROVED'] >= 0)
+        self.assertTrue(data['DELETED'] >= 0)
