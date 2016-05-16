@@ -839,6 +839,9 @@ class Listing(models.Model):
     # use a custom Manager class to limit returned Listings
     objects = AccessControlListingManager()
 
+    def is_bookmarked(self):
+        return ApplicationLibraryEntry.objects.filter(listing=self).count() >= 1
+
     def __repr__(self):
         return '(%s-%s)' % (self.unique_name, [owner.user.username for owner in self.owners.all()])
 

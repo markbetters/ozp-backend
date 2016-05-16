@@ -215,7 +215,13 @@ class CreateListingProfileSerializer(serializers.ModelSerializer):
         read_only = ('display_name', 'id')
 
 
+class ListingIsBookmarked(serializers.ReadOnlyField):
+    def to_native(self, obj):
+        return obj
+
+
 class ListingSerializer(serializers.ModelSerializer):
+    is_bookmarked = ListingIsBookmarked()
     screenshots = ScreenshotSerializer(many=True, required=False)
     doc_urls = DocUrlSerializer(many=True, required=False)
     owners = CreateListingProfileSerializer(required=False, many=True)
