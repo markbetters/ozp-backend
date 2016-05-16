@@ -11,6 +11,7 @@ from rest_framework import generics
 from rest_framework import status
 from rest_framework import viewsets
 from rest_framework.response import Response
+from rest_framework import filters
 
 import ozpcenter.errors as errors
 import ozpcenter.api.notification.serializers as serializers
@@ -88,6 +89,9 @@ class NotificationViewSet(viewsets.ModelViewSet):
 class UserNotificationViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsUser,)
     serializer_class = serializers.NotificationSerializer
+    filter_backends = (filters.OrderingFilter,)
+    ordering_fields = ('created_date',)
+    ordering = ('-created_date',)
 
     def get_queryset(self):
         """
