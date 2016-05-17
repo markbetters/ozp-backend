@@ -216,6 +216,9 @@ class CreateListingProfileSerializer(serializers.ModelSerializer):
 
 
 class ListingIsBookmarked(serializers.ReadOnlyField):
+    """
+    Read Only Field to see if a listing is bookmarked
+    """
     def to_native(self, obj):
         return obj
 
