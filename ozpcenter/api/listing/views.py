@@ -154,8 +154,13 @@ class ListingUserActivitiesViewSet(viewsets.ModelViewSet):
             self.request.user.username)
 
     def list(self, request):
-        # queryset = self.get_queryset()
-        serializer = serializers.ListingActivitySerializer(self.get_queryset(),
+        queryset = self.get_queryset()
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = serializers.ListingActivitySerializer(page,
+                context={'request': request}, many=True)
+            return self.get_paginated_response(serializer.data)
+        serializer = serializers.ListingActivitySerializer(queryset,
             context={'request': request}, many=True)
         return Response(serializer.data)
 

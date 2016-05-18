@@ -1439,6 +1439,36 @@ class ListingApiTest(APITestCase):
             counter += 1
         self.assertEqual(counter, len(expected_titles))
 
+    def test_get_listing_activities_offset_limit(self):
+        user = generic_model_access.get_profile('bigbrother').user
+        self.client.force_authenticate(user=user)
+        url = '/api/listings/activity/?offset=0&limit=24'
+        response = self.client.get(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        data = response.data
+        self.assertTrue('count' in data)
+        self.assertTrue('previous' in data)
+        self.assertTrue('next' in data)
+        self.assertTrue('results' in data)
+        self.assertTrue('/api/listings/activity/?limit=24&offset=24' in data.get('next'))
+        self.assertEqual(data.get('previous'), None)
+        self.assertTrue(len(data.get('results')) >= 1)
+
+    def test_get_self_listing_activities_offset_limit(self):
+        user = generic_model_access.get_profile('aaronson').user
+        self.client.force_authenticate(user=user)
+        url = '/api/self/listings/activity/?offset=0&limit=24'
+        response = self.client.get(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        data = response.data
+        self.assertTrue('count' in data)
+        self.assertTrue('previous' in data)
+        self.assertTrue('next' in data)
+        self.assertTrue('results' in data)
+        self.assertEqual(data.get('next'), None)
+        self.assertEqual(data.get('previous'), None)
+        self.assertTrue(len(data.get('results')) >= 0)
+
     def test_get_listings_with_query_params(self):
         """
         Supported query params: org (agency title), approval_status, enabled
