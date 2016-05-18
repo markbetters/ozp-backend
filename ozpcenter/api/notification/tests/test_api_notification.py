@@ -49,6 +49,37 @@ class NotificationApiTest(APITestCase):
         self.assertIn('message', first_notification)
         self.assertIn('expires_date', first_notification)
 
+    def test_get_self_notification_ordering(self):
+        url = '/api/self/notification/'
+        # get default
+        user = generic_model_access.get_profile('wsmith').user
+        self.client.force_authenticate(user=user)
+        response = self.client.get(url, format='json')
+        default_ids = [record['id'] for record in response.data]
+
+        self.assertEqual(default_ids, [2, 1])
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        url = '/api/self/notification/?ordering=-created_date'
+        # get reversed order
+        user = generic_model_access.get_profile('wsmith').user
+        self.client.force_authenticate(user=user)
+        response = self.client.get(url, format='json')
+        reverse_order_ids = [record['id'] for record in response.data]
+
+        self.assertEqual(reverse_order_ids, default_ids)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        url = '/api/self/notification/?ordering=created_date'
+        # get ascending order
+        user = generic_model_access.get_profile('wsmith').user
+        self.client.force_authenticate(user=user)
+        response = self.client.get(url, format='json')
+        order_ids = [record['id'] for record in response.data]
+
+        self.assertEqual(reverse_order_ids, list(reversed(order_ids)))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
     def test_dismiss_self_notification(self):
         url = '/api/self/notification/'
         # test authorized user
