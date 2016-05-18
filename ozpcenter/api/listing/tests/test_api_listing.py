@@ -27,7 +27,7 @@ class ListingApiTest(APITestCase):
         """
         setUp is invoked before each test method
         """
-        self
+        pass
 
     @classmethod
     def setUpTestData(cls):
@@ -36,15 +36,79 @@ class ListingApiTest(APITestCase):
         """
         data_gen.run()
 
+    def _validate_listing_map_keys(self, listing_map):
+        """
+        Used to validate the keys of a listing
+        """
+        if not isinstance(listing_map, dict):
+            raise Exception('listing_map is not type dict, it is %s' % type(listing_map))
+
+        listing_map_default_keys = ['id', 'is_bookmarked', 'screenshots',
+                                    'doc_urls', 'owners', 'categories', 'tags', 'contacts', 'intents',
+                                    'small_icon', 'large_icon', 'banner_icon', 'large_banner_icon',
+                                    'agency', 'last_activity', 'current_rejection', 'listing_type',
+                                    'title', 'approved_date', 'edited_date', 'description', 'launch_url',
+                                    'version_name', 'unique_name', 'what_is_new', 'description_short',
+                                    'requirements', 'approval_status', 'is_enabled', 'is_featured',
+                                    'is_deleted', 'avg_rate', 'total_votes', 'total_rate5', 'total_rate4',
+                                    'total_rate3', 'total_rate2', 'total_rate1', 'total_reviews',
+                                    'iframe_compatible', 'security_marking', 'is_private',
+                                    'required_listings']
+
+        listing_keys = [k for k, v in listing_map.items()]
+
+        invalid_key_list = []
+
+        for current_key in listing_map_default_keys:
+            if current_key not in listing_keys:
+                invalid_key_list.append(current_key)
+
+        return invalid_key_list
+
+    def _request_helper(self, url, method, data=None, username='bigbrother', status_code=200):
+        """
+        Request Helper
+        """
+        user = generic_model_access.get_profile(username).user
+        self.client.force_authenticate(user=user)
+
+        response = None
+
+        if method.upper() == 'GET':
+            response = self.client.get(url, format='json')
+        elif method.upper() == 'POST':
+            response = self.client.post(url, data, format='json')
+        elif method.upper() == 'PUT':
+            response = self.client.put(url, data, format='json')
+        elif method.upper() == 'DELETE':
+            response = self.client.delete(url, format='json')
+        else:
+            raise Exception('method is not supported')
+
+        if response:
+            if status_code == 200:
+                self.assertEqual(response.status_code, status.HTTP_200_OK)
+            elif status_code == 201:
+                self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+            elif status_code == 204:
+                self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+            else:
+                raise Exception('status code is not supported')
+
+        return response
+
     def test_search_categories_single_with_space(self):
         user = generic_model_access.get_profile('wsmith').user
         self.client.force_authenticate(user=user)
         url = '/api/listings/search/?category=Health and Fitness'
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
         titles = [i['title'] for i in response.data]
         self.assertTrue('Hatch Latch' in titles)
         self.assertEqual(len(titles), 20)
+        for listing_map in response.data:
+            self.assertEquals(self._validate_listing_map_keys(listing_map), [])
 
     def test_search_categories_multiple_with_space(self):
         user = generic_model_access.get_profile('wsmith').user
@@ -52,9 +116,12 @@ class ListingApiTest(APITestCase):
         url = '/api/listings/search/?category=Health and Fitness&category=Communication'
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
         titles = [i['title'] for i in response.data]
         self.assertTrue('Air Mail' in titles)
         self.assertTrue('Bread Basket' in titles)
+        for listing_map in response.data:
+            self.assertEquals(self._validate_listing_map_keys(listing_map), [])
 
     def test_search_text(self):
         user = generic_model_access.get_profile('wsmith').user
@@ -62,9 +129,12 @@ class ListingApiTest(APITestCase):
         url = '/api/listings/search/?search=air ma'
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
         titles = [i['title'] for i in response.data]
         self.assertTrue('Air Mail' in titles)
         self.assertEqual(len(titles), 10)
+        for listing_map in response.data:
+            self.assertEquals(self._validate_listing_map_keys(listing_map), [])
 
     def test_search_type(self):
         user = generic_model_access.get_profile('wsmith').user
@@ -72,9 +142,12 @@ class ListingApiTest(APITestCase):
         url = '/api/listings/search/?type=web application'
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
         titles = [i['title'] for i in response.data]
         self.assertTrue('Air Mail' in titles)
         self.assertTrue(len(titles) > 7)
+        for listing_map in response.data:
+            self.assertEquals(self._validate_listing_map_keys(listing_map), [])
 
     def test_search_is_enable(self):
         user = generic_model_access.get_profile('wsmith').user
@@ -85,6 +158,9 @@ class ListingApiTest(APITestCase):
 
         ids = [record.get('id') for record in response.data]
         self.assertEqual(ids, [1, 12, 23, 34, 45, 56, 67, 78, 89, 100])
+
+        for listing_map in response.data:
+            self.assertEquals(self._validate_listing_map_keys(listing_map), [])
 
         # Disable one app
         user = generic_model_access.get_profile('bigbrother').user
@@ -159,6 +235,8 @@ class ListingApiTest(APITestCase):
 
         ids = [record.get('id') for record in response.data]
         self.assertEqual(ids, [12, 23, 34, 45, 56, 67, 78, 89, 100])
+        for listing_map in response.data:
+            self.assertEquals(self._validate_listing_map_keys(listing_map), [])
 
     def test_search_agency(self):
         user = generic_model_access.get_profile('wsmith').user
@@ -166,8 +244,11 @@ class ListingApiTest(APITestCase):
         url = '/api/listings/search/?agency=Minipax&agency=Miniluv'
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
         titles = [i['title'] for i in response.data]
         self.assertTrue('Chatter Box' in titles)
+        for listing_map in response.data:
+            self.assertEquals(self._validate_listing_map_keys(listing_map), [])
 
     def test_search_limit(self):
         user = generic_model_access.get_profile('wsmith').user
@@ -175,9 +256,12 @@ class ListingApiTest(APITestCase):
         url = '/api/listings/search/?limit=1'
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
         titles = [i['title'] for i in response.data['results']]
         self.assertTrue('JotSpot' in titles)
         self.assertEqual(len(titles), 1)
+        for listing_map in response.data['results']:
+            self.assertEquals(self._validate_listing_map_keys(listing_map), [])
 
     def test_search_offset_limit(self):
         user = generic_model_access.get_profile('wsmith').user
@@ -185,9 +269,12 @@ class ListingApiTest(APITestCase):
         url = '/api/listings/search/?offset=1&limit=1'
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
         titles = [i['title'] for i in response.data['results']]
         self.assertTrue('JotSpot 1' in titles)
         self.assertEqual(len(titles), 1)
+        for listing_map in response.data['results']:
+            self.assertEquals(self._validate_listing_map_keys(listing_map), [])
 
     def test_self_listing(self):
         user = generic_model_access.get_profile('julia').user
@@ -195,10 +282,13 @@ class ListingApiTest(APITestCase):
         url = '/api/self/listing/'
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
         titles = [i['title'] for i in response.data]
         self.assertTrue('Bread Basket' in titles)
         self.assertTrue('Chatter Box' in titles)
         self.assertTrue('Air Mail' not in titles)
+        for listing_map in response.data:
+            self.assertEquals(self._validate_listing_map_keys(listing_map), [])
 
     def test_get_reviews(self):
         user = generic_model_access.get_profile('wsmith').user
@@ -490,6 +580,8 @@ class ListingApiTest(APITestCase):
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data['title'], title)
+        self.assertEquals(self._validate_listing_map_keys(response.data), [])
+        self.assertEquals(response.data['is_bookmarked'], False)
 
     def test_create_listing_no_title(self):
         # create a new listing with minimal data (title)
@@ -662,11 +754,14 @@ class ListingApiTest(APITestCase):
         self.assertEqual(response.data['iframe_compatible'], True)
         self.assertEqual(response.data['required_listings'], None)
         self.assertTrue(response.data['edited_date'])
+        self.assertEquals(self._validate_listing_map_keys(response.data), [])
+        self.assertEquals(response.data['is_bookmarked'], False)
 
     def test_delete_listing(self):
         url = '/api/listing/1/'
         response = self._request_helper(url, 'GET', username='wsmith', status_code=200)
         self.assertFalse(response.data.get('is_deleted'))
+        self.assertEquals(self._validate_listing_map_keys(response.data), [])
 
         url = '/api/listing/1/'
         response = self._request_helper(url, 'DELETE', username='wsmith', status_code=204)
@@ -674,6 +769,7 @@ class ListingApiTest(APITestCase):
         url = '/api/listing/1/'
         response = self._request_helper(url, 'GET', username='wsmith', status_code=200)
         self.assertTrue(response.data.get('is_deleted'))
+        self.assertEquals(self._validate_listing_map_keys(response.data), [])
 
     def test_delete_listing_permission_denied(self):
         user = generic_model_access.get_profile('jones').user
@@ -718,6 +814,8 @@ class ListingApiTest(APITestCase):
         self.assertEqual(response.data['large_icon']['id'], 2)
         self.assertEqual(response.data['banner_icon']['id'], 3)
         self.assertEqual(response.data['large_banner_icon']['id'], 4)
+        self.assertEqual(response.data['is_bookmarked'], True)
+        self.assertEquals(self._validate_listing_map_keys(response.data), [])
 
     def test_update_listing_full(self):
         user = generic_model_access.get_profile('julia').user
@@ -884,6 +982,7 @@ class ListingApiTest(APITestCase):
         self.assertEqual(response.data['iframe_compatible'], False)
         self.assertEqual(response.data['required_listings'], None)
         self.assertTrue(response.data['edited_date'])
+        self.assertEquals(self._validate_listing_map_keys(response.data), [])
 
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         #                   verify change_details
@@ -1071,6 +1170,7 @@ class ListingApiTest(APITestCase):
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data['approval_status'], 'IN_PROGRESS')
+        self.assertEquals(self._validate_listing_map_keys(response.data), [])
         listing_id = response.data['id']
 
         data = {
@@ -1151,6 +1251,7 @@ class ListingApiTest(APITestCase):
         contacts = response.data['contacts']
         contact_types = [i['contact_type']['name'] for i in contacts]
         self.assertEqual(str(contact_types), str(['Civillian', 'Government']))
+        self.assertEquals(self._validate_listing_map_keys(response.data), [])
 
     def test_update_listing_approval_status_deny_user(self):
         # a standard user cannot update the approval_status
@@ -1166,6 +1267,7 @@ class ListingApiTest(APITestCase):
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data['approval_status'], 'IN_PROGRESS')
+        self.assertEquals(self._validate_listing_map_keys(response.data), [])
 
         data = response.data
         data['approval_status'] = models.Listing.APPROVED
@@ -1180,35 +1282,6 @@ class ListingApiTest(APITestCase):
         # url = '/api/listing/%s/' % listing_id
         # response = self.client.get(url, data, format='json')
         # self.assertEqual(response.data['approval_status'], models.Listing.IN_PROGRESS)
-
-    def _request_helper(self, url, method, data=None, username='bigbrother', status_code=200):
-        user = generic_model_access.get_profile(username).user
-        self.client.force_authenticate(user=user)
-
-        response = None
-
-        if method.upper() == 'GET':
-            response = self.client.get(url, format='json')
-        elif method.upper() == 'POST':
-            response = self.client.post(url, data, format='json')
-        elif method.upper() == 'PUT':
-            response = self.client.put(url, data, format='json')
-        elif method.upper() == 'DELETE':
-            response = self.client.delete(url, format='json')
-        else:
-            raise Exception('method is not supported')
-
-        if response:
-            if status_code == 200:
-                self.assertEqual(response.status_code, status.HTTP_200_OK)
-            elif status_code == 201:
-                self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-            elif status_code == 204:
-                self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-            else:
-                raise Exception('status code is not supported')
-
-        return response
 
     def test_listing_activities(self):
         action_log = []
@@ -1234,8 +1307,6 @@ class ListingApiTest(APITestCase):
         self.assertEqual(activity_actions, action_log)
         activity_agency = [i['listing']['agency'] for i in response.data]
         self.assertEquals(json.dumps(activity_agency[0]), '{"title": "Ministry of Truth", "short_name": "Minitrue"}')
-        for entry in response.data:
-            self.assertTrue('small_icon' in entry['listing'])
 
         # MODIFIED
         data['title'] = "mr jones mod app"
@@ -1253,8 +1324,6 @@ class ListingApiTest(APITestCase):
         self.assertEqual(activity_actions, action_log)
         activity_agency = [i['listing']['agency'] for i in response.data]
         self.assertEquals(json.dumps(activity_agency[0]), '{"title": "Ministry of Truth", "short_name": "Minitrue"}')
-        for entry in response.data:
-            self.assertTrue('small_icon' in entry['listing'])
 
         # SUBMITTED
         data['approval_status'] = models.Listing.PENDING
@@ -1272,8 +1341,6 @@ class ListingApiTest(APITestCase):
         self.assertTrue(models.ListingActivity.SUBMITTED in activity_actions)
         activity_agency = [i['listing']['agency'] for i in response.data]
         self.assertEquals(json.dumps(activity_agency[0]), '{"title": "Ministry of Truth", "short_name": "Minitrue"}')
-        for entry in response.data:
-            self.assertTrue('small_icon' in entry['listing'])
 
         # APPROVED_ORG
 
@@ -1293,8 +1360,6 @@ class ListingApiTest(APITestCase):
         self.assertEqual(activity_actions, action_log)
         activity_agency = [i['listing']['agency'] for i in response.data]
         self.assertEquals(json.dumps(activity_agency[0]), '{"title": "Ministry of Truth", "short_name": "Minitrue"}')
-        for entry in response.data:
-            self.assertTrue('small_icon' in entry['listing'])
 
         # ENABLED
         data['is_enabled'] = True
@@ -1310,8 +1375,6 @@ class ListingApiTest(APITestCase):
         self.assertEqual(activity_actions, action_log)
         activity_agency = [i['listing']['agency'] for i in response.data]
         self.assertEquals(json.dumps(activity_agency[0]), '{"title": "Ministry of Truth", "short_name": "Minitrue"}')
-        for entry in response.data:
-            self.assertTrue('small_icon' in entry['listing'])
 
     def test_get_all_listing_activities(self):
         """
