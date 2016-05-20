@@ -91,7 +91,7 @@ def get_self_listings(username):
         try:
             user = generic_model_access.get_profile(username)
             data = models.Listing.objects.for_user(username).filter(
-                owners__in=[user.id])
+                owners__in=[user.id]).filter(is_deleted=False)
             cache.set(key, data)
             return data
         except ObjectDoesNotExist:
