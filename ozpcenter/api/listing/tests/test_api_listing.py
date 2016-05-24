@@ -771,6 +771,18 @@ class ListingApiTest(APITestCase):
         self.assertTrue(response.data.get('is_deleted'))
         self.assertEquals(self._validate_listing_map_keys(response.data), [])
 
+    def test_self_deleted_listing(self):
+        user = generic_model_access.get_profile('wsmith').user
+        self.client.force_authenticate(user=user)
+        url = '/api/self/listing/'
+        response = self.client.get(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        titles = [i['id'] for i in response.data]
+        self.assertTrue('1' not in titles)
+        for listing_map in response.data:
+            self.assertEquals(self._validate_listing_map_keys(listing_map), [])
+
     def test_delete_listing_permission_denied(self):
         user = generic_model_access.get_profile('jones').user
         self.client.force_authenticate(user=user)
