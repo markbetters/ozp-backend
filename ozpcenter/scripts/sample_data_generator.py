@@ -271,6 +271,21 @@ def run():
     access_control = json.dumps({
         'clearances': ['UNCLASSIFIED', 'CONFIDENTIAL', 'SECRET', 'TOP SECRET'],
         'formal_accesses': ['SIERRA', 'TANGO', 'GOLF', 'HOTEL'],
+        'visas': ['DRS']
+    })
+    khaleesi = models.Profile.create_user('khaleesi',
+        email='khaleesi@dragonborn.gov',
+        display_name='Daenerys Targaryen',
+        bio='I am Queen of Meereen, Queen of the Andals(, the Rhoynar) and the First Men, Lady Regnant of the Seven Kingdoms, Khaleesi of the Great Grass Sea, Mhysa, Breaker of Chains, the Unburnt, Mother of Dragons".',
+        access_control=access_control,
+        organizations=['Ministry of Peace'],
+        groups=['APPS_MALL_STEWARD'],
+        dn='Daenerys Targaryen khaleesi'
+    )
+
+    access_control = json.dumps({
+        'clearances': ['UNCLASSIFIED', 'CONFIDENTIAL', 'SECRET', 'TOP SECRET'],
+        'formal_accesses': ['SIERRA', 'TANGO', 'GOLF', 'HOTEL'],
         'visas': ['NOVEMBER']
     })
     big_brother = models.Profile.create_user('bigbrother',
@@ -315,6 +330,21 @@ def run():
         organizations=['Ministry of Love'],
         groups=['USER'],
         dn='Aaronson aaronson'
+    )
+
+    access_control = json.dumps({
+        'clearances': ['UNCLASSIFIED', 'CONFIDENTIAL', 'SECRET'],
+        'formal_accesses': [],
+        'visas': ['STE', 'RVR']
+    })
+    hodor = models.Profile.create_user('hodor',
+        email='hodor@hodor.hodor',
+        display_name='Hodor',
+        bio='Hold the door',
+        access_control=access_control,
+        organizations=['Ministry of Love'],
+        groups=['USER'],
+        dn='Hodor hodor'
     )
 
     access_control = json.dumps({
@@ -375,6 +405,22 @@ def run():
         organizations=['Ministry of Peace', 'Ministry of Love'],
         groups=['USER'],
         dn='Tparsons tparsons'
+    )
+
+
+    access_control = json.dumps({
+        'clearances': ['UNCLASSIFIED'],
+        'formal_accesses': [],
+        'visas': ['TWN']
+    })
+    jsnow = models.Profile.create_user('jsnow',
+        email='jsnow@forthewatch.com',
+        display_name='Jon Snow',
+        bio='I know nothing.',
+        access_control=access_control,
+        organizations=['Ministry of Peace', 'Ministry of Love'],
+        groups=['USER'],
+        dn='Jonsnow jsnow'
     )
 
     access_control = json.dumps({
