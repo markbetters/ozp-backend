@@ -30,7 +30,7 @@ def get_image_path(pk):
     if os.path.isfile(image_path):
         return image_path
     else:
-        logger.error('image for pk %d does not exist' % pk)
+        logger.error('image for pk {0:d} does not exist'.format(pk))
         # TODO: raise exception
         return '/does/not/exist'
 

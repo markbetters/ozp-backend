@@ -85,7 +85,7 @@ def get_self_listings(username):
     Key: self_listings:<username>
     """
     username = utils.make_keysafe(username)
-    key = 'self_listings:%s' % username
+    key = 'self_listings:{0!s}'.format(username)
     data = cache.get(key)
     if data is None:
         try:
@@ -107,7 +107,7 @@ def get_listings(username):
     Key: listings:<username>
     """
     username = utils.make_keysafe(username)
-    key = 'listings:%s' % username
+    key = 'listings:{0!s}'.format(username)
     data = cache.get(key)
     if data is None:
         try:
@@ -127,7 +127,7 @@ def get_reviews(username):
     Key: reviews:<username>
     """
     username = utils.make_keysafe(username)
-    key = 'reviews:%s' % username
+    key = 'reviews:{0!s}'.format(username)
     data = cache.get(key)
     if data is None:
         try:
@@ -607,9 +607,9 @@ def image_to_string(image, queryset=False, extra_str=None):
         return None
 
     if queryset:
-        image_str = '%s.%s' % (image.id, image.security_marking)
+        image_str = '{0!s}.{1!s}'.format(image.id, image.security_marking)
     else:
-        image_str = '%s.%s' % (image.get('id'), image.get('security_marking', constants.DEFAULT_SECURITY_MARKING))
+        image_str = '{0!s}.{1!s}'.format(image.get('id'), image.get('security_marking', constants.DEFAULT_SECURITY_MARKING))
     return image_str
 
 

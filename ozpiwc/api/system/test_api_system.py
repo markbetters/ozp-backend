@@ -33,7 +33,7 @@ class SystemApiTest(APITestCase):
     def test_listings(self):
         user = generic_model_access.get_profile('wsmith').user
         self.client.force_authenticate(user=user)
-        url = '/iwc-api/profile/%s/application/' % user.id
+        url = '/iwc-api/profile/{0!s}/application/'.format(user.id)
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertTrue('_links' in response.data)

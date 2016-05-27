@@ -114,7 +114,7 @@ class UserLibraryViewSet(viewsets.ViewSet):
         serializer = serializers.UserLibrarySerializer(data=request.data,
             context={'request': request})
         if not serializer.is_valid():
-            logger.error('%s' % serializer.errors)
+            logger.error('{0!s}'.format(serializer.errors))
             return Response(serializer.errors,
                 status=status.HTTP_400_BAD_REQUEST)
 

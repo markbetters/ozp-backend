@@ -59,7 +59,7 @@ def get_storefront(username):
             'most_popular': most_popular_listings
         }
     except Exception as e:
-        return {'error': True, 'msg': 'Error getting storefront: %s' % str(e)}
+        return {'error': True, 'msg': 'Error getting storefront: {0!s}'.format(str(e))}
     return data
 
 
@@ -104,5 +104,5 @@ def get_metadata(username):
 
             cache.set(key, data)
         except Exception as e:
-            return {'error': True, 'msg': 'Error getting metadata: %s' % str(e)}
+            return {'error': True, 'msg': 'Error getting metadata: {0!s}'.format(str(e))}
     return data

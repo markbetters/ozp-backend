@@ -248,12 +248,12 @@ class ProfileApiTest(APITestCase):
                 # Get all '{role}' profiles at '{current_username}' access control level
                 user = generic_model_access.get_profile(current_username).user
                 self.client.force_authenticate(user=user)
-                url = '/api/profile/?role=%s' % role
+                url = '/api/profile/?role={0!s}'.format(role)
                 response = self.client.get(url, format='json')
                 self.assertEqual(response.status_code, status.HTTP_200_OK)
                 usernames = [i['user']['username'] for i in response.data]
 
-                self.assertEquals('bigbrother' in usernames, bool(combo[0]), 'bigbrother role [%s] in %s' % (role, bool(combo[0])))
+                self.assertEquals('bigbrother' in usernames, bool(combo[0]), 'bigbrother role [{0!s}] in {1!s}'.format(role, bool(combo[0])))
                 self.assertEquals('julia' in usernames, bool(combo[1]))
                 self.assertEquals('jones' in usernames, bool(combo[2]))
                 displaynames = [i['display_name'] for i in response.data]

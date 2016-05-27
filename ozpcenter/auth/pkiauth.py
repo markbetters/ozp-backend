@@ -43,7 +43,7 @@ class PkiAuthentication(authentication.BaseAuthentication):
         # this assumes that we're using nginx and that the value of
         # $ssl_client_verify was put into the HTTP_X_SSL_AUTHENTICATED header
         if authentication_status != 'SUCCESS':
-            logger.error('Value of HTTP_X_SSL_AUTHENTICATED header not SUCCESS, got %s instead' % authentication_status)
+            logger.error('Value of HTTP_X_SSL_AUTHENTICATED header not SUCCESS, got {0!s} instead'.format(authentication_status))
             return None
 
         # get the user's DN
@@ -66,15 +66,15 @@ class PkiAuthentication(authentication.BaseAuthentication):
             dn = _preprocess_dn(dn)
             issuer_dn = _preprocess_dn(issuer_dn)
 
-        logger.info('Attempting to authenticate user with dn: %s and issuer dn: %s' % (dn, issuer_dn))
+        logger.info('Attempting to authenticate user with dn: {0!s} and issuer dn: {1!s}'.format(dn, issuer_dn))
 
         profile = _get_profile_by_dn(dn, issuer_dn)
 
         if profile:
-            logger.info('found user %s, authentication succeeded' % profile.user.username, extra={'user', profile.user.username})
+            logger.info('found user {0!s}, authentication succeeded'.format(profile.user.username), extra={'user', profile.user.username})
             return (profile.user, None)
         else:
-            logger.error('Failed to find/create user for dn %s. Authentication failed' % dn)
+            logger.error('Failed to find/create user for dn {0!s}. Authentication failed'.format(dn))
             return None
 
 
@@ -100,16 +100,16 @@ def _get_profile_by_dn(dn, issuer_dn='default issuer dn'):
     profile = models.Profile.objects.filter(dn__iexact=dn).first()
     if profile:
         if not profile.user.is_active:
-            logger.warning('User %s tried to login but is inactive' % dn)
+            logger.warning('User {0!s} tried to login but is inactive'.format(dn))
             return None
         # update the issuer_dn
         if profile.issuer_dn != issuer_dn:
-            logger.info('updating issuer dn for user %s' % profile.user.username)
+            logger.info('updating issuer dn for user {0!s}'.format(profile.user.username))
             profile.issuer_dn = issuer_dn
             profile.save()
         return profile
     else:
-        logger.info('creating new user for dn: %s' % dn)
+        logger.info('creating new user for dn: {0!s}'.format(dn))
         if 'CN=' in dn:
             cn = utils.find_between(dn, 'CN=', ',')
         else:
@@ -126,16 +126,16 @@ def _get_profile_by_dn(dn, issuer_dn='default issuer dn'):
         if count != 0:
             new_username = username[0:27]
             count = User.objects.filter(username__startswith=new_username).count()
-            new_username = '%s_%s' % (new_username, count + 1)
+            new_username = '{0!s}_{1!s}'.format(new_username, count + 1)
             username = new_username
 
         # now check again - if this username exists, we have a problem
         count = User.objects.filter(
             username=username).count()
         if count != 0:
-            logger.error('Cannot create new user for dn %s, username %s already exists' % (dn, username))
+            logger.error('Cannot create new user for dn {0!s}, username {1!s} already exists'.format(dn, username))
             return None
 
         profile = models.Profile.create_user(username, **kwargs)
-        logger.info('created new profile for user %s' % profile.user.username)
+        logger.info('created new profile for user {0!s}'.format(profile.user.username))
         return profile

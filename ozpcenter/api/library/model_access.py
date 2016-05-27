@@ -38,7 +38,7 @@ def get_library_entry_by_id(id):
 
     Key: library:<id>
     """
-    key = 'library:%s' % id
+    key = 'library:{0!s}'.format(id)
     data = cache.get(key)
     if data is None:
         try:
@@ -58,7 +58,7 @@ def get_self_application_library(username):
     Key: app_library:<username>
     """
     username = utils.make_keysafe(username)
-    key = 'app_library:%s' % username
+    key = 'app_library:{0!s}'.format(username)
     data = cache.get(key)
     if data is None:
         try:
@@ -82,7 +82,7 @@ def get_self_application_library_by_listing_type(username, listing_type):
     """
     username = utils.make_keysafe(username)
     listing_type_key = utils.make_keysafe(listing_type)
-    key = 'app_library_type(%s):%s' % (username, listing_type_key)
+    key = 'app_library_type({0!s}):{1!s}'.format(username, listing_type_key)
     data = cache.get(key)
     if data is None:
         try:

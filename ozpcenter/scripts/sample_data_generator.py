@@ -475,13 +475,13 @@ def run():
         #                           Listing
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         listing = models.Listing(
-            title='Air Mail%s' % postfix_space,
+            title='Air Mail{0!s}'.format(postfix_space),
             agency=minitrue,
             listing_type=web_app,
             description='Sends mail via air',
-            launch_url='%s/demo_apps/centerSampleListings/airMail/index.html' % DEMO_APP_ROOT,
+            launch_url='{0!s}/demo_apps/centerSampleListings/airMail/index.html'.format(DEMO_APP_ROOT),
             version_name='1.0.0',
-            unique_name='ozp.test.air_mail%s' % postfix_dot,
+            unique_name='ozp.test.air_mail{0!s}'.format(postfix_dot),
             small_icon=small_icon,
             large_icon=large_icon,
             banner_icon=banner_icon,
@@ -588,13 +588,13 @@ def run():
         #                           Listing
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         listing = models.Listing(
-            title='Bread Basket%s' % postfix_space,
+            title='Bread Basket{0!s}'.format(postfix_space),
             agency=minitrue,
             listing_type=web_app,
             description='Carries delicious bread',
-            launch_url='%s/demo_apps/centerSampleListings/breadBasket/index.html' % DEMO_APP_ROOT,
+            launch_url='{0!s}/demo_apps/centerSampleListings/breadBasket/index.html'.format(DEMO_APP_ROOT),
             version_name='1.0.0',
-            unique_name='ozp.test.bread_basket%s' % postfix_dot,
+            unique_name='ozp.test.bread_basket{0!s}'.format(postfix_dot),
             small_icon=small_icon,
             large_icon=large_icon,
             banner_icon=banner_icon,
@@ -655,13 +655,13 @@ def run():
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
         listing = models.Listing(
-            title='Chart Course%s' % postfix_space,
+            title='Chart Course{0!s}'.format(postfix_space),
             agency=minitrue,
             listing_type=web_app,
             description='Chart your course',
-            launch_url='%s/demo_apps/centerSampleListings/chartCourse/index.html' % DEMO_APP_ROOT,
+            launch_url='{0!s}/demo_apps/centerSampleListings/chartCourse/index.html'.format(DEMO_APP_ROOT),
             version_name='1.0.0',
-            unique_name='ozp.test.chartcourse%s' % postfix_dot,
+            unique_name='ozp.test.chartcourse{0!s}'.format(postfix_dot),
             small_icon=small_icon,
             large_icon=large_icon,
             banner_icon=banner_icon,
@@ -711,13 +711,13 @@ def run():
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
         listing = models.Listing(
-            title='Chatter Box%s' % postfix_space,
+            title='Chatter Box{0!s}'.format(postfix_space),
             agency=miniluv,
             listing_type=web_app,
             description='Chat with people',
-            launch_url='%s/demo_apps/centerSampleListings/chatterBox/index.html' % DEMO_APP_ROOT,
+            launch_url='{0!s}/demo_apps/centerSampleListings/chatterBox/index.html'.format(DEMO_APP_ROOT),
             version_name='1.0.0',
-            unique_name='ozp.test.chatterbox%s' % postfix_dot,
+            unique_name='ozp.test.chatterbox{0!s}'.format(postfix_dot),
             small_icon=small_icon,
             large_icon=large_icon,
             banner_icon=banner_icon,
@@ -766,13 +766,13 @@ def run():
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
         listing = models.Listing(
-            title='Clipboard%s' % postfix_space,
+            title='Clipboard{0!s}'.format(postfix_space),
             agency=minitrue,
             listing_type=web_app,
             description='Clip stuff on a board',
-            launch_url='%s/demo_apps/centerSampleListings/clipboard/index.html' % DEMO_APP_ROOT,
+            launch_url='{0!s}/demo_apps/centerSampleListings/clipboard/index.html'.format(DEMO_APP_ROOT),
             version_name='1.0.0',
-            unique_name='ozp.test.clipboard%s' % postfix_dot,
+            unique_name='ozp.test.clipboard{0!s}'.format(postfix_dot),
             small_icon=small_icon,
             large_icon=large_icon,
             banner_icon=banner_icon,
@@ -822,13 +822,13 @@ def run():
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
         listing = models.Listing(
-            title='FrameIt%s' % postfix_space,
+            title='FrameIt{0!s}'.format(postfix_space),
             agency=minitrue,
             listing_type=web_app,
             description='Show things in an iframe',
-            launch_url='%s/demo_apps/frameit/index.html' % DEMO_APP_ROOT,
+            launch_url='{0!s}/demo_apps/frameit/index.html'.format(DEMO_APP_ROOT),
             version_name='1.0.0',
-            unique_name='ozp.test.frameit%s' % postfix_dot,
+            unique_name='ozp.test.frameit{0!s}'.format(postfix_dot),
             small_icon=small_icon,
             large_icon=large_icon,
             banner_icon=banner_icon,
@@ -878,13 +878,13 @@ def run():
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
         listing = models.Listing(
-            title='Hatch Latch%s' % postfix_space,
+            title='Hatch Latch{0!s}'.format(postfix_space),
             agency=minitrue,
             listing_type=web_app,
             description='Hatch latches',
-            launch_url='%s/demo_apps/centerSampleListings/hatchLatch/index.html' % DEMO_APP_ROOT,
+            launch_url='{0!s}/demo_apps/centerSampleListings/hatchLatch/index.html'.format(DEMO_APP_ROOT),
             version_name='1.0.0',
-            unique_name='ozp.test.hatchlatch%s' % postfix_dot,
+            unique_name='ozp.test.hatchlatch{0!s}'.format(postfix_dot),
             small_icon=small_icon,
             large_icon=large_icon,
             banner_icon=banner_icon,
@@ -935,13 +935,13 @@ def run():
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
         listing = models.Listing(
-            title='JotSpot%s' % postfix_space,
+            title='JotSpot{0!s}'.format(postfix_space),
             agency=minitrue,
             listing_type=web_app,
             description='Jot things down',
-            launch_url='%s/demo_apps/centerSampleListings/jotSpot/index.html' % DEMO_APP_ROOT,
+            launch_url='{0!s}/demo_apps/centerSampleListings/jotSpot/index.html'.format(DEMO_APP_ROOT),
             version_name='1.0.0',
-            unique_name='ozp.test.jotspot%s' % postfix_dot,
+            unique_name='ozp.test.jotspot{0!s}'.format(postfix_dot),
             small_icon=small_icon,
             large_icon=large_icon,
             banner_icon=banner_icon,
@@ -995,13 +995,13 @@ def run():
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
         listing = models.Listing(
-            title='LocationLister%s' % postfix_space,
+            title='LocationLister{0!s}'.format(postfix_space),
             agency=minitrue,
             listing_type=web_app,
             description='List locations',
-            launch_url='%s/demo_apps/locationLister/index.html' % DEMO_APP_ROOT,
+            launch_url='{0!s}/demo_apps/locationLister/index.html'.format(DEMO_APP_ROOT),
             version_name='1.0.0',
-            unique_name='ozp.test.locationlister%s' % postfix_dot,
+            unique_name='ozp.test.locationlister{0!s}'.format(postfix_dot),
             small_icon=small_icon,
             large_icon=large_icon,
             banner_icon=banner_icon,
@@ -1051,13 +1051,13 @@ def run():
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
         listing = models.Listing(
-            title='LocationViewer%s' % postfix_space,
+            title='LocationViewer{0!s}'.format(postfix_space),
             agency=minitrue,
             listing_type=web_app,
             description='View locations',
-            launch_url='%s/demo_apps/locationViewer/index.html' % DEMO_APP_ROOT,
+            launch_url='{0!s}/demo_apps/locationViewer/index.html'.format(DEMO_APP_ROOT),
             version_name='1.0.0',
-            unique_name='ozp.test.locationviewer%s' % postfix_dot,
+            unique_name='ozp.test.locationviewer{0!s}'.format(postfix_dot),
             small_icon=small_icon,
             large_icon=large_icon,
             banner_icon=banner_icon,
@@ -1107,13 +1107,13 @@ def run():
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
         listing = models.Listing(
-            title='LocationAnalyzer%s' % postfix_space,
+            title='LocationAnalyzer{0!s}'.format(postfix_space),
             agency=minitrue,
             listing_type=web_app,
             description='Analyze locations',
-            launch_url='%s/demo_apps/locationAnalyzer/index.html' % DEMO_APP_ROOT,
+            launch_url='{0!s}/demo_apps/locationAnalyzer/index.html'.format(DEMO_APP_ROOT),
             version_name='1.0.0',
-            unique_name='ozp.test.locationanalyzer%s' % postfix_dot,
+            unique_name='ozp.test.locationanalyzer{0!s}'.format(postfix_dot),
             small_icon=small_icon,
             large_icon=large_icon,
             banner_icon=banner_icon,

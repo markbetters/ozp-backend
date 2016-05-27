@@ -138,7 +138,7 @@ class Image(models.Model):
         file_extension = kwargs.get('file_extension', 'png')
         valid_extensions = constants.VALID_IMAGE_TYPES
         if file_extension not in valid_extensions:
-            logger.error('Invalid image type: %s' % file_extension)
+            logger.error('Invalid image type: {0!s}'.format(file_extension))
             # TODO: raise exception?
             return
 
@@ -166,8 +166,8 @@ class Image(models.Model):
         # To avoid unexpected image save error, make the max_size_bytes
         # larger than we expect
         if size_bytes > (image_type.max_size_bytes * 2):
-            logger.error('Image size is %d bytes, which is larger than the max \
-                allowed %d bytes' % (size_bytes, 2 * image_type.max_size_bytes))
+            logger.error('Image size is {0:d} bytes, which is larger than the max \
+                allowed {1:d} bytes'.format(size_bytes, 2 * image_type.max_size_bytes))
             # TODO raise exception and remove file
             return
 
@@ -253,11 +253,11 @@ class ApplicationLibraryEntry(models.Model):
         'Listing', related_name='application_library_entries')
 
     def __str__(self):
-        return '%s:%s:%s' % (self.folder, self.owner.user.username,
+        return '{0!s}:{1!s}:{2!s}'.format(self.folder, self.owner.user.username,
                              self.listing.title)
 
     def __repr__(self):
-        return '%s:%s:%s' % (self.folder, self.owner.user.username,
+        return '{0!s}:{1!s}:{2!s}'.format(self.folder, self.owner.user.username,
                              self.listing.title)
 
     class Meta:
@@ -300,7 +300,7 @@ class ChangeDetail(models.Model):
                                  blank=True, null=True)
 
     def __repr__(self):
-        return "id:%d field %s was %s now is %s" % (
+        return "id:{0:d} field {1!s} was {2!s} now is {3!s}".format(
             self.id, self.field_name, self.old_value, self.new_value)
 
 
@@ -351,18 +351,18 @@ class Contact(models.Model):
                 be blank'})
 
     def __repr__(self):
-        val = '%s, %s' % (self.name, self.email)
-        val += 'organization %s' % (
-            self.organization if self.organization else '')
-        val += 'secure_phone %s' % (
-            self.secure_phone if self.secure_phone else '')
-        val += 'unsecure_phone %s' % (
-            self.unsecure_phone if self.unsecure_phone else '')
+        val = '{0!s}, {1!s}'.format(self.name, self.email)
+        val += 'organization {0!s}'.format((
+            self.organization if self.organization else ''))
+        val += 'secure_phone {0!s}'.format((
+            self.secure_phone if self.secure_phone else ''))
+        val += 'unsecure_phone {0!s}'.format((
+            self.unsecure_phone if self.unsecure_phone else ''))
 
         return val
 
     def __str__(self):
-        return '%s: %s' % (self.name, self.email)
+        return '{0!s}: {1!s}'.format(self.name, self.email)
 
 
 class ContactType(models.Model):
@@ -401,10 +401,10 @@ class DocUrl(models.Model):
     listing = models.ForeignKey('Listing', related_name='doc_urls')
 
     def __repr__(self):
-        return '%s:%s' % (self.name, self.url)
+        return '{0!s}:{1!s}'.format(self.name, self.url)
 
     def __str__(self):
-        return '%s: %s' % (self.name, self.url)
+        return '{0!s}: {1!s}'.format(self.name, self.url)
 
 
 class Intent(models.Model):
@@ -434,7 +434,7 @@ class Intent(models.Model):
     icon = models.ForeignKey(Image, related_name='intent')
 
     def __repr__(self):
-        return '%s/%s' % (self.type, self.action)
+        return '{0!s}/{1!s}'.format(self.type, self.action)
 
     def __str__(self):
         return self.action
@@ -482,11 +482,11 @@ class Review(models.Model):
     edited_date = models.DateTimeField(default=utils.get_now_utc)
 
     def __repr__(self):
-        return '%s: rate: %d text: %s' % (self.author.user.username,
+        return '{0!s}: rate: {1:d} text: {2!s}'.format(self.author.user.username,
                                           self.rate, self.text)
 
     def __str__(self):
-        return '%s: rate: %d text: %s' % (self.author.user.username,
+        return '{0!s}: rate: {1:d} text: {2!s}'.format(self.author.user.username,
                                           self.rate, self.text)
 
     class Meta:
@@ -557,7 +557,7 @@ class Profile(models.Model):
     # django_user
 
     def __repr__(self):
-        return 'Profile: %s' % self.user.username
+        return 'Profile: {0!s}'.format(self.user.username)
 
     def __str__(self):
         return self.user.username
@@ -592,7 +592,7 @@ class Profile(models.Model):
             return 'USER'
         else:
             # TODO: raise exception?
-            logger.error('User %s has invalid Group' % self.user.username)
+            logger.error('User {0!s} has invalid Group'.format(self.user.username))
             return ''
 
     @staticmethod
@@ -709,7 +709,7 @@ class AccessControlListingManager(models.Manager):
         titles_to_exclude = []
         for i in objects:
             if not i.security_marking:
-                logger.debug('Listing %s has no security_marking' % i.title)
+                logger.debug('Listing {0!s} has no security_marking'.format(i.title))
             if not access_control_instance.has_access(user.access_control, i.security_marking):
                 titles_to_exclude.append(i.title)
         objects = objects.exclude(title__in=titles_to_exclude)
@@ -843,10 +843,10 @@ class Listing(models.Model):
         return ApplicationLibraryEntry.objects.filter(listing=self).count() >= 1
 
     def __repr__(self):
-        return '(%s-%s)' % (self.unique_name, [owner.user.username for owner in self.owners.all()])
+        return '({0!s}-{1!s})'.format(self.unique_name, [owner.user.username for owner in self.owners.all()])
 
     def __str__(self):
-        return '(%s-%s)' % (self.unique_name, [owner.user.username for owner in self.owners.all()])
+        return '({0!s}-{1!s})'.format(self.unique_name, [owner.user.username for owner in self.owners.all()])
 
 
 class AccessControlListingActivityManager(models.Manager):
@@ -934,11 +934,11 @@ class ListingActivity(models.Model):
     objects = AccessControlListingActivityManager()
 
     def __repr__(self):
-        return '%s %s %s at %s' % (self.author.user.username, self.action,
+        return '{0!s} {1!s} {2!s} at {3!s}'.format(self.author.user.username, self.action,
                                    self.listing.title, self.activity_date)
 
     def __str__(self):
-        return '%s %s %s at %s' % (self.author.user.username, self.action,
+        return '{0!s} {1!s} {2!s} at {3!s}'.format(self.author.user.username, self.action,
                                    self.listing.title, self.activity_date)
 
     class Meta:
@@ -959,10 +959,10 @@ class Screenshot(models.Model):
     listing = models.ForeignKey('Listing', related_name='screenshots')
 
     def __repr__(self):
-        return '%s: %s, %s' % (self.listing.title, self.large_image.id, self.small_image.id)
+        return '{0!s}: {1!s}, {2!s}'.format(self.listing.title, self.large_image.id, self.small_image.id)
 
     def __str__(self):
-        return '%s: %s, %s' % (self.listing.title, self.large_image.id, self.small_image.id)
+        return '{0!s}: {1!s}, {2!s}'.format(self.listing.title, self.large_image.id, self.small_image.id)
 
 
 class ListingType(models.Model):
@@ -1005,7 +1005,7 @@ class Notification(models.Model):
                                 null=True, blank=True)
 
     def __repr__(self):
-        return '%s: %s' % (self.author.user.username, self.message)
+        return '{0!s}: {1!s}'.format(self.author.user.username, self.message)
 
     def __str__(self):
-        return '%s: %s' % (self.author.user.username, self.message)
+        return '{0!s}: {1!s}'.format(self.author.user.username, self.message)

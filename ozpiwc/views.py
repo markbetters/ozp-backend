@@ -34,39 +34,39 @@ def RootApiView(request):
     data = hal.create_base_structure(request,
         hal.generate_content_type(request.accepted_media_type))
     data['_links'][hal.APPLICATION_REL] = {
-        "href": '%sself/application/' % (hal.get_abs_url_for_iwc(request)),
+        "href": '{0!s}self/application/'.format((hal.get_abs_url_for_iwc(request))),
         "type": hal.generate_content_type(
             renderers.ApplicationListResourceRenderer.media_type)
     }
     data['_links'][hal.INTENT_REL] = {
-        "href": '%sself/intent/' % (hal.get_abs_url_for_iwc(request)),
+        "href": '{0!s}self/intent/'.format((hal.get_abs_url_for_iwc(request))),
         "type": hal.generate_content_type(
             renderers.IntentListResourceRenderer.media_type)
     }
     data['_links'][hal.SYSTEM_REL] = {
-        "href": '%siwc-api/system/' % (root_url),
+        "href": '{0!s}iwc-api/system/'.format((root_url)),
         "type": hal.generate_content_type(
             renderers.SystemResourceRenderer.media_type)
     }
     data['_links'][hal.USER_REL] = {
-        "href": '%sself/' % (hal.get_abs_url_for_iwc(request)),
+        "href": '{0!s}self/'.format((hal.get_abs_url_for_iwc(request))),
         "type": hal.generate_content_type(
             renderers.UserResourceRenderer.media_type)
     }
     data['_links'][hal.USER_DATA_REL] = {
-        "href": '%sself/data/' % (hal.get_abs_url_for_iwc(request)),
+        "href": '{0!s}self/data/'.format((hal.get_abs_url_for_iwc(request))),
         "type": hal.generate_content_type(
             renderers.DataObjectListResourceRenderer.media_type)
     }
 
     data['_links'][hal.DATA_ITEM_REL] = {
-        "href": '%sself/data/{+resource}' % (hal.get_abs_url_for_iwc(request)),
+        "href": '{0!s}self/data/{{+resource}}'.format((hal.get_abs_url_for_iwc(request))),
         "type": hal.generate_content_type(renderers.DataObjectResourceRenderer.media_type),
         "templated": True
     }
 
     data['_links'][hal.APPLICATION_ITEM_REL] = {
-        "href": '%slisting/{+resource}/' % (hal.get_abs_url_for_iwc(request)),
+        "href": '{0!s}listing/{{+resource}}/'.format((hal.get_abs_url_for_iwc(request))),
         "type": hal.generate_content_type(renderers.ApplicationResourceRenderer.media_type),
         "templated": True
     }
@@ -77,7 +77,7 @@ def RootApiView(request):
         "name": profile.display_name,
         "_links": {
             "self": {
-                "href": '%sself/' % (hal.get_abs_url_for_iwc(request)),
+                "href": '{0!s}self/'.format((hal.get_abs_url_for_iwc(request))),
                 "type": hal.generate_content_type(
                     renderers.UserResourceRenderer.media_type)
             }
@@ -89,7 +89,7 @@ def RootApiView(request):
         "name": 'TBD',
         "_links": {
             "self": {
-                "href": '%ssystem/' % (hal.get_abs_url_for_iwc(request)),
+                "href": '{0!s}system/'.format((hal.get_abs_url_for_iwc(request))),
                 "type": hal.generate_content_type(
                     renderers.SystemResourceRenderer.media_type)
             }

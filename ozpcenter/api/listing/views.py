@@ -390,7 +390,7 @@ class ListingViewSet(viewsets.ModelViewSet):
             serializer = serializers.ListingSerializer(data=request.data,
                 context={'request': request}, partial=True)
             if not serializer.is_valid():
-                logger.error('%s' % serializer.errors, extra={'request': request})
+                logger.error('{0!s}'.format(serializer.errors), extra={'request': request})
                 return Response(serializer.errors,
                     status=status.HTTP_400_BAD_REQUEST)
             serializer.save()
@@ -518,7 +518,7 @@ class ListingViewSet(viewsets.ModelViewSet):
             # logger.debug('created ListingSerializer', extra={'request': request})
 
             if not serializer.is_valid():
-                logger.error('%s' % serializer.errors, extra={'request': request})
+                logger.error('{0!s}'.format(serializer.errors), extra={'request': request})
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
             serializer.save()

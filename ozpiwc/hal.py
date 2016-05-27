@@ -29,7 +29,7 @@ def create_base_structure(request, type='application/json'):
                 "templated": True
             },
             "self": {
-                "href": '%s' % request.build_absolute_uri(request.path),
+                "href": '{0!s}'.format(request.build_absolute_uri(request.path)),
                 "type": type
             }
         },
@@ -51,7 +51,7 @@ def add_hal_structure(data, request, type='application/json'):
             "templated": True
         },
         "self": {
-            "href": '%s' % request.build_absolute_uri(request.path),
+            "href": '{0!s}'.format(request.build_absolute_uri(request.path)),
             "type": type
         }
     }
@@ -61,12 +61,12 @@ def add_hal_structure(data, request, type='application/json'):
 
 def get_abs_url_for_profile(request, profile_id):
     root_url = request.build_absolute_uri('/')
-    return '%siwc-api/profile/%s/' % (root_url, profile_id)
+    return '{0!s}iwc-api/profile/{1!s}/'.format(root_url, profile_id)
 
 
 def get_abs_url_for_iwc(request):
     root_url = request.build_absolute_uri('/')
-    return '%siwc-api/' % root_url
+    return '{0!s}iwc-api/'.format(root_url)
 
 
 def add_link_item(url, data, type='application/json'):
@@ -88,7 +88,7 @@ def generate_content_type(type, version=2):
         # version number found already - just use what's there
         return type
     except IndexError:
-        return '%s;version=%s' % (type, version)
+        return '{0!s};version={1!s}'.format(type, version)
 
 
 def validate_version(accept_header):

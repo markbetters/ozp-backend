@@ -33,7 +33,7 @@ class DataResource(models.Model):
         unique_together = ('username', 'key')
 
     def __repr__(self):
-        return '%s:%s' % (self.username, self.key)
+        return '{0!s}:{1!s}'.format(self.username, self.key)
 
     def __str__(self):
-        return '%s:%s' % (self.username, self.key)
+        return '{0!s}:{1!s}'.format(self.username, self.key)

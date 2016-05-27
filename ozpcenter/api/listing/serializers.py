@@ -297,7 +297,7 @@ class ListingSerializer(serializers.ModelSerializer):
         small_icon = data.get('small_icon', None)
         if small_icon:
             if 'id' not in small_icon:
-                raise serializers.ValidationError('Image(small_icon) requires a %s' % 'id')
+                raise serializers.ValidationError('Image(small_icon) requires a {0!s}'.format('id'))
             if small_icon.get('security_marking') is None:
                 small_icon['security_marking'] = constants.DEFAULT_SECURITY_MARKING
             if not access_control_instance.validate_marking(small_icon['security_marking']):
@@ -309,7 +309,7 @@ class ListingSerializer(serializers.ModelSerializer):
         large_icon = data.get('large_icon', None)
         if large_icon:
             if 'id' not in large_icon:
-                raise serializers.ValidationError('Image(large_icon) requires a %s' % 'id')
+                raise serializers.ValidationError('Image(large_icon) requires a {0!s}'.format('id'))
             if large_icon.get('security_marking') is None:
                 large_icon['security_marking'] = constants.DEFAULT_SECURITY_MARKING
             if not access_control_instance.validate_marking(large_icon['security_marking']):
@@ -321,7 +321,7 @@ class ListingSerializer(serializers.ModelSerializer):
         banner_icon = data.get('banner_icon', None)
         if banner_icon:
             if 'id' not in banner_icon:
-                raise serializers.ValidationError('Image(banner_icon) requires a %s' % 'id')
+                raise serializers.ValidationError('Image(banner_icon) requires a {0!s}'.format('id'))
             if banner_icon.get('security_marking') is None:
                 banner_icon['security_marking'] = constants.DEFAULT_SECURITY_MARKING
             if not access_control_instance.validate_marking(banner_icon['security_marking']):
@@ -333,7 +333,7 @@ class ListingSerializer(serializers.ModelSerializer):
         large_banner_icon = data.get('large_banner_icon', None)
         if large_banner_icon:
             if 'id' not in large_banner_icon:
-                raise serializers.ValidationError('Image(large_banner_icon) requires a %s' % 'id')
+                raise serializers.ValidationError('Image(large_banner_icon) requires a {0!s}'.format('id'))
             if large_banner_icon.get('security_marking') is None:
                 large_banner_icon['security_marking'] = constants.DEFAULT_SECURITY_MARKING
             if not access_control_instance.validate_marking(large_banner_icon['security_marking']):
@@ -350,17 +350,17 @@ class ListingSerializer(serializers.ModelSerializer):
                 if ('small_image' not in screenshot_set or
                         'large_image' not in screenshot_set):
                     raise serializers.ValidationError(
-                        'Screenshot Set requires %s fields' % 'small_image, large_icon')
+                        'Screenshot Set requires {0!s} fields'.format('small_image, large_icon'))
                 screenshot_small_image = screenshot_set.get('small_image')
                 screenshot_large_image = screenshot_set.get('large_image')
 
                 for field in image_require_fields:
                     if field not in screenshot_small_image:
-                        raise serializers.ValidationError('Screenshot Small Image requires a %s' % field)
+                        raise serializers.ValidationError('Screenshot Small Image requires a {0!s}'.format(field))
 
                 for field in image_require_fields:
                     if field not in screenshot_large_image:
-                        raise serializers.ValidationError('Screenshot Large Image requires a %s' % field)
+                        raise serializers.ValidationError('Screenshot Large Image requires a {0!s}'.format(field))
 
                 if not screenshot_small_image.get('security_marking'):
                     screenshot_small_image['security_marking'] = constants.DEFAULT_SECURITY_MARKING
@@ -387,7 +387,7 @@ class ListingSerializer(serializers.ModelSerializer):
                 for field in required_fields:
                     if field not in contact:
                         raise serializers.ValidationError(
-                            'Contact requires a %s' % field)
+                            'Contact requires a {0!s}'.format(field))
 
         owners = []
         if 'owners' in data:
@@ -439,7 +439,7 @@ class ListingSerializer(serializers.ModelSerializer):
         title = validated_data['title']
         user = generic_model_access.get_profile(
             self.context['request'].user.username)
-        logger.info('creating listing %s for user %s' % (title,
+        logger.info('creating listing {0!s} for user {1!s}'.format(title,
             user.user.username), extra={'request': self.context.get('request')})
 
         # assign a default security_marking level if none is provided
@@ -542,7 +542,7 @@ class ListingSerializer(serializers.ModelSerializer):
         if user.highest_role() not in ['APPS_MALL_STEWARD', 'ORG_STEWARD']:
             if user not in instance.owners.all():
                 raise errors.PermissionDenied(
-                    'User (%s) is not an owner of this listing' % user.username)
+                    'User ({0!s}) is not an owner of this listing'.format(user.username))
 
         if instance.is_deleted:
             raise errors.PermissionDenied(
@@ -613,8 +613,8 @@ class ListingSerializer(serializers.ModelSerializer):
         image_keys = ['small_icon', 'large_icon', 'banner_icon', 'large_banner_icon']
         for image_key in image_keys:
             if validated_data[image_key]:
-                old_value = model_access.image_to_string(getattr(instance, image_key), True, 'old_value(%s)' % image_key)
-                new_value = model_access.image_to_string(validated_data[image_key], False, 'new_value(%s)' % image_key)
+                old_value = model_access.image_to_string(getattr(instance, image_key), True, 'old_value({0!s})'.format(image_key))
+                new_value = model_access.image_to_string(validated_data[image_key], False, 'new_value({0!s})'.format(image_key))
 
                 if old_value != new_value:
                     new_value_image = None
@@ -748,7 +748,7 @@ class ListingSerializer(serializers.ModelSerializer):
                     new_doc_url_instances.append(obj)
                 for i in old_doc_url_instances:
                     if i not in new_doc_url_instances:
-                        logger.info('Deleting doc_url: %s' % i.id, extra={'request': self.context.get('request')})
+                        logger.info('Deleting doc_url: {0!s}'.format(i.id), extra={'request': self.context.get('request')})
                         i.delete()
 
         # screenshots will be automatically created
@@ -781,7 +781,7 @@ class ListingSerializer(serializers.ModelSerializer):
 
             for i in old_screenshot_instances:
                 if i not in new_screenshot_instances:
-                    logger.info('Deleting screenshot: %s' % i.id, extra={'request': self.context.get('request')})
+                    logger.info('Deleting screenshot: {0!s}'.format(i.id), extra={'request': self.context.get('request')})
                     i.delete()
 
         if 'agency' in validated_data:

@@ -39,7 +39,7 @@ def ApplicationListView(request):
     items = []
     embedded_items = []
     for i in applications:
-        item = {"href": '%slisting/%s/' % (listing_root_url, i.id),
+        item = {"href": '{0!s}listing/{1!s}/'.format(listing_root_url, i.id),
             "type": hal.generate_content_type(renderers.ApplicationResourceRenderer.media_type)}
         items.append(item)
 
