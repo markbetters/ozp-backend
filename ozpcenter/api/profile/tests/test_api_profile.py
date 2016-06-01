@@ -267,13 +267,13 @@ class ProfileApiTest(APITestCase):
         settings.OZP['USE_AUTH_SERVER'] = True
         user_combo_list = [
             # bigbrother (minipax)
-            {'id': 4, 'username': 'bigbrother', 'display_name': 'Big Brother',
+            {'id': 5, 'username': 'bigbrother', 'display_name': 'Big Brother',
                 'stewarded_organizations': [],
                 'groups': [{'name': 'APPS_MALL_STEWARD'}],
                 'highest_role': 'APPS_MALL_STEWARD',
                 'test_data_input_stewarded_organizations': False},
             # bigbrother2 (minitrue)
-            {'id': 5, 'username': 'bigbrother2', 'display_name': 'Big Brother2',
+            {'id': 6, 'username': 'bigbrother2', 'display_name': 'Big Brother2',
                 'stewarded_organizations': [],
                 'groups': [{'name': 'APPS_MALL_STEWARD'}],
                 'highest_role': 'APPS_MALL_STEWARD',
@@ -285,13 +285,13 @@ class ProfileApiTest(APITestCase):
                 'highest_role': 'ORG_STEWARD',
                 'test_data_input_stewarded_organizations': True},
             # charrington (minipax, miniluv, minitrue) - User Level
-            {'id': 11, 'username': 'charrington', 'display_name': 'Charrington',
+            {'id': 14, 'username': 'charrington', 'display_name': 'Charrington',
                 'stewarded_organizations': [],
                 'groups': [{'name': 'USER'}],
                 'highest_role': 'USER',
                 'test_data_input_stewarded_organizations': True},
             # jones (minitrue) - User Level
-            {'id': 7,
+            {'id': 9,
                 'username': 'jones',
                 'display_name': 'Jones',
                 'stewarded_organizations': [],

@@ -406,7 +406,7 @@ class ListingTest(TestCase):
 
         owners = models.Profile.objects.filter(user__username__istartswith='j')
         out = model_access.owners_to_string(owners, True)
-        self.assertEqual(out, "['jones', 'julia']")
+        self.assertEqual(out, "['jones', 'jsnow', 'julia']")
 
     def test_put_counts_in_listings_endpoint(self):
         queryset = models.Listing.objects.all()
