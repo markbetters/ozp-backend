@@ -91,7 +91,7 @@ class LibraryApiTest(APITestCase):
         """
         user = generic_model_access.get_profile(default_user).user
         self.client.force_authenticate(user=user)
-        url = '/api/listing/%s/' % id
+        url = '/api/listing/{0!s}/'.format(id)
         # GET Listing
         data = self.client.get(url, format='json').data
 

@@ -56,7 +56,7 @@ def get_version():
         return verstr
     else:
         raise RuntimeError(
-            "Unable to find version string in %s." % (VERSION_FILE,))
+            "Unable to find version string in {0!s}.".format(VERSION_FILE))
 
 
 def get_date_time():
@@ -75,7 +75,7 @@ def cleanup():
     shutil.rmtree("dist", ignore_errors=True)
     shutil.rmtree("build", ignore_errors=True)
     shutil.rmtree("release", ignore_errors=True)
-    shutil.rmtree("%s.egg-info" % PACKAGE, ignore_errors=True)
+    shutil.rmtree("{0!s}.egg-info".format(PACKAGE), ignore_errors=True)
 
 
 def create_release_dir():
@@ -133,11 +133,11 @@ def run():
     # tar everything up
     if args.version:
         version = get_version()
-        call("tar -czf %s-%s.tar.gz release" % ('backend', version),
+        call("tar -czf {0!s}-{1!s}.tar.gz release".format('backend', version),
              shell=True)
     else:
         date = get_date_time()
-        call("tar -czf %s-%s.tar.gz release" % ('backend', date),
+        call("tar -czf {0!s}-{1!s}.tar.gz release".format('backend', date),
              shell=True)
 
     # cleanup build dirs

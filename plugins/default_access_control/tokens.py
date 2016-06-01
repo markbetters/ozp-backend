@@ -10,13 +10,13 @@ class Token(object):
         self.long_name = long_name
 
     def __str__(self):
-        return '%s(%s)' % (self.token_type, self.long_name)
+        return '{0!s}({1!s})'.format(self.token_type, self.long_name)
 
     def __repr__(self):
-        return '%s(%s)' % (self.token_type, self.long_name)
+        return '{0!s}({1!s})'.format(self.token_type, self.long_name)
 
     def __unicode__(self):
-        return u'%s(%s)' % (self.token_type, self.long_name)
+        return u'{0!s}({1!s})'.format(self.token_type, self.long_name)
 
 
 class InvalidFormatToken(Token):

@@ -38,7 +38,7 @@ def IntentListView(request):
     intents = intent_model_access.get_all_intents()
     items = []
     for i in intents:
-        item = {"href": '%sintent/%s/' % (root_url, i.id)}
+        item = {"href": '{0!s}intent/{1!s}/'.format(root_url, i.id)}
         items.append(item)
     data['_links']['item'] = items
 

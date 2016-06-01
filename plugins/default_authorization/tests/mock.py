@@ -10,7 +10,7 @@ TEST_BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 def _load_json_file():
-    with open('%s/%s' % (TEST_BASE_DIR, 'tests/auth_data.json')) as json_data:
+    with open('{0!s}/{1!s}'.format(TEST_BASE_DIR, 'tests/auth_data.json')) as json_data:
         auth_data = json.load(json_data)
         return auth_data
 

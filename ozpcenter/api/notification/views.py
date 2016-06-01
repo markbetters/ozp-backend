@@ -36,7 +36,7 @@ class NotificationViewSet(viewsets.ModelViewSet):
             serializer = serializers.NotificationSerializer(data=request.data,
                 context={'request': request}, partial=True)
             if not serializer.is_valid():
-                logger.error('%s' % serializer.errors)
+                logger.error('{0!s}'.format(serializer.errors))
                 return Response(serializer.errors,
                     status=status.HTTP_400_BAD_REQUEST)
 
@@ -57,7 +57,7 @@ class NotificationViewSet(viewsets.ModelViewSet):
                 data=request.data, context={'request': request}, partial=True)
 
             if not serializer.is_valid():
-                logger.error('%s' % serializer.errors)
+                logger.error('{0!s}'.format(serializer.errors))
                 return Response(serializer.errors,
                     status=status.HTTP_400_BAD_REQUEST)
 

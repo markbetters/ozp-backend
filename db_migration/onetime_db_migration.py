@@ -72,10 +72,10 @@ def get_columns(table):
 
     Columns will be in the same order as the values appear in the data
     """
-    with open('%s/%s.sql' % (SQL_FILE_PATH, table), 'r') as f:
+    with open('{0!s}/{1!s}.sql'.format(SQL_FILE_PATH, table), 'r') as f:
         data = f.read().replace('\n', '')
     # extract a string like (`id`, `version`, `created_by_id`)
-    columns = utils.find_between(data, "INSERT INTO `%s`" % table, " VALUES")
+    columns = utils.find_between(data, "INSERT INTO `{0!s}`".format(table), " VALUES")
     # remove parenthesis, backticks, and spaces
     columns = re.sub('[`() ]', '', columns)
     columns = columns.split(',')
@@ -90,7 +90,7 @@ def get_values(table, column_count):
         column_count: number of columns in this table
     """
     values = []
-    with open('%s/%s.sql' % (SQL_FILE_PATH, table), 'r') as f:
+    with open('{0!s}/{1!s}.sql'.format(SQL_FILE_PATH, table), 'r') as f:
         data = f.read().replace('\n', '')
     # extract the data we want
     values_str = utils.find_between(data, "VALUES ", ");") + ')'
@@ -146,7 +146,7 @@ def get_values(table, column_count):
                 # logging.debug('got string value: %s' % val)
                 # remove comma
                 if values_str[0] != ',' and columns_processed != column_count:
-                    logging.error('Error: comma not found after extracting string value. string[0]: %s' % values_str[0])
+                    logging.error('Error: comma not found after extracting string value. string[0]: {0!s}'.format(values_str[0]))
                     return None
                 if columns_processed < column_count:
                     values_str = values_str[1:]
@@ -179,7 +179,7 @@ def get_values(table, column_count):
                 if columns_processed < column_count:
                     values_str = values_str[1:]
             else:
-                logging.error('Error: found invalid character in data: %s' % values_str[0])
+                logging.error('Error: found invalid character in data: {0!s}'.format(values_str[0]))
                 return None
 
             if columns_processed == column_count:
@@ -264,7 +264,7 @@ def migrate_category():
     assert columns[7] == 'title'
     values = get_values('category', len(columns))
     # logging.debug('category columns: %s' % columns)
-    logging.info('Categories to migrate: %s' % len(values))
+    logging.info('Categories to migrate: {0!s}'.format(len(values)))
     # logging.debug('category values: %s' % values)
     # map old ids to new ones for future migrations: {'<old_id>': '<new_id>'}
     category_mapper = {}
@@ -273,7 +273,7 @@ def migrate_category():
         old_id = i[0]
         description = i[4]
         title = i[7]
-        logging.info('Adding category title: %s, description: %s' % (title, description))
+        logging.info('Adding category title: {0!s}, description: {1!s}'.format(title, description))
         cat = models.Category(description=description, title=title)
         cat.save()
         category_mapper[i[0]] = str(cat.id)
@@ -294,7 +294,7 @@ def migrate_agency():
     assert columns[8] == 'title'
     values = get_values('agency', len(columns))
     # logging.debug('category columns: %s' % columns)
-    logging.info('Agencies to migrate: %s' % len(values))
+    logging.info('Agencies to migrate: {0!s}'.format(len(values)))
     # logging.debug('agency values: %s' % values)
     # map old ids to new ones for future migrations: {'<old_id>': '<new_id>'}
     agency_mapper = {}
@@ -303,7 +303,7 @@ def migrate_agency():
         old_id = i[0]
         short_name = i[7]
         title = i[8]
-        logging.info('Adding agency title: %s, short_name: %s' % (title, short_name))
+        logging.info('Adding agency title: {0!s}, short_name: {1!s}'.format(title, short_name))
         a = models.Agency(short_name=short_name, title=title)
         a.save()
         agency_mapper[i[0]] = str(a.id)
@@ -323,7 +323,7 @@ def migrate_type():
     assert columns[7] == 'title'
     values = get_values('type', len(columns))
     # logging.debug('category columns: %s' % columns)
-    logging.info('Listing Types to migrate: %s' % len(values))
+    logging.info('Listing Types to migrate: {0!s}'.format(len(values)))
     # logging.debug('agency values: %s' % values)
     # map old ids to new ones for future migrations: {'<old_id>': '<new_id>'}
     type_mapper = {}
@@ -332,7 +332,7 @@ def migrate_type():
         old_id = i[0]
         description = i[4]
         title = i[7]
-        logging.info('Adding listing type title: %s, description: %s' % (title, description))
+        logging.info('Adding listing type title: {0!s}, description: {1!s}'.format(title, description))
         t = models.ListingType(title=title, description=description)
         t.save()
         type_mapper[i[0]] = str(t.id)
@@ -352,7 +352,7 @@ def migrate_contact_type():
     assert columns[7] == 'title'
     values = get_values('contact_type', len(columns))
     # logging.debug('category columns: %s' % columns)
-    logging.info('ContactTypes to migrate: %s' % len(values))
+    logging.info('ContactTypes to migrate: {0!s}'.format(len(values)))
     # logging.debug('agency values: %s' % values)
     # map old ids to new ones for future migrations: {'<old_id>': '<new_id>'}
     contact_type_mapper = {}
@@ -361,7 +361,7 @@ def migrate_contact_type():
         old_id = i[0]
         required = i[6]
         title = i[7]
-        logging.info('Adding contact_type title: %s, required: %s' % (title, required))
+        logging.info('Adding contact_type title: {0!s}, required: {1!s}'.format(title, required))
         ct = models.ContactType(name=title, required=required)
         ct.save()
         contact_type_mapper[i[0]] = str(ct.id)
@@ -386,7 +386,7 @@ def migrate_profile():
     assert columns[12] == 'launch_in_webtop'
     values = get_values('profile', len(columns))
     # logging.debug('category columns: %s' % columns)
-    logging.info('Profiles to migrate: %s' % len(values))
+    logging.info('Profiles to migrate: {0!s}'.format(len(values)))
     # logging.debug('agency values: %s' % values)
     # map old ids to new ones for future migrations: {'<old_id>': '<new_id>'}
     profile_mapper = {}
@@ -419,7 +419,7 @@ def migrate_profile():
         # be done automatically the first time authorization is checked
         p = models.Profile.create_user(username, **kwargs)
 
-        logging.info('Adding profile username: %s, display_name: %s, dn: %s' % (p.user.username, p.display_name, p.dn))
+        logging.info('Adding profile username: {0!s}, display_name: {1!s}, dn: {2!s}'.format(p.user.username, p.display_name, p.dn))
         profile_mapper[i[0]] = str(p.id)
     return profile_mapper
 
@@ -437,7 +437,7 @@ def migrate_notification(profile_mapper):
     assert columns[7] == 'expires_date'
     values = get_values('notification', len(columns))
     # logging.debug('category columns: %s' % columns)
-    logging.info('Notifications to migrate: %s' % len(values))
+    logging.info('Notifications to migrate: {0!s}'.format(len(values)))
     # logging.debug('agency values: %s' % values)
     # map old ids to new ones for future migrations: {'<old_id>': '<new_id>'}
     notification_mapper = {}
@@ -448,7 +448,7 @@ def migrate_notification(profile_mapper):
         expires_date = get_date_from_str(i[7])
         created_date = get_date_from_str(i[3])
         created_by_id = i[2]
-        logging.info('Adding notification message: %s, expires_date: %s' % (message, expires_date))
+        logging.info('Adding notification message: {0!s}, expires_date: {1!s}'.format(message, expires_date))
         p = models.Profile.objects.get(id=profile_mapper[created_by_id])
         n = models.Notification(message=message, expires_date=expires_date, created_date=created_date, author=p)
         n.save()
@@ -462,7 +462,7 @@ def migrate_profile_dismissed_notifications(profile_mapper, notification_mapper)
     assert columns[0] == 'notification_id'
     assert columns[1] == 'profile_id'
     values = get_values('profile_dismissed_notifications', len(columns))
-    logging.info('Dismissed notifications to migrate: %s' % len(values))
+    logging.info('Dismissed notifications to migrate: {0!s}'.format(len(values)))
     for i in values:
         notification_id = i[0]
         profile_id = i[1]
@@ -480,12 +480,12 @@ def migrate_image(image_uuid, image_type):
     VALID_IMAGE_TYPES = ['png', 'jpg', 'jpeg', 'gif']
     file_extension = None
     for i in VALID_IMAGE_TYPES:
-        filename = IMAGE_FILE_PATH + '/%s.%s' % (image_uuid, i)
+        filename = IMAGE_FILE_PATH + '/{0!s}.{1!s}'.format(image_uuid, i)
         if os.path.isfile(filename):
             file_extension = i
             break
     if not file_extension:
-        logging.error('Error: no file extension found for image %s' % image_uuid)
+        logging.error('Error: no file extension found for image {0!s}'.format(image_uuid))
         return
 
     # set default security marking
@@ -497,14 +497,14 @@ def migrate_image(image_uuid, image_type):
     src = filename
     dest = settings.MEDIA_ROOT + str(img.id) + '_' + img.image_type.name + '.' + file_extension
     shutil.copy(src, dest)
-    logging.info('Migrated image: %s, type: %s' % (image_uuid, image_type))
+    logging.info('Migrated image: {0!s}, type: {1!s}'.format(image_uuid, image_type))
     return img
 
 def migrate_listing(category_mapper, agency_mapper, type_mapper,
         contact_type_mapper, profile_mapper):
     logging.debug('migrating listings')
     columns = get_columns('listing')
-    logging.debug('listing columns: %s' % columns)
+    logging.debug('listing columns: {0!s}'.format(columns))
     # ['id', 'version', 'agency_id', 'approval_status', 'approved_date', 'avg_rate',
     #   'created_by_id', 'created_date', 'description', 'description_short',
     #   'edited_by_id', 'edited_date', 'small_icon_id', 'large_icon_id',
@@ -551,7 +551,7 @@ def migrate_listing(category_mapper, agency_mapper, type_mapper,
     assert columns[35] == 'height'
     values = get_values('listing', len(columns))
     # logging.debug('listing values: %s' % values)
-    logging.info('Listings to migrate: %s' % len(values))
+    logging.info('Listings to migrate: {0!s}'.format(len(values)))
 
     # map old ids to new ones for future migrations: {'<old_id>': '<new_id>'}
     listing_mapper = {}
@@ -597,7 +597,7 @@ def migrate_listing(category_mapper, agency_mapper, type_mapper,
             what_is_new = i[32]
             iframe_compatible = not i[34]
 
-            logging.info('Adding listing title: %s' % (title))
+            logging.info('Adding listing title: {0!s}'.format((title)))
             # TODO: unique_name?
             listing = models.Listing(title=title, agency=agency,
                 approval_status=approval_status, approved_date=approved_date,
@@ -616,7 +616,7 @@ def migrate_listing(category_mapper, agency_mapper, type_mapper,
             listing.save()
             listing_mapper[old_id] = str(listing.id)
         except Exception as e:
-            logging.error('Error processing listing %s: %s' % (title, str(e)))
+            logging.error('Error processing listing {0!s}: {1!s}'.format(title, str(e)))
 
     return listing_mapper
 
@@ -635,7 +635,7 @@ def migrate_application_library_entry(profile_mapper, listing_mapper):
     assert columns[8] == 'owner_id'
     values = get_values('application_library_entry', len(columns))
     # logging.debug('category columns: %s' % columns)
-    logging.info('Application Library Entries to migrate: %s' % len(values))
+    logging.info('Application Library Entries to migrate: {0!s}'.format(len(values)))
     logging.info('==========================')
     for i in values:
         try:
@@ -644,11 +644,11 @@ def migrate_application_library_entry(profile_mapper, listing_mapper):
             listing_id = i[7]
             listing = models.Listing.objects.get(id=listing_mapper[listing_id])
             owner = models.Profile.objects.get(id=profile_mapper[i[8]])
-            logging.info('Adding application_library_entry for listing %s, owner %s' % (listing.title, owner.user.username))
+            logging.info('Adding application_library_entry for listing {0!s}, owner {1!s}'.format(listing.title, owner.user.username))
             entry = models.ApplicationLibraryEntry(folder=folder, listing=listing, owner=owner)
             entry.save()
         except Exception as e:
-            logging.error('Error adding library entry: %s, values: %s' % (str(e), i))
+            logging.error('Error adding library entry: {0!s}, values: {1!s}'.format(str(e), i))
 
 def migrate_doc_url(listing_mapper):
     logging.debug('migrating doc_url...')
@@ -661,7 +661,7 @@ def migrate_doc_url(listing_mapper):
     assert columns[4] == 'url'
     values = get_values('doc_url', len(columns))
     # logging.debug('category columns: %s' % columns)
-    logging.info('Doc Urls to migrate: %s' % len(values))
+    logging.info('Doc Urls to migrate: {0!s}'.format(len(values)))
     logging.info('==========================')
     for i in values:
         try:
@@ -670,11 +670,11 @@ def migrate_doc_url(listing_mapper):
             name = i[3]
             url = i[4]
             listing = models.Listing.objects.get(id=listing_mapper[listing_id])
-            logging.info('Adding doc_url for listing %s, name %s' % (listing.title, name))
+            logging.info('Adding doc_url for listing {0!s}, name {1!s}'.format(listing.title, name))
             doc_url = models.DocUrl(name=name, url=url, listing=listing)
             doc_url.save()
         except Exception as e:
-            logging.error('Error adding doc_url entry: %s, values: %s' % (str(e), i))
+            logging.error('Error adding doc_url entry: {0!s}, values: {1!s}'.format(str(e), i))
 
 def migrate_item_comment(profile_mapper, listing_mapper):
     logging.debug('migrating item_comment...')
@@ -692,7 +692,7 @@ def migrate_item_comment(profile_mapper, listing_mapper):
     assert columns[9] == 'text'
     values = get_values('item_comment', len(columns))
     # logging.debug('category columns: %s' % columns)
-    logging.info('Reviews to migrate: %s' % len(values))
+    logging.info('Reviews to migrate: {0!s}'.format(len(values)))
     logging.info('==========================')
     for i in values:
         try:
@@ -704,10 +704,10 @@ def migrate_item_comment(profile_mapper, listing_mapper):
             text = i[9]
             review = models.Review(text=text, rate=rate,
                 edited_date=edited_date, author=author, listing=listing)
-            logging.info('Adding review for listing %s, rate: %s, text: %s' % (listing.title, rate, text))
+            logging.info('Adding review for listing {0!s}, rate: {1!s}, text: {2!s}'.format(listing.title, rate, text))
             review.save()
         except Exception as e:
-            logging.error('Error adding review entry: %s, values: %s' % (str(e), i))
+            logging.error('Error adding review entry: {0!s}, values: {1!s}'.format(str(e), i))
 
 def migrate_iwc_data_object(profile_mapper):
     logging.debug('migrating iwc_data_object...')
@@ -721,7 +721,7 @@ def migrate_iwc_data_object(profile_mapper):
     assert columns[5] == 'profile_id'
     values = get_values('iwc_data_object', len(columns))
     # logging.debug('category columns: %s' % columns)
-    logging.info('IWC data objects to migrate: %s' % len(values))
+    logging.info('IWC data objects to migrate: {0!s}'.format(len(values)))
     logging.info('==========================')
     for i in values:
         try:
@@ -733,11 +733,11 @@ def migrate_iwc_data_object(profile_mapper):
             # TODO: any modification here to match new api?
             data = iwc_models.DataResource(key=key, entity=entity,
                 content_type=content_type, username=profile.user.username)
-            logging.info('Adding iwc DataObject for user %s, key: %s, content_type: %s' % (
+            logging.info('Adding iwc DataObject for user {0!s}, key: {1!s}, content_type: {2!s}'.format(
                 profile.user.username, key, content_type))
             data.save()
         except Exception as e:
-            logging.error('Error adding iwc DataObject entry: %s, values: %s' % (str(e), i))
+            logging.error('Error adding iwc DataObject entry: {0!s}, values: {1!s}'.format(str(e), i))
 
 def migrate_listing_category(listing_mapper, category_mapper):
     logging.debug('migrating listing_category...')
@@ -747,7 +747,7 @@ def migrate_listing_category(listing_mapper, category_mapper):
     assert columns[1] == 'category_id'
     values = get_values('listing_category', len(columns))
     # logging.debug('category columns: %s' % columns)
-    logging.info('listing_category associations to migrate: %s' % len(values))
+    logging.info('listing_category associations to migrate: {0!s}'.format(len(values)))
     logging.info('==========================')
     for i in values:
         try:
@@ -755,10 +755,10 @@ def migrate_listing_category(listing_mapper, category_mapper):
             category_id = i[1]
             listing = models.Listing.objects.get(id=listing_mapper[listing_id])
             category = models.Category.objects.get(id=category_mapper[category_id])
-            logging.info('Adding category for listing %s, name %s' % (listing.title, category.title))
+            logging.info('Adding category for listing {0!s}, name {1!s}'.format(listing.title, category.title))
             listing.categories.add(category)
         except Exception as e:
-            logging.error('Error adding category %s to listing: %s, values: %s' % (category.title, listing.title, i))
+            logging.error('Error adding category {0!s} to listing: {1!s}, values: {2!s}'.format(category.title, listing.title, i))
 
 def migrate_listing_profile(profile_mapper, listing_mapper):
     # owners
@@ -769,7 +769,7 @@ def migrate_listing_profile(profile_mapper, listing_mapper):
     assert columns[1] == 'profile_id'
     values = get_values('listing_profile', len(columns))
     # logging.debug('category columns: %s' % columns)
-    logging.info('listing_profile associations to migrate: %s' % len(values))
+    logging.info('listing_profile associations to migrate: {0!s}'.format(len(values)))
     logging.info('==========================')
     for i in values:
         try:
@@ -777,10 +777,10 @@ def migrate_listing_profile(profile_mapper, listing_mapper):
             profile_id = i[1]
             listing = models.Listing.objects.get(id=listing_mapper[listing_id])
             profile = models.Profile.objects.get(id=profile_mapper[profile_id])
-            logging.info('Adding owner for listing %s, username %s' % (listing.title, profile.user.username))
+            logging.info('Adding owner for listing {0!s}, username {1!s}'.format(listing.title, profile.user.username))
             listing.owners.add(profile)
         except Exception as e:
-            logging.error('Error adding owner %s to listing: %s, values: %s' % (profile.user.username, listing.title, i))
+            logging.error('Error adding owner {0!s} to listing: {1!s}, values: {2!s}'.format(profile.user.username, listing.title, i))
 
 def migrate_listing_screenshot(listing_mapper):
     logging.debug('migrating screenshot...')
@@ -798,7 +798,7 @@ def migrate_listing_screenshot(listing_mapper):
     assert columns[9] == 'ordinal'
     values = get_values('screenshot', len(columns))
     # logging.debug('category columns: %s' % columns)
-    logging.info('Screenshots to migrate: %s' % len(values))
+    logging.info('Screenshots to migrate: {0!s}'.format(len(values)))
     logging.info('==========================')
     for i in values:
         try:
@@ -809,11 +809,11 @@ def migrate_listing_screenshot(listing_mapper):
             listing = models.Listing.objects.get(id=listing_mapper[listing_id])
             small_image = migrate_image(small_image_id, 'small_screenshot')
             large_image = migrate_image(large_image_id, 'large_screenshot')
-            logging.info('Adding screenshot for listing %s, large_image_id %s' % (listing.title, large_image_id))
+            logging.info('Adding screenshot for listing {0!s}, large_image_id {1!s}'.format(listing.title, large_image_id))
             screenshot = models.Screenshot(small_image=small_image, large_image=large_image, listing=listing)
             screenshot.save()
         except Exception as e:
-            logging.error('Error adding screenshot entry: %s, values: %s' % (str(e), i))
+            logging.error('Error adding screenshot entry: {0!s}, values: {1!s}'.format(str(e), i))
 
 def migrate_listing_tags(listing_mapper):
     logging.debug('migrating listing_tags...')
@@ -823,7 +823,7 @@ def migrate_listing_tags(listing_mapper):
     assert columns[1] == 'tags_string'
     values = get_values('listing_tags', len(columns))
     # logging.debug('category columns: %s' % columns)
-    logging.info('Tags to migrate: %s' % len(values))
+    logging.info('Tags to migrate: {0!s}'.format(len(values)))
     logging.info('==========================')
     for i in values:
         try:
@@ -835,11 +835,11 @@ def migrate_listing_tags(listing_mapper):
                 tag.save()
             except Exception:
                 tag = models.Tag.objects.get(name=name)
-            logging.info('Adding tag for listing %s, name %s' % (listing.title, tag))
+            logging.info('Adding tag for listing {0!s}, name {1!s}'.format(listing.title, tag))
             listing.tags.add(tag)
 
         except Exception as e:
-            logging.error('Error adding tag entry: %s, values: %s' % (str(e), i))
+            logging.error('Error adding tag entry: {0!s}, values: {1!s}'.format(str(e), i))
 
 def migrate_contact(listing_mapper, contact_type_mapper):
     logging.debug('migrating contact...')
@@ -862,7 +862,7 @@ def migrate_contact(listing_mapper, contact_type_mapper):
 
     values = get_values('contact', len(columns))
     # logging.debug('category columns: %s' % columns)
-    logging.info('Contacts to migrate: %s' % len(values))
+    logging.info('Contacts to migrate: {0!s}'.format(len(values)))
     logging.info('==========================')
     for i in values:
         try:
@@ -880,13 +880,13 @@ def migrate_contact(listing_mapper, contact_type_mapper):
                     unsecure_phone=unsecure_phone, contact_type=contact_type)
                 contact.save()
             except Exception:
-                logging.warning('Error: Found duplicate contact entry: %s' % name)
+                logging.warning('Error: Found duplicate contact entry: {0!s}'.format(name))
                 contact = models.Tag.objects.get(name=name)
-            logging.info('Adding contact %s for listing %s' % (name, listing.title))
+            logging.info('Adding contact {0!s} for listing {1!s}'.format(name, listing.title))
             listing.contacts.add(contact)
 
         except Exception as e:
-            logging.error('Error adding contact entry: %s, values: %s' % (str(e), i))
+            logging.error('Error adding contact entry: {0!s}, values: {1!s}'.format(str(e), i))
 
 def migrate_listing_activities(profile_mapper, listing_mapper):
     logging.debug('migrating listing_activity...')
@@ -906,7 +906,7 @@ def migrate_listing_activities(profile_mapper, listing_mapper):
     assert columns[10] == 'listing_activities_idx'
     values = get_values('listing_activity', len(columns))
     # logging.debug('category columns: %s' % columns)
-    logging.info('Listing Activities to migrate: %s' % len(values))
+    logging.info('Listing Activities to migrate: {0!s}'.format(len(values)))
     listing_activity_mapper = {}
     logging.info('==========================')
     for i in values:
@@ -918,13 +918,13 @@ def migrate_listing_activities(profile_mapper, listing_mapper):
             activity_date = get_date_from_str(i[8])
             author = models.Profile.objects.get(id=profile_mapper[author_id])
             listing = models.Listing.objects.get(id=listing_mapper[listing_id])
-            logging.info('Adding listing_activity %s for listing %s' % (action, listing.title))
+            logging.info('Adding listing_activity {0!s} for listing {1!s}'.format(action, listing.title))
             listing_activity = models.ListingActivity(action=action, activity_date=activity_date,
                 author=author, listing=listing)
             listing_activity.save()
             listing_activity_mapper[old_id] = str(listing_activity.id)
         except Exception as e:
-            logging.warning('Error adding listing_activity entry: %s, values: %s' % (str(e), i))
+            logging.warning('Error adding listing_activity entry: {0!s}, values: {1!s}'.format(str(e), i))
 
     return listing_activity_mapper
 
@@ -940,7 +940,7 @@ def migrate_change_detail(listing_activity_mapper):
     assert columns[5] == 'service_item_activity_id'
     values = get_values('change_detail', len(columns))
     # logging.debug('category columns: %s' % columns)
-    logging.info('Change details to migrate: %s' % len(values))
+    logging.info('Change details to migrate: {0!s}'.format(len(values)))
     logging.info('==========================')
     for i in values:
         try:
@@ -949,13 +949,13 @@ def migrate_change_detail(listing_activity_mapper):
             old_value = i[4]
             listing_activity_id = i[5]
             listing_activity = models.ListingActivity.objects.get(id=listing_activity_mapper[listing_activity_id])
-            logging.info('Adding change_detail for listing %s, field_name %s' % (listing_activity.listing.title, field_name))
+            logging.info('Adding change_detail for listing {0!s}, field_name {1!s}'.format(listing_activity.listing.title, field_name))
             change_detail = models.ChangeDetail(field_name=field_name,
                 old_value=old_value, new_value=new_value)
             change_detail.save()
             listing_activity.change_details.add(change_detail)
         except Exception as e:
-            logging.warning('Error adding change_detail %s, values: %s' % (field_name, i))
+            logging.warning('Error adding change_detail {0!s}, values: {1!s}'.format(field_name, i))
 
 def migrate_rejection_data(listing_mapper, listing_activity_mapper):
     """
@@ -968,7 +968,7 @@ def migrate_rejection_data(listing_mapper, listing_activity_mapper):
     assert columns[1] == 'rejection_listing_id'
     rejection_activity_values = get_values('rejection_activity', len(columns))
     # logging.debug('category columns: %s' % columns)
-    logging.info('Rejection activities to migrate: %s' % len(rejection_activity_values))
+    logging.info('Rejection activities to migrate: {0!s}'.format(len(rejection_activity_values)))
 
     logging.debug('getting data from rejection_listing...')
     columns = get_columns('rejection_listing')
@@ -985,7 +985,7 @@ def migrate_rejection_data(listing_mapper, listing_activity_mapper):
     assert columns[8] == 'service_item_id'
     rejection_listing_values = get_values('rejection_listing', len(columns))
     # logging.debug('category columns: %s' % columns)
-    logging.info('Rejection listings to migrate: %s' % len(rejection_listing_values))
+    logging.info('Rejection listings to migrate: {0!s}'.format(len(rejection_listing_values)))
 
     inverse_listing_activity_mapper = {v: k for k, v in listing_activity_mapper.items()}
 
@@ -995,7 +995,7 @@ def migrate_rejection_data(listing_mapper, listing_activity_mapper):
         if activity.action == 'REJECTED':
             found_description = False
             try:
-                logging.info('Found REJECTED action for listing %s' % activity.listing.title)
+                logging.info('Found REJECTED action for listing {0!s}'.format(activity.listing.title))
             except Exception:
                 logging.warning('Error: Found REJECTED action for non-existent listing')
                 continue
@@ -1006,7 +1006,7 @@ def migrate_rejection_data(listing_mapper, listing_activity_mapper):
                     for rejection_listing in rejection_listing_values:
                         if rejection_listing[0] == rejection_activity[1]:
                             description = rejection_listing[5]
-                            logging.info('Adding reason for rejection: %s' % description)
+                            logging.info('Adding reason for rejection: {0!s}'.format(description))
                             activity.description = description
                             activity.save()
                             found_description = True

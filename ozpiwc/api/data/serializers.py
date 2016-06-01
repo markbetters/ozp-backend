@@ -46,7 +46,7 @@ class DataResourceSerializer(serializers.Serializer):
             pattern=validated_data['pattern'],
             permissions=validated_data['permissions'])
         data_resource.save()
-        logger.debug('saved NEW resource with key: %s, entity: %s' % (self.context['key'], validated_data['entity']))
+        logger.debug('saved NEW resource with key: {0!s}, entity: {1!s}'.format(self.context['key'], validated_data['entity']))
         return data_resource
 
     def update(self, instance, validated_data):
@@ -55,5 +55,5 @@ class DataResourceSerializer(serializers.Serializer):
         instance.pattern = validated_data['pattern']
         instance.permissions = validated_data['permissions']
         instance.save()
-        logger.debug('saved EXISTING resource with key: %s, entity: %s' % (self.context['key'], validated_data['entity']))
+        logger.debug('saved EXISTING resource with key: {0!s}, entity: {1!s}'.format(self.context['key'], validated_data['entity']))
         return instance

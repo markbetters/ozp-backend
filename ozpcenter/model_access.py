@@ -20,7 +20,7 @@ def get_profile(username):
     Key: current_profile:<username>
     """
     username = utils.make_keysafe(username)
-    key = 'current_profile:%s' % username
+    key = 'current_profile:{0!s}'.format(username)
 
     data = cache.get(key)
     if data is None:

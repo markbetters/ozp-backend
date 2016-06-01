@@ -55,7 +55,7 @@ def ListDataApiView(request):
                 data=request.data, context={'request': request, 'key': key},
                 partial=True)
             if not serializer.is_valid():
-                logger.error('%s' % serializer.errors)
+                logger.error('{0!s}'.format(serializer.errors))
                 return Response(serializer.errors,
                     status=status.HTTP_400_BAD_REQUEST)
             item = hal.add_hal_structure(serializer.data, request,
@@ -88,7 +88,7 @@ def DataApiView(request, key=None):
     if key.endswith('/'):
         key = key[:-1]
 
-    logger.debug('Got IWC Data request for key %s' % key)
+    logger.debug('Got IWC Data request for key {0!s}'.format(key))
 
     if not hal.validate_version(request.META.get('HTTP_ACCEPT')):
         return Response('Invalid version requested',
@@ -101,7 +101,7 @@ def DataApiView(request, key=None):
 
     if request.method == 'PUT':
         try:
-            logger.debug('request.data: %s' % request.data)
+            logger.debug('request.data: {0!s}'.format(request.data))
             instance = model_access.get_data_resource(request.user.username,
                 key)
             if instance:
@@ -109,7 +109,7 @@ def DataApiView(request, key=None):
                     data=request.data, context={'request': request, 'key': key},
                     partial=True)
                 if not serializer.is_valid():
-                    logger.error('%s' % serializer.errors)
+                    logger.error('{0!s}'.format(serializer.errors))
                     return Response(serializer.errors,
                         status=status.HTTP_400_BAD_REQUEST)
                 serializer.save()
@@ -123,7 +123,7 @@ def DataApiView(request, key=None):
                     data=request.data, context={'request': request, 'key': key},
                     partial=True)
                 if not serializer.is_valid():
-                    logger.error('ERROR: %s' % serializer.errors)
+                    logger.error('ERROR: {0!s}'.format(serializer.errors))
                     return Response(serializer.errors,
                         status=status.HTTP_400_BAD_REQUEST)
                 serializer.save()
@@ -147,7 +147,7 @@ def DataApiView(request, key=None):
                 data=request.data, context={'request': request, 'key': key},
                 partial=True)
             if not serializer.is_valid():
-                logger.error('%s' % serializer.errors)
+                logger.error('{0!s}'.format(serializer.errors))
                 return Response(serializer.errors,
                     status=status.HTTP_400_BAD_REQUEST)
             resp = serializer.data

@@ -64,13 +64,13 @@ class PluginMain(object):
         # logger.debug('hitting url %s for user with dn %s' % (url, profile.dn), extra={'request':request})
 
         if r.status_code != 200:
-            raise errors.AuthorizationFailure('Error contacting authorization server: %s' % r.text)
+            raise errors.AuthorizationFailure('Error contacting authorization server: {0!s}'.format(r.text))
         user_data = r.json()
 
         user_json_keys = ['dn', 'formalAccesses', 'clearances', 'dutyorg', 'visas']
         for user_key in user_json_keys:
             if user_key not in user_data:
-                raise ValueError('Endpoint %s not return value output - missing key: %s' % (url, user_key))
+                raise ValueError('Endpoint {0!s} not return value output - missing key: {1!s}'.format(url, user_key))
 
         # convert dutyorg -> duty_org
         user_data['duty_org'] = user_data['dutyorg']
@@ -85,11 +85,11 @@ class PluginMain(object):
         # logger.debug('hitting url %s for user with dn %s for group info' % (url, profile.dn), extra={'request':request})
         r = self.requests.get(url, cert=(server_crt, server_key), verify=False)
         if r.status_code != 200:
-            raise errors.AuthorizationFailure('Error contacting authorization server: %s' % r.text)
+            raise errors.AuthorizationFailure('Error contacting authorization server: {0!s}'.format(r.text))
         group_data = r.json()
 
         if 'groups' not in group_data:
-            raise ValueError('Endpoint %s not return value output - missing key: %s' % (url, 'groups'))
+            raise ValueError('Endpoint {0!s} not return value output - missing key: {1!s}'.format(url, 'groups'))
 
         groups = group_data['groups']
         user_data['is_org_steward'] = False
@@ -123,7 +123,7 @@ class PluginMain(object):
 
         profile = model_access.get_profile(username)
         if not profile:
-            raise errors.NotFound('User %s was not found - cannot update authorization info' % username)
+            raise errors.NotFound('User {0!s} was not found - cannot update authorization info'.format(username))
 
         # check profile.auth_expires. if auth_expires - now > 24 hours, raise an
         # exception (auth data should never be cached for more than 24 hours)
@@ -133,7 +133,7 @@ class PluginMain(object):
             raise errors.AuthorizationFailure('Cannot cache data for more than 1 day')
         expires_in = profile.auth_expires - now
         if expires_in.days >= 1:
-            raise errors.AuthorizationFailure('User %s had auth expires set to expire in more than 24 hours' % username)
+            raise errors.AuthorizationFailure('User {0!s} had auth expires set to expire in more than 24 hours'.format(username))
 
         # if auth_data cache hasn't expired, we're good to go
         # TODO: might want to check and see if auth expires in 12 hours
@@ -142,7 +142,7 @@ class PluginMain(object):
         # help to alleviate errors due to the authorization service being down
         # Example: '2016-04-18 15:57:09.275093+00:00' <= '2016-04-18 16:36:05.825269+00:00' = True
         if now <= profile.auth_expires:
-            logger.debug('no auth refresh required. Expires in %s seconds' % expires_in.seconds,
+            logger.debug('no auth refresh required. Expires in {0!s} seconds'.format(expires_in.seconds),
                          extra={'request': request, 'method': method})
             return True
 
@@ -161,7 +161,7 @@ class PluginMain(object):
             if (hasattr(settings, 'DEFAULT_AGENCY') and (settings.DEFAULT_AGENCY != '')):
                 duty_org = settings.DEFAULT_AGENCY
             else:
-                raise errors.AuthorizationFailure('User %s has invalid duty org %s' % (username, duty_org))
+                raise errors.AuthorizationFailure('User {0!s} has invalid duty org {1!s}'.format(username, duty_org))
 
         # update the user's org
         try:
@@ -169,7 +169,7 @@ class PluginMain(object):
             org = models.Agency.objects.get(short_name=duty_org)
             profile.organizations.add(org)
         except Exception as e:
-            logger.error('Failed to update organizations for user %s. Error: %s' % (username, str(e)),
+            logger.error('Failed to update organizations for user {0!s}. Error: {1!s}'.format(username, str(e)),
                          extra={'request': request, 'method': method})
             return False
 

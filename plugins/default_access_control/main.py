@@ -145,7 +145,7 @@ class PluginMain(object):
         try:
             user_accesses = json.loads(user_accesses_json)
         except ValueError:
-            logger.error('Error parsing JSON data: %s' % user_accesses_json)
+            logger.error('Error parsing JSON data: {0!s}'.format(user_accesses_json))
             return False
 
         # check clearances

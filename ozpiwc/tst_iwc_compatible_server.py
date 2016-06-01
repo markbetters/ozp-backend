@@ -43,7 +43,7 @@ class TestIwcBackend(unittest.TestCase):
         self.assertTrue(r['_embedded']['ozp:system'])
         self.assertTrue(r['_embedded']['ozp:system']['version'])
         self.assertTrue(r['_embedded']['ozp:system']['name'])
-        self.assertEqual(r['_embedded']['ozp:system']['_links']['self']['href'], '%s/system/' % IWC_ROOT)
+        self.assertEqual(r['_embedded']['ozp:system']['_links']['self']['href'], '{0!s}/system/'.format(IWC_ROOT))
 
         # check for embedded user details
         self.assertTrue(r['_embedded']['ozp:user'])
@@ -53,7 +53,7 @@ class TestIwcBackend(unittest.TestCase):
 
     def test_data_api(self):
         key = '/transportation/car7'
-        url = '%s/self/data%s/' % (IWC_ROOT, key)
+        url = '{0!s}/self/data{1!s}/'.format(IWC_ROOT, key)
         # delete this entry, in case it already exists
         r = self.make_delete_request(url, True)
 
@@ -103,7 +103,7 @@ class TestIwcBackend(unittest.TestCase):
         }
 
         key = '/transportation/truck3'
-        url = '%s/self/data%s/' % (IWC_ROOT, key)
+        url = '{0!s}/self/data{1!s}/'.format(IWC_ROOT, key)
         # delete this entry, in case it already exists
         r = self.make_delete_request(url, True)
         r = self.make_put_request(url, data, 201)
@@ -118,7 +118,7 @@ class TestIwcBackend(unittest.TestCase):
         self.assertTrue(len(r['_links']['item'][0]['href']))
 
         # test deleting a key
-        url = '%s/self/data%s/' % (IWC_ROOT, key)
+        url = '{0!s}/self/data{1!s}/'.format(IWC_ROOT, key)
         r = self.make_delete_request(url, 204)
         # should now get a 404 trying to get this key
         r = self.make_get_request(url, 404)

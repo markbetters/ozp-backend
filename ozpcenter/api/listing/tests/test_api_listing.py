@@ -41,7 +41,7 @@ class ListingApiTest(APITestCase):
         Used to validate the keys of a listing
         """
         if not isinstance(listing_map, dict):
-            raise Exception('listing_map is not type dict, it is %s' % type(listing_map))
+            raise Exception('listing_map is not type dict, it is {0!s}'.format(type(listing_map)))
 
         listing_map_default_keys = ['id', 'is_bookmarked', 'screenshots',
                                     'doc_urls', 'owners', 'categories', 'tags', 'contacts', 'intents',
@@ -294,7 +294,7 @@ class ListingApiTest(APITestCase):
         user = generic_model_access.get_profile('wsmith').user
         self.client.force_authenticate(user=user)
         air_mail_id = models.Listing.objects.get(title='Air Mail').id
-        url = '/api/listing/%s/review/' % air_mail_id
+        url = '/api/listing/{0!s}/review/'.format(air_mail_id)
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -302,7 +302,7 @@ class ListingApiTest(APITestCase):
         user = generic_model_access.get_profile('wsmith').user
         self.client.force_authenticate(user=user)
         air_mail_id = models.Listing.objects.get(title='Air Mail').id
-        url = '/api/listing/%s/review/1/' % air_mail_id
+        url = '/api/listing/{0!s}/review/1/'.format(air_mail_id)
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertTrue('rate' in response.data)
@@ -315,7 +315,7 @@ class ListingApiTest(APITestCase):
         user = generic_model_access.get_profile('wsmith').user
         self.client.force_authenticate(user=user)
         air_mail_id = models.Listing.objects.get(title='Air Mail').id
-        url = '/api/listing/%s/review/' % air_mail_id
+        url = '/api/listing/{0!s}/review/'.format(air_mail_id)
         data = {'rate': 4, 'text': 'winston test review'}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -337,7 +337,7 @@ class ListingApiTest(APITestCase):
         bread_basket_id = models.Listing.objects.get(title='Bread Basket').id
         user = generic_model_access.get_profile('rutherford').user
         self.client.force_authenticate(user=user)
-        url = '/api/listing/%s/review/' % bread_basket_id
+        url = '/api/listing/{0!s}/review/'.format(bread_basket_id)
         data = {'rate': 4, 'text': 'rutherford test review'}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -347,7 +347,7 @@ class ListingApiTest(APITestCase):
         user = generic_model_access.get_profile('julia').user
         self.client.force_authenticate(user=user)
         air_mail_id = models.Listing.objects.get(title='Air Mail').id
-        url = '/api/listing/%s/review/' % air_mail_id
+        url = '/api/listing/{0!s}/review/'.format(air_mail_id)
         data = {'rate': 3}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -363,21 +363,21 @@ class ListingApiTest(APITestCase):
         user = generic_model_access.get_profile('wsmith').user
         self.client.force_authenticate(user=user)
         air_mail_id = models.Listing.objects.get(title='Air Mail').id
-        url = '/api/listing/%s/review/' % air_mail_id
+        url = '/api/listing/{0!s}/review/'.format(air_mail_id)
         data = {'rate': 4, 'text': 'winston test review'}
         response = self.client.post(url, data, format='json')
         review_id = response.data['id']
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
         # now update it
-        url = '/api/listing/%s/review/%s/' % (air_mail_id, review_id)
+        url = '/api/listing/{0!s}/review/{1!s}/'.format(air_mail_id, review_id)
         data = {'rate': 4, 'text': 'winston test review'}
         response = self.client.put(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(4, response.data['rate'])
 
         # test the listing/<id>/activity endpoint
-        url = '/api/listing/%s/activity/' % air_mail_id
+        url = '/api/listing/{0!s}/activity/'.format(air_mail_id)
         response = self.client.get(url, format='json')
         activiy_actions = [i['action'] for i in response.data]
 
@@ -385,7 +385,7 @@ class ListingApiTest(APITestCase):
         self.assertTrue(models.ListingActivity.REVIEW_EDITED in activiy_actions)
 
         # try to edit a review from another user - should fail
-        url = '/api/listing/%s/review/1/' % air_mail_id
+        url = '/api/listing/{0!s}/review/1/'.format(air_mail_id)
         data = {'rate': 4, 'text': 'winston test review'}
         response = self.client.put(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
@@ -395,19 +395,19 @@ class ListingApiTest(APITestCase):
         user = generic_model_access.get_profile('rutherford').user
         self.client.force_authenticate(user=user)
         air_mail_id = models.Listing.objects.get(title='Air Mail').id
-        url = '/api/listing/%s/review/' % air_mail_id
+        url = '/api/listing/{0!s}/review/'.format(air_mail_id)
         data = {'rate': 4, 'text': 'rutherford test review'}
         response = self.client.post(url, data, format='json')
         review_id = response.data['id']
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
         # now delete it
-        url = '/api/listing/%s/review/%s/' % (air_mail_id, review_id)
+        url = '/api/listing/{0!s}/review/{1!s}/'.format(air_mail_id, review_id)
         response = self.client.delete(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
         # test the listing/<id>/activity endpoint
-        url = '/api/listing/%s/activity/' % air_mail_id
+        url = '/api/listing/{0!s}/activity/'.format(air_mail_id)
         response = self.client.get(url, format='json')
         activiy_actions = [i['action'] for i in response.data]
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -418,14 +418,14 @@ class ListingApiTest(APITestCase):
         user = generic_model_access.get_profile('wsmith').user
         self.client.force_authenticate(user=user)
         air_mail_id = models.Listing.objects.get(title='Air Mail').id
-        url = '/api/listing/%s/review/' % air_mail_id
+        url = '/api/listing/{0!s}/review/'.format(air_mail_id)
         data = {'rate': 4, 'text': 'winston test review'}
         response = self.client.post(url, data, format='json')
         review_id = response.data['id']
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
         # trying to delete it as a different user should fail...
-        url = '/api/listing/%s/review/%s/' % (air_mail_id, review_id)
+        url = '/api/listing/{0!s}/review/{1!s}/'.format(air_mail_id, review_id)
         user = generic_model_access.get_profile('jones').user
         self.client.force_authenticate(user=user)
         response = self.client.delete(url, format='json')
@@ -456,7 +456,7 @@ class ListingApiTest(APITestCase):
         self.assertEqual(listing.total_rate5, 0)
 
         # add one review
-        url = '/api/listing/%s/review/' % listing.id
+        url = '/api/listing/{0!s}/review/'.format(listing.id)
         data = {'rate': 1, 'text': 'winston test review'}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -475,35 +475,35 @@ class ListingApiTest(APITestCase):
         # add a few more reviews
         user = generic_model_access.get_profile('julia').user
         self.client.force_authenticate(user=user)
-        url = '/api/listing/%s/review/' % listing.id
+        url = '/api/listing/{0!s}/review/'.format(listing.id)
         data = {'rate': 2, 'text': 'julia test review'}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
         user = generic_model_access.get_profile('charrington').user
         self.client.force_authenticate(user=user)
-        url = '/api/listing/%s/review/' % listing.id
+        url = '/api/listing/{0!s}/review/'.format(listing.id)
         data = {'rate': 3, 'text': 'charrington test review'}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
         user = generic_model_access.get_profile('jones').user
         self.client.force_authenticate(user=user)
-        url = '/api/listing/%s/review/' % listing.id
+        url = '/api/listing/{0!s}/review/'.format(listing.id)
         data = {'rate': 4, 'text': 'jones test review'}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
         user = generic_model_access.get_profile('rutherford').user
         self.client.force_authenticate(user=user)
-        url = '/api/listing/%s/review/' % listing.id
+        url = '/api/listing/{0!s}/review/'.format(listing.id)
         data = {'rate': 5, 'text': 'rutherford test review'}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
         user = generic_model_access.get_profile('syme').user
         self.client.force_authenticate(user=user)
-        url = '/api/listing/%s/review/' % listing.id
+        url = '/api/listing/{0!s}/review/'.format(listing.id)
         data = {'rate': 5, 'text': 'syme test review'}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -512,7 +512,7 @@ class ListingApiTest(APITestCase):
         # and one without a review
         user = generic_model_access.get_profile('tparsons').user
         self.client.force_authenticate(user=user)
-        url = '/api/listing/%s/review/' % listing.id
+        url = '/api/listing/{0!s}/review/'.format(listing.id)
         data = {'rate': 4}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -533,7 +533,7 @@ class ListingApiTest(APITestCase):
         # update an existing review
         user = generic_model_access.get_profile('tparsons').user
         self.client.force_authenticate(user=user)
-        url = '/api/listing/%s/review/%s/' % (listing.id,
+        url = '/api/listing/{0!s}/review/{1!s}/'.format(listing.id,
             tparsons_review_id)
         data = {'rate': 2}
         response = self.client.put(url, data, format='json')
@@ -554,7 +554,7 @@ class ListingApiTest(APITestCase):
         # delete an existing review
         user = generic_model_access.get_profile('syme').user
         self.client.force_authenticate(user=user)
-        url = '/api/listing/%s/review/%s/' % (listing.id, syme_review_id)
+        url = '/api/listing/{0!s}/review/{1!s}/'.format(listing.id, syme_review_id)
         response = self.client.delete(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
@@ -1257,7 +1257,7 @@ class ListingApiTest(APITestCase):
           "required_listings": None
         }
 
-        url = '/api/listing/%s/' % listing_id
+        url = '/api/listing/{0!s}/'.format(listing_id)
         response = self.client.put(url, data, format='json')
 
         contacts = response.data['contacts']
@@ -1285,7 +1285,7 @@ class ListingApiTest(APITestCase):
         data['approval_status'] = models.Listing.APPROVED
         listing_id = data['id']
 
-        url = '/api/listing/%s/' % listing_id
+        url = '/api/listing/{0!s}/'.format(listing_id)
         response = self.client.put(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
@@ -1310,7 +1310,7 @@ class ListingApiTest(APITestCase):
         data = response.data
 
         # VERIFY that is was created
-        url = '/api/listing/%s/activity/' % app_id
+        url = '/api/listing/{0!s}/activity/'.format(app_id)
         response = self._request_helper(url, 'GET', username='jones', status_code=200)
 
         activity_actions = [i['action'] for i in response.data]
@@ -1322,12 +1322,12 @@ class ListingApiTest(APITestCase):
 
         # MODIFIED
         data['title'] = "mr jones mod app"
-        url = '/api/listing/%s/' % app_id
+        url = '/api/listing/{0!s}/'.format(app_id)
         response = self._request_helper(url, 'PUT', data=data, username='jones', status_code=200)
         data = response.data
 
         # VERIFY that is was modified
-        url = '/api/listing/%s/activity/' % app_id
+        url = '/api/listing/{0!s}/activity/'.format(app_id)
         response = self._request_helper(url, 'GET', username='jones', status_code=200)
 
         activity_actions = [i['action'] for i in response.data]
@@ -1339,11 +1339,11 @@ class ListingApiTest(APITestCase):
 
         # SUBMITTED
         data['approval_status'] = models.Listing.PENDING
-        url = '/api/listing/%s/' % app_id
+        url = '/api/listing/{0!s}/'.format(app_id)
         response = self._request_helper(url, 'PUT', data=data, username='jones', status_code=200)
 
         # Verify that is was submitted
-        url = '/api/listing/%s/activity/' % app_id
+        url = '/api/listing/{0!s}/activity/'.format(app_id)
         response = self._request_helper(url, 'GET', username='jones', status_code=200)
 
         activity_actions = [i['action'] for i in response.data]
@@ -1360,11 +1360,11 @@ class ListingApiTest(APITestCase):
 
         # DISABLE
         data['is_enabled'] = False
-        url = '/api/listing/%s/' % app_id
+        url = '/api/listing/{0!s}/'.format(app_id)
         response = self._request_helper(url, 'PUT', data=data, username='jones', status_code=200)
 
         # Verify that it was disabled
-        url = '/api/listing/%s/activity/' % app_id
+        url = '/api/listing/{0!s}/activity/'.format(app_id)
         response = self._request_helper(url, 'GET', username='jones', status_code=200)
         activity_actions = [i['action'] for i in response.data]
         self.assertEquals(len(activity_actions), 4)
@@ -1375,11 +1375,11 @@ class ListingApiTest(APITestCase):
 
         # ENABLED
         data['is_enabled'] = True
-        url = '/api/listing/%s/' % app_id
+        url = '/api/listing/{0!s}/'.format(app_id)
         response = self._request_helper(url, 'PUT', data=data, username='jones', status_code=200)
 
         # Verify that it was enabled
-        url = '/api/listing/%s/activity/' % app_id
+        url = '/api/listing/{0!s}/activity/'.format(app_id)
         response = self._request_helper(url, 'GET', username='jones', status_code=200)
         activity_actions = [i['action'] for i in response.data]
         self.assertEquals(len(activity_actions), 5)
@@ -1422,13 +1422,13 @@ class ListingApiTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         titles = [i['listing']['title'] for i in response.data]
         titles = list(set(titles))
-        print('for bigbrother, got titles: %s' % titles)
+        print('for bigbrother, got titles: {0!s}'.format(titles))
         counter = 0
         for i in expected_titles:
             # Bread Basket is a private app, and bigbrother is not in that
             # organization
             if i != 'Bread Basket':
-                print('checking for app %s' % i)
+                print('checking for app {0!s}'.format(i))
                 self.assertTrue(i in titles)
                 counter += 1
         self.assertEqual(counter, len(expected_titles) - 1)

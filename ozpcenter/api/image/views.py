@@ -124,7 +124,7 @@ class ImageViewSet(viewsets.ModelViewSet):
             serializer = serializers.ImageCreateSerializer(data=request.data,
                 context={'request': request})
             if not serializer.is_valid():
-                logger.error('%s' % serializer.errors)
+                logger.error('{0!s}'.format(serializer.errors))
                 return Response(serializer.errors,
                     status=status.HTTP_400_BAD_REQUEST)
             serializer.save()
@@ -160,7 +160,7 @@ class ImageViewSet(viewsets.ModelViewSet):
             with open(image_path, 'rb') as f:
                 return HttpResponse(f.read(), content_type=content_type)
         except IOError:
-            logger.error('No image found for pk %d' % pk)
+            logger.error('No image found for pk {0:d}'.format(pk))
             return Response(status=status.HTTP_404_NOT_FOUND)
 
     def destroy(self, request, pk=None):
