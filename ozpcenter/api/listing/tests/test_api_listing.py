@@ -149,6 +149,33 @@ class ListingApiTest(APITestCase):
         for listing_map in response.data:
             self.assertEquals(self._validate_listing_map_keys(listing_map), [])
 
+    def test_search_tags(self):
+        user = generic_model_access.get_profile('wsmith').user
+        self.client.force_authenticate(user=user)
+        url = '/api/listings/search/?search=tag_1'
+        response = self.client.get(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        titles = [i['title'] for i in response.data]
+        self.assertTrue('Air Mail 1' in titles)
+        self.assertTrue(len(titles) == 1)
+        for listing_map in response.data:
+            self.assertEquals(self._validate_listing_map_keys(listing_map), [])
+
+    def test_search_tags_startwith(self):
+        user = generic_model_access.get_profile('wsmith').user
+        self.client.force_authenticate(user=user)
+        url = '/api/listings/search/?search=tag_'
+        response = self.client.get(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        titles = [i['title'] for i in response.data]
+        self.assertTrue('Air Mail 1' in titles)
+        self.assertTrue('Air Mail' in titles)
+        self.assertTrue(len(titles) == 10)
+        for listing_map in response.data:
+            self.assertEquals(self._validate_listing_map_keys(listing_map), [])
+
     def test_search_is_enable(self):
         user = generic_model_access.get_profile('wsmith').user
         self.client.force_authenticate(user=user)

@@ -513,8 +513,13 @@ def run():
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         #                           Tags
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+        current_tag = models.Tag(name='tag_{0}'.format(i))
+        current_tag.save()
+
         listing.tags.add(demo)
         listing.tags.add(example)
+        listing.tags.add(current_tag)
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         #                           Screenshots
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

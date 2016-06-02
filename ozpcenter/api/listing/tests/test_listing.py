@@ -393,7 +393,7 @@ class ListingTest(TestCase):
 
         tags = models.Tag.objects.all()
         out = model_access.tags_to_string(tags, True)
-        self.assertEqual(out, "['demo', 'example']")
+        self.assertEqual(out, "['demo', 'example', 'tag_0', 'tag_1', 'tag_2', 'tag_3', 'tag_4', 'tag_5', 'tag_6', 'tag_7', 'tag_8', 'tag_9']")
 
     def test_owners_to_string(self):
         owners = [
