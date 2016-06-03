@@ -6,16 +6,16 @@ import unittest
 
 from django.db import transaction
 from django.db.utils import IntegrityError
-from rest_framework.reverse import reverse
 from rest_framework import status
-from rest_framework.test import APITestCase
+from rest_framework.reverse import reverse
 from rest_framework.test import APIRequestFactory
+from rest_framework.test import APITestCase
 from rest_framework.test import force_authenticate
 
-from ozpcenter.scripts import sample_data_generator as data_gen
-import ozpiwc.api.data.views as views
-from ozpiwc import models as models
 from ozpcenter import model_access as generic_model_access
+from ozpcenter.scripts import sample_data_generator as data_gen
+from ozpiwc import models as models
+import ozpiwc.api.data.views as views
 
 
 class DataApiTest(APITestCase):

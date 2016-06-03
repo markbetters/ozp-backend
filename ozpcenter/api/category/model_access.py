@@ -4,7 +4,8 @@ Model Access
 import logging
 
 from django.db.models.functions import Lower
-import ozpcenter.models as models
+
+from ozpcenter import models
 
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center.' + str(__name__))

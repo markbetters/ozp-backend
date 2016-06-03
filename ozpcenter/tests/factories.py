@@ -7,10 +7,11 @@ fixtures with easy-to-use factories for creating complex objects"
 
 https://factoryboy.readthedocs.org/en/latest/index.html
 """
-import factory
+from django.contrib import auth
 from faker import Factory
-import django.contrib.auth
-import ozpcenter.models as models
+from ozpcenter import models
+import factory
+
 
 fake = Factory.create()
 
@@ -18,7 +19,7 @@ fake = Factory.create()
 class GroupFactory(factory.django.DjangoModelFactory):
 
     class Meta:
-        model = django.contrib.auth.models.Group
+        model = auth.models.Group
         # http://joequery.me/code/factory-boy-handle-unique-constraints/
         django_get_or_create = ('name',)
 
@@ -28,7 +29,7 @@ class GroupFactory(factory.django.DjangoModelFactory):
 class UserFactory(factory.django.DjangoModelFactory):
 
     class Meta:
-        model = django.contrib.auth.models.User
+        model = auth.models.User
         # http://joequery.me/code/factory-boy-handle-unique-constraints/
         django_get_or_create = ('username', 'email')
 

@@ -20,16 +20,16 @@ Summary:
 import logging
 
 from django.shortcuts import get_object_or_404
-from rest_framework.decorators import detail_route, list_route
 from rest_framework import status
 from rest_framework import viewsets
+from rest_framework.decorators import detail_route, list_route
 from rest_framework.response import Response
 
-import ozpcenter.api.library.serializers as serializers
+from ozpcenter import models
+from ozpcenter import permissions
 import ozpcenter.api.library.model_access as model_access
 import ozpcenter.api.listing.model_access as listing_model_access
-import ozpcenter.models as models
-import ozpcenter.permissions as permissions
+import ozpcenter.api.library.serializers as serializers
 
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center.' + str(__name__))

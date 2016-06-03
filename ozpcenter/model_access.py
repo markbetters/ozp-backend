@@ -6,8 +6,8 @@ import logging
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 
-import ozpcenter.models as models
-import ozpcenter.utils as utils
+from ozpcenter import models
+from ozpcenter import utils
 
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center.' + str(__name__))

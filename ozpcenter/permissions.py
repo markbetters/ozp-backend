@@ -4,10 +4,9 @@ Custom permissions for API endpoints
 Can do things like if view.action == 'create'
 
 """
-
+from ozpcenter import models
+from ozpcenter import utils
 from rest_framework import permissions
-import ozpcenter.utils as utils
-import ozpcenter.models as models
 import ozpcenter.model_access as model_access
 
 from plugins_util import plugin_manager

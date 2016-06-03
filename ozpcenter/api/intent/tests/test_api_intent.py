@@ -5,16 +5,16 @@ import unittest
 
 from django.db import transaction
 from django.db.utils import IntegrityError
-from rest_framework.reverse import reverse
 from rest_framework import status
-from rest_framework.test import APITestCase
+from rest_framework.reverse import reverse
 from rest_framework.test import APIRequestFactory
+from rest_framework.test import APITestCase
 from rest_framework.test import force_authenticate
 
+from ozpcenter import model_access as generic_model_access
+from ozpcenter import models
 from ozpcenter.scripts import sample_data_generator as data_gen
 import ozpcenter.api.contact_type.views as views
-from ozpcenter import models as models
-from ozpcenter import model_access as generic_model_access
 
 
 class IntentApiTest(APITestCase):
@@ -40,9 +40,9 @@ class IntentApiTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         actions = [i['action'] for i in response.data]
         self.assertTrue('/application/json/view' in actions)
-        self.assertTrue(response.data[0]['icon'] != None)
-        self.assertTrue(response.data[0]['media_type'] != None)
-        self.assertTrue(response.data[0]['label'] != None)
+        self.assertTrue(response.data[0]['icon'] is not None)
+        self.assertTrue(response.data[0]['media_type'] is not None)
+        self.assertTrue(response.data[0]['label'] is not None)
 
     def test_get_intent(self):
         user = generic_model_access.get_profile('wsmith').user

@@ -7,8 +7,8 @@ import re
 from django.db.models.functions import Lower
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
-import ozpcenter.models as models
-import ozpcenter.utils as utils
+from ozpcenter import models
+from ozpcenter import utils
 import ozpcenter.api.storefront.serializers as serializers
 
 # Get an instance of a logger

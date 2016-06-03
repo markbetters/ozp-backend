@@ -5,7 +5,6 @@ model definitions for ozpiwc
 """
 import logging
 
-# import django.contrib.auth
 from django.db import models
 
 # Get an instance of a logger

@@ -1,11 +1,11 @@
 """
 Utils tests
 """
-from django.test import TestCase
-from django.db.utils import IntegrityError
 from django.db import transaction
+from django.db.utils import IntegrityError
+from django.test import TestCase
 
-from ozpcenter import models as models
+from ozpcenter import models
 from ozpcenter import utils as utils
 from ozpcenter.scripts import sample_data_generator as data_gen
 

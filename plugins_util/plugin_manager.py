@@ -1,24 +1,22 @@
 """
 Plugin Manager
 """
+from types import ModuleType
 import datetime
-import json
-import os
-import sys
 import imp
 import importlib
+import json
 import logging
-import traceback
-from types import ModuleType
+import os
 import requests
-
+import sys
+import traceback
 
 from django.conf import settings
 
-
 logger = logging.getLogger('ozp-center.' + str(__name__))
 
-BASE_PLUGIN_DIRECTORY = ('%s/%s') % (os.path.realpath(os.path.join(os.path.dirname(__file__), '../')), 'plugins')
+BASE_PLUGIN_DIRECTORY = '{0}/{1}'.format(os.path.realpath(os.path.join(os.path.dirname(__file__), '../')), 'plugins')
 
 
 # sys.path.insert(0, BASE_DIRECTORY)

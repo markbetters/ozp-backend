@@ -3,11 +3,12 @@ Serializers
 """
 import logging
 
-import django.contrib.auth
+from django.contrib import auth
+
 
 from rest_framework import serializers
 
-import ozpcenter.models as models
+from ozpcenter import models
 import ozpcenter.model_access as generic_model_access
 import ozpcenter.api.agency.model_access as agency_model_access
 
@@ -30,7 +31,7 @@ class AgencySerializer(serializers.ModelSerializer):
 class GroupSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
-        model = django.contrib.auth.models.Group
+        model = auth.models.Group
         fields = ('name',)
 
 
@@ -41,7 +42,7 @@ class UserSerializer(serializers.ModelSerializer):
         # TODO: not supposed to reference Django's User model directly, but
         # using settings.AUTH_USER_MODEL here doesn't not work
         # model = settings.AUTH_USER_MODEL
-        model = django.contrib.auth.models.User
+        model = auth.models.User
         fields = ('username', 'email', 'groups')
 
 
@@ -51,7 +52,7 @@ class ShortUserSerializer(serializers.ModelSerializer):
         # TODO: not supposed to reference Django's User model directly, but
         # using settings.AUTH_USER_MODEL here doesn't not work
         # model = settings.AUTH_USER_MODEL
-        model = django.contrib.auth.models.User
+        model = auth.models.User
         fields = ('username', 'email')
 
 

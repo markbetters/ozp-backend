@@ -5,10 +5,10 @@ import logging
 
 from rest_framework import viewsets
 
-import ozpcenter.permissions as permissions
-import ozpcenter.api.category.serializers as serializers
-import ozpcenter.models as models
+from ozpcenter import models
+from ozpcenter import permissions
 import ozpcenter.api.category.model_access as model_access
+import ozpcenter.api.category.serializers as serializers
 
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center.' + str(__name__))

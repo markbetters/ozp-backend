@@ -4,15 +4,14 @@ Serializers
 Some of these serializers use the HyperlinkedModelSerializer base class, as that
 provides the 'url' field, which makes it easier for the front-end to consume
 """
+from PIL import Image
 import logging
 
 from rest_framework import serializers
 
-from PIL import Image
-
-import ozpcenter.models as models
-import ozpcenter.model_access as generic_model_access
+from ozpcenter import models
 from plugins_util import plugin_manager
+import ozpcenter.model_access as generic_model_access
 
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center.' + str(__name__))

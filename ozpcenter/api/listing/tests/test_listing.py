@@ -1,15 +1,15 @@
 """
 Listing tests
 """
-from django.test import TestCase
-from django.db.utils import IntegrityError
 from django.db import transaction
+from django.db.utils import IntegrityError
+from django.test import TestCase
 
-from ozpcenter import models as models
-import ozpcenter.errors as errors
-import ozpcenter.api.listing.model_access as model_access
-import ozpcenter.model_access as generic_model_access
 from ozpcenter.scripts import sample_data_generator as data_gen
+import ozpcenter.api.listing.model_access as model_access
+from ozpcenter import errors
+import ozpcenter.model_access as generic_model_access
+from ozpcenter import models
 
 
 class ListingTest(TestCase):

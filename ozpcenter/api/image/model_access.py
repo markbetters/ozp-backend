@@ -2,11 +2,11 @@
 Image model access
 """
 import logging
-import os.path
+import os
 
 from django.conf import settings
 
-import ozpcenter.models as models
+from ozpcenter import models
 
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center.' + str(__name__))

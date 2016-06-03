@@ -1,13 +1,13 @@
 """
 Notification tests
 """
-from django.test import TestCase
-from django.db.utils import IntegrityError
 from django.db import transaction
+from django.db.utils import IntegrityError
+from django.test import TestCase
 
-from ozpcenter import models as models
-import ozpcenter.api.notification.model_access as model_access
+from ozpcenter import models
 from ozpcenter.scripts import sample_data_generator as data_gen
+import ozpcenter.api.notification.model_access as model_access
 
 
 class ListingTest(TestCase):

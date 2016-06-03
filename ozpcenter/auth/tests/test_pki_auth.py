@@ -3,9 +3,9 @@ Tests for (most) of the PkiAuthentication mechanism
 """
 from django.test import TestCase
 
+from ozpcenter import models
 from ozpcenter.scripts import sample_data_generator as data_gen
 import ozpcenter.auth.pkiauth as pkiauth
-import ozpcenter.models as models
 import ozpcenter.model_access as model_access
 
 

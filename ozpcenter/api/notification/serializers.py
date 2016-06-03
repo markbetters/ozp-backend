@@ -3,13 +3,13 @@ Serializers
 """
 import logging
 
-from rest_framework import serializers
 from django.contrib.auth.models import User
+from rest_framework import serializers
 
-import ozpcenter.models as models
-import ozpcenter.errors as errors
-import ozpcenter.model_access as generic_model_access
+from ozpcenter import errors
+from ozpcenter import models
 import ozpcenter.api.listing.model_access as listing_model_access
+import ozpcenter.model_access as generic_model_access
 
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center.' + str(__name__))

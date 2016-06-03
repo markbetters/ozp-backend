@@ -6,18 +6,14 @@ import pytz
 import unittest
 
 from django.conf import settings
-
 from django.test import TestCase
 
+from ozpcenter import errors
+from ozpcenter import models
 from ozpcenter.scripts import sample_data_generator as data_gen
-# import ozpcenter.self.auth.ozp_authorization as auth
-import plugins.default_authorization.main as auth
-import ozpcenter.models as models
-import ozpcenter.model_access as model_access
-
 from plugins.default_authorization.main import PluginMain
-
-import ozpcenter.errors as errors
+import ozpcenter.model_access as model_access
+import plugins.default_authorization.main as auth
 
 
 class OzpAuthorizationTest(TestCase):

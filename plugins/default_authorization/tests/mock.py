@@ -1,10 +1,10 @@
-import re
 import inspect
 import json
 import os
+import re
 
-from ozp.tests.helper import Route
 from ozp.tests.helper import MockResponse
+from ozp.tests.helper import Route
 
 TEST_BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 

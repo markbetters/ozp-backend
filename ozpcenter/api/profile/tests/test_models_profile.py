@@ -12,8 +12,7 @@ from django.db.utils import IntegrityError
 from django.db import transaction
 
 from django import forms
-from ozpcenter import models as models
-
+from ozpcenter import models
 import ozpcenter.tests.factories as f
 
 
@@ -75,11 +74,11 @@ class ProfileTest(TestCase):
         This is because "constraints" like blank=False apply only to form
         validation, not to the actual database
         """
-        testUser = models.Profile.create_user(username='myname',
+        test_user = models.Profile.create_user(username='myname',
             display_name='My Name',
             email='myname@me.com',
             access_control=json.dumps({'clearances': ['SOMETHING'], 'formal_accesses': ['ABC']}))
-        testUser.save()
+        test_user.save()
         # check that it was saved
         user_found = models.Profile.objects.filter(user__username='myname').count()
         self.assertEqual(1, user_found)
@@ -97,10 +96,10 @@ class ProfileTest(TestCase):
         try:
             with transaction.atomic():
                 uname_long = 'x' * 256
-                testUser = models.Profile.create_user(username=uname_long,
+                test_user = models.Profile.create_user(username=uname_long,
                     access_control=json.dumps({'clearances': ['U'], 'formal_accesses': ['ABC']}))
                 # this passes if we're using SQLite
-                testUser.save()
+                test_user.save()
             # self.assertTrue(0, 'username of excess length allowed')
         except IntegrityError:
             # this is expected for PostgreSQL and MySQL
@@ -110,9 +109,9 @@ class ProfileTest(TestCase):
         pass
 
     def test_highest_role(self):
-        testUser = models.Profile.create_user(username='newguy',
+        test_user = models.Profile.create_user(username='newguy',
             access_control=json.dumps({'clearances': ['U'], 'formal_accesses': ['ABC']}))
-        testUser.save()
-        testUser = models.Profile.objects.get(user__username='newguy',
+        test_user.save()
+        test_user = models.Profile.objects.get(user__username='newguy',
             access_control=json.dumps({'clearances': ['U'], 'formal_accesses': ['ABC']}))
-        self.assertEqual(testUser.highest_role(), 'USER')
+        self.assertEqual(test_user.highest_role(), 'USER')
