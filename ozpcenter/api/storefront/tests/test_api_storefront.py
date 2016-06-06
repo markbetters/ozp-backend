@@ -1,16 +1,10 @@
 """
 Tests for storefront endpoints
 """
-from rest_framework.reverse import reverse
-from rest_framework import status
 from rest_framework.test import APITestCase
-from rest_framework.test import APIRequestFactory
-from rest_framework.test import force_authenticate
 
-from ozpcenter.scripts import sample_data_generator as data_gen
-import ozpcenter.api.storefront.views as views
-from ozpcenter import models as models
 from ozpcenter import model_access as generic_model_access
+from ozpcenter.scripts import sample_data_generator as data_gen
 
 
 class StorefrontApiTest(APITestCase):

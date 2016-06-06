@@ -1,24 +1,15 @@
 """
 Tests for Profile endpoints
 """
-import unittest
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch
 
-from django.db import transaction
-from django.db.utils import IntegrityError
 from django.conf import settings
-from rest_framework.reverse import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
-from rest_framework.test import APIRequestFactory
-from rest_framework.test import force_authenticate
 
-
-from ozpcenter.scripts import sample_data_generator as data_gen
-import ozpcenter.api.contact_type.views as views
-from ozpcenter import models as models
-from ozpcenter import model_access as generic_model_access
 from ozp.tests import helper
+from ozpcenter import model_access as generic_model_access
+from ozpcenter.scripts import sample_data_generator as data_gen
 
 
 class ProfileApiTest(APITestCase):
@@ -120,7 +111,7 @@ class ProfileApiTest(APITestCase):
         response = self.client.get(url, format='json')
         data = response.data
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        ids = [i['id'] for i in response.data]
+        ids = [i['id'] for i in data]
         self.assertTrue(110 in ids)
         self.assertEquals(len(ids), 90)
 
@@ -157,7 +148,7 @@ class ProfileApiTest(APITestCase):
         data = response.data
         # print(data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        ids = [i['id'] for i in response.data]
+        ids = [i['id'] for i in data]
         self.assertTrue(110 in ids)
         self.assertEquals(len(ids), 90)
 
@@ -193,7 +184,7 @@ class ProfileApiTest(APITestCase):
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         data = response.data
-        ids = [i['id'] for i in response.data]
+        ids = [i['id'] for i in data]
         self.assertTrue(59 in ids)
         self.assertEquals(len(ids), 10)
 

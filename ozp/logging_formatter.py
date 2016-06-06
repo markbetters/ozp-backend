@@ -12,12 +12,10 @@ class CustomisedJSONFormatter(json_log_formatter.JSONFormatter):
         extra['message'] = message
         extra['logger'] = record.name
 
-        if 'request' in extra:
-            request = extra['request']
-            if extra.get('request'):
-                extra['user'] = request.user.username
-            else:
-                extra['user'] = 'system'
+        # Django Request
+        request = extra.get('request')
+        if request:
+            extra['user'] = request.user.username
             del extra['request']
         else:
             extra['user'] = 'system'
@@ -25,7 +23,7 @@ class CustomisedJSONFormatter(json_log_formatter.JSONFormatter):
         if 'method' in extra:
             method = extra['method']
             delete_method_key = True
-            if extra.get('method'):
+            if method:
                 delete_method_key = False
             if delete_method_key:
                 del extra['method']

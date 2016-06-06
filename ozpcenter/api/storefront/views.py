@@ -9,13 +9,11 @@ import logging
 
 from rest_framework.decorators import api_view
 from rest_framework.decorators import permission_classes
-from rest_framework import generics, status
 from rest_framework.response import Response
 
-import ozpcenter.api.storefront.serializers as serializers
-import ozpcenter.permissions as permissions
-import ozpcenter.models as models
+from ozpcenter import permissions
 import ozpcenter.api.storefront.model_access as model_access
+import ozpcenter.api.storefront.serializers as serializers
 
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center.' + str(__name__))

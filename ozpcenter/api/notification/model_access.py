@@ -5,7 +5,7 @@ import datetime
 import logging
 import pytz
 
-import ozpcenter.models as models
+from ozpcenter import models
 import ozpcenter.model_access as generic_model_access
 
 # Get an instance of a logger

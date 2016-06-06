@@ -1,23 +1,19 @@
 """
 Views
 """
-import datetime
 import logging
-import pytz
 
 from django.shortcuts import get_object_or_404
-
+from rest_framework import filters
 from rest_framework import generics
 from rest_framework import status
 from rest_framework import viewsets
 from rest_framework.response import Response
-from rest_framework import filters
 
-import ozpcenter.errors as errors
-import ozpcenter.api.notification.serializers as serializers
-import ozpcenter.permissions as permissions
-import ozpcenter.models as models
+from ozpcenter import errors
+from ozpcenter import permissions
 import ozpcenter.api.notification.model_access as model_access
+import ozpcenter.api.notification.serializers as serializers
 import ozpcenter.model_access as generic_model_access
 
 # Get an instance of a logger

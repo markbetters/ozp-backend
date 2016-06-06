@@ -7,7 +7,7 @@ from rest_framework.decorators import permission_classes
 from rest_framework.decorators import renderer_classes
 from rest_framework import permissions
 from rest_framework import renderers as rf_renderers
-from rest_framework import generics, status
+from rest_framework import status
 from rest_framework.response import Response
 
 import ozpcenter.model_access as model_access
@@ -74,7 +74,7 @@ def ApplicationView(request, id='0'):
         return Response('Invalid version requested',
             status=status.HTTP_406_NOT_ACCEPTABLE)
 
-    listing_root_url = hal.get_abs_url_for_iwc(request)
+    listing_root_url = hal.get_abs_url_for_iwc(request)  # flake8: noqa TODO: Is Necessary? - Variable not being used in method
     profile = model_access.get_profile(request.user.username)
 
     # TODO: only include the fields that are necessary for IWC. This will also
@@ -105,8 +105,8 @@ def SystemView(request):
         return Response('Invalid version requested',
             status=status.HTTP_406_NOT_ACCEPTABLE)
 
-    listing_root_url = hal.get_abs_url_for_iwc(request)
-    profile = model_access.get_profile(request.user.username)
+    listing_root_url = hal.get_abs_url_for_iwc(request)  # flake8: noqa TODO: Is Necessary? - Variable not being used in method
+    profile = model_access.get_profile(request.user.username)  # flake8: noqa TODO: Is Necessary? - Variable not being used in method
 
     data = hal.create_base_structure(request, hal.generate_content_type(
         request.accepted_media_type))

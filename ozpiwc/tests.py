@@ -1,18 +1,11 @@
 """
 Tests for agency endpoints
 """
-import unittest
-
-from django.db import transaction
-from django.db.utils import IntegrityError
-from rest_framework.reverse import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
-from rest_framework.test import APIRequestFactory
-from rest_framework.test import force_authenticate
 
-import ozpcenter.model_access as generic_model_access
 from ozpcenter.scripts import sample_data_generator as data_gen
+import ozpcenter.model_access as generic_model_access
 
 
 class RootViewApiTest(APITestCase):

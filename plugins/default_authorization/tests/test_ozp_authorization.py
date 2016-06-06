@@ -3,21 +3,14 @@ Tests for base_authorization
 """
 import datetime
 import pytz
-import unittest
 
 from django.conf import settings
-
 from django.test import TestCase
 
+from ozpcenter import errors
 from ozpcenter.scripts import sample_data_generator as data_gen
-# import ozpcenter.self.auth.ozp_authorization as auth
-import plugins.default_authorization.main as auth
-import ozpcenter.models as models
-import ozpcenter.model_access as model_access
-
 from plugins.default_authorization.main import PluginMain
-
-import ozpcenter.errors as errors
+import ozpcenter.model_access as model_access
 
 
 class OzpAuthorizationTest(TestCase):
@@ -115,7 +108,7 @@ class OzpAuthorizationTest(TestCase):
             'is_apps_mall_steward': False,
             'is_metrics_user': False
         }
-        a = self.auth.authorization_update('rutherford', auth_data, method='test_org_change')
+        self.auth.authorization_update('rutherford', auth_data, method='test_org_change')
         profile = model_access.get_profile('rutherford')
         org = profile.organizations.values_list('title', flat=True)[0]
         self.assertEqual(org, 'Ministry of Love')
@@ -143,7 +136,7 @@ class OzpAuthorizationTest(TestCase):
             'is_apps_mall_steward': False,
             'is_metrics_user': False
         }
-        a = self.auth.authorization_update('wsmith', auth_data, method='test_org_steward_to_user')
+        self.auth.authorization_update('wsmith', auth_data, method='test_org_steward_to_user')
         profile = model_access.get_profile('wsmith')
         stewarded_orgs = profile.stewarded_organizations.values_list('title', flat=True)
         self.assertTrue(len(stewarded_orgs) == 0)
@@ -174,7 +167,7 @@ class OzpAuthorizationTest(TestCase):
             'is_apps_mall_steward': False,
             'is_metrics_user': False
         }
-        a = self.auth.authorization_update('bigbrother', auth_data, method='test_apps_mall_steward_to_user')
+        self.auth.authorization_update('bigbrother', auth_data, method='test_apps_mall_steward_to_user')
         profile = model_access.get_profile('bigbrother')
         groups = profile.user.groups.values_list('name', flat=True)
         self.assertTrue('USER' in groups)
@@ -203,7 +196,7 @@ class OzpAuthorizationTest(TestCase):
             'is_apps_mall_steward': False,
             'is_metrics_user': False
         }
-        a = self.auth.authorization_update('bigbrother', auth_data, method='test_org_steward_to_apps_mall_steward')
+        self.auth.authorization_update('bigbrother', auth_data, method='test_org_steward_to_apps_mall_steward')
         profile = model_access.get_profile('bigbrother')
         groups = profile.user.groups.values_list('name', flat=True)
         self.assertTrue('ORG_STEWARD' in groups)
@@ -232,7 +225,7 @@ class OzpAuthorizationTest(TestCase):
             'is_apps_mall_steward': True,
             'is_metrics_user': False
         }
-        a = self.auth.authorization_update('wsmith', auth_data,
+        self.auth.authorization_update('wsmith', auth_data,
                     method='test_org_steward_to_apps_mall_steward_only')
         profile = model_access.get_profile('wsmith')
         stewarded_orgs = profile.stewarded_organizations.values_list('title', flat=True)
@@ -265,7 +258,7 @@ class OzpAuthorizationTest(TestCase):
             'is_apps_mall_steward': True,
             'is_metrics_user': False
         }
-        a = self.auth.authorization_update('wsmith', auth_data, method='test_org_steward_to_apps_mall_steward')
+        self.auth.authorization_update('wsmith', auth_data, method='test_org_steward_to_apps_mall_steward')
         profile = model_access.get_profile('wsmith')
         stewarded_orgs = profile.stewarded_organizations.values_list('title', flat=True)
         self.assertTrue('Ministry of Truth' in stewarded_orgs)

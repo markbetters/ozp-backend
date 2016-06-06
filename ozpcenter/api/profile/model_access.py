@@ -3,9 +3,8 @@ Model access
 """
 import logging
 
-import django.contrib.auth
-
-import ozpcenter.models as models
+from ozpcenter import models
+from django.contrib import auth
 import ozpcenter.model_access as generic_model_access
 
 from plugins_util import plugin_manager
@@ -73,8 +72,8 @@ def filter_queryset_by_username_starts_with(queryset, starts_with):
 
 
 def get_all_users():
-    return django.contrib.auth.models.User.objects.all()
+    return auth.models.User.objects.all()
 
 
 def get_all_groups():
-    return django.contrib.auth.models.Group.objects.all()
+    return auth.models.Group.objects.all()

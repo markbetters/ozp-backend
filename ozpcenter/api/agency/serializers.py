@@ -5,15 +5,14 @@ import logging
 
 from rest_framework import serializers
 
-import ozpcenter.api.image.serializers as image_serializers
-import ozpcenter.models as models
+from ozpcenter import models
+
 
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center.' + str(__name__))
 
 
 class AgencySerializer(serializers.ModelSerializer):
-    # icon = image_serializers.ImageSerializer()
 
     class Meta:
         model = models.Agency

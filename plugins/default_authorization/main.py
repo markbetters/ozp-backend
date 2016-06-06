@@ -11,18 +11,19 @@ Checks models.Profile.auth_expires. If auth is expired, refresh it.
 - models.Profile.access_control
 - models.Profile.display_name (use CN)
 """
-from django.conf import settings
-from django.contrib.auth.models import Group
-
-import ozpcenter.errors as errors
-import ozpcenter.model_access as model_access
-import ozpcenter.models as models
-import ozpcenter.utils as utils
-
 import datetime
 import json
 import logging
 import pytz
+
+from django.conf import settings
+from django.contrib.auth.models import Group
+
+from ozpcenter import errors
+from ozpcenter import models
+from ozpcenter import utils
+import ozpcenter.model_access as model_access
+
 
 logger = logging.getLogger('ozp-center.' + str(__name__))
 

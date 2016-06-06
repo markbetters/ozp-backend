@@ -5,10 +5,10 @@ import logging
 
 from rest_framework import serializers
 
-import ozpcenter.models as models
-import ozpcenter.api.profile.serializers as profile_serializers
+from ozpcenter import models
 import ozpcenter.api.image.serializers as image_serializers
 import ozpcenter.api.listing.model_access as listing_model_access
+#  import ozpcenter.api.profile.serializers as profile_serializers  # TODO: Figure out why this line was imported
 import ozpcenter.model_access as generic_model_access
 
 # Get an instance of a logger

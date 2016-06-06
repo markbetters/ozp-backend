@@ -7,21 +7,19 @@ run the unit tests (python manage.py test) after making any changes to this
 data!!
 ************************************WARNING************************************
 """
+from PIL import Image
 import datetime
 import json
 import os
+import pytz
 import sys
-
-from PIL import Image
 
 sys.path.insert(0, os.path.realpath(os.path.join(os.path.dirname(__file__), '../../')))
 
-import pytz
-
-import django.contrib.auth
+from django.contrib import auth
 from django.conf import settings
 
-from ozpcenter import models as models
+from ozpcenter import models
 from ozpcenter import model_access
 import ozpcenter.api.listing.model_access as listing_model_access
 

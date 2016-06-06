@@ -1,7 +1,7 @@
 """
 urls
 """
-from django.conf.urls import url, include
+from django.conf.urls import url
 
 import ozpcenter.api.storefront.views as views
 

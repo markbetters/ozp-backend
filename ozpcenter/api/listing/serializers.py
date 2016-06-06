@@ -5,25 +5,21 @@ import datetime
 import logging
 import pytz
 
-import django.contrib.auth
-
 from rest_framework import serializers
-from rest_framework.exceptions import ValidationError
+from django.contrib import auth
 
-import ozpcenter.models as models
-import ozpcenter.constants as constants
-
+from ozpcenter import constants
+from ozpcenter import models
+from ozpcenter import errors
+from plugins_util import plugin_manager
+import ozpcenter.api.agency.model_access as agency_model_access
+import ozpcenter.api.category.model_access as category_model_access
+import ozpcenter.api.contact_type.model_access as contact_type_model_access
+import ozpcenter.api.image.model_access as image_model_access
+import ozpcenter.api.intent.model_access as intent_model_access
 import ozpcenter.api.listing.model_access as model_access
 import ozpcenter.api.profile.serializers as profile_serializers
 import ozpcenter.model_access as generic_model_access
-import ozpcenter.api.agency.model_access as agency_model_access
-import ozpcenter.api.image.model_access as image_model_access
-import ozpcenter.api.category.model_access as category_model_access
-import ozpcenter.api.intent.model_access as intent_model_access
-import ozpcenter.api.contact_type.model_access as contact_type_model_access
-import ozpcenter.errors as errors
-
-from plugins_util import plugin_manager
 
 
 # Get an instance of a logger
@@ -198,7 +194,7 @@ class CategorySerializer(serializers.ModelSerializer):
 class CreateListingUserSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = django.contrib.auth.models.User
+        model = auth.models.User
         fields = ('username',)
 
         extra_kwargs = {
@@ -253,20 +249,20 @@ class ListingSerializer(serializers.ModelSerializer):
         user = generic_model_access.get_profile(
             self.context['request'].user.username)
 
-        if not data.get('title', None):
+        if not data.get('title'):
             raise serializers.ValidationError('Title is required')
 
-        data['description'] = data.get('description', None)
-        data['launch_url'] = data.get('launch_url', None)
-        data['version_name'] = data.get('version_name', None)
-        data['unique_name'] = data.get('unique_name', None)
-        data['what_is_new'] = data.get('what_is_new', None)
-        data['description_short'] = data.get('description_short', None)
-        data['requirements'] = data.get('requirements', None)
+        data['description'] = data.get('description')
+        data['launch_url'] = data.get('launch_url')
+        data['version_name'] = data.get('version_name')
+        data['unique_name'] = data.get('unique_name')
+        data['what_is_new'] = data.get('what_is_new')
+        data['description_short'] = data.get('description_short')
+        data['requirements'] = data.get('requirements')
         data['is_private'] = data.get('is_private', False)
         if 'security_marking' not in data:
             raise serializers.ValidationError('security_marking is required')
-        data['security_marking'] = data.get('security_marking', None)
+        data['security_marking'] = data.get('security_marking')
 
         if not access_control_instance.validate_marking(data['security_marking']):
             raise errors.InvalidInput('security_marking is invalid')
@@ -274,10 +270,10 @@ class ListingSerializer(serializers.ModelSerializer):
         # only checked on update, not create
         data['is_enabled'] = data.get('is_enabled', False)
         data['is_featured'] = data.get('is_featured', False)
-        data['approval_status'] = data.get('approval_status', None)
+        data['approval_status'] = data.get('approval_status')
 
         # agency
-        agency_title = data.get('agency', None)
+        agency_title = data.get('agency')
         if agency_title:
             data['agency'] = agency_model_access.get_agency_by_title(agency_title['title'])
             if data['agency'] is None:
@@ -286,7 +282,7 @@ class ListingSerializer(serializers.ModelSerializer):
             data['agency'] = user.organizations.all()[0]
 
         # listing_type
-        type_title = data.get('listing_type', None)
+        type_title = data.get('listing_type')
         if type_title:
             data['listing_type'] = model_access.get_listing_type_by_title(
                 data['listing_type']['title'])
@@ -294,7 +290,7 @@ class ListingSerializer(serializers.ModelSerializer):
             data['listing_type'] = None
 
         # small_icon
-        small_icon = data.get('small_icon', None)
+        small_icon = data.get('small_icon')
         if small_icon:
             if 'id' not in small_icon:
                 raise serializers.ValidationError('Image(small_icon) requires a {0!s}'.format('id'))
@@ -306,7 +302,7 @@ class ListingSerializer(serializers.ModelSerializer):
             data['small_icon'] = None
 
         # large_icon
-        large_icon = data.get('large_icon', None)
+        large_icon = data.get('large_icon')
         if large_icon:
             if 'id' not in large_icon:
                 raise serializers.ValidationError('Image(large_icon) requires a {0!s}'.format('id'))
@@ -318,7 +314,7 @@ class ListingSerializer(serializers.ModelSerializer):
             data['large_icon'] = None
 
         # banner_icon
-        banner_icon = data.get('banner_icon', None)
+        banner_icon = data.get('banner_icon')
         if banner_icon:
             if 'id' not in banner_icon:
                 raise serializers.ValidationError('Image(banner_icon) requires a {0!s}'.format('id'))
@@ -330,7 +326,7 @@ class ListingSerializer(serializers.ModelSerializer):
             data['banner_icon'] = None
 
         # large_banner_icon
-        large_banner_icon = data.get('large_banner_icon', None)
+        large_banner_icon = data.get('large_banner_icon')
         if large_banner_icon:
             if 'id' not in large_banner_icon:
                 raise serializers.ValidationError('Image(large_banner_icon) requires a {0!s}'.format('id'))
@@ -342,7 +338,7 @@ class ListingSerializer(serializers.ModelSerializer):
             data['large_banner_icon'] = None
 
         # Screenshot
-        screenshots = data.get('screenshots', None)
+        screenshots = data.get('screenshots')
         if screenshots is not None:
             screenshots_out = []
             image_require_fields = ['id']
@@ -444,7 +440,7 @@ class ListingSerializer(serializers.ModelSerializer):
 
         # assign a default security_marking level if none is provided
 
-        if not validated_data.get('security_marking', None):
+        if not validated_data.get('security_marking'):
             validated_data['security_marking'] = constants.DEFAULT_SECURITY_MARKING
 
         # TODO required_listings
@@ -480,7 +476,7 @@ class ListingSerializer(serializers.ModelSerializer):
 
         listing.save()
 
-        if validated_data.get('contacts', None) is not None:
+        if validated_data.get('contacts') is not None:
             for contact in validated_data['contacts']:
                 new_contact, created = models.Contact.objects.get_or_create(name=contact['name'],
                     email=contact['email'],
@@ -491,7 +487,7 @@ class ListingSerializer(serializers.ModelSerializer):
                 new_contact.save()
                 listing.contacts.add(new_contact)
 
-        if validated_data.get('owners', None) is not None:
+        if validated_data.get('owners') is not None:
             if validated_data['owners']:
                 for owner in validated_data['owners']:
                     listing.owners.add(owner)
@@ -499,29 +495,29 @@ class ListingSerializer(serializers.ModelSerializer):
                 # if no owners are specified, just add the current user
                 listing.owners.add(user)
 
-        if validated_data.get('categories', None) is not None:
+        if validated_data.get('categories') is not None:
             for category in validated_data['categories']:
                 listing.categories.add(category)
 
         # tags will be automatically created if necessary
-        if validated_data.get('tags', None) is not None:
+        if validated_data.get('tags') is not None:
             for tag in validated_data['tags']:
                 obj, created = models.Tag.objects.get_or_create(
                     name=tag['name'])
                 listing.tags.add(obj)
 
-        if validated_data.get('intents', None) is not None:
+        if validated_data.get('intents') is not None:
             for intent in validated_data['intents']:
                 listing.intents.add(intent)
 
         # doc_urls will be automatically created
-        if validated_data.get('doc_urls', None) is not None:
+        if validated_data.get('doc_urls') is not None:
             for d in validated_data['doc_urls']:
                 doc_url = models.DocUrl(name=d['name'], url=d['url'], listing=listing)
                 doc_url.save()
 
         # screenshots will be automatically created
-        if validated_data.get('screenshots', None) is not None:
+        if validated_data.get('screenshots') is not None:
             for s in validated_data['screenshots']:
                 screenshot = models.Screenshot(
                     small_image=image_model_access.get_image_by_id(s['small_image']['id']),

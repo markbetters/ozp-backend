@@ -9,12 +9,10 @@ $ssl_client_verify -> HTTP_X_SSL_AUTHENTICATED
 import logging
 
 from django.conf import settings
-
 from rest_framework import authentication
-from rest_framework import exceptions
 
-import ozpcenter.models as models
-import ozpcenter.utils as utils
+from ozpcenter import models
+from ozpcenter import utils
 
 try:
     from django.contrib.auth import get_user_model

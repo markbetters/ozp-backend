@@ -31,7 +31,7 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'ozp.settings'
 import django
 from django.conf import settings
 
-from ozpcenter import models as models
+from ozpcenter import models
 from ozpcenter import model_access
 from ozpcenter import utils
 

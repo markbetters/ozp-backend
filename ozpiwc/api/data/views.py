@@ -7,7 +7,7 @@ from rest_framework.decorators import permission_classes
 from rest_framework.decorators import renderer_classes
 from rest_framework import permissions
 from rest_framework import renderers as rf_renderers
-from rest_framework import generics, status
+from rest_framework import status
 from rest_framework.response import Response
 
 import ozpiwc.hal as hal
@@ -30,7 +30,7 @@ def ListDataApiView(request):
         return Response('Invalid version requested',
             status=status.HTTP_406_NOT_ACCEPTABLE)
 
-    listing_root_url = hal.get_abs_url_for_iwc(request)
+    listing_root_url = hal.get_abs_url_for_iwc(request)  # flake8: noqa TODO: Is Necessary? - Variable not being used in method
 
     data = hal.create_base_structure(request,
         hal.generate_content_type(request.accepted_media_type))
@@ -94,8 +94,8 @@ def DataApiView(request, key=None):
         return Response('Invalid version requested',
             status=status.HTTP_406_NOT_ACCEPTABLE)
 
-    listing_root_url = hal.get_abs_url_for_iwc(request)
-    data = hal.create_base_structure(request,
+    listing_root_url = hal.get_abs_url_for_iwc(request)  # flake8: noqa TODO: Is Necessary? - Variable not being used in method
+    data = hal.create_base_structure(request,   # flake8: noqa TODO: Is Necessary? - Variable not being used in method
         hal.generate_content_type(
             request.accepted_media_type))
 

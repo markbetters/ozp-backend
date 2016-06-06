@@ -1,10 +1,8 @@
-import re
-import inspect
 import json
 import os
 
-from ozp.tests.helper import Route
 from ozp.tests.helper import MockResponse
+from ozp.tests.helper import Route
 
 TEST_BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -45,6 +43,7 @@ class DemoAuthView(object):
         if not user_data:
             return MockResponse('User not found', 404)
         return MockResponse(user_data, 200)
+
 
 urls = [
     Route(r'^/demo-auth/users/(?P<dn>[0-9a-zA-Z_=,\.@ ]+)/info.json[\d\D\W\w]*$', DemoAuthView, 'user_info'),

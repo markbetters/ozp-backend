@@ -78,16 +78,16 @@ class PluginMain(object):
         if type is None or data is None:
             return all_tokens.InvalidFormatToken()
 
-        tokenTypeClass = all_tokens.InvalidFormatToken
+        token_type_class = all_tokens.InvalidFormatToken
 
         if type == 'Classification':
-            tokenTypeClass = all_tokens.ClassificationToken
+            token_type_class = all_tokens.ClassificationToken
         elif type == 'DisseminationControl':
-            tokenTypeClass = all_tokens.DisseminationControlToken
+            token_type_class = all_tokens.DisseminationControlToken
         else:
-            return tokenTypeClass()
+            return token_type_class()
 
-        return tokenTypeClass(**data)
+        return token_type_class(**data)
 
     def _split_tokens(self, input_marking, delimiter='//'):
         """

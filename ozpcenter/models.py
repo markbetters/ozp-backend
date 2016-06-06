@@ -7,20 +7,18 @@ import json
 import logging
 import os
 import uuid
-from PIL import Image
 
-import django.contrib.auth
-from django.contrib.auth import models
+from django.conf import settings
 from django.core.exceptions import ValidationError
-from django.core.validators import MaxValueValidator, MinValueValidator
+from django.core.validators import MaxValueValidator
+from django.core.validators import MinValueValidator
 from django.core.validators import RegexValidator
 from django.db import models
-from django.forms import ModelForm
-from django.conf import settings
+from django.contrib import auth
 
-import ozpcenter.constants as constants
 from plugins_util import plugin_manager
-import ozpcenter.utils as utils
+from ozpcenter import constants
+from ozpcenter import utils
 
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center.' + str(__name__))
@@ -142,7 +140,7 @@ class Image(models.Model):
             # TODO: raise exception?
             return
 
-        image_type = kwargs.get('image_type', None)
+        image_type = kwargs.get('image_type')
         if not image_type:
             logger.error('No image_type provided')
             # TODO raise exception?
@@ -570,12 +568,9 @@ class Profile(models.Model):
         after the server has started)
         """
         # create the different Groups (Roles) of users
-        group = django.contrib.auth.models.Group.objects.create(
-            name='USER')
-        group = django.contrib.auth.models.Group.objects.create(
-            name='ORG_STEWARD')
-        group = django.contrib.auth.models.Group.objects.create(
-            name='APPS_MALL_STEWARD')
+        auth.models.Group.objects.create(name='USER')
+        auth.models.Group.objects.create(name='ORG_STEWARD')
+        auth.models.Group.objects.create(name='APPS_MALL_STEWARD')
 
     def highest_role(self):
         """
@@ -623,12 +618,12 @@ class Profile(models.Model):
         # access to the admin site
         groups = kwargs.get('groups', ['USER'])
         if 'ORG_STEWARD' in groups or 'APPS_MALL_STEWARD' in groups:
-            user = django.contrib.auth.models.User.objects.create_superuser(
+            user = auth.models.User.objects.create_superuser(
                 username=username, email=email, password=password)
             user.save()
             # logger.warn('creating superuser: %s, password: %s' % (username, password))
         else:
-            user = django.contrib.auth.models.User.objects.create_user(
+            user = auth.models.User.objects.create_user(
                 username=username, email=email, password=password)
             user.save()
             # logger.info('creating user: %s' % username)
@@ -637,7 +632,7 @@ class Profile(models.Model):
         # APPS_MALL_STEWARD). If no specific Group is provided, we
         # will default to USER
         for i in groups:
-            g = django.contrib.auth.models.Group.objects.get(name=i)
+            g = auth.models.Group.objects.get(name=i)
             user.groups.add(g)
 
         # get additional profile information
@@ -646,7 +641,7 @@ class Profile(models.Model):
         ac = kwargs.get('access_control', json.dumps({'clearances': ['U']}))
         access_control = ac
         dn = kwargs.get('dn', username)
-        issuer_dn = kwargs.get('issuer_dn', None)
+        issuer_dn = kwargs.get('issuer_dn')
 
         # create the profile object and associate it with the User
         p = Profile(display_name=display_name,
