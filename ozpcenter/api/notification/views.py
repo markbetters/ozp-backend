@@ -1,9 +1,7 @@
 """
 Views
 """
-import datetime
 import logging
-import pytz
 
 from django.shortcuts import get_object_or_404
 from rest_framework import filters
@@ -13,7 +11,6 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 
 from ozpcenter import errors
-from ozpcenter import models
 from ozpcenter import permissions
 import ozpcenter.api.notification.model_access as model_access
 import ozpcenter.api.notification.serializers as serializers

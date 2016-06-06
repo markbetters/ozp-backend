@@ -2,7 +2,6 @@
 Tests for access control utility functions
 """
 import json
-import unittest
 
 from django.test import TestCase
 

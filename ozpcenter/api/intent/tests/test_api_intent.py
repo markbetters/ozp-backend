@@ -1,20 +1,11 @@
 """
 Tests for intent endpoints
 """
-import unittest
-
-from django.db import transaction
-from django.db.utils import IntegrityError
 from rest_framework import status
-from rest_framework.reverse import reverse
-from rest_framework.test import APIRequestFactory
 from rest_framework.test import APITestCase
-from rest_framework.test import force_authenticate
 
 from ozpcenter import model_access as generic_model_access
-from ozpcenter import models
 from ozpcenter.scripts import sample_data_generator as data_gen
-import ozpcenter.api.contact_type.views as views
 
 
 class IntentApiTest(APITestCase):
@@ -62,7 +53,7 @@ class IntentApiTest(APITestCase):
                 'icon': {'id': 1, 'security_marking': 'UNCLASSIFIED'}}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        action = response.data['action']
+        action = response.data['action']  # flake8: noqa TODO: Is Necessary? - Variable not being used in method
 
     def test_update_intent(self):
         user = generic_model_access.get_profile('bigbrother').user

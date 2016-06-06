@@ -6,11 +6,11 @@ import logging
 import pytz
 
 from rest_framework import serializers
-from rest_framework.exceptions import ValidationError
 from django.contrib import auth
 
 from ozpcenter import constants
 from ozpcenter import models
+from ozpcenter import errors
 from plugins_util import plugin_manager
 import ozpcenter.api.agency.model_access as agency_model_access
 import ozpcenter.api.category.model_access as category_model_access
@@ -19,7 +19,6 @@ import ozpcenter.api.image.model_access as image_model_access
 import ozpcenter.api.intent.model_access as intent_model_access
 import ozpcenter.api.listing.model_access as model_access
 import ozpcenter.api.profile.serializers as profile_serializers
-from ozpcenter import errors
 import ozpcenter.model_access as generic_model_access
 
 

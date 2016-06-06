@@ -3,7 +3,6 @@
 model definitions for ozpcenter
 
 """
-from PIL import Image
 import json
 import logging
 import os
@@ -15,7 +14,6 @@ from django.core.validators import MaxValueValidator
 from django.core.validators import MinValueValidator
 from django.core.validators import RegexValidator
 from django.db import models
-from django.forms import ModelForm
 from django.contrib import auth
 
 from plugins_util import plugin_manager
@@ -570,12 +568,9 @@ class Profile(models.Model):
         after the server has started)
         """
         # create the different Groups (Roles) of users
-        group = auth.models.Group.objects.create(
-            name='USER')
-        group = auth.models.Group.objects.create(
-            name='ORG_STEWARD')
-        group = auth.models.Group.objects.create(
-            name='APPS_MALL_STEWARD')
+        auth.models.Group.objects.create(name='USER')
+        auth.models.Group.objects.create(name='ORG_STEWARD')
+        auth.models.Group.objects.create(name='APPS_MALL_STEWARD')
 
     def highest_role(self):
         """

@@ -2,8 +2,6 @@ import json
 
 from rest_framework import serializers
 
-import ozpiwc.errors as errors
-
 
 class JsonField(serializers.Field):
     """

@@ -2,7 +2,7 @@
 """
 import logging
 
-from rest_framework import generics, status
+from rest_framework import status
 from rest_framework import permissions
 from rest_framework import renderers as rf_renderers
 from rest_framework.decorators import api_view

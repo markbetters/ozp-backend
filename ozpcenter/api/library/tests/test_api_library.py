@@ -2,15 +2,10 @@
 Tests for library endpoints (listings in a user's library)
 """
 from rest_framework import status
-from rest_framework.reverse import reverse
-from rest_framework.test import APIRequestFactory
 from rest_framework.test import APITestCase
-from rest_framework.test import force_authenticate
 
 from ozpcenter import model_access as generic_model_access
-from ozpcenter import models
 from ozpcenter.scripts import sample_data_generator as data_gen
-import ozpcenter.api.library.views as views
 
 
 class LibraryApiTest(APITestCase):
@@ -33,6 +28,7 @@ class LibraryApiTest(APITestCase):
         self.client.force_authenticate(user=user)
         url = '/api/library/'
         response = self.client.get(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         # print('response.data: %s' % response.data)
 
     def test_create_library(self):

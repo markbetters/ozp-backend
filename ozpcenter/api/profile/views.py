@@ -12,17 +12,15 @@ import logging
 
 from rest_framework import filters
 from rest_framework import viewsets
-from rest_framework.decorators import api_view
-from rest_framework.decorators import permission_classes
-from rest_framework import generics, status
+# from rest_framework.decorators import permission_classes
+from rest_framework import status
 from rest_framework.response import Response
 
 from ozpcenter import errors
+from ozpcenter import permissions
 import ozpcenter.api.profile.serializers as serializers
 import ozpcenter.api.listing.serializers as listing_serializers
-from ozpcenter import models
-from ozpcenter import pagination
-from ozpcenter import permissions
+# from ozpcenter import pagination
 import ozpcenter.api.profile.model_access as model_access
 
 # Get an instance of a logger

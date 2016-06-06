@@ -1,12 +1,10 @@
 """
 Serializers
 """
-import json
 import logging
 
 from rest_framework import serializers
 
-import ozpiwc.errors as errors
 import ozpiwc.models as models
 import ozpiwc.serializer_fields as serializer_fields
 

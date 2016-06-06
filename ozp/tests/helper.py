@@ -1,6 +1,5 @@
 import re
 import inspect
-import json
 import os
 
 from plugins_util.plugin_manager import plugin_manager_instance
@@ -73,9 +72,14 @@ class Router(object):
                             pass
                     return current_method(**kargs)
 
-            return MockResponse({'message': 'Mock Service - URL Not found', "URL": url}, 404)
+            return MockResponse({'message': 'Mock Service - URL Not found',
+                                 'protocol': protocol,
+                                 'host': host, 'URL': url}, 404)
         except RuntimeError as e:
-            return MockResponse({'message': 'Mock Service - {0!s}'.format(str(e)), "URL": url}, 404)
+            return MockResponse({'message': 'Mock Service - {0!s}'.format(str(e)),
+                                 'protocol': protocol,
+                                 'host': host,
+                                 'URL': url}, 404)
 
 router = Router()
 plugin_manager_instance.load_mock_services(router)

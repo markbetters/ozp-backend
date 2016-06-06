@@ -1,13 +1,11 @@
 """
 Notification tests
 """
-from django.db import transaction
-from django.db.utils import IntegrityError
 from django.test import TestCase
 
-from ozpcenter import models
+# from ozpcenter import models
 from ozpcenter.scripts import sample_data_generator as data_gen
-import ozpcenter.api.notification.model_access as model_access
+# import ozpcenter.api.notification.model_access as model_access
 
 
 class ListingTest(TestCase):
@@ -26,6 +24,7 @@ class ListingTest(TestCase):
         data_gen.run()
 
     def test_get_self_notifications(self):
+        # models.Notifications
         # create three system-wide notifications (not listing-specific). Make
         # one of them expire in the past
 
@@ -48,3 +47,5 @@ class ListingTest(TestCase):
         #   * 1 unexpired, undismissed system-wide notification
         #   * nothing else
         pass
+
+    # TODO: Add More Tests

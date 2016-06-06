@@ -7,12 +7,10 @@ most popular)
 """
 import logging
 
-from rest_framework import generics, status
 from rest_framework.decorators import api_view
 from rest_framework.decorators import permission_classes
 from rest_framework.response import Response
 
-from ozpcenter import models
 from ozpcenter import permissions
 import ozpcenter.api.storefront.model_access as model_access
 import ozpcenter.api.storefront.serializers as serializers

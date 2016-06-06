@@ -2,13 +2,10 @@
 model access
 """
 import logging
-import re
 
 from django.db.models.functions import Lower
 from django.core.cache import cache
-from django.core.exceptions import ObjectDoesNotExist
 from ozpcenter import models
-from ozpcenter import utils
 import ozpcenter.api.storefront.serializers as serializers
 
 # Get an instance of a logger
@@ -24,7 +21,7 @@ def get_storefront(username):
 
     NOTE: think about adding Bookmark status to this later on
     """
-    user = models.Profile.objects.get(user__username=username)
+    user = models.Profile.objects.get(user__username=username)  # flake8: noqa TODO: Is Necessary? - Variable not being used in method
     try:
         # get featured listings
         featured_listings = models.Listing.objects.for_user(

@@ -19,8 +19,8 @@ def create_base_structure(request, type='application/json'):
     """
     Creates the initial HAL structure for a given request
     """
-    root_url = request.build_absolute_uri('/')
-    profile = model_access.get_profile(request.user.username)
+    root_url = request.build_absolute_uri('/')  # flake8: noqa TODO: Is Necessary? - Variable not being used in method
+    profile = model_access.get_profile(request.user.username)  # flake8: noqa TODO: Is Necessary? - Variable not being used in method
     data = {
         "_links": {
             "curies": {

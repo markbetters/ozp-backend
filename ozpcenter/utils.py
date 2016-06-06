@@ -4,7 +4,6 @@ Utility functions
 import datetime
 import pytz
 import re
-import sys
 
 
 def make_keysafe(key):

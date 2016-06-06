@@ -2,14 +2,10 @@
 Plugin Manager
 """
 from types import ModuleType
-import datetime
-import imp
 import importlib
-import json
 import logging
 import os
 import requests
-import sys
 import traceback
 
 from django.conf import settings
@@ -150,7 +146,7 @@ class PluginManager(object):
             return plugin_instance
         else:
             # Default behaviour
-            raise AttributeError('Class missing method: {0!s}'.format(name))
+            raise AttributeError('Class missing method: {0!s}'.format(plugin_name))
 
     def load_mock_services(self, router_instance, path=BASE_PLUGIN_DIRECTORY):
         """
@@ -189,7 +185,7 @@ class PluginManager(object):
 plugin_manager_instance = PluginManager()
 
 # Import helper for the mock services
-from ozp.tests import helper
+from ozp.tests import helper  # flake8: noqa TODO: Find better way to import mock services
 
 if hasattr(settings, 'ACCESS_CONTROL_PLUGIN'):
     ACCESS_CONTROL_PLUGIN = settings.ACCESS_CONTROL_PLUGIN

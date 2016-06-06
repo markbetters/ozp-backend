@@ -1,8 +1,6 @@
 """
 Utils tests
 """
-from django.db import transaction
-from django.db.utils import IntegrityError
 from django.test import TestCase
 
 from ozpcenter import models

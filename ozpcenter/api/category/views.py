@@ -5,7 +5,6 @@ import logging
 
 from rest_framework import viewsets
 
-from ozpcenter import models
 from ozpcenter import permissions
 import ozpcenter.api.category.model_access as model_access
 import ozpcenter.api.category.serializers as serializers

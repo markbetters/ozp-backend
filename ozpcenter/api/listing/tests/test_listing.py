@@ -1,8 +1,6 @@
 """
 Listing tests
 """
-from django.db import transaction
-from django.db.utils import IntegrityError
 from django.test import TestCase
 
 from ozpcenter.scripts import sample_data_generator as data_gen
@@ -43,7 +41,9 @@ class ListingTest(TestCase):
             'offset': 0,
             'limit': 24
         }
-        listings = model_access.filter_listings(username, filter_params)
+        listings = model_access.filter_listings(username, filter_params)  # flake8: noqa TODO: Is Necessary? - Variable not being used in method
+
+        #  TODO: Finish Unit Test
 
     def test_get_reviews(self):
         username = 'wsmith'

@@ -1,10 +1,8 @@
 """
 Model access
 """
-import json
 import logging
 
-import ozpiwc.errors as errors
 import ozpiwc.models as models
 
 # Get an instance of a logger

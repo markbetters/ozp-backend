@@ -10,7 +10,6 @@ from rest_framework import viewsets
 from rest_framework.parsers import MultiPartParser, JSONParser
 from rest_framework.response import Response
 
-from ozpcenter import models
 from ozpcenter import permissions
 from plugins_util import plugin_manager
 import ozpcenter.api.image.model_access as model_access

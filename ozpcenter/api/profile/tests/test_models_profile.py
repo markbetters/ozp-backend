@@ -5,13 +5,11 @@ Note: This is more verbose than most model tests, as it also serves as
 examples for how to test various things
 """
 import json
-import unittest
 
 from django.test import TestCase
 from django.db.utils import IntegrityError
 from django.db import transaction
 
-from django import forms
 from ozpcenter import models
 import ozpcenter.tests.factories as f
 
