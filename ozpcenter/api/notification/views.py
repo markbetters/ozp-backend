@@ -14,7 +14,6 @@ from ozpcenter import errors
 from ozpcenter import permissions
 import ozpcenter.api.notification.model_access as model_access
 import ozpcenter.api.notification.serializers as serializers
-import ozpcenter.model_access as generic_model_access
 
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center.' + str(__name__))
@@ -29,12 +28,12 @@ class NotificationViewSet(viewsets.ModelViewSet):
 
     def create(self, request):
         try:
+            print(request.data)
             serializer = serializers.NotificationSerializer(data=request.data,
                 context={'request': request}, partial=True)
             if not serializer.is_valid():
                 logger.error('{0!s}'.format(serializer.errors))
-                return Response(serializer.errors,
-                    status=status.HTTP_400_BAD_REQUEST)
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -45,7 +44,7 @@ class NotificationViewSet(viewsets.ModelViewSet):
 
     def update(self, request, pk=None):
         """
-        update is used only change the expiration date of the message
+        Update is used only change the expiration date of the message
         """
         try:
             instance = self.get_queryset().get(pk=pk)
@@ -54,8 +53,7 @@ class NotificationViewSet(viewsets.ModelViewSet):
 
             if not serializer.is_valid():
                 logger.error('{0!s}'.format(serializer.errors))
-                return Response(serializer.errors,
-                    status=status.HTTP_400_BAD_REQUEST)
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
             serializer.save()
 
@@ -101,8 +99,7 @@ class UserNotificationViewSet(viewsets.ModelViewSet):
         """
         queryset = self.get_queryset()
         notification = get_object_or_404(queryset, pk=pk)
-        user = generic_model_access.get_profile(self.request.user.username)
-        notification.dismissed_by.add(user)
+        model_access.dismiss_notification(notification, self.request.user.username)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
