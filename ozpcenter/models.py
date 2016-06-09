@@ -998,6 +998,8 @@ class Notification(models.Model):
     )
     listing = models.ForeignKey(Listing, related_name='notifications',
                                 null=True, blank=True)
+    agency = models.ForeignKey(Agency, related_name='agency_notifications',
+                               null=True, blank=True)
 
     def __repr__(self):
         return '{0!s}: {1!s}'.format(self.author.user.username, self.message)

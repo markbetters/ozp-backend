@@ -18,3 +18,12 @@ def get_agency_by_title(title):
         return models.Agency.objects.get(title=title)
     except models.Agency.DoesNotExist:
         return None
+
+
+def get_agency_by_id(id, reraise=True):
+    try:
+        return models.Agency.objects.get(id=id)
+    except models.Agency.DoesNotExist as err:
+        if reraise:
+            raise err
+        return None
