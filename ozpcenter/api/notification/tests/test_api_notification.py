@@ -144,6 +144,31 @@ class NotificationApiTest(APITestCase):
                 "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=pytz.utc)
             self.assertTrue(test_time < now)
 
+    def test_get_pending_notifications_listing(self):
+        url = '/api/notifications/pending/?listing=1'
+        # test unauthorized user
+        user = generic_model_access.get_profile('jones').user
+        self.client.force_authenticate(user=user)
+        response = self.client.get(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+        user = generic_model_access.get_profile('wsmith').user
+        self.client.force_authenticate(user=user)
+        response = self.client.get(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        ids = [i['id'] for i in response.data]
+        self.assertTrue(ids, [1])
+        expires_at = [i['expires_date'] for i in response.data]
+        self.assertTrue(len(expires_at) == 1)
+        now = datetime.datetime.now(pytz.utc)
+        for i in expires_at:
+            test_time = datetime.datetime.strptime(i,
+                "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=pytz.utc)
+            self.assertTrue(test_time > now)
+
+    # TODO: Test All Notification Listing Filter
+    # TODO: Test All Expiring Notification Listing Filter
+
     def test_create_system_notification(self):
         url = '/api/notification/'
         # test unauthorized user - only org stewards and above can create
