@@ -24,7 +24,13 @@ class NotificationViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsUser,)
 
     def get_queryset(self):
-        return model_access.get_all_notifications()
+        queryset = model_access.get_all_notifications()
+
+        listing_id = self.request.query_params.get('listing', None)
+        if listing_id is not None:
+            queryset = queryset.filter(listing__id=listing_id)
+
+        return queryset
 
     def create(self, request):
         try:
@@ -107,7 +113,13 @@ class PendingNotificationView(generics.ListCreateAPIView):
     serializer_class = serializers.NotificationSerializer
 
     def get_queryset(self):
-        return model_access.get_all_pending_notifications()
+        queryset = model_access.get_all_pending_notifications()
+
+        listing_id = self.request.query_params.get('listing', None)
+        if listing_id is not None:
+            queryset = queryset.filter(listing__id=listing_id)
+
+        return queryset
 
     def list(self, request):
         queryset = self.get_queryset()
@@ -126,7 +138,13 @@ class ExpiredNotificationView(generics.ListCreateAPIView):
     serializer_class = serializers.NotificationSerializer
 
     def get_queryset(self):
-        return model_access.get_all_expired_notifications()
+        queryset = model_access.get_all_expired_notifications()
+
+        listing_id = self.request.query_params.get('listing', None)
+        if listing_id is not None:
+            queryset = queryset.filter(listing__id=listing_id)
+
+        return queryset
 
     def list(self, request):
         queryset = self.get_queryset()

@@ -9,7 +9,6 @@ from enum import Enum
 from ozpcenter import errors
 from ozpcenter import models
 import ozpcenter.model_access as generic_model_access
-import ozpcenter.api.listing.model_access as listing_model_access
 
 
 # Get an instance of a logger
@@ -287,12 +286,19 @@ def get_listing_pending_notifications(username):
     Returns:
         django.db.models.query.QuerySet(models.Notification): List of user's listing pending notifications
     """
-    user_listing = listing_model_access.get_listings(username)
+    bookmarked_listing_ids = models.ApplicationLibraryEntry.objects \
+        .filter(owner__user__username=username) \
+        .filter(listing__is_enabled=True) \
+        .filter(listing__is_deleted=False) \
+        .values_list('listing', flat=True)
+
     unexpired_listing_notifications = models.Notification.objects.filter(
-        expires_date__gt=datetime.datetime.now(pytz.utc),
+        expires_date__gt=datetime.datetime.now(pytz.utc), listing__pk_in=bookmarked_listing_ids)
         listing__pk_in=user_listing,
         agency__isnull=True)
     return unexpired_listing_notifications
+    # return (unexpired_system_notifications + unexpired_listing_notifications) -
+    #    dismissed_notifications
 
 
 def get_agency_pending_notifications(username):

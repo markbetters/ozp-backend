@@ -52,7 +52,7 @@ class NotificationApiTest(APITestCase):
         response = self.client.get(url, format='json')
         default_ids = [record['id'] for record in response.data]
 
-        self.assertEqual(default_ids, [14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 2, 1])
+        self.assertEqual(default_ids, [5, 2, 1])
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         url = '/api/self/notification/?ordering=-created_date'
@@ -85,7 +85,7 @@ class NotificationApiTest(APITestCase):
         for i in response.data:
             notification_ids.append(i['id'])
 
-        self.assertEqual(12, len(notification_ids))
+        self.assertEqual(3, len(notification_ids))
 
         # now dismiss the first notification
         dismissed_notification_id = notification_ids[0]
@@ -101,7 +101,7 @@ class NotificationApiTest(APITestCase):
         for i in response.data:
             notification_ids.append(i['id'])
 
-        self.assertEqual(11, len(notification_ids))
+        self.assertEqual(2, len(notification_ids))
         self.assertTrue(notification_ids[0] != dismissed_notification_id)
 
     def test_get_pending_notifications(self):
@@ -143,6 +143,31 @@ class NotificationApiTest(APITestCase):
             test_time = datetime.datetime.strptime(i,
                 "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=pytz.utc)
             self.assertTrue(test_time < now)
+
+    def test_get_pending_notifications_listing(self):
+        url = '/api/notifications/pending/?listing=1'
+        # test unauthorized user
+        user = generic_model_access.get_profile('jones').user
+        self.client.force_authenticate(user=user)
+        response = self.client.get(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+        user = generic_model_access.get_profile('wsmith').user
+        self.client.force_authenticate(user=user)
+        response = self.client.get(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        ids = [i['id'] for i in response.data]
+        self.assertTrue(ids, [1])
+        expires_at = [i['expires_date'] for i in response.data]
+        self.assertTrue(len(expires_at) == 1)
+        now = datetime.datetime.now(pytz.utc)
+        for i in expires_at:
+            test_time = datetime.datetime.strptime(i,
+                "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=pytz.utc)
+            self.assertTrue(test_time > now)
+
+    # TODO: Test All Notification Listing Filter
+    # TODO: Test All Expiring Notification Listing Filter
 
     def test_create_system_notification(self):
         url = '/api/notification/'
