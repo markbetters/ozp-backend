@@ -7,7 +7,6 @@ import pytz
 
 from ozpcenter import models
 import ozpcenter.model_access as generic_model_access
-import ozpcenter.api.listing.model_access as listing_model_access
 
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center.' + str(__name__))
@@ -103,15 +102,21 @@ def get_self_notifications(username):
         dismissed_by__user__username=username)
 
     # Get all unexpired notifications for listings in this user's library
-    user_listing = listing_model_access.get_listings(username)
+    bookmarked_listing_ids = models.ApplicationLibraryEntry.objects \
+        .filter(owner__user__username=username) \
+        .filter(listing__is_enabled=True) \
+        .filter(listing__is_deleted=False) \
+        .values_list('listing', flat=True)
+
     unexpired_listing_notifications = models.Notification.objects.filter(
-        expires_date__gt=datetime.datetime.now(pytz.utc), listing__pk_in=user_listing)
+        expires_date__gt=datetime.datetime.now(pytz.utc), listing__pk_in=bookmarked_listing_ids)
 
     # Get all unexpired system-wide notifications
     unexpired_system_notifications = models.Notification.objects.filter(
         expires_date__gt=datetime.datetime.now(pytz.utc), listing__isnull=True)
 
-    # return (unexpired_system_notifications + unexpired_listing_notifications) - dismissed_notifications
+    # return (unexpired_system_notifications + unexpired_listing_notifications) -
+    #    dismissed_notifications
     notifications = (unexpired_system_notifications | unexpired_listing_notifications).exclude(
         pk__in=dismissed_notifications)
 
