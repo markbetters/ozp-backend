@@ -127,7 +127,7 @@ def get_all_pending_notifications():
         else [] if no notifications exists
     """
     unexpired_system_notifications = models.Notification.objects.filter(
-        expires_date__gt=datetime.datetime.now(pytz.utc), listing__isnull=True)
+        expires_date__gt=datetime.datetime.now(pytz.utc))
     return unexpired_system_notifications
 
 
@@ -140,7 +140,7 @@ def get_all_expired_notifications():
         else [] if no notifications exists
     """
     expired_system_notifications = models.Notification.objects.filter(
-        expires_date__lt=datetime.datetime.now(pytz.utc), listing__isnull=True)
+        expires_date__lt=datetime.datetime.now(pytz.utc))
     return expired_system_notifications
 
 
