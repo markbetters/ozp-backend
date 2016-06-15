@@ -34,7 +34,6 @@ class NotificationViewSet(viewsets.ModelViewSet):
 
     def create(self, request):
         try:
-            print(request.data)
             serializer = serializers.NotificationSerializer(data=request.data,
                 context={'request': request}, partial=True)
             if not serializer.is_valid():
@@ -43,8 +42,8 @@ class NotificationViewSet(viewsets.ModelViewSet):
 
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        except errors.PermissionDenied:
-            return Response({'detail': 'Permission Denied'}, status=status.HTTP_403_FORBIDDEN)
+        except errors.PermissionDenied as err:
+            return Response({'detail': 'Permission Denied', 'message': '{0}'.format(err)}, status=status.HTTP_403_FORBIDDEN)
         except Exception as e:
             raise e
 
@@ -64,8 +63,8 @@ class NotificationViewSet(viewsets.ModelViewSet):
             serializer.save()
 
             return Response(serializer.data, status=status.HTTP_200_OK)
-        except errors.PermissionDenied:
-            return Response({'detail': 'Permission Denied'}, status=status.HTTP_403_FORBIDDEN)
+        except errors.PermissionDenied as err:
+            return Response({'detail': 'Permission Denied', 'message': '{0}'.format(err)}, status=status.HTTP_403_FORBIDDEN)
         except Exception as e:
             raise e
 
@@ -73,15 +72,15 @@ class NotificationViewSet(viewsets.ModelViewSet):
         try:
             current_request_profile = model_access.get_self(request.user.username)
 
-            if current_request_profile.highest_role() not in ['APPS_MALL_STEWARD', 'ORG_STEWARD']:
-                raise errors.PermissionDenied
+            if not current_request_profile.is_steward():
+                raise errors.PermissionDenied('Only Stewards can delete notifications')
 
             queryset = self.get_queryset()
             notification_instance = get_object_or_404(queryset, pk=pk)
             notification_instance.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
-        except errors.PermissionDenied:
-            return Response({'detail': 'Permission Denied'}, status=status.HTTP_403_FORBIDDEN)
+        except errors.PermissionDenied as err:
+            return Response({'detail': 'Permission Denied', 'message': '{0}'.format(err)}, status=status.HTTP_403_FORBIDDEN)
         except Exception as e:
             raise e
 
