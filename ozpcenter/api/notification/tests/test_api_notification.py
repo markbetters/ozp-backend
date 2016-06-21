@@ -175,8 +175,8 @@ class NotificationApiTest(APITestCase):
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
-    # TODO should work when data script gets refactored (rivera 20150620)
-    @skip("should work when data script gets refactored (rivera 20150620)")
+    # TODO should work when data script gets refactored (rivera 20160620)
+    @skip("should work when data script gets refactored (rivera 20160620)")
     def test_all_expired_notifications_listing_filter(self):
         url = '/api/notifications/expired/?listing=1'
         user = generic_model_access.get_profile('bigbrother').user
@@ -201,7 +201,7 @@ class NotificationApiTest(APITestCase):
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
-    # TODO: test_all_notifications_listing_filter (rivera 20150617)
+    # TODO: test_all_notifications_listing_filter (rivera 20160617)
 
     def test_create_system_notification(self):
         url = '/api/notification/'
@@ -242,8 +242,8 @@ class NotificationApiTest(APITestCase):
         response = self.client.put(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
-    # TODO below test should work when permission gets refactored (rivera 20150620)
-    @skip("should work permissions gets refactored (rivera 20150620)")
+    # TODO below test should work when permission gets refactored (rivera 20160620)
+    @skip("should work permissions gets refactored (rivera 20160620)")
     def test_update_system_notification_unauthorized_org_steward(self):
         url = '/api/notification/1/'
         user = generic_model_access.get_profile('wsmith').user
@@ -376,8 +376,8 @@ class NotificationApiTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data['non_field_errors'], ["Could not find listing"])
 
-    # TODO: test_create_listing_notification_org_steward_invalid (rivera 20150617)
-    # TODO: test_create_listing_notification_user_unauthorized (rivera 20150617)
+    # TODO: test_create_listing_notification_org_steward_invalid (rivera 20160617)
+    # TODO: test_create_listing_notification_user_unauthorized (rivera 20160617)
 
     def test_create_agency_notification_app_mall_steward(self):
         url = '/api/notification/'
@@ -431,9 +431,9 @@ class NotificationApiTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data['non_field_errors'], ['Could not find agency'])
 
-    # TODO: test_create_agency_notification_org_steward (rivera 20150617)
-    # TODO: test_create_agency_notification_org_steward_invalid (rivera 20150617)
-    # TODO: test_create_agency_notification_user_unauthorized (rivera 20150617)
+    # TODO: test_create_agency_notification_org_steward (rivera 20160617)
+    # TODO: test_create_agency_notification_org_steward_invalid (rivera 20160617)
+    # TODO: test_create_agency_notification_user_unauthorized (rivera 20160617)
 
     def test_create_peer_notification_app_mall_steward(self):
         url = '/api/notification/'
@@ -458,7 +458,7 @@ class NotificationApiTest(APITestCase):
         self.assertEqual(response.data['peer'], {'user': {'username': 'jones'}})
         self.assertTrue('expires_date' in data)
 
-    @skip("should work when data script gets refactored (rivera 20150620)")
+    @skip("should work when data script gets refactored (rivera 20160620)")
     def test_create_peer_bookmark_notification_app_mall_steward(self):
         url = '/api/notification/'
         user = generic_model_access.get_profile('bigbrother').user
@@ -482,8 +482,8 @@ class NotificationApiTest(APITestCase):
         self.assertEqual(response.data['listing'], None)
         self.assertTrue('expires_date' in data)
 
-    # TODO test_create_peer_notification_invalid (rivera 20150617)
-    # TODO test_create_peer_bookmark_notification (rivera 20150617)
+    # TODO test_create_peer_notification_invalid (rivera 20160617)
+    # TODO test_create_peer_bookmark_notification (rivera 20160617)
 
     def test_delete_system_notification_apps_mall_steward(self):
         url = '/api/notification/1/'
@@ -492,8 +492,8 @@ class NotificationApiTest(APITestCase):
         response = self.client.delete(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
-    # TODO below test should work when permission gets refactored (rivera 20150620)
-    @skip("should work when permission gets refactored (rivera 20150620)")
+    # TODO below test should work when permission gets refactored (rivera 20160620)
+    @skip("should work when permission gets refactored (rivera 20160620)")
     def test_delete_system_notification_org_steward(self):
         url = '/api/notification/1/'
         user = generic_model_access.get_profile('wsmith').user
