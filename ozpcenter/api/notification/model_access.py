@@ -298,6 +298,28 @@ def get_all_pending_notifications(for_user=False):
     return unexpired_system_notifications
 
 
+def get_pending_peer_notifications(username):
+    """
+    Gets all peer pending notifications
+
+    Includes
+     * System Notifications
+     * Listing Notifications
+     * Agency Notifications
+
+    Includes
+     * Peer Notifications
+
+    Returns:
+        django.db.models.query.QuerySet(models.Notification): List of system-wide pending notifications
+    """
+    unexpired_peer_notifications = models.Notification.objects.filter(_peer__isnull=False) \
+        .filter(expires_date__gt=datetime.datetime.now(pytz.utc)) \
+        .filter(_peer__contains='"user": {"username": "%s"}' % (username))
+
+    return unexpired_peer_notifications
+
+
 def get_listing_pending_notifications(username):
     """
     Gets all notifications that are regarding a listing in this user's library
@@ -365,6 +387,8 @@ def get_all_expired_notifications():
     * Listing Notifications
     * Agency Notifications
     * System Notifications
+    * Peer Notifications
+    * Peer.Bookmark Notifications
 
     Returns:
         django.db.models.query.QuerySet(models.Notification): List of system-wide pending notifications
@@ -430,12 +454,15 @@ def get_self_notifications(username):
     # agencies
     unexpired_agency_notifications = get_agency_pending_notifications(username)
 
+    # Get all unexpired peer notification
+    unexpired_peer_notifications = get_pending_peer_notifications(username)
+
     # Get all unexpired system-wide notifications
     unexpired_system_notifications = get_all_pending_notifications(for_user=True)
 
     # return (unexpired_system_notifications +
     # unexpired_listing_notifications) - dismissed_notifications
-    notifications = (unexpired_system_notifications | unexpired_agency_notifications |
+    notifications = (unexpired_system_notifications | unexpired_agency_notifications | unexpired_peer_notifications |
                      unexpired_listing_notifications).exclude(pk__in=dismissed_notifications)
 
     return notifications

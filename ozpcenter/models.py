@@ -1076,6 +1076,7 @@ class Notification(models.Model):
         Types:
             SYSTEM - System-wide Notifications
             AGENCY - Agency-wide Notifications
+            AGENCY.BOOKMARK - Agency-wide Bookmark Notifications # Not requirement (erivera 20160621)
             LISTING - Listing Notifications
             PEER - Peer to Peer Notifications
             PEER.BOOKMARK - Peer to Peer Bookmark Notifications

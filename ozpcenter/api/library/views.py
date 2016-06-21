@@ -11,7 +11,11 @@ GET /api/self/library
 Summary:
     Return The id and unique name of each listing in the user's library
 
-POST /api/self/library/import_bookmarks/{bookmark_notification_id}
+POST /api/self/library/import_bookmarks/
+{
+    "bookmark_notification_id": {bookmark_notification_id}
+}
+
 Summary:
     Return The id and unique name of each listing in the user's library
 
@@ -149,6 +153,18 @@ class UserLibraryViewSet(viewsets.ViewSet):
         library_entry.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+    @list_route(methods=['post'], permission_classes=[permissions.IsUser])
+    def import_bookmarks(self, request):
+        """
+        Import Bookmarks
+        """
+        current_request_username = request.user.username
+        errors, data = model_access.import_bookmarks(current_request_username, request.data.get('bookmark_notification_id'))
+        if errors:
+            return Response({'message': '{0}'.format(errors)}, status=status.HTTP_500_BAD_REQUEST)
+        else:
+            return Response(data, status=status.HTTP_200_OK)
+
     @list_route(methods=['put'], permission_classes=[permissions.IsUser])
     def update_all(self, request):
         """
@@ -189,8 +205,8 @@ class UserLibraryViewSet(viewsets.ViewSet):
             query: replace
         omit_serializer: true
         """
-        username = request.user.username
-        errors, data = model_access.batch_update_user_library_entry(username, request.data)
+        current_request_username = request.user.username
+        errors, data = model_access.batch_update_user_library_entry(current_request_username, request.data)
         if errors:
             return Response({'message': '{0}'.format(errors)}, status=status.HTTP_500_BAD_REQUEST)
         else:

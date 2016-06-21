@@ -136,6 +136,49 @@ def create_self_user_library_entry(username, listing_id, folder_name=None):
     return entry
 
 
+# TODO Finish Logic (rivera 20160621)
+def import_bookmarks(username, peer_bookmark_notification_id):
+    """
+    Import Bookmarks to current user
+
+    Steps:
+        * Return Peer Bookmark Notification Entry {notification_entry} using {peer_bookmark_notification_id}
+            * If not found add to error list
+        * Validate {notification_entry} is a 'PEER.BOOKMARK' notification
+            * If fail add error to error list
+        * Extract {peer} from {notification_entry}
+        * Validate {peer.user.username} is same current user's username
+            * If fail add error to error list
+        * Validation on {peer.folder_name} for current user
+            if folder_name already exist for that user then increament folder_name by 1
+                (ex 'folder name 1' to 'folder name 1 (1)')
+                (ex 'cool (1)' to 'cool (2)')
+        * Iterate {peer._bookmark_listing_ids}
+            create_self_user_library_entry({username}, {peer._bookmark_listing_ids.id})
+
+    Args:
+        username: dictionary
+        peer_bookmark_notification_id (int): peer bookmark notification id
+
+    Returns:
+        [
+            {
+                "listing": {
+                    "id": 1
+                },
+                "folder": "folderName" (or null),
+                "id": 2
+            },....
+        ]
+    """
+    validated_data = []
+    errors = []
+
+    if errors:
+        return errors, None
+    return None, validated_data
+
+
 def batch_update_user_library_entry(username, data):
     """
     Update ALL of the user's library entries

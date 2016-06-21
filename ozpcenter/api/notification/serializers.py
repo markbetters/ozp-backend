@@ -2,7 +2,6 @@
 Serializers
 """
 import logging
-import json
 
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
@@ -65,32 +64,13 @@ class GenericField(serializers.ReadOnlyField):
         return obj
 
 
-class GenericJSONField(serializers.ReadOnlyField):
+class DictField(serializers.ReadOnlyField):
     """
     Read Only Field
     """
 
-    def to_native(self, obj):
-        logger.error('{0}'.format(obj))
-        if obj is None:
-            return None
-        else:
-            return json.dumps(obj)
-
-    def from_native(self, value):
-        """
-        Native is a Json String
-        """
-        logger.error('{0}'.format(value))
-        if value is None:
-            return None
-        else:
-            try:
-                return json.loads(value)
-            except TypeError:
-                raise serializers.ValidationError(
-                    "Could not load json <{}>".format(value)
-                )
+    def from_native(self, obj):
+        return None
 
 
 class NotificationSerializer(serializers.ModelSerializer):
@@ -98,7 +78,6 @@ class NotificationSerializer(serializers.ModelSerializer):
     listing = NotificationListingSerializer(required=False)
     agency = NotificationAgencySerializer(required=False)
     notification_type = GenericField(required=False)
-    peer = GenericField(required=False)
 
     extra_kwargs = {
         'listing': {'validators': []},
