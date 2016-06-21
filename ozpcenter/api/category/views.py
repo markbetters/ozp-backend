@@ -1,5 +1,5 @@
 """
-Views
+Category Views
 """
 import logging
 

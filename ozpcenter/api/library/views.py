@@ -4,21 +4,6 @@ Library Views
 Requirements
 ============
 * The user shall be able to
-
-
-
-GET /api/self/library
-Summary:
-    Return The id and unique name of each listing in the user's library
-
-POST /api/self/library/import_bookmarks/
-{
-    "bookmark_notification_id": {bookmark_notification_id}
-}
-
-Summary:
-    Return The id and unique name of each listing in the user's library
-
 """
 import logging
 
@@ -159,11 +144,16 @@ class UserLibraryViewSet(viewsets.ViewSet):
         Import Bookmarks
         """
         current_request_username = request.user.username
-        errors, data = model_access.import_bookmarks(current_request_username, request.data.get('bookmark_notification_id'))
+        bookmark_notification_id = request.data.get('bookmark_notification_id')
+
+        errors, data = model_access.import_bookmarks(current_request_username, bookmark_notification_id)
         if errors:
-            return Response({'message': '{0}'.format(errors)}, status=status.HTTP_500_BAD_REQUEST)
+            return Response({'message': '{0}'.format(errors)}, status=status.HTTP_400_BAD_REQUEST)
         else:
-            return Response(data, status=status.HTTP_200_OK)
+            serializer = serializers.UserLibrarySerializer(data,
+                many=True, context={'request': request})
+
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     @list_route(methods=['put'], permission_classes=[permissions.IsUser])
     def update_all(self, request):
@@ -208,6 +198,6 @@ class UserLibraryViewSet(viewsets.ViewSet):
         current_request_username = request.user.username
         errors, data = model_access.batch_update_user_library_entry(current_request_username, request.data)
         if errors:
-            return Response({'message': '{0}'.format(errors)}, status=status.HTTP_500_BAD_REQUEST)
+            return Response({'message': '{0}'.format(errors)}, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response(data, status=status.HTTP_200_OK)

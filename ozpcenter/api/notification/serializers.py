@@ -166,7 +166,7 @@ class NotificationSerializer(serializers.ModelSerializer):
             temp_folder_name = temp_peer.get('folder_name')
             if temp_folder_name:
                 library_query = library_model_access.get_self_application_library(username, folder_name=temp_folder_name)
-                temp_peer['_bookmark_listing_ids'] = [library_query_entry.id for library_query_entry in library_query]
+                temp_peer['_bookmark_listing_ids'] = [library_query_entry.listing.id for library_query_entry in library_query]
 
                 # temp_peer['_user_folders'] = library_serializers.UserLibrarySerializer(library_query,
                 #      many=True, context={'request': self.context['request']}).data

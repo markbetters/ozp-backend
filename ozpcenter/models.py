@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-model definitions for ozpcenter
-
+Model Definitions for ozpcenter
 """
 import json
 import logging
@@ -1090,7 +1089,7 @@ class Notification(models.Model):
             try:
                 json_obj = (self.peer)
                 if json_obj and 'folder_name' in json_obj:
-                        peer_list.append('BOOKMARK')
+                    peer_list.append('BOOKMARK')
             except ValueError:
                 # Ignore Value Errors
                 pass

@@ -1,7 +1,5 @@
 """
-Model Access for Library
-CRUD operations for Library
-
+Library Model Access
 """
 import logging
 
@@ -11,6 +9,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from ozpcenter import models
 from ozpcenter import utils
 import ozpcenter.api.listing.model_access as listing_model_access
+import ozpcenter.api.notification.model_access as notification_model_access
 import ozpcenter.model_access as generic_model_access
 
 
@@ -129,15 +128,14 @@ def create_self_user_library_entry(username, listing_id, folder_name=None):
     if not listing or not owner:
         raise Exception('Listing or user not found')
 
-    logger.debug('Adding bookmark for listing[{0!s}], user[{1!s}]'.format(listing.title, username))
+    logger.debug('Adding bookmark for listing[{0!s}], user[{1!s}]'.format(listing.title, username), extra={'user': username})
 
     entry = models.ApplicationLibraryEntry(listing=listing, owner=owner, folder=folder_name)
     entry.save()
     return entry
 
 
-# TODO Finish Logic (rivera 20160621)
-def import_bookmarks(username, peer_bookmark_notification_id):
+def import_bookmarks(current_username, peer_bookmark_notification_id):
     """
     Import Bookmarks to current user
 
@@ -147,32 +145,65 @@ def import_bookmarks(username, peer_bookmark_notification_id):
         * Validate {notification_entry} is a 'PEER.BOOKMARK' notification
             * If fail add error to error list
         * Extract {peer} from {notification_entry}
-        * Validate {peer.user.username} is same current user's username
+        * Validate {peer.user.username} is same current user's username {current_username}
             * If fail add error to error list
         * Validation on {peer.folder_name} for current user
             if folder_name already exist for that user then increament folder_name by 1
                 (ex 'folder name 1' to 'folder name 1 (1)')
                 (ex 'cool (1)' to 'cool (2)')
         * Iterate {peer._bookmark_listing_ids}
-            create_self_user_library_entry({username}, {peer._bookmark_listing_ids.id})
+            create_self_user_library_entry({current_username}, {peer._bookmark_listing_ids.id})
+        * Dismiss {notification_entry}
 
     Args:
         username: dictionary
         peer_bookmark_notification_id (int): peer bookmark notification id
 
     Returns:
-        [
-            {
-                "listing": {
-                    "id": 1
-                },
-                "folder": "folderName" (or null),
-                "id": 2
-            },....
-        ]
+        [ models.ApplicationLibraryEntry, ...]
     """
     validated_data = []
     errors = []
+
+    notification_entry = notification_model_access.get_notification_by_id(current_username, peer_bookmark_notification_id)
+
+    if not notification_entry:
+        errors.append('Could not find Notification Entry')
+        return errors, None
+
+    notification_entry_type = notification_entry.notification_type()
+
+    if not notification_entry_type == 'PEER.BOOKMARK':
+        errors.append('Notification Entry should be \'PEER.BOOKMARK\' but it is \'{0}\''.format(notification_entry_type))
+        return errors, None
+
+    peer_data = notification_entry.peer
+
+    peer_username = peer_data.get('user', {}).get('username')
+    peer_folder_name = peer_data.get('folder_name')
+    peer_bookmark_list = peer_data.get('_bookmark_listing_ids', [])
+
+    if not peer_username == current_username:
+        errors.append('Target username does not match current user\'s username')
+
+    if not peer_folder_name:
+        errors.append('Could not find folder_name entry')
+
+    if not peer_bookmark_list:
+        errors.append('Could not find peer bookmark list entry')
+
+    # TODO Validate Folder Name
+
+    if errors:
+        return errors, None
+
+    for current_bookmark_listing_id in peer_bookmark_list:
+        try:
+            validated_data.append(create_self_user_library_entry(current_username, current_bookmark_listing_id, peer_folder_name))
+        except Exception:
+            pass  # ignore exception Exception('Listing or user not found')
+
+    notification_model_access.dismiss_notification(notification_entry, current_username)
 
     if errors:
         return errors, None

@@ -1,5 +1,5 @@
 """
-Views
+Notification Views
 """
 import logging
 

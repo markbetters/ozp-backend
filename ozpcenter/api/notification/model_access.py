@@ -426,6 +426,23 @@ def get_dismissed_notifications(username):
     return models.Notification.objects.filter(dismissed_by__user__username=username)
 
 
+def get_notification_by_id(username, id, reraise=False):
+    """
+    Get Notification by id
+
+    Args:
+        id (int): id of notification
+    """
+    try:
+        dismissed_notifications = get_dismissed_notifications(username)
+        return models.Notification.objects.exclude(pk__in=dismissed_notifications).get(id=id)
+    except models.Notification.DoesNotExist as err:
+        if reraise:
+            raise err
+        else:
+            return None
+
+
 def get_self_notifications(username):
     """
     Get notifications for current user

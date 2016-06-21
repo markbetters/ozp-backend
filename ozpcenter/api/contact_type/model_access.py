@@ -1,5 +1,5 @@
 """
-Model Access
+Contact Types Model Access
 """
 import logging
 

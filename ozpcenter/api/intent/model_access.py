@@ -1,5 +1,5 @@
 """
-Model Access
+Intent Model Access
 """
 import logging
 

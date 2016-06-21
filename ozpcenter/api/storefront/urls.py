@@ -1,5 +1,5 @@
 """
-urls
+Storefront and Metadata URLs
 """
 from django.conf.urls import url
 

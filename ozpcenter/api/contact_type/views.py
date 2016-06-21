@@ -1,5 +1,5 @@
 """
-Views
+Contact Types Views
 """
 import logging
 

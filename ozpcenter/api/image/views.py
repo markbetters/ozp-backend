@@ -1,5 +1,5 @@
 """
-Views
+Image Views
 """
 import logging
 
