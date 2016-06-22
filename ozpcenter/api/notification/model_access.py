@@ -111,7 +111,7 @@ def _check_profile_permission(user_role_type, notification_action, notification_
             NotificationActionEnum.CREATE: {
                 NotificationTypeEnum.SYSTEM: lambda: raise_(errors.PermissionDenied('Only app mall stewards can create system notifications')),
                 NotificationTypeEnum.AGENCY: lambda: True,
-                NotificationTypeEnum.LISTING: lambda: org_create_listing_condition(profile_obj, listing)
+                NotificationTypeEnum.LISTING: lambda: True  # TODO: org_create_listing_condition(profile_obj, listing)
             },
             NotificationActionEnum.UPDATE: {
                 # lambda: raise_(errors.PermissionDenied('Only app mall
@@ -149,7 +149,7 @@ def _check_profile_permission(user_role_type, notification_action, notification_
     return permissions.get(user_role_type, {}).get(notification_action, {}).get(notification_type, lambda: raise_(errors.PermissionDenied('Unknown Permissions')))
 
 
-def create_notification(author_username, expires_date, message, listing=None, agency=None):
+def create_notification(author_username, expires_date, message, listing=None, agency=None, peer=None):
     """
     Create Notification
 
@@ -201,7 +201,8 @@ def create_notification(author_username, expires_date, message, listing=None, ag
         author=user,
         message=message,
         listing=listing,
-        agency=agency)
+        agency=agency,
+        peer=peer)
 
     notification.save()
     return notification
@@ -297,6 +298,28 @@ def get_all_pending_notifications(for_user=False):
     return unexpired_system_notifications
 
 
+def get_pending_peer_notifications(username):
+    """
+    Gets all peer pending notifications
+
+    Includes
+     * System Notifications
+     * Listing Notifications
+     * Agency Notifications
+
+    Includes
+     * Peer Notifications
+
+    Returns:
+        django.db.models.query.QuerySet(models.Notification): List of system-wide pending notifications
+    """
+    unexpired_peer_notifications = models.Notification.objects.filter(_peer__isnull=False) \
+        .filter(expires_date__gt=datetime.datetime.now(pytz.utc)) \
+        .filter(_peer__contains='"user": {"username": "%s"}' % (username))
+
+    return unexpired_peer_notifications
+
+
 def get_listing_pending_notifications(username):
     """
     Gets all notifications that are regarding a listing in this user's library
@@ -364,6 +387,8 @@ def get_all_expired_notifications():
     * Listing Notifications
     * Agency Notifications
     * System Notifications
+    * Peer Notifications
+    * Peer.Bookmark Notifications
 
     Returns:
         django.db.models.query.QuerySet(models.Notification): List of system-wide pending notifications
@@ -401,6 +426,23 @@ def get_dismissed_notifications(username):
     return models.Notification.objects.filter(dismissed_by__user__username=username)
 
 
+def get_notification_by_id(username, id, reraise=False):
+    """
+    Get Notification by id
+
+    Args:
+        id (int): id of notification
+    """
+    try:
+        dismissed_notifications = get_dismissed_notifications(username)
+        return models.Notification.objects.exclude(pk__in=dismissed_notifications).get(id=id)
+    except models.Notification.DoesNotExist as err:
+        if reraise:
+            raise err
+        else:
+            return None
+
+
 def get_self_notifications(username):
     """
     Get notifications for current user
@@ -429,12 +471,15 @@ def get_self_notifications(username):
     # agencies
     unexpired_agency_notifications = get_agency_pending_notifications(username)
 
+    # Get all unexpired peer notification
+    unexpired_peer_notifications = get_pending_peer_notifications(username)
+
     # Get all unexpired system-wide notifications
     unexpired_system_notifications = get_all_pending_notifications(for_user=True)
 
     # return (unexpired_system_notifications +
     # unexpired_listing_notifications) - dismissed_notifications
-    notifications = (unexpired_system_notifications | unexpired_agency_notifications |
+    notifications = (unexpired_system_notifications | unexpired_agency_notifications | unexpired_peer_notifications |
                      unexpired_listing_notifications).exclude(pk__in=dismissed_notifications)
 
     return notifications

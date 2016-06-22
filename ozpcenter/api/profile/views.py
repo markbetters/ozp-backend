@@ -1,13 +1,12 @@
 """
-Views
-
+Profile Views
 TODO: GET api/profile?role=ORG_STEWARD for view (shown on create/edit listing page)
-
 TODO: POST api/profile/self/library - add listing to library (bookmark)
-  params: listing id
-
+    params: listing id
 TODO: DELETE api/profile/self/library/<id> - unbookmark a listing
 """
+
+
 import logging
 
 from rest_framework import filters

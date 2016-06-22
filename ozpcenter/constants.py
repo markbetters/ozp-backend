@@ -1,5 +1,5 @@
 """
-constants used throughout the app
+Application-wide Constants
 """
 MAX_URL_SIZE = 2083  # see http://support.microsoft.com/kb/208427
 URL_REGEX = r'^(https|http|ftp|sftp|file)://.*$'

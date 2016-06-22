@@ -1,5 +1,5 @@
 """
-model access
+Storefront and Metadata Model Access
 """
 import logging
 

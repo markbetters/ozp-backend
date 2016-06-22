@@ -15,10 +15,10 @@ pre:
 	export DJANGO_SETTINGS_MODULE=ozp.settings
 
 test: clean pre create_static
-	python manage.py test
+	python -q -X faulthandler manage.py test
 
-ftest: pre
-	python manage.py test
+softtest: pre
+	python -q -X faulthandler manage.py test
 
 run:
 	python manage.py runserver
@@ -29,6 +29,12 @@ runp:
 codecheck:
 	flake8 ozp ozpcenter ozpiwc plugins plugins_util --ignore=E501,E123,E128,E121,E124,E711,E402 --exclude=ozpcenter/scripts/* --show-source
 
+autopepdiff:
+	autopep8 ozp ozpcenter ozpiwc plugins plugins_util --ignore=E501,E123,E128,E121,E124,E711,E402 --exclude=ozpcenter/scripts/* --recursive --diff
+
+autopep:
+	autopep8 ozp ozpcenter ozpiwc plugins plugins_util --ignore=E501,E123,E128,E121,E124,E711,E402 --exclude=ozpcenter/scripts/* --recursive --in-place
+	
 dev: clean pre create_static
 	python manage.py makemigrations ozpcenter
 	python manage.py makemigrations ozpiwc

@@ -1,5 +1,5 @@
 """
-Urls
+Listing URLs
 
 Unlike most (maybe all) of the other resources, the Listing resource has several
 nested resources - reviews and activity, for example. To help generate

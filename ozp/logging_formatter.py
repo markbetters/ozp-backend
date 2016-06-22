@@ -20,6 +20,10 @@ class CustomisedJSONFormatter(json_log_formatter.JSONFormatter):
         else:
             extra['user'] = 'system'
 
+        user = extra.get('user')
+        if user and not request:
+            extra['user'] = user
+
         if 'method' in extra:
             method = extra['method']
             delete_method_key = True

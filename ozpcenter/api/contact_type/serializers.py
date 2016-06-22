@@ -1,5 +1,5 @@
 """
-Serializers
+Contact Types Serializers
 """
 import logging
 

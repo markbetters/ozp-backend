@@ -1,5 +1,5 @@
 """
-Image model access
+Image Model Access
 """
 import logging
 import os
