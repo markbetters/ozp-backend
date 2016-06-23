@@ -1,0 +1,3 @@
+#!/bin/sh
+echo 'If you see Flake8 Messages, you need to fix and commit again'
+flake8 ozp ozpcenter ozpiwc plugins plugins_util --ignore=E501,E123,E128,E121,E124,E711,E402 --exclude=ozpcenter/scripts/* --show-source
