@@ -202,15 +202,16 @@ REST_FRAMEWORK = {
     )
 }
 
-# NOTE: In production, change this to memcached
+# NOTE: In production, comment REDIS_CLIENT_CLASS line
 CACHES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
-        'TIMEOUT': 300,  # 5 minutes
-        'OPTIONS': {
-            'MAX_ENTRIES': 10000
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'localhost:6379',
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            "REDIS_CLIENT_CLASS": "mockredis.mock_strict_redis_client",
         }
-    }
+    },
 }
 
 # django-cors-headers
