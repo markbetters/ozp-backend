@@ -33,56 +33,41 @@ class NotificationViewSet(viewsets.ModelViewSet):
         return queryset
 
     def create(self, request):
-        try:
-            serializer = serializers.NotificationSerializer(data=request.data,
-                context={'request': request}, partial=True)
-            if not serializer.is_valid():
-                logger.error('{0!s}'.format(serializer.errors))
-                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        serializer = serializers.NotificationSerializer(data=request.data,
+            context={'request': request}, partial=True)
 
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        except errors.PermissionDenied as err:
-            return Response({'detail': 'Permission Denied', 'message': '{0}'.format(err)}, status=status.HTTP_403_FORBIDDEN)
-        except Exception as e:
-            raise e
+        if not serializer.is_valid():
+            logger.error('{0!s}'.format(serializer.errors))
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        serializer.save()
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def update(self, request, pk=None):
         """
         Update is used only change the expiration date of the message
         """
-        try:
-            instance = self.get_queryset().get(pk=pk)
-            serializer = serializers.NotificationSerializer(instance,
-                data=request.data, context={'request': request}, partial=True)
+        instance = self.get_queryset().get(pk=pk)
+        serializer = serializers.NotificationSerializer(instance,
+            data=request.data, context={'request': request}, partial=True)
 
-            if not serializer.is_valid():
-                logger.error('{0!s}'.format(serializer.errors))
-                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        if not serializer.is_valid():
+            logger.error('{0!s}'.format(serializer.errors))
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        serializer.save()
 
-            serializer.save()
-
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        except errors.PermissionDenied as err:
-            return Response({'detail': 'Permission Denied', 'message': '{0}'.format(err)}, status=status.HTTP_403_FORBIDDEN)
-        except Exception as e:
-            raise e
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def destroy(self, request, pk=None):
-        try:
-            current_request_profile = model_access.get_self(request.user.username)
+        current_request_profile = model_access.get_self(request.user.username)
 
-            if not current_request_profile.is_steward():
-                raise errors.PermissionDenied('Only Stewards can delete notifications')
+        if not current_request_profile.is_steward():
+            raise errors.PermissionDenied('Only Stewards can delete notifications')
 
-            queryset = self.get_queryset()
-            notification_instance = get_object_or_404(queryset, pk=pk)
-            notification_instance.delete()
-            return Response(status=status.HTTP_204_NO_CONTENT)
-        except errors.PermissionDenied as err:
-            return Response({'detail': 'Permission Denied', 'message': '{0}'.format(err)}, status=status.HTTP_403_FORBIDDEN)
-        except Exception as e:
-            raise e
+        queryset = self.get_queryset()
+        notification_instance = get_object_or_404(queryset, pk=pk)
+        notification_instance.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class UserNotificationViewSet(viewsets.ModelViewSet):

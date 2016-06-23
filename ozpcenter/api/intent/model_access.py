@@ -13,15 +13,19 @@ def get_all_intents():
     return models.Intent.objects.all()
 
 
-def get_intent_by_action(action):
+def get_intent_by_action(action, reraise=False):
     try:
         return models.Intent.objects.get(action=action)
-    except models.Intent.DoesNotExist:
+    except models.Intent.DoesNotExist as err:
+        if reraise:
+            raise err
         return None
 
 
-def get_intent_by_id(id):
+def get_intent_by_id(id, reraise=False):
     try:
         return models.Intent.objects.get(id=id)
-    except models.Intent.DoesNotExist:
+    except models.Intent.DoesNotExist as err:
+        if reraise:
+            raise err
         return None

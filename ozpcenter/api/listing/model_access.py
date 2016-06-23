@@ -447,7 +447,7 @@ def delete_listing_review(username, review):
     if user.highest_role() in priv_roles:
         pass
     elif review.author.user.username != username:
-        raise errors.PermissionDenied()
+        raise errors.PermissionDenied('Cannot update another user\'s review')
 
     # make a note of the change
     change_details = [

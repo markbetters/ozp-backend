@@ -15,8 +15,10 @@ def get_all_categories():
     return models.Category.objects.all().order_by(Lower('title'))
 
 
-def get_category_by_title(title):
+def get_category_by_title(title, reraise=False):
     try:
         return models.Category.objects.get(title=title)
-    except models.Category.DoesNotExist:
+    except models.Category.DoesNotExist as err:
+        if reraise:
+            raise err
         return None
