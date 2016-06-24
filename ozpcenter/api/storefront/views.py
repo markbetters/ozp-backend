@@ -7,6 +7,7 @@ most popular)
 """
 import logging
 
+from django.core.cache import cache
 from rest_framework.decorators import api_view
 from rest_framework.decorators import permission_classes
 from rest_framework.response import Response
@@ -26,8 +27,14 @@ def MetadataView(request):
     Metadata for the store including categories, agencies, contact types,
     intents, and listing types
     """
-    data = model_access.get_metadata(request.user.username)
-    return Response(data)
+    request_username = request.user.username
+
+    cache_key = 'metadata-{0}'.format(request_username)
+    cache_data = cache.get(cache_key)
+    if not cache_data:
+        cache_data = model_access.get_metadata(request_username)
+        cache.set(cache_key, cache_data, timeout=60 * 60 * 24 * 1)
+    return Response(cache_data)
 
 
 @api_view(['GET'])
@@ -41,4 +48,11 @@ def StorefrontView(request):
     data = model_access.get_storefront(request.user)
     serializer = serializers.StorefrontSerializer(data,
         context={'request': request})
-    return Response(serializer.data)
+
+    request_username = request.user.username
+    cache_key = 'storefront-{0}'.format(request_username)
+    cache_data = cache.get(cache_key)
+    if not cache_data:
+        cache_data = serializer.data
+        cache.set(cache_key, cache_data, timeout=60 * 60 * 24 * 1)
+    return Response(cache_data)

@@ -60,6 +60,9 @@ def get_storefront(username):
     return data
 
 
+def values_query_set_to_dict(vqs):
+    return [item for item in vqs]
+
 def get_metadata(username):
     """
     Returns metadata including:
@@ -71,35 +74,32 @@ def get_metadata(username):
 
     Key: metadata
     """
-    key = 'metadata'
-    data = cache.get(key)
-    if data is None:
-        try:
-            data = {}
-            data['categories'] = models.Category.objects.all().values(
-                'title', 'description').order_by(Lower('title'))
-            data['listing_types'] = models.ListingType.objects.all().values(
-                'title', 'description')
-            data['agencies'] = models.Agency.objects.all().values(
-                'title', 'short_name', 'icon', 'id')
-            data['contact_types'] = models.ContactType.objects.all().values(
-                'name', 'required')
-            data['intents'] = models.Intent.objects.all().values(
-                'action', 'media_type', 'label', 'icon', 'id')
+    try:
+        data = {}
+        data['categories'] = values_query_set_to_dict(models.Category.objects.all().values(
+            'title', 'description').order_by(Lower('title')))
 
-            # return icon/image urls instead of the id and get listing counts
-            for i in data['agencies']:
-                # i['icon'] = models.Image.objects.get(id=i['icon']).image_url()
-                # i['icon'] = '/TODO'
-                i['listing_count'] = models.Listing.objects.for_user(
-                    username).filter(agency__title=i['title'],
-                    approval_status=models.Listing.APPROVED).count()
 
-            for i in data['intents']:
-                # i['icon'] = models.Image.objects.get(id=i['icon']).image_url()
-                i['icon'] = '/TODO'
+        data['listing_types'] = values_query_set_to_dict(models.ListingType.objects.all().values(
+            'title', 'description'))
+        data['agencies'] = values_query_set_to_dict(models.Agency.objects.all().values(
+            'title', 'short_name', 'icon', 'id'))
+        data['contact_types'] = values_query_set_to_dict(models.ContactType.objects.all().values(
+            'name', 'required'))
+        data['intents'] = values_query_set_to_dict(models.Intent.objects.all().values(
+            'action', 'media_type', 'label', 'icon', 'id'))
 
-            cache.set(key, data)
-        except Exception as e:
-            return {'error': True, 'msg': 'Error getting metadata: {0!s}'.format(str(e))}
-    return data
+        # return icon/image urls instead of the id and get listing counts
+        for i in data['agencies']:
+            # i['icon'] = models.Image.objects.get(id=i['icon']).image_url()
+            # i['icon'] = '/TODO'
+            i['listing_count'] = models.Listing.objects.for_user(
+                username).filter(agency__title=i['title'],
+                approval_status=models.Listing.APPROVED).count()
+
+        for i in data['intents']:
+            # i['icon'] = models.Image.objects.get(id=i['icon']).image_url()
+            i['icon'] = '/TODO'
+        return data
+    except Exception as e:
+        return {'error': True, 'msg': 'Error getting metadata: {0!s}'.format(str(e))}

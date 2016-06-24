@@ -12,7 +12,6 @@ import ozpcenter.api.listing.model_access as listing_model_access
 import ozpcenter.api.notification.model_access as notification_model_access
 import ozpcenter.model_access as generic_model_access
 
-
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center.' + str(__name__))
 
@@ -27,17 +26,10 @@ def get_all_library_entries():
     Return:
         [ApplicationLibraryEntry]: List of All ApplicationLibrary Entry Objects
     """
-    key = 'library_entries'
-    data = cache.get(key)
-    if data is None:
-        try:
-            data = models.ApplicationLibraryEntry.objects.filter(listing__is_deleted=False).all()
-            cache.set(key, data)
-            return data
-        except ObjectDoesNotExist:
-            return None
-    else:
-        return data
+    try:
+        return models.ApplicationLibraryEntry.objects.filter(listing__is_deleted=False).all()
+    except ObjectDoesNotExist:
+        return None
 
 
 def get_library_entry_by_id(library_entry_id):

@@ -209,7 +209,11 @@ CACHES = {
         'LOCATION': 'localhost:6379',
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
-            "REDIS_CLIENT_CLASS": "mockredis.mock_strict_redis_client",
+            # "REDIS_CLIENT_CLASS": "mockredis.mock_strict_redis_client",
+            "COMPRESSOR": "django_redis.compressors.lzma.LzmaCompressor",
+            "SERIALIZER": "django_redis.serializers.msgpack.MSGPackSerializer",
+            # "COMPRESSOR": "django_redis.compressors.zlib.ZlibCompressor",
+            # "SERIALIZER": "django_redis.serializers.json.JSONSerializer",
         }
     },
 }

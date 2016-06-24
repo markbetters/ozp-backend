@@ -7,7 +7,10 @@ import logging
 import os
 import uuid
 
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.conf import settings
+from django.core.cache import cache
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator
 from django.core.validators import MinValueValidator
@@ -63,6 +66,11 @@ class ImageType(models.Model):
 
     def __str__(self):
         return self.name
+
+
+@receiver(post_save, sender=ImageType)
+def post_save_image_type(sender, instance, created, **kwargs):
+    pass
 
 
 class AccessControlImageManager(models.Manager):
@@ -173,6 +181,11 @@ class Image(models.Model):
         return img
 
 
+@receiver(post_save, sender=Image)
+def post_save_image(sender, instance, created, **kwargs):
+    pass
+
+
 class Tag(models.Model):
     """
     Tag name (for a listing)
@@ -186,6 +199,11 @@ class Tag(models.Model):
 
     def __str__(self):
         return self.name
+
+
+@receiver(post_save, sender=Tag)
+def post_save_tag(sender, instance, created, **kwargs):
+    pass
 
 
 class Agency(models.Model):
@@ -212,6 +230,12 @@ class Agency(models.Model):
 
     class Meta:
         verbose_name_plural = "agencies"
+
+
+@receiver(post_save, sender=Agency)
+def post_save_agency(sender, instance, created, **kwargs):
+    cache.delete_pattern('metadata-*')
+
 
 # TODO
 # class ApplicationLibraryFolder(models.Model):
@@ -278,6 +302,11 @@ class Category(models.Model):
 
     class Meta:
         verbose_name_plural = "categories"
+
+
+@receiver(post_save, sender=Category)
+def post_save_category(sender, instance, created, **kwargs):
+    cache.delete_pattern('metadata-*')
 
 
 class ChangeDetail(models.Model):
@@ -377,6 +406,11 @@ class ContactType(models.Model):
         return self.title
 
 
+@receiver(post_save, sender=ContactType)
+def post_save_contact_types(sender, instance, created, **kwargs):
+    cache.delete_pattern('metadata-*')
+
+
 class DocUrl(models.Model):
     """
     A documentation link that belongs to a Listing
@@ -435,6 +469,11 @@ class Intent(models.Model):
 
     def __str__(self):
         return self.action
+
+
+@receiver(post_save, sender=Intent)
+def post_save_intents(sender, instance, created, **kwargs):
+    cache.delete_pattern('metadata-*')
 
 
 class AccessControlReviewManager(models.Manager):
@@ -858,6 +897,11 @@ class Listing(models.Model):
         return '({0!s}-{1!s})'.format(self.unique_name, [owner.user.username for owner in self.owners.all()])
 
 
+@receiver(post_save, sender=Listing)
+def post_save_listing(sender, instance, created, **kwargs):
+    cache.delete_pattern("storefront-*")
+
+
 class AccessControlListingActivityManager(models.Manager):
     """
     Use a custom manager to control access to ListingActivities
@@ -990,6 +1034,11 @@ class ListingType(models.Model):
 
     def __str__(self):
         return self.title
+
+
+@receiver(post_save, sender=ListingType)
+def post_save_listing_types(sender, instance, created, **kwargs):
+    cache.delete_pattern('metadata-*')
 
 
 class Notification(models.Model):
