@@ -1,5 +1,5 @@
 """
-Serializers
+Notification Serializers
 """
 import logging
 

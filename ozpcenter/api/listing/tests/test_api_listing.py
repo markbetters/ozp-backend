@@ -351,6 +351,7 @@ class ListingApiTest(APITestCase):
         # except IntegrityError:
         #     pass
 
+    def test_create_review_not_found(self):
         # creating a review for an app this user cannot see should fail
         bread_basket_id = models.Listing.objects.get(title='Bread Basket').id
         user = generic_model_access.get_profile('rutherford').user
@@ -358,7 +359,7 @@ class ListingApiTest(APITestCase):
         url = '/api/listing/{0!s}/review/'.format(bread_basket_id)
         data = {'rate': 4, 'text': 'rutherford test review'}
         response = self.client.post(url, data, format='json')
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_create_review_no_text(self):
         # create a new review

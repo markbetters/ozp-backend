@@ -9,8 +9,6 @@ from rest_framework import status
 from rest_framework import viewsets
 from rest_framework.response import Response
 
-from ozpcenter import errors
-from ozpcenter import models
 #  from ozpcenter import pagination  # TODO: Is Necessary?
 from ozpcenter import permissions
 import ozpcenter.api.listing.model_access as model_access
@@ -71,69 +69,39 @@ class ReviewViewSet(viewsets.ModelViewSet):
     def destroy(self, request, pk=None, listing_pk=None):
         queryset = self.get_queryset()
         review = get_object_or_404(queryset, pk=pk)
-        try:
-            model_access.delete_listing_review(request.user.username, review)
-        except errors.PermissionDenied:
-            return Response('Cannot update another user\'s review',
-                status=status.HTTP_403_FORBIDDEN)
+        model_access.delete_listing_review(request.user.username, review)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     def create(self, request, listing_pk=None):
         """
         Create a new review
         """
-        try:
-            listing = model_access.get_listing_by_id(request.user.username,
-                listing_pk)
-            if listing is None:
-                raise Exception
-        except Exception:
-            return Response('Invalid listing',
-                status=status.HTTP_400_BAD_REQUEST)
+        request_current_username = request.user.username
+        listing = model_access.get_listing_by_id(request_current_username,
+            listing_pk, True)
 
-        try:
-            rate = int(request.data['rate'])
-            text = request.data.get('text', None)
-        except Exception:
-            return Response('Invalid input data',
-                status=status.HTTP_400_BAD_REQUEST)
+        rate = int(request.data.get('rate', None))
+        text = request.data.get('text', None)
 
-        try:
-            resp = model_access.create_listing_review(request.user.username,
-                listing, rate, text)
-            return Response(resp, status=status.HTTP_201_CREATED)
-        except Exception as e:
-            raise e
-            return Response('Bad request to create new review',
-                status=status.HTTP_400_BAD_REQUEST)
+        resp = model_access.create_listing_review(request_current_username,
+            listing, rate, text)
+        return Response(resp, status=status.HTTP_201_CREATED)
 
     def update(self, request, pk=None, listing_pk=None):
         """
         Update an existing review
         """
-        try:
-            review = model_access.get_review_by_id(pk)
-        except models.Review.DoesNotExist:
-            return Response('Invalid review',
-                status=status.HTTP_400_BAD_REQUEST)
+        review = model_access.get_review_by_id(pk)
 
-        try:
-            rate = request.data.get('rate', review.rate)
-            text = request.data.get('text', None)
-        except:
-            return Response('Bad request to create new review',
-                status=status.HTTP_400_BAD_REQUEST)
+        rate = request.data.get('rate', review.rate)
+        text = request.data.get('text', None)
 
-        try:
-            review = model_access.edit_listing_review(request.user.username,
-                review, rate, text)
-            output = {"rate": review.rate, "text": review.text,
-                "author": review.author.id,
-                "listing": review.listing.id, "id": review.id}
-            return Response(output, status=status.HTTP_200_OK)
-        except errors.PermissionDenied:
-            return Response('Cannot update another user\'s review',
-                 status=status.HTTP_403_FORBIDDEN)
+        review = model_access.edit_listing_review(request.user.username,
+            review, rate, text)
+        output = {"rate": review.rate, "text": review.text,
+                  "author": review.author.id,
+                  "listing": review.listing.id, "id": review.id}
+        return Response(output, status=status.HTTP_200_OK)
 
 
 class ListingTypeViewSet(viewsets.ModelViewSet):
@@ -303,6 +271,7 @@ class ListingViewSet(viewsets.ModelViewSet):
             # add counts to response
             r.data['counts'] = counts_data
             return r
+
         serializer = serializers.ListingSerializer(queryset,
             context={'request': request}, many=True)
         r = Response(serializer.data)
@@ -384,22 +353,17 @@ class ListingViewSet(viewsets.ModelViewSet):
             query: replace
         omit_serializer: true
         """
-        try:
-            # logger.debug('inside ListingViewSet.create', extra={'request': request})
-            serializer = serializers.ListingSerializer(data=request.data,
-                context={'request': request}, partial=True)
-            if not serializer.is_valid():
-                logger.error('{0!s}'.format(serializer.errors), extra={'request': request})
-                return Response(serializer.errors,
-                    status=status.HTTP_400_BAD_REQUEST)
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        except errors.PermissionDenied:
-            return Response({'detail': 'Permission Denied'}, status=status.HTTP_403_FORBIDDEN)
-        except errors.InvalidInput as err:
-            return Response({'detail': '{}'.format(err)}, status=status.HTTP_400_BAD_REQUEST)
-        except Exception as e:
-            raise e
+        # logger.debug('inside ListingViewSet.create', extra={'request': request})
+        serializer = serializers.ListingSerializer(data=request.data,
+            context={'request': request}, partial=True)
+
+        if not serializer.is_valid():
+            logger.error('{0!s}'.format(serializer.errors), extra={'request': request})
+            return Response(serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST)
+        serializer.save()
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def retrieve(self, request, pk=None):
         """
@@ -416,10 +380,7 @@ class ListingViewSet(viewsets.ModelViewSet):
         """
         queryset = self.get_queryset()
         listing = get_object_or_404(queryset, pk=pk)
-        try:
-            model_access.delete_listing(request.user.username, listing)
-        except errors.PermissionDenied as e:
-            return Response({'detail': 'Permission Denied', 'reason': str(e)}, status=status.HTTP_403_FORBIDDEN)
+        model_access.delete_listing(request.user.username, listing)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     def update(self, request, pk=None):
@@ -507,27 +468,20 @@ class ListingViewSet(viewsets.ModelViewSet):
            ]
         }
         """
-        try:
-            # logger.debug('inside ListingViewSet.update', extra={'request': request})
+        # logger.debug('inside ListingViewSet.update', extra={'request': request})
 
-            instance = self.get_queryset().get(pk=pk)
-            serializer = serializers.ListingSerializer(instance,
-                data=request.data, context={'request': request}, partial=True)
+        instance = self.get_queryset().get(pk=pk)
+        serializer = serializers.ListingSerializer(instance,
+            data=request.data, context={'request': request}, partial=True)
 
-            # logger.debug('created ListingSerializer', extra={'request': request})
+        # logger.debug('created ListingSerializer', extra={'request': request})
 
-            if not serializer.is_valid():
-                logger.error('{0!s}'.format(serializer.errors), extra={'request': request})
-                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        if not serializer.is_valid():
+            logger.error('{0!s}'.format(serializer.errors), extra={'request': request})
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        except errors.PermissionDenied:
-            return Response({'detail': 'Permission Denied'}, status=status.HTTP_403_FORBIDDEN)
-        except errors.InvalidInput as err:
-            return Response({'detail': '{}'.format(err)}, status=status.HTTP_400_BAD_REQUEST)
-        except Exception as e:
-            raise e
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def partial_update(self, request, pk=None):
         """
