@@ -168,6 +168,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 MEDIA_URL = 'media/'
 
 REST_FRAMEWORK = {
+    'EXCEPTION_HANDLER': 'ozpcenter.errors.exception_handler',
     'DEFAULT_AUTHENTICATION_CLASSES': (
         # 'ozpcenter.auth.pkiauth.PkiAuthentication'
         'rest_framework.authentication.BasicAuthentication',

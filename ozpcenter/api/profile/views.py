@@ -48,25 +48,20 @@ class ProfileViewSet(viewsets.ModelViewSet):
         return queryset
 
     def update(self, request, pk=None):
-        try:
-            current_request_profile = model_access.get_self(request.user.username)
-            if current_request_profile.highest_role() != 'APPS_MALL_STEWARD':
-                raise errors.PermissionDenied
-            profile_instance = self.get_queryset().get(pk=pk)
-            serializer = serializers.ProfileSerializer(profile_instance,
-                data=request.data, context={'request': request}, partial=True)
-            if not serializer.is_valid():
-                logger.error('{0!s}'.format(serializer.errors))
-                return Response(serializer.errors,
-                    status=status.HTTP_400_BAD_REQUEST)
+        current_request_profile = model_access.get_self(request.user.username)
+        if current_request_profile.highest_role() != 'APPS_MALL_STEWARD':
+            raise errors.PermissionDenied
+        profile_instance = self.get_queryset().get(pk=pk)
+        serializer = serializers.ProfileSerializer(profile_instance,
+            data=request.data, context={'request': request}, partial=True)
+        if not serializer.is_valid():
+            logger.error('{0!s}'.format(serializer.errors))
+            return Response(serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST)
 
-            serializer.save()
+        serializer.save()
 
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        except errors.PermissionDenied:
-            return Response({'detail': 'Permission Denied'}, status=status.HTTP_403_FORBIDDEN)
-        except Exception as e:
-            raise e
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class ProfileListingViewSet(viewsets.ModelViewSet):
@@ -87,29 +82,24 @@ class ProfileListingViewSet(viewsets.ModelViewSet):
         """
         Retrieves all listings for a specific profile that they own
         """
-        try:
-            current_request_username = request.user.username
-            queryset = self.get_queryset(current_request_username, profile_pk)
 
-            if queryset:
-                page = self.paginate_queryset(queryset)
+        current_request_username = request.user.username
+        queryset = self.get_queryset(current_request_username, profile_pk)
 
-                if page is not None:
-                    serializer = listing_serializers.ListingSerializer(page,
-                        context={'request': request}, many=True)
-                    response = self.get_paginated_response(serializer.data)
-                    return response
+        if queryset:
+            page = self.paginate_queryset(queryset)
 
-                serializer = listing_serializers.ListingSerializer(queryset,
+            if page is not None:
+                serializer = listing_serializers.ListingSerializer(page,
                     context={'request': request}, many=True)
-                return Response(serializer.data)
-            else:
-                return Response({'detail': 'Not Found'}, status=status.HTTP_404_NOT_FOUND)
+                response = self.get_paginated_response(serializer.data)
+                return response
 
-        except errors.PermissionDenied:
-            return Response({'detail': 'Permission Denied'}, status=status.HTTP_403_FORBIDDEN)
-        except Exception as e:
-            raise e
+            serializer = listing_serializers.ListingSerializer(queryset,
+                context={'request': request}, many=True)
+            return Response(serializer.data)
+        else:
+            return Response({'detail': 'Not Found'}, status=status.HTTP_404_NOT_FOUND)
 
     def retrieve(self, request, pk, profile_pk=None):
         """
@@ -173,18 +163,13 @@ class CurrentUserViewSet(viewsets.ViewSet):
         return Response(serializer.data)
 
     def update(self, request):
-        try:
-            current_request_profile = model_access.get_self(request.user.username)
-            serializer = serializers.ProfileSerializer(current_request_profile,
-                data=request.data, context={'request': request}, partial=True)
-            if not serializer.is_valid():
-                logger.error('{0!s}'.format(serializer.errors))
-                return Response(serializer.errors,
-                    status=status.HTTP_400_BAD_REQUEST)
+        current_request_profile = model_access.get_self(request.user.username)
+        serializer = serializers.ProfileSerializer(current_request_profile,
+            data=request.data, context={'request': request}, partial=True)
+        if not serializer.is_valid():
+            logger.error('{0!s}'.format(serializer.errors))
+            return Response(serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST)
 
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        except errors.PermissionDenied:
-            return Response({'detail': 'Permission Denied'}, status=status.HTTP_403_FORBIDDEN)
-        except Exception as e:
-            raise e
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)

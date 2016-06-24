@@ -116,20 +116,15 @@ class ImageViewSet(viewsets.ModelViewSet):
         # already knows to set the necessary authentication header
         if 'cuz_ie' in request.data:
             return Response('IE made me do this', status=status.HTTP_200_OK)
-        try:
-            serializer = serializers.ImageCreateSerializer(data=request.data,
-                context={'request': request})
-            if not serializer.is_valid():
-                logger.error('{0!s}'.format(serializer.errors))
-                return Response(serializer.errors,
-                    status=status.HTTP_400_BAD_REQUEST)
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-        except errors.PermissionDenied:
-            return Response({'detail': 'Permission Denied'}, status=status.HTTP_403_FORBIDDEN)
-        except Exception as e:
-            raise e
+        serializer = serializers.ImageCreateSerializer(data=request.data,
+            context={'request': request})
+        if not serializer.is_valid():
+            logger.error('{0!s}'.format(serializer.errors))
+            return Response(serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def list(self, request):
         queryset = self.get_queryset()
@@ -148,9 +143,9 @@ class ImageViewSet(viewsets.ModelViewSet):
         user = generic_model_access.get_profile(self.request.user.username)
 
         access_control_instance = plugin_manager.get_system_access_control_plugin()
-        if not access_control_instance.has_access(user.access_control,
-                image.security_marking):
-            return Response(status=status.HTTP_403_FORBIDDEN)
+        if not access_control_instance.has_access(user.access_control, image.security_marking):
+            raise errors.PermissionDenied()
+
         content_type = 'image/' + image.file_extension
         try:
             with open(image_path, 'rb') as f:
