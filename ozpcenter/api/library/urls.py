@@ -16,5 +16,4 @@ router.register(r'self/library', views.UserLibraryViewSet,
 # Wire up our API using automatic URL routing.
 urlpatterns = [
     url(r'^', include(router.urls)),
-
 ]

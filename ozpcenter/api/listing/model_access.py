@@ -3,7 +3,6 @@ Listing Model Access
 """
 import logging
 
-from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 
 from ozpcenter import models
@@ -84,43 +83,24 @@ def filter_listings(username, filter_params):
 def get_self_listings(username):
     """
     Get the Listings that belong to this user
-
-    Key: self_listings:<username>
     """
-    username = utils.make_keysafe(username)
-    key = 'self_listings:{0!s}'.format(username)
-    data = cache.get(key)
-    if data is None:
-        try:
-            user = generic_model_access.get_profile(username)
-            data = models.Listing.objects.for_user(username).filter(
-                owners__in=[user.id]).filter(is_deleted=False)
-            cache.set(key, data)
-            return data
-        except ObjectDoesNotExist:
-            return None
-    else:
+    try:
+        user = generic_model_access.get_profile(username)
+        data = models.Listing.objects.for_user(username).filter(
+            owners__in=[user.id]).filter(is_deleted=False)
         return data
+    except ObjectDoesNotExist:
+        return None
 
 
 def get_listings(username):
     """
     Get Listings this user can see
-
-    Key: listings:<username>
     """
-    username = utils.make_keysafe(username)
-    key = 'listings:{0!s}'.format(username)
-    data = cache.get(key)
-    if data is None:
-        try:
-            data = models.Listing.objects.for_user(username).all()
-            cache.set(key, data)
-            return data
-        except ObjectDoesNotExist:
-            return None
-    else:
-        return data
+    try:
+        return models.Listing.objects.for_user(username).all()
+    except ObjectDoesNotExist:
+        return None
 
 
 def get_reviews(username):
@@ -129,18 +109,10 @@ def get_reviews(username):
 
     Key: reviews:<username>
     """
-    username = utils.make_keysafe(username)
-    key = 'reviews:{0!s}'.format(username)
-    data = cache.get(key)
-    if data is None:
-        try:
-            data = models.Review.objects.for_user(username).all()
-            cache.set(key, data)
-            return data
-        except ObjectDoesNotExist:
-            return None
-    else:
-        return data
+    try:
+        return models.Review.objects.for_user(username).all()
+    except ObjectDoesNotExist:
+        return None
 
 
 def get_review_by_id(id):

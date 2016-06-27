@@ -4,11 +4,13 @@ Plugin Manager
 from types import ModuleType
 import importlib
 import logging
+import hashlib
 import os
 import requests
 import traceback
 
 from django.conf import settings
+from django.core.cache import cache
 
 logger = logging.getLogger('ozp-center.' + str(__name__))
 
@@ -53,7 +55,6 @@ def dynamic_importer(name, class_name=None):
 
     Usage:
     DynamicImporterWrapper(module, class) = dynamic_importer("plugins.default_access_control.main", "PluginMain")
-
     """
     current_module = importlib.util.find_spec(name)
     current_module_found = current_module is not None
@@ -202,6 +203,38 @@ else:
 
 def get_system_access_control_plugin():
     return plugin_manager_instance.get_plugin_instance(ACCESS_CONTROL_PLUGIN)
+
+
+def system_has_access_control(username, user_access_control_json, security_marking):
+    """
+    convenience method to check access control
+
+
+    Determine if a user has access to a given access control
+
+    Ultimately, this will likely invoke a separate service to do the check.
+    For now, some basic logic will suffice
+
+    Assume the access control is of the format:
+    <CLASSIFICATION>//<CONTROL>//<CONTROL>//...
+
+    i.e.: a single classification followed by additional marking categories
+    separated by //
+
+    Args:
+        username (str): username
+        user_accesses_json (str): user accesses in json (clearances, formal_accesses, visas)
+        marking: a valid (str): a valid security marking
+    """
+    data_hash = hashlib.sha224('{0!s}-{1!s}'.format(user_access_control_json, security_marking).encode('utf-8')).hexdigest()
+    key = 'system_has_access_control-{0!s}-{1!s}'.format(username, data_hash)
+    data = cache.get(key)
+    if data:
+        return data
+    else:
+        results = get_system_access_control_plugin().has_access(username, user_access_control_json, security_marking)
+        cache.set(key, results, timeout=60 * 60 * 24)
+        return results
 
 
 def get_system_authorization_plugin():

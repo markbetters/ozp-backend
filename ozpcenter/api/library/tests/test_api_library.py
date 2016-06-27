@@ -99,7 +99,7 @@ class LibraryApiTest(APITestCase):
         response = self.client.put(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    def test_get_self_library_when_listing_disabled_enabled(self):
+    def test_get_library_self_when_listing_disabled_enabled(self):
         """
         GET /self/library
         """

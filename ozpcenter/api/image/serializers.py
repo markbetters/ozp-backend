@@ -10,7 +10,7 @@ import logging
 from rest_framework import serializers
 
 from ozpcenter import models
-from plugins_util import plugin_manager
+from plugins_util.plugin_manager import system_has_access_control
 import ozpcenter.model_access as generic_model_access
 
 # Get an instance of a logger
@@ -33,12 +33,11 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
     def validate_security_marking(self, value):
         # don't allow user to select a security marking that is above
         # their own access level
-        user = generic_model_access.get_profile(
+        profile = generic_model_access.get_profile(
             self.context['request'].user.username)
 
-        access_control_instance = plugin_manager.get_system_access_control_plugin()
         if value:
-            if not access_control_instance.has_access(user.access_control, value):
+            if not system_has_access_control(profile.user.username, profile.access_control, value):
                 raise serializers.ValidationError(
                     'Security marking too high for current user')
         else:
@@ -72,12 +71,11 @@ class ImageCreateSerializer(serializers.Serializer):
     def validate_security_marking(self, value):
         # don't allow user to select a security marking that is above
         # their own access level
-        user = generic_model_access.get_profile(
+        profile = generic_model_access.get_profile(
             self.context['request'].user.username)
 
-        access_control_instance = plugin_manager.get_system_access_control_plugin()
         if value:
-            if not access_control_instance.has_access(user.access_control, value):
+            if not system_has_access_control(profile.user.username, profile.access_control, value):
                 raise serializers.ValidationError(
                     'Security marking too high for current user')
         else:

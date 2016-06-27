@@ -8,6 +8,7 @@ import os
 import uuid
 
 from django.db.models.signals import post_save
+from django.db.models.signals import post_delete
 from django.dispatch import receiver
 from django.conf import settings
 from django.core.cache import cache
@@ -18,7 +19,7 @@ from django.core.validators import RegexValidator
 from django.db import models
 from django.contrib import auth
 
-from plugins_util import plugin_manager
+from plugins_util.plugin_manager import system_has_access_control
 from ozpcenter import constants
 from ozpcenter import utils
 
@@ -73,6 +74,11 @@ def post_save_image_type(sender, instance, created, **kwargs):
     pass
 
 
+@receiver(post_delete, sender=ImageType)
+def post_delete_image_type(sender, instance, **kwargs):
+    pass
+
+
 class AccessControlImageManager(models.Manager):
     """
     Use a custom manager to control access to Images
@@ -85,14 +91,13 @@ class AccessControlImageManager(models.Manager):
     """
 
     def for_user(self, username):
-        access_control_instance = plugin_manager.get_system_access_control_plugin()
         # get all images
         objects = super(AccessControlImageManager, self).get_queryset()
         user = Profile.objects.get(user__username=username)
         # filter out listings by user's access level
         images_to_exclude = []
         for i in objects:
-            if not access_control_instance.has_access(user.access_control, i.security_marking):
+            if not system_has_access_control(username, user.access_control, i.security_marking):
                 images_to_exclude.append(i.id)
         objects = objects.exclude(id__in=images_to_exclude)
         return objects
@@ -186,6 +191,11 @@ def post_save_image(sender, instance, created, **kwargs):
     pass
 
 
+@receiver(post_delete, sender=Image)
+def post_delete_image(sender, instance, **kwargs):
+    pass
+
+
 class Tag(models.Model):
     """
     Tag name (for a listing)
@@ -203,6 +213,11 @@ class Tag(models.Model):
 
 @receiver(post_save, sender=Tag)
 def post_save_tag(sender, instance, created, **kwargs):
+    pass
+
+
+@receiver(post_delete, sender=Tag)
+def post_delete_tag(sender, instance, **kwargs):
     pass
 
 
@@ -237,20 +252,9 @@ def post_save_agency(sender, instance, created, **kwargs):
     cache.delete_pattern('metadata-*')
 
 
-# TODO
-# class ApplicationLibraryFolder(models.Model):
-#     """
-#     A change made to a field of a Listing
-#
-#     Additional db.relationships:
-#         * ListingActivity (ManyToMany)
-#     """
-#     folder_name = models.CharField(max_length=255)
-#
-#
-#     def __repr__(self):
-#         return "id:%d field %s was %s now is %s" % (
-#             self.id, self.field_name, self.old_value, self.new_value)
+@receiver(post_delete, sender=Agency)
+def post_delete_agency(sender, instance, **kwargs):
+    cache.delete_pattern('metadata-*')
 
 
 class ApplicationLibraryEntry(models.Model):
@@ -306,6 +310,11 @@ class Category(models.Model):
 
 @receiver(post_save, sender=Category)
 def post_save_category(sender, instance, created, **kwargs):
+    cache.delete_pattern('metadata-*')
+
+
+@receiver(post_delete, sender=Category)
+def post_delete_category(sender, instance, **kwargs):
     cache.delete_pattern('metadata-*')
 
 
@@ -411,6 +420,11 @@ def post_save_contact_types(sender, instance, created, **kwargs):
     cache.delete_pattern('metadata-*')
 
 
+@receiver(post_delete, sender=ContactType)
+def post_delete_contact_types(sender, instance, **kwargs):
+    cache.delete_pattern('metadata-*')
+
+
 class DocUrl(models.Model):
     """
     A documentation link that belongs to a Listing
@@ -473,6 +487,11 @@ class Intent(models.Model):
 
 @receiver(post_save, sender=Intent)
 def post_save_intents(sender, instance, created, **kwargs):
+    cache.delete_pattern('metadata-*')
+
+
+@receiver(post_delete, sender=Intent)
+def post_delete_intents(sender, instance, **kwargs):
     cache.delete_pattern('metadata-*')
 
 
@@ -751,14 +770,12 @@ class AccessControlListingManager(models.Manager):
         objects = objects.exclude(is_private=True,
                                   agency__in=exclude_orgs)
 
-        access_control_instance = plugin_manager.get_system_access_control_plugin()
-
         # filter out listings by user's access level
         titles_to_exclude = []
         for i in objects:
             if not i.security_marking:
                 logger.debug('Listing {0!s} has no security_marking'.format(i.title))
-            if not access_control_instance.has_access(user.access_control, i.security_marking):
+            if not system_has_access_control(username, user.access_control, i.security_marking):
                 titles_to_exclude.append(i.title)
         objects = objects.exclude(title__in=titles_to_exclude)
         return objects
@@ -900,6 +917,13 @@ class Listing(models.Model):
 @receiver(post_save, sender=Listing)
 def post_save_listing(sender, instance, created, **kwargs):
     cache.delete_pattern("storefront-*")
+    cache.delete_pattern("library_self-*")
+
+
+@receiver(post_delete, sender=Listing)
+def post_delete_listing(sender, instance, **kwargs):
+    cache.delete_pattern("storefront-*")
+    cache.delete_pattern("library_self-*")
 
 
 class AccessControlListingActivityManager(models.Manager):
@@ -1038,6 +1062,11 @@ class ListingType(models.Model):
 
 @receiver(post_save, sender=ListingType)
 def post_save_listing_types(sender, instance, created, **kwargs):
+    cache.delete_pattern('metadata-*')
+
+
+@receiver(post_delete, sender=ListingType)
+def post_delete_listing_types(sender, instance, **kwargs):
     cache.delete_pattern('metadata-*')
 
 

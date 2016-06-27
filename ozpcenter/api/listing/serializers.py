@@ -12,6 +12,7 @@ from ozpcenter import constants
 from ozpcenter import models
 from ozpcenter import errors
 from plugins_util import plugin_manager
+from plugins_util.plugin_manager import system_has_access_control
 import ozpcenter.api.agency.model_access as agency_model_access
 import ozpcenter.api.category.model_access as category_model_access
 import ozpcenter.api.contact_type.model_access as contact_type_model_access
@@ -55,15 +56,13 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
         }
 
     def validate_security_marking(self, value):
-        access_control_instance = plugin_manager.get_system_access_control_plugin()
         # don't allow user to select a security marking that is above
         # their own access level
-        user = generic_model_access.get_profile(
+        profile = generic_model_access.get_profile(
             self.context['request'].user.username)
 
-        access_control_instance = plugin_manager.get_system_access_control_plugin()
         if value:
-            if not access_control_instance.has_access(user.access_control, value):
+            if not system_has_access_control(profile.user.username, profile.access_control, value):
                 raise serializers.ValidationError(
                     'Security marking too high for current user')
         else:
@@ -419,14 +418,13 @@ class ListingSerializer(serializers.ModelSerializer):
         return data
 
     def validate_security_marking(self, value):
-        access_control_instance = plugin_manager.get_system_access_control_plugin()
         # don't allow user to select a security marking that is above
         # their own access level
-        user = generic_model_access.get_profile(
+        profile = generic_model_access.get_profile(
             self.context['request'].user.username)
 
         if value:
-            if not access_control_instance.has_access(user.access_control, value):
+            if not system_has_access_control(profile.user.username, profile.access_control, value):
                 raise serializers.ValidationError(
                     'Security marking too high for current user')
         return value

@@ -3,11 +3,9 @@ Library Model Access
 """
 import logging
 
-from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 
 from ozpcenter import models
-from ozpcenter import utils
 import ozpcenter.api.listing.model_access as listing_model_access
 import ozpcenter.api.notification.model_access as notification_model_access
 import ozpcenter.model_access as generic_model_access
@@ -45,17 +43,10 @@ def get_library_entry_by_id(library_entry_id):
     Return:
         ApplicationLibraryEntry: Get an ApplicationLibrary Entry Object based on library_entry_id
     """
-    key = 'library:{0!s}'.format(library_entry_id)
-    data = cache.get(key)
-    if data is None:
-        try:
-            data = models.ApplicationLibraryEntry.objects.filter(listing__is_deleted=False).get(id=library_entry_id)
-            cache.set(key, data)
-            return data
-        except ObjectDoesNotExist:
-            return None
-    else:
-        return data
+    try:
+        return models.ApplicationLibraryEntry.objects.filter(listing__is_deleted=False).get(id=library_entry_id)
+    except ObjectDoesNotExist:
+        return None
 
 
 def get_self_application_library(username, listing_type=None, folder_name=None):
@@ -74,28 +65,21 @@ def get_self_application_library(username, listing_type=None, folder_name=None):
         Queryset(ApplicationLibraryEntry): User's Application Library
 
     """
-    username = utils.make_keysafe(username)
-    key = 'app_library({0!s}):{1!s}'.format(listing_type, username)
-    data = cache.get(key)
-    if data is None:
-        try:
-            data = models.ApplicationLibraryEntry.objects
-            data = data.filter(owner__user__username=username)
-            data = data.filter(listing__is_enabled=True)
-            data = data.filter(listing__is_deleted=False)
+    try:
+        data = models.ApplicationLibraryEntry.objects
+        data = data.filter(owner__user__username=username)
+        data = data.filter(listing__is_enabled=True)
+        data = data.filter(listing__is_deleted=False)
 
-            if listing_type:
-                data = data.filter(listing__listing_type__title=listing_type)
+        if listing_type:
+            data = data.filter(listing__listing_type__title=listing_type)
 
-            if folder_name:
-                data = data.filter(folder=folder_name)
+        if folder_name:
+            data = data.filter(folder=folder_name)
 
-            cache.set(key, data)
-            return data
-        except ObjectDoesNotExist:
-            return None
-    else:
         return data
+    except ObjectDoesNotExist:
+        return None
 
 
 def create_self_user_library_entry(username, listing_id, folder_name=None):

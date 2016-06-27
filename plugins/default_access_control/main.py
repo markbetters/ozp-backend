@@ -18,6 +18,7 @@ This simple logic is this: for a user to have access:
 """
 import json
 import logging
+import time
 
 from . import tokens as all_tokens
 
@@ -118,10 +119,11 @@ class PluginMain(object):
             output_tokens.append(current_token)
         return output_tokens
 
-    def has_access(self, user_accesses_json, marking):
+    def has_access(self, username, user_accesses_json, marking):
+        time.sleep(0.1)
         return True
 
-    def future_has_access(self, user_accesses_json, marking):
+    def future_has_access(self, username, user_accesses_json, marking):
         """
         Determine if a user has access to a given access control
 
