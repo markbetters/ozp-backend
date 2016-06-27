@@ -205,7 +205,7 @@ def get_system_access_control_plugin():
     return plugin_manager_instance.get_plugin_instance(ACCESS_CONTROL_PLUGIN)
 
 
-def system_has_access_control(username, user_access_control_json, security_marking):
+def system_has_access_control(username, security_marking):
     """
     convenience method to check access control
 
@@ -226,13 +226,14 @@ def system_has_access_control(username, user_access_control_json, security_marki
         user_accesses_json (str): user accesses in json (clearances, formal_accesses, visas)
         marking: a valid (str): a valid security marking
     """
-    data_hash = hashlib.sha224('{0!s}-{1!s}'.format(user_access_control_json, security_marking).encode('utf-8')).hexdigest()
+    data_hash = hashlib.sha224('{0!s}'.format(security_marking).encode('utf-8')).hexdigest()
     key = 'system_has_access_control-{0!s}-{1!s}'.format(username, data_hash)
     data = cache.get(key)
+
     if data:
         return data
     else:
-        results = get_system_access_control_plugin().has_access(username, user_access_control_json, security_marking)
+        results = get_system_access_control_plugin().has_access(username, security_marking)
         cache.set(key, results, timeout=60 * 60 * 24)
         return results
 

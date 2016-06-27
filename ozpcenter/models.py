@@ -93,11 +93,10 @@ class AccessControlImageManager(models.Manager):
     def for_user(self, username):
         # get all images
         objects = super(AccessControlImageManager, self).get_queryset()
-        user = Profile.objects.get(user__username=username)
         # filter out listings by user's access level
         images_to_exclude = []
         for i in objects:
-            if not system_has_access_control(username, user.access_control, i.security_marking):
+            if not system_has_access_control(username, i.security_marking):
                 images_to_exclude.append(i.id)
         objects = objects.exclude(id__in=images_to_exclude)
         return objects
@@ -775,7 +774,7 @@ class AccessControlListingManager(models.Manager):
         for i in objects:
             if not i.security_marking:
                 logger.debug('Listing {0!s} has no security_marking'.format(i.title))
-            if not system_has_access_control(username, user.access_control, i.security_marking):
+            if not system_has_access_control(username, i.security_marking):
                 titles_to_exclude.append(i.title)
         objects = objects.exclude(title__in=titles_to_exclude)
         return objects

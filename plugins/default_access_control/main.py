@@ -22,6 +22,8 @@ import time
 
 from . import tokens as all_tokens
 
+import ozpcenter.model_access as model_access
+
 logger = logging.getLogger('ozp-center.' + str(__name__))
 
 
@@ -119,11 +121,21 @@ class PluginMain(object):
             output_tokens.append(current_token)
         return output_tokens
 
-    def has_access(self, username, user_accesses_json, marking):
+    def has_access(self, username, marking):
         time.sleep(0.1)
         return True
 
-    def future_has_access(self, username, user_accesses_json, marking):
+    def future_has_access(self, username, marking):
+        profile = model_access.get_profile(username)
+
+        if not profile:
+            return False
+
+        user_accesses_json = profile.access_control
+
+        return self.future_has_access_json(user_accesses_json, marking)
+
+    def future_has_access_json(self, user_accesses_json, marking):
         """
         Determine if a user has access to a given access control
 

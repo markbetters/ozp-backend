@@ -5,6 +5,7 @@ import json
 
 from django.test import TestCase
 
+from ozpcenter.scripts import sample_data_generator as data_gen
 from plugins.default_access_control.main import PluginMain
 
 
@@ -22,7 +23,7 @@ class AccessControlTest(TestCase):
         """
         Set up test data for the whole TestCase (only run once for the TestCase)
         """
-        pass
+        data_gen.run()
 
     def test_split_tokens(self):
         marking = 'UNCLASSIFIED//FOUO//ABC'
@@ -79,7 +80,7 @@ class AccessControlTest(TestCase):
             }
         )
         marking = 'UNCLASSIFIED//FOUO//ABC'
-        self.assertTrue(self.access_control_instance.future_has_access('username', user_accesses_json, marking))
+        self.assertTrue(self.access_control_instance.future_has_access_json(user_accesses_json, marking))
 
         user_accesses_json = json.dumps(
             {
@@ -89,7 +90,7 @@ class AccessControlTest(TestCase):
             }
         )
         marking = 'UNCLASSIFIED'
-        self.assertTrue(self.access_control_instance.future_has_access('username', user_accesses_json, marking))
+        self.assertTrue(self.access_control_instance.future_has_access_json(user_accesses_json, marking))
 
         user_accesses_json = json.dumps(
             {
@@ -99,7 +100,7 @@ class AccessControlTest(TestCase):
             }
         )
         marking = 'UNCLASSIFIED//FOUO//ABC'
-        self.assertFalse(self.access_control_instance.future_has_access('username', user_accesses_json, marking))
+        self.assertFalse(self.access_control_instance.future_has_access_json(user_accesses_json, marking))
         user_accesses_json = json.dumps(
             {
                 "clearances": ["UNCLASSIFIED"],
@@ -108,13 +109,13 @@ class AccessControlTest(TestCase):
             }
         )
         marking = 'CONFIDENTIAL'
-        self.assertFalse(self.access_control_instance.future_has_access('username', user_accesses_json, marking))
+        self.assertFalse(self.access_control_instance.future_has_access_json(user_accesses_json, marking))
         marking = 'SECRET'
-        self.assertFalse(self.access_control_instance.future_has_access('username', user_accesses_json, marking))
+        self.assertFalse(self.access_control_instance.future_has_access_json(user_accesses_json, marking))
         marking = 'TOP SECRET'
-        self.assertFalse(self.access_control_instance.future_has_access('username', user_accesses_json, marking))
+        self.assertFalse(self.access_control_instance.future_has_access_json(user_accesses_json, marking))
         marking = 'INVALID LEVEL'
-        self.assertFalse(self.access_control_instance.future_has_access('username', user_accesses_json, marking))
+        self.assertFalse(self.access_control_instance.future_has_access_json(user_accesses_json, marking))
 
     def test_has_access_confidential(self):
         user_accesses_json = json.dumps(
@@ -125,7 +126,7 @@ class AccessControlTest(TestCase):
             }
         )
         marking = 'UNCLASSIFIED//FOUO//ABC'
-        self.assertTrue(self.access_control_instance.future_has_access('username', user_accesses_json, marking))
+        self.assertTrue(self.access_control_instance.future_has_access_json(user_accesses_json, marking))
         user_accesses_json = json.dumps(
             {
                 "clearances": ["UNCLASSIFIED", "CONFIDENTIAL"],
@@ -134,7 +135,7 @@ class AccessControlTest(TestCase):
             }
         )
         marking = 'CONFIDENTIAL'
-        self.assertTrue(self.access_control_instance.future_has_access('username', user_accesses_json, marking))
+        self.assertTrue(self.access_control_instance.future_has_access_json(user_accesses_json, marking))
         user_accesses_json = json.dumps(
             {
                 "clearances": ["UNCLASSIFIED", "CONFIDENTIAL"],
@@ -143,7 +144,7 @@ class AccessControlTest(TestCase):
             }
         )
         marking = 'CONFIDENTIAL//FOUO//ABC'
-        self.assertTrue(self.access_control_instance.future_has_access('username', user_accesses_json, marking))
+        self.assertTrue(self.access_control_instance.future_has_access_json(user_accesses_json, marking))
 
         user_accesses_json = json.dumps(
             {
@@ -153,13 +154,13 @@ class AccessControlTest(TestCase):
             }
         )
         marking = 'CONFIDENTIAL'
-        self.assertFalse(self.access_control_instance.future_has_access('username', user_accesses_json, marking))
+        self.assertFalse(self.access_control_instance.future_has_access_json(user_accesses_json, marking))
         marking = 'SECRET'
-        self.assertFalse(self.access_control_instance.future_has_access('username', user_accesses_json, marking))
+        self.assertFalse(self.access_control_instance.future_has_access_json(user_accesses_json, marking))
         marking = 'TOP SECRET'
-        self.assertFalse(self.access_control_instance.future_has_access('username', user_accesses_json, marking))
+        self.assertFalse(self.access_control_instance.future_has_access_json(user_accesses_json, marking))
         marking = 'INVALID LEVEL'
-        self.assertFalse(self.access_control_instance.future_has_access('username', user_accesses_json, marking))
+        self.assertFalse(self.access_control_instance.future_has_access_json(user_accesses_json, marking))
 
     def test_has_access_secret(self):
         user_accesses_json = json.dumps(
@@ -170,7 +171,7 @@ class AccessControlTest(TestCase):
             }
         )
         marking = 'UNCLASSIFIED//FOUO//ABC'
-        self.assertTrue(self.access_control_instance.future_has_access('username', user_accesses_json, marking))
+        self.assertTrue(self.access_control_instance.future_has_access_json(user_accesses_json, marking))
         user_accesses_json = json.dumps(
             {
                 "clearances": ["UNCLASSIFIED", "CONFIDENTIAL", "SECRET"],
@@ -179,7 +180,7 @@ class AccessControlTest(TestCase):
             }
         )
         marking = 'CONFIDENTIAL//FOUO//ABC'
-        self.assertTrue(self.access_control_instance.future_has_access('username', user_accesses_json, marking))
+        self.assertTrue(self.access_control_instance.future_has_access_json(user_accesses_json, marking))
         user_accesses_json = json.dumps(
             {
                 "clearances": ["UNCLASSIFIED", "CONFIDENTIAL", "SECRET"],
@@ -188,7 +189,7 @@ class AccessControlTest(TestCase):
             }
         )
         marking = 'SECRET'
-        self.assertTrue(self.access_control_instance.future_has_access('username', user_accesses_json, marking))
+        self.assertTrue(self.access_control_instance.future_has_access_json(user_accesses_json, marking))
         user_accesses_json = json.dumps(
             {
                 "clearances": ["UNCLASSIFIED", "CONFIDENTIAL", "SECRET"],
@@ -197,7 +198,7 @@ class AccessControlTest(TestCase):
             }
         )
         marking = 'SECRET//FOUO//ABC'
-        self.assertTrue(self.access_control_instance.future_has_access('username', user_accesses_json, marking))
+        self.assertTrue(self.access_control_instance.future_has_access_json(user_accesses_json, marking))
 
         user_accesses_json = json.dumps(
             {
@@ -207,12 +208,12 @@ class AccessControlTest(TestCase):
             }
         )
         marking = 'TOP SECRET//FOUO//ABC'
-        self.assertFalse(self.access_control_instance.future_has_access('username', user_accesses_json, marking))
+        self.assertFalse(self.access_control_instance.future_has_access_json(user_accesses_json, marking))
         marking = 'SECRET//FOUO//ABC/XYZ'
-        self.assertFalse(self.access_control_instance.future_has_access('username', user_accesses_json, marking))
+        self.assertFalse(self.access_control_instance.future_has_access_json(user_accesses_json, marking))
 
         marking = 'INVALID LEVEL'
-        self.assertFalse(self.access_control_instance.future_has_access('username', user_accesses_json, marking))
+        self.assertFalse(self.access_control_instance.future_has_access_json(user_accesses_json, marking))
 
     def test_has_access_top_secret(self):
         user_accesses_json = json.dumps(
@@ -223,13 +224,13 @@ class AccessControlTest(TestCase):
             }
         )
         marking = 'UNCLASSIFIED//FOUO//ABC'
-        self.assertTrue(self.access_control_instance.future_has_access('username', user_accesses_json, marking))
+        self.assertTrue(self.access_control_instance.future_has_access_json(user_accesses_json, marking))
         marking = 'CONFIDENTIAL//FOUO//ABC'
-        self.assertTrue(self.access_control_instance.future_has_access('username', user_accesses_json, marking))
+        self.assertTrue(self.access_control_instance.future_has_access_json(user_accesses_json, marking))
         marking = 'SECRET//FOUO//ABC'
-        self.assertTrue(self.access_control_instance.future_has_access('username', user_accesses_json, marking))
+        self.assertTrue(self.access_control_instance.future_has_access_json(user_accesses_json, marking))
         marking = 'TOP SECRET//FOUO//ABC'
-        self.assertTrue(self.access_control_instance.future_has_access('username', user_accesses_json, marking))
+        self.assertTrue(self.access_control_instance.future_has_access_json(user_accesses_json, marking))
         user_accesses_json = json.dumps(
             {
                 "clearances": ["UNCLASSIFIED", "CONFIDENTIAL", "SECRET", "TOP SECRET"],
@@ -238,7 +239,7 @@ class AccessControlTest(TestCase):
             }
         )
         marking = 'TOP SECRET'
-        self.assertTrue(self.access_control_instance.future_has_access('username', user_accesses_json, marking))
+        self.assertTrue(self.access_control_instance.future_has_access_json(user_accesses_json, marking))
 
         user_accesses_json = json.dumps(
             {
@@ -248,8 +249,8 @@ class AccessControlTest(TestCase):
             }
         )
         marking = 'SECRET//FOUO//ABC/XYZ'
-        self.assertFalse(self.access_control_instance.future_has_access('username', user_accesses_json, marking))
+        self.assertFalse(self.access_control_instance.future_has_access_json(user_accesses_json, marking))
         marking = 'UNCLASSIFIED//FOUO//ABC/XYZ'
-        self.assertFalse(self.access_control_instance.future_has_access('username', user_accesses_json, marking))
+        self.assertFalse(self.access_control_instance.future_has_access_json(user_accesses_json, marking))
         marking = 'INVALID LEVEL'
-        self.assertFalse(self.access_control_instance.future_has_access('username', user_accesses_json, marking))
+        self.assertFalse(self.access_control_instance.future_has_access_json(user_accesses_json, marking))

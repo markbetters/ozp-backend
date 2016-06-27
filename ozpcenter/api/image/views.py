@@ -142,7 +142,7 @@ class ImageViewSet(viewsets.ModelViewSet):
         # enforce access control
         profile = generic_model_access.get_profile(self.request.user.username)
 
-        if not system_has_access_control(profile.user.username, profile.access_control, image.security_marking):
+        if not system_has_access_control(profile.user.username, image.security_marking):
             raise errors.PermissionDenied()
 
         content_type = 'image/' + image.file_extension

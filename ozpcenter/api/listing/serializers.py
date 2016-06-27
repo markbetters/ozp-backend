@@ -62,7 +62,7 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
             self.context['request'].user.username)
 
         if value:
-            if not system_has_access_control(profile.user.username, profile.access_control, value):
+            if not system_has_access_control(profile.user.username, value):
                 raise serializers.ValidationError(
                     'Security marking too high for current user')
         else:
@@ -424,7 +424,7 @@ class ListingSerializer(serializers.ModelSerializer):
             self.context['request'].user.username)
 
         if value:
-            if not system_has_access_control(profile.user.username, profile.access_control, value):
+            if not system_has_access_control(profile.user.username, value):
                 raise serializers.ValidationError(
                     'Security marking too high for current user')
         return value
