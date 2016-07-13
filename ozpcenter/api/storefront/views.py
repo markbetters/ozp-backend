@@ -7,6 +7,7 @@ most popular)
 """
 import logging
 
+from django.conf import settings
 from django.core.cache import cache
 from rest_framework.decorators import api_view
 from rest_framework.decorators import permission_classes
@@ -33,7 +34,7 @@ def MetadataView(request):
     cache_data = cache.get(cache_key)
     if not cache_data:
         cache_data = model_access.get_metadata(request_username)
-        cache.set(cache_key, cache_data, timeout=60 * 60 * 24 * 1)
+        cache.set(cache_key, cache_data, timeout=settings.GLOBAL_SECONDS_TO_CACHE_DATA)
     return Response(cache_data)
 
 
@@ -54,5 +55,5 @@ def StorefrontView(request):
     cache_data = cache.get(cache_key)
     if not cache_data:
         cache_data = serializer.data
-        cache.set(cache_key, cache_data, timeout=60 * 60 * 24 * 1)
+        cache.set(cache_key, cache_data, timeout=settings.GLOBAL_SECONDS_TO_CACHE_DATA)
     return Response(cache_data)
