@@ -234,7 +234,7 @@ def system_has_access_control(username, security_marking):
         return data
     else:
         results = get_system_access_control_plugin().has_access(username, security_marking)
-        cache.set(key, results, timeout=60 * 60 * 24)
+        cache.set(key, results, timeout=settings.GLOBAL_SECONDS_TO_CACHE_DATA)
         return results
 
 
