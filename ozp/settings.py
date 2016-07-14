@@ -203,15 +203,20 @@ REST_FRAMEWORK = {
     )
 }
 
-# NOTE: In production, change this to memcached
+# NOTE: In production, comment REDIS_CLIENT_CLASS line
 CACHES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
-        'TIMEOUT': 300,  # 5 minutes
-        'OPTIONS': {
-            'MAX_ENTRIES': 10000
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'localhost:6379',
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            # "REDIS_CLIENT_CLASS": "mockredis.mock_strict_redis_client",
+            "COMPRESSOR": "django_redis.compressors.lzma.LzmaCompressor",
+            "SERIALIZER": "django_redis.serializers.msgpack.MSGPackSerializer",
+            # "COMPRESSOR": "django_redis.compressors.zlib.ZlibCompressor",
+            # "SERIALIZER": "django_redis.serializers.json.JSONSerializer",
         }
-    }
+    },
 }
 
 # django-cors-headers
@@ -255,3 +260,4 @@ AUTHORIZATION_PLUGIN = 'default_authorization'
 # Set to empty string if no default agency exists
 # If a default agency exists, set it to the agency's short name
 DEFAULT_AGENCY = ''
+GLOBAL_SECONDS_TO_CACHE_DATA = 60 * 60 * 24  # 24 Hours

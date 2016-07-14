@@ -108,5 +108,6 @@ def exception_handler(exc, context):
         set_rollback()
         return Response(data, status=status.HTTP_400_BAD_REQUEST)
 
+    traceback.print_exc(file=sys.stdout)
     # Note: Unhandled exceptions will raise a 500 error.
     return None

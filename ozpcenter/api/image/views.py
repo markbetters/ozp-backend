@@ -11,7 +11,7 @@ from rest_framework.parsers import MultiPartParser, JSONParser
 from rest_framework.response import Response
 
 from ozpcenter import permissions
-from plugins_util import plugin_manager
+from plugins_util.plugin_manager import system_has_access_control
 import ozpcenter.api.image.model_access as model_access
 import ozpcenter.api.image.serializers as serializers
 from ozpcenter import errors
@@ -140,10 +140,9 @@ class ImageViewSet(viewsets.ModelViewSet):
         image = get_object_or_404(queryset, pk=pk)
         image_path = model_access.get_image_path(pk)
         # enforce access control
-        user = generic_model_access.get_profile(self.request.user.username)
+        profile = generic_model_access.get_profile(self.request.user.username)
 
-        access_control_instance = plugin_manager.get_system_access_control_plugin()
-        if not access_control_instance.has_access(user.access_control, image.security_marking):
+        if not system_has_access_control(profile.user.username, image.security_marking):
             raise errors.PermissionDenied()
 
         content_type = 'image/' + image.file_extension
