@@ -2,8 +2,7 @@
 Custom Exceptions and Custom Exception Handler
 """
 from __future__ import unicode_literals
-import traceback
-import sys
+import logging
 
 from django.core.exceptions import PermissionDenied
 from django.core.exceptions import ObjectDoesNotExist
@@ -13,6 +12,8 @@ from django.utils.translation import ugettext_lazy as _
 from rest_framework import exceptions, status
 from rest_framework.compat import set_rollback
 from rest_framework.response import Response
+
+logger = logging.getLogger('ozp-center.' + str(__name__))
 
 
 class NotFound(Http404):
@@ -39,6 +40,9 @@ def exception_handler(exc, context):
     Any unhandled exceptions may return `None`, which will cause a 500 error
     to be raised.
     """
+    request = context.get('request')
+    logger.exception(exc, extra={'request': request})
+
     if isinstance(exc, exceptions.APIException):
         headers = {}
         if getattr(exc, 'auth_header', None):
@@ -94,8 +98,6 @@ def exception_handler(exc, context):
         msg = _('Invalid Input.')
         data = {'detail': six.text_type(msg)}
 
-        traceback.print_exc(file=sys.stdout)
-
         set_rollback()
         return Response(data, status=status.HTTP_400_BAD_REQUEST)
 
@@ -103,11 +105,8 @@ def exception_handler(exc, context):
         msg = _('Invalid Input.')
         data = {'detail': six.text_type(msg)}
 
-        traceback.print_exc(file=sys.stdout)
-
         set_rollback()
         return Response(data, status=status.HTTP_400_BAD_REQUEST)
 
-    traceback.print_exc(file=sys.stdout)
     # Note: Unhandled exceptions will raise a 500 error.
     return None
