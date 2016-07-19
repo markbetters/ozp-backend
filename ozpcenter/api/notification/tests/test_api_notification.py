@@ -10,6 +10,25 @@ from rest_framework.test import APITestCase
 
 from ozpcenter import model_access as generic_model_access
 from ozpcenter.scripts import sample_data_generator as data_gen
+from ozpcenter.api.library.tests.test_api_library import _create_create_bookmark
+
+
+def _import_bookmarks(test_case_instance, username, bookmark_notification_id, status_code=201):
+    user = generic_model_access.get_profile(username).user
+    test_case_instance.client.force_authenticate(user=user)
+    url = '/api/self/library/import_bookmarks/'
+    data = {'bookmark_notification_id': bookmark_notification_id}
+    response = test_case_instance.client.post(url, data, format='json')
+
+    if response:
+        if status_code == 201:
+            test_case_instance.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        elif status_code == 400:
+            test_case_instance.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        else:
+            raise Exception('status code is not supported')
+
+    return response
 
 
 class NotificationApiTest(APITestCase):
@@ -450,6 +469,7 @@ class NotificationApiTest(APITestCase):
             }}
 
         response = self.client.post(url, data, format='json')
+
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data['message'], 'A Simple Peer to Peer Notification')
         self.assertEqual(response.data['notification_type'], 'PEER')
@@ -482,8 +502,176 @@ class NotificationApiTest(APITestCase):
         self.assertEqual(response.data['listing'], None)
         self.assertTrue('expires_date' in data)
 
+        # eval({
+        #     'request': {
+        #         'uri': '/api/notification/',
+        #         'user': 'bigbrother',
+        #         'action': 'POST',
+        #         'data': {
+        #             "expires_date": datetime.datetime.now(pytz.utc),
+        #             "message": "A Simple Peer to Peer Notification",
+        #             "peer": {
+        #                 "user": {
+        #                     "username": "jones"
+        #                 },
+        #                 "folder_name": "folder"
+        #             }
+        #         }
+        #     },
+        #     'response': {
+        #         'status_code[eq]': 201,
+        #         'd.message[eq]': 'A Simple Peer to Peer Notification',
+        #         'd.notification_type[eq]': 'PEER',
+        #         'd.agency[eq],d.listing[eq]': None,
+        #         'd.expires_date[ex]': True
+        #     }
+        # })
+
     # TODO test_create_peer_notification_invalid (rivera 20160617)
     # TODO test_create_peer_bookmark_notification (rivera 20160617)
+
+    def test_create_peer_bookmark_notification_integration(self):
+        """
+        test_create_peer_bookmark_notification_integration
+        """
+        # Listing ID: 1, 2, 3, 4
+        # wsmith (minitrue, stewarded_orgs: minitrue)
+        # julia (minitrue, stewarded_orgs: minitrue, miniluv)
+        # bigbrother2 - minitrue
+        response = _create_create_bookmark(self, 'wsmith', 3, folder_name='foldername1', status_code=201)
+        self.assertEqual(response.data['listing']['id'], 3)
+
+        response = _create_create_bookmark(self, 'wsmith', 4, folder_name='foldername1', status_code=201)
+        self.assertEqual(response.data['listing']['id'], 4)
+
+        # Compare Notifications for users
+        usernames_list = {'wsmith': [1, 2, 5],
+                          'julia': [1, 2],
+                          'jones': [1, 2],
+                          'bigbrother': [1, 2]}
+
+        for username, ids_list in usernames_list.items():
+            url = '/api/self/notification/'
+            user = generic_model_access.get_profile(username).user
+            self.client.force_authenticate(user=user)
+            response = self.client.get(url, format='json')
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            before_notification_ids = sorted([entry.get('id') for entry in response.data])
+            self.assertEqual(before_notification_ids, ids_list)
+
+        # Compare Library for users
+        usernames_list = {'wsmith': [1, 2, 3, 4],
+                          'julia': [],
+                          'jones': [],
+                          'bigbrother': []}
+
+        for username, ids_list in usernames_list.items():
+            url = '/api/self/library/'
+            user = generic_model_access.get_profile(username).user
+            self.client.force_authenticate(user=user)
+            response = self.client.get(url, format='json')
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            before_notification_ids = sorted([entry.get('id') for entry in response.data])
+            self.assertEqual(before_notification_ids, ids_list, 'Comparing Library for {}'.format(username))
+
+        # Create Bookmark
+        response = _create_create_bookmark(self, 'bigbrother', 4, folder_name='foldername2', status_code=201)
+        self.assertEqual(response.data['listing']['id'], 4)
+
+        # Compare Library for users
+        usernames_list = {'wsmith': [1, 2, 3, 4],
+                          'julia': [],
+                          'jones': [],
+                          'bigbrother': [5]}
+
+        for username, ids_list in usernames_list.items():
+            url = '/api/self/library/'
+            user = generic_model_access.get_profile(username).user
+            self.client.force_authenticate(user=user)
+            response = self.client.get(url, format='json')
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            before_notification_ids = sorted([entry.get('id') for entry in response.data])
+            self.assertEqual(before_notification_ids, ids_list, 'Comparing Library for {}'.format(username))
+
+        # Create Bookmark Notification
+        bookmark_notification_ids = []
+
+        for i in range(3):
+            url = '/api/notification/'
+            user = generic_model_access.get_profile('wsmith').user
+            self.client.force_authenticate(user=user)
+            now = datetime.datetime.now(pytz.utc) + datetime.timedelta(days=5)
+
+            data = {'expires_date': str(now),
+                    'message': 'A Simple Peer to Peer Notification',
+                    'peer': {
+                        'user': {
+                          'username': 'julia',
+                        },
+                        'folder_name': 'foldername1'
+                }}
+
+            response = self.client.post(url, data, format='json')
+            self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+            self.assertEqual(response.data['message'], 'A Simple Peer to Peer Notification')
+            self.assertEqual(response.data['notification_type'], 'PEER.BOOKMARK')
+            self.assertEqual(response.data['agency'], None)
+            self.assertEqual(response.data['listing'], None)
+            peer_data = {'user': {'username': 'julia'}, 'folder_name': 'foldername1', '_bookmark_listing_ids': [3, 4]}
+            self.assertEqual(response.data['peer'], peer_data)
+            self.assertTrue('expires_date' in data)
+
+            bookmark_notification_ids.append(response.data['id'])
+
+            # Compare Notifications for users
+            usernames_list = {'wsmith': [1, 2, 5],
+                              'julia': [1, 2] + bookmark_notification_ids,
+                              'jones': [1, 2],
+                              'bigbrother': [1, 2]}
+
+            for username, ids_list in usernames_list.items():
+                url = '/api/self/notification/'
+                user = generic_model_access.get_profile(username).user
+                self.client.force_authenticate(user=user)
+                response = self.client.get(url, format='json')
+                self.assertEqual(response.status_code, status.HTTP_200_OK)
+                before_notification_ids = sorted([entry.get('id') for entry in response.data])
+                self.assertEqual(before_notification_ids, ids_list)
+
+        bookmark_notification1_id = bookmark_notification_ids[0]
+
+        # Import Bookmarks
+        _import_bookmarks(self, 'julia', bookmark_notification1_id, status_code=201)
+
+        # Compare Library for users
+        usernames_list = {'wsmith': [1, 2, 3, 4],
+                          'julia': [6, 7],
+                          'jones': [],
+                          'bigbrother': [5]}
+
+        for username, ids_list in usernames_list.items():
+            url = '/api/self/library/'
+            user = generic_model_access.get_profile(username).user
+            self.client.force_authenticate(user=user)
+            response = self.client.get(url, format='json')
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            before_notification_ids = sorted([entry.get('id') for entry in response.data])
+            self.assertEqual(before_notification_ids, ids_list, 'Comparing Library for {}'.format(username))
+
+        # Compare Notifications for users
+        usernames_list = {'wsmith': [1, 2, 5],
+                          'julia': [1, 2] + bookmark_notification_ids[1:],
+                          'jones': [1, 2],
+                          'bigbrother': [1, 2]}
+
+        for username, ids_list in usernames_list.items():
+            url = '/api/self/notification/'
+            user = generic_model_access.get_profile(username).user
+            self.client.force_authenticate(user=user)
+            response = self.client.get(url, format='json')
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            before_notification_ids = sorted([entry.get('id') for entry in response.data])
+            self.assertEqual(before_notification_ids, ids_list)
 
     def test_delete_system_notification_apps_mall_steward(self):
         url = '/api/notification/1/'
@@ -491,6 +679,17 @@ class NotificationApiTest(APITestCase):
         self.client.force_authenticate(user=user)
         response = self.client.delete(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+        # eval({
+        #     'request': {
+        #         'uri': '/api/notification/1/',
+        #         'user': 'bigbrother',
+        #         'action': 'DELETE',
+        #     },
+        #     'response': {
+        #         'status_code[eq]': 204,
+        #     }
+        # })
 
     # TODO below test should work when permission gets refactored (rivera 20160620)
     @skip("should work when permission gets refactored (rivera 20160620)")
