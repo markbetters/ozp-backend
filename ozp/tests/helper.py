@@ -1,7 +1,7 @@
 import re
 import inspect
 import os
-
+import sys
 from plugins_util.plugin_manager import plugin_manager_instance
 
 
@@ -82,7 +82,11 @@ class Router(object):
                                  'URL': url}, 404)
 
 router = Router()
-plugin_manager_instance.load_mock_services(router)
+
+# Detect if test is in the arguement, ex) manage.py
+# If doing test then load the mock services
+if 'test' in sys.argv:
+    plugin_manager_instance.load_mock_services(router)
 
 
 def mocked_requests_get(*args, **kwargs):

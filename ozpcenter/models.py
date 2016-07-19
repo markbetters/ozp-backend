@@ -288,6 +288,16 @@ class ApplicationLibraryEntry(models.Model):
         verbose_name_plural = "application library entries"
 
 
+@receiver(post_save, sender=ApplicationLibraryEntry)
+def post_save_application_library_entry(sender, instance, created, **kwargs):
+    cache.delete_pattern('library_self-*')
+
+
+@receiver(post_delete, sender=ApplicationLibraryEntry)
+def post_delete_application_library_entry(sender, instance, **kwargs):
+    cache.delete_pattern('library_self-*')
+
+
 class Category(models.Model):
     """
     Categories for Listings

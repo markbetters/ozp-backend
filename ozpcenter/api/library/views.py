@@ -117,15 +117,7 @@ class UserLibraryViewSet(viewsets.ViewSet):
         queryset = self.get_queryset()
         serializer = serializers.UserLibrarySerializer(queryset,
             many=True, context={'request': request})
-
-        request_username = request.user.username
-        listing_type = self.request.query_params.get('type', None)
-        cache_key = 'library_self-{0}-{1}'.format(listing_type, request_username)
-        cache_data = cache.get(cache_key)
-        if not cache_data:
-            cache_data = serializer.data
-            cache.set(cache_key, cache_data, timeout=settings.GLOBAL_SECONDS_TO_CACHE_DATA)
-        return Response(cache_data)
+        return Response(serializer.data)
 
     def retrieve(self, request, pk=None):
         """
