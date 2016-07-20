@@ -78,10 +78,10 @@ def get_metadata(username):
         data = {}
         data['categories'] = values_query_set_to_dict(models.Category.objects.all().values(
             'title', 'description').order_by(Lower('title')))
-
-
         data['listing_types'] = values_query_set_to_dict(models.ListingType.objects.all().values(
             'title', 'description'))
+        data['listing_titles'] = [record.get('title') for record in values_query_set_to_dict(models.Listing.objects.for_user(username).all().values(
+            'title'))]
         data['agencies'] = values_query_set_to_dict(models.Agency.objects.all().values(
             'title', 'short_name', 'icon', 'id'))
         data['contact_types'] = values_query_set_to_dict(models.ContactType.objects.all().values(

@@ -29,13 +29,8 @@ def MetadataView(request):
     intents, and listing types
     """
     request_username = request.user.username
-
-    cache_key = 'metadata-{0}'.format(request_username)
-    cache_data = cache.get(cache_key)
-    if not cache_data:
-        cache_data = model_access.get_metadata(request_username)
-        cache.set(cache_key, cache_data, timeout=settings.GLOBAL_SECONDS_TO_CACHE_DATA)
-    return Response(cache_data)
+    data = model_access.get_metadata(request_username)
+    return Response(data)
 
 
 @api_view(['GET'])
