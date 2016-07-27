@@ -8,6 +8,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import serializers
 
 from ozpcenter import models
+from plugins_util.plugin_manager import system_anonymize_identifiable_data
 import ozpcenter.api.listing.model_access as listing_model_access
 import ozpcenter.api.library.model_access as library_model_access
 import ozpcenter.api.agency.model_access as agency_model_access
@@ -24,6 +25,17 @@ class ShortUserSerializer(serializers.ModelSerializer):
         model = User
         fields = ('username',)
 
+    def to_representation(self, data):
+        ret = super(ShortUserSerializer, self).to_representation(data)
+
+        # Used to anonymize usernames
+        anonymize_identifiable_data = system_anonymize_identifiable_data(self.context['request'].user.username)
+
+        if anonymize_identifiable_data:
+            ret['username'] = '*'
+
+        return ret
+
 
 class ShortProfileSerializer(serializers.ModelSerializer):
     user = ShortUserSerializer()
@@ -31,6 +43,17 @@ class ShortProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Profile
         fields = ('user',)
+
+    def to_representation(self, data):
+        ret = super(ShortProfileSerializer, self).to_representation(data)
+
+        # Used to anonymize usernames
+        anonymize_identifiable_data = system_anonymize_identifiable_data(self.context['request'].user.username)
+
+        if anonymize_identifiable_data:
+            ret['user'] = '*'
+
+        return ret
 
 
 class NotificationListingSerializer(serializers.ModelSerializer):

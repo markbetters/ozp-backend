@@ -122,8 +122,21 @@ class PluginMain(object):
         return output_tokens
 
     def has_access(self, username, marking):
+        # Timer used to simulate REST Service Call
         time.sleep(0.1)
         return True
+
+    def anonymize_identifiable_data(self, username):
+        """
+        Anonymize Identifiable Data for certain users
+
+        Return:
+            True - Anonymize Identifiable Data
+            False - Access to see Identifiable Data
+        """
+        # Timer used to simulate REST Service Call
+        time.sleep(0.1)
+        return False
 
     def future_has_access(self, username, marking):
         profile = model_access.get_profile(username)

@@ -230,10 +230,25 @@ def system_has_access_control(username, security_marking):
     key = 'system_has_access_control-{0!s}-{1!s}'.format(username, data_hash)
     data = cache.get(key)
 
-    if data:
+    if data is not None:
         return data
     else:
         results = get_system_access_control_plugin().has_access(username, security_marking)
+        cache.set(key, results, timeout=settings.GLOBAL_SECONDS_TO_CACHE_DATA)
+        return results
+
+
+def system_anonymize_identifiable_data(username):
+    """
+    convenience method to check if username needs to anonymize identifiable data
+    """
+    key = 'system_anonymize_identifiable_data-{0!s}'.format(username)
+    data = cache.get(key)
+
+    if data is not None:
+        return data
+    else:
+        results = get_system_access_control_plugin().anonymize_identifiable_data(username)
         cache.set(key, results, timeout=settings.GLOBAL_SECONDS_TO_CACHE_DATA)
         return results
 
