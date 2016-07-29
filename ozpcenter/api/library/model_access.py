@@ -179,8 +179,6 @@ def import_bookmarks(current_username, peer_bookmark_notification_id):
         except Exception:
             pass  # ignore exception Exception('Listing or user not found')
 
-    notification_model_access.dismiss_notification(notification_entry, current_username)
-
     if errors:
         return errors, None
     return None, validated_data
