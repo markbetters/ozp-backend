@@ -5,7 +5,7 @@ to get OZP (Center, HUD, Webtop, IWC) up and running, see the
 
 ## 3rd Party Services 
 Travis-CI
-[![Build Status](https://travis-ci.org/ozone-development/ozp-backend.svg?branch=master)](https://travis-ci.org/ozone-development/ozp-backend)
+[![Build Status](https://travis-ci.org/aml-development/ozp-backend.svg?branch=master)](https://travis-ci.org/ozone-development/ozp-backend)
 
 Quantified Code
 [![Code Issues](https://www.quantifiedcode.com/api/v1/project/13070c3c7b784cf88463f8cee86d5ea2/badge.svg)](https://www.quantifiedcode.com/app/project/13070c3c7b784cf88463f8cee86d5ea2)
