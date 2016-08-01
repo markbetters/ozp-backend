@@ -3,7 +3,6 @@ Notification Serializers
 """
 import logging
 
-from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import serializers
 
@@ -14,46 +13,10 @@ import ozpcenter.api.library.model_access as library_model_access
 import ozpcenter.api.agency.model_access as agency_model_access
 import ozpcenter.api.notification.model_access as model_access
 import ozpcenter.model_access as generic_model_access
+import ozpcenter.api.profile.serializers as profile_serializers
 
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center.' + str(__name__))
-
-
-class ShortUserSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = User
-        fields = ('username',)
-
-    def to_representation(self, data):
-        ret = super(ShortUserSerializer, self).to_representation(data)
-
-        # Used to anonymize usernames
-        anonymize_identifiable_data = system_anonymize_identifiable_data(self.context['request'].user.username)
-
-        if anonymize_identifiable_data:
-            ret['username'] = '*'
-
-        return ret
-
-
-class ShortProfileSerializer(serializers.ModelSerializer):
-    user = ShortUserSerializer()
-
-    class Meta:
-        model = models.Profile
-        fields = ('user',)
-
-    def to_representation(self, data):
-        ret = super(ShortProfileSerializer, self).to_representation(data)
-
-        # Used to anonymize usernames
-        anonymize_identifiable_data = system_anonymize_identifiable_data(self.context['request'].user.username)
-
-        if anonymize_identifiable_data:
-            ret['user'] = '*'
-
-        return ret
 
 
 class NotificationListingSerializer(serializers.ModelSerializer):
@@ -97,20 +60,33 @@ class DictField(serializers.ReadOnlyField):
 
 
 class NotificationSerializer(serializers.ModelSerializer):
-    author = ShortProfileSerializer(required=False)
+    author = profile_serializers.ShortProfileSerializer(required=False)
     listing = NotificationListingSerializer(required=False)
     agency = NotificationAgencySerializer(required=False)
+    # notification_type is a runtime generated GenericField from the model
     notification_type = GenericField(required=False)
-
-    extra_kwargs = {
-        'listing': {'validators': []},
-        'agency': {'validators': []},
-    }
 
     class Meta:
         model = models.Notification
         fields = ('id', 'created_date', 'expires_date', 'author',
             'message', 'notification_type', 'listing', 'agency', 'peer', )
+
+        extra_kwargs = {
+            'listing': {'validators': []},
+            'agency': {'validators': []},
+        }
+
+    def to_representation(self, data):
+        ret = super(NotificationSerializer, self).to_representation(data)
+
+        # Used to anonymize usernames
+        anonymize_identifiable_data = system_anonymize_identifiable_data(self.context['request'].user.username)
+
+        if anonymize_identifiable_data:
+            pass
+            # TODO: Hide Peer data (erivera 2016-07-29)
+
+        return ret
 
     def validate(self, validated_data):
         """ Responsible of cleaning and validating user input data """
