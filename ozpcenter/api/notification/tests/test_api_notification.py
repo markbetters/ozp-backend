@@ -660,7 +660,7 @@ class NotificationApiTest(APITestCase):
 
         # Compare Notifications for users
         usernames_list = {'wsmith': [1, 2, 5],
-                          'julia': [1, 2] + bookmark_notification_ids[1:],
+                          'julia': [1, 2] + bookmark_notification_ids,
                           'jones': [1, 2],
                           'bigbrother': [1, 2]}
 
