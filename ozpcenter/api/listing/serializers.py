@@ -229,7 +229,6 @@ class CreateListingProfileSerializer(serializers.ModelSerializer):
 
         if anonymize_identifiable_data:
             ret['display_name'] = '*'
-            ret['display_name'] = '*'
 
         return ret
 
