@@ -20,11 +20,13 @@ logger = logging.getLogger('ozp-center.' + str(__name__))
 
 
 class ContactViewSet(viewsets.ModelViewSet):
+    permission_classes = (permissions.IsUser,)
     queryset = model_access.get_all_contacts()
     serializer_class = serializers.ContactSerializer
 
 
 class DocUrlViewSet(viewsets.ModelViewSet):
+    permission_classes = (permissions.IsUser,)
     queryset = model_access.get_all_doc_urls()
     serializer_class = serializers.DocUrlSerializer
 
@@ -105,6 +107,7 @@ class ReviewViewSet(viewsets.ModelViewSet):
 
 
 class ListingTypeViewSet(viewsets.ModelViewSet):
+    permission_classes = (permissions.IsUser,)
     queryset = model_access.get_all_listing_types()
     serializer_class = serializers.ListingTypeSerializer
 
@@ -220,11 +223,13 @@ class ListingRejectionViewSet(viewsets.ModelViewSet):
 
 
 class ScreenshotViewSet(viewsets.ModelViewSet):
+    permission_classes = (permissions.IsUser,)
     queryset = model_access.get_all_screenshots()
     serializer_class = serializers.ScreenshotSerializer
 
 
 class TagViewSet(viewsets.ModelViewSet):
+    permission_classes = (permissions.IsUser,)
     queryset = model_access.get_all_tags()
     serializer_class = serializers.TagSerializer
 

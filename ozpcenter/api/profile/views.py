@@ -146,6 +146,7 @@ class UserViewSet(viewsets.ModelViewSet):
 
 
 class GroupViewSet(viewsets.ModelViewSet):
+    permission_classes = (permissions.IsUser,)
     queryset = model_access.get_all_groups()
     serializer_class = serializers.GroupSerializer
 
