@@ -13,6 +13,7 @@ from ozpcenter import models
 from ozpcenter import errors
 from plugins_util import plugin_manager
 from plugins_util.plugin_manager import system_has_access_control
+from plugins_util.plugin_manager import system_anonymize_identifiable_data
 import ozpcenter.api.agency.model_access as agency_model_access
 import ozpcenter.api.category.model_access as category_model_access
 import ozpcenter.api.contact_type.model_access as contact_type_model_access
@@ -200,6 +201,17 @@ class CreateListingUserSerializer(serializers.ModelSerializer):
             'username': {'validators': []}
         }
 
+    def to_representation(self, data):
+        ret = super(CreateListingUserSerializer, self).to_representation(data)
+
+        # Used to anonymize usernames
+        anonymize_identifiable_data = system_anonymize_identifiable_data(self.context['request'].user.username)
+
+        if anonymize_identifiable_data:
+            ret['username'] = '*'
+
+        return ret
+
 
 class CreateListingProfileSerializer(serializers.ModelSerializer):
     user = CreateListingUserSerializer()
@@ -208,6 +220,17 @@ class CreateListingProfileSerializer(serializers.ModelSerializer):
         model = models.Profile
         fields = ('user', 'display_name', 'id')
         read_only = ('display_name', 'id')
+
+    def to_representation(self, data):
+        ret = super(CreateListingProfileSerializer, self).to_representation(data)
+
+        # Used to anonymize usernames
+        anonymize_identifiable_data = system_anonymize_identifiable_data(self.context['request'].user.username)
+
+        if anonymize_identifiable_data:
+            ret['display_name'] = '*'
+
+        return ret
 
 
 class ListingIsBookmarked(serializers.ReadOnlyField):
@@ -242,6 +265,60 @@ class ListingSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Listing
         depth = 2
+
+    def to_representation(self, data):
+        ret = super(ListingSerializer, self).to_representation(data)
+
+        # Used to anonymize usernames
+        anonymize_identifiable_data = system_anonymize_identifiable_data(self.context['request'].user.username)
+
+        if anonymize_identifiable_data:
+            ret['contacts'] = []
+
+        return ret
+
+    @staticmethod
+    def setup_eager_loading(queryset):
+        # select_related foreign keys
+        queryset = queryset.select_related('agency')
+        queryset = queryset.select_related('small_icon')
+        queryset = queryset.select_related('large_icon')
+        queryset = queryset.select_related('banner_icon')
+        queryset = queryset.select_related('large_banner_icon')
+        queryset = queryset.select_related('required_listings')
+
+        # prefetch_related many-to-many relationships
+        queryset = queryset.prefetch_related('agency__icon')
+        queryset = queryset.prefetch_related('screenshots')
+        queryset = queryset.prefetch_related('screenshots__small_image')
+        queryset = queryset.prefetch_related('screenshots__large_image')
+        queryset = queryset.prefetch_related('doc_urls')
+        queryset = queryset.prefetch_related('owners')
+        queryset = queryset.prefetch_related('owners__user')
+        queryset = queryset.prefetch_related('owners__organizations')
+        queryset = queryset.prefetch_related('owners__stewarded_organizations')
+        queryset = queryset.prefetch_related('categories')
+        queryset = queryset.prefetch_related('tags')
+        queryset = queryset.prefetch_related('contacts')
+        queryset = queryset.prefetch_related('contacts__contact_type')
+        queryset = queryset.prefetch_related('listing_type')
+        queryset = queryset.prefetch_related('last_activity')
+        queryset = queryset.prefetch_related('last_activity__change_details')
+        queryset = queryset.prefetch_related('last_activity__author')
+        queryset = queryset.prefetch_related('last_activity__author__organizations')
+        queryset = queryset.prefetch_related('last_activity__author__stewarded_organizations')
+        queryset = queryset.prefetch_related('last_activity__listing')
+        queryset = queryset.prefetch_related('last_activity__listing__contacts')
+        queryset = queryset.prefetch_related('last_activity__listing__owners')
+        queryset = queryset.prefetch_related('last_activity__listing__owners__user')
+        queryset = queryset.prefetch_related('last_activity__listing__categories')
+        queryset = queryset.prefetch_related('last_activity__listing__tags')
+        queryset = queryset.prefetch_related('last_activity__listing__intents')
+        queryset = queryset.prefetch_related('current_rejection')
+        queryset = queryset.prefetch_related('intents')
+        queryset = queryset.prefetch_related('intents__icon')
+
+        return queryset
 
     def validate(self, data):
         access_control_instance = plugin_manager.get_system_access_control_plugin()

@@ -9,9 +9,9 @@ from django.contrib import auth
 from rest_framework import serializers
 
 from ozpcenter import models
+from plugins_util.plugin_manager import system_anonymize_identifiable_data
 import ozpcenter.model_access as generic_model_access
 import ozpcenter.api.agency.model_access as agency_model_access
-
 
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center.' + str(__name__))
@@ -45,6 +45,22 @@ class UserSerializer(serializers.ModelSerializer):
         model = auth.models.User
         fields = ('username', 'email', 'groups')
 
+    def to_internal_value(self, data):
+        ret = super(UserSerializer, self).to_internal_value(data)
+        return ret
+
+    def to_representation(self, data):
+        ret = super(UserSerializer, self).to_representation(data)
+
+        # Used to anonymize usernames
+        anonymize_identifiable_data = system_anonymize_identifiable_data(self.context['request'].user.username)
+
+        if anonymize_identifiable_data:
+            ret['username'] = '*'
+            ret['email'] = '*'
+
+        return ret
+
 
 class ShortUserSerializer(serializers.ModelSerializer):
 
@@ -54,6 +70,18 @@ class ShortUserSerializer(serializers.ModelSerializer):
         # model = settings.AUTH_USER_MODEL
         model = auth.models.User
         fields = ('username', 'email')
+
+    def to_representation(self, data):
+        ret = super(ShortUserSerializer, self).to_representation(data)
+
+        # Used to anonymize usernames
+        anonymize_identifiable_data = system_anonymize_identifiable_data(self.context['request'].user.username)
+
+        if anonymize_identifiable_data:
+            ret['username'] = '*'
+            ret['email'] = '*'
+
+        return ret
 
 
 class ProfileSerializer(serializers.ModelSerializer):
@@ -69,6 +97,19 @@ class ProfileSerializer(serializers.ModelSerializer):
 
         read_only_fields = ('id', 'bio', 'organizations', 'user',
             'highest_role')
+
+    def to_representation(self, data):
+        ret = super(ProfileSerializer, self).to_representation(data)
+
+        # Used to anonymize usernames
+        anonymize_identifiable_data = system_anonymize_identifiable_data(self.context['request'].user.username)
+
+        if anonymize_identifiable_data:
+            ret['display_name'] = '*'
+            ret['bio'] = '*'
+            ret['dn'] = '*'
+
+        return ret
 
     def validate(self, data):
         stewarded_organizations = []
@@ -107,3 +148,15 @@ class ShortProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Profile
         fields = ('user', 'display_name', 'id', 'dn')
+
+    def to_representation(self, data):
+        ret = super(ShortProfileSerializer, self).to_representation(data)
+
+        # Used to anonymize usernames
+        anonymize_identifiable_data = system_anonymize_identifiable_data(self.context['request'].user.username)
+
+        if anonymize_identifiable_data:
+            ret['display_name'] = '*'
+            ret['dn'] = '*'
+
+        return ret

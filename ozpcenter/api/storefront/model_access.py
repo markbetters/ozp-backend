@@ -6,7 +6,7 @@ import logging
 from django.db.models.functions import Lower
 from django.core.cache import cache
 from ozpcenter import models
-import ozpcenter.api.storefront.serializers as serializers
+import ozpcenter.api.listing.serializers as listing_serializers
 
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center.' + str(__name__))
@@ -46,9 +46,9 @@ def get_storefront(username):
                 is_enabled=True,
                 is_deleted=False).order_by('-avg_rate', '-total_reviews')[:36]
 
-        featured_listings = serializers.ListingSerializer.setup_eager_loading(featured_listings)
-        recent_listings = serializers.ListingSerializer.setup_eager_loading(recent_listings)
-        most_popular_listings = serializers.ListingSerializer.setup_eager_loading(most_popular_listings)
+        featured_listings = listing_serializers.ListingSerializer.setup_eager_loading(featured_listings)
+        recent_listings = listing_serializers.ListingSerializer.setup_eager_loading(recent_listings)
+        most_popular_listings = listing_serializers.ListingSerializer.setup_eager_loading(most_popular_listings)
 
         data = {
             'featured': featured_listings,
