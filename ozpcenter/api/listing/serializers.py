@@ -5,8 +5,8 @@ import datetime
 import logging
 import pytz
 
-from rest_framework import serializers
 from django.contrib import auth
+from rest_framework import serializers
 
 from ozpcenter import constants
 from ozpcenter import models
@@ -29,7 +29,6 @@ logger = logging.getLogger('ozp-center.' + str(__name__))
 
 
 class AgencySerializer(serializers.ModelSerializer):
-    # icon = image_serializers.ImageSerializer()
 
     class Meta:
         model = models.Agency
@@ -83,13 +82,40 @@ class ContactTypeSerializer(serializers.ModelSerializer):
             'name': {'validators': []}
         }
 
+    def to_representation(self, data):
+        access_control_instance = plugin_manager.get_system_access_control_plugin()
+        ret = super(ContactTypeSerializer, self).to_representation(data)
 
-# contacts are only used in conjunction with Listings
+        # Used to anonymize usernames
+        anonymize_identifiable_data = system_anonymize_identifiable_data(self.context['request'].user.username)
+
+        if anonymize_identifiable_data:
+            ret['name'] = access_control_instance.anonymize_value('contact_type_name')
+
+        return ret
+
+
 class ContactSerializer(serializers.ModelSerializer):
     contact_type = ContactTypeSerializer()
 
     class Meta:
         model = models.Contact
+
+    def to_representation(self, data):
+        access_control_instance = plugin_manager.get_system_access_control_plugin()
+        ret = super(ContactSerializer, self).to_representation(data)
+
+        # Used to anonymize usernames
+        anonymize_identifiable_data = system_anonymize_identifiable_data(self.context['request'].user.username)
+
+        if anonymize_identifiable_data:
+            ret['secure_phone'] = access_control_instance.anonymize_value('secure_phone')
+            ret['unsecure_phone'] = access_control_instance.anonymize_value('unsecure_phone')
+            ret['secure_phone'] = access_control_instance.anonymize_value('secure_phone')
+            ret['name'] = access_control_instance.anonymize_value('name')
+            ret['organization'] = access_control_instance.anonymize_value('organization')
+            ret['email'] = access_control_instance.anonymize_value('email')
+        return ret
 
 
 class ListingTypeSerializer(serializers.ModelSerializer):
@@ -108,11 +134,6 @@ class DocUrlSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.DocUrl
         fields = ('name', 'url')
-
-
-# class RejectionListingSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = models.RejectionListing
 
 
 class ScreenshotSerializer(serializers.ModelSerializer):
@@ -202,13 +223,14 @@ class CreateListingUserSerializer(serializers.ModelSerializer):
         }
 
     def to_representation(self, data):
+        access_control_instance = plugin_manager.get_system_access_control_plugin()
         ret = super(CreateListingUserSerializer, self).to_representation(data)
 
         # Used to anonymize usernames
         anonymize_identifiable_data = system_anonymize_identifiable_data(self.context['request'].user.username)
 
         if anonymize_identifiable_data:
-            ret['username'] = '*'
+            ret['username'] = access_control_instance.anonymize_value('username')
 
         return ret
 
@@ -222,13 +244,14 @@ class CreateListingProfileSerializer(serializers.ModelSerializer):
         read_only = ('display_name', 'id')
 
     def to_representation(self, data):
+        access_control_instance = plugin_manager.get_system_access_control_plugin()
         ret = super(CreateListingProfileSerializer, self).to_representation(data)
 
         # Used to anonymize usernames
         anonymize_identifiable_data = system_anonymize_identifiable_data(self.context['request'].user.username)
 
         if anonymize_identifiable_data:
-            ret['display_name'] = '*'
+            ret['display_name'] = access_control_instance.anonymize_value('display_name')
 
         return ret
 
