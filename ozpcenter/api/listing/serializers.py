@@ -270,8 +270,7 @@ class ListingSerializer(serializers.ModelSerializer):
     screenshots = ScreenshotSerializer(many=True, required=False)
     doc_urls = DocUrlSerializer(many=True, required=False)
     owners = CreateListingProfileSerializer(required=False, many=True)
-    categories = CategorySerializer(many=True,
-        required=False)
+    categories = CategorySerializer(many=True, required=False)
     tags = TagSerializer(many=True, required=False)
     contacts = ContactSerializer(many=True, required=False)
     intents = IntentSerializer(many=True, required=False)
@@ -340,17 +339,32 @@ class ListingSerializer(serializers.ModelSerializer):
         queryset = queryset.prefetch_related('current_rejection')
         queryset = queryset.prefetch_related('intents')
         queryset = queryset.prefetch_related('intents__icon')
-
         return queryset
 
     def validate(self, data):
         access_control_instance = plugin_manager.get_system_access_control_plugin()
         # logger.debug('inside ListingSerializer.validate', extra={'request':self.context.get('request')})
-        user = generic_model_access.get_profile(
+        profile = generic_model_access.get_profile(
             self.context['request'].user.username)
 
+        # This checks to see if value exist as a key and value is not None
         if not data.get('title'):
             raise serializers.ValidationError('Title is required')
+
+        if 'security_marking' not in data:
+            raise serializers.ValidationError('Security Marking is Required')
+
+        # Assign a default security_marking level if none is provided
+        if not data.get('security_marking'):
+            data['security_marking'] = constants.DEFAULT_SECURITY_MARKING
+
+        if not access_control_instance.validate_marking(data['security_marking']):
+            raise serializers.ValidationError('Security Marking Format is Invalid')
+
+        # Don't allow user to select a security marking that is above
+        # their own access level
+        if not system_has_access_control(profile.user.username, data.get('security_marking')):
+            raise serializers.ValidationError('Security marking too high for current user')
 
         data['description'] = data.get('description')
         data['launch_url'] = data.get('launch_url')
@@ -360,82 +374,43 @@ class ListingSerializer(serializers.ModelSerializer):
         data['description_short'] = data.get('description_short')
         data['requirements'] = data.get('requirements')
         data['is_private'] = data.get('is_private', False)
-        if 'security_marking' not in data:
-            raise serializers.ValidationError('security_marking is required')
         data['security_marking'] = data.get('security_marking')
-
-        if not access_control_instance.validate_marking(data['security_marking']):
-            raise errors.InvalidInput('security_marking is invalid')
 
         # only checked on update, not create
         data['is_enabled'] = data.get('is_enabled', False)
         data['is_featured'] = data.get('is_featured', False)
         data['approval_status'] = data.get('approval_status')
 
-        # agency
-        agency_title = data.get('agency')
+        # Agency
+        agency_title = None if data.get('agency') is None else data.get('agency', {}).get('title')
         if agency_title:
-            data['agency'] = agency_model_access.get_agency_by_title(agency_title['title'])
+            data['agency'] = agency_model_access.get_agency_by_title(agency_title)
             if data['agency'] is None:
                 raise serializers.ValidationError('Invalid Agency')
         else:
-            data['agency'] = user.organizations.all()[0]
+            data['agency'] = profile.organizations.all()[0]
 
-        # listing_type
-        type_title = data.get('listing_type')
+        # Listing Type
+        type_title = None if data.get('listing_type') is None else data.get('listing_type', {}).get('title')
         if type_title:
-            data['listing_type'] = model_access.get_listing_type_by_title(
-                data['listing_type']['title'])
+            data['listing_type'] = model_access.get_listing_type_by_title(type_title)
         else:
             data['listing_type'] = None
 
-        # small_icon
-        small_icon = data.get('small_icon')
-        if small_icon:
-            if 'id' not in small_icon:
-                raise serializers.ValidationError('Image(small_icon) requires a {0!s}'.format('id'))
-            if small_icon.get('security_marking') is None:
-                small_icon['security_marking'] = constants.DEFAULT_SECURITY_MARKING
-            if not access_control_instance.validate_marking(small_icon['security_marking']):
-                raise errors.InvalidInput('security_marking is invalid')
-        else:
-            data['small_icon'] = None
+        # Images
+        image_keys = ['small_icon', 'large_icon', 'banner_icon', 'large_banner_icon']
 
-        # large_icon
-        large_icon = data.get('large_icon')
-        if large_icon:
-            if 'id' not in large_icon:
-                raise serializers.ValidationError('Image(large_icon) requires a {0!s}'.format('id'))
-            if large_icon.get('security_marking') is None:
-                large_icon['security_marking'] = constants.DEFAULT_SECURITY_MARKING
-            if not access_control_instance.validate_marking(large_icon['security_marking']):
-                raise errors.InvalidInput('security_marking is invalid')
-        else:
-            data['large_icon'] = None
-
-        # banner_icon
-        banner_icon = data.get('banner_icon')
-        if banner_icon:
-            if 'id' not in banner_icon:
-                raise serializers.ValidationError('Image(banner_icon) requires a {0!s}'.format('id'))
-            if banner_icon.get('security_marking') is None:
-                banner_icon['security_marking'] = constants.DEFAULT_SECURITY_MARKING
-            if not access_control_instance.validate_marking(banner_icon['security_marking']):
-                raise errors.InvalidInput('security_marking is invalid')
-        else:
-            data['banner_icon'] = None
-
-        # large_banner_icon
-        large_banner_icon = data.get('large_banner_icon')
-        if large_banner_icon:
-            if 'id' not in large_banner_icon:
-                raise serializers.ValidationError('Image(large_banner_icon) requires a {0!s}'.format('id'))
-            if large_banner_icon.get('security_marking') is None:
-                large_banner_icon['security_marking'] = constants.DEFAULT_SECURITY_MARKING
-            if not access_control_instance.validate_marking(large_banner_icon['security_marking']):
-                raise errors.InvalidInput('security_marking is invalid')
-        else:
-            data['large_banner_icon'] = None
+        for image_key in image_keys:
+            current_image_value = data.get(image_key)
+            if current_image_value:
+                if 'id' not in current_image_value:
+                    raise serializers.ValidationError('Image({!s}) requires a {!s}'.format(image_key, 'id'))
+                if current_image_value.get('security_marking') is None:
+                    current_image_value['security_marking'] = constants.DEFAULT_SECURITY_MARKING
+                if not access_control_instance.validate_marking(current_image_value['security_marking']):
+                    raise errors.InvalidInput('{!s} Security Marking is invalid'.format(image_key))
+            else:
+                data[image_key] = None
 
         # Screenshot
         screenshots = data.get('screenshots')
@@ -461,86 +436,112 @@ class ListingSerializer(serializers.ModelSerializer):
                 if not screenshot_small_image.get('security_marking'):
                     screenshot_small_image['security_marking'] = constants.DEFAULT_SECURITY_MARKING
                 if not access_control_instance.validate_marking(screenshot_small_image['security_marking']):
-                    raise errors.InvalidInput('security_marking is invalid')
+                    raise errors.InvalidInput('Security Marking is invalid')
 
                 if not screenshot_large_image.get('security_marking'):
                     screenshot_large_image['security_marking'] = constants.DEFAULT_SECURITY_MARKING
                 if not access_control_instance.validate_marking(screenshot_large_image['security_marking']):
-                    raise errors.InvalidInput('security_marking is invalid')
+                    raise errors.InvalidInput('Security Marking is invalid')
 
                 screenshots_out.append(screenshot_set)
                 data['screenshots'] = screenshots_out
         else:
             data['screenshots'] = None
 
+        # Contacts
         if 'contacts' in data:
-            required_fields = ['email', 'name', 'contact_type']
             for contact in data['contacts']:
+                if 'name' not in contact:
+                    raise serializers.ValidationError('Contact requires [name] field')
+                if 'email' not in contact:
+                    raise serializers.ValidationError('Contact requires [email] field')
                 if 'secure_phone' not in contact:
                     contact['secure_phone'] = None
                 if 'unsecure_phone' not in contact:
                     contact['unsecure_phone'] = None
-                for field in required_fields:
-                    if field not in contact:
-                        raise serializers.ValidationError(
-                            'Contact requires a {0!s}'.format(field))
+                if 'contact_type' not in contact:
+                    raise serializers.ValidationError('Contact requires [contact_type] field')
 
+                contact_type = contact.get('contact_type')
+                contact_type_name = None if contact_type is None else contact_type.get('name')
+
+                if not contact_type_name:
+                    raise serializers.ValidationError('Contact field requires correct format')
+
+                contact_type_instance = contact_type_model_access.get_contact_type_by_name(contact_type_name)
+                if not contact_type_instance:
+                    raise serializers.ValidationError('Contact Type [{}] not found'.format(contact_type_name))
+
+        # owners
         owners = []
         if 'owners' in data:
             for owner in data['owners']:
-                owners.append(generic_model_access.get_profile(
-                    owner['user']['username']))
+                user_dict = owner.get('user')
+                user_username = None if user_dict is None else user_dict.get('username')
+
+                if not user_username:
+                    raise serializers.ValidationError('Owner field requires correct format')
+
+                owner_profile = generic_model_access.get_profile(user_username)
+                if not owner_profile:
+                    raise serializers.ValidationError('Owner Profile not found')
+
+                # Don't allow user to select a security marking that is above
+                # their own access level
+                if not system_has_access_control(owner_profile.user.username, data.get('security_marking')):
+                    raise serializers.ValidationError('Security marking too high for current owner profile')
+
+                owners.append(owner_profile)
         data['owners'] = owners
 
+        # Categories
         categories = []
         if 'categories' in data:
             for category in data['categories']:
-                categories.append(category_model_access.get_category_by_title(
-                    category['title']))
+                category_title = category.get('title')
+                if not category_title:
+                    raise serializers.ValidationError('Categories field requires correct format')
+
+                category_instance = category_model_access.get_category_by_title(category_title)
+                if not category_instance:
+                    raise serializers.ValidationError('Category [{}] not found'.format(category_title))
+
+                categories.append(category_instance)
         data['categories'] = categories
 
-        # tags will be created (if necessary) in create()
-        if 'tags' in data:
-            pass
-
+        # Intents
         intents = []
         if 'intents' in data:
             for intent in data['intents']:
-                intents.append(intent_model_access.get_intent_by_action(
-                    intent['action']))
+                intent_action = intent.get('action')
+                if not intent_action:
+                    raise serializers.ValidationError('Intent field requires correct format')
+
+                intent_instance = intent_model_access.get_intent_by_action(intent_action)
+                if not intent_instance:
+                    raise serializers.ValidationError('Intent Action [{}] not found'.format(intent_action))
+
+                intents.append(intent_instance)
         data['intents'] = intents
 
         # doc urls will be created in create()
         if 'doc_urls' in data:
             pass
 
+        # tags will be created (if necessary) in create()
+        if 'tags' in data:
+            pass
+
         # logger.debug('leaving ListingSerializer.validate', extra={'request':self.context.get('request')})
         return data
-
-    def validate_security_marking(self, value):
-        # don't allow user to select a security marking that is above
-        # their own access level
-        profile = generic_model_access.get_profile(
-            self.context['request'].user.username)
-
-        if value:
-            if not system_has_access_control(profile.user.username, value):
-                raise serializers.ValidationError(
-                    'Security marking too high for current user')
-        return value
 
     def create(self, validated_data):
         # logger.debug('inside ListingSerializer.create', extra={'request':self.context.get('request')})
         title = validated_data['title']
-        user = generic_model_access.get_profile(
-            self.context['request'].user.username)
+        user = generic_model_access.get_profile(self.context['request'].user.username)
+
         logger.info('creating listing {0!s} for user {1!s}'.format(title,
             user.user.username), extra={'request': self.context.get('request')})
-
-        # assign a default security_marking level if none is provided
-
-        if not validated_data.get('security_marking'):
-            validated_data['security_marking'] = constants.DEFAULT_SECURITY_MARKING
 
         # TODO required_listings
         listing = models.Listing(title=title,
@@ -577,12 +578,13 @@ class ListingSerializer(serializers.ModelSerializer):
 
         if validated_data.get('contacts') is not None:
             for contact in validated_data['contacts']:
+                contact_type_instance = contact_type_model_access.get_contact_type_by_name(contact['contact_type']['name'])
                 new_contact, created = models.Contact.objects.get_or_create(name=contact['name'],
                     email=contact['email'],
                     secure_phone=contact['secure_phone'],
                     unsecure_phone=contact['unsecure_phone'],
                     organization=contact.get('organization', None),
-                    contact_type=contact_type_model_access.get_contact_type_by_name(contact['contact_type']['name']))
+                    contact_type=contact_type_instance)
                 new_contact.save()
                 listing.contacts.add(new_contact)
 
@@ -617,10 +619,10 @@ class ListingSerializer(serializers.ModelSerializer):
 
         # screenshots will be automatically created
         if validated_data.get('screenshots') is not None:
-            for s in validated_data['screenshots']:
+            for screenshot_dict in validated_data['screenshots']:
                 screenshot = models.Screenshot(
-                    small_image=image_model_access.get_image_by_id(s['small_image']['id']),
-                    large_image=image_model_access.get_image_by_id(s['large_image']['id']),
+                    small_image=image_model_access.get_image_by_id(screenshot_dict['small_image']['id']),
+                    large_image=image_model_access.get_image_by_id(screenshot_dict['large_image']['id']),
                     listing=listing)
                 screenshot.save()
 
@@ -640,8 +642,7 @@ class ListingSerializer(serializers.ModelSerializer):
                     'User ({0!s}) is not an owner of this listing'.format(user.username))
 
         if instance.is_deleted:
-            raise errors.PermissionDenied(
-                'Cannot update a previously deleted listing')
+            raise errors.PermissionDenied('Cannot update a previously deleted listing')
 
         change_details = []
 
@@ -681,7 +682,6 @@ class ListingSerializer(serializers.ModelSerializer):
                 raise errors.PermissionDenied('Only an APPS_MALL_STEWARD can mark a listing as APPROVED')
             if s == models.Listing.APPROVED_ORG and user.highest_role() not in ['APPS_MALL_STEWARD', 'ORG_STEWARD']:
                 raise errors.PermissionDenied('Only stewards can mark a listing as APPROVED_ORG')
-
             if s == models.Listing.PENDING:
                 model_access.submit_listing(user, instance)
             if s == models.Listing.APPROVED_ORG:
@@ -741,10 +741,8 @@ class ListingSerializer(serializers.ModelSerializer):
 
         if 'contacts' in validated_data:
             old_contact_instances = instance.contacts.all()
-            old_contacts = model_access.contacts_to_string(
-                old_contact_instances, True)
-            new_contacts = model_access.contacts_to_string(
-                validated_data['contacts'])
+            old_contacts = model_access.contacts_to_string(old_contact_instances, True)
+            new_contacts = model_access.contacts_to_string(validated_data['contacts'])
 
             if old_contacts != new_contacts:
                 change_details.append({'old_value': old_contacts,
@@ -772,10 +770,8 @@ class ListingSerializer(serializers.ModelSerializer):
 
         if 'categories' in validated_data:
             old_category_instances = instance.categories.all()
-            old_categories = model_access.categories_to_string(
-                old_category_instances, True)
-            new_categories = model_access.categories_to_string(
-                validated_data['categories'], True)
+            old_categories = model_access.categories_to_string(old_category_instances, True)
+            new_categories = model_access.categories_to_string(validated_data['categories'], True)
             if old_categories != new_categories:
                 change_details.append({'old_value': old_categories,
                     'new_value': new_categories, 'field_name': 'categories'})
@@ -785,10 +781,8 @@ class ListingSerializer(serializers.ModelSerializer):
 
         if 'owners' in validated_data:
             old_owner_instances = instance.owners.all()
-            old_owners = model_access.owners_to_string(
-                old_owner_instances, True)
-            new_owners = model_access.owners_to_string(
-                validated_data['owners'], True)
+            old_owners = model_access.owners_to_string(old_owner_instances, True)
+            new_owners = model_access.owners_to_string(validated_data['owners'], True)
             if old_owners != new_owners:
                 change_details.append({'old_value': old_owners,
                     'new_value': new_owners, 'field_name': 'owners'})
@@ -814,8 +808,7 @@ class ListingSerializer(serializers.ModelSerializer):
             old_intent_instances = instance.intents.all()
             old_intents = model_access.intents_to_string(old_intent_instances,
                 True)
-            new_intents = model_access.intents_to_string(
-                validated_data['intents'], True)
+            new_intents = model_access.intents_to_string(validated_data['intents'], True)
             if old_intents != new_intents:
                 change_details.append({'old_value': old_intents,
                     'new_value': new_intents, 'field_name': 'intents'})
@@ -826,10 +819,8 @@ class ListingSerializer(serializers.ModelSerializer):
         # doc_urls will be automatically created
         if 'doc_urls' in validated_data:
             old_doc_url_instances = model_access.get_doc_urls_for_listing(instance)
-            old_doc_urls = model_access.doc_urls_to_string(
-                old_doc_url_instances, True)
-            new_doc_urls = model_access.doc_urls_to_string(
-                validated_data['doc_urls'])
+            old_doc_urls = model_access.doc_urls_to_string(old_doc_url_instances, True)
+            new_doc_urls = model_access.doc_urls_to_string(validated_data['doc_urls'])
             if old_doc_urls != new_doc_urls:
                 change_details.append({
                     'old_value': old_doc_urls,
