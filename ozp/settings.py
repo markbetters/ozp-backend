@@ -203,18 +203,18 @@ REST_FRAMEWORK = {
     )
 }
 
-# NOTE: In production, comment REDIS_CLIENT_CLASS line
+# NOTE: In production or when developing with redis server, comment REDIS_CLIENT_CLASS line
 CACHES = {
     'default': {
         'BACKEND': 'django_redis.cache.RedisCache',
         'LOCATION': 'localhost:6379',
-        "OPTIONS": {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient",
-            # "REDIS_CLIENT_CLASS": "mockredis.mock_strict_redis_client",
-            "COMPRESSOR": "django_redis.compressors.lzma.LzmaCompressor",
-            "SERIALIZER": "django_redis.serializers.msgpack.MSGPackSerializer",
-            # "COMPRESSOR": "django_redis.compressors.zlib.ZlibCompressor",
-            # "SERIALIZER": "django_redis.serializers.json.JSONSerializer",
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+            'REDIS_CLIENT_CLASS': 'mockredis.mock_strict_redis_client',
+            'COMPRESSOR': 'django_redis.compressors.lzma.LzmaCompressor',
+            'SERIALIZER': 'django_redis.serializers.msgpack.MSGPackSerializer',
+            # 'COMPRESSOR': 'django_redis.compressors.zlib.ZlibCompressor',
+            # 'SERIALIZER': 'django_redis.serializers.json.JSONSerializer',
         }
     },
 }
@@ -260,4 +260,6 @@ AUTHORIZATION_PLUGIN = 'default_authorization'
 # Set to empty string if no default agency exists
 # If a default agency exists, set it to the agency's short name
 DEFAULT_AGENCY = ''
+
+# Number of seconds to cache data
 GLOBAL_SECONDS_TO_CACHE_DATA = 60 * 60 * 24  # 24 Hours

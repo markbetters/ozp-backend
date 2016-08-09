@@ -673,7 +673,7 @@ class ListingApiTest(APITestCase):
           ],
           "intents": [],
           "doc_urls": [],
-          "security_marking": "UNCLASSIFIED//FOR OFFICIAL USE ONLY//ABCDE",
+          "security_marking": "UNCLASSIFIED",  # //FOR OFFICIAL USE ONLY//ABCDE
           "listing_type": {
             "title": "web application"
           },

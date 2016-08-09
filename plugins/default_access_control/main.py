@@ -121,11 +121,6 @@ class PluginMain(object):
             output_tokens.append(current_token)
         return output_tokens
 
-    def has_access(self, username, marking):
-        # Timer used to simulate REST Service Call
-        time.sleep(0.1)
-        return True
-
     def anonymize_identifiable_data(self, username):
         """
         Anonymize Identifiable Data for certain users
@@ -134,10 +129,63 @@ class PluginMain(object):
             True - Anonymize Identifiable Data
             False - Access to see Identifiable Data
         """
+        profile = model_access.get_profile(username)
+
+        if not profile:
+            return True
+
         # Timer used to simulate REST Service Call
         time.sleep(0.1)
         return False
 
+    def anonymize_value(self, data):
+        """
+        Anonymize Identifiable Value
+
+        Metadata Current Choices:
+            dn
+            username
+            bio
+            display_name
+            email
+            etc
+
+        Return:
+            String Value - Masked Value
+        """
+        if data == 'username':
+            return 'Masked Username'
+
+        elif data == 'display_name':
+            return 'Masked Display Name'
+
+        elif data == 'email':
+            return 'Masked Email'
+
+        elif data == 'name':
+            return 'Masked Name'
+
+        elif data == 'secure_phone':
+            return 'Masked secure phone'
+
+        elif data == 'unsecure_phone':
+            return 'Masked unsecure phone'
+
+        elif data == 'contact_type_name':
+            return 'Masked Name'
+
+        elif data == 'organization':
+            return 'Masked Organization'
+
+        else:
+            return 'Masked Value'
+
+    def has_access(self, username, marking):
+        # Timer used to simulate REST Service Call
+        time.sleep(0.1)
+        return True
+
+    # TODO: Get future_has_access method to work for unit tests (rivera 20160808)
     def future_has_access(self, username, marking):
         profile = model_access.get_profile(username)
 
