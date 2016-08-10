@@ -35,6 +35,7 @@ NOSE_ARGS = [
     '--with-coverage',
     '--cover-html',
     '--cover-package=ozp,ozpcenter,ozpiwc,plugins,plugins_util',
+    '--verbosity=2',
 ]
 
 # Application definition
