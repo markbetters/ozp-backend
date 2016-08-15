@@ -24,7 +24,12 @@ urlpatterns = [
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^api/', include('ozpcenter.urls')),
     url(r'^iwc-api/', include('ozpiwc.urls')),
-    url(r'^docs/', include('rest_framework_swagger.urls'))
+    url(r'^docs/', include('rest_framework_swagger.urls')),
+
+    # CAS
+    url(r'^accounts/login/$', 'cas.views.login', name='login'),
+    url(r'^accounts/logout/$', 'cas.views.login', name='logout'),
+
 ]
 
 # in debug, serve the media and static resources with the django web server

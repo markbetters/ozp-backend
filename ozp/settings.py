@@ -54,7 +54,10 @@ INSTALLED_APPS = (
     'rest_framework_swagger',
     'ozpcenter',
     'ozpiwc',
-    'corsheaders'
+    'corsheaders',
+
+    #CAS
+    'cas'
 )
 
 # Note that CorsMiddleware needs to come before Django's CommonMiddleware if
@@ -70,9 +73,19 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+
+    #CAS
+    'cas.middleware.CASMiddleware'
 )
 
 ROOT_URLCONF = 'ozp.urls'
+
+# CAS
+CAS_SERVER_URL = "http://localhost:8080/cas/"
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'cas.backends.CASBackend'
+)
 
 TEMPLATES = [
     {
