@@ -233,6 +233,16 @@ class ListingReviewApiTest(APITestCase):
         response = self.client.delete(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
+        # Check listing history
+        url = '/api/listing/{0!s}/'.format(air_mail_id)
+        response = self._request_helper(url, 'GET', username='wsmith', status_code=200)
+        data = response.data
+
+        self.assertEquals(self._validate_listing_map_keys(data), [])
+        self.assertEquals(data['last_activity']['author']['user']['username'], 'julia')
+        self.assertEquals(data['last_activity']['action'], 'REVIEW_DELETED')
+        self.assertEquals(data['last_activity']['listing']['id'], air_mail_id)
+
     def test_rating_updates(self):
         """
         Tests that reviews are updated

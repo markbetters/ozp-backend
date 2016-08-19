@@ -436,7 +436,7 @@ def delete_listing_review(username, review):
     ]
     # add this action to the log
     listing = review.listing
-    listing = _add_listing_activity(review.author, listing,
+    listing = _add_listing_activity(user, listing,
         models.ListingActivity.REVIEW_DELETED, change_details=change_details)
 
     # delete the review
