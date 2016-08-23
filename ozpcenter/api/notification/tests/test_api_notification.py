@@ -617,7 +617,7 @@ class NotificationApiTest(APITestCase):
             self.assertEqual(response.data['notification_type'], 'PEER.BOOKMARK')
             self.assertEqual(response.data['agency'], None)
             self.assertEqual(response.data['listing'], None)
-            peer_data = {'user': {'username': 'julia'}, 'folder_name': 'foldername1', '_bookmark_listing_ids': [3, 4]}
+            peer_data = {'user': {'username': 'julia'}, 'folder_name': 'foldername1'}  # '_bookmark_listing_ids': [3, 4]}
             self.assertEqual(response.data['peer'], peer_data)
             self.assertTrue('expires_date' in data)
 
