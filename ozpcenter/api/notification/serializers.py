@@ -7,6 +7,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import serializers
 
 from ozpcenter import models
+from plugins_util import plugin_manager
 from plugins_util.plugin_manager import system_anonymize_identifiable_data
 import ozpcenter.api.listing.model_access as listing_model_access
 import ozpcenter.api.library.model_access as library_model_access
@@ -77,13 +78,18 @@ class NotificationSerializer(serializers.ModelSerializer):
         }
 
     def to_representation(self, data):
+        access_control_instance = plugin_manager.get_system_access_control_plugin()
         ret = super(NotificationSerializer, self).to_representation(data)
 
+        peer = ret['peer']
+        if peer and peer.get('_bookmark_listing_ids'):
+            del peer['_bookmark_listing_ids']
         # Used to anonymize usernames
         anonymize_identifiable_data = system_anonymize_identifiable_data(self.context['request'].user.username)
 
         if anonymize_identifiable_data:
-            pass
+            if peer:
+                peer['user']['username'] = access_control_instance.anonymize_value('username')
             # TODO: Hide Peer data (erivera 2016-07-29)
 
         return ret

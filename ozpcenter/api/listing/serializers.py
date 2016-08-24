@@ -216,7 +216,7 @@ class CreateListingUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = auth.models.User
-        fields = ('username',)
+        fields = ('id', 'username',)
 
         extra_kwargs = {
             'username': {'validators': []}
@@ -229,7 +229,13 @@ class CreateListingUserSerializer(serializers.ModelSerializer):
         # Used to anonymize usernames
         anonymize_identifiable_data = system_anonymize_identifiable_data(self.context['request'].user.username)
 
-        if anonymize_identifiable_data:
+        check_request_self = False
+        if self.context['request'].user.id == ret['id']:
+            check_request_self = True
+
+        del ret['id']
+
+        if anonymize_identifiable_data and not check_request_self:
             ret['username'] = access_control_instance.anonymize_value('username')
 
         return ret
@@ -240,8 +246,8 @@ class CreateListingProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Profile
-        fields = ('user', 'display_name', 'id')
-        read_only = ('display_name', 'id')
+        fields = ('id', 'user', 'display_name')
+        read_only = ('id', 'display_name')
 
     def to_representation(self, data):
         access_control_instance = plugin_manager.get_system_access_control_plugin()
@@ -250,7 +256,11 @@ class CreateListingProfileSerializer(serializers.ModelSerializer):
         # Used to anonymize usernames
         anonymize_identifiable_data = system_anonymize_identifiable_data(self.context['request'].user.username)
 
-        if anonymize_identifiable_data:
+        check_request_self = False
+        if self.context['request'].user.id == ret['id']:
+            check_request_self = True
+
+        if anonymize_identifiable_data and not check_request_self:
             ret['display_name'] = access_control_instance.anonymize_value('display_name')
 
         return ret

@@ -44,7 +44,7 @@ class UserSerializer(serializers.ModelSerializer):
         # using settings.AUTH_USER_MODEL here doesn't not work
         # model = settings.AUTH_USER_MODEL
         model = auth.models.User
-        fields = ('username', 'email', 'groups')
+        fields = ('id', 'username', 'email', 'groups')
 
     def to_internal_value(self, data):
         ret = super(UserSerializer, self).to_internal_value(data)
@@ -57,7 +57,13 @@ class UserSerializer(serializers.ModelSerializer):
         # Used to anonymize usernames
         anonymize_identifiable_data = system_anonymize_identifiable_data(self.context['request'].user.username)
 
-        if anonymize_identifiable_data:
+        check_request_self = False
+        if self.context['request'].user.id == ret['id']:
+            check_request_self = True
+
+        del ret['id']
+
+        if anonymize_identifiable_data and not check_request_self:
             ret['username'] = access_control_instance.anonymize_value('username')
             ret['email'] = access_control_instance.anonymize_value('email')
 
@@ -71,7 +77,7 @@ class ShortUserSerializer(serializers.ModelSerializer):
         # using settings.AUTH_USER_MODEL here doesn't not work
         # model = settings.AUTH_USER_MODEL
         model = auth.models.User
-        fields = ('username', 'email')
+        fields = ('id', 'username', 'email')
 
     def to_representation(self, data):
         access_control_instance = plugin_manager.get_system_access_control_plugin()
@@ -80,7 +86,13 @@ class ShortUserSerializer(serializers.ModelSerializer):
         # Used to anonymize usernames
         anonymize_identifiable_data = system_anonymize_identifiable_data(self.context['request'].user.username)
 
-        if anonymize_identifiable_data:
+        check_request_self = False
+        if self.context['request'].user.id == ret['id']:
+            check_request_self = True
+
+        del ret['id']
+
+        if anonymize_identifiable_data and not check_request_self:
             ret['username'] = access_control_instance.anonymize_value('username')
             ret['email'] = access_control_instance.anonymize_value('email')
 
@@ -108,7 +120,11 @@ class ProfileSerializer(serializers.ModelSerializer):
         # Used to anonymize usernames
         anonymize_identifiable_data = system_anonymize_identifiable_data(self.context['request'].user.username)
 
-        if anonymize_identifiable_data:
+        check_request_self = False
+        if self.context['request'].user.id == ret['id']:
+            check_request_self = True
+
+        if anonymize_identifiable_data and not check_request_self:
             ret['display_name'] = access_control_instance.anonymize_value('display_name')
             ret['bio'] = access_control_instance.anonymize_value('bio')
             ret['dn'] = access_control_instance.anonymize_value('dn')
@@ -151,7 +167,7 @@ class ShortProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Profile
-        fields = ('user', 'display_name', 'id', 'dn')
+        fields = ('id', 'user', 'display_name', 'dn')
 
     def to_representation(self, data):
         access_control_instance = plugin_manager.get_system_access_control_plugin()
@@ -160,7 +176,11 @@ class ShortProfileSerializer(serializers.ModelSerializer):
         # Used to anonymize usernames
         anonymize_identifiable_data = system_anonymize_identifiable_data(self.context['request'].user.username)
 
-        if anonymize_identifiable_data:
+        check_request_self = False
+        if self.context['request'].user.id == ret['id']:
+            check_request_self = True
+
+        if anonymize_identifiable_data and not check_request_self:
             ret['display_name'] = access_control_instance.anonymize_value('display_name')
             ret['dn'] = access_control_instance.anonymize_value('dn')
 
