@@ -167,7 +167,7 @@ class CurrentUserViewSet(viewsets.ViewSet):
     def retrieve(self, request):
         current_request_profile = model_access.get_self(request.user.username)
         serializer = serializers.ProfileSerializer(current_request_profile,
-            context={'request': request})
+            context={'request': request, 'self': True})
         return Response(serializer.data)
 
     def update(self, request):

@@ -120,6 +120,15 @@ class ProfileSerializer(serializers.ModelSerializer):
         # Used to anonymize usernames
         anonymize_identifiable_data = system_anonymize_identifiable_data(self.context['request'].user.username)
 
+        from_current_view = self.context.get('self')
+
+        if from_current_view:
+            ret['second_party_user'] = False
+
+        if anonymize_identifiable_data:
+            if from_current_view:
+                ret['second_party_user'] = True
+
         check_request_self = False
         if self.context['request'].user.id == ret['id']:
             check_request_self = True
