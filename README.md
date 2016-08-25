@@ -462,6 +462,7 @@ Example trace for a GET Request for getting a user's profile for an authenticate
 * ozpcenter/api/profile/views.py - For GET Request for this route it will call the 'retrieve' method
   * Before allowing user to access the endpoint it will make sure user is authenticated and has the correct role using 'permission_classes = (permissions.IsUser,)'
 
+
 ## Controlling Access
 Anonymous users have no access - all must have a valid username/password (dev)
 or valid certificate (production) to be granted any access
@@ -715,6 +716,31 @@ themselves
     </tr>
 
 </table>
+
+## Sample Users for BasicAuth
+By default, HTTP Basic Authentication is used for login. This can be changed
+to PKI (client certificates) by changing `REST_FRAMEWORK.DEFAULT_AUTHENTICATION_CLASSES` in `settings.py`
+
+Below are usernames that are part of our sample data (defined in
+`ozp-backend/ozpcenter/scripts/sample_data_generator.py`) (password for all users is `password`):
+
+**Users:**
+- aaronson (miniluv)
+- jones (minitrue)
+- rutherford (miniplenty)
+- syme (minipax)
+- tparsons (minipax, miniluv)
+- charrington (minipax, miniluv, minitrue)
+
+**Org Stewards:**
+- wsmith (minitrue, stewarded_orgs: minitrue)
+- julia (minitrue, stewarded_orgs: minitrue, miniluv)
+- obrien (minipax, stewarded_orgs: minipax, miniplenty)
+
+**Admins:**
+- bigbrother (minipax)
+- bigbrother2 (minitrue)
+
 
 ## Domain Knowledge
 ### The life of a submitted listing
