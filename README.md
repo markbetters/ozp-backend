@@ -526,8 +526,7 @@ themselves
         a listing for which they are not the owner and/or not a member of
         the listing's agency)
     * global WRITE access to create/modify/delete reviews (item_comment) for
-        any listing (must respect organization (if private) and access_control
-        )
+        any listing (must respect organization (if private) and access_control)
 * READ access to /self/listing to return listings that current user owns (?)
 
 **Permission Types**
@@ -724,23 +723,29 @@ to PKI (client certificates) by changing `REST_FRAMEWORK.DEFAULT_AUTHENTICATION_
 Below are usernames that are part of our sample data (defined in
 `ozp-backend/ozpcenter/scripts/sample_data_generator.py`) (password for all users is `password`):
 
-**Users:**
-- aaronson (miniluv)
-- jones (minitrue)
-- rutherford (miniplenty)
-- syme (minipax)
-- tparsons (minipax, miniluv)
-- charrington (minipax, miniluv, minitrue)
+**Admins:**
+- bigbrother (minipax)
+- bigbrother2 (minitrue)
+- khaleesi (miniplen)
 
 **Org Stewards:**
 - wsmith (minitrue, stewarded_orgs: minitrue)
 - julia (minitrue, stewarded_orgs: minitrue, miniluv)
 - obrien (minipax, stewarded_orgs: minipax, miniplenty)
 
-**Admins:**
-- bigbrother (minipax)
-- bigbrother2 (minitrue)
-- khaleesi (minipax)
+**Users:**
+- aaronson (miniluv)
+- hodor (miniluv - PKI)
+- jones (minitrue)
+- tammy (minitrue - PKI)
+- rutherford (miniplenty)
+- noah (miniplenty - PKI)
+- syme (minipax)
+- abe (minipax - PKI)
+- tparsons (minipax, miniluv)
+- jsnow (minipax, miniluv - PKI)
+- charrington (minipax, miniluv, minitrue)
+- johnson (minipax, miniluv, minitrue - PKI)
 
 
 ## Domain Knowledge
