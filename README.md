@@ -740,6 +740,7 @@ Below are usernames that are part of our sample data (defined in
 **Admins:**
 - bigbrother (minipax)
 - bigbrother2 (minitrue)
+- khaleesi (minipax)
 
 
 ## Domain Knowledge
