@@ -54,50 +54,49 @@ def run():
     ############################################################################
     #                           Categories
     ############################################################################
-    books_ref = models.Category(title="Books and Reference",
-        description="Things made of paper")
+    books_ref = models.Category(title="Books and Reference", description="Things made of paper")
     books_ref.save()
-    business = models.Category(title="Business",
-        description="For making money")
+
+    business = models.Category(title="Business", description="For making money")
     business.save()
-    communication = models.Category(title="Communication",
-        description="Moving info between people and things")
+
+    communication = models.Category(title="Communication", description="Moving info between people and things")
     communication.save()
-    education = models.Category(title="Education",
-        description="Educational in nature")
+
+    education = models.Category(title="Education", description="Educational in nature")
     education.save()
-    entertainment = models.Category(title="Entertainment",
-        description="For fun")
+
+    entertainment = models.Category(title="Entertainment", description="For fun")
     entertainment.save()
-    finance = models.Category(title="Finance",
-        description="For managing money")
+
+    finance = models.Category(title="Finance", description="For managing money")
     finance.save()
-    health_fitness = models.Category(title="Health and Fitness",
-        description="Be healthy, be fit")
+
+    health_fitness = models.Category(title="Health and Fitness", description="Be healthy, be fit")
     health_fitness.save()
-    media_video = models.Category(title="Media and Video",
-        description="Videos and media stuff")
+
+    media_video = models.Category(title="Media and Video", description="Videos and media stuff")
     media_video.save()
-    music_audio = models.Category(title="Music and Audio",
-        description="Using your ears")
+
+    music_audio = models.Category(title="Music and Audio", description="Using your ears")
     music_audio.save()
-    news = models.Category(title="News",
-        description="What's happening where")
+
+    news = models.Category(title="News", description="What's happening where")
     news.save()
-    productivity = models.Category(title="Productivity",
-        description="Do more in less time")
+
+    productivity = models.Category(title="Productivity", description="Do more in less time")
     productivity.save()
-    shopping = models.Category(title="Shopping",
-        description="For spending your money")
+
+    shopping = models.Category(title="Shopping", description="For spending your money")
     shopping.save()
-    sports = models.Category(title="Sports",
-        description="Score more points than your opponent")
+
+    sports = models.Category(title="Sports", description="Score more points than your opponent")
     sports.save()
-    tools = models.Category(title="Tools",
-        description="Tools and Utilities")
+
+    tools = models.Category(title="Tools", description="Tools and Utilities")
     tools.save()
-    weather = models.Category(title="Weather",
-        description="Get the temperature")
+
+    weather = models.Category(title="Weather", description="Get the temperature")
     weather.save()
 
     ############################################################################
@@ -105,22 +104,23 @@ def run():
     ############################################################################
     civillian = models.ContactType(name='Civillian')
     civillian.save()
+
     government = models.ContactType(name='Government')
     government.save()
+
     military = models.ContactType(name='Military')
     military.save()
 
     ############################################################################
     #                           Listing Types
     ############################################################################
-    web_app = models.ListingType(title='web application',
-        description='web applications')
+    web_app = models.ListingType(title='web application', description='web applications')
     web_app.save()
-    widget = models.ListingType(title='widget',
-        description='widget things')
+
+    widget = models.ListingType(title='widget', description='widget things')
     widget.save()
-    dev_resource = models.ListingType(title='developer resource',
-        description='APIs and resources for developers')
+
+    dev_resource = models.ListingType(title='developer resource', description='APIs and resources for developers')
     dev_resource.save()
 
     ############################################################################
@@ -128,29 +128,28 @@ def run():
     ############################################################################
     # Note: these image sizes do not represent those that should be used in
     # production
-    small_icon_type = models.ImageType(name='small_icon',
-        max_size_bytes='4096')
+    small_icon_type = models.ImageType(name='small_icon', max_size_bytes='4096')
     small_icon_type.save()
-    large_icon_type = models.ImageType(name='large_icon',
-        max_size_bytes='8192')
+
+    large_icon_type = models.ImageType(name='large_icon', max_size_bytes='8192')
     large_icon_type.save()
-    banner_icon_type = models.ImageType(name='banner_icon',
-        max_size_bytes='2097152')
+
+    banner_icon_type = models.ImageType(name='banner_icon', max_size_bytes='2097152')
     banner_icon_type.save()
-    large_banner_icon_type = models.ImageType(name='large_banner_icon',
-        max_size_bytes='2097152')
+
+    large_banner_icon_type = models.ImageType(name='large_banner_icon', max_size_bytes='2097152')
     large_banner_icon_type.save()
-    small_screenshot_type = models.ImageType(name='small_screenshot',
-        max_size_bytes='1048576')
+
+    small_screenshot_type = models.ImageType(name='small_screenshot', max_size_bytes='1048576')
     small_screenshot_type.save()
-    large_screenshot_type = models.ImageType(name='large_screenshot',
-        max_size_bytes='1048576')
+
+    large_screenshot_type = models.ImageType(name='large_screenshot', max_size_bytes='1048576')
     large_screenshot_type.save()
-    intent_icon_type = models.ImageType(name='intent_icon',
-        max_size_bytes='2097152')
+
+    intent_icon_type = models.ImageType(name='intent_icon', max_size_bytes='2097152')
     intent_icon_type.save()
-    agency_icon_type = models.ImageType(name='agency_icon',
-        max_size_bytes='2097152')
+
+    agency_icon_type = models.ImageType(name='agency_icon', max_size_bytes='2097152')
     agency_icon_type.save()
 
     ############################################################################
@@ -175,13 +174,15 @@ def run():
     ############################################################################
     #                           Organizations
     ############################################################################
+
+    # Minitrue - Ministry of Truth
     img = Image.open(TEST_IMG_PATH + 'ministry_of_truth.jpg')
     icon = models.Image.create_image(img, file_extension='jpg',
         security_marking='UNCLASSIFIED', image_type='agency_icon')
-    minitrue = models.Agency(title='Ministry of Truth', short_name='Minitrue',
-        icon=icon)
+    minitrue = models.Agency(title='Ministry of Truth', short_name='Minitrue', icon=icon)
     minitrue.save()
 
+    # Minipax - Ministry of Peace
     img = Image.open(TEST_IMG_PATH + 'ministry_of_peace.png')
     icon = models.Image.create_image(img, file_extension='png',
         security_marking='UNCLASSIFIED', image_type='agency_icon')
@@ -189,18 +190,18 @@ def run():
         icon=icon)
     minipax.save()
 
+    # Miniluv - Ministry of Love
     img = Image.open(TEST_IMG_PATH + 'ministry_of_love.jpeg')
     icon = models.Image.create_image(img, file_extension='jpeg',
         security_marking='UNCLASSIFIED', image_type='agency_icon')
-    miniluv = models.Agency(title='Ministry of Love', short_name='Miniluv',
-        icon=icon)
+    miniluv = models.Agency(title='Ministry of Love', short_name='Miniluv', icon=icon)
     miniluv.save()
 
+    # Miniplen - Ministry of Plenty
     img = Image.open(TEST_IMG_PATH + 'ministry_of_plenty.png')
     icon = models.Image.create_image(img, file_extension='png',
         security_marking='UNCLASSIFIED', image_type='agency_icon')
-    miniplenty = models.Agency(title='Ministry of Plenty',
-        short_name='Miniplen', icon=icon)
+    miniplenty = models.Agency(title='Ministry of Plenty', short_name='Miniplen', icon=icon)
     miniplenty.save()
 
     ############################################################################
@@ -208,8 +209,61 @@ def run():
     ############################################################################
     demo = models.Tag(name='demo')
     demo.save()
+
     example = models.Tag(name='example')
     example.save()
+
+    ############################################################################
+    #                               Apps Mall Stewards
+    ############################################################################
+
+    # bigbrother
+    access_control = json.dumps({
+        'clearances': ['UNCLASSIFIED', 'CONFIDENTIAL', 'SECRET', 'TOP SECRET'],
+        'formal_accesses': ['SIERRA', 'TANGO', 'GOLF', 'HOTEL'],
+        'visas': ['NOVEMBER']
+    })
+    big_brother = models.Profile.create_user('bigbrother',
+        email='bigbrother@oceania.gov',
+        display_name='Big Brother',
+        bio='I make everyones life better',
+        access_control=access_control,
+        organizations=['Ministry of Peace'],
+        groups=['APPS_MALL_STEWARD'],
+        dn='Big Brother bigbrother'
+    )
+
+    # bigbrother2
+    access_control = json.dumps({
+        'clearances': ['UNCLASSIFIED', 'CONFIDENTIAL', 'SECRET', 'TOP SECRET'],
+        'formal_accesses': ['SIERRA', 'TANGO', 'GOLF', 'HOTEL'],
+        'visas': ['NOVEMBER']
+    })
+    big_brother2 = models.Profile.create_user('bigbrother2',
+        email='bigbrother2@oceania.gov',
+        display_name='Big Brother2',
+        bio='I also make everyones life better',
+        access_control=access_control,
+        organizations=['Ministry of Truth'],
+        groups=['APPS_MALL_STEWARD'],
+        dn='Big Brother 2 bigbrother2'
+    )
+
+    # khaleesi
+    access_control = json.dumps({
+        'clearances': ['UNCLASSIFIED', 'CONFIDENTIAL', 'SECRET', 'TOP SECRET'],
+        'formal_accesses': ['SIERRA', 'TANGO', 'GOLF', 'HOTEL'],
+        'visas': ['DRS']
+    })
+    khaleesi = models.Profile.create_user('khaleesi',
+        email='khaleesi@dragonborn.gov',
+        display_name='Daenerys Targaryen',
+        bio='I am Queen of Meereen, Queen of the Andals(, the Rhoynar) and the First Men, Lady Regnant of the Seven Kingdoms, Khaleesi of the Great Grass Sea, Mhysa, Breaker of Chains, the Unburnt, Mother of Dragons".',
+        access_control=access_control,
+        organizations=['Ministry of Plenty'],
+        groups=['APPS_MALL_STEWARD'],
+        dn='Daenerys Targaryen khaleesi'
+    )
 
     ############################################################################
     #                               Org Stewards
@@ -263,58 +317,10 @@ def run():
     )
 
     ############################################################################
-    #                               Apps Mall Stewards
-    ############################################################################
-
-    access_control = json.dumps({
-        'clearances': ['UNCLASSIFIED', 'CONFIDENTIAL', 'SECRET', 'TOP SECRET'],
-        'formal_accesses': ['SIERRA', 'TANGO', 'GOLF', 'HOTEL'],
-        'visas': ['DRS']
-    })
-    khaleesi = models.Profile.create_user('khaleesi',
-        email='khaleesi@dragonborn.gov',
-        display_name='Daenerys Targaryen',
-        bio='I am Queen of Meereen, Queen of the Andals(, the Rhoynar) and the First Men, Lady Regnant of the Seven Kingdoms, Khaleesi of the Great Grass Sea, Mhysa, Breaker of Chains, the Unburnt, Mother of Dragons".',
-        access_control=access_control,
-        organizations=['Ministry of Peace'],
-        groups=['APPS_MALL_STEWARD'],
-        dn='Daenerys Targaryen khaleesi'
-    )
-
-    access_control = json.dumps({
-        'clearances': ['UNCLASSIFIED', 'CONFIDENTIAL', 'SECRET', 'TOP SECRET'],
-        'formal_accesses': ['SIERRA', 'TANGO', 'GOLF', 'HOTEL'],
-        'visas': ['NOVEMBER']
-    })
-    big_brother = models.Profile.create_user('bigbrother',
-        email='bigbrother@oceania.gov',
-        display_name='Big Brother',
-        bio='I make everyones life better',
-        access_control=access_control,
-        organizations=['Ministry of Peace'],
-        groups=['APPS_MALL_STEWARD'],
-        dn='Big Brother bigbrother'
-    )
-
-    access_control = json.dumps({
-        'clearances': ['UNCLASSIFIED', 'CONFIDENTIAL', 'SECRET', 'TOP SECRET'],
-        'formal_accesses': ['SIERRA', 'TANGO', 'GOLF', 'HOTEL'],
-        'visas': ['NOVEMBER']
-    })
-    big_brother2 = models.Profile.create_user('bigbrother2',
-        email='bigbrother2@oceania.gov',
-        display_name='Big Brother2',
-        bio='I also make everyones life better',
-        access_control=access_control,
-        organizations=['Ministry of Truth'],
-        groups=['APPS_MALL_STEWARD'],
-        dn='Big Brother 2 bigbrother2'
-    )
-
-    ############################################################################
     #                               Regular user
     ############################################################################
 
+    # USER - Ministry of Love
     access_control = json.dumps({
         'clearances': ['UNCLASSIFIED', 'CONFIDENTIAL', 'SECRET'],
         'formal_accesses': [],
@@ -330,13 +336,14 @@ def run():
         dn='Aaronson aaronson'
     )
 
+    # PKI USER - Ministry of Love
     access_control = json.dumps({
         'clearances': ['UNCLASSIFIED', 'CONFIDENTIAL', 'SECRET'],
         'formal_accesses': [],
-        'visas': ['STE', 'RVR']
+        'visas': ['STE', 'RVR', 'PKI']
     })
     hodor = models.Profile.create_user('hodor',
-        email='hodor@hodor.hodor',
+        email='hodor@hodor.com',
         display_name='Hodor',
         bio='Hold the door',
         access_control=access_control,
@@ -345,6 +352,7 @@ def run():
         dn='Hodor hodor'
     )
 
+    # USER - Ministry of Truth
     access_control = json.dumps({
         'clearances': ['UNCLASSIFIED', 'CONFIDENTIAL', 'SECRET'],
         'formal_accesses': [],
@@ -360,6 +368,23 @@ def run():
         dn='Jones jones'
     )
 
+    # PKI USER - Ministry of Truth
+    access_control = json.dumps({
+        'clearances': ['UNCLASSIFIED', 'CONFIDENTIAL', 'SECRET'],
+        'formal_accesses': [],
+        'visas': ['NOVEMBER', 'PKI']
+    })
+    tammy = models.Profile.create_user('tammy',
+        email='tammy@airstripone.com',
+        display_name='Tammy',
+        bio='I am a normal person also',
+        access_control=access_control,
+        organizations=['Ministry of Truth'],
+        groups=['USER'],
+        dn='Tammy tammy'
+    )
+
+    # USER - Ministry of Plenty
     access_control = json.dumps({
         'clearances': ['UNCLASSIFIED', 'CONFIDENTIAL', 'SECRET'],
         'formal_accesses': [],
@@ -375,6 +400,23 @@ def run():
         dn='Rutherford rutherford'
     )
 
+    # PKI USER - Ministry of Plenty
+    access_control = json.dumps({
+        'clearances': ['UNCLASSIFIED', 'CONFIDENTIAL', 'SECRET'],
+        'formal_accesses': [],
+        'visas': ['PKI']
+    })
+    noah = models.Profile.create_user('noah',
+        email='noah@airstripone.com',
+        display_name='Noah',
+        bio='I am a cool normal person',
+        access_control=access_control,
+        organizations=['Ministry of Plenty'],
+        groups=['USER'],
+        dn='Noah noah'
+    )
+
+    # USER - Ministry of Peace
     access_control = json.dumps({
         'clearances': ['UNCLASSIFIED', 'CONFIDENTIAL', 'SECRET', 'TOP SECRET'],
         'formal_accesses': ['SIERRA'],
@@ -390,6 +432,23 @@ def run():
         dn='Syme syme'
     )
 
+    # PKI USER - Ministry of Peace
+    access_control = json.dumps({
+        'clearances': ['UNCLASSIFIED', 'CONFIDENTIAL', 'SECRET', 'TOP SECRET'],
+        'formal_accesses': ['SIERRA'],
+        'visas': ['PKI']
+    })
+    abe = models.Profile.create_user('abe',
+        email='abe@airstripone.com',
+        display_name='Abe',
+        bio='I am too smart for my own good also',
+        access_control=access_control,
+        organizations=['Ministry of Peace'],
+        groups=['USER'],
+        dn='Abe abe'
+    )
+
+    # USER - Ministry of Peace, Ministry of Love
     access_control = json.dumps({
         'clearances': ['UNCLASSIFIED'],
         'formal_accesses': [],
@@ -405,11 +464,11 @@ def run():
         dn='Tparsons tparsons'
     )
 
-
+    # PKI USER - Ministry of Peace, Ministry of Love
     access_control = json.dumps({
         'clearances': ['UNCLASSIFIED'],
         'formal_accesses': [],
-        'visas': ['TWN']
+        'visas': ['TWN', 'PKI']
     })
     jsnow = models.Profile.create_user('jsnow',
         email='jsnow@forthewatch.com',
@@ -421,6 +480,7 @@ def run():
         dn='Jonsnow jsnow'
     )
 
+    # USER - Ministry of Peace, Ministry of Love, Ministry of Truth
     access_control = json.dumps({
         'clearances': ['UNCLASSIFIED', 'CONFIDENTIAL', 'SECRET', 'TOP SECRET'],
         'formal_accesses': ['SIERRA', 'TANGO', 'GOLF', 'HOTEL'],
@@ -431,10 +491,25 @@ def run():
         display_name='Charrington',
         bio='A member of the Thought Police',
         access_control=access_control,
-        organizations=['Ministry of Peace', 'Ministry of Love',
-        'Ministry of Truth'],
+        organizations=['Ministry of Peace', 'Ministry of Love', 'Ministry of Truth'],
         groups=['USER'],
         dn='Charrington charrington'
+    )
+
+    # PKI USER - Ministry of Peace, Ministry of Love, Ministry of Truth
+    access_control = json.dumps({
+        'clearances': ['UNCLASSIFIED', 'CONFIDENTIAL', 'SECRET', 'TOP SECRET'],
+        'formal_accesses': ['SIERRA', 'TANGO', 'GOLF', 'HOTEL'],
+        'visas': ['NOVEMBER', 'PKI']
+    })
+    johnson = models.Profile.create_user('johnson',
+        email='johnson@airstripone.com',
+        display_name='Johnson',
+        bio='A member of the Thought Police also',
+        access_control=access_control,
+        organizations=['Ministry of Peace', 'Ministry of Love', 'Ministry of Truth'],
+        groups=['USER'],
+        dn='Johnson johnson'
     )
 
     ############################################################################
@@ -448,6 +523,7 @@ def run():
         approximately 30 minutes on X/Y at 1100Z',
         expires_date=next_week, author=winston)
     n1.save()
+
     n2 = models.Notification(message='System will be functioning in a \
         degredaded state between 1800Z-0400Z on A/B',
         expires_date=next_week, author=julia)
@@ -460,6 +536,7 @@ def run():
         approximately 30 minutes on C/D at 1700Z',
         expires_date=last_week, author=winston)
     n1.save()
+
     n2 = models.Notification(message='System will be functioning in a \
         degredaded state between 2100Z-0430Z on F/G',
         expires_date=last_week, author=julia)
@@ -667,12 +744,10 @@ def run():
         listing.tags.add(demo)
         listing.tags.add(example)
 
-        listing_model_access.create_listing_review(jones.user.username,
-            listing, 2,
+        listing_model_access.create_listing_review(jones.user.username, listing, 2,
             text="This bread is stale!")
 
-        listing_model_access.create_listing_review(julia.user.username,
-            listing, 5,
+        listing_model_access.create_listing_review(julia.user.username, listing, 5,
             text="Yum!")
 
         listing_model_access.create_listing(julia, listing)
@@ -686,15 +761,22 @@ def run():
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         #                           Icons
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        # ChartCourse16
         img = Image.open(TEST_IMG_PATH + 'ChartCourse16.png')
         small_icon = models.Image.create_image(img, file_extension='png',
             security_marking=unclass, image_type=small_icon_type.name)
+
+        # ChartCourse32
         img = Image.open(TEST_IMG_PATH + 'ChartCourse32.png')
         large_icon = models.Image.create_image(img, file_extension='png',
             security_marking=unclass, image_type=large_icon_type.name)
+
+        # ChartCourse
         img = Image.open(TEST_IMG_PATH + 'ChartCourse.png')
         banner_icon = models.Image.create_image(img, file_extension='png',
             security_marking=unclass, image_type=banner_icon_type.name)
+
+        # ChartCourseFeatured
         img = Image.open(TEST_IMG_PATH + 'ChartCourseFeatured.png')
         large_banner_icon = models.Image.create_image(img, file_extension='png',
             security_marking=unclass, image_type=large_banner_icon_type.name)
