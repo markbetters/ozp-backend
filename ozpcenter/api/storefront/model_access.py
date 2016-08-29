@@ -49,14 +49,14 @@ def get_storefront(username):
         featured_listings = listing_serializers.ListingSerializer.setup_eager_loading(featured_listings)
         recent_listings = listing_serializers.ListingSerializer.setup_eager_loading(recent_listings)
         most_popular_listings = listing_serializers.ListingSerializer.setup_eager_loading(most_popular_listings)
-
+        
         data = {
             'featured': featured_listings,
             'recent': recent_listings,
             'most_popular': most_popular_listings
         }
     except Exception as e:
-        return {'error': True, 'msg': 'Error getting storefront: {0!s}'.format(str(e))}
+        raise Exception({'error': True, 'msg': 'Error getting storefront: {0!s}'.format(str(e))})
     return data
 
 
