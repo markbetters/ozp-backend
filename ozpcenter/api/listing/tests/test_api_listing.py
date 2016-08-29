@@ -294,6 +294,16 @@ class ListingApiTest(APITestCase):
         response = self.client.delete(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
+    def test_delete_listing_permission_denied_2nd_party(self):
+        user = generic_model_access.get_profile('johnson').user
+        self.client.force_authenticate(user=user)
+        url = '/api/listing/1/'
+        response = self.client.delete(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        data = response.data
+        expected_data = {'detail': 'Permission denied.', 'message': 'Current profile has does not have delete permissions'}
+        self.assertEqual(data, expected_data)
+
     def test_update_listing_partial(self):
         """
         This was added to catch the case where a listing that didn't previously

@@ -380,6 +380,8 @@ class ListingSerializer(serializers.ModelSerializer):
         if system_anonymize_identifiable_data(profile.user.username):
             raise serializers.ValidationError('Permissions are invalid for current profile')
 
+        # TODO: errors.PermissionDenied instead of serializers.ValidationError
+
         data['description'] = data.get('description')
         data['launch_url'] = data.get('launch_url')
         data['version_name'] = data.get('version_name')
