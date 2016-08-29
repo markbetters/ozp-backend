@@ -627,6 +627,75 @@ class ListingApiTest(APITestCase):
 
         self.assertEqual(total_found, len(fields) - 2)    # (-1 for approved_status) + (-1 for is_enabled)
 
+    # TODO: def test_update_listing_full_access_control(self):
+
+    def test_update_listing_full_2nd_party(self):
+        user = generic_model_access.get_profile('julia').user
+        self.client.force_authenticate(user=user)
+        url = '/api/listing/1/'
+        title = 'julias app 2'
+        data = {
+            "title": title,
+            "description": "description of app",
+            "launch_url": "http://www.google.com/launch",
+            "version_name": "2.1.8",
+            "unique_name": "org.apps.julia-one",
+            "what_is_new": "nothing is new",
+            "description_short": "a shorter description",
+            "requirements": "Many new things",
+            "is_private": "true",
+            "is_enabled": "false",
+            "is_featured": "false",
+            "contacts": [
+                {"email": "a@a.com", "secure_phone": "111-222-3434",
+                    "unsecure_phone": "444-555-4545", "name": "me",
+                    "contact_type": {"name": "Government"}
+                },
+                {"email": "b@b.com", "secure_phone": "222-222-3333",
+                    "unsecure_phone": "555-555-5555", "name": "you",
+                    "contact_type": {"name": "Military"}
+                }
+            ],
+            "security_marking": "SECRET",
+            "listing_type": {"title": "widget"},
+            "small_icon": {"id": 1},
+            "large_icon": {"id": 2},
+            "banner_icon": {"id": 3},
+            "large_banner_icon": {"id": 4},
+            "categories": [
+                {"title": "Bumake siness"},
+                {"title": "Education"}
+            ],
+            "owners": [
+                {"user": {"username": "johnson"}},
+                {"user": {"username": "julia"}}
+            ],
+            "tags": [
+                {"name": "demo"},
+                {"name": "map"}
+            ],
+            "intents": [
+                {"action": "/application/json/view"},
+                {"action": "/application/json/edit"}
+            ],
+            "doc_urls": [
+                {"name": "wiki", "url": "http://www.google.com/wiki2"},
+                {"name": "guide", "url": "http://www.google.com/guide2"}
+            ],
+            "screenshots": [
+                {"small_image": {"id": 1}, "large_image": {"id": 2}},
+                {"small_image": {"id": 3}, "large_image": {"id": 4}}
+            ]
+
+        }
+        response = self.client.put(url, data, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        data = response.data
+        expected_data = {'non_field_errors': ['Permission are invalid for current owner profile']}
+
+        self.assertEqual(data, expected_data)
+
     def test_z_create_update(self):
         user = generic_model_access.get_profile('julia').user
         self.client.force_authenticate(user=user)
@@ -841,6 +910,8 @@ class ListingApiTest(APITestCase):
             }
             }
         self.assertEquals(last_item, expected_item)
+
+    # TODO: test_counts_in_listings - 2ndparty
 
     def test_create_listing_with_different_agency(self):
         user = generic_model_access.get_profile('julia').user

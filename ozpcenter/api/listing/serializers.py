@@ -501,6 +501,10 @@ class ListingSerializer(serializers.ModelSerializer):
                 if not system_has_access_control(owner_profile.user.username, data.get('security_marking')):
                     raise serializers.ValidationError('Security marking too high for current owner profile')
 
+                # Don't allow 2nd-party user to be an owner of a listing
+                if system_anonymize_identifiable_data(owner_profile.user.username):
+                    raise serializers.ValidationError('Permission are invalid for current owner profile')
+
                 owners.append(owner_profile)
         data['owners'] = owners
 
