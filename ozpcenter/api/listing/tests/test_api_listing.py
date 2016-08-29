@@ -629,7 +629,25 @@ class ListingApiTest(APITestCase):
 
     # TODO: def test_update_listing_full_access_control(self):
 
-    def test_update_listing_full_2nd_party(self):
+    def test_update_listing_full_2nd_party_request_user(self):
+        user = generic_model_access.get_profile('johnson').user
+        self.client.force_authenticate(user=user)
+        url = '/api/listing/1/'
+        title = 'julias app 2'
+        data = {
+            "title": title,
+            "description": "description of app",
+            "security_marking": "SECRET",
+        }
+        response = self.client.put(url, data, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        data = response.data
+        expected_data = {'non_field_errors': ['Permissions are invalid for current profile']}
+
+        self.assertEqual(data, expected_data)
+
+    def test_update_listing_full_2nd_party_owner(self):
         user = generic_model_access.get_profile('julia').user
         self.client.force_authenticate(user=user)
         url = '/api/listing/1/'
@@ -692,7 +710,7 @@ class ListingApiTest(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         data = response.data
-        expected_data = {'non_field_errors': ['Permission are invalid for current owner profile']}
+        expected_data = {'non_field_errors': ['Permissions are invalid for current owner profile']}
 
         self.assertEqual(data, expected_data)
 
