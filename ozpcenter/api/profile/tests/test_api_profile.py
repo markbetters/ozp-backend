@@ -107,7 +107,7 @@ class ProfileApiTest(APITestCase):
     def _all_listing_for_minitrue_profile_from_multi_org_profile(self):
         user = generic_model_access.get_profile('charrington').user
         self.client.force_authenticate(user=user)
-        url = '/api/profile/1/listing/'
+        url = '/api/profile/4/listing/'
         response = self.client.get(url, format='json')
         data = response.data
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -121,9 +121,9 @@ class ProfileApiTest(APITestCase):
         Testing GET /api/profile/1/listing/ endpoint
 
         Getting
-            wsmith (minitrue, stewarded_orgs: minitrue) - Winston Smith - 1
+            wsmith (minitrue, stewarded_orgs: minitrue) - Winston Smith - 4
         From
-            charrington (minipax, miniluv, minitrue) - Charrington - 11
+            charrington (minipax, miniluv, minitrue) - Charrington - 17
         """
         settings.OZP['USE_AUTH_SERVER'] = True
         self._all_listing_for_minitrue_profile_from_multi_org_profile()
@@ -133,9 +133,9 @@ class ProfileApiTest(APITestCase):
         Testing GET /api/profile/1/listing/ endpoint
 
         Getting
-            wsmith (minitrue, stewarded_orgs: minitrue) - Winston Smith - 1
+            wsmith (minitrue, stewarded_orgs: minitrue) - Winston Smith - 4
         From
-            charrington (minipax, miniluv, minitrue) - Charrington - 11
+            charrington (minipax, miniluv, minitrue) - Charrington - 17
         """
         settings.OZP['USE_AUTH_SERVER'] = False
         self._all_listing_for_minitrue_profile_from_multi_org_profile()
@@ -143,7 +143,7 @@ class ProfileApiTest(APITestCase):
     def _all_listing_for_app_profile_from_multi_org_profile(self):
         user = generic_model_access.get_profile('bigbrother').user
         self.client.force_authenticate(user=user)
-        url = '/api/profile/1/listing/'
+        url = '/api/profile/4/listing/'
         response = self.client.get(url, format='json')
         data = response.data
         # print(data)
@@ -155,24 +155,24 @@ class ProfileApiTest(APITestCase):
     @patch('plugins_util.plugin_manager.requests.get', side_effect=helper.mocked_requests_get)
     def test_all_listing_for_app_profile_from_multi_org_profile_auth_enabled(self, mock_request):
         """
-        Testing GET /api/profile/1/listing/ endpoint
+        Testing GET /api/profile/4/listing/ endpoint
 
         Getting
-            wsmith (minitrue, stewarded_orgs: minitrue) - Winston Smith - 1
+            wsmith (minitrue, stewarded_orgs: minitrue) - Winston Smith - 4
         From
-            bigbrother (minipax) - Big Brother - 4
+            bigbrother (minipax) - Big Brother - 1
         """
         settings.OZP['USE_AUTH_SERVER'] = True
         self._all_listing_for_app_profile_from_multi_org_profile()
 
     def test_all_listing_for_app_profile_from_multi_org_profile_auth_disabled(self):
         """
-        Testing GET /api/profile/1/listing/ endpoint
+        Testing GET /api/profile/4/listing/ endpoint
 
         Getting
-            wsmith (minitrue, stewarded_orgs: minitrue) - Winston Smith - 1
+            wsmith (minitrue, stewarded_orgs: minitrue) - Winston Smith - 4
         From
-            bigbrother (minipax) - Big Brother - 4
+            bigbrother (minipax) - Big Brother - 1
         """
         settings.OZP['USE_AUTH_SERVER'] = False
         self._all_listing_for_app_profile_from_multi_org_profile()
@@ -180,7 +180,7 @@ class ProfileApiTest(APITestCase):
     def _all_listing_for_minitrue_profile_from_minitrue_profile(self):
         user = generic_model_access.get_profile('jones').user
         self.client.force_authenticate(user=user)
-        url = '/api/profile/2/listing/'
+        url = '/api/profile/5/listing/'
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         data = response.data
@@ -191,12 +191,12 @@ class ProfileApiTest(APITestCase):
     @patch('plugins_util.plugin_manager.requests.get', side_effect=helper.mocked_requests_get)
     def test_all_listing_for_minitrue_profile_from_minitrue_profile(self, mock_request):
         """
-        Testing GET /api/profile/2/listing/ endpoint
+        Testing GET /api/profile/5/listing/ endpoint
 
         Getting
-            julia (minitrue, stewarded_orgs: minitrue, miniluv) - Julia Dixon - 2
+            julia (minitrue, stewarded_orgs: minitrue, miniluv) - Julia Dixon - 5
         From
-            jones (minitrue) - Jones - 7
+            jones (minitrue) - Jones - 9
         """
         settings.OZP['USE_AUTH_SERVER'] = True
         self._all_listing_for_minitrue_profile_from_minitrue_profile()
@@ -256,27 +256,46 @@ class ProfileApiTest(APITestCase):
         Testing GET/POST /api/self/profile endpoint
         """
         settings.OZP['USE_AUTH_SERVER'] = True
+        # aaronson - 7
+        # abe - 4
+        # bigbrother - 1
+        # bigbrother2 - 2
+        # charrington - 17
+        # khaleesi- 3
+        # hodor - 8
+        # johnson - 18
+        # jsnow - 16
+        # jones - 9
+        # julia - 5
+        # noah -12
+        # obrien - 6
+        # rutherford - 11
+        # syme - 13
+        # tammy - 10
+        # tparsons - 15
+        # wsmith - 4
+
         user_combo_list = [
             # bigbrother (minipax)
-            {'id': 5, 'username': 'bigbrother', 'display_name': 'Big Brother',
+            {'id': 1, 'username': 'bigbrother', 'display_name': 'Big Brother',
                 'stewarded_organizations': [],
                 'groups': [{'name': 'APPS_MALL_STEWARD'}],
                 'highest_role': 'APPS_MALL_STEWARD',
                 'test_data_input_stewarded_organizations': False},
             # bigbrother2 (minitrue)
-            {'id': 6, 'username': 'bigbrother2', 'display_name': 'Big Brother2',
+            {'id': 2, 'username': 'bigbrother2', 'display_name': 'Big Brother2',
                 'stewarded_organizations': [],
                 'groups': [{'name': 'APPS_MALL_STEWARD'}],
                 'highest_role': 'APPS_MALL_STEWARD',
                 'test_data_input_stewarded_organizations': False},
             # wsmith (minitrue, stewarded_orgs: minitrue) - Org Steward Level
-            {'id': 1, 'username': 'wsmith', 'display_name': 'Winston Smith',
+            {'id': 4, 'username': 'wsmith', 'display_name': 'Winston Smith',
                 'stewarded_organizations': [{"short_name": "Minitrue", "title": "Ministry of Truth"}],
                 'groups': [{"name": "ORG_STEWARD"}],
                 'highest_role': 'ORG_STEWARD',
                 'test_data_input_stewarded_organizations': True},
             # charrington (minipax, miniluv, minitrue) - User Level
-            {'id': 14, 'username': 'charrington', 'display_name': 'Charrington',
+            {'id': 17, 'username': 'charrington', 'display_name': 'Charrington',
                 'stewarded_organizations': [],
                 'groups': [{'name': 'USER'}],
                 'highest_role': 'USER',
@@ -305,11 +324,14 @@ class ProfileApiTest(APITestCase):
 
             url = '/api/self/profile/'
             response = self.client.get(url, format='json')
+            response_username = response.data.get('user').get('username')
+            response_id = response.data.get('id')
+
             self.assertEqual(response.status_code, status.HTTP_200_OK)
-            self.assertEqual(response.data.get('id'), current_id)
+            self.assertEqual(response.data.get('id'), current_id, '{}: Actual ID: {} Expected ID: {}'.format(response_username, response_id, current_id))
             self.assertEqual(response.data.get('display_name'), current_display_name)
             self.assertEqual(response.data.get('stewarded_organizations'), current_stewarded_organizations)
-            self.assertEqual(response.data.get('user').get('username'), current_username)
+            self.assertEqual(response_username, current_username)
             self.assertEqual(response.data.get('user').get('groups'), current_groups)
             self.assertEqual(response.data.get('highest_role'), current_highest_role)
             self.assertEqual(response.data.get('center_tour_flag'), True)
@@ -386,6 +408,10 @@ class ProfileApiTest(APITestCase):
         expected_data = {'detail': 'Authentication credentials were not provided.'}
         self.assertEqual(response.data, expected_data)
 
+    def _get_profile_url_for_username(self, username):
+        user_id = generic_model_access.get_profile(username).user.id
+        return '/api/profile/{}/'.format(user_id)
+
     @patch('plugins_util.plugin_manager.requests.get', side_effect=helper.mocked_requests_get)
     def test_update_stewarded_orgs_for_apps_mall_steward_level(self, mock_request):
         settings.OZP['USE_AUTH_SERVER'] = True
@@ -407,7 +433,8 @@ class ProfileApiTest(APITestCase):
         settings.OZP['USE_AUTH_SERVER'] = True
         user = generic_model_access.get_profile('bigbrother').user
         self.client.force_authenticate(user=user)
-        url = '/api/profile/1/'
+
+        url = self._get_profile_url_for_username('wsmith')
         data = {'display_name': 'Winston Smith', 'stewarded_organizations': False}
         response = self.client.put(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -420,7 +447,7 @@ class ProfileApiTest(APITestCase):
         settings.OZP['USE_AUTH_SERVER'] = True
         user = generic_model_access.get_profile('wsmith').user
         self.client.force_authenticate(user=user)
-        url = '/api/profile/1/'
+        url = self._get_profile_url_for_username('wsmith')
         data = {'display_name': 'Winston Smith', 'stewarded_organizations': [
             {'title': 'Ministry of Truth'}, {'title': 'Ministry of Love'}]}
         response = self.client.put(url, data, format='json')
@@ -431,7 +458,7 @@ class ProfileApiTest(APITestCase):
         settings.OZP['USE_AUTH_SERVER'] = True
         user = generic_model_access.get_profile('jones').user
         self.client.force_authenticate(user=user)
-        url = '/api/profile/1/'
+        url = self._get_profile_url_for_username('wsmith')
         data = {'display_name': 'Winston Smith', 'stewarded_organizations': [
             {'title': 'Ministry of Truth'}, {'title': 'Ministry of Love'}]}
         response = self.client.put(url, data, format='json')
