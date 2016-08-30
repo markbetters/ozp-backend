@@ -774,3 +774,17 @@ Description on how listings get submitted. API endpoint: ````/api/listing````
     * User: Needs Action
     * Org Steward: Returned
     * Admin: Returned
+````
+                           Submitted
+ +--------+                Listing     +---------------------+
+ |  USER  +------------------------->  |  ORG STEWARD/ADMIN  |
+ +---+----+                            +---+----+------------+
+     ^           Rejected Listing          |    |
+     +---------------------+---------------+    |
+                           ^                    |
+                           |          Approved  |
+                Approved   |          Listing   |
++-----------+   Listing   ++-------+            |
+|Published  | <-----------+  ADMIN | <----------+
++-----------+             +--------+
+````
