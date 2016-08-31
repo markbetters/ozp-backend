@@ -3,6 +3,12 @@ Access control utilities
 
 An access control is a marking that complies with the structure described here:
 https://www.fas.org/sgp/othergov/intel/capco_reg.pdf
+http://www.ncsc.gov/training/WBT/docs/CM_AltText_021312.pdf
+http://www.ncsc.gov/training/resources/Public_CAPCO%20Manual_v2.1.pdf
+http://www.ncsc.gov/training/resources/Publically%20Releasable%20Register.pdf
+https://www.nsa.gov/public_info/_files/nsacss_policies/Policy_Manual_1-52.pdf
+http://www.dtic.mil/whs/directives/corres/pdf/520001_vol2.pdf
+https://www.cia.gov/library/publications/the-world-factbook/print/print_AppendixD.pdf
 
 For example:
     SECRET//ABC//XYZ//USA or TOP SECRET or UNCLASSIFIED//FOUO
@@ -129,13 +135,21 @@ class PluginMain(object):
             True - Anonymize Identifiable Data
             False - Access to see Identifiable Data
         """
+        # Timer used to simulate REST Service Call
+        time.sleep(0.1)
+
         profile = model_access.get_profile(username)
 
         if not profile:
             return True
 
-        # Timer used to simulate REST Service Call
-        time.sleep(0.1)
+        user_accesses_json = profile.access_control
+        user_accesses = json.loads(user_accesses_json)
+
+        user_visas = user_accesses['visas']
+
+        if 'PKI' in user_visas:
+            return True
         return False
 
     def anonymize_value(self, data):

@@ -5,11 +5,13 @@ import logging
 
 from django.core.exceptions import ObjectDoesNotExist
 
+
 from ozpcenter import models
 from ozpcenter import constants
 from ozpcenter import errors
-import ozpcenter.model_access as generic_model_access
 from ozpcenter import utils
+import ozpcenter.model_access as generic_model_access
+from plugins_util.plugin_manager import system_anonymize_identifiable_data
 
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center.' + str(__name__))
@@ -412,11 +414,12 @@ def delete_listing_review(username, review):
 
     Returns: Listing associated with this review
     """
-    user = generic_model_access.get_profile(username)
+    profile = generic_model_access.get_profile(username)
     # ensure user is the author of this review, or that user is an org
     # steward or apps mall steward
     priv_roles = ['APPS_MALL_STEWARD', 'ORG_STEWARD']
-    if user.highest_role() in priv_roles:
+
+    if profile.highest_role() in priv_roles:
         pass
     elif review.author.user.username != username:
         raise errors.PermissionDenied('Cannot update another user\'s review')
@@ -436,7 +439,7 @@ def delete_listing_review(username, review):
     ]
     # add this action to the log
     listing = review.listing
-    listing = _add_listing_activity(user, listing,
+    listing = _add_listing_activity(profile, listing,
         models.ListingActivity.REVIEW_DELETED, change_details=change_details)
 
     # delete the review
@@ -452,12 +455,17 @@ def delete_listing(username, listing):
 
     for now just remove
     """
-    user = generic_model_access.get_profile(username)
+    profile = generic_model_access.get_profile(username)
     app_owners = [i.user.username for i in listing.owners.all()]
     # ensure user is the author of this review, or that user is an org
     # steward or apps mall steward
+
+    # Don't allow 2nd-party user to be an delete a listing
+    if system_anonymize_identifiable_data(profile.user.username):
+        raise errors.PermissionDenied('Current profile has does not have delete permissions')
+
     priv_roles = ['APPS_MALL_STEWARD', 'ORG_STEWARD']
-    if user.highest_role() in priv_roles:
+    if profile.highest_role() in priv_roles:
         pass
     elif username not in app_owners:
         raise errors.PermissionDenied()
@@ -465,7 +473,7 @@ def delete_listing(username, listing):
     if listing.is_deleted:
         raise errors.PermissionDenied('The listing has already been deleted')
 
-    listing = _add_listing_activity(user, listing, models.ListingActivity.DELETED)
+    listing = _add_listing_activity(profile, listing, models.ListingActivity.DELETED)
     listing.is_deleted = True
     listing.is_enabled = False
     listing.approval_status = models.Listing.DELETED
