@@ -18,26 +18,81 @@ logger = logging.getLogger('ozp-center.' + str(__name__))
 
 
 def get_all_doc_urls():
+    """
+    Get all doc urls
+
+    Returns:
+        [DocUrl]: List of DocUrl Objects
+    """
     return models.DocUrl.objects.all()
 
 
+def get_doc_urls_for_listing(listing):
+    """
+    Get doc urls for listings
+
+    Returns:
+        [Screenshot]: List of DocUrls Objects
+    """
+    return models.DocUrl.objects.filter(listing=listing)
+
+
 def get_all_contacts():
+    """
+    Get all contacts
+
+    Return:
+        [Contact]: List of Contact Objects
+    """
     return models.Contact.objects.all()
 
 
 def get_screenshots_for_listing(listing):
+    """
+    Get screenshots for listings
+
+    Args:
+        listing
+
+    Returns:
+        [Screenshot]: List of Screenshot Objects
+    """
     return models.Screenshot.objects.filter(listing=listing)
 
 
-def get_doc_urls_for_listing(listing):
-    return models.DocUrl.objects.filter(listing=listing)
+# TODO: reraise=False
+def get_listing_type_by_title(title, reraise=True):
+    """
+    Get listing type by title
 
+    Args:
+        title(str)
+        reraise(bool)
 
-def get_listing_type_by_title(title):
-    return models.ListingType.objects.get(title=title)
+    Returns:
+        ListingType
+    """
+    try:
+        return models.ListingType.objects.get(title=title)
+    except models.Listing.DoesNotExist as err:
+        if reraise:
+            raise err
+        else:
+            return None
 
 
 def get_listing_by_id(username, id, reraise=False):
+    """
+    Get listing type by title
+
+    Args:
+        username(str)
+        id
+        reraise(bool)
+
+    Returns:
+        Listing
+    """
     try:
         return models.Listing.objects.for_user(username).get(id=id)
     except models.Listing.DoesNotExist as err:
@@ -47,8 +102,26 @@ def get_listing_by_id(username, id, reraise=False):
             return None
 
 
-def get_listing_by_title(username, title):
-    return models.Listing.objects.for_user(username).get(title=title)
+# TODO: reraise=False
+def get_listing_by_title(username, title, reraise=True):
+    """
+    Get listing by title
+
+    Args:
+        username(str)
+        title
+        reraise(bool)
+
+    Returns:
+        Listing
+    """
+    try:
+        return models.Listing.objects.for_user(username).get(title=title)
+    except models.Listing.DoesNotExist as err:
+        if reraise:
+            raise err
+        else:
+            return None
 
 
 def filter_listings(username, filter_params):
@@ -84,7 +157,13 @@ def filter_listings(username, filter_params):
 
 def get_self_listings(username):
     """
-    Get the Listings that belong to this user
+    Get the listings that belong to this user
+
+    Args:
+        username(str)
+
+    Returns:
+        [Listing]
     """
     try:
         user = generic_model_access.get_profile(username)
@@ -109,7 +188,8 @@ def get_reviews(username):
     """
     Get Reviews this user can see
 
-    Key: reviews:<username>
+    Args:
+        username (str): username
     """
     try:
         return models.Review.objects.for_user(username).all()
@@ -118,10 +198,16 @@ def get_reviews(username):
 
 
 def get_review_by_id(id):
+    """
+    Get review by id
+    """
     return models.Review.objects.get(id=id)
 
 
 def get_all_listing_types():
+    """
+    Get all listing types
+    """
     return models.ListingType.objects.all()
 
 
@@ -141,10 +227,16 @@ def get_all_listing_activities(username):
 
 
 def get_all_tags():
+    """
+    Get all tags
+    """
     return models.Tag.objects.all()
 
 
 def get_all_screenshots():
+    """
+    Get all screenshots
+    """
     # access control enforced on images themselves, not the metadata
     return models.Screenshot.objects.all()
 
@@ -184,6 +276,12 @@ def _update_rating(username, listing):
 
 
 def get_rejection_listings(username):
+    """
+    Get Rejection Listings for a user
+
+    Args:
+        username (str): username for user
+    """
     activities = models.ListingActivity.objects.for_user(username).filter(
         action=models.ListingActivity.REJECTED)
     return activities
@@ -239,6 +337,13 @@ def _add_listing_activity(author, listing, action, change_details=None,
 def create_listing(author, listing):
     """
     Create a listing
+
+    Args:
+        author
+        listing
+
+    Return:
+        listing
     """
     listing = _add_listing_activity(author, listing, models.ListingActivity.CREATED)
     listing.approval_status = models.Listing.IN_PROGRESS
@@ -249,6 +354,11 @@ def create_listing(author, listing):
 def log_listing_modification(author, listing, change_details):
     """
     Log a listing modification
+
+    Args:
+        author
+        listing
+        change_details
     """
     listing = _add_listing_activity(author, listing, models.ListingActivity.MODIFIED,
         change_details)
@@ -258,6 +368,13 @@ def log_listing_modification(author, listing, change_details):
 def submit_listing(author, listing):
     """
     Submit a listing for approval
+
+    Args:
+        author
+        listing
+
+    Return:
+        listing
     """
     # TODO: check that all required fields are set
     listing = _add_listing_activity(author, listing, models.ListingActivity.SUBMITTED)
@@ -270,6 +387,13 @@ def submit_listing(author, listing):
 def approve_listing_by_org_steward(org_steward, listing):
     """
     Give Org Steward approval to a listing
+
+    Args:
+        org_steward
+        listing
+
+    Return:
+        listing
     """
     listing = _add_listing_activity(org_steward, listing,
         models.ListingActivity.APPROVED_ORG)
@@ -282,6 +406,13 @@ def approve_listing_by_org_steward(org_steward, listing):
 def approve_listing(steward, listing):
     """
     Give final approval to a listing
+
+    Args:
+        org_steward
+        listing
+
+    Return:
+        listing
     """
     listing = _add_listing_activity(steward, listing,
         models.ListingActivity.APPROVED)
@@ -295,6 +426,14 @@ def approve_listing(steward, listing):
 def reject_listing(steward, listing, rejection_description):
     """
     Reject a submitted listing
+
+    Args:
+        steward
+        listing
+        rejection_description
+
+    Return:
+        Listing
     """
     listing = _add_listing_activity(steward, listing,
         models.ListingActivity.REJECTED, description=rejection_description)
@@ -307,6 +446,13 @@ def reject_listing(steward, listing, rejection_description):
 def enable_listing(user, listing):
     """
     Enable a listing
+
+    Args:
+        user
+        listing
+
+    Returns:
+        listing
     """
     listing = _add_listing_activity(user, listing, models.ListingActivity.ENABLED)
     listing.is_enabled = True
@@ -318,6 +464,13 @@ def enable_listing(user, listing):
 def disable_listing(steward, listing):
     """
     Disable a listing
+
+    Args:
+        steward
+        listing
+
+    Returns:
+        listing
     """
     listing = _add_listing_activity(steward, listing, models.ListingActivity.DISABLED)
     listing.is_enabled = False
@@ -334,6 +487,7 @@ def create_listing_review(username, listing, rating, text=None):
         username (str): author's username
         rating (int): rating, 1-5
         text (Optional(str)): review text
+
     Returns:
         {
             "rate": rate,
@@ -412,7 +566,8 @@ def delete_listing_review(username, review):
         username: user making this request
         review (models.Review): review to delete
 
-    Returns: Listing associated with this review
+    Returns:
+        Listing associated with this review
     """
     profile = generic_model_access.get_profile(username)
     # ensure user is the author of this review, or that user is an org
@@ -490,37 +645,59 @@ def put_counts_in_listings_endpoint(queryset):
 
     Args:
         querset: models.Listing queryset
+
     Returns:
         {
             "total": <total listings>,
             "organizations": {
-                <org_id>: <count>,
+                <org_id>: <int>,
                 ...
             },
             "enabled": <enabled listings>,
-            "IN_PROGRESS": <num>,
-            "PENDING": <num>,
-            "REJECTED": <num>,
-            "APPROVED_ORG": <num>,
-            "APPROVED": <num>,
-            "DELETED": <num>
+            "IN_PROGRESS": <int>,
+            "PENDING": <int>,
+            "REJECTED": <int>,
+            "APPROVED_ORG": <int>,
+            "APPROVED": <int>,
+            "DELETED": <int>
         }
     """
-    data = {"total": queryset.count(), "organizations": {}}
+    # TODO: Take in account 2pki user (rivera-20160908)
+
+    data = {}
+
+    # Number of total listings
+    num_total = queryset.count()
+    # Number of listing that is Enabled
     num_enabled = queryset.filter(is_enabled=True).count()
+
+    # Number of listing that is IN_PROGRESS
     num_in_progress = queryset.filter(
         approval_status=models.Listing.IN_PROGRESS).count()
+
+    # Number of listing that is PENDING
     num_pending = queryset.filter(
         approval_status=models.Listing.PENDING).count()
+
+    # Number of listing that is REJECTED
     num_rejected = queryset.filter(
         approval_status=models.Listing.REJECTED).count()
+
+    # Number of listing that is APPROVED_ORG
     num_approved_org = queryset.filter(
         approval_status=models.Listing.APPROVED_ORG).count()
+
+    # Number of listing that is APPROVED
     num_approved = queryset.filter(
         approval_status=models.Listing.APPROVED).count()
+
+    # Number of listing that is DELETED
     num_deleted = queryset.filter(
         approval_status=models.Listing.DELETED).count()
+
+    data['total'] = num_total
     data['enabled'] = num_enabled
+    data['organizations'] = {}
     data[models.Listing.IN_PROGRESS] = num_in_progress
     data[models.Listing.PENDING] = num_pending
     data[models.Listing.REJECTED] = num_rejected
@@ -573,7 +750,8 @@ def screenshots_to_string(screenshots, queryset=False):
                             i.large_image.security_marking) for i in screenshots]
     else:
         new_screenshots = [(i['small_image']['id'],
-                            i['small_image'].get('security_marking', constants.DEFAULT_SECURITY_MARKING),
+                            i['small_image'].get('security_marking',
+                                                 constants.DEFAULT_SECURITY_MARKING),
                             i['large_image']['id'],
                             i['large_image'].get('security_marking', constants.DEFAULT_SECURITY_MARKING)) for i in screenshots]
     return str(sorted(new_screenshots))
@@ -592,7 +770,9 @@ def image_to_string(image, queryset=False, extra_str=None):
     if queryset:
         image_str = '{0!s}.{1!s}'.format(image.id, image.security_marking)
     else:
-        image_str = '{0!s}.{1!s}'.format(image.get('id'), image.get('security_marking', constants.DEFAULT_SECURITY_MARKING))
+        image_str = '{0!s}.{1!s}'.format(image.get('id'),
+                                         image.get('security_marking',
+                                         constants.DEFAULT_SECURITY_MARKING))
     return image_str
 
 
@@ -681,5 +861,14 @@ def owners_to_string(owners, queryset=False):
     return str(sorted(new_owners))
 
 
-def bool_to_string(var):
-    return str(var).lower()
+def bool_to_string(bool_instance):
+    """
+    Function to convert boolean value to string value
+
+    Args:
+        bool_instance (bool)
+
+    Return:
+        true or false (str)
+    """
+    return str(bool_instance).lower()

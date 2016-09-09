@@ -68,12 +68,6 @@ class ReviewViewSet(viewsets.ModelViewSet):
             context={'request': request})
         return Response(serializer.data)
 
-    def destroy(self, request, pk=None, listing_pk=None):
-        queryset = self.get_queryset()
-        review = get_object_or_404(queryset, pk=pk)
-        model_access.delete_listing_review(request.user.username, review)
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
     def create(self, request, listing_pk=None):
         """
         Create a new review
@@ -105,8 +99,17 @@ class ReviewViewSet(viewsets.ModelViewSet):
                   "listing": review.listing.id, "id": review.id}
         return Response(output, status=status.HTTP_200_OK)
 
+    def destroy(self, request, pk=None, listing_pk=None):
+        queryset = self.get_queryset()
+        review = get_object_or_404(queryset, pk=pk)
+        model_access.delete_listing_review(request.user.username, review)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 class ListingTypeViewSet(viewsets.ModelViewSet):
+    """
+    Listing Types
+    """
     permission_classes = (permissions.IsUser,)
     queryset = model_access.get_all_listing_types()
     serializer_class = serializers.ListingTypeSerializer
@@ -474,7 +477,6 @@ class ListingViewSet(viewsets.ModelViewSet):
         }
         """
         # logger.debug('inside ListingViewSet.update', extra={'request': request})
-
         instance = self.get_queryset().get(pk=pk)
         serializer = serializers.ListingSerializer(instance,
             data=request.data, context={'request': request}, partial=True)

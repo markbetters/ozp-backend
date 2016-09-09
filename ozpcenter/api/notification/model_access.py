@@ -35,6 +35,8 @@ class NotificationTypeEnum(Enum):
 
 
 def org_create_listing_condition(profile_obj, listing):
+    """
+    """
     if profile_obj not in listing.owners.all():
         raise errors.PermissionDenied(
             'Cannot create a notification for a listing you do not own')

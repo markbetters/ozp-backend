@@ -4,7 +4,6 @@ Storefront and Metadata Model Access
 import logging
 
 from django.db.models.functions import Lower
-from django.core.cache import cache
 from ozpcenter import models
 import ozpcenter.api.listing.serializers as listing_serializers
 
@@ -20,10 +19,19 @@ def get_storefront(username):
         * most popular listings (max=36?)
 
     NOTE: think about adding Bookmark status to this later on
+
+    Args:
+        username
+
+    Returns:
+        {
+            'featured': [Listing],
+            'recent': [Listing],
+            'most_popular': [Listing]
+        }
     """
-    user = models.Profile.objects.get(user__username=username)  # flake8: noqa TODO: Is Necessary? - Variable not being used in method
     try:
-        # get featured listings
+        # Get Featured Listings
         featured_listings = models.Listing.objects.for_user(
             username).filter(
                 is_featured=True,
@@ -31,7 +39,7 @@ def get_storefront(username):
                 is_enabled=True,
                 is_deleted=False)[:12]
 
-        # get recent listings
+        # Get Recent Listings
         recent_listings = models.Listing.objects.for_user(
             username).order_by(
                 '-approved_date').filter(
@@ -39,7 +47,7 @@ def get_storefront(username):
                     is_enabled=True,
                     is_deleted=False)[:24]
 
-        # get most popular listings via a weighted average
+        # Get most popular listings via a weighted average
         most_popular_listings = models.Listing.objects.for_user(
             username).filter(
                 approval_status=models.Listing.APPROVED,
@@ -49,7 +57,7 @@ def get_storefront(username):
         featured_listings = listing_serializers.ListingSerializer.setup_eager_loading(featured_listings)
         recent_listings = listing_serializers.ListingSerializer.setup_eager_loading(recent_listings)
         most_popular_listings = listing_serializers.ListingSerializer.setup_eager_loading(most_popular_listings)
-        
+
         data = {
             'featured': featured_listings,
             'recent': recent_listings,
@@ -62,6 +70,7 @@ def get_storefront(username):
 
 def values_query_set_to_dict(vqs):
     return [item for item in vqs]
+
 
 def get_metadata(username):
     """
