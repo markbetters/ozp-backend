@@ -14,7 +14,7 @@ if mo:
 else:
     raise RuntimeError("Unable to find version string in {0!s}.".format(VERSIONFILE))
 
-
+# TODO Read requirements from requirements.txt file
 install_requires = [
     'django-cors-headers>=1.1.0',
     'django-enumfield>=1.2.1',
@@ -47,6 +47,7 @@ packages = ['ozp', 'ozpcenter', 'ozpcenter.api', 'ozpcenter.scripts',
             'ozpcenter.api.storefront', 'ozpiwc', 'ozpiwc.migrations',
             'ozpiwc.api', 'ozpiwc.api.data',
             'ozpiwc.api.intent', 'ozpiwc.api.names', 'ozpiwc.api.system']
+
 package_data = {'': ['README.md', 'static']}
 
 setup(name=PKG,

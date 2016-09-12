@@ -26,8 +26,10 @@ class ContactTypeApiTest(APITestCase):
     def test_get_contact_type_list(self):
         user = generic_model_access.get_profile('wsmith').user
         self.client.force_authenticate(user=user)
+
         url = '/api/contact_type/'
         response = self.client.get(url, format='json')
+
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         names = [i['name'] for i in response.data]
         self.assertTrue('Civillian' in names)
@@ -37,8 +39,10 @@ class ContactTypeApiTest(APITestCase):
     def test_get_contact_type(self):
         user = generic_model_access.get_profile('wsmith').user
         self.client.force_authenticate(user=user)
+
         url = '/api/contact_type/1/'
         response = self.client.get(url, format='json')
+
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         name = response.data['name']
         self.assertEqual(name, 'Civillian')
@@ -46,28 +50,40 @@ class ContactTypeApiTest(APITestCase):
     def test_create_contact_type(self):
         user = generic_model_access.get_profile('bigbrother').user
         self.client.force_authenticate(user=user)
+
         url = '/api/contact_type/'
         data = {'name': 'New Contact Type'}
         response = self.client.post(url, data, format='json')
+
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         name = response.data['name']
         self.assertEqual(name, 'New Contact Type')
 
+    # TODO def test_create_contact_type(self): test different user groups access control
+
     def test_update_contact_type(self):
         user = generic_model_access.get_profile('bigbrother').user
         self.client.force_authenticate(user=user)
+
         url = '/api/contact_type/1/'
         data = {'name': 'Updated Type', 'required': True}
         response = self.client.put(url, data, format='json')
+
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         name = response.data['name']
         required = response.data['required']
         self.assertEqual(name, 'Updated Type')
         self.assertEqual(required, True)
 
+    # TODO def test_update_contact_type(self): test different user groups access control
+
     def test_delete_contact_type(self):
         user = generic_model_access.get_profile('bigbrother').user
         self.client.force_authenticate(user=user)
+
         url = '/api/contact_type/1/'
         response = self.client.delete(url, format='json')
+
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+    # TODO def test_delete_contact_type(self): test different user groups access control
