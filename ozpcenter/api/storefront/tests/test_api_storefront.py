@@ -22,13 +22,8 @@ class StorefrontApiTest(APITestCase):
         """
         data_gen.run()
 
-    def test_metadata(self):
+    def test_metadata_authorized(self):
         url = '/api/metadata/'
-        # test unauthorized user
-        response = self.client.get(url, format='json')
-        self.assertEqual(response.status_code, 401)
-
-        # test authorized user
         user = generic_model_access.get_profile('wsmith').user
         self.client.force_authenticate(user=user)
         response = self.client.get(url, format='json')
@@ -38,19 +33,25 @@ class StorefrontApiTest(APITestCase):
         self.assertIn('listing_types', response.data)
         self.assertIn('intents', response.data)
         self.assertIn('listing_titles', response.data)
+
         for i in response.data['agencies']:
             self.assertTrue('listing_count' in i)
 
-    def test_storefront(self):
-        url = '/api/storefront/'
-        # test unauthorized user
+    def test_metadata_unauthorized(self):
+        url = '/api/metadata/'
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, 401)
 
-        # test authorized user
+    def test_storefront_authorized(self):
+        url = '/api/storefront/'
         user = generic_model_access.get_profile('wsmith').user
         self.client.force_authenticate(user=user)
         response = self.client.get(url, format='json')
         self.assertIn('featured', response.data)
         self.assertIn('recent', response.data)
         self.assertIn('most_popular', response.data)
+
+    def test_storefront_unauthorized(self):
+        url = '/api/storefront/'
+        response = self.client.get(url, format='json')
+        self.assertEqual(response.status_code, 401)

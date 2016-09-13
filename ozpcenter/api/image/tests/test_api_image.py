@@ -26,6 +26,7 @@ class ImageApiTest(APITestCase):
     def test_post_image(self):
         user = generic_model_access.get_profile('wsmith').user
         self.client.force_authenticate(user=user)
+
         url = '/api/image/'
         data = {
             'security_marking': 'UNCLASSIFIED',
@@ -34,6 +35,7 @@ class ImageApiTest(APITestCase):
             'image': open('ozpcenter/scripts/test_images/android.png', mode='rb')
         }
         response = self.client.post(url, data, format='multipart')
+
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertTrue('id' in response.data)
         self.assertTrue('security_marking' in response.data)

@@ -527,7 +527,7 @@ class AccessControlReviewManager(models.Manager):
 
 class Review(models.Model):
     """
-    A review made on a Listing
+    A Review made on a Listing
     """
     text = models.CharField(max_length=constants.MAX_VALUE_LENGTH,
                             blank=True, null=True)

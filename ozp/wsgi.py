@@ -31,8 +31,9 @@ def get_version():
         raise RuntimeError(
             "Unable to find version string in {0!s}.".format(VERSION_FILE))
 
-os.environ['OZP_BACKEND_VERSION'] = get_version()  # TODO: Find a better way to get version
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "ozp.settings")
+# TODO: Find a better way to get version
+os.environ['OZP_BACKEND_VERSION'] = get_version()
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'ozp.settings')
 
 application = get_wsgi_application()

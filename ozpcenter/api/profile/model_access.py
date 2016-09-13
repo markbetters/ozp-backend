@@ -14,6 +14,15 @@ logger = logging.getLogger('ozp-center.' + str(__name__))
 
 
 def get_self(username):
+    """
+    Get Profile by username
+
+    Args:
+        username(str)
+
+    Return:
+        Profile
+    """
     return generic_model_access.get_profile(username)
 
 

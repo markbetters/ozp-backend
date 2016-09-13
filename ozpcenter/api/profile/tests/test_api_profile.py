@@ -215,6 +215,14 @@ class ProfileApiTest(APITestCase):
         self.assertEqual(len(response.data), 1)
         self.assertEqual(response.data[0]['user']['username'], 'wsmith')
 
+    @patch('plugins_util.plugin_manager.requests.get', side_effect=helper.mocked_requests_get)
+    def test_username_starts_with_no_results(self, mock_request):
+        """
+        Testing GET /api/profile/?username_starts_with={username} endpoint
+        """
+        settings.OZP['USE_AUTH_SERVER'] = True
+        user = generic_model_access.get_profile('wsmith').user
+        self.client.force_authenticate(user=user)
         url = '/api/profile/?username_starts_with=asdf'
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -387,9 +395,9 @@ class ProfileApiTest(APITestCase):
         data = {'id': 5, 'center_tour_flag': 4}
         response = self.client.put(url, data, format='json')
 
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
         expected_data = {'center_tour_flag': ['"4" is not a valid boolean.']}
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data, expected_data)
 
     @patch('plugins_util.plugin_manager.requests.get', side_effect=helper.mocked_requests_get)
@@ -398,17 +406,19 @@ class ProfileApiTest(APITestCase):
         Testing POST /api/self/profile endpoint - invalid user
         """
         settings.OZP['USE_AUTH_SERVER'] = True
-        self.client.login(username='invalid', password='invalid')
         url = '/api/self/profile/'
         data = {'id': 5, 'center_tour_flag': False}
+        self.client.login(username='invalid', password='invalid')
         response = self.client.put(url, data, format='json')
 
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
-
         expected_data = {'detail': 'Authentication credentials were not provided.'}
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
         self.assertEqual(response.data, expected_data)
 
     def _get_profile_url_for_username(self, username):
+        """
+        Get Profile Url
+        """
         user_id = generic_model_access.get_profile(username).user.id
         return '/api/profile/{}/'.format(user_id)
 
@@ -419,11 +429,11 @@ class ProfileApiTest(APITestCase):
         self.client.force_authenticate(user=user)
         url = '/api/profile/1/'
         data = {'display_name': 'Winston Smith', 'stewarded_organizations': [
-            {'title': 'Ministry of Truth'}, {'title': 'Ministry of Love'}]}
+               {'title': 'Ministry of Truth'}, {'title': 'Ministry of Love'}]}
         response = self.client.put(url, data, format='json')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         orgs = [i['title'] for i in response.data.get('stewarded_organizations')]
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertTrue('Ministry of Truth' in orgs)
         self.assertTrue('Ministry of Love' in orgs)
         self.assertEqual(len(orgs), 2)
@@ -433,13 +443,12 @@ class ProfileApiTest(APITestCase):
         settings.OZP['USE_AUTH_SERVER'] = True
         user = generic_model_access.get_profile('bigbrother').user
         self.client.force_authenticate(user=user)
-
         url = self._get_profile_url_for_username('wsmith')
         data = {'display_name': 'Winston Smith', 'stewarded_organizations': False}
         response = self.client.put(url, data, format='json')
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
         expected_data = {'stewarded_organizations': {'non_field_errors': ['Expected a list of items but got type "bool".']}}
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data, expected_data)
 
     @patch('plugins_util.plugin_manager.requests.get', side_effect=helper.mocked_requests_get)
@@ -449,8 +458,9 @@ class ProfileApiTest(APITestCase):
         self.client.force_authenticate(user=user)
         url = self._get_profile_url_for_username('wsmith')
         data = {'display_name': 'Winston Smith', 'stewarded_organizations': [
-            {'title': 'Ministry of Truth'}, {'title': 'Ministry of Love'}]}
+               {'title': 'Ministry of Truth'}, {'title': 'Ministry of Love'}]}
         response = self.client.put(url, data, format='json')
+
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     @patch('plugins_util.plugin_manager.requests.get', side_effect=helper.mocked_requests_get)
@@ -460,6 +470,7 @@ class ProfileApiTest(APITestCase):
         self.client.force_authenticate(user=user)
         url = self._get_profile_url_for_username('wsmith')
         data = {'display_name': 'Winston Smith', 'stewarded_organizations': [
-            {'title': 'Ministry of Truth'}, {'title': 'Ministry of Love'}]}
+               {'title': 'Ministry of Truth'}, {'title': 'Ministry of Love'}]}
         response = self.client.put(url, data, format='json')
+
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)

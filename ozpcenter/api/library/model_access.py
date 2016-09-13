@@ -18,9 +18,6 @@ def get_all_library_entries():
     """
     Get all ApplicationLibrary objects
 
-    Cache:
-        Key: library_entries
-
     Return:
         [ApplicationLibraryEntry]: List of All ApplicationLibrary Entry Objects
     """

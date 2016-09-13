@@ -11,6 +11,15 @@ from ozpcenter.scripts import sample_data_generator as data_gen
 def _edit_listing(test_case_instance, id, input_data, default_user='bigbrother'):
     """
     Helper Method to modify a listing
+
+    Args:
+        test_case_instance
+        id
+        input_data
+        default_user(optional)
+
+    Return:
+        response
     """
     user = generic_model_access.get_profile(default_user).user
     test_case_instance.client.force_authenticate(user=user)
@@ -25,13 +34,28 @@ def _edit_listing(test_case_instance, id, input_data, default_user='bigbrother')
     # PUT the Modification
     response = test_case_instance.client.put(url, data, format='json')
     test_case_instance.assertEqual(response.status_code, status.HTTP_200_OK)
+    return response
 
 
 def _create_create_bookmark(test_case_instance, username, listing_id, folder_name=None, status_code=200):
+    """
+    Create Bookmark Helper Function
+
+    Args:
+        test_case_instance
+        username
+        listing_id
+        folder_name(optional)
+        status_code
+
+    Returns:
+        response
+    """
     user = generic_model_access.get_profile(username).user
     test_case_instance.client.force_authenticate(user=user)
-    url = '/api/self/library/'
+
     data = {'listing': {'id': listing_id}, 'folder': folder_name}
+    url = '/api/self/library/'
     response = test_case_instance.client.post(url, data, format='json')
 
     if response:
@@ -63,10 +87,11 @@ class LibraryApiTest(APITestCase):
     def test_get_library(self):
         user = generic_model_access.get_profile('wsmith').user
         self.client.force_authenticate(user=user)
+
         url = '/api/library/'
         response = self.client.get(url, format='json')
+
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        # print('response.data: %s' % response.data)
 
     def test_create_library(self):
         """
@@ -94,8 +119,10 @@ class LibraryApiTest(APITestCase):
         """
         user = generic_model_access.get_profile('wsmith').user
         self.client.force_authenticate(user=user)
+
         url = '/api/self/library/'
         response = self.client.get(url, format='json')
+
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(2, len(response.data))
         self.assertIn('listing', response.data[0])
@@ -110,8 +137,10 @@ class LibraryApiTest(APITestCase):
         """
         user = generic_model_access.get_profile('wsmith').user
         self.client.force_authenticate(user=user)
+
         url = '/api/self/library/'
         response = self.client.get(url, format='json')
+
         listing_ids = [record['listing']['id'] for record in response.data]
         first_listing_id = listing_ids[0]  # Should be 2
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -122,8 +151,10 @@ class LibraryApiTest(APITestCase):
 
         user = generic_model_access.get_profile('wsmith').user
         self.client.force_authenticate(user=user)
+
         url = '/api/self/library/'
         response = self.client.get(url, format='json')
+
         listing_ids = [record['listing']['id'] for record in response.data]
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(listing_ids, [1], 'Comparing Ids #2')
@@ -133,8 +164,10 @@ class LibraryApiTest(APITestCase):
 
         user = generic_model_access.get_profile('wsmith').user
         self.client.force_authenticate(user=user)
+
         url = '/api/self/library/'
         response = self.client.get(url, format='json')
+
         listing_ids = [record['listing']['id'] for record in response.data]
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(listing_ids, [2, 1], 'Comparings Ids #3')
@@ -145,8 +178,10 @@ class LibraryApiTest(APITestCase):
         """
         user = generic_model_access.get_profile('wsmith').user
         self.client.force_authenticate(user=user)
+
         url = '/api/self/library/?type=web application'
         response = self.client.get(url, format='json')
+
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(2, len(response.data))
         self.assertIn('listing', response.data[0])
@@ -161,8 +196,10 @@ class LibraryApiTest(APITestCase):
         """
         user = generic_model_access.get_profile('wsmith').user
         self.client.force_authenticate(user=user)
+
         url = '/api/self/library/?type=widget'
         response = self.client.get(url, format='json')
+
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(0, len(response.data))
 
@@ -172,8 +209,10 @@ class LibraryApiTest(APITestCase):
         """
         user = generic_model_access.get_profile('wsmith').user
         self.client.force_authenticate(user=user)
+
         url = '/api/self/library/1/'
         response = self.client.get(url, format='json')
+
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertIn('listing', response.data)
         self.assertIn('id', response.data['listing'])
@@ -187,8 +226,10 @@ class LibraryApiTest(APITestCase):
         """
         user = generic_model_access.get_profile('wsmith').user
         self.client.force_authenticate(user=user)
+
         url = '/api/self/library/'
         response = self.client.get(url, format='json')
+
         put_data = []
         for i in response.data:
             data = {'id': i['id'], 'folder': 'test',
