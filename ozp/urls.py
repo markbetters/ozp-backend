@@ -17,11 +17,13 @@ from django.conf import settings
 from django.conf.urls import include, url
 from django.conf.urls.static import static
 from django.contrib import admin
+from django.contrib.auth.decorators import login_required
 
+from decorator_include import decorator_include
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^api/', include('ozpcenter.urls')),
+    url(r'^api/', decorator_include(login_required, 'ozpcenter.urls')),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^iwc-api/', include('ozpiwc.urls')),
     url(r'^docs/', include('rest_framework_swagger.urls')),
@@ -29,7 +31,6 @@ urlpatterns = [
     # CAS
     url(r'^accounts/login/$', 'cas.views.login', name='login'),
     url(r'^accounts/logout/$', 'cas.views.login', name='logout'),
-
 ]
 
 # in debug, serve the media and static resources with the django web server
