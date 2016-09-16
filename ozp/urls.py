@@ -18,7 +18,7 @@ from django.conf.urls import include, url
 from django.conf.urls.static import static
 from django.contrib import admin
 
-from decorators.cas_decorators import cas_login_required
+from ozpdecorators.cas_decorators import cas_login_required
 
 from decorator_include import decorator_include
 
