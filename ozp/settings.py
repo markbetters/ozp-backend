@@ -54,7 +54,6 @@ INSTALLED_APPS = (
     'rest_framework_swagger',
     'ozpcenter',
     'ozpiwc',
-    'ozpdecorators',
     'corsheaders',
 
     #CAS
