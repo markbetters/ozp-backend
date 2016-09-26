@@ -114,14 +114,20 @@ def run():
     ############################################################################
     #                           Listing Types
     ############################################################################
-    web_app = models.ListingType(title='web application', description='web applications')
+    web_app = models.ListingType(title='Web Application', description='web applications')
     web_app.save()
 
-    widget = models.ListingType(title='widget', description='widget things')
+    widget = models.ListingType(title='Widget', description='widget things')
     widget.save()
 
-    dev_resource = models.ListingType(title='developer resource', description='APIs and resources for developers')
-    dev_resource.save()
+    desktop_app = models.ListingType(title='Desktop App', description='desktop app')
+    desktop_app.save()
+
+    web_services = models.ListingType(title='Web Services', description='web services')
+    web_services.save()
+
+    code_library = models.ListingType(title='Code Library', description='code library')
+    code_library.save()
 
     ############################################################################
     #                           Image Types

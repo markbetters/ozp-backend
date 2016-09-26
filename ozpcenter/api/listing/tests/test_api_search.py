@@ -126,7 +126,7 @@ class ListingSearchApiTest(APITestCase):
     def test_search_type(self):
         user = generic_model_access.get_profile('wsmith').user
         self.client.force_authenticate(user=user)
-        url = '/api/listings/search/?type=web application'
+        url = '/api/listings/search/?type=Web Application'
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -166,7 +166,7 @@ class ListingSearchApiTest(APITestCase):
     def test_search_is_enable(self):
         user = generic_model_access.get_profile('wsmith').user
         self.client.force_authenticate(user=user)
-        url = '/api/listings/search/?search=airmail&type=web application'
+        url = '/api/listings/search/?search=airmail&type=Web Application'
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -205,7 +205,7 @@ class ListingSearchApiTest(APITestCase):
                     }
                 ],
             "security_marking": "UNCLASSIFIED",
-            "listing_type": {"title": "web application"},
+            "listing_type": {"title": "Web Application"},
             "small_icon": {"id": 1},
             "large_icon": {"id": 2},
             "banner_icon": {"id": 3},
@@ -243,7 +243,7 @@ class ListingSearchApiTest(APITestCase):
         # Check
         user = generic_model_access.get_profile('wsmith').user
         self.client.force_authenticate(user=user)
-        url = '/api/listings/search/?search=airmail&type=web application'
+        url = '/api/listings/search/?search=airmail&type=Web Application'
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 

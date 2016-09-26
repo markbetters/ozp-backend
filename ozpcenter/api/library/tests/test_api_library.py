@@ -179,7 +179,7 @@ class LibraryApiTest(APITestCase):
         user = generic_model_access.get_profile('wsmith').user
         self.client.force_authenticate(user=user)
 
-        url = '/api/self/library/?type=web application'
+        url = '/api/self/library/?type=Web Application'
         response = self.client.get(url, format='json')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
