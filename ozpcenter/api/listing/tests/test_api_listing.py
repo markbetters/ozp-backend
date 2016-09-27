@@ -139,7 +139,7 @@ class ListingApiTest(APITestCase):
                 }
             ],
             "security_marking": "UNCLASSIFIED",
-            "listing_type": {"title": "web application"},
+            "listing_type": {"title": "Web Application"},
             "small_icon": {"id": 1},
             "large_icon": {"id": 2},
             "banner_icon": {"id": 3},
@@ -204,7 +204,7 @@ class ListingApiTest(APITestCase):
             'UNCLASSIFIED')
         # listing_type
         self.assertEqual(response.data['listing_type']['title'],
-            'web application')
+            'Web Application')
         # icons
         self.assertEqual(response.data['small_icon']['id'], 1)
         self.assertEqual(response.data['large_icon']['id'], 2)
@@ -331,7 +331,7 @@ class ListingApiTest(APITestCase):
         data['large_icon'] = {'id': 2}
         data['banner_icon'] = {'id': 3}
         data['large_banner_icon'] = {'id': 4}
-        data['listing_type'] = {'title': 'web application'}
+        data['listing_type'] = {'title': 'Web Application'}
         # and another update
         response = self.client.put(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -371,7 +371,7 @@ class ListingApiTest(APITestCase):
                 }
             ],
             "security_marking": "SECRET",
-            "listing_type": {"title": "widget"},
+            "listing_type": {"title": "Widget"},
             "small_icon": {"id": 1},
             "large_icon": {"id": 2},
             "banner_icon": {"id": 3},
@@ -437,7 +437,7 @@ class ListingApiTest(APITestCase):
             'SECRET')
         # listing_type
         self.assertEqual(response.data['listing_type']['title'],
-            'widget')
+            'Widget')
         # icons
         self.assertEqual(response.data['small_icon']['id'], 1)
         self.assertEqual(response.data['large_icon']['id'], 2)
@@ -685,7 +685,7 @@ class ListingApiTest(APITestCase):
                 }
             ],
             "security_marking": "SECRET",
-            "listing_type": {"title": "widget"},
+            "listing_type": {"title": "Widget"},
             "small_icon": {"id": 1},
             "large_icon": {"id": 2},
             "banner_icon": {"id": 3},
@@ -772,7 +772,7 @@ class ListingApiTest(APITestCase):
           "doc_urls": [],
           "security_marking": "UNCLASSIFIED",  # //FOR OFFICIAL USE ONLY//ABCDE
           "listing_type": {
-            "title": "web application"
+            "title": "Web Application"
           },
           "last_activity": {
             "action": "APPROVED"
@@ -849,7 +849,7 @@ class ListingApiTest(APITestCase):
           "is_private": False,
           "security_marking": "UNCLASSIFIED//FOR OFFICIAL USE ONLY//ABCDE",
           "listing_type": {
-            "title": "web application"
+            "title": "Web Application"
           },
           "unique_name": None,
           "last_activity": {
