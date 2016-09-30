@@ -201,7 +201,7 @@ class Tag(models.Model):
 
     TODO: this will work differently than legacy
     """
-    name = models.CharField(max_length=16, unique=True)
+    name = models.CharField(max_length=30, unique=True)
 
     def __repr__(self):
         return self.name
