@@ -87,14 +87,22 @@ def get_metadata(username):
         data = {}
         data['categories'] = values_query_set_to_dict(models.Category.objects.all().values(
             'title', 'description').order_by(Lower('title')))
+
         data['listing_types'] = values_query_set_to_dict(models.ListingType.objects.all().values(
             'title', 'description'))
-        data['listing_titles'] = [record.get('title') for record in values_query_set_to_dict(models.Listing.objects.for_user(username).all().values(
+
+        listing_titles = models.Listing.objects.for_user(username).filter(approval_status=models.Listing.APPROVED) \
+            .filter(is_deleted=False, is_enabled=True).all()
+
+        data['listing_titles'] = [record.get('title') for record in values_query_set_to_dict(listing_titles.values(
             'title'))]
+
         data['agencies'] = values_query_set_to_dict(models.Agency.objects.all().values(
             'title', 'short_name', 'icon', 'id'))
+
         data['contact_types'] = values_query_set_to_dict(models.ContactType.objects.all().values(
             'name', 'required'))
+
         data['intents'] = values_query_set_to_dict(models.Intent.objects.all().values(
             'action', 'media_type', 'label', 'icon', 'id'))
 
@@ -109,6 +117,7 @@ def get_metadata(username):
         for i in data['intents']:
             # i['icon'] = models.Image.objects.get(id=i['icon']).image_url()
             i['icon'] = '/TODO'
+
         return data
     except Exception as e:
         return {'error': True, 'msg': 'Error getting metadata: {0!s}'.format(str(e))}
