@@ -231,9 +231,16 @@ class LibraryApiTest(APITestCase):
         response = self.client.get(url, format='json')
 
         put_data = []
+        position_count = 0
+
         for i in response.data:
-            data = {'id': i['id'], 'folder': 'test',
-                'listing': {'id': i['listing']['id']}}
+            position_count = position_count + 1
+
+            data = {'id': i['id'],
+                    'folder': 'test',
+                    'listing': {'id': i['listing']['id']},
+                    'position': position_count
+                    }
             put_data.append(data)
 
         url = '/api/self/library/update_all/'
