@@ -74,6 +74,7 @@ def get_self_application_library(username, listing_type=None, folder_name=None):
         if folder_name:
             data = data.filter(folder=folder_name)
 
+        data = data.order_by('position')
         return data
     except ObjectDoesNotExist:
         return None
@@ -273,7 +274,7 @@ def batch_update_user_library_entry(username, data):
         instance.folder = data_entry['folder']
         instance.listing = data_entry['listing']
 
-        if data_entry['position']:
+        if data_entry['position'] is not None:
             instance.position = data_entry['position']
 
         instance.save()
