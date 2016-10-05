@@ -275,14 +275,13 @@ class ApplicationLibraryEntry(models.Model):
         'Profile', related_name='application_library_entries')
     listing = models.ForeignKey(
         'Listing', related_name='application_library_entries')
+    position = models.PositiveIntegerField(default=0)
 
     def __str__(self):
-        return '{0!s}:{1!s}:{2!s}'.format(self.folder, self.owner.user.username,
-                             self.listing.title)
+        return '{0!s}:{1!s}:{2!s}:{3!s}'.format(self.folder, self.owner.user.username, self.listing.title, self.position)
 
     def __repr__(self):
-        return '{0!s}:{1!s}:{2!s}'.format(self.folder, self.owner.user.username,
-                             self.listing.title)
+        return '{0!s}:{1!s}:{2!s}:{3!s}'.format(self.folder, self.owner.user.username, self.listing.title, self.position)
 
     class Meta:
         verbose_name_plural = "application library entries"
@@ -801,14 +800,14 @@ class AccessControlListingManager(models.Manager):
         objects = objects.exclude(is_private=True,
                                   agency__in=exclude_orgs)
 
-        # filter out listings by user's access level
-        titles_to_exclude = []
+        # Filter out listings by user's access level
+        ids_to_exclude = []
         for i in objects:
             if not i.security_marking:
                 logger.debug('Listing {0!s} has no security_marking'.format(i.title))
             if not system_has_access_control(username, i.security_marking):
-                titles_to_exclude.append(i.title)
-        objects = objects.exclude(title__in=titles_to_exclude)
+                ids_to_exclude.append(i.id)
+        objects = objects.exclude(pk__in=ids_to_exclude)
         return objects
 
 
@@ -1125,7 +1124,7 @@ class Notification(models.Model):
                                null=True, blank=True)
 
     # Peer to Peer Notifications
-    # 'peer_org' declaration causes a Segmentation Fault (core dumped) Error in Django Database Libray Code
+    # 'peer_org' declaration causes a Segmentation Fault (core dumped) Error in Django Database Library Code
     # django/db/backends/sqlite3/base.py, line 316 in execute
 
     # peer_org = models.ForeignKey(Profile, related_name='peer_notifications', null=True)

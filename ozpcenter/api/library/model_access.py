@@ -74,12 +74,13 @@ def get_self_application_library(username, listing_type=None, folder_name=None):
         if folder_name:
             data = data.filter(folder=folder_name)
 
+        data = data.order_by('position')
         return data
     except ObjectDoesNotExist:
         return None
 
 
-def create_self_user_library_entry(username, listing_id, folder_name=None):
+def create_self_user_library_entry(username, listing_id, folder_name=None, position=0):
     """
     Create ApplicationLibrary Entry
 
@@ -104,6 +105,10 @@ def create_self_user_library_entry(username, listing_id, folder_name=None):
     logger.debug('Adding bookmark for listing[{0!s}], user[{1!s}]'.format(listing.title, username), extra={'user': username})
 
     entry = models.ApplicationLibraryEntry(listing=listing, owner=owner, folder=folder_name)
+
+    if position:
+        entry.position = position
+
     entry.save()
     return entry
 
@@ -196,14 +201,16 @@ def batch_update_user_library_entry(username, data):
                         "id": 1
                     },
                     "folder": "folderName" (or null),
-                    "id": 2
+                    "id": 2,
+                    "position": 2
                 },
                 {
                     "listing": {
                         "id": 2
                     },
                     "folder": "folderName" (or null),
-                    "id": 1
+                    "id": 1,
+                    "position": 1
                 }
             ]
 
@@ -245,6 +252,17 @@ def batch_update_user_library_entry(username, data):
         else:
             new_data_entry['folder'] = data_entry['folder']
 
+        if 'position' not in data_entry:
+            new_data_entry['position'] = None
+        else:
+            try:
+                position_value = int(data_entry['position'])
+                new_data_entry['position'] = position_value
+            except ValueError:
+                errors.append('Position is not an integer')
+                error = True
+                new_data_entry['position'] = None
+
         if not error:
             validated_data.append(new_data_entry)
 
@@ -255,6 +273,10 @@ def batch_update_user_library_entry(username, data):
         instance = get_library_entry_by_id(data_entry['id'])
         instance.folder = data_entry['folder']
         instance.listing = data_entry['listing']
+
+        if data_entry['position'] is not None:
+            instance.position = data_entry['position']
+
         instance.save()
 
     return None, data
