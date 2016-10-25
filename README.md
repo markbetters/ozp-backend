@@ -3,7 +3,7 @@ Django-based backend API for the OZONE Platform (OZP). For those who just want
 to get OZP (Center, HUD, Webtop, IWC) up and running, see the
 [quickstart](https://github.com/ozone-development/ozp-ansible#quickstart) of the [ozp-ansible](https://github.com/ozone-development/ozp-ansible) project.
 
-## 3rd Party Services 
+## 3rd Party Services
 Travis-CI
 [![Build Status](https://travis-ci.org/aml-development/ozp-backend.svg?branch=master)](https://travis-ci.org/ozone-development/ozp-backend)
 
@@ -30,17 +30,6 @@ of this README, which will create a production-esque deployment of OZP:
 To serve the application on your host machine with minimal external dependencies,
 do the following:
 
-1. Remove psycopg2 from requirements.txt (so that Postgres won't be required)
-2. Enable HTTP Basic Auth and disable PKI authentication. In settings.py,
-`REST_FRAMEWORK.DEFAULT_AUTHENTICATION_CLASSES` should be set to
-`'rest_framework.authentication.BasicAuthentication'`
-3. Disable the authorization service. In settings.py, set `OZP.USE_AUTH_SERVER`
-to `False`
-4. In settings.py, set `OZP.DEMO_APP_ROOT` to `localhost:8000` (or wherever
-the django app will be served at)
-
-Then, do the following:
-
 1. Install Python 3.4.3. Python can be installed by downloading the appropriate
     files [here](https://www.python.org/downloads/release/python-343/). Note
     that Python 3.4 includes both `pip` and `venv`, a built-in replacement
@@ -52,7 +41,7 @@ Then, do the following:
 3. Active the new environment: `source ENV/bin/activate`
 4. Install the necessary dependencies into this python environment:
     `pip install -r requirements.txt`
-5. Run the server: `./restart_clean_dev_server.sh`
+5. Run the server: `make dev`
 
 Swagger documentation for the api is available at `http://localhost:8000/docs/`
 Use username `wsmith` password `password` when prompted for authentication info
