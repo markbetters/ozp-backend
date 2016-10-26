@@ -30,6 +30,8 @@ of this README, which will create a production-esque deployment of OZP:
 To serve the application on your host machine with minimal external dependencies,
 do the following:
 
+### Windows
+
 1. Install Python 3.4.3. Python can be installed by downloading the appropriate
     files [here](https://www.python.org/downloads/release/python-343/). Note
     that Python 3.4 includes both `pip` and `venv`, a built-in replacement
@@ -43,6 +45,36 @@ do the following:
     `pip install -r requirements.txt`
 5. Run the server: `make dev`
 
+### Debian Linux
+
+#### Operating system dependencies
+
+The Python version shipped with Debian Jessie, 3.4.2, will not work with our SDK changes.
+
+* `apt-get install liblzma-dev libsqlite3-dev sqlite3`
+* `wget https://www.python.org/ftp/python/3.5.2/Python-3.5.2.tgz`
+* `tar -xzf Python-3.5.2.tgz`
+* `cd Python-3.5.2`
+* `./configure --enable-loadable-sqlite-extensions`
+* `make`
+* `sudo make install`
+* `python3 -m pip install --upgrade pip`
+
+#### Development environment preparation
+
+* `cd ./<ozp project base>`
+* `git clone http://dev1.vistronix.com:9080/ozp/ozp-backend.git`
+* `python3 -m venv ozp-venv`
+* `source ozp-venv/bin/activate`
+* `cd ozp-backend`
+* `pip install -r requirements.txt`
+
+#### Building and running the OZP backend
+
+* `make dev`
+
+## API Documentation
+
 Swagger documentation for the api is available at `http://localhost:8000/docs/`
 Use username `wsmith` password `password` when prompted for authentication info
 
@@ -54,7 +86,7 @@ Run `python release.py` to generate a tarball with Wheels for the application
 and all of its dependencies. See `release.py` for details
 
 ## For Developers
-Understanding this project requires knowing a small-medium amount of Django and
+Understanding this project requires knowing a moderate amount of Django and
 a large amount of Django Rest Framework (DRF). From Django itself:
 * Object-relational mapper (ORM)
 * Authentication

@@ -26,6 +26,8 @@ env
 .idea/dictionaries
 .idea/vcs.xml
 .idea/jsLibraryMappings.xml
+.idea/compiler.xml
+.idea/misc.xml
 
 # Sensitive or high-churn files:
 .idea/dataSources.ids
