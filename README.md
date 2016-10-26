@@ -71,6 +71,9 @@ The Python version shipped with Debian Jessie, 3.4.2, will not work with our SDK
 
 #### Building and running the OZP backend
 
+* `cd ./<ozp project base>`
+* `source ozp-venv/bin/activate`
+* `cd ozp-backend`
 * `make dev`
 
 ## API Documentation
