@@ -31,7 +31,7 @@ urlpatterns = [
 
     # CAS
     url(r'^accounts/login/$', 'cas.views.login', name='login'),
-    url(r'^accounts/logout/$', 'cas.views.login', name='logout'),
+    url(r'^accounts/logout/$', 'cas.views.logout', name='logout'),
 
     # AJAX Sample
     url(r'^ajax_sample/', include('ajax_sample.urls')),
