@@ -63,11 +63,11 @@ res = es.bulk(index = INDEX_NAME, body = bulk_data, refresh = True)
 #print(" response: '%s'" % (res))
 
 
-# sanity check
-print("searching...")
-res = es.search(index = INDEX_NAME, size=2, body={"query": {"match_all": {}}})
-print(" response: '%s'" % (res))
-
-print("results:")
-for hit in res['hits']['hits']:
-    print(hit["_source"])
+# # sanity check
+# print("searching...")
+# res = es.search(index = INDEX_NAME, size=2, body={"query": {"match_all": {}}})
+# print(" response: '%s'" % (res))
+#
+# print("results:")
+# for hit in res['hits']['hits']:
+#     print(hit["_source"])

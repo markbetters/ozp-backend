@@ -29,6 +29,9 @@ Sorted by Relevance
   "total_reviews": 0,
   "is_featured": true,
 
+Resources:
+https://www.elastic.co/guide/en/elasticsearch/reference/2.4/analyzer.html
+https://qbox.io/blog/quick-and-dirty-autocomplete-with-elasticsearch-completion-suggest
 
 ************************************WARNING************************************
 Running this script will delete existing data in elasticsearch
@@ -76,6 +79,149 @@ class ReadOnlyListingSerializer(serializers.ModelSerializer):
         depth = 2
 
 
+def make_search_query_obj(user_string="", categories=[], agency=None, listing_type=None, size=10):
+    filter_data = [
+        {
+          "query": {
+            "term": {
+              "is_deleted": 0
+            }
+          }
+        },
+        {
+          "query": {
+            "term": {
+              "is_enabled": 1
+            }
+          }
+        },
+        {
+          "query": {
+            "match": {
+              "approval_status": "APPROVED"
+            }
+          }
+        }
+    ]
+
+    if agency:
+        agency_data = {
+            "nested": {
+              "path": "agency",
+              "query": {
+                "match": {
+                  "agency.short_name": "Minitrue"
+                }
+              }
+            }
+         }
+        filter_data.append(agency_data)
+
+    if listing_type:
+        listing_type_data = {
+            "nested": {
+              "path": "listing_type",
+              "query": {
+                "match": {
+                  "listing_type.title": listing_type
+                }
+              }
+            }
+        }
+
+        filter_data.append(listing_type_data)
+
+
+    if categories:
+        should_data = []
+
+        for category in categories:
+            current_category_data = {
+                "match": {
+                    "categories.title": category
+                }
+            }
+            should_data.append(current_category_data)
+
+        categories_data = {
+            "nested": {
+            "boost": 1,
+            "path": "categories",
+            "query": {
+                "bool": {
+                "should": should_data
+                }
+                }
+            }
+        }
+
+        filter_data.append(categories_data)
+
+    search_query = {
+      "size": size,
+      "query": {
+        "bool": {
+          "should": [
+            {
+              "match": {
+                "title": {
+                  "query": user_string,
+                  "boost": 2
+                }
+              }
+            },
+            {
+              "match": {
+                "description": {
+                  "query": user_string,
+                  "boost": 2
+                }
+              }
+            },
+            {
+              "match": {
+                "description_short": {
+                  "query": user_string,
+                  "boost": 2
+                }
+              }
+            },
+            {
+              "nested": {
+                "boost": 1,
+                "query": {
+                  "query_string": {
+                    "fields": [
+                      "tags.name"
+                    ],
+                    "query": user_string
+                  }
+                },
+                "path": "tags"
+              }
+            }
+          ],
+          "filter": filter_data
+        }
+      }
+    }
+    return search_query
+
+
+
+def search(user_string="", categories=[], agency=None, listing_type=None,size=10):
+        search_query = make_search_query_obj()
+
+        # sanity check
+        print("searching...")
+        res = es.search(index = INDEX_NAME, size=2, body=search_query)
+        print(" response: '%s'" % (res))
+
+        print("results:")
+        for hit in res['hits']['hits']:
+            print(hit["_source"])
+
+
 def run():
     """
     Reindex Data
@@ -96,16 +242,7 @@ def run():
     bulk_data = []
 
     for record in serializer_results:
-        # Clean Record
-        for key in keys_to_remove:
-            if key in record:
-                del record[key]
-
-        del record['agency']['icon']
-
-        record_clean_obj = json.loads(json.dumps(record))
-
-        # Sample Record (record_json)
+        # Sample Record (record_json) after clean
         '''
         {
           "id": 316,
@@ -157,6 +294,18 @@ def run():
           ]
         }
         '''
+        # Clean Record
+        for key in keys_to_remove:
+            if key in record:
+                del record[key]
+
+        del record['agency']['icon']
+
+        record_clean_obj = json.loads(json.dumps(record))
+
+        # title_suggest = {"input": [ record_clean_obj['title'] ] }
+        # record_clean_obj['title_suggest'] =title_suggest
+
         # Transform Serializer records into records for elasticsearch
         # print(record_clean_obj)
         # print('-----------')
@@ -181,11 +330,160 @@ def run():
         print(" response: '%s'" % (res))
 
     request_body = {
-        "settings" : {
+          "settings": {
             "number_of_shards": 1,
-            "number_of_replicas": 0
+            "number_of_replicas": 0,
+
+            "analysis": {
+              "filter": {
+                "autocomplete_filter": {
+                  "type": "edge_ngram",
+                  "min_gram": 1,
+                  "max_gram": 20
+                }
+              },
+              "analyzer": {
+                "autocomplete": {
+                  "type": "custom",
+                  "tokenizer": "standard",
+                  "filter": [
+                    "lowercase",
+                    "autocomplete_filter"
+                  ]
+                }
+              }
+            }
+          },
+
+          "mappings": {
+            "listings": {
+              "dynamic":      "strict",
+              "properties": {
+                "id": {
+                  "type": "long"
+                },
+                # Agency
+                "agency": {
+                  "type": "nested",
+                  "properties": {
+                    "id": {
+                      "type": "long"
+                    },
+                    "short_name": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "approval_status": {
+                  "type": "string"
+                },
+                "avg_rate": {
+                  "type": "double"
+                },
+                "categories": {
+                  "type": "nested",
+                  "properties": {
+                    "description": {
+                      "type": "string"
+                    },
+                    "id": {
+                      "type": "long"
+                    },
+                    "title": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "description": {
+                  "type": "string"
+                },
+                "description_short": {
+                  "type": "string"
+                },
+                "is_deleted": {
+                  "type": "boolean"
+                },
+                "is_enabled": {
+                  "type": "boolean"
+                },
+                "is_featured": {
+                  "type": "boolean"
+                },
+                "is_private": {
+                  "type": "boolean"
+                },
+                "listing_type": {
+                   "type": "nested",
+                   "properties": {
+
+                    "description": {
+                      "type": "string"
+                    },
+                    "id": {
+                      "type": "long"
+                    },
+                    "title": {
+                      "type": "string"
+                    }
+                   }
+                },
+                "security_marking": {
+                  "type": "string"
+                },
+                "tags": {
+                  "type": "nested",
+                  "properties": {
+                    "id": {
+                      "type": "long"
+                    },
+                    "name": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "title": {
+                  "type": "string",
+                  "analyzer": "autocomplete",
+                  "search_analyzer": "autocomplete"
+                },
+                # "title_suggest":{
+                #   "type": "completion",
+                #   #"index_analyzer": "simple",
+                #   "analyzer": "autocomplete",
+                #   "search_analyzer": "autocomplete",
+                #   "payloads": False
+                # },
+                "total_rate1": {
+                  "type": "long"
+                },
+                "total_rate2": {
+                  "type": "long"
+                },
+                "total_rate3": {
+                  "type": "long"
+                },
+                "total_rate4": {
+                  "type": "long"
+                },
+                "total_rate5": {
+                  "type": "long"
+                },
+                "total_reviews": {
+                  "type": "long"
+                },
+                "total_votes": {
+                  "type": "long"
+                },
+                "unique_name": {
+                  "type": "string"
+                }
+              }
+            }
+          }
         }
-    }
 
     print("Creating '%s' index..." % (INDEX_NAME))
     res = es.indices.create(index = INDEX_NAME, body = request_body)
@@ -198,3 +496,7 @@ def run():
 
     print("Done Indexing")
     # http://127.0.0.1:9200/appsmall/_search?size=10000&pretty
+
+    print(json.dumps(make_search_query_obj(agency='Minitrue',
+                                listing_type='web application',
+                                categories=['Communication']),indent=2))
