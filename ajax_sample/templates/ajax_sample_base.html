@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AJAX Sample</title>
+</head>
+<body>
+    <p>This sample AJAX page pulls a random value from the server every 10 seconds.</p>
+    <p>Next lookup is in <strong><span id="countdown">0</span> second(s).</strong></p>
+    <p>The server request said: <strong><span id="result">...</span></strong></p>
+    <script type="application/javascript" src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script type="application/javascript">
+
+        var counter = 10;
+
+        function fetchResult() {
+            $('span#result').html('...');
+            $.get('/ajax_sample/status/', function(text) {
+                $('span#result').html(text);
+            });
+        }
+
+        setInterval(function() {
+            counter = (counter < 1) ? 10 : counter - 1;
+            $('span#countdown').html(counter);
+            if (counter < 1) fetchResult();
+        }, 1000);
+
+    </script>
+</body>
+</html>
