@@ -32,9 +32,12 @@ codecheck:
 autopepdiff:
 	autopep8 ozp ozpcenter ozpiwc plugins plugins_util --ignore=E501,E123,E128,E121,E124,E711,E402 --exclude=ozpcenter/scripts/* --recursive --diff
 
+reindex_es:
+	python manage.py runscript reindex_es
+
 autopep:
 	autopep8 ozp ozpcenter ozpiwc plugins plugins_util --ignore=E501,E123,E128,E121,E124,E711,E402 --exclude=ozpcenter/scripts/* --recursive --in-place
-	
+
 dev: clean pre create_static
 	python manage.py makemigrations ozpcenter
 	python manage.py makemigrations ozpiwc
