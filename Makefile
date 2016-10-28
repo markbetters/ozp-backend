@@ -43,4 +43,4 @@ dev: clean pre create_static
 	echo 'Loading sample data...'
 	python manage.py runscript sample_data_generator
 
-	python manage.py runserver
+	python manage.py runserver 4440

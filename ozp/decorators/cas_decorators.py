@@ -17,7 +17,7 @@ def redirecting_login_required(view_func=None):
     def _wrapped_view(request: HttpRequest, *args, **kwargs):
         if request.user.is_authenticated():
             return view_func(request, *args, **kwargs)
-        if request.is_ajax():
+        if request.is_ajax() or not request.META.get('HTTP_ORIGIN') is None:
             return HttpResponseForbidden()
         path = request.build_absolute_uri()
         resolved_login_url = resolve_url(settings.LOGIN_URL)

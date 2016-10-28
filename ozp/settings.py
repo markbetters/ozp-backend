@@ -251,9 +251,9 @@ OZP = {
         'SERVER_CRT': '/ozp/server.crt',
         'SERVER_KEY': '/ozp/server.key',
         # assumes the real URL is <root>/users/<DN>/
-        'USER_INFO_URL': r'http://localhost:8000/demo-auth/users/%s/info.json?issuerDN=%s',
+        'USER_INFO_URL': r'http://localhost:4440/demo-auth/users/%s/info.json?issuerDN=%s',
         # assumes the real URL is <root>/users/<DN>/groups/<PROJECT_NAME>/
-        'USER_GROUPS_URL': r'http://localhost:8000/demo-auth/users/%s/groups/%s/',
+        'USER_GROUPS_URL': r'http://localhost:4440/demo-auth/users/%s/groups/%s/',
         # name of the group in the auth service for apps mall stewards
         'APPS_MALL_STEWARD_GROUP_NAME': 'OZP_APPS_MALL_STEWARD',
         # name of the group in the auth service for org stewards
