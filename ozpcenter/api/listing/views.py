@@ -8,12 +8,15 @@ from rest_framework import filters
 from rest_framework import status
 from rest_framework import viewsets
 from rest_framework.response import Response
+from rest_framework.decorators import list_route
 
 #  from ozpcenter import pagination  # TODO: Is Necessary?
 from ozpcenter import permissions
 import ozpcenter.api.listing.model_access as model_access
 import ozpcenter.api.listing.serializers as serializers
 import ozpcenter.model_access as generic_model_access
+import ozpcenter.api.listing.model_access_es as model_access_es
+
 
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center.' + str(__name__))
@@ -569,3 +572,70 @@ class ListingSearchViewSet(viewsets.ModelViewSet):
               message: Not authenticated
         """
         return super(ListingSearchViewSet, self).list(self, request)
+
+
+class ElasticsearchListingSearchViewSet(viewsets.ViewSet):
+    """
+    Elasticsearch Listing Search Viewset
+
+    It must support pagination. offset, limit
+
+    GET /api/listings/search/?search=6&offset=0&limit=24 HTTP/1.1
+    GET /api/listings/search/?search=6&offset=0&limit=24 HTTP/1.1
+
+    GET api/listings/essearch/?search=6&offset=0&category=Education&limit=24&type=web+application&agency=Minitrue&agency=Miniluv
+    """
+    permission_classes = (permissions.IsUser,)
+
+    def get_params(self):
+        filter_params = {}
+        filter_params['search'] = self.request.query_params.get('search')
+
+        filter_params['offset'] = self.request.query_params.get('offset', 0)
+        filter_params['limit'] = self.request.query_params.get('limit', 100)
+
+        if self.request.query_params.get('limit', False):
+            filter_params['limit_set'] = True
+        else:
+            filter_params['limit_set'] = False
+
+        # Filtering
+        filter_params['categories'] = self.request.query_params.getlist('category', [])
+        filter_params['agencies'] = self.request.query_params.getlist('agency', [])
+        filter_params['listing_types'] = self.request.query_params.getlist('type', [])
+
+        return filter_params
+
+    def list(self, request):
+        if not model_access_es.ping_elasticsearch():
+            return Response({'error': True, 'msg': 'Elasticsearch not responding'}, status=status.HTTP_503_SERVICE_UNAVAILABLE)
+
+        current_request_username = request.user.username
+        params = self.get_params()
+
+        return Response(model_access_es.search(current_request_username, params), status=status.HTTP_200_OK)
+
+    @list_route(methods=['get'], permission_classes=[permissions.IsUser])
+    def suggest(self, request):
+        if not model_access_es.ping_elasticsearch():
+            return Response({'error': True, 'msg': 'Elasticsearch not responding'}, status=status.HTTP_503_SERVICE_UNAVAILABLE)
+
+        current_request_username = request.user.username
+        params = self.get_params()
+
+        return Response(model_access_es.suggest(current_request_username, params), status=status.HTTP_200_OK)
+
+    def create(self, request):
+        pass
+
+    def retrieve(self, request, pk=None):
+        pass
+
+    def update(self, request, pk=None):
+        pass
+
+    def partial_update(self, request, pk=None):
+        pass
+
+    def destroy(self, request, pk=None):
+        pass
