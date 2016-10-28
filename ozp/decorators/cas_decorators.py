@@ -21,7 +21,7 @@ def redirecting_login_required(view_func=None):
             return HttpResponseForbidden()
         path = request.build_absolute_uri()
         resolved_login_url = resolve_url(settings.LOGIN_URL)
-        return redirect_to_login(path, resolved_login_url, 'renamed_next')
+        return redirect_to_login(path, resolved_login_url)
     return _wrapped_view
 
 
