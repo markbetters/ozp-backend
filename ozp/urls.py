@@ -32,9 +32,6 @@ urlpatterns = [
     # CAS
     url(r'^accounts/login/$', 'cas.views.login', name='login'),
     url(r'^accounts/logout/$', 'cas.views.logout', name='logout'),
-
-    # AJAX Sample
-    url(r'^ajax_sample/', include('ajax_sample.urls')),
 ]
 
 # in debug, serve the media and static resources with the django web server
