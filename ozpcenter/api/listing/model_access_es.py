@@ -9,6 +9,7 @@ from elasticsearch import Elasticsearch
 from rest_framework import serializers
 
 from ozpcenter import models
+from ozpcenter import errors
 from plugins_util.plugin_manager import system_has_access_control
 
 # import ozpcenter.model_access as generic_model_access
@@ -218,6 +219,10 @@ def bulk_reindex():
     https://qbox.io/blog/quick-and-dirty-autocomplete-with-elasticsearch-completion-suggest
     """
     print('Starting Indexing Process')
+
+    if not ping_elasticsearch():
+        raise errors.ElasticsearchServiceUnavailable()
+
     all_listings = models.Listing.objects.all()
     serializer = ReadOnlyListingSerializer(all_listings, many=True)
     serializer_results = serializer.data
@@ -324,7 +329,7 @@ def bulk_reindex():
         bulk_data.append(op_dict)
         bulk_data.append(record_clean_obj)
 
-    # create ES client, create index
+    # create ES client
     es = Elasticsearch(hosts=[ES_HOST])
 
     if es.indices.exists(INDEX_NAME):
@@ -358,6 +363,9 @@ def suggest(username, params_dict):
     """
     suggest
     """
+    if not ping_elasticsearch():
+        raise errors.ElasticsearchServiceUnavailable()
+
     search_input = params_dict['search']
     if search_input is None:
         return []
@@ -393,13 +401,63 @@ def suggest(username, params_dict):
 
 
 def search(username, params_dict):
+    """
+    Filter Listings
+
+    It must respects restrictions
+     - Private apps (apps only from user's agency)
+     - User's max_classification_level
+
+    Search Fields - user_search_input
+     - title
+     - description
+     - description_short
+     - tags__name
+
+    Filter_params can contain - filter_params
+        * List of category names (OR logic)
+        * List of agencies (OR logic)
+        * List of listing types (OR logic)
+
+    Too many variations to cache
+
+    Args:
+        username(str): username
+        user_search_input: user provided search keywords
+        filter_params({}):
+            categories = self.request.query_params.getlist('category', False)
+            agencies = self.request.query_params.getlist('agency', False)
+            listing_types = self.request.query_params.getlist('type', False)
+    """
+    if not ping_elasticsearch():
+        raise errors.ElasticsearchServiceUnavailable()
+
+    user = models.Profile.objects.get(user__username=username)
+
+    # Filter out private listings - private apps (apps only from user's agency) requirement
+    if user.highest_role() == 'APPS_MALL_STEWARD':
+        exclude_orgs = []
+    elif user.highest_role() == 'ORG_STEWARD':
+        user_orgs = user.stewarded_organizations.all()
+        user_orgs = [i.title for i in user_orgs]
+        exclude_orgs_obj = models.Agency.objects.exclude(title__in=user_orgs)
+        exclude_orgs = [agency.title for agency in exclude_orgs_obj]
+    else:
+        user_orgs = user.organizations.all()
+        user_orgs = [i.title for i in user_orgs]
+        exclude_orgs_obj = models.Agency.objects.exclude(title__in=user_orgs)
+        exclude_orgs = [agency.title for agency in exclude_orgs_obj]
+
+    # print(exclude_orgs)
+    # exclude_orgs = 'miniluv', 'minitrue']
+
     search_input = params_dict['search']
     if search_input is None:
         return []
 
-    search_query = make_search_query_obj(params_dict, min_score=0.3, exclude_agencies=['miniluv', 'minitrue'])
-
+    search_query = make_search_query_obj(params_dict, min_score=0.3, exclude_agencies=exclude_orgs)
     print(json.dumps(search_query, indent=4))
+
     res = es_client.search(index=INDEX_NAME, body=search_query)
 
     hits = res.get('hits', {})
@@ -409,7 +467,7 @@ def search(username, params_dict):
 
     hit_titles = []
 
-    excluded_count = 10
+    excluded_count = 0
 
     for current_innter_hit in inner_hits:
         source = current_innter_hit.get('_source')
@@ -437,7 +495,7 @@ def search(username, params_dict):
     return final_results
 
 
-def make_search_query_obj(filter_params, exclude_agencies=[], min_score=0.8):
+def make_search_query_obj(filter_params, exclude_agencies=[], min_score=0.4):
     """
     Function is used to make elasticsearch query for searching
 
@@ -637,84 +695,3 @@ def make_search_query_obj(filter_params, exclude_agencies=[], min_score=0.8):
         search_query['from'] = user_offset
 
     return search_query
-
-
-def filter_listings(username, filter_params):
-    """
-    Filter Listings
-
-    It must respects restrictions
-     - Private apps (apps only from user's agency)
-     - User's max_classification_level
-
-    Search Fields - user_search_input
-     - title
-     - description
-     - description_short
-     - tags__name
-
-    Filter_params can contain - filter_params
-        * List of category names (OR logic)
-        * List of agencies (OR logic)
-        * List of listing types (OR logic)
-
-    Too many variations to cache
-
-    Args:
-        username(str): username
-        user_search_input: user provided search keywords
-        filter_params({}):
-            categories = self.request.query_params.getlist('category', False)
-            agencies = self.request.query_params.getlist('agency', False)
-            listing_types = self.request.query_params.getlist('type', False)
-    """
-    user = models.Profile.objects.get(user__username=username)
-
-    # Filter out private listings - private apps (apps only from user's agency) requirement
-    if user.highest_role() == 'APPS_MALL_STEWARD':
-        exclude_orgs = []
-    elif user.highest_role() == 'ORG_STEWARD':
-        user_orgs = user.stewarded_organizations.all()
-        user_orgs = [i.title for i in user_orgs]
-        exclude_orgs = models.Agency.objects.exclude(title__in=user_orgs)
-    else:
-        user_orgs = user.organizations.all()
-        user_orgs = [i.title for i in user_orgs]
-        exclude_orgs = models.Agency.objects.exclude(title__in=user_orgs)
-
-    print(exclude_orgs)
-    # exclude_orgs is availble
-
-    # TODO: Rewrite 'Filter_params' and 'Search Fields' logic for elasticsearch
-    # Use def make_search_query_obj(user_string="", categories=[], agency=None, listing_type=None, size=10)
-    # --------------
-    # objects = models.Listing.objects.for_user(username).filter(
-    #     approval_status=models.Listing.APPROVED).filter(is_enabled=True)
-    # if 'categories' in filter_params:
-    #     # TODO: this is OR logic not AND
-    #     objects = objects.filter(
-    #         categories__title__in=filter_params['categories'])
-    # if 'agencies' in filter_params:
-    #     objects = objects.filter(
-    #         agency__short_name__in=filter_params['agencies'])
-    # if 'listing_types' in filter_params:
-    #     objects = objects.filter(
-    #         listing_type__title__in=filter_params['listing_types'])
-    #
-    # objects = objects.order_by('-avg_rate', '-total_reviews')
-    # return objects
-    # --------------
-
-    # TODO: Rewrite 'restrictions' logic for elasticsearch
-    #
-    # # Filter out listings by user's access level
-    # ids_to_exclude = []
-    # for i in objects:
-    #     if not i.security_marking:
-    #         logger.debug('Listing {0!s} has no security_marking'.format(i.title))
-    #     if not system_has_access_control(username, i.security_marking):
-    #         ids_to_exclude.append(i.id)
-    # objects = objects.exclude(pk__in=ids_to_exclude)
-    # return objects
-    # --------------
-    pass

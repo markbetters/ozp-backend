@@ -18,10 +18,26 @@ from django.core.validators import MinValueValidator
 from django.core.validators import RegexValidator
 from django.db import models
 from django.contrib import auth
+from rest_framework import serializers
 
 from plugins_util.plugin_manager import system_has_access_control
 from ozpcenter import constants
 from ozpcenter import utils
+
+from elasticsearch import Elasticsearch
+
+ES_HOST = {
+    "host": "localhost",
+    "port": 9200
+}
+
+INDEX_NAME = 'appsmall'
+TYPE_NAME = 'listings'
+ID_FIELD = 'id'
+
+# Create ES client
+es_client = Elasticsearch(hosts=[ES_HOST])
+
 
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center.' + str(__name__))
@@ -943,6 +959,81 @@ class Listing(models.Model):
     def __str__(self):
         return '({0!s}-{1!s})'.format(self.unique_name, [owner.user.username for owner in self.owners.all()])
 
+    def save(self, *args, **kwargs):
+        is_new = self.pk
+        super(Listing, self).save(*args, **kwargs)
+        current_listing_id = self.pk
+
+        if not es_client.ping():
+            logger.error('ElasticsearchServiceUnavailable')
+            # raise errors.ElasticsearchServiceUnavailable()
+        else:
+            serializer = ReadOnlyListingSerializer(self)
+            record = serializer.data
+
+            keys_to_remove = ['small_icons', 'contacts', 'last_activity',
+                              'required_listings', 'large_icon', 'small_icon',
+                              'banner_icon', 'large_banner_icon', 'owners',
+                              'current_rejection', 'launch_url', 'what_is_new',
+                              'iframe_compatible', 'approved_date',
+                              'edited_date', 'version_name', 'requirements',
+                              'intents']
+            # Clean Record
+            for key in keys_to_remove:
+                if key in record:
+                    del record[key]
+
+            del record['agency']['icon']
+
+            record_clean_obj = json.loads(json.dumps(record))
+
+            # title_suggest = {"input": [ record_clean_obj['title'] ] }
+            # record_clean_obj['title_suggest'] =title_suggest
+
+            # Flatten Agency Obj - Makes the search query easier
+            record_clean_obj['agency_id'] = record_clean_obj['agency']['id']
+            record_clean_obj['agency_short_name'] = record_clean_obj['agency']['short_name']
+            record_clean_obj['agency_title'] = record_clean_obj['agency']['title']
+            del record_clean_obj['agency']
+
+            # Flatten listing_type Obj - - Makes the search query easier
+            record_clean_obj['listing_type_id'] = record_clean_obj['listing_type']['id']
+            record_clean_obj['listing_type_description'] = record_clean_obj['listing_type']['description']
+            record_clean_obj['listing_type_title'] = record_clean_obj['listing_type']['title']
+            del record_clean_obj['listing_type']
+
+            # Transform Serializer records into records for elasticsearch
+            # print(record_clean_obj)
+            # print('-----------')
+
+            if is_new is not None:
+                es_client.update(
+                    index=INDEX_NAME,
+                    doc_type=TYPE_NAME,
+                    id=current_listing_id,
+                    refresh=True,
+                    body={
+                        'doc': record_clean_obj
+                    }
+                )
+            else:
+                es_client.create(
+                    index=self._meta.es_index_name,
+                    doc_type=self._meta.es_type_name,
+                    id=current_listing_id,
+                    refresh=True,
+                    body={
+                        'doc': record_clean_obj
+                    }
+                )
+
+
+class ReadOnlyListingSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Listing
+        depth = 2
+
 
 @receiver(post_save, sender=Listing)
 def post_save_listing(sender, instance, created, **kwargs):
@@ -952,6 +1043,7 @@ def post_save_listing(sender, instance, created, **kwargs):
 
 @receiver(post_delete, sender=Listing)
 def post_delete_listing(sender, instance, **kwargs):
+    # TODO: When logic is in place to delete, make sure elasticsearch logic is here
     cache.delete_pattern("storefront-*")
     cache.delete_pattern("library_self-*")
 

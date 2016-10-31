@@ -607,35 +607,46 @@ class ElasticsearchListingSearchViewSet(viewsets.ViewSet):
         return filter_params
 
     def list(self, request):
-        if not model_access_es.ping_elasticsearch():
-            return Response({'error': True, 'msg': 'Elasticsearch not responding'}, status=status.HTTP_503_SERVICE_UNAVAILABLE)
-
         current_request_username = request.user.username
         params = self.get_params()
 
-        return Response(model_access_es.search(current_request_username, params), status=status.HTTP_200_OK)
+        results = model_access_es.search(current_request_username, params)
+        return Response(results, status=status.HTTP_200_OK)
 
     @list_route(methods=['get'], permission_classes=[permissions.IsUser])
     def suggest(self, request):
-        if not model_access_es.ping_elasticsearch():
-            return Response({'error': True, 'msg': 'Elasticsearch not responding'}, status=status.HTTP_503_SERVICE_UNAVAILABLE)
-
         current_request_username = request.user.username
         params = self.get_params()
 
-        return Response(model_access_es.suggest(current_request_username, params), status=status.HTTP_200_OK)
+        results = model_access_es.suggest(current_request_username, params)
+        return Response(results, status=status.HTTP_200_OK)
 
     def create(self, request):
-        pass
+        """
+        This method is not supported
+        """
+        return Response({'detail': 'HTTP Verb Not Supported'}, status=status.HTTP_501_NOT_IMPLEMENTED)
 
     def retrieve(self, request, pk=None):
-        pass
+        """
+        This method is not supported
+        """
+        return Response({'detail': 'HTTP Verb Not Supported'}, status=status.HTTP_501_NOT_IMPLEMENTED)
 
     def update(self, request, pk=None):
-        pass
+        """
+        This method is not supported
+        """
+        return Response({'detail': 'HTTP Verb Not Supported'}, status=status.HTTP_501_NOT_IMPLEMENTED)
 
     def partial_update(self, request, pk=None):
-        pass
+        """
+        This method is not supported
+        """
+        return Response({'detail': 'HTTP Verb Not Supported'}, status=status.HTTP_501_NOT_IMPLEMENTED)
 
     def destroy(self, request, pk=None):
-        pass
+        """
+        This method is not supported
+        """
+        return Response({'detail': 'HTTP Verb Not Supported'}, status=status.HTTP_501_NOT_IMPLEMENTED)
