@@ -151,7 +151,7 @@ def filter_listings(username, filter_params):
         objects = objects.filter(
             listing_type__title__in=filter_params['listing_types'])
 
-    objects = objects.order_by('-avg_rate', '-total_reviews')
+    objects = objects.order_by('is_deleted','-avg_rate', '-total_reviews')
     return objects
 
 
@@ -179,7 +179,7 @@ def get_listings(username):
     Get Listings this user can see
     """
     try:
-        return models.Listing.objects.for_user(username).all()
+        return models.Listing.objects.for_user(username).order_by('is_deleted', '-edited_date')
     except ObjectDoesNotExist:
         return None
 
