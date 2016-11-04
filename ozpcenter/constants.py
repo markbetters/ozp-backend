@@ -22,3 +22,15 @@ MEDIA_TYPE_REGEX = r'\w'
 VALID_IMAGE_TYPES = ['png', 'jpg', 'jpeg', 'gif']
 
 DEFAULT_SECURITY_MARKING = 'UNCLASSIFIED'
+
+# Boolean to enable/disable the use Elasticsearch use
+ES_ENABLED = True
+ES_INDEX_NAME = 'appsmall'
+ES_TYPE_NAME = 'listings'
+ES_ID_FIELD = 'id'
+
+# TODO:Put in settings.py
+ES_HOST = {
+    "host": "localhost",
+    "port": 9200
+}
