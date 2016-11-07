@@ -34,6 +34,8 @@ def ping_elasticsearch():
     """
     Used to check to see if elasticsearch is up
     """
+    if constants.ES_ENABLED is False:
+        return False
     return es_client.ping()
 
 

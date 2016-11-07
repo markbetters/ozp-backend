@@ -9,8 +9,12 @@ from ozpcenter import constants
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center.' + str(__name__))
 
-# Create ES client
-es_client = Elasticsearch(hosts=[constants.ES_HOST])
+
+if constants.ES_ENABLED:
+    # Create ES client
+    es_client = Elasticsearch(hosts=[constants.ES_HOST])
+else:
+    es_client = None
 
 
 def update_es_listing(current_listing_id, record, is_new):
@@ -18,7 +22,9 @@ def update_es_listing(current_listing_id, record, is_new):
     Args:
         is_new: backend is new
     """
-    if not es_client.ping():
+    if constants.ES_ENABLED is False:
+        logger.warn('ElasticsearchService Not Enabled')
+    elif not es_client.ping():
         logger.warn('ElasticsearchServiceUnavailable')
         # raise errors.ElasticsearchServiceUnavailable()
     else:

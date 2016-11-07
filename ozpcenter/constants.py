@@ -24,7 +24,7 @@ VALID_IMAGE_TYPES = ['png', 'jpg', 'jpeg', 'gif']
 DEFAULT_SECURITY_MARKING = 'UNCLASSIFIED'
 
 # Boolean to enable/disable the use Elasticsearch use
-ES_ENABLED = True
+ES_ENABLED = False
 ES_INDEX_NAME = 'appsmall'
 ES_TYPE_NAME = 'listings'
 ES_ID_FIELD = 'id'
