@@ -953,10 +953,9 @@ class Listing(models.Model):
         super(Listing, self).save(*args, **kwargs)
         current_listing_id = self.pk
 
-        serializer = ReadOnlyListingSerializer(self)
-        record = serializer.data
-
         if constants.ES_ENABLED:
+            serializer = ReadOnlyListingSerializer(self)
+            record = serializer.data  # TODO Find a faster way to serialize data, makes test take a long time to complete
             elasticsearch_util.update_es_listing(current_listing_id, record, is_new)
 
 
