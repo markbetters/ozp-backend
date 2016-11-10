@@ -25,7 +25,7 @@ DEFAULT_SECURITY_MARKING = 'UNCLASSIFIED'
 
 # TODO: Put Elasticsearch settings into in settings.py
 # Boolean to enable/disable the use Elasticsearch use
-ES_ENABLED = True
+ES_ENABLED = False
 ES_INDEX_NAME = 'appsmall'
 ES_TYPE_NAME = 'listings'
 ES_ID_FIELD = 'id'
