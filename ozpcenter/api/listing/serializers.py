@@ -314,7 +314,7 @@ class ListingSerializer(serializers.ModelSerializer):
                 user_username = None if user_dict is None else user_dict.get('username')
 
                 # if not user_username:
-                    # raise serializers.ValidationError('Owner field requires correct format')
+                # raise serializers.ValidationError('Owner field requires correct format')
 
                 owner_profile = generic_model_access.get_profile(user_username)
                 # if not owner_profile:
@@ -325,8 +325,8 @@ class ListingSerializer(serializers.ModelSerializer):
                 try:
                     if system_has_access_control(owner_profile.user.username, ret.get('security_marking')) is False:
                         check_failed.append(owner_profile.user.username)
-                        # raise serializers.ValidationError('Security marking too high for current owner profile')
-                except Exception as err:
+                        # raise serializers.ValidationError(owner_profile.user.username + 'User certificate is invalid')
+                except Exception:
                     check_failed.append(owner_profile.user.username)
 
         ret['cert_issues'] = check_failed

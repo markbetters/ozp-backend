@@ -42,7 +42,7 @@ class ListingApiTest(APITestCase):
                                     'is_deleted', 'avg_rate', 'total_votes', 'total_rate5', 'total_rate4',
                                     'total_rate3', 'total_rate2', 'total_rate1', 'total_reviews',
                                     'iframe_compatible', 'security_marking', 'is_private',
-                                    'required_listings']
+                                    'required_listings', 'cert_issues']
 
         listing_keys = [k for k, v in listing_map.items()]
 
