@@ -1,3 +1,8 @@
+"""
+Elasticsearch Utils
+--------------------------
+Contains Elasticsearch common functions
+"""
 import json
 import logging
 import time
@@ -12,9 +17,222 @@ logger = logging.getLogger('ozp-center.' + str(__name__))
 
 if constants.ES_ENABLED:
     # Create ES client
-    es_client = Elasticsearch(hosts=[constants.ES_HOST])
+    es_client = Elasticsearch(hosts=constants.ES_HOST)
 else:
     es_client = None
+
+
+def get_mapping_setting_obj(number_of_shards=None, number_of_replicas=None):
+    """
+    This method creates the elasticsearch mapping object
+
+    https://www.elastic.co/guide/en/elasticsearch/guide/current/_how_primary_and_replica_shards_interact.html
+    Args:
+        number_of_shards(int): Number of shards that index should to have
+        number_of_replicas(int): Number of replicas that index should have
+
+    Returns:
+        mapping obj(dictionary): elasticsearch mapping object
+    """
+    if number_of_shards is None:
+        number_of_shards = constants.ES_NUMBER_OF_SHARDS
+
+    if number_of_replicas is None:
+        number_of_replicas = constants.ES_NUMBER_OF_REPLICAS
+
+    data = {
+      "settings": {
+        "number_of_shards": number_of_shards,
+        "number_of_replicas": number_of_replicas,
+        "analysis": {
+          "filter": {
+            "autocomplete_filter": {
+              "type": "edge_ngram",
+              "min_gram": 1,
+              "max_gram": 20
+            }
+          },
+          "analyzer": {
+            "autocomplete": {
+              "type": "custom",
+              "tokenizer": "standard",
+              "filter": [
+                "lowercase",
+                "autocomplete_filter"
+              ]
+            }
+          }
+        }
+      },
+      "mappings": {
+        "listings": {
+          "dynamic": "strict",
+          "properties": {
+            "id": {
+              "type": "long"
+            },
+            "title": {
+              "type": "string",
+              "analyzer": "autocomplete",
+              "search_analyzer": "autocomplete"
+            },
+            "agency_id": {
+              "type": "long"
+            },
+            "agency_short_name": {
+              "type": "string"
+            },
+            "agency_title": {
+              "type": "string"
+            },
+            "approval_status": {
+              "type": "string"
+            },
+            "avg_rate": {
+              "type": "double"
+            },
+            "categories": {
+              "type": "nested",
+              "properties": {
+                "description": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "long"
+                },
+                "title": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": {
+              "type": "string",
+              "analyzer": "autocomplete",
+              "search_analyzer": "autocomplete"
+            },
+            "description_short": {
+              "type": "string",
+              "analyzer": "autocomplete",
+              "search_analyzer": "autocomplete"
+            },
+            "is_deleted": {
+              "type": "boolean"
+            },
+            "is_enabled": {
+              "type": "boolean"
+            },
+            "is_featured": {
+              "type": "boolean"
+            },
+            "is_private": {
+              "type": "boolean"
+            },
+            "listing_type_description": {
+              "type": "string"
+            },
+            "listing_type_id": {
+              "type": "long"
+            },
+            "listing_type_title": {
+              "type": "string"
+            },
+            "security_marking": {
+              "type": "string"
+            },
+            "tags": {
+              "type": "nested",
+              "properties": {
+                "id": {
+                  "type": "long"
+                },
+                "name": {
+                  "type": "string",
+                  "analyzer": "autocomplete",
+                  "search_analyzer": "autocomplete"
+                }
+              }
+            },
+            "banner_icon": {
+              "properties": {
+                "file_extension": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "long"
+                },
+                "security_marking": {
+                  "type": "string"
+                }
+              }
+            },
+            "large_banner_icon": {
+              "properties": {
+                "file_extension": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "long"
+                },
+                "security_marking": {
+                  "type": "string"
+                }
+              }
+            },
+            "large_icon": {
+              "properties": {
+                "file_extension": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "long"
+                },
+                "security_marking": {
+                  "type": "string"
+                }
+              }
+            },
+            "small_icon": {
+              "properties": {
+                "file_extension": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "long"
+                },
+                "security_marking": {
+                  "type": "string"
+                }
+              }
+            },
+            "total_rate1": {
+              "type": "long"
+            },
+            "total_rate2": {
+              "type": "long"
+            },
+            "total_rate3": {
+              "type": "long"
+            },
+            "total_rate4": {
+              "type": "long"
+            },
+            "total_rate5": {
+              "type": "long"
+            },
+            "total_reviews": {
+              "type": "long"
+            },
+            "total_votes": {
+              "type": "long"
+            },
+            "unique_name": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+    return data
 
 
 def update_es_listing(current_listing_id, record, is_new):
@@ -85,155 +303,7 @@ def update_es_listing(current_listing_id, record, is_new):
                 )
 
 
-def get_mapping_setting_obj():
-    """
-    Mapping Object
-    """
-    data = {
-        "settings": {
-            # "refresh_interval" : 5,
-            "number_of_shards": 1,
-            "number_of_replicas": 0,
-            "analysis": {
-                "filter": {
-                    "autocomplete_filter": {
-                        "type": "edge_ngram",
-                        "min_gram": 1,
-                        "max_gram": 20
-                    }
-                },
-                "analyzer": {
-                    "autocomplete": {
-                        "type": "custom",
-                        "tokenizer": "standard",
-                        "filter": [
-                            "lowercase",
-                            "autocomplete_filter"
-                        ]
-                    }
-                }
-            }
-        },
-        "mappings": {
-            "listings": {
-                "dynamic": "strict",
-                "properties": {
-                    "id": {
-                        "type": "long"
-                    },
-                    "title": {
-                        "type": "string",
-                        "analyzer": "autocomplete",
-                        "search_analyzer": "autocomplete"
-                    },
-                    "agency_id": {
-                        "type": "long"
-                    },
-                    "agency_short_name": {
-                        "type": "string"
-                    },
-                    "agency_title": {
-                        "type": "string"
-                    },
-                    "approval_status": {
-                        "type": "string"
-                    },
-                    "avg_rate": {
-                        "type": "double"
-                    },
-                    "categories": {
-                        "type": "nested",
-                        "properties": {
-                            "description": {
-                                "type": "string"
-                            },
-                            "id": {
-                                "type": "long"
-                            },
-                            "title": {
-                                "type": "string"
-                            }
-                        }
-                    },
-                    "description": {
-                        "type": "string",
-                        "analyzer": "autocomplete",
-                        "search_analyzer": "autocomplete"
-                    },
-                    "description_short": {
-                        "type": "string",
-                        "analyzer": "autocomplete",
-                        "search_analyzer": "autocomplete"
-                    },
-                    "is_deleted": {
-                        "type": "boolean"
-                    },
-                    "is_enabled": {
-                        "type": "boolean"
-                    },
-                    "is_featured": {
-                        "type": "boolean"
-                    },
-                    "is_private": {
-                        "type": "boolean"
-                    },
-                    "listing_type_description": {
-                        "type": "string"
-                    },
-                    "listing_type_id": {
-                        "type": "long"
-                    },
-                    "listing_type_title": {
-                        "type": "string"
-                    },
-                    "security_marking": {
-                        "type": "string"
-                    },
-                    "tags": {
-                        "type": "nested",
-                        "properties": {
-                            "id": {
-                                "type": "long"
-                            },
-                            "name": {
-                                "type": "string",
-                                "analyzer": "autocomplete",
-                                "search_analyzer": "autocomplete"
-                            }
-                        }
-                    },
-                    "total_rate1": {
-                        "type": "long"
-                    },
-                    "total_rate2": {
-                        "type": "long"
-                    },
-                    "total_rate3": {
-                        "type": "long"
-                    },
-                    "total_rate4": {
-                        "type": "long"
-                    },
-                    "total_rate5": {
-                        "type": "long"
-                    },
-                    "total_reviews": {
-                        "type": "long"
-                    },
-                    "total_votes": {
-                        "type": "long"
-                    },
-                    "unique_name": {
-                        "type": "string"
-                    }
-                }
-            }
-        }
-    }
-    return data
-
-
-def make_search_query_obj(filter_params, exclude_agencies=[], min_score=0.4):
+def make_search_query_obj(filter_params, exclude_agencies=None, min_score=0.4):
     """
     Function is used to make elasticsearch query for searching
 
@@ -241,8 +311,16 @@ def make_search_query_obj(filter_params, exclude_agencies=[], min_score=0.4):
 
     Args:
         filter_params(dict): Dictionary with search parameters
+            search(str): Search Keyword
+            user_offset(int): Offset
+            user_limit(int): Limit
+            categories([str,str,..]): List category Strings
+            agencies([str,str,..]): List agencies Strings
+            listing_types([str,str,..]): List listing types Strings
     """
-    user_string = filter_params.get('search', '')
+    exclude_agencies = exclude_agencies or []
+
+    user_string = filter_params.get('search', '').strip()
 
     # Pagination
     user_offset = filter_params.get('offset', 0)
@@ -254,7 +332,8 @@ def make_search_query_obj(filter_params, exclude_agencies=[], min_score=0.4):
     agencies = filter_params.get('agencies', [])
     listing_types = filter_params.get('listing_types', [])
 
-    # Default Filter - A Listing needs to enabled, not deleted, and approved
+    # Default Filter
+    # Filters out listing that are not deleted, enabled, and Approved
     filter_data = [
         {
           "query": {
@@ -279,8 +358,9 @@ def make_search_query_obj(filter_params, exclude_agencies=[], min_score=0.4):
         }
     ]
 
+    # Agencies to filter
     if agencies:
-        should_data = []
+        agencies_temp = []
 
         for agency_title in agencies:
             current_agency_data = {
@@ -288,23 +368,23 @@ def make_search_query_obj(filter_params, exclude_agencies=[], min_score=0.4):
                     "agency_short_name": agency_title
                 }
             }
-            should_data.append(current_agency_data)
+            agencies_temp.append(current_agency_data)
 
         agencies_data = {
             "query": {
                 "bool": {
-                    "should": should_data
+                    "should": agencies_temp
                     }
                 }
         }
 
         filter_data.append(agencies_data)
 
+    # Agencies to exclude
     if exclude_agencies:
-        agencies_must_not_data = []
+        exclude_agencies_temp = []
 
         for exclude_agency_short_name in exclude_agencies:
-
             temp_filter = {
               "bool": {
                 "filter": [
@@ -322,20 +402,21 @@ def make_search_query_obj(filter_params, exclude_agencies=[], min_score=0.4):
               }
             }
 
-            agencies_must_not_data.append(temp_filter)
+            exclude_agencies_temp.append(temp_filter)
 
         agencies_query_data = {
             "query": {
                 "bool": {
-                    "must_not": agencies_must_not_data
+                    "must_not": exclude_agencies_temp
                 }
             }
         }
 
         filter_data.append(agencies_query_data)
 
+    # Listing Types to filter
     if listing_types:
-        should_data = []
+        listing_types_temp = []
 
         for listing_type_title in listing_types:
             current_listing_type_data = {
@@ -343,19 +424,20 @@ def make_search_query_obj(filter_params, exclude_agencies=[], min_score=0.4):
                     "listing_type_title": listing_type_title
                 }
             }
-            should_data.append(current_listing_type_data)
+            listing_types_temp.append(current_listing_type_data)
 
         listing_type_data = {
             "query": {
                 "bool": {
-                    "should": should_data
+                    "should": listing_types_temp
                 }
             }
         }
         filter_data.append(listing_type_data)
 
+    # Categories to filter
     if categories:
-        should_data = []
+        categories_temp = []
 
         for category in categories:
             current_category_data = {
@@ -363,7 +445,7 @@ def make_search_query_obj(filter_params, exclude_agencies=[], min_score=0.4):
                     "categories.title": category
                 }
             }
-            should_data.append(current_category_data)
+            categories_temp.append(current_category_data)
 
         categories_data = {
             "nested": {
@@ -371,7 +453,7 @@ def make_search_query_obj(filter_params, exclude_agencies=[], min_score=0.4):
                 "path": "categories",
                 "query": {
                     "bool": {
-                        "should": should_data
+                        "should": categories_temp
                     }
                 }
             }
@@ -494,18 +576,34 @@ def prepare_clean_listing_record(record):
     Args:
         record: One record of ReadOnlyListingSerializer
     """
-    keys_to_remove = ['small_icons', 'contacts', 'last_activity',
-                      'required_listings', 'large_icon', 'small_icon',
-                      'banner_icon', 'large_banner_icon', 'owners',
-                      'current_rejection', 'launch_url', 'what_is_new',
-                      'iframe_compatible', 'approved_date',
-                      'edited_date', 'version_name', 'requirements',
+    keys_to_remove = ['contacts',
+                      'last_activity',
+                      'required_listings',
+                      'owners',
+                      'current_rejection',
+                      'launch_url',
+                      'what_is_new',
+                      'iframe_compatible',
+                      'approved_date',
+                      'edited_date',
+                      'version_name',
+                      'requirements',
                       'intents']
 
     # Clean Record
     for key in keys_to_remove:
         if key in record:
             del record[key]
+
+    image_keys_to_clean = ['large_icon',
+                           'small_icon',
+                           'banner_icon',
+                           'large_banner_icon']
+
+    # Clean Large_icon
+    for image_key in image_keys_to_clean:
+        del record[image_key]['image_type']
+        del record[image_key]['uuid']
 
     del record['agency']['icon']
 
@@ -525,4 +623,5 @@ def prepare_clean_listing_record(record):
     record_clean_obj['listing_type_description'] = record_clean_obj['listing_type']['description']
     record_clean_obj['listing_type_title'] = record_clean_obj['listing_type']['title']
     del record_clean_obj['listing_type']
+
     return record_clean_obj

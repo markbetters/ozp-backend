@@ -580,8 +580,8 @@ class ElasticsearchListingSearchViewSet(viewsets.ViewSet):
 
     It must support pagination. offset, limit
 
-    GET /api/listings/search/?search=6&offset=0&limit=24 HTTP/1.1
-    GET /api/listings/search/?search=6&offset=0&limit=24 HTTP/1.1
+    GET /api/listings/essearch/?search=6&offset=0&limit=24 HTTP/1.1
+    GET /api/listings/essearch/?search=6&offset=0&limit=24 HTTP/1.1
 
     GET api/listings/essearch/?search=6&offset=0&category=Education&limit=24&type=web+application&agency=Minitrue&agency=Miniluv
     """

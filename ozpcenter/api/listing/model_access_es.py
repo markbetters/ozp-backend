@@ -1,7 +1,7 @@
 """
 Listing Model Access For Elasticsearch
 """
-import json
+# import json
 import logging
 
 # from django.conf import settings  # TODO: Get Elasticsearch settings
@@ -39,6 +39,14 @@ def ping_elasticsearch():
     return es_client.ping()
 
 
+def check_elasticsearch():
+    if constants.ES_ENABLED is False:
+        raise errors.ElasticsearchServiceUnavailable("Elasticsearch is disabled in the settings")
+
+    if not ping_elasticsearch():
+        raise errors.ElasticsearchServiceUnavailable("Elasticsearch is not reachable")
+
+
 def bulk_reindex():
     """
     Reindexing
@@ -48,6 +56,7 @@ def bulk_reindex():
      - description
      - description_short
      - tags
+
     Filter by
      - category
      - agency
@@ -76,9 +85,7 @@ def bulk_reindex():
     https://qbox.io/blog/quick-and-dirty-autocomplete-with-elasticsearch-completion-suggest
     """
     print('Starting Indexing Process')
-
-    if not ping_elasticsearch():
-        raise errors.ElasticsearchServiceUnavailable()
+    check_elasticsearch()
 
     all_listings = models.Listing.objects.all()
     serializer = ReadOnlyListingSerializer(all_listings, many=True)
@@ -117,7 +124,7 @@ def bulk_reindex():
     # Bulk index the data
     print("Bulk indexing listings...")
     res = es_client.bulk(index=constants.ES_INDEX_NAME, body=bulk_data, refresh=True)
-    # print(" response: '%s'" % (res))
+    print(" response: '%s'" % (res))
 
     print("Done Indexing")
     # http://127.0.0.1:9200/appsmall/_search?size=10000&pretty
@@ -125,17 +132,21 @@ def bulk_reindex():
 
 def suggest(username, params_dict):
     """
-    suggest
+    Suggest
+
+    Returns:
+        listing titles in a list
     """
-    if not ping_elasticsearch():
-        raise errors.ElasticsearchServiceUnavailable()
+    check_elasticsearch()
 
     search_input = params_dict['search']
+
     if search_input is None:
         return []
 
-    # Override Limit - Only 10 results should come
-    params_dict['limit'] = 10
+    # Override Limit - Only 15 results should come
+    params_dict['limit'] = 15
+
     search_query = elasticsearch_util.make_search_query_obj(params_dict, min_score=0.3)
     search_query['_source'] = ['title', 'security_marking']
 
@@ -193,8 +204,7 @@ def search(username, params_dict):
             agencies = self.request.query_params.getlist('agency', False)
             listing_types = self.request.query_params.getlist('type', False)
     """
-    if not ping_elasticsearch():
-        raise errors.ElasticsearchServiceUnavailable()
+    check_elasticsearch()
 
     user = models.Profile.objects.get(user__username=username)
 
@@ -212,15 +222,12 @@ def search(username, params_dict):
         exclude_orgs_obj = models.Agency.objects.exclude(title__in=user_orgs)
         exclude_orgs = [agency.title for agency in exclude_orgs_obj]
 
-    # print(exclude_orgs)
-    # exclude_orgs = 'miniluv', 'minitrue']
-
     search_input = params_dict['search']
     if search_input is None:
         return []
 
     search_query = elasticsearch_util.make_search_query_obj(params_dict, min_score=0.3, exclude_agencies=exclude_orgs)
-    print(json.dumps(search_query, indent=4))
+    # print(json.dumps(search_query, indent=4))
 
     res = es_client.search(index=constants.ES_INDEX_NAME, body=search_query)
 
@@ -251,8 +258,8 @@ def search(username, params_dict):
 
     final_results = {
         "count": hits.get('total') - excluded_count,
-        "next": None,
-        "previous": "/api/listings/search/?category=Education&limit=10&offset=13&search=6&type=web+application",
+        # "next": None,
+        # "previous": "/api/listings/search/?category=Education&limit=10&offset=13&search=6&type=web+application",
         "results": hit_titles
     }
 
