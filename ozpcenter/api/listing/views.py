@@ -591,13 +591,13 @@ class ElasticsearchListingSearchViewSet(viewsets.ViewSet):
         filter_params = {}
         filter_params['search'] = self.request.query_params.get('search')
 
-        filter_params['offset'] = self.request.query_params.get('offset', 0)
-        filter_params['limit'] = self.request.query_params.get('limit', 100)
-
         if self.request.query_params.get('limit', False):
             filter_params['limit_set'] = True
         else:
             filter_params['limit_set'] = False
+
+        filter_params['offset'] = int(self.request.query_params.get('offset', 0))
+        filter_params['limit'] = int(self.request.query_params.get('limit', 100))
 
         # Filtering
         filter_params['categories'] = self.request.query_params.getlist('category', [])

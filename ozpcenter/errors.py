@@ -113,7 +113,7 @@ def exception_handler(exc, context):
     #     return Response(data, status=status.HTTP_400_BAD_REQUEST)
 
     elif isinstance(exc, ElasticsearchServiceUnavailable):
-        msg = _('Elasticsearch Service Unavailable')
+        msg = _(str(exc))
         data = {'error': True, 'detail': six.text_type(msg)}
 
         set_rollback()

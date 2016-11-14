@@ -8,6 +8,7 @@ import logging
 from rest_framework import serializers
 
 from django.conf import settings
+from django.http.request import QueryDict
 from ozpcenter import models
 from ozpcenter import errors
 from ozpcenter import constants
@@ -131,6 +132,31 @@ def bulk_reindex():
     # http://127.0.0.1:9200/appsmall/_search?size=10000&pretty
 
 
+def get_user_exclude_orgs(username):
+    """
+    Get User's Orgs to exclude
+    """
+    exclude_orgs = None
+
+    user = models.Profile.objects.get(user__username=username)
+
+    # Filter out private listings - private apps (apps only from user's agency) requirement
+    if user.highest_role() == 'APPS_MALL_STEWARD':
+        exclude_orgs = []
+    elif user.highest_role() == 'ORG_STEWARD':
+        user_orgs = user.stewarded_organizations.all()
+        user_orgs = [i.title for i in user_orgs]
+        exclude_orgs_obj = models.Agency.objects.exclude(title__in=user_orgs)
+        exclude_orgs = [agency.title for agency in exclude_orgs_obj]
+    else:
+        user_orgs = user.organizations.all()
+        user_orgs = [i.title for i in user_orgs]
+        exclude_orgs_obj = models.Agency.objects.exclude(title__in=user_orgs)
+        exclude_orgs = [agency.title for agency in exclude_orgs_obj]
+
+    return exclude_orgs
+
+
 def suggest(username, params_dict):
     """
     Suggest
@@ -141,15 +167,17 @@ def suggest(username, params_dict):
     check_elasticsearch()
 
     search_input = params_dict['search']
-
     if search_input is None:
         return []
 
-    # Override Limit - Only 15 results should come
-    params_dict['limit'] = constants.ES_SUGGEST_LIMIT
+    user_exclude_orgs = get_user_exclude_orgs(username)
 
-    search_query = elasticsearch_util.make_search_query_obj(params_dict, min_score=0.3)
-    search_query['_source'] = ['title', 'security_marking']
+    # Override Limit - Only 15 results should come if limit was not set
+    if params_dict['limit_set'] is False:
+        params_dict['limit'] = constants.ES_SUGGEST_LIMIT
+
+    search_query = elasticsearch_util.make_search_query_obj(params_dict, min_score=0.3, exclude_agencies=user_exclude_orgs)
+    search_query['_source'] = ['title', 'security_marking']  # Only Retrieve these fields from Elasticsearch
 
     # print(json.dumps(search_query, indent=4))
     res = es_client.search(index=settings.ES_INDEX_NAME, body=search_query)
@@ -208,27 +236,13 @@ def search(username, params_dict, base_url=None):
     """
     check_elasticsearch()
 
-    user = models.Profile.objects.get(user__username=username)
-
-    # Filter out private listings - private apps (apps only from user's agency) requirement
-    if user.highest_role() == 'APPS_MALL_STEWARD':
-        exclude_orgs = []
-    elif user.highest_role() == 'ORG_STEWARD':
-        user_orgs = user.stewarded_organizations.all()
-        user_orgs = [i.title for i in user_orgs]
-        exclude_orgs_obj = models.Agency.objects.exclude(title__in=user_orgs)
-        exclude_orgs = [agency.title for agency in exclude_orgs_obj]
-    else:
-        user_orgs = user.organizations.all()
-        user_orgs = [i.title for i in user_orgs]
-        exclude_orgs_obj = models.Agency.objects.exclude(title__in=user_orgs)
-        exclude_orgs = [agency.title for agency in exclude_orgs_obj]
-
     search_input = params_dict['search']
     if search_input is None:
         return []
 
-    search_query = elasticsearch_util.make_search_query_obj(params_dict, min_score=0.3, exclude_agencies=exclude_orgs)
+    user_exclude_orgs = get_user_exclude_orgs(username)
+
+    search_query = elasticsearch_util.make_search_query_obj(params_dict, min_score=0.3, exclude_agencies=user_exclude_orgs)
     # print(json.dumps(search_query, indent=4))
 
     res = es_client.search(index=settings.ES_INDEX_NAME, body=search_query)
@@ -246,13 +260,12 @@ def search(username, params_dict, base_url=None):
         source = current_innter_hit.get('_source')
         source['_score'] = current_innter_hit.get('_score')
 
-        # Add URL to icons
+        # Add URLs to icons
         image_keys_to_add_url = ['large_icon',
                                  'small_icon',
                                  'banner_icon',
                                  'large_banner_icon']
 
-        # Clean Large_icon
         for image_key in image_keys_to_add_url:
             if source.get(image_key) is not None:
                 if base_url:
@@ -272,15 +285,38 @@ def search(username, params_dict, base_url=None):
         else:
             excluded_count = excluded_count + 1
 
-    # TODO: Figure out logic for next and previous links (rivera 11/14/2016)
-    # QueryDict.urlencode(safe=None)[source]¶
-
-    # TODO: For the results, figure out how to make URLs for Images  (rivera 11/14/2016)
     final_results = {
         "count": hits.get('total') - excluded_count,
-        # "next": None,
-        # "previous": "/api/listings/search/?category=Education&limit=10&offset=13&search=6&type=web+application",
         "results": hit_titles
     }
+
+    # TODO: Figure out smarter logic for next and previous links (rivera 11/14/2016)
+
+    # Previous URL
+    prev_query = QueryDict(mutable=True)
+    prev_query.update({'search': search_input})
+    prev_query.update({'offset': params_dict['offset'] - params_dict['limit']})
+    prev_query.update({'current_limit': params_dict['limit']})
+
+    [prev_query.update({'category': current_category}) for current_category in params_dict['categories']]
+    [prev_query.update({'agency': current_category}) for current_category in params_dict['agencies']]
+    [prev_query.update({'type': current_category}) for current_category in params_dict['listing_types']]
+
+    if params_dict['offset'] - params_dict['limit'] >= 0:
+        final_results['previous'] = '{!s}/api/listings/essearch/?{!s}'.format(base_url, prev_query.urlencode())
+    else:
+        final_results['previous'] = None
+
+    # Next URL
+    next_query = QueryDict(mutable=True)
+    next_query.update({'search': search_input})
+    next_query.update({'offset': params_dict['offset'] + params_dict['limit']})
+    next_query.update({'current_limit': params_dict['limit']})
+
+    [next_query.update({'category': current_category}) for current_category in params_dict['categories']]
+    [next_query.update({'agency': current_category}) for current_category in params_dict['agencies']]
+    [next_query.update({'type': current_category}) for current_category in params_dict['listing_types']]
+
+    final_results['next'] = '{!s}/api/listings/essearch/?{!s}'.format(base_url, next_query.urlencode())
 
     return final_results
