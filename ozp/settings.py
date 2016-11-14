@@ -266,7 +266,7 @@ DEFAULT_AGENCY = ''
 GLOBAL_SECONDS_TO_CACHE_DATA = 60 * 60 * 24  # 24 Hours
 
 # Boolean to enable/disable the use Elasticsearch use
-ES_ENABLED = False
+ES_ENABLED = True
 ES_INDEX_NAME = 'appsmall'
 ES_TYPE_NAME = 'listings'
 ES_ID_FIELD = 'id'

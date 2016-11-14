@@ -610,7 +610,9 @@ class ElasticsearchListingSearchViewSet(viewsets.ViewSet):
         current_request_username = request.user.username
         params = self.get_params()
 
-        results = model_access_es.search(current_request_username, params)
+        current_uri = '{scheme}://{host}'.format(scheme=request.scheme, host=request.get_host())
+
+        results = model_access_es.search(current_request_username, params, base_url=current_uri)
         return Response(results, status=status.HTTP_200_OK)
 
     @list_route(methods=['get'], permission_classes=[permissions.IsUser])

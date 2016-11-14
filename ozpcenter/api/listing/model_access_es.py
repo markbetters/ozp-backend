@@ -176,7 +176,7 @@ def suggest(username, params_dict):
     return hit_titles
 
 
-def search(username, params_dict):
+def search(username, params_dict, base_url=None):
     """
     Filter Listings
 
@@ -204,6 +204,7 @@ def search(username, params_dict):
             categories = self.request.query_params.getlist('category', False)
             agencies = self.request.query_params.getlist('agency', False)
             listing_types = self.request.query_params.getlist('type', False)
+        base_url: String of url.  example string > http://127.0.0.1:8001
     """
     check_elasticsearch()
 
@@ -245,6 +246,20 @@ def search(username, params_dict):
         source = current_innter_hit.get('_source')
         source['_score'] = current_innter_hit.get('_score')
 
+        # Add URL to icons
+        image_keys_to_add_url = ['large_icon',
+                                 'small_icon',
+                                 'banner_icon',
+                                 'large_banner_icon']
+
+        # Clean Large_icon
+        for image_key in image_keys_to_add_url:
+            if source.get(image_key) is not None:
+                if base_url:
+                    source[image_key]['url'] = '{!s}/api/image/{!s}/'.format(base_url, source[image_key]['id'])
+                else:
+                    source[image_key]['url'] = '/api/image/{!s}/'.format(source[image_key]['id'])
+
         exclude_bool = False
         if not source.get('security_marking'):
             exclude_bool = True
@@ -258,6 +273,8 @@ def search(username, params_dict):
             excluded_count = excluded_count + 1
 
     # TODO: Figure out logic for next and previous links (rivera 11/14/2016)
+    # QueryDict.urlencode(safe=None)[source]¶
+
     # TODO: For the results, figure out how to make URLs for Images  (rivera 11/14/2016)
     final_results = {
         "count": hits.get('total') - excluded_count,
