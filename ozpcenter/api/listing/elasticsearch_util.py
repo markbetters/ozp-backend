@@ -7,17 +7,16 @@ import json
 import logging
 import time
 
+from django.conf import settings
 from elasticsearch import Elasticsearch
-
-from ozpcenter import constants
 
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center.' + str(__name__))
 
 
-if constants.ES_ENABLED:
+if settings.ES_ENABLED:
     # Create ES client
-    es_client = Elasticsearch(hosts=constants.ES_HOST)
+    es_client = Elasticsearch(hosts=settings.ES_HOST)
 else:
     es_client = None
 
@@ -35,10 +34,10 @@ def get_mapping_setting_obj(number_of_shards=None, number_of_replicas=None):
         mapping obj(dictionary): elasticsearch mapping object
     """
     if number_of_shards is None:
-        number_of_shards = constants.ES_NUMBER_OF_SHARDS
+        number_of_shards = settings.ES_NUMBER_OF_SHARDS
 
     if number_of_replicas is None:
-        number_of_replicas = constants.ES_NUMBER_OF_REPLICAS
+        number_of_replicas = settings.ES_NUMBER_OF_REPLICAS
 
     data = {
       "settings": {
@@ -240,25 +239,26 @@ def update_es_listing(current_listing_id, record, is_new):
     Args:
         is_new: backend is new
     """
-    if constants.ES_ENABLED is False:
-        logger.warn('ElasticsearchService Not Enabled')
+    if settings.ES_ENABLED is False:
+        logger.warn('Elasticsearch Service Not Enabled')
     elif not es_client.ping():
-        logger.warn('ElasticsearchServiceUnavailable')
+        logger.warn('Elasticsearch Service Unavailable')
         # raise errors.ElasticsearchServiceUnavailable()
     else:
 
-        if not es_client.indices.exists(constants.ES_INDEX_NAME):
+        if not es_client.indices.exists(settings.ES_INDEX_NAME):
             request_body = get_mapping_setting_obj()
 
-            print("Creating '%s' index..." % (constants.ES_INDEX_NAME))
-            res = es_client.indices.create(index=constants.ES_INDEX_NAME, body=request_body)
+            print("Creating '%s' index..." % (settings.ES_INDEX_NAME))
+            res = es_client.indices.create(index=settings.ES_INDEX_NAME, body=request_body)
             print(" response: '%s'" % (res))
 
+            # TODO: Figure out a better method to insure index is created on server than using sleep (rivera 11/14/2016)
             time.sleep(20)   # Seems like there needs to be a delay if not a 503 error will happen
 
         es_record_exist = es_client.exists(
-            index=constants.ES_INDEX_NAME,
-            doc_type=constants.ES_TYPE_NAME,
+            index=settings.ES_INDEX_NAME,
+            doc_type=settings.ES_TYPE_NAME,
             id=current_listing_id,
             refresh=True
         )
@@ -269,16 +269,16 @@ def update_es_listing(current_listing_id, record, is_new):
         if is_new is not None:
             if es_record_exist:
                 es_client.update(
-                    index=constants.ES_INDEX_NAME,
-                    doc_type=constants.ES_TYPE_NAME,
+                    index=settings.ES_INDEX_NAME,
+                    doc_type=settings.ES_TYPE_NAME,
                     id=current_listing_id,
                     refresh=True,
                     body={"doc": record_clean_obj}
                 )
             else:
                 es_client.create(
-                    index=constants.ES_INDEX_NAME,
-                    doc_type=constants.ES_TYPE_NAME,
+                    index=settings.ES_INDEX_NAME,
+                    doc_type=settings.ES_TYPE_NAME,
                     id=current_listing_id,
                     refresh=True,
                     body=record_clean_obj
@@ -286,8 +286,8 @@ def update_es_listing(current_listing_id, record, is_new):
         else:
             if es_record_exist:
                 es_client.update(
-                    index=constants.ES_INDEX_NAME,
-                    doc_type=constants.ES_TYPE_NAME,
+                    index=settings.ES_INDEX_NAME,
+                    doc_type=settings.ES_TYPE_NAME,
                     id=current_listing_id,
                     refresh=True,
                     body={"doc": record_clean_obj}
@@ -295,8 +295,8 @@ def update_es_listing(current_listing_id, record, is_new):
             else:
                 # Ensure if doc exist in es, then update
                 es_client.create(
-                    index=constants.ES_INDEX_NAME,
-                    doc_type=constants.ES_TYPE_NAME,
+                    index=settings.ES_INDEX_NAME,
+                    doc_type=settings.ES_TYPE_NAME,
                     id=current_listing_id,
                     refresh=True,
                     body=record_clean_obj

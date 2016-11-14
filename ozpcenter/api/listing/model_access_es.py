@@ -7,6 +7,7 @@ import logging
 # from django.conf import settings  # TODO: Get Elasticsearch settings
 from rest_framework import serializers
 
+from django.conf import settings
 from ozpcenter import models
 from ozpcenter import errors
 from ozpcenter import constants
@@ -34,13 +35,13 @@ def ping_elasticsearch():
     """
     Used to check to see if elasticsearch is up
     """
-    if constants.ES_ENABLED is False:
+    if settings.ES_ENABLED is False:
         return False
     return es_client.ping()
 
 
 def check_elasticsearch():
-    if constants.ES_ENABLED is False:
+    if settings.ES_ENABLED is False:
         raise errors.ElasticsearchServiceUnavailable("Elasticsearch is disabled in the settings")
 
     if not ping_elasticsearch():
@@ -99,9 +100,9 @@ def bulk_reindex():
 
         op_dict = {
             "index": {
-                "_index": constants.ES_INDEX_NAME,
-                "_type": constants.ES_TYPE_NAME,
-                "_id": record_clean_obj[constants.ES_ID_FIELD]
+                "_index": settings.ES_INDEX_NAME,
+                "_type": settings.ES_TYPE_NAME,
+                "_id": record_clean_obj[settings.ES_ID_FIELD]
             }
         }
 
@@ -110,20 +111,20 @@ def bulk_reindex():
 
     print('Checking to see if Index exist')
 
-    if es_client.indices.exists(constants.ES_INDEX_NAME):
-        print("deleting '%s' index..." % (constants.ES_INDEX_NAME))
-        res = es_client.indices.delete(index=constants.ES_INDEX_NAME)
+    if es_client.indices.exists(settings.ES_INDEX_NAME):
+        print("deleting '%s' index..." % (settings.ES_INDEX_NAME))
+        res = es_client.indices.delete(index=settings.ES_INDEX_NAME)
         print(" response: '%s'" % (res))
 
     request_body = elasticsearch_util.get_mapping_setting_obj()
 
-    print("Creating '%s' index..." % (constants.ES_INDEX_NAME))
-    res = es_client.indices.create(index=constants.ES_INDEX_NAME, body=request_body)
+    print("Creating '%s' index..." % (settings.ES_INDEX_NAME))
+    res = es_client.indices.create(index=settings.ES_INDEX_NAME, body=request_body)
     print(" response: '%s'" % (res))
 
     # Bulk index the data
     print("Bulk indexing listings...")
-    res = es_client.bulk(index=constants.ES_INDEX_NAME, body=bulk_data, refresh=True)
+    res = es_client.bulk(index=settings.ES_INDEX_NAME, body=bulk_data, refresh=True)
     print(" response: '%s'" % (res))
 
     print("Done Indexing")
@@ -145,13 +146,13 @@ def suggest(username, params_dict):
         return []
 
     # Override Limit - Only 15 results should come
-    params_dict['limit'] = 15
+    params_dict['limit'] = constants.ES_SUGGEST_LIMIT
 
     search_query = elasticsearch_util.make_search_query_obj(params_dict, min_score=0.3)
     search_query['_source'] = ['title', 'security_marking']
 
     # print(json.dumps(search_query, indent=4))
-    res = es_client.search(index=constants.ES_INDEX_NAME, body=search_query)
+    res = es_client.search(index=settings.ES_INDEX_NAME, body=search_query)
 
     hits = res.get('hits', {}).get('hits', None)
     if not hits:
@@ -229,7 +230,7 @@ def search(username, params_dict):
     search_query = elasticsearch_util.make_search_query_obj(params_dict, min_score=0.3, exclude_agencies=exclude_orgs)
     # print(json.dumps(search_query, indent=4))
 
-    res = es_client.search(index=constants.ES_INDEX_NAME, body=search_query)
+    res = es_client.search(index=settings.ES_INDEX_NAME, body=search_query)
 
     hits = res.get('hits', {})
     inner_hits = hits.get('hits', None)
@@ -256,6 +257,8 @@ def search(username, params_dict):
         else:
             excluded_count = excluded_count + 1
 
+    # TODO: Figure out logic for next and previous links (rivera 11/14/2016)
+    # TODO: For the results, figure out how to make URLs for Images  (rivera 11/14/2016)
     final_results = {
         "count": hits.get('total') - excluded_count,
         # "next": None,
