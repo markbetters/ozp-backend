@@ -237,13 +237,11 @@ def search(username, params_dict, base_url=None):
     check_elasticsearch()
 
     search_input = params_dict['search']
-    if search_input is None:
-        return []
 
     user_exclude_orgs = get_user_exclude_orgs(username)
-
     search_query = elasticsearch_util.make_search_query_obj(params_dict, min_score=0.3, exclude_agencies=user_exclude_orgs)
-    # print(json.dumps(search_query, indent=4))
+
+    # import json; print(json.dumps(search_query, indent=4))
 
     res = es_client.search(index=settings.ES_INDEX_NAME, body=search_query)
 

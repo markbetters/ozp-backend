@@ -320,7 +320,10 @@ def make_search_query_obj(filter_params, exclude_agencies=None, min_score=0.4):
     """
     exclude_agencies = exclude_agencies or []
 
-    user_string = filter_params.get('search', '').strip()
+    user_string = filter_params.get('search')
+
+    if user_string:
+        user_string = user_string.strip()
 
     # Pagination
     user_offset = filter_params.get('offset', 0)
@@ -461,51 +464,59 @@ def make_search_query_obj(filter_params, exclude_agencies=None, min_score=0.4):
 
         filter_data.append(categories_data)
 
+    temp_should = []
+
+    if user_string:
+        temp_should.append({
+          "match": {
+            "title": {
+              "query": user_string,
+              "boost": 10
+            }
+          }
+        })
+
+        temp_should.append({
+          "match": {
+            "description": {
+              "query": user_string,
+              "boost": 2
+            }
+          }
+        })
+
+        temp_should.append({
+          "match": {
+            "description_short": {
+              "query": user_string,
+              "boost": 2
+            }
+          }
+        })
+
+        temp_should.append({
+          "nested": {
+            "boost": 1,
+            "query": {
+              "query_string": {
+                "fields": [
+                  "tags.name"
+                ],
+                "query": user_string
+              }
+            },
+            "path": "tags"
+          }
+        })
+    else:
+        temp_should.append({"match_all": {}})
+
     search_query = {
       "size": user_limit,
       "min_score": min_score,
       "query": {
         "bool": {
-          "should": [
-            {
-              "match": {
-                "title": {
-                  "query": user_string,
-                  "boost": 10
-                }
-              }
-            },
-            {
-              "match": {
-                "description": {
-                  "query": user_string,
-                  "boost": 2
-                }
-              }
-            },
-            {
-              "match": {
-                "description_short": {
-                  "query": user_string,
-                  "boost": 2
-                }
-              }
-            },
-            {
-              "nested": {
-                "boost": 1,
-                "query": {
-                  "query_string": {
-                    "fields": [
-                      "tags.name"
-                    ],
-                    "query": user_string
-                  }
-                },
-                "path": "tags"
-              }
-            }
-          ],
+          "should": temp_should,
           "filter": filter_data
         }
       }
