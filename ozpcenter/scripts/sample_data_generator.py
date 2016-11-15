@@ -341,6 +341,15 @@ def run():
         groups=['USER'],
         dn='Aaronson aaronson'
     )
+    pmurt = models.Profile.create_user('pmurt',
+        email='pmurt@airstripone.com',
+        display_name='pmurt',
+        bio='Nothing special',
+        access_control=access_control,
+        organizations=['Ministry of Love'],
+        groups=['USER'],
+        dn='dlanod pmurt'
+    )
 
     # PKI USER - Ministry of Love
     access_control = json.dumps({
@@ -814,7 +823,7 @@ def run():
         )
         listing.save()
         listing.contacts.add(rob_baratheon)
-        listing.owners.add(winston)
+        listing.owners.add(pmurt)
         listing.categories.add(tools)
         listing.categories.add(education)
         listing.tags.add(demo)
