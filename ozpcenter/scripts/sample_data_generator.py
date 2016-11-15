@@ -581,6 +581,122 @@ def run():
     #                           Listings
     ############################################################################
     ############################################################################
+    ############################################################################
+    #                           America
+    ############################################################################
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    #                           Icons
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    img = Image.open(TEST_IMG_PATH + 'Skybox.png')
+    small_icon = models.Image.create_image(img, file_extension='png',
+        security_marking=unclass, image_type=small_icon_type.name)
+    img = Image.open(TEST_IMG_PATH + 'Skybox32.png')
+    large_icon = models.Image.create_image(img, file_extension='png',
+        security_marking=unclass, image_type=large_icon_type.name)
+    img = Image.open(TEST_IMG_PATH + 'Skybox.png')
+    banner_icon = models.Image.create_image(img, file_extension='png',
+        security_marking=unclass, image_type=banner_icon_type.name)
+    img = Image.open(TEST_IMG_PATH + 'Skybox.png')
+    large_banner_icon = models.Image.create_image(img, file_extension='png',
+        security_marking=unclass, image_type=large_banner_icon_type.name)
+
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    #                           Listing
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    listing = models.Listing(
+        title='SkyBox',
+        agency=minitrue,
+        listing_type=web_app,
+        description='a box in the sky',
+        launch_url='{0!s}/demo_apps/centerSampleListings/airMail/index.html'.format(DEMO_APP_ROOT),
+        version_name='1.0.0',
+        unique_name='ozp.test.SkyBox',
+        small_icon=small_icon,
+        large_icon=large_icon,
+        banner_icon=banner_icon,
+        large_banner_icon=large_banner_icon,
+        what_is_new='its a flying box',
+        description_short='its not a bird or a plane',
+        requirements='None',
+        is_enabled=True,
+        is_featured=True,
+        iframe_compatible=False,
+        security_marking=unclass
+    )
+    listing.save()
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    #                           Contacts
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    listing.contacts.add(osha)
+    listing.contacts.add(brienne)
+
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    #                           Owners
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    listing.owners.add(pmurt)
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    #                           Categories
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    listing.categories.add(communication)
+    listing.categories.add(productivity)
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    #                           Tags
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    current_tag = models.Tag(name='tag_{0}'.format(i))
+    current_tag.save()
+
+    listing.tags.add(demo)
+    listing.tags.add(example)
+    listing.tags.add(current_tag)
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    #                           Screenshots
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    img = Image.open(TEST_IMG_PATH + 'screenshot_small.png')
+    small_img = models.Image.create_image(img, file_extension='png',
+        security_marking=unclass, image_type=small_screenshot_type.name)
+    img = Image.open(TEST_IMG_PATH + 'screenshot_large.png')
+    large_img = models.Image.create_image(img, file_extension='png',
+        security_marking=unclass, image_type=large_screenshot_type.name)
+    screenshot = models.Screenshot(small_image=small_img,
+        large_image=large_img,
+        listing=listing)
+    screenshot.save()
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    #                           Notifications
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    notification1 = models.Notification(message='Air Mail update next week',
+        expires_date=next_week, listing=listing, author=winston)
+    notification1.save()
+
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    #                           Reviews
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    listing_model_access.create_listing_review(charrington.user.username,
+        listing, 5,
+        text="This app is great - well designed and easy to use")
+
+    listing_model_access.create_listing_review(tparsons.user.username,
+        listing, 3,
+        text="Air mail is ok - does what it says and no more")
+
+    listing_model_access.create_listing_review(syme.user.username,
+        listing, 1,
+        text="Air mail crashes all the time - it doesn't even support IE 6!")
+
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    #                           Document URLs
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    wiki = models.DocUrl(name='wiki', url='http://www.google.com/wiki',
+        listing=listing)
+    wiki.save()
+    guide = models.DocUrl(name='guide', url='http://www.google.com/guide',
+        listing=listing)
+    guide.save()
+
+    listing_model_access.create_listing(winston, listing)
+    listing_model_access.submit_listing(winston, listing)
+    listing_model_access.approve_listing_by_org_steward(winston, listing)
+    listing_model_access.approve_listing(winston, listing)
 
     # Looping for more sample results
     for i in range(0, 10):
@@ -823,7 +939,7 @@ def run():
         )
         listing.save()
         listing.contacts.add(rob_baratheon)
-        listing.owners.add(pmurt)
+        listing.owners.add(winston)
         listing.categories.add(tools)
         listing.categories.add(education)
         listing.tags.add(demo)
