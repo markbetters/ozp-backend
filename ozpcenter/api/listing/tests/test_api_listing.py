@@ -301,7 +301,7 @@ class ListingApiTest(APITestCase):
         response = self.client.delete(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         data = response.data
-        expected_data = {'detail': 'Permission denied.', 'message': 'Current profile has does not have delete permissions'}
+        expected_data = {'detail': 'Permission denied.', 'error': True, 'message': 'Current profile has does not have delete permissions'}
         self.assertEqual(data, expected_data)
 
     def test_update_listing_partial(self):

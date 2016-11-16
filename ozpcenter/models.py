@@ -18,10 +18,15 @@ from django.core.validators import MinValueValidator
 from django.core.validators import RegexValidator
 from django.db import models
 from django.contrib import auth
+from rest_framework import serializers
 
 from plugins_util.plugin_manager import system_has_access_control
 from ozpcenter import constants
 from ozpcenter import utils
+
+
+from ozpcenter.api.listing import elasticsearch_util
+
 
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center.' + str(__name__))
@@ -943,6 +948,23 @@ class Listing(models.Model):
     def __str__(self):
         return '({0!s}-{1!s})'.format(self.unique_name, [owner.user.username for owner in self.owners.all()])
 
+    def save(self, *args, **kwargs):
+        is_new = self.pk
+        super(Listing, self).save(*args, **kwargs)
+        current_listing_id = self.pk
+
+        if settings.ES_ENABLED:
+            serializer = ReadOnlyListingSerializer(self)
+            record = serializer.data  # TODO Find a faster way to serialize data, makes test take a long time to complete
+            elasticsearch_util.update_es_listing(current_listing_id, record, is_new)
+
+
+class ReadOnlyListingSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Listing
+        depth = 2
+
 
 @receiver(post_save, sender=Listing)
 def post_save_listing(sender, instance, created, **kwargs):
@@ -952,6 +974,7 @@ def post_save_listing(sender, instance, created, **kwargs):
 
 @receiver(post_delete, sender=Listing)
 def post_delete_listing(sender, instance, **kwargs):
+    # TODO: When logic is in place to delete, make sure elasticsearch logic is here
     cache.delete_pattern("storefront-*")
     cache.delete_pattern("library_self-*")
 

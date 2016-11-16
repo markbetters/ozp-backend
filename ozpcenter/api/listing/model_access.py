@@ -5,7 +5,6 @@ import logging
 
 from django.core.exceptions import ObjectDoesNotExist
 
-
 from ozpcenter import models
 from ozpcenter import constants
 from ozpcenter import errors

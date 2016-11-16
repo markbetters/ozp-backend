@@ -18,6 +18,10 @@ router.register(r'listing', views.ListingViewSet, base_name="listing")
 # nested router
 router.register(r'listings/search', views.ListingSearchViewSet,
     base_name='listingssearch')
+
+router.register(r'listings/essearch', views.ElasticsearchListingSearchViewSet,
+    base_name='eslistingssearch')
+
 # Ideally this route would be listing/activity, but that conflicts with the
 # nested router
 router.register(r'listings/activity', views.ListingActivitiesViewSet,

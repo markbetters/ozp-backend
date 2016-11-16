@@ -411,7 +411,7 @@ class ProfileApiTest(APITestCase):
         self.client.login(username='invalid', password='invalid')
         response = self.client.put(url, data, format='json')
 
-        expected_data = {'detail': 'Authentication credentials were not provided.'}
+        expected_data = {'detail': 'Authentication credentials were not provided.', 'error': True}
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
         self.assertEqual(response.data, expected_data)
 

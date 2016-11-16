@@ -22,3 +22,6 @@ MEDIA_TYPE_REGEX = r'\w'
 VALID_IMAGE_TYPES = ['png', 'jpg', 'jpeg', 'gif']
 
 DEFAULT_SECURITY_MARKING = 'UNCLASSIFIED'
+
+# Smart Search Suggest Limit
+ES_SUGGEST_LIMIT = 15
