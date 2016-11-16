@@ -341,6 +341,15 @@ def run():
         groups=['USER'],
         dn='Aaronson aaronson'
     )
+    pmurt = models.Profile.create_user('pmurt',
+        email='pmurt@airstripone.com',
+        display_name='pmurt',
+        bio='Nothing special',
+        access_control=access_control,
+        organizations=['Ministry of Love'],
+        groups=['USER'],
+        dn='dlanod pmurt'
+    )
 
     # PKI USER - Ministry of Love
     access_control = json.dumps({
@@ -570,7 +579,6 @@ def run():
     ############################################################################
     ############################################################################
     #                           Listings
-    ############################################################################
     ############################################################################
 
     # Looping for more sample results
@@ -1275,7 +1283,61 @@ def run():
         listing_model_access.submit_listing(winston, listing)
         listing_model_access.approve_listing_by_org_steward(winston, listing)
         listing_model_access.approve_listing(winston, listing)
+    ############################################################################
+    #                           Skybox
+    ############################################################################
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    #                           Icons
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    img = Image.open(TEST_IMG_PATH + 'Skybox16.png')
+    small_icon = models.Image.create_image(img, file_extension='png',
+        security_marking=unclass, image_type=small_icon_type.name)
+    img = Image.open(TEST_IMG_PATH + 'Skybox32.png')
+    large_icon = models.Image.create_image(img, file_extension='png',
+        security_marking=unclass, image_type=large_icon_type.name)
+    img = Image.open(TEST_IMG_PATH + 'Skybox.png')
+    banner_icon = models.Image.create_image(img, file_extension='png',
+        security_marking=unclass, image_type=banner_icon_type.name)
+    img = Image.open(TEST_IMG_PATH + 'SkyboxFeatured.png')
+    large_banner_icon = models.Image.create_image(img, file_extension='png',
+        security_marking=unclass, image_type=large_banner_icon_type.name)
 
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    #                           Listing
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+    listing = models.Listing(
+        title='Skybox',
+        agency=miniluv,
+        listing_type=web_app,
+        description='Sky Overlord',
+        launch_url='0/demo_apps/Skybox/index.html'.format(DEMO_APP_ROOT),
+        version_name='1.0.0',
+        unique_name='ozp.test.Skybox'.format(postfix_dot),
+        small_icon=small_icon,
+        large_icon=large_icon,
+        banner_icon=banner_icon,
+        large_banner_icon=large_banner_icon,
+        what_is_new="It's a box in the sky",
+        description_short='Sky Overlord',
+        requirements='None',
+        is_enabled=True,
+        is_featured=True,
+        iframe_compatible=False,
+        is_private=False,
+        security_marking=unclass
+    )
+    listing.save()
+    listing.contacts.add(rob_baratheon)
+    listing.owners.add(pmurt)
+    listing.categories.add(tools)
+    listing.categories.add(education)
+    listing.tags.add(demo)
+
+    listing_model_access.create_listing(winston, listing)
+    listing_model_access.submit_listing(winston, listing)
+    listing_model_access.approve_listing_by_org_steward(winston, listing)
+    listing_model_access.approve_listing(winston, listing)
     ############################################################################
     #                           Library
     ############################################################################

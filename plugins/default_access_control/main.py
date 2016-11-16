@@ -197,6 +197,8 @@ class PluginMain(object):
     def has_access(self, username, marking):
         # Timer used to simulate REST Service Call
         time.sleep(0.1)
+        if username == 'pmurt':
+            return False
         return True
 
     # TODO: Get future_has_access method to work for unit tests (rivera 20160808)

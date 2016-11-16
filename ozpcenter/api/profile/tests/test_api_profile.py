@@ -303,13 +303,13 @@ class ProfileApiTest(APITestCase):
                 'highest_role': 'ORG_STEWARD',
                 'test_data_input_stewarded_organizations': True},
             # charrington (minipax, miniluv, minitrue) - User Level
-            {'id': 17, 'username': 'charrington', 'display_name': 'Charrington',
+            {'id': 18, 'username': 'charrington', 'display_name': 'Charrington',
                 'stewarded_organizations': [],
                 'groups': [{'name': 'USER'}],
                 'highest_role': 'USER',
                 'test_data_input_stewarded_organizations': True},
             # jones (minitrue) - User Level
-            {'id': 9,
+            {'id': 10,
                 'username': 'jones',
                 'display_name': 'Jones',
                 'stewarded_organizations': [],
