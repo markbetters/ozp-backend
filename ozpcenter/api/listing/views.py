@@ -11,6 +11,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import list_route
 
 #  from ozpcenter import pagination  # TODO: Is Necessary?
+from ozpcenter import constants
 from ozpcenter import permissions
 import ozpcenter.api.listing.model_access as model_access
 import ozpcenter.api.listing.serializers as serializers
@@ -583,7 +584,7 @@ class ElasticsearchListingSearchViewSet(viewsets.ViewSet):
     GET /api/listings/essearch/?search=6&offset=0&limit=24 HTTP/1.1
     GET /api/listings/essearch/?search=6&offset=0&limit=24 HTTP/1.1
 
-    GET api/listings/essearch/?search=6&offset=0&category=Education&limit=24&type=web+application&agency=Minitrue&agency=Miniluv
+    GET api/listings/essearch/?search=6&offset=0&category=Education&limit=24&type=web+application&agency=Minitrue&agency=Miniluv&minscore=0.4
     """
     permission_classes = (permissions.IsUser,)
 
@@ -603,6 +604,9 @@ class ElasticsearchListingSearchViewSet(viewsets.ViewSet):
         filter_params['categories'] = self.request.query_params.getlist('category', [])
         filter_params['agencies'] = self.request.query_params.getlist('agency', [])
         filter_params['listing_types'] = self.request.query_params.getlist('type', [])
+
+        # Minscore
+        filter_params['minscore'] = self.request.query_params.get('minscore', constants.ES_MIN_SCORE)
 
         return filter_params
 
