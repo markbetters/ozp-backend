@@ -25,3 +25,5 @@ DEFAULT_SECURITY_MARKING = 'UNCLASSIFIED'
 
 # Smart Search Suggest Limit
 ES_SUGGEST_LIMIT = 15
+# Search Min Score
+ES_MIN_SCORE = 0.3
