@@ -11,13 +11,11 @@ from rest_framework.response import Response
 from rest_framework.decorators import list_route
 
 #  from ozpcenter import pagination  # TODO: Is Necessary?
-from ozpcenter import constants
 from ozpcenter import permissions
 import ozpcenter.api.listing.model_access as model_access
 import ozpcenter.api.listing.serializers as serializers
 import ozpcenter.model_access as generic_model_access
 import ozpcenter.api.listing.model_access_es as model_access_es
-
 
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center.' + str(__name__))
@@ -588,43 +586,19 @@ class ElasticsearchListingSearchViewSet(viewsets.ViewSet):
     """
     permission_classes = (permissions.IsUser,)
 
-    def get_params(self):
-        filter_params = {}
-        filter_params['search'] = self.request.query_params.get('search')
-
-        if self.request.query_params.get('limit', False):
-            filter_params['limit_set'] = True
-        else:
-            filter_params['limit_set'] = False
-
-        filter_params['offset'] = int(self.request.query_params.get('offset', 0))
-        filter_params['limit'] = int(self.request.query_params.get('limit', 100))
-
-        # Filtering
-        filter_params['categories'] = self.request.query_params.getlist('category', [])
-        filter_params['agencies'] = self.request.query_params.getlist('agency', [])
-        filter_params['listing_types'] = self.request.query_params.getlist('type', [])
-
-        # Minscore
-        filter_params['minscore'] = self.request.query_params.get('minscore', constants.ES_MIN_SCORE)
-
-        return filter_params
-
     def list(self, request):
         current_request_username = request.user.username
-        params = self.get_params()
+        params_obj = model_access_es.SearchParamParser(request)
 
-        current_uri = '{scheme}://{host}'.format(scheme=request.scheme, host=request.get_host())
-
-        results = model_access_es.search(current_request_username, params, base_url=current_uri)
+        results = model_access_es.search(current_request_username, params_obj)
         return Response(results, status=status.HTTP_200_OK)
 
     @list_route(methods=['get'], permission_classes=[permissions.IsUser])
     def suggest(self, request):
         current_request_username = request.user.username
-        params = self.get_params()
+        params_obj = model_access_es.SearchParamParser(self.request)
 
-        results = model_access_es.suggest(current_request_username, params)
+        results = model_access_es.suggest(current_request_username, params_obj)
         return Response(results, status=status.HTTP_200_OK)
 
     def create(self, request):
