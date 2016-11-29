@@ -303,37 +303,42 @@ def update_es_listing(current_listing_id, record, is_new):
                 )
 
 
-def make_search_query_obj(filter_params, exclude_agencies=None, min_score=0.4):
+def make_search_query_obj(filter_obj, exclude_agencies=None):
     """
     Function is used to make elasticsearch query for searching
 
-    user_string="", categories=[], agencies=[], exclude_agencies=[], listing_types=[], size=10000
-
     Args:
-        filter_params(dict): Dictionary with search parameters
+        filter_params(SearchParamParser): Object with search parameters
             search(str): Search Keyword
             user_offset(int): Offset
             user_limit(int): Limit
             categories([str,str,..]): List category Strings
             agencies([str,str,..]): List agencies Strings
             listing_types([str,str,..]): List listing types Strings
+            minscore(float): Minscore Float
+
     """
-    exclude_agencies = exclude_agencies or []
-
-    user_string = filter_params.get('search')
-
-    if user_string:
-        user_string = user_string.strip()
+    user_string = filter_obj.search_string
 
     # Pagination
-    user_offset = filter_params.get('offset', 0)
-    user_limit = filter_params.get('limit', 100)  # Size
+    user_offset = filter_obj.offset
+    user_limit = filter_obj.limit  # Size
     # user_limit_set = filter_params.get('limit_set', False)
 
     # Filtering
-    categories = filter_params.get('categories', [])
-    agencies = filter_params.get('agencies', [])
-    listing_types = filter_params.get('listing_types', [])
+    categories = filter_obj.categories
+    agencies = filter_obj.agencies
+    listing_types = filter_obj.listing_types
+
+    boost_title = filter_obj.boost_title
+    boost_description = filter_obj.boost_description
+    boost_description_short = filter_obj.boost_description_short
+    boost_tags = filter_obj.boost_tags
+
+    min_score = filter_obj.min_score
+
+    # Exclude_agencies
+    exclude_agencies = exclude_agencies or []
 
     # Default Filter
     # Filters out listing that are not deleted, enabled, and Approved
@@ -471,7 +476,7 @@ def make_search_query_obj(filter_params, exclude_agencies=None, min_score=0.4):
           "match": {
             "title": {
               "query": user_string,
-              "boost": 10
+              "boost": boost_title
             }
           }
         })
@@ -480,7 +485,7 @@ def make_search_query_obj(filter_params, exclude_agencies=None, min_score=0.4):
           "match": {
             "description": {
               "query": user_string,
-              "boost": 2
+              "boost": boost_description
             }
           }
         })
@@ -489,14 +494,14 @@ def make_search_query_obj(filter_params, exclude_agencies=None, min_score=0.4):
           "match": {
             "description_short": {
               "query": user_string,
-              "boost": 2
+              "boost": boost_description_short
             }
           }
         })
 
         temp_should.append({
           "nested": {
-            "boost": 1,
+            "boost": boost_tags,
             "query": {
               "query_string": {
                 "fields": [

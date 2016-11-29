@@ -1,7 +1,7 @@
 """
 Listing Model Access For Elasticsearch
 """
-# import json
+import json
 import logging
 
 # from django.conf import settings  # TODO: Get Elasticsearch settings
@@ -23,6 +23,77 @@ logger = logging.getLogger('ozp-center.' + str(__name__))
 
 # Create ES client
 es_client = elasticsearch_util.es_client
+
+
+class SearchParamParser(object):
+
+    def __init__(self, request):
+        self.base_url = '{scheme}://{host}'.format(scheme=request.scheme, host=request.get_host())
+
+        self.search_string = request.query_params.get('search', None)
+
+        if self.search_string:
+            try:
+                self.search_string = str(self.search_string).strip()
+            except:
+                self.search_string = None
+
+        if request.query_params.get('limit', False):
+            self.limit_set = True
+        else:
+            self.limit_set = False
+
+        try:
+            self.offset = int(request.query_params.get('offset', 0))
+        except:
+            self.offset = 0
+
+        try:
+            self.limit = int(request.query_params.get('limit', 100))
+        except:
+            self.limit = 100
+
+        # Filtering
+        self.categories = [str(record) for record in request.query_params.getlist('category', [])]
+        self.agencies = [str(record) for record in request.query_params.getlist('agency', [])]
+        self.listing_types = [str(record) for record in request.query_params.getlist('type', [])]
+
+        # Minscore
+        try:
+            self.min_score = float(request.query_params.get('minscore', constants.ES_MIN_SCORE))
+        except:
+            self.min_score = constants.ES_MIN_SCORE
+
+        # Boost - Title
+        try:
+            self.boost_title = float(request.query_params.get('bti', constants.ES_BOOST_TITLE))
+        except:
+            self.boost_title = constants.ES_BOOST_TITLE
+
+        # Boost - Description
+        try:
+            self.boost_description = float(request.query_params.get('bde', constants.ES_BOOST_DESCRIPTION))
+        except:
+            self.boost_description = constants.ES_BOOST_DESCRIPTION
+
+        # Boost - Short Description
+        try:
+            self.boost_description_short = float(request.query_params.get('bds', constants.ES_BOOST_DESCRIPTION_SHORT))
+        except:
+            self.boost_description_short = constants.ES_BOOST_DESCRIPTION_SHORT
+
+        # Boost - Tags
+        try:
+            self.boost_tags = float(request.query_params.get('btg', constants.ES_BOOST_TAGS))
+        except:
+            self.boost_tags = constants.ES_BOOST_TAGS
+
+    def __str__(self):
+        """
+        Convert into string
+        """
+        temp_dict = {'SearchParamParser': vars(self)}
+        return json.dumps(temp_dict)
 
 
 class ReadOnlyListingSerializer(serializers.ModelSerializer):
@@ -157,26 +228,29 @@ def get_user_exclude_orgs(username):
     return exclude_orgs
 
 
-def suggest(username, params_dict):
+def suggest(request_username, params_obj):
     """
     Suggest
+
+    It must respects restrictions
+     - Private apps (apps only from user's agency)
+     - User's max_classification_level
 
     Returns:
         listing titles in a list
     """
     check_elasticsearch()
 
-    search_input = params_dict['search']
-    if search_input is None:
+    if params_obj.search_string is None:
         return []
 
-    user_exclude_orgs = get_user_exclude_orgs(username)
+    user_exclude_orgs = get_user_exclude_orgs(request_username)
 
     # Override Limit - Only 15 results should come if limit was not set
-    if params_dict['limit_set'] is False:
-        params_dict['limit'] = constants.ES_SUGGEST_LIMIT
+    if params_obj.limit_set is False:
+        params_obj.limit = constants.ES_SUGGEST_LIMIT
 
-    search_query = elasticsearch_util.make_search_query_obj(params_dict, min_score=0.3, exclude_agencies=user_exclude_orgs)
+    search_query = elasticsearch_util.make_search_query_obj(params_obj, exclude_agencies=user_exclude_orgs)
     search_query['_source'] = ['title', 'security_marking']  # Only Retrieve these fields from Elasticsearch
 
     # print(json.dumps(search_query, indent=4))
@@ -195,7 +269,7 @@ def suggest(username, params_dict):
         if not source.get('security_marking'):
             exclude_bool = True
             logger.debug('Listing {0!s} has no security_marking'.format(source.get('title')))
-        if not system_has_access_control(username, source.get('security_marking')):
+        if not system_has_access_control(request_username, source.get('security_marking')):
             exclude_bool = True
 
         if exclude_bool is False:
@@ -204,9 +278,10 @@ def suggest(username, params_dict):
     return hit_titles
 
 
-def search(username, params_dict, base_url=None):
+def search(request_username, params_obj):
     """
     Filter Listings
+    Too many variations to cache results
 
     It must respects restrictions
      - Private apps (apps only from user's agency)
@@ -223,8 +298,6 @@ def search(username, params_dict, base_url=None):
         * List of agencies (OR logic)
         * List of listing types (OR logic)
 
-    Too many variations to cache
-
     Args:
         username(str): username
         user_search_input: user provided search keywords
@@ -236,14 +309,8 @@ def search(username, params_dict, base_url=None):
     """
     check_elasticsearch()
 
-    search_input = params_dict['search']
-    try:
-        min_score = float(params_dict['minscore'])  # TODO better type error handling
-    except:
-        min_score = constants.ES_MIN_SCORE
-
-    user_exclude_orgs = get_user_exclude_orgs(username)
-    search_query = elasticsearch_util.make_search_query_obj(params_dict, min_score=min_score, exclude_agencies=user_exclude_orgs)
+    user_exclude_orgs = get_user_exclude_orgs(request_username)
+    search_query = elasticsearch_util.make_search_query_obj(params_obj, exclude_agencies=user_exclude_orgs)
 
     # import json; print(json.dumps(search_query, indent=4))
 
@@ -270,8 +337,8 @@ def search(username, params_dict, base_url=None):
 
         for image_key in image_keys_to_add_url:
             if source.get(image_key) is not None:
-                if base_url:
-                    source[image_key]['url'] = '{!s}/api/image/{!s}/'.format(base_url, source[image_key]['id'])
+                if params_obj.base_url:
+                    source[image_key]['url'] = '{!s}/api/image/{!s}/'.format(params_obj.base_url, source[image_key]['id'])
                 else:
                     source[image_key]['url'] = '/api/image/{!s}/'.format(source[image_key]['id'])
 
@@ -279,7 +346,7 @@ def search(username, params_dict, base_url=None):
         if not source.get('security_marking'):
             exclude_bool = True
             logger.debug('Listing {0!s} has no security_marking'.format(source.get('title')))
-        if not system_has_access_control(username, source.get('security_marking')):
+        if not system_has_access_control(request_username, source.get('security_marking')):
             exclude_bool = True
 
         if exclude_bool is False:
@@ -296,29 +363,29 @@ def search(username, params_dict, base_url=None):
 
     # Previous URL
     prev_query = QueryDict(mutable=True)
-    prev_query.update({'search': search_input})
-    prev_query.update({'offset': params_dict['offset'] - params_dict['limit']})
-    prev_query.update({'current_limit': params_dict['limit']})
+    prev_query.update({'search': params_obj.search_string})
+    prev_query.update({'offset': params_obj.offset - params_obj.limit})
+    prev_query.update({'current_limit': params_obj.limit})
 
-    [prev_query.update({'category': current_category}) for current_category in params_dict['categories']]
-    [prev_query.update({'agency': current_category}) for current_category in params_dict['agencies']]
-    [prev_query.update({'type': current_category}) for current_category in params_dict['listing_types']]
+    [prev_query.update({'category': current_category}) for current_category in params_obj.categories]
+    [prev_query.update({'agency': current_category}) for current_category in params_obj.agencies]
+    [prev_query.update({'type': current_category}) for current_category in params_obj.listing_types]
 
-    if params_dict['offset'] - params_dict['limit'] >= 0:
-        final_results['previous'] = '{!s}/api/listings/essearch/?{!s}'.format(base_url, prev_query.urlencode())
+    if params_obj.offset - params_obj.limit >= 0:
+        final_results['previous'] = '{!s}/api/listings/essearch/?{!s}'.format(params_obj.base_url, prev_query.urlencode())
     else:
         final_results['previous'] = None
 
     # Next URL
     next_query = QueryDict(mutable=True)
-    next_query.update({'search': search_input})
-    next_query.update({'offset': params_dict['offset'] + params_dict['limit']})
-    next_query.update({'current_limit': params_dict['limit']})
+    next_query.update({'search': params_obj.search_string})
+    next_query.update({'offset': params_obj.offset + params_obj.limit})
+    next_query.update({'current_limit': params_obj.limit})
 
-    [next_query.update({'category': current_category}) for current_category in params_dict['categories']]
-    [next_query.update({'agency': current_category}) for current_category in params_dict['agencies']]
-    [next_query.update({'type': current_category}) for current_category in params_dict['listing_types']]
+    [next_query.update({'category': current_category}) for current_category in params_obj.categories]
+    [next_query.update({'agency': current_category}) for current_category in params_obj.agencies]
+    [next_query.update({'type': current_category}) for current_category in params_obj.listing_types]
 
-    final_results['next'] = '{!s}/api/listings/essearch/?{!s}'.format(base_url, next_query.urlencode())
+    final_results['next'] = '{!s}/api/listings/essearch/?{!s}'.format(params_obj.base_url, next_query.urlencode())
 
     return final_results
