@@ -251,7 +251,7 @@ def suggest(request_username, params_obj):
         params_obj.limit = constants.ES_SUGGEST_LIMIT
 
     search_query = elasticsearch_util.make_search_query_obj(params_obj, exclude_agencies=user_exclude_orgs)
-    search_query['_source'] = ['title', 'security_marking']  # Only Retrieve these fields from Elasticsearch
+    search_query['_source'] = ['title', 'security_marking', 'id']  # Only Retrieve these fields from Elasticsearch
 
     # print(json.dumps(search_query, indent=4))
     res = es_client.search(index=settings.ES_INDEX_NAME, body=search_query)
@@ -273,7 +273,8 @@ def suggest(request_username, params_obj):
             exclude_bool = True
 
         if exclude_bool is False:
-            hit_titles.append(source['title'])
+            temp = {'title': source['title'], 'id': source['id']}
+            hit_titles.append(temp)
 
     return hit_titles
 
