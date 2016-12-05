@@ -279,6 +279,22 @@ def suggest(request_username, params_obj):
     return hit_titles
 
 
+def generate_link(params_obj, offset_prediction):
+    """
+    Generate next/previous links
+    """
+    query_temp = QueryDict(mutable=True)
+    query_temp.update({'search': params_obj.search_string})
+    query_temp.update({'offset': offset_prediction})
+    query_temp.update({'limit': params_obj.limit})  # Limit stays the same
+
+    [query_temp.update({'category': current_category}) for current_category in params_obj.categories]
+    [query_temp.update({'agency': current_category}) for current_category in params_obj.agencies]
+    [query_temp.update({'type': current_category}) for current_category in params_obj.listing_types]
+
+    return '{!s}/api/listings/essearch/?{!s}'.format(params_obj.base_url, query_temp.urlencode())
+
+
 def search(request_username, params_obj):
     """
     Filter Listings
@@ -355,38 +371,36 @@ def search(request_username, params_obj):
         else:
             excluded_count = excluded_count + 1
 
+    # Total Records in Elasticsearch
+    final_count = hits.get('total')
+    # Total Records minus what the user does not have access to see, this count should never be below zero
+    # TODO: Figure out smarter logic for excluded_count compensation (rivera 11/14/2016)
+    final_count_with_excluded = final_count - excluded_count
+
     final_results = {
-        "count": hits.get('total') - excluded_count,
+        "count": final_count_with_excluded,
         "results": hit_titles
     }
 
-    # TODO: Figure out smarter logic for next and previous links (rivera 11/14/2016)
+    final_results['previous'] = None
+    final_results['next'] = None
+
+    # if final_count_with_excluded < 0 then previous and next should be None
+    if final_count_with_excluded < 0:
+        return final_results
+
+    previous_offset_prediction = params_obj.offset - params_obj.limit
+    next_offset_prediction = params_obj.offset + params_obj.limit
+
+    final_results['next_offset_prediction'] = next_offset_prediction
 
     # Previous URL
-    prev_query = QueryDict(mutable=True)
-    prev_query.update({'search': params_obj.search_string})
-    prev_query.update({'offset': params_obj.offset - params_obj.limit})
-    prev_query.update({'current_limit': params_obj.limit})
-
-    [prev_query.update({'category': current_category}) for current_category in params_obj.categories]
-    [prev_query.update({'agency': current_category}) for current_category in params_obj.agencies]
-    [prev_query.update({'type': current_category}) for current_category in params_obj.listing_types]
-
-    if params_obj.offset - params_obj.limit >= 0:
-        final_results['previous'] = '{!s}/api/listings/essearch/?{!s}'.format(params_obj.base_url, prev_query.urlencode())
-    else:
-        final_results['previous'] = None
+    # previous_offset_prediction is less than zero, previous should be None
+    if previous_offset_prediction >= 0:
+        final_results['previous'] = generate_link(params_obj, previous_offset_prediction)
 
     # Next URL
-    next_query = QueryDict(mutable=True)
-    next_query.update({'search': params_obj.search_string})
-    next_query.update({'offset': params_obj.offset + params_obj.limit})
-    next_query.update({'current_limit': params_obj.limit})
-
-    [next_query.update({'category': current_category}) for current_category in params_obj.categories]
-    [next_query.update({'agency': current_category}) for current_category in params_obj.agencies]
-    [next_query.update({'type': current_category}) for current_category in params_obj.listing_types]
-
-    final_results['next'] = '{!s}/api/listings/essearch/?{!s}'.format(params_obj.base_url, next_query.urlencode())
+    if next_offset_prediction <= final_count_with_excluded:
+        final_results['next'] = generate_link(params_obj, next_offset_prediction)
 
     return final_results

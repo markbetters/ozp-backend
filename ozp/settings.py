@@ -278,3 +278,5 @@ ES_HOST = [{
     "host": "localhost",
     "port": 9200
 }]
+
+# TODO: Add Basic Auth

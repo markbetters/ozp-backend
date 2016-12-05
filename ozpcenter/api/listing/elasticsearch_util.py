@@ -17,6 +17,7 @@ logger = logging.getLogger('ozp-center.' + str(__name__))
 if settings.ES_ENABLED:
     # Create ES client
     es_client = Elasticsearch(hosts=settings.ES_HOST)
+    # TODO: Add Basic Auth
 else:
     es_client = None
 
