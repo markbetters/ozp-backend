@@ -308,7 +308,7 @@ class ListingSerializer(serializers.ModelSerializer):
             ret['contacts'] = []
         check_failed = []
         # owners
-        if 'owners' in ret:
+        if 'owners' in ret and not anonymize_identifiable_data:
             for owner in ret['owners']:
                 user_dict = owner.get('user')
                 user_username = None if user_dict is None else user_dict.get('username')
