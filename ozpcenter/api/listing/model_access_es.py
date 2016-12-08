@@ -218,12 +218,12 @@ def get_user_exclude_orgs(username):
         user_orgs = user.stewarded_organizations.all()
         user_orgs = [i.title for i in user_orgs]
         exclude_orgs_obj = models.Agency.objects.exclude(title__in=user_orgs)
-        exclude_orgs = [agency.title for agency in exclude_orgs_obj]
+        exclude_orgs = [agency.short_name for agency in exclude_orgs_obj]
     else:
         user_orgs = user.organizations.all()
         user_orgs = [i.title for i in user_orgs]
         exclude_orgs_obj = models.Agency.objects.exclude(title__in=user_orgs)
-        exclude_orgs = [agency.title for agency in exclude_orgs_obj]
+        exclude_orgs = [agency.short_name for agency in exclude_orgs_obj]
 
     return exclude_orgs
 
@@ -279,23 +279,23 @@ def suggest(request_username, params_obj):
     return hit_titles
 
 
-def generate_link(params_obj, offset_prediction):
+def generate_link(search_param_parser, offset_prediction):
     """
     Generate next/previous links
     """
     query_temp = QueryDict(mutable=True)
-    query_temp.update({'search': params_obj.search_string})
+    query_temp.update({'search': search_param_parser.search_string})
     query_temp.update({'offset': offset_prediction})
-    query_temp.update({'limit': params_obj.limit})  # Limit stays the same
+    query_temp.update({'limit': search_param_parser.limit})  # Limit stays the same
 
-    [query_temp.update({'category': current_category}) for current_category in params_obj.categories]
-    [query_temp.update({'agency': current_category}) for current_category in params_obj.agencies]
-    [query_temp.update({'type': current_category}) for current_category in params_obj.listing_types]
+    [query_temp.update({'category': current_category}) for current_category in search_param_parser.categories]
+    [query_temp.update({'agency': current_category}) for current_category in search_param_parser.agencies]
+    [query_temp.update({'type': current_category}) for current_category in search_param_parser.listing_types]
 
-    return '{!s}/api/listings/essearch/?{!s}'.format(params_obj.base_url, query_temp.urlencode())
+    return '{!s}/api/listings/essearch/?{!s}'.format(search_param_parser.base_url, query_temp.urlencode())
 
 
-def search(request_username, params_obj):
+def search(request_username, search_param_parser):
     """
     Filter Listings
     Too many variations to cache results
@@ -317,19 +317,15 @@ def search(request_username, params_obj):
 
     Args:
         username(str): username
-        user_search_input: user provided search keywords
-        filter_params({}):
-            categories = self.request.query_params.getlist('category', False)
-            agencies = self.request.query_params.getlist('agency', False)
-            listing_types = self.request.query_params.getlist('type', False)
-        base_url: String of url.  example string > http://127.0.0.1:8001
+        search_param_parser(SearchParamParser): parameters
     """
     check_elasticsearch()
 
     user_exclude_orgs = get_user_exclude_orgs(request_username)
-    search_query = elasticsearch_util.make_search_query_obj(params_obj, exclude_agencies=user_exclude_orgs)
+    search_query = elasticsearch_util.make_search_query_obj(search_param_parser, exclude_agencies=user_exclude_orgs)
 
-    # import json; print(json.dumps(search_query, indent=4))
+    import json
+    print(json.dumps(search_query, indent=4))
 
     res = es_client.search(index=settings.ES_INDEX_NAME, body=search_query)
 
@@ -354,8 +350,8 @@ def search(request_username, params_obj):
 
         for image_key in image_keys_to_add_url:
             if source.get(image_key) is not None:
-                if params_obj.base_url:
-                    source[image_key]['url'] = '{!s}/api/image/{!s}/'.format(params_obj.base_url, source[image_key]['id'])
+                if search_param_parser.base_url:
+                    source[image_key]['url'] = '{!s}/api/image/{!s}/'.format(search_param_parser.base_url, source[image_key]['id'])
                 else:
                     source[image_key]['url'] = '/api/image/{!s}/'.format(source[image_key]['id'])
 
@@ -389,18 +385,18 @@ def search(request_username, params_obj):
     if final_count_with_excluded < 0:
         return final_results
 
-    previous_offset_prediction = params_obj.offset - params_obj.limit
-    next_offset_prediction = params_obj.offset + params_obj.limit
+    previous_offset_prediction = search_param_parser.offset - search_param_parser.limit
+    next_offset_prediction = search_param_parser.offset + search_param_parser.limit
 
     final_results['next_offset_prediction'] = next_offset_prediction
 
     # Previous URL
     # previous_offset_prediction is less than zero, previous should be None
     if previous_offset_prediction >= 0:
-        final_results['previous'] = generate_link(params_obj, previous_offset_prediction)
+        final_results['previous'] = generate_link(search_param_parser, previous_offset_prediction)
 
     # Next URL
     if next_offset_prediction <= final_count_with_excluded:
-        final_results['next'] = generate_link(params_obj, next_offset_prediction)
+        final_results['next'] = generate_link(search_param_parser, next_offset_prediction)
 
     return final_results
