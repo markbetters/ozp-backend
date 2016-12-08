@@ -88,6 +88,9 @@ def get_mapping_setting_obj(number_of_shards=None, number_of_replicas=None):
             "approval_status": {
               "type": "string"
             },
+            "launch_url": {
+              "type": "string"
+            },
             "avg_rate": {
               "type": "double"
             },
@@ -598,7 +601,6 @@ def prepare_clean_listing_record(record):
                       'required_listings',
                       'owners',
                       'current_rejection',
-                      'launch_url',
                       'what_is_new',
                       'iframe_compatible',
                       'approved_date',
@@ -619,8 +621,9 @@ def prepare_clean_listing_record(record):
 
     # Clean Large_icon
     for image_key in image_keys_to_clean:
-        del record[image_key]['image_type']
-        del record[image_key]['uuid']
+        if record.get(image_key):
+            del record[image_key]['image_type']
+            del record[image_key]['uuid']
 
     del record['agency']['icon']
 
