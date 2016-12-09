@@ -63,18 +63,22 @@ There's also the admin interface at `http://localhost:8000/admin`
 ### Runing Elasticsearch for Search
 ozp/Settings.py file variable needs to be updated    
 ES_ENABLED = True    
-elastic search 2.4.1 needs to be installed and run    
-https://www.elastic.co/guide/en/elasticsearch/guide/current/running-elasticsearch.html    
-run make reindex_es in the ozp-backend folder while inside of your $env     
-Installing and Running Elasticsearch     
+After installing Elasticsearch run ````make reindex_es```` in the ozp-backend folder while inside of your $env     
+
+**Installing and Running Elasticsearch**     
+Elasticsearch 2.4.1 needs to be installed and run 
+https://www.elastic.co/guide/en/elasticsearch/guide/current/running-elasticsearch.html 
+
 The only requirement for installing Elasticsearch is a recent version of Java. Preferably, you should install the latest version of the official Java from www.java.com.    
 You can get the latest version of Elasticsearch from elastic.co/downloads/elasticsearch.    
-To install Elasticsearch, download and extract the archive file for your platform. For more information, see the Installation topic in the Elasticsearch Reference.    
-Tip    
+To install Elasticsearch, download and extract the archive file for your platform. For more information, see the Installation topic in the Elasticsearch Reference.
+
+**Tip**    
 When installing Elasticsearch in production, you can choose to use the Debian or RPM packages provided on the downloads page. You can also use the officially supported Puppet module or Chef cookbook.    
 Once you’ve extracted the archive file, Elasticsearch is ready to run. To start it up in the foreground:    
 cd elasticsearch    
 ./bin/elasticsearch    
+
 
 ## Releasing
 Run `python release.py` to generate a tarball with Wheels for the application
