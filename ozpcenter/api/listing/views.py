@@ -519,8 +519,9 @@ class ListingSearchViewSet(viewsets.ModelViewSet):
     """
     permission_classes = (permissions.IsUser,)
     serializer_class = serializers.ListingSerializer
-    filter_backends = (filters.SearchFilter, )
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter, )
     search_fields = ('title', 'description', 'description_short', 'tags__name')
+    ordering_fields = ('title', 'owners')
 
     def get_queryset(self):
         filter_params = {}
