@@ -70,7 +70,8 @@ Elasticsearch 2.4.1 needs to be installed and run
 https://www.elastic.co/guide/en/elasticsearch/guide/current/running-elasticsearch.html 
 
 The only requirement for installing Elasticsearch is a recent version of Java. Preferably, you should install the latest version of the official Java from www.java.com.    
-You can get the latest version of Elasticsearch from elastic.co/downloads/elasticsearch.    
+
+You can get the Elasticsearch 2.4.1 from https://www.elastic.co/blog/elasticsearch-2-4-1-released.    
 To install Elasticsearch, download and extract the archive file for your platform. For more information, see the Installation topic in the Elasticsearch Reference.
 
 **Tip**    
