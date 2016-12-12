@@ -245,6 +245,8 @@ class ListingViewSet(viewsets.ModelViewSet):
     """
     permission_classes = (permissions.IsUser,)
     serializer_class = serializers.ListingSerializer
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter )
+    search_fields = ('title', 'id', 'owners__display_name', 'agency__title', 'agency__short_name',)
 
     def get_queryset(self):
         approval_status = self.request.query_params.get('approval_status', None)
@@ -269,7 +271,7 @@ class ListingViewSet(viewsets.ModelViewSet):
         return listings
 
     def list(self, request):
-        queryset = self.get_queryset()
+        queryset = self.filter_queryset(self.get_queryset())
         counts_data = model_access.put_counts_in_listings_endpoint(queryset)
         # it appears that because we override the queryset here, we must
         # manually invoke the pagination methods
@@ -519,9 +521,8 @@ class ListingSearchViewSet(viewsets.ModelViewSet):
     """
     permission_classes = (permissions.IsUser,)
     serializer_class = serializers.ListingSerializer
-    filter_backends = (filters.SearchFilter, filters.OrderingFilter, )
+    filter_backends = (filters.SearchFilter, )
     search_fields = ('title', 'description', 'description_short', 'tags__name')
-    ordering_fields = ('title', 'owners')
 
     def get_queryset(self):
         filter_params = {}
