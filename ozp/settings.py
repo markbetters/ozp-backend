@@ -279,4 +279,6 @@ ES_HOST = [{
     "port": 9200
 }]
 
-# TODO: Add Basic Auth
+ES_BASIC_AUTH = bool(os.getenv('ES_BASIC_AUTH', False))
+ES_AUTH_USERNAME = os.getenv('ES_AUTH_USERNAME', 'user')
+ES_AUTH_PASSWORD = os.getenv('ES_AUTH_PASSWORD', 'password')

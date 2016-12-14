@@ -4,18 +4,16 @@ Listing Model Access For Elasticsearch
 import json
 import logging
 
-# from django.conf import settings  # TODO: Get Elasticsearch settings
-from rest_framework import serializers
-
 from django.conf import settings
 from django.http.request import QueryDict
+from rest_framework import serializers
+from elasticsearch import exceptions
+
 from ozpcenter import models
 from ozpcenter import errors
 from ozpcenter import constants
 from plugins_util.plugin_manager import system_has_access_control
 from ozpcenter.api.listing import elasticsearch_util
-
-
 # import ozpcenter.model_access as generic_model_access
 
 # Get an instance of a logger
@@ -103,21 +101,44 @@ class ReadOnlyListingSerializer(serializers.ModelSerializer):
         depth = 2
 
 
-def ping_elasticsearch():
+def check_elasticsearch():
     """
     Used to check to see if elasticsearch is up
+    TODO: Replace es_client.ping() with es_client.info()
+    If successful:
+        {'name': 'Human Top', 'version': {'build_snapshot': False, 'number': '2.4.0', 'build_hash': 'ce9f0c7394dee074091dd1bc4e9469251181fc55',
+        'build_timestamp': '2016-08-29T09:14:17Z', 'lucene_version': '5.5.2'}, 'cluster_name': 'elasticsearch', 'tagline': 'You Know, for Search'}
+    If Exception: TransportError
+        Ngnix BasicAuth Fail:
+            TransportError(401, '<html>\r\n<head><title>401 Authorization Required</title></head>\r\n<body bgcolor="white">\r\n<center><h1>401 Authorization Required</h1></center>\r\n<hr><center>nginx/1.11.6</center>\r\n</body>\r\n</html>\r\n')
+        Nginx reverse proxy can't find elasticsearch but correct BasicAuth
+            TransportError(502, 'An error occurred.</h1>\n<p>Sorry, the page you are looking for is currently unavailable.<br/>\nPlease try again later.....
+    If Exception Type: Connection fails:
+        ConnectionError(<urllib3.connection.HTTPConnection object at 0x7f6343212c50>: Failed to establish a new connection: [Errno 111] Connection refused) ...
+    If Exception Type: SerializationError
+        Exception Value: Unknown mimetype, unable to deserialize: text/html
+
+    Ping does > self.transport.perform_request('HEAD', '/', params=params) > it would be helpful if function was more verbosed
     """
-    if settings.ES_ENABLED is False:
-        return False
-    return es_client.ping()
-
-
-def check_elasticsearch():
     if settings.ES_ENABLED is False:
         raise errors.ElasticsearchServiceUnavailable("Elasticsearch is disabled in the settings")
 
-    if not ping_elasticsearch():
-        raise errors.ElasticsearchServiceUnavailable("Elasticsearch is not reachable")
+    try:
+        results = es_client.info()
+        keys_to_check = ['name', 'version', 'cluster_name', 'tagline']
+        for key in keys_to_check:
+            if key not in results:
+                raise errors.ElasticsearchServiceUnavailable("Elasticsearch Results missing keys")
+        return True
+    except exceptions.SerializationError:
+        raise errors.ElasticsearchServiceUnavailable("Elasticsearch Serialization Error")
+    except exceptions.AuthenticationException:
+        raise errors.ElasticsearchServiceUnavailable("Elasticsearch Authentication Exception")
+    except exceptions.ConnectionError:
+        raise errors.ElasticsearchServiceUnavailable("Elasticsearch Connection Error")
+    except exceptions.TransportError:
+        raise errors.ElasticsearchServiceUnavailable("Elasticsearch Transport Error")
+    raise errors.ElasticsearchServiceUnavailable("Elasticsearch Check Error")
 
 
 def bulk_reindex():
@@ -324,8 +345,7 @@ def search(request_username, search_param_parser):
     user_exclude_orgs = get_user_exclude_orgs(request_username)
     search_query = elasticsearch_util.make_search_query_obj(search_param_parser, exclude_agencies=user_exclude_orgs)
 
-    import json
-    print(json.dumps(search_query, indent=4))
+    # print(json.dumps(search_query, indent=4))
 
     res = es_client.search(index=settings.ES_INDEX_NAME, body=search_query)
 
