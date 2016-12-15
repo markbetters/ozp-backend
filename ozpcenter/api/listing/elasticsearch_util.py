@@ -84,7 +84,8 @@ def get_mapping_setting_obj(number_of_shards=None, number_of_replicas=None):
               "type": "long"
             },
             "agency_short_name": {
-              "type": "string"
+              "type": "string",
+              "index": "not_analyzed"
             },
             "agency_title": {
               "type": "string"
