@@ -4,6 +4,9 @@ Listing Views
 import logging
 
 from django.shortcuts import get_object_or_404
+from django.db.models import Min
+from django.db.models.functions import Lower
+from django.db.models.functions import Coalesce
 from rest_framework import filters
 from rest_framework import status
 from rest_framework import viewsets
@@ -247,12 +250,14 @@ class ListingViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.ListingSerializer
     filter_backends = (filters.SearchFilter, filters.OrderingFilter )
     search_fields = ('title', 'id', 'owners__display_name', 'agency__title', 'agency__short_name',)
+    ordering_fields = ('title', 'id', 'agency__title', 'agency__short_name',)
 
     def get_queryset(self):
         approval_status = self.request.query_params.get('approval_status', None)
         # org = self.request.query_params.get('org', None)
         orgs = self.request.query_params.getlist('org', False)
         enabled = self.request.query_params.get('enabled', None)
+        ordering = self.request.query_params.getlist('ordering', None)
         if enabled:
             enabled = enabled.lower()
             if enabled in ['true', '1']:
@@ -267,6 +272,11 @@ class ListingViewSet(viewsets.ModelViewSet):
             listings = listings.filter(agency__title__in=orgs)
         if enabled is not None:
             listings = listings.filter(is_enabled=enabled)
+        # have to handle this case manually because the ordering includes an app multiple times
+        # if there are multiple owners. We instead do sorting by case insensitive compare of the 
+        # app owner that comes first alphabetically
+        if ordering is not None and 'owners__display_name' in ordering:
+            listings = listings.annotate(min = Min(Lower('owners__display_name'))).order_by('min')
 
         return listings
 
