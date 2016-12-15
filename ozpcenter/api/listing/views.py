@@ -250,7 +250,7 @@ class ListingViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.ListingSerializer
     filter_backends = (filters.SearchFilter, filters.OrderingFilter )
     search_fields = ('title', 'id', 'owners__display_name', 'agency__title', 'agency__short_name',)
-    ordering_fields = ('title', 'id', 'agency__title', 'agency__short_name',)
+    ordering_fields = ('title', 'id', 'agency__title', 'agency__short_name','is_enabled','is_featured')
     ordering = ('is_deleted', '-edited_date')
     def get_queryset(self):
         approval_status = self.request.query_params.get('approval_status', None)
@@ -273,7 +273,7 @@ class ListingViewSet(viewsets.ModelViewSet):
         if enabled is not None:
             listings = listings.filter(is_enabled=enabled)
         # have to handle this case manually because the ordering includes an app multiple times
-        # if there are multiple owners. We instead do sorting by case insensitive compare of the 
+        # if there are multiple owners. We instead do sorting by case insensitive compare of the
         # app owner that comes first alphabetically
         param = [s for s in ordering if 'owners__display_name' == s or '-owners__display_name' == s]
         if ordering is not None and param:
@@ -282,7 +282,7 @@ class ListingViewSet(viewsets.ModelViewSet):
                 orderby = '-min'
             listings = listings.annotate(min = Min(Lower('owners__display_name'))).order_by(orderby)
             self.ordering = None
-            
+
 
         return listings
 
