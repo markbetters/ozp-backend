@@ -251,7 +251,7 @@ class ListingViewSet(viewsets.ModelViewSet):
     filter_backends = (filters.SearchFilter, filters.OrderingFilter )
     search_fields = ('title', 'id', 'owners__display_name', 'agency__title', 'agency__short_name',)
     ordering_fields = ('title', 'id', 'agency__title', 'agency__short_name',)
-
+    ordering = ('is_deleted', '-edited_date')
     def get_queryset(self):
         approval_status = self.request.query_params.get('approval_status', None)
         # org = self.request.query_params.get('org', None)
@@ -275,8 +275,14 @@ class ListingViewSet(viewsets.ModelViewSet):
         # have to handle this case manually because the ordering includes an app multiple times
         # if there are multiple owners. We instead do sorting by case insensitive compare of the 
         # app owner that comes first alphabetically
-        if ordering is not None and 'owners__display_name' in ordering:
-            listings = listings.annotate(min = Min(Lower('owners__display_name'))).order_by('min')
+        param = [s for s in ordering if 'owners__display_name' == s or '-owners__display_name' == s]
+        if ordering is not None and param:
+            orderby = 'min'
+            if param[0].startswith('-'):
+                orderby = '-min'
+            listings = listings.annotate(min = Min(Lower('owners__display_name'))).order_by(orderby)
+            self.ordering = None
+            
 
         return listings
 

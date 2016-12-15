@@ -178,7 +178,7 @@ def get_listings(username):
     Get Listings this user can see
     """
     try:
-        return models.Listing.objects.for_user(username).order_by('is_deleted', '-edited_date')
+        return models.Listing.objects.for_user(username)
     except ObjectDoesNotExist:
         return None
 
