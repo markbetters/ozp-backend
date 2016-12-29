@@ -1032,6 +1032,7 @@ class ListingActivity(models.Model):
     REVIEW_EDITED = 'REVIEW_EDITED'
     # a review for a listing has been deleted
     REVIEW_DELETED = 'REVIEW_DELETED'
+    PENDING_DELETION = 'PENDING_DELETION'
 
     ACTION_CHOICES = (
         (CREATED, 'CREATED'),
@@ -1044,7 +1045,8 @@ class ListingActivity(models.Model):
         (DISABLED, 'DISABLED'),
         (DELETED, 'DELETED'),
         (REVIEW_EDITED, 'REVIEW_EDITED'),
-        (REVIEW_DELETED, 'REVIEW_DELETED')
+        (REVIEW_DELETED, 'REVIEW_DELETED'),
+        (PENDING_DELETION, 'PENDING_DELETION')
     )
 
     action = models.CharField(max_length=128, choices=ACTION_CHOICES)

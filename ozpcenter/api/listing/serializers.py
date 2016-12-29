@@ -727,6 +727,8 @@ class ListingSerializer(serializers.ModelSerializer):
                 raise errors.PermissionDenied('Only stewards can mark a listing as APPROVED_ORG')
             if s == models.Listing.PENDING:
                 model_access.submit_listing(user, instance)
+            if s == models.Listing.PENDING_DELETION:
+                model_access.pending_delete_listing(user, instance)
             if s == models.Listing.APPROVED_ORG:
                 model_access.approve_listing_by_org_steward(user, instance)
             if s == models.Listing.APPROVED:

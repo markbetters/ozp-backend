@@ -382,6 +382,23 @@ def submit_listing(author, listing):
     listing.save()
     return listing
 
+def pending_delete_listing(author, listing):
+    """
+    Submit a listing for Deletion
+
+    Args:
+        author
+        listing
+
+    Return:
+        listing
+    """
+    # TODO: check that all required fields are set
+    listing = _add_listing_activity(author, listing, models.ListingActivity.PENDING_DELETION)
+    listing.approval_status = models.Listing.PENDING_DELETION
+    listing.edited_date = utils.get_now_utc()
+    listing.save()
+    return listing
 
 def approve_listing_by_org_steward(org_steward, listing):
     """
