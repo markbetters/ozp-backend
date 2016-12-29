@@ -833,13 +833,15 @@ class Listing(models.Model):
     APPROVED = 'APPROVED'
     REJECTED = 'REJECTED'
     DELETED = 'DELETED'
+    PENDING_DELETION = 'PENDING_DELETION'
     APPROVAL_STATUS_CHOICES = (
         (IN_PROGRESS, 'IN_PROGRESS'),
         (PENDING, 'PENDING'),
         (APPROVED_ORG, 'APPROVED_ORG'),
         (APPROVED, 'APPROVED'),
         (REJECTED, 'REJECTED'),
-        (DELETED, 'DELETED')
+        (DELETED, 'DELETED'),
+        (PENDING_DELETION, 'PENDING_DELETION')
     )
     # title is not guaranteed to be unique
     title = models.CharField(max_length=255)
