@@ -711,6 +711,10 @@ def put_counts_in_listings_endpoint(queryset):
     num_deleted = queryset.filter(
         approval_status=models.Listing.DELETED).count()
 
+    # Number of listing that is PENDING_DELETION
+    num_pending_deletion = queryset.filter(
+        approval_status=models.Listing.PENDING_DELETION).count()
+
     data['total'] = num_total
     data['enabled'] = num_enabled
     data['organizations'] = {}
@@ -720,6 +724,7 @@ def put_counts_in_listings_endpoint(queryset):
     data[models.Listing.APPROVED_ORG] = num_approved_org
     data[models.Listing.APPROVED] = num_approved
     data[models.Listing.DELETED] = num_deleted
+    data[models.Listing.PENDING_DELETION] = num_pending_deletion
 
     orgs = models.Agency.objects.all()
     for i in orgs:
