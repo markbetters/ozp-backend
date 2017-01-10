@@ -250,7 +250,7 @@ class ListingViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.ListingSerializer
     filter_backends = (filters.SearchFilter, filters.OrderingFilter )
     search_fields = ('title', 'id', 'owners__display_name', 'agency__title', 'agency__short_name',)
-    ordering_fields = ('title', 'id', 'agency__title', 'agency__short_name','is_enabled','is_featured', 'edited_date')
+    ordering_fields = ('title', 'id', 'agency__title', 'agency__short_name','is_enabled','is_featured', 'edited_date','security_marking','is_private','approval_status')
     ordering = ('is_deleted', '-edited_date')
     def get_queryset(self):
         approval_status = self.request.query_params.get('approval_status', None)

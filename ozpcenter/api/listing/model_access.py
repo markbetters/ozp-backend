@@ -630,6 +630,7 @@ def delete_listing(username, listing):
     listing = _add_listing_activity(profile, listing, models.ListingActivity.DELETED)
     listing.is_deleted = True
     listing.is_enabled = False
+    listing.is_featured = False
     listing.approval_status = models.Listing.DELETED
 
     # TODO Delete the values of other field
