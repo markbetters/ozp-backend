@@ -833,13 +833,15 @@ class Listing(models.Model):
     APPROVED = 'APPROVED'
     REJECTED = 'REJECTED'
     DELETED = 'DELETED'
+    PENDING_DELETION = 'PENDING_DELETION'
     APPROVAL_STATUS_CHOICES = (
         (IN_PROGRESS, 'IN_PROGRESS'),
         (PENDING, 'PENDING'),
         (APPROVED_ORG, 'APPROVED_ORG'),
         (APPROVED, 'APPROVED'),
         (REJECTED, 'REJECTED'),
-        (DELETED, 'DELETED')
+        (DELETED, 'DELETED'),
+        (PENDING_DELETION, 'PENDING_DELETION')
     )
     # title is not guaranteed to be unique
     title = models.CharField(max_length=255)
@@ -1030,6 +1032,7 @@ class ListingActivity(models.Model):
     REVIEW_EDITED = 'REVIEW_EDITED'
     # a review for a listing has been deleted
     REVIEW_DELETED = 'REVIEW_DELETED'
+    PENDING_DELETION = 'PENDING_DELETION'
 
     ACTION_CHOICES = (
         (CREATED, 'CREATED'),
@@ -1042,7 +1045,8 @@ class ListingActivity(models.Model):
         (DISABLED, 'DISABLED'),
         (DELETED, 'DELETED'),
         (REVIEW_EDITED, 'REVIEW_EDITED'),
-        (REVIEW_DELETED, 'REVIEW_DELETED')
+        (REVIEW_DELETED, 'REVIEW_DELETED'),
+        (PENDING_DELETION, 'PENDING_DELETION')
     )
 
     action = models.CharField(max_length=128, choices=ACTION_CHOICES)

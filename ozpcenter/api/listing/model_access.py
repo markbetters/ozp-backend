@@ -168,6 +168,7 @@ def get_self_listings(username):
         user = generic_model_access.get_profile(username)
         data = models.Listing.objects.for_user(username).filter(
             owners__in=[user.id]).filter(is_deleted=False)
+        data = data.order_by('approval_status')
         return data
     except ObjectDoesNotExist:
         return None
@@ -378,6 +379,25 @@ def submit_listing(author, listing):
     # TODO: check that all required fields are set
     listing = _add_listing_activity(author, listing, models.ListingActivity.SUBMITTED)
     listing.approval_status = models.Listing.PENDING
+    listing.edited_date = utils.get_now_utc()
+    listing.save()
+    return listing
+
+
+def pending_delete_listing(author, listing):
+    """
+    Submit a listing for Deletion
+
+    Args:
+        author
+        listing
+
+    Return:
+        listing
+    """
+    # TODO: check that all required fields are set
+    listing = _add_listing_activity(author, listing, models.ListingActivity.PENDING_DELETION)
+    listing.approval_status = models.Listing.PENDING_DELETION
     listing.edited_date = utils.get_now_utc()
     listing.save()
     return listing
@@ -610,7 +630,7 @@ def delete_listing(username, listing):
     for now just remove
     """
     profile = generic_model_access.get_profile(username)
-    app_owners = [i.user.username for i in listing.owners.all()]
+    # app_owners = [i.user.username for i in listing.owners.all()]
     # ensure user is the author of this review, or that user is an org
     # steward or apps mall steward
 
@@ -619,10 +639,10 @@ def delete_listing(username, listing):
         raise errors.PermissionDenied('Current profile has does not have delete permissions')
 
     priv_roles = ['APPS_MALL_STEWARD', 'ORG_STEWARD']
-    if profile.highest_role() in priv_roles:
+    if profile.highest_role() in priv_roles or listing.approval_status == 'IN_PROGRESS':
         pass
-    elif username not in app_owners:
-        raise errors.PermissionDenied()
+    else:
+        raise errors.PermissionDenied('Only Org Stewards and admins can delete listings')
 
     if listing.is_deleted:
         raise errors.PermissionDenied('The listing has already been deleted')
@@ -655,6 +675,7 @@ def put_counts_in_listings_endpoint(queryset):
             "enabled": <enabled listings>,
             "IN_PROGRESS": <int>,
             "PENDING": <int>,
+            "PENDING_DELETION: <int>"
             "REJECTED": <int>,
             "APPROVED_ORG": <int>,
             "APPROVED": <int>,
@@ -694,6 +715,10 @@ def put_counts_in_listings_endpoint(queryset):
     num_deleted = queryset.filter(
         approval_status=models.Listing.DELETED).count()
 
+    # Number of listing that is PENDING_DELETION
+    num_pending_deletion = queryset.filter(
+        approval_status=models.Listing.PENDING_DELETION).count()
+
     data['total'] = num_total
     data['enabled'] = num_enabled
     data['organizations'] = {}
@@ -703,6 +728,7 @@ def put_counts_in_listings_endpoint(queryset):
     data[models.Listing.APPROVED_ORG] = num_approved_org
     data[models.Listing.APPROVED] = num_approved
     data[models.Listing.DELETED] = num_deleted
+    data[models.Listing.PENDING_DELETION] = num_pending_deletion
 
     orgs = models.Agency.objects.all()
     for i in orgs:
