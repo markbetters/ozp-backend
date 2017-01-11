@@ -383,6 +383,7 @@ def submit_listing(author, listing):
     listing.save()
     return listing
 
+
 def pending_delete_listing(author, listing):
     """
     Submit a listing for Deletion
@@ -400,6 +401,7 @@ def pending_delete_listing(author, listing):
     listing.edited_date = utils.get_now_utc()
     listing.save()
     return listing
+
 
 def approve_listing_by_org_steward(org_steward, listing):
     """
@@ -637,12 +639,10 @@ def delete_listing(username, listing):
         raise errors.PermissionDenied('Current profile has does not have delete permissions')
 
     priv_roles = ['APPS_MALL_STEWARD', 'ORG_STEWARD']
-    if profile.highest_role() in priv_roles:
-        pass
-    if listing.approval_status == 'IN_PROGRESS':
+    if profile.highest_role() in priv_roles or listing.approval_status == 'IN_PROGRESS':
         pass
     else:
-        raise errors.PermissionDenied()
+        raise errors.PermissionDenied('Only Org Stewards and admins can delete listings')
 
     if listing.is_deleted:
         raise errors.PermissionDenied('The listing has already been deleted')
@@ -675,6 +675,7 @@ def put_counts_in_listings_endpoint(queryset):
             "enabled": <enabled listings>,
             "IN_PROGRESS": <int>,
             "PENDING": <int>,
+            "PENDING_DELETION: <int>"
             "REJECTED": <int>,
             "APPROVED_ORG": <int>,
             "APPROVED": <int>,

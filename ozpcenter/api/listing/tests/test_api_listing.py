@@ -933,6 +933,7 @@ class ListingApiTest(APITestCase):
             "total": 111,
             "APPROVED": 111,
             "PENDING": 0,
+            "PENDING_DELETION": 0,
             "IN_PROGRESS": 0,
             "DELETED": 0
             }
