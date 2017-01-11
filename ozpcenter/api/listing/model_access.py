@@ -630,7 +630,7 @@ def delete_listing(username, listing):
     for now just remove
     """
     profile = generic_model_access.get_profile(username)
-    app_owners = [i.user.username for i in listing.owners.all()]
+    # app_owners = [i.user.username for i in listing.owners.all()]
     # ensure user is the author of this review, or that user is an org
     # steward or apps mall steward
 
