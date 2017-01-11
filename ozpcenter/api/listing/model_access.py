@@ -168,6 +168,7 @@ def get_self_listings(username):
         user = generic_model_access.get_profile(username)
         data = models.Listing.objects.for_user(username).filter(
             owners__in=[user.id]).filter(is_deleted=False)
+        data = data.order_by('approval_status')
         return data
     except ObjectDoesNotExist:
         return None
@@ -638,7 +639,9 @@ def delete_listing(username, listing):
     priv_roles = ['APPS_MALL_STEWARD', 'ORG_STEWARD']
     if profile.highest_role() in priv_roles:
         pass
-    elif username not in app_owners:
+    if listing.approval_status == 'IN_PROGRESS':
+        pass
+    else:
         raise errors.PermissionDenied()
 
     if listing.is_deleted:
