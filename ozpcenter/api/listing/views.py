@@ -6,7 +6,6 @@ import logging
 from django.shortcuts import get_object_or_404
 from django.db.models import Min
 from django.db.models.functions import Lower
-from django.db.models.functions import Coalesce
 from rest_framework import filters
 from rest_framework import status
 from rest_framework import viewsets
@@ -248,10 +247,11 @@ class ListingViewSet(viewsets.ModelViewSet):
     """
     permission_classes = (permissions.IsUser,)
     serializer_class = serializers.ListingSerializer
-    filter_backends = (filters.SearchFilter, filters.OrderingFilter )
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter)
     search_fields = ('title', 'id', 'owners__display_name', 'agency__title', 'agency__short_name',)
-    ordering_fields = ('title', 'id', 'agency__title', 'agency__short_name','is_enabled','is_featured', 'edited_date','security_marking','is_private','approval_status')
+    ordering_fields = ('title', 'id', 'agency__title', 'agency__short_name', 'is_enabled', 'is_featured', 'edited_date', 'security_marking', 'is_private', 'approval_status')
     ordering = ('is_deleted', '-edited_date')
+
     def get_queryset(self):
         approval_status = self.request.query_params.get('approval_status', None)
         # org = self.request.query_params.get('org', None)
@@ -280,10 +280,8 @@ class ListingViewSet(viewsets.ModelViewSet):
             orderby = 'min'
             if param[0].startswith('-'):
                 orderby = '-min'
-            listings = listings.annotate(min = Min(Lower('owners__display_name'))).order_by(orderby)
+            listings = listings.annotate(min=Min(Lower('owners__display_name'))).order_by(orderby)
             self.ordering = None
-
-
         return listings
 
     def list(self, request):
