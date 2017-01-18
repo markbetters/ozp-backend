@@ -4,6 +4,8 @@ Listing Views
 import logging
 
 from django.shortcuts import get_object_or_404
+from django.db.models import Min
+from django.db.models.functions import Lower
 from rest_framework import filters
 from rest_framework import status
 from rest_framework import viewsets
@@ -245,12 +247,17 @@ class ListingViewSet(viewsets.ModelViewSet):
     """
     permission_classes = (permissions.IsUser,)
     serializer_class = serializers.ListingSerializer
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter)
+    search_fields = ('title', 'id', 'owners__display_name', 'agency__title', 'agency__short_name',)
+    ordering_fields = ('title', 'id', 'agency__title', 'agency__short_name', 'is_enabled', 'is_featured', 'edited_date', 'security_marking', 'is_private', 'approval_status')
+    ordering = ('is_deleted', '-edited_date')
 
     def get_queryset(self):
         approval_status = self.request.query_params.get('approval_status', None)
         # org = self.request.query_params.get('org', None)
         orgs = self.request.query_params.getlist('org', False)
         enabled = self.request.query_params.get('enabled', None)
+        ordering = self.request.query_params.getlist('ordering', None)
         if enabled:
             enabled = enabled.lower()
             if enabled in ['true', '1']:
@@ -265,11 +272,20 @@ class ListingViewSet(viewsets.ModelViewSet):
             listings = listings.filter(agency__title__in=orgs)
         if enabled is not None:
             listings = listings.filter(is_enabled=enabled)
-
+        # have to handle this case manually because the ordering includes an app multiple times
+        # if there are multiple owners. We instead do sorting by case insensitive compare of the
+        # app owner that comes first alphabetically
+        param = [s for s in ordering if 'owners__display_name' == s or '-owners__display_name' == s]
+        if ordering is not None and param:
+            orderby = 'min'
+            if param[0].startswith('-'):
+                orderby = '-min'
+            listings = listings.annotate(min=Min(Lower('owners__display_name'))).order_by(orderby)
+            self.ordering = None
         return listings
 
     def list(self, request):
-        queryset = self.get_queryset()
+        queryset = self.filter_queryset(self.get_queryset())
         counts_data = model_access.put_counts_in_listings_endpoint(queryset)
         # it appears that because we override the queryset here, we must
         # manually invoke the pagination methods

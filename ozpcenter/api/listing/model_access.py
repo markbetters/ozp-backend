@@ -179,7 +179,7 @@ def get_listings(username):
     Get Listings this user can see
     """
     try:
-        return models.Listing.objects.for_user(username).order_by('is_deleted', '-edited_date')
+        return models.Listing.objects.for_user(username)
     except ObjectDoesNotExist:
         return None
 
@@ -650,6 +650,7 @@ def delete_listing(username, listing):
     listing = _add_listing_activity(profile, listing, models.ListingActivity.DELETED)
     listing.is_deleted = True
     listing.is_enabled = False
+    listing.is_featured = False
     listing.approval_status = models.Listing.DELETED
 
     # TODO Delete the values of other field
