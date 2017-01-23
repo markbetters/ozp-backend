@@ -63,7 +63,7 @@ def get_self_application_library(username, listing_type=None, folder_name=None):
 
     """
     try:
-        data = models.ApplicationLibraryEntry.objects
+        data = models.ApplicationLibraryEntry.objects.for_user(username)
         data = data.filter(owner__user__username=username)
         data = data.filter(listing__is_enabled=True)
         data = data.filter(listing__is_deleted=False)
