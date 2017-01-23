@@ -113,6 +113,97 @@ def create_self_user_library_entry(username, listing_id, folder_name=None, posit
     return entry
 
 
+def create_batch_library_entries(username, data):
+    """
+    Create Batch
+
+    Args:
+        username (str): username
+        data (List<Dict>): Payload
+            [
+                {
+                    "listing": {
+                        "id": 1
+                    },
+                    "folder": "folderName" (or null),
+                    "id": 2,
+                    "position": 2
+                },
+                {
+                    "listing": {
+                        "id": 2
+                    },
+                    "folder": "folderName" (or null),
+                    "id": 1,
+                    "position": 1
+                }
+            ]
+
+        Return:
+            List<Dict>: payload data
+    """
+    owner = generic_model_access.get_profile(username)
+    if not owner:
+        return []
+
+    validated_data = []
+    # validate input
+    for data_entry in data:
+        error = False
+        # Validates Listing
+        new_data_entry = {}
+
+        if 'listing' not in data_entry:
+            error = True
+        else:
+            listing_id = data_entry.get('listing', {}).get('id')
+            listing_obj = listing_model_access.get_listing_by_id(username, listing_id)
+            if not listing_obj:
+                error = True
+            else:
+                new_data_entry['listing'] = listing_obj
+
+        if 'folder' not in data_entry:
+            new_data_entry['folder'] = None
+        else:
+            new_data_entry['folder'] = data_entry['folder']
+
+        if 'position' not in data_entry:
+            new_data_entry['position'] = None
+        else:
+            try:
+                position_value = int(data_entry['position'])
+                new_data_entry['position'] = position_value
+            except:
+                new_data_entry['position'] = None
+
+        if not error:
+            validated_data.append(new_data_entry)
+
+    output_entries = []
+    for data_entry in validated_data:
+        listing = data_entry.get('listing')
+        folder_name = data_entry.get('folder')
+        position = data_entry.get('position')
+
+        if not listing:
+            raise Exception('Listing not found')
+
+        logger.debug('Adding bookmark for listing[{0!s}], user[{1!s}]'.format(listing.title, username), extra={'user': username})
+
+        entry = models.ApplicationLibraryEntry(listing=listing,
+                                               owner=owner,
+                                               folder=folder_name)
+        if position:
+            entry.position = position
+
+        entry.save()
+
+        output_entries.append(entry)
+
+    return output_entries
+
+
 def import_bookmarks(current_username, peer_bookmark_notification_id):
     """
     Import Bookmarks to current user
@@ -215,7 +306,7 @@ def batch_update_user_library_entry(username, data):
             ]
 
         Return:
-            List<Dict>: payload data
+            List<Dict>: payload data  # TODO: Pass list of instances (rivera 2017-01-23)
 
         Raise:
             Exception: if validation fails

@@ -165,6 +165,21 @@ class UserLibraryViewSet(viewsets.ViewSet):
 
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
+    @list_route(methods=['post'], permission_classes=[permissions.IsUser])
+    def create_batch(self, request):
+        """
+        Import Bookmarks
+        """
+        current_request_username = request.user.username
+        request_data = request.data
+
+        data = model_access.create_batch_library_entries(current_request_username, request_data)
+
+        serializer = serializers.UserLibrarySerializer(data,
+            many=True, context={'request': request})
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
     @list_route(methods=['put'], permission_classes=[permissions.IsUser])
     def update_all(self, request):
         """
