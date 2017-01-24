@@ -261,6 +261,47 @@ def post_delete_agency(sender, instance, **kwargs):
     cache.delete_pattern('metadata-*')
 
 
+class AccessControlApplicationLibraryEntryManager(models.Manager):
+    """
+    Use a custom manager to control access to Listings
+
+    Instead of using models.Listing.objects.all() or .filter(...) etc, use:
+    models.Listing.objects.for_user(user).all() or .filter(...) etc
+
+    This way there is a single place to implement this 'tailored view' logic
+    for listing queries
+    """
+
+    def for_user(self, username):
+        # get all listings
+        objects = super(AccessControlApplicationLibraryEntryManager, self).get_queryset()
+        # filter out private listings
+        user = Profile.objects.get(user__username=username)
+        if user.highest_role() == 'APPS_MALL_STEWARD':
+            exclude_orgs = []
+        elif user.highest_role() == 'ORG_STEWARD':
+            user_orgs = user.stewarded_organizations.all()
+            user_orgs = [i.title for i in user_orgs]
+            exclude_orgs = Agency.objects.exclude(title__in=user_orgs)
+        else:
+            user_orgs = user.organizations.all()
+            user_orgs = [i.title for i in user_orgs]
+            exclude_orgs = Agency.objects.exclude(title__in=user_orgs)
+
+        objects = objects.exclude(listing__is_private=True,
+                                  listing__agency__in=exclude_orgs)
+
+        # Filter out listings by user's access level
+        ids_to_exclude = []
+        for i in objects:
+            if not i.listing.security_marking:
+                logger.debug('Listing {0!s} has no security_marking'.format(i.listing.title))
+            if not system_has_access_control(username, i.listing.security_marking):
+                ids_to_exclude.append(i.listing.id)
+        objects = objects.exclude(listing__pk__in=ids_to_exclude)
+        return objects
+
+
 class ApplicationLibraryEntry(models.Model):
     """
     A Listing that a user (Profile) has in their 'application library'/bookmarks
@@ -281,6 +322,9 @@ class ApplicationLibraryEntry(models.Model):
     listing = models.ForeignKey(
         'Listing', related_name='application_library_entries')
     position = models.PositiveIntegerField(default=0)
+
+    # use a custom Manager class to limit returned Listings
+    objects = AccessControlApplicationLibraryEntryManager()
 
     def __str__(self):
         return '{0!s}:{1!s}:{2!s}:{3!s}'.format(self.folder, self.owner.user.username, self.listing.title, self.position)
