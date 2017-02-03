@@ -482,46 +482,57 @@ def make_search_query_obj(filter_obj, exclude_agencies=None):
 
     if user_string:
         temp_should.append({
-          "match": {
-            "title": {
-              "query": user_string,
-              "boost": boost_title
-            }
-          }
+           "multi_match" : {
+              "query" : user_string,
+              "type" : "best_fields",
+              "fields" : [ "title", "description", "description_short", "tags.name" ],
+              #  "fields" : [ "title^10", "description^8", "description_short^6", "tags.name^3" ],
+              "tie_breaker" : 0.3,
+              "minimum_should_match" : "60%",
+              "fuzziness" : "10" # Fixes missing first letter issue with searches (10).
+           }
         })
+##        temp_should.append({
+##          "match": {
+##            "title": {
+##              "query": user_string,
+##              "boost": boost_title
+##            }
+##          }
+##        })
 
-        temp_should.append({
-          "match": {
-            "description": {
-              "query": user_string,
-              "boost": boost_description
-            }
-          }
-        })
+##        temp_should.append({
+##          "match": {
+##            "description": {
+##              "query": user_string,
+##              "boost": boost_description
+##            }
+##          }
+##        })
 
-        temp_should.append({
-          "match": {
-            "description_short": {
-              "query": user_string,
-              "boost": boost_description_short
-            }
-          }
-        })
+##        temp_should.append({
+##          "match": {
+##            "description_short": {
+##              "query": user_string,
+##              "boost": boost_description_short
+##            }
+##          }
+##        })
 
-        temp_should.append({
-          "nested": {
-            "boost": boost_tags,
-            "query": {
-              "query_string": {
-                "fields": [
-                  "tags.name"
-                ],
-                "query": user_string
-              }
-            },
-            "path": "tags"
-          }
-        })
+##        temp_should.append({
+##          "nested": {
+##            "boost": boost_tags,
+##            "query": {
+##              "query_string": {
+##                "fields": [
+##                  "tags.name"
+##                ],
+##                "query": user_string
+##              }
+##            },
+##            "path": "tags"
+##          }
+##        })
     else:
         temp_should.append({"match_all": {}})
 
