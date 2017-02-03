@@ -492,47 +492,6 @@ def make_search_query_obj(filter_obj, exclude_agencies=None):
               "fuzziness" : "10" # Fixes missing first letter issue with searches (10).
            }
         })
-##        temp_should.append({
-##          "match": {
-##            "title": {
-##              "query": user_string,
-##              "boost": boost_title
-##            }
-##          }
-##        })
-
-##        temp_should.append({
-##          "match": {
-##            "description": {
-##              "query": user_string,
-##              "boost": boost_description
-##            }
-##          }
-##        })
-
-##        temp_should.append({
-##          "match": {
-##            "description_short": {
-##              "query": user_string,
-##              "boost": boost_description_short
-##            }
-##          }
-##        })
-
-##        temp_should.append({
-##          "nested": {
-##            "boost": boost_tags,
-##            "query": {
-##              "query_string": {
-##                "fields": [
-##                  "tags.name"
-##                ],
-##                "query": user_string
-##              }
-##            },
-##            "path": "tags"
-##          }
-##        })
     else:
         temp_should.append({"match_all": {}})
 
