@@ -487,10 +487,10 @@ def make_search_query_obj(filter_obj, exclude_agencies=None):
         btg = boost_tags
 
         temp_should.append({
-           "multi_match" : {
+           "multi_match": {
               "query": user_string,
               "type": "best_fields",
-              "fields": [ "title^"+str(bt), "description^"+str(bd), "description_short^"+str(bds), "tags.name^"+str(btg) ],
+              "fields": ["title^" + str(bt), "description^" + str(bd), "description_short^" + str(bds), "tags.name^" + str(btg)],
               "tie_breaker": 0.3,
               "minimum_should_match": "60%",
               "analyzer": "english",
