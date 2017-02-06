@@ -494,7 +494,8 @@ def make_search_query_obj(filter_obj, exclude_agencies=None):
               "tie_breaker": 0.3,
               "minimum_should_match": "60%",
               "analyzer": "english",
-              "fuzziness": "10" # Fixes missing first letter issue with searches (10).
+              "fuzziness": "10"
+              # fuzziness changes fixes missing first letter issue with searches (10).
            }
         })
     else:
