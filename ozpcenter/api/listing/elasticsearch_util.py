@@ -481,15 +481,20 @@ def make_search_query_obj(filter_obj, exclude_agencies=None):
     temp_should = []
 
     if user_string:
+        bt = boost_title
+        bd = boost_description
+        bds = boost_description_short
+        btg = boost_tags
+
         temp_should.append({
            "multi_match" : {
-              "query" : user_string,
-              "type" : "best_fields",
-              "fields" : [ "title", "description", "description_short", "tags.name" ],
-              #  "fields" : [ "title^10", "description^8", "description_short^6", "tags.name^3" ],
-              "tie_breaker" : 0.3,
-              "minimum_should_match" : "60%",
-              "fuzziness" : "10" # Fixes missing first letter issue with searches (10).
+              "query": user_string,
+              "type": "best_fields",
+              "fields": [ "title^"+str(bt), "description^"+str(bd), "description_short^"+str(bds), "tags.name^"+str(btg) ],
+              "tie_breaker": 0.3,
+              "minimum_should_match": "60%",
+              "analyzer": "english",
+              "fuzziness": "10" # Fixes missing first letter issue with searches (10).
            }
         })
     else:
