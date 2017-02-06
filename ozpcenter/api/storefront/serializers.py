@@ -12,6 +12,7 @@ logger = logging.getLogger('ozp-center.' + str(__name__))
 
 
 class StorefrontSerializer(serializers.Serializer):
+    recommended = listing_serializers.ListingSerializer(many=True)
     featured = listing_serializers.ListingSerializer(many=True)
     recent = listing_serializers.ListingSerializer(many=True)
     most_popular = listing_serializers.ListingSerializer(many=True)

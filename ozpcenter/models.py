@@ -1025,6 +1025,29 @@ def post_delete_listing(sender, instance, **kwargs):
     cache.delete_pattern("library_self-*")
 
 
+class RecommendationsEntry(models.Model):
+    """
+    Recommendations Entry
+
+    """
+    target_profile = models.ForeignKey(
+        'Profile', related_name='recommendations_profile')
+    listing = models.ForeignKey(
+        'Listing', related_name='recommendations_lisiting')
+    score = models.FloatField(default=0.0)
+
+    def __str__(self):
+        return '{0!s}:{1!s}:{2!s}'.format(self.target_profile, self.listing,
+                             self.score)
+
+    def __repr__(self):
+        return '{0!s}:{1!s}:{2!s}'.format(self.target_profile, self.listing,
+                             self.score)
+
+    class Meta:
+        verbose_name_plural = "recommendations entries"
+
+
 class AccessControlListingActivityManager(models.Manager):
     """
     Use a custom manager to control access to ListingActivities
