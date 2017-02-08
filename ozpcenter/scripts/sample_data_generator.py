@@ -1353,5 +1353,27 @@ def run():
     library_entry.save()
 
 
+    ############################################################################
+    #                           Recommendations
+    ############################################################################
+    all_profiles = models.Profile.objects.all()
+    for profile in all_profiles:
+        # Assign Recommendations
+        # Get Listings this user can see
+        current_listings = None
+        try:
+            current_listings = models.Listing.objects.for_user(profile.user.username)[:10]
+        except ObjectDoesNotExist:
+            current_listings = None
+
+        if current_listings:
+            for current_listing in current_listings:
+                recommendations_entry = models.RecommendationsEntry(
+                    target_profile=profile,
+                    listing=current_listing,
+                    score=1.0)
+                recommendations_entry.save()
+
+
 if __name__ == "__main__":
     run()

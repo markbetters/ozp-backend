@@ -30,7 +30,16 @@ def get_storefront(username):
             'most_popular': [Listing]
         }
     """
+    profile = models.Profile.objects.get(user__username=username)
     try:
+        # get recommended listing for owner
+        # Ensure that the Listing are viewable by the current user
+        recommended_listings_raw = models.RecommendationsEntry.objects.filter(target_profile=profile,
+                                                                         listing__is_enabled=True,
+                                                                         listing__approval_status=models.Listing.APPROVED,
+                                                                         listing__is_deleted=False).order_by('-score')[:10]
+        recommended_listings = [recommendations_entry.listing for recommendations_entry in recommended_listings_raw]
+
         # Get Featured Listings
         featured_listings = models.Listing.objects.for_user(
             username).filter(
@@ -59,6 +68,7 @@ def get_storefront(username):
         most_popular_listings = listing_serializers.ListingSerializer.setup_eager_loading(most_popular_listings)
 
         data = {
+            'recommended': recommended_listings,
             'featured': featured_listings,
             'recent': recent_listings,
             'most_popular': most_popular_listings
