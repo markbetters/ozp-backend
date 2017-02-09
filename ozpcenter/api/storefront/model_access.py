@@ -32,9 +32,9 @@ def get_storefront(username):
     """
     profile = models.Profile.objects.get(user__username=username)
     try:
-        # get recommended listing for owner
-        # Ensure that the Listing are viewable by the current user
-        recommended_listings_raw = models.RecommendationsEntry.objects.filter(target_profile=profile,
+        # Get Recommended Listings for owner
+        # Security filtering to Ensure that the Listing are viewable by the current user
+        recommended_listings_raw = models.RecommendationsEntry.objects.for_user(username).filter(target_profile=profile,
                                                                          listing__is_enabled=True,
                                                                          listing__approval_status=models.Listing.APPROVED,
                                                                          listing__is_deleted=False).order_by('-score')[:10]
