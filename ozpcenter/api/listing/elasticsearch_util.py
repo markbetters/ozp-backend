@@ -481,46 +481,22 @@ def make_search_query_obj(filter_obj, exclude_agencies=None):
     temp_should = []
 
     if user_string:
-        temp_should.append({
-          "match": {
-            "title": {
-              "query": user_string,
-              "boost": boost_title
-            }
-          }
-        })
+        bt = boost_title
+        bd = boost_description
+        bds = boost_description_short
+        btg = boost_tags
 
         temp_should.append({
-          "match": {
-            "description": {
+           "multi_match": {
               "query": user_string,
-              "boost": boost_description
-            }
-          }
-        })
-
-        temp_should.append({
-          "match": {
-            "description_short": {
-              "query": user_string,
-              "boost": boost_description_short
-            }
-          }
-        })
-
-        temp_should.append({
-          "nested": {
-            "boost": boost_tags,
-            "query": {
-              "query_string": {
-                "fields": [
-                  "tags.name"
-                ],
-                "query": user_string
-              }
-            },
-            "path": "tags"
-          }
+              "type": "best_fields",
+              "fields": ["title^" + str(bt), "description^" + str(bd), "description_short^" + str(bds), "tags.name^" + str(btg)],
+              "tie_breaker": 0.3,
+              "minimum_should_match": "60%",
+              "analyzer": "english",
+              "fuzziness": "10"
+              # fuzziness changes fixes missing first letter issue with searches (10).
+           }
         })
     else:
         temp_should.append({"match_all": {}})
