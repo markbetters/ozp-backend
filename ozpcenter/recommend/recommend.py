@@ -13,7 +13,20 @@ Recommendations are based on individual users
 Steps:
     Load Data for each users
 
+settings.py/or this file?
+-----
+recommendation_engines = ['ElasticsearchUserBaseRecommender', 'ElasticsearchContentBaseRecommender', 'CrabUserBaseRecommender']
+----
+
+obj = ElasticsearchUserBaseRecommender()
+obj.recommend()
+
+obj.merge(CrabUserBaseRecommender().recommend())
+
+obj.save_to_db()
 """
+
+
 from ozpcenter import models
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -172,17 +185,22 @@ class CrabUserBaseRecommender(Recommender):
         # crab logic
         pass
 
-"""
-settings.py/or this file?
------
-recommendation_engines = ['ElasticsearchUserBaseRecommender', 'ElasticsearchContentBaseRecommender', 'CrabUserBaseRecommender']
 
-----
+class RecommenderDirectory(object):
+    """
+    Wrapper for all Recommenders
+    """
+    def __init__(self):
+        self.recommender_classes = {
+            'crab_user_base': CrabUserBaseRecommender,
+            'elasticsearch_user_base': ElasticsearchUserBaseRecommender,
+            'elasticsearch_content_base': ElasticsearchContentBaseRecommender,
+            'sample_data': SampleDataRecommender
+        }
 
-obj = ElasticsearchUserBaseRecommender()
-obj.recommend()
+    def recommend(self, recommender):
+        if recommender not in self.recommender_classes:
+            raise Exception('Recommender Engine Not Found')
 
-obj.merge(CrabUserBaseRecommender().recommend())
-
-obj.save_to_db()
-"""
+        recommender_obj = self.recommender_classes[recommender]()
+        recommender_obj.recommend()

@@ -1,4 +1,4 @@
-"""
+"""k
 Creates test data
 
 ************************************WARNING************************************
@@ -23,7 +23,7 @@ from ozpcenter import models
 from ozpcenter import model_access
 import ozpcenter.api.listing.model_access as listing_model_access
 
-from ozpcenter.recommend.recommend import SampleDataRecommender
+from ozpcenter.recommend.recommend import RecommenderDirectory
 
 
 TEST_IMG_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'test_images') + '/'
@@ -1359,8 +1359,8 @@ def run():
     ############################################################################
     #                           Recommendations
     ############################################################################
-    sample_data_recommender = SampleDataRecommender()
-    sample_data_recommender.recommend()
+    sample_data_recommender = RecommenderDirectory()
+    sample_data_recommender.recommend('sample_data')
 
 
 if __name__ == "__main__":
