@@ -35,6 +35,9 @@ autopepdiff:
 reindex_es:
 	python manage.py runscript reindex_es
 
+recommend:
+	RECOMMENDATION_ENGINE='sample_data' python manage.py runscript recommend
+
 autopep:
 	autopep8 ozp ozpcenter ozpiwc plugins plugins_util --ignore=E501,E123,E128,E121,E124,E711,E402 --exclude=ozpcenter/scripts/* --recursive --in-place
 
