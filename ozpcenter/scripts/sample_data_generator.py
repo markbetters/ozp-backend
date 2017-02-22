@@ -1,4 +1,4 @@
-"""k
+"""
 Creates test data
 
 ************************************WARNING************************************
@@ -1354,7 +1354,6 @@ def run():
         owner=winston,
         listing=models.Listing.objects.get(unique_name='ozp.test.air_mail'))
     library_entry.save()
-
 
     ############################################################################
     #                           Recommendations

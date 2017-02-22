@@ -12,21 +12,7 @@ Recommendations are based on individual users
 
 Steps:
     Load Data for each users
-
-settings.py/or this file?
------
-recommendation_engines = ['ElasticsearchUserBaseRecommender', 'ElasticsearchContentBaseRecommender', 'CrabUserBaseRecommender']
-----
-
-obj = ElasticsearchUserBaseRecommender()
-obj.recommend()
-
-obj.merge(CrabUserBaseRecommender().recommend())
-
-obj.save_to_db()
 """
-
-
 from ozpcenter import models
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -94,6 +80,9 @@ class Recommender(object):
                 profile = None
 
             if profile:
+                # Clear Recommendations Entries before putting new ones.
+                models.RecommendationsEntry.objects.filter(target_profile=profile).delete()
+
                 listing_ids = self.recommender_result_set[profile_id]
 
                 for current_listing_id in listing_ids:
@@ -117,6 +106,9 @@ class SampleDataRecommender(Recommender):
     Sample Data Recommender
     """
     def initiate(self):
+        """
+        Initiate any variables needed for recommendation_logic function
+        """
         pass
 
     def recommendation_logic(self):
@@ -143,14 +135,15 @@ class ElasticsearchContentBaseRecommender(Recommender):
     Elasticsearch based recommendation engine
     """
     def initiate(self):
+        """
+        Initiate any variables needed for recommendation_logic function
+        """
         pass
 
     def recommendation_logic(self):
         """
-        Return:
-            RecommenderResultSet
+        Recommendation logic
         """
-        # Elasticsearch logic
         pass
 
 
@@ -159,14 +152,15 @@ class ElasticsearchUserBaseRecommender(Recommender):
     Elasticsearch based recommendation engine
     """
     def initiate(self):
+        """
+        Initiate any variables needed for recommendation_logic function
+        """
         pass
 
     def recommendation_logic(self):
         """
-        Return:
-            RecommenderResultSet
+        Recommendation logic
         """
-        # Elasticsearch logic
         pass
 
 
@@ -175,20 +169,22 @@ class CrabUserBaseRecommender(Recommender):
     Crab based recommendation engine
     """
     def initiate(self):
+        """
+        Initiate any variables needed for recommendation_logic function
+        """
         pass
 
     def recommendation_logic(self):
         """
-        Return:
-            RecommenderResultSet
+        Recommendation logic
         """
-        # crab logic
         pass
 
 
 class RecommenderDirectory(object):
     """
     Wrapper for all Recommenders
+    It maps strings to classes.
     """
     def __init__(self):
         self.recommender_classes = {
@@ -198,9 +194,12 @@ class RecommenderDirectory(object):
             'sample_data': SampleDataRecommender
         }
 
-    def recommend(self, recommender):
-        if recommender not in self.recommender_classes:
+    def recommend(self, recommender_string):
+        """
+        Creates Recommender Object, and excute the recommend
+        """
+        if recommender_string not in self.recommender_classes:
             raise Exception('Recommender Engine Not Found')
 
-        recommender_obj = self.recommender_classes[recommender]()
+        recommender_obj = self.recommender_classes[recommender_string]()
         recommender_obj.recommend()
