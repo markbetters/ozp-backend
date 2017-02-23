@@ -155,6 +155,7 @@ class Recommender(object):
         This function is responsible for storing the recommendations into the database
         """
         for profile_id in self.recommender_result_set:
+
             profile = None
             try:
                 profile = models.Profile.objects.get(pk=profile_id)
@@ -171,7 +172,7 @@ class Recommender(object):
                     score = listing_ids[current_listing_id]
                     current_listing = None
                     try:
-                        current_listing = models.Listing.objects.get(pk=profile_id)
+                        current_listing = models.Listing.objects.get(pk=current_listing_id)
                     except ObjectDoesNotExist:
                         current_listing = None
 
