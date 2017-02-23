@@ -38,6 +38,12 @@ reindex_es:
 recommend:
 	RECOMMENDATION_ENGINE='sample_data' python manage.py runscript recommend
 
+recommend_es_user:
+	ES_ENABLED=TRUE RECOMMENDATION_ENGINE='elasticsearch_user_base' python manage.py runscript recommend
+
+recommend_es_content:
+	ES_ENABLED=TRUE RECOMMENDATION_ENGINE='elasticsearch_content_base' python manage.py runscript recommend
+
 autopep:
 	autopep8 ozp ozpcenter ozpiwc plugins plugins_util --ignore=E501,E123,E128,E121,E124,E711,E402 --exclude=ozpcenter/scripts/* --recursive --in-place
 

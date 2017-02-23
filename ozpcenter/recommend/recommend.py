@@ -1,20 +1,41 @@
 """
-Recommender
+Recommendations Engine
+===============
+Business Objective:
+To recommend applications to users that they might find useful in their everyday objectives
 
-https://github.com/aml-development/ozp-documentation/wiki/Recommender-%282017%29
+Website Link: https://github.com/aml-development/ozp-documentation/wiki/Recommender-%282017%29
 
-Data Per User
+Data that could be used for recommendations
 - Listing Bookmarked
-
-Keep track of folder apps
+- Keep track of folder apps
 
 Recommendations are based on individual users
 
+Assumptions:
+    30,000 Users
+    300 Listings
+
 Steps:
-    Load Data for each users
+    - Load Data for each users
+    - Process Data with recommendation algorthim
+      - Produces a list of listing's id for each profile = Results
+    - Iterate through the Results to call add_listing_to_user_profile function
 """
-from ozpcenter import models
+import logging
+
+
 from django.core.exceptions import ObjectDoesNotExist
+from ozpcenter import models
+from ozpcenter.api.listing.model_access_es import check_elasticsearch
+
+from ozpcenter.api.listing import model_access_es
+
+# Get an instance of a logger
+logger = logging.getLogger('ozp-center.' + str(__name__))
+
+# Create ES client
+es_client = model_access_es.es_client
 
 
 class Recommender(object):
@@ -30,7 +51,7 @@ class Recommender(object):
             profile_id#2: {
                 listing_id#1: score#1,
                 listing_id#2: score#2,
-                listing_id#3: score#2,
+                listing_id#3: score#3,
             }
         }
     """
@@ -40,14 +61,68 @@ class Recommender(object):
         self.initiate()
 
     def initiate(self):
+        """
+        This method is used for the subclasses
+        It is used for initiating variables, classes, objects, connecting to service
+        """
         raise NotImplementedError()
 
     def recommendation_logic(self):
+        """
+        This method is used for the subclasses.
+        It is used for put the recommendation logic
+        """
         raise NotImplementedError()
 
     def merge(self):
         """
-        This function is responsible for merging the results of the other Recommender RecommenderResultSet Object into self Object
+        Purpose is to merge all of the different Recommender's algorthim recommender result together.
+        This function is responsible for merging the results of the other Recommender recommender_result_set diction into self recommender_result_set
+
+        Self recommender_result_set
+        {
+            profile_id#1: {
+                listing_id#1: score#1,
+                listing_id#2: score#2
+            },
+            profile_id#2: {
+                listing_id#1: score#1,
+                listing_id#2: score#2,
+                listing_id#3: score#3,
+            }
+        }
+
+        Other recommender_result_set:
+        {
+            profile_id#3: {
+                listing_id#1: score#1,
+                listing_id#2: score#2
+            },
+            profile_id#1: {
+                listing_id#5: score#1,
+            }
+        }
+
+        Merged recommender_result_set
+        {
+            profile_id#1: {
+                listing_id#1: score#1,
+                listing_id#2: score#2,
+                listing_id#5: score#1,
+            },
+            profile_id#2: {
+                listing_id#1: score#1,
+                listing_id#2: score#2,
+                listing_id#3: score#3,
+            },
+            profile_id#3: {
+                listing_id#1: score#1,
+                listing_id#2: score#2
+            },
+        }
+
+        When there is a conflict in the profile/listing/score, average the two scores together
+        TODO Implement Code
         """
         pass
 
@@ -130,9 +205,25 @@ class SampleDataRecommender(Recommender):
                     self.add_listing_to_user_profile(profile.id, current_listing.id, 1.0)
 
 
-class ElasticsearchContentBaseRecommender(Recommender):
+class CustomRecommender(Recommender):
     """
-    Elasticsearch based recommendation engine
+    Custom Recommender
+
+    Assumptions:
+    - Listing has ratings and possible not to have ratings
+    - Listing can be featured
+    - User bookmark Listings
+    - User have bookmark folder, a collection of listing in a folder.
+    - Listing be
+
+    Requirements:
+    - Recommendations should be explainable and believable
+    - Must respect private apps
+    - Does not have to repect security markings at recommendation_logic step
+      - Before user see recommendations the results that the user sees will repect security marking
+
+    Profile#1
+        Bookmarked(listing_id)
     """
     def initiate(self):
         """
@@ -142,31 +233,74 @@ class ElasticsearchContentBaseRecommender(Recommender):
 
     def recommendation_logic(self):
         """
-        Recommendation logic
+        Sample Recommendations for all users
         """
-        pass
+        all_profiles = models.Profile.objects.all()
+        for profile in all_profiles:
+            # Assign Recommendations
+            # Get Listings this user can see
+            current_listings = None
+            try:
+                current_listings = models.Listing.objects.for_user(profile.user.username)[:10]
+            except ObjectDoesNotExist:
+                current_listings = None
+
+            if current_listings:
+                for current_listing in current_listings:
+                    self.add_listing_to_user_profile(profile.id, current_listing.id, 1.0)
+
+
+class ElasticsearchContentBaseRecommender(Recommender):
+    """
+    Elasticsearch Content based recommendation engine
+    """
+    def initiate(self):
+        """
+        Initiate any variables needed for recommendation_logic function
+        Make sure the Elasticsearch is up and running
+        """
+        check_elasticsearch()
+        # TODO: Make sure the elasticsearch index is created here with the mappings
+
+    def recommendation_logic(self):
+        """
+        Recommendation logic
+
+        Template Code to make sure that Elasticsearch client is working
+        This code should be replace by real algorthim
+        """
+        print('Elasticsearch Content Base Recommendation Engine')
+        print('Elasticsearch Health : {}'.format(es_client.cluster.health()))
 
 
 class ElasticsearchUserBaseRecommender(Recommender):
     """
-    Elasticsearch based recommendation engine
+    Elasticsearch User based recommendation engine
     """
     def initiate(self):
         """
         Initiate any variables needed for recommendation_logic function
+        Make sure the Elasticsearch is up and running
         """
-        pass
+        check_elasticsearch()
+        # TODO: Make sure the elasticsearch index is created here with the mappings
 
     def recommendation_logic(self):
         """
         Recommendation logic
+
+        Template Code to make sure that Elasticsearch client is working
+        This code should be replace by real algorthim
         """
-        pass
+        print('Elasticsearch User Base Recommendation Engine')
+        print('Elasticsearch Health : {}'.format(es_client.cluster.health()))
 
 
-class CrabUserBaseRecommender(Recommender):
+class SurpriseUserBaseRecommender(Recommender):
     """
-    Crab based recommendation engine
+    Surprise Based Recommendation Engine
+
+    http://surprise.readthedocs.io/en/latest/getting_started.html
     """
     def initiate(self):
         """
@@ -188,7 +322,7 @@ class RecommenderDirectory(object):
     """
     def __init__(self):
         self.recommender_classes = {
-            'crab_user_base': CrabUserBaseRecommender,
+            'surprise_user_base': SurpriseUserBaseRecommender,
             'elasticsearch_user_base': ElasticsearchUserBaseRecommender,
             'elasticsearch_content_base': ElasticsearchContentBaseRecommender,
             'sample_data': SampleDataRecommender
