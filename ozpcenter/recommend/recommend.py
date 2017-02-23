@@ -27,6 +27,7 @@ import logging
 
 from django.core.exceptions import ObjectDoesNotExist
 from ozpcenter import models
+from django.db.models import Count
 from ozpcenter.api.listing.model_access_es import check_elasticsearch
 
 from ozpcenter.api.listing import model_access_es
@@ -126,15 +127,21 @@ class Recommender(object):
         """
         pass
 
-    def add_listing_to_user_profile(self, profile_id, listing_id, score):
+    def add_listing_to_user_profile(self, profile_id, listing_id, score, cumulative=False):
         """
         Add listing and score to user profile
         """
         if profile_id in self.recommender_result_set:
-            self.recommender_result_set[profile_id][listing_id] = score
+            if self.recommender_result_set[profile_id].get('listing_id'):
+                if cumulative:
+                    self.recommender_result_set[profile_id][listing_id] = self.recommender_result_set[profile_id][listing_id] + float(score)
+                else:
+                    self.recommender_result_set[profile_id][listing_id] = float(score)
+            else:
+                self.recommender_result_set[profile_id][listing_id] = float(score)
         else:
             self.recommender_result_set[profile_id] = {}
-            self.recommender_result_set[profile_id][listing_id] = score
+            self.recommender_result_set[profile_id][listing_id] = float(score)
 
     def recommend(self):
         """
@@ -214,7 +221,7 @@ class CustomRecommender(Recommender):
     - Listing can be featured
     - User bookmark Listings
     - User have bookmark folder, a collection of listing in a folder.
-    - Listing be
+    - Listing has total_reviews field
 
     Requirements:
     - Recommendations should be explainable and believable
@@ -231,23 +238,90 @@ class CustomRecommender(Recommender):
         """
         pass
 
+    def map(self, input_num, in_min, in_max, out_min, out_max):
+        """
+        y2 - y1 / x2 - x1
+        out_max - in_max / out_min - in_min + input_num
+        """
+        slope_top = float(out_max) - float(in_max)
+        slope_bottom = float(out_min) - float(in_min)
+        if slope_bottom == 0:
+            slope_bottom == 1
+        slope = slope_top / slope_bottom
+        output = input_num * slope + input_num
+        return output
+
     def recommendation_logic(self):
         """
         Sample Recommendations for all users
         """
         all_profiles = models.Profile.objects.all()
-        for profile in all_profiles:
-            # Assign Recommendations
-            # Get Listings this user can see
-            current_listings = None
-            try:
-                current_listings = models.Listing.objects.for_user(profile.user.username)[:10]
-            except ObjectDoesNotExist:
-                current_listings = None
 
-            if current_listings:
-                for current_listing in current_listings:
-                    self.add_listing_to_user_profile(profile.id, current_listing.id, 1.0)
+        for profile in all_profiles:
+            profile_id = profile.id
+            profile_username = profile.user.username
+            # Get Featured Listings
+            featured_listings = models.Listing.objects.for_user_organization_minus_security_markings(
+                profile_username).order_by('-approved_date').filter(
+                    is_featured=True,
+                    approval_status=models.Listing.APPROVED,
+                    is_enabled=True,
+                    is_deleted=False)[:36]
+
+            for current_listing in featured_listings:
+                self.add_listing_to_user_profile(profile_id, current_listing.id, 3.0, True)
+
+            # Get Recent Listings
+            recent_listings = models.Listing.objects.for_user_organization_minus_security_markings(
+                profile_username).order_by(
+                    '-approved_date').filter(
+                        is_featured=False,
+                        approval_status=models.Listing.APPROVED,
+                        is_enabled=True,
+                        is_deleted=False)[:36]
+
+            for current_listing in recent_listings:
+                self.add_listing_to_user_profile(profile_id, current_listing.id, 2.0, True)
+
+            # Get most popular listings via a weighted average
+            most_popular_listings = models.Listing.objects.for_user_organization_minus_security_markings(
+                profile_username).filter(
+                    approval_status=models.Listing.APPROVED,
+                    is_enabled=True,
+                    is_deleted=False).order_by('-avg_rate', '-total_reviews')[:36]
+
+            for current_listing in most_popular_listings:
+                if current_listing.avg_rate != 0:
+                    self.add_listing_to_user_profile(profile_id, current_listing.id, current_listing.avg_rate, True)
+
+            # Get most popular bookmarked apps for all users
+            library_entries = models.ApplicationLibraryEntry.objects.for_user_organization_minus_security_markings(profile_username)
+            # library_entries = library_entries.filter(owner__user__username=username)
+            library_entries = library_entries.filter(listing__is_enabled=True)
+            library_entries = library_entries.filter(listing__is_deleted=False)
+            library_entries = library_entries.filter(listing__approval_status=models.Listing.APPROVED)
+            library_entries_group_by_count = library_entries.values('listing_id').annotate(count=Count('listing_id'))
+            # [{'listing_id': 1, 'total': 1}, {'listing_id': 2, 'total': 1}]
+
+            mapped_max = 10
+            mapped_min = 4
+            count_max = 1
+            count_min = 1
+            for entry in library_entries_group_by_count:
+                count = entry['count']
+                if count == 0:
+                    continue
+                if count > count_max:
+                    count_max = count
+                if count < count_min:
+                    count_min = count
+
+            for entry in library_entries_group_by_count:
+                listing_id = entry['listing_id']
+                count = entry['count']
+
+                calculation = self.map(count, count_min, count_max, mapped_min, mapped_max)
+                self.add_listing_to_user_profile(profile_id, listing_id, calculation, True)
 
 
 class ElasticsearchContentBaseRecommender(Recommender):
@@ -325,7 +399,8 @@ class RecommenderDirectory(object):
             'surprise_user_base': SurpriseUserBaseRecommender,
             'elasticsearch_user_base': ElasticsearchUserBaseRecommender,
             'elasticsearch_content_base': ElasticsearchContentBaseRecommender,
-            'sample_data': SampleDataRecommender
+            'sample_data': SampleDataRecommender,
+            'custom': CustomRecommender
         }
 
     def recommend(self, recommender_string):

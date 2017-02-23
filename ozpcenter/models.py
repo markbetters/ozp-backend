@@ -301,6 +301,26 @@ class AccessControlApplicationLibraryEntryManager(models.Manager):
         objects = objects.exclude(listing__pk__in=ids_to_exclude)
         return objects
 
+    def for_user_organization_minus_security_markings(self, username):
+        # get all listings
+        objects = super(AccessControlApplicationLibraryEntryManager, self).get_queryset()
+        # filter out private listings
+        user = Profile.objects.get(user__username=username)
+        if user.highest_role() == 'APPS_MALL_STEWARD':
+            exclude_orgs = []
+        elif user.highest_role() == 'ORG_STEWARD':
+            user_orgs = user.stewarded_organizations.all()
+            user_orgs = [i.title for i in user_orgs]
+            exclude_orgs = Agency.objects.exclude(title__in=user_orgs)
+        else:
+            user_orgs = user.organizations.all()
+            user_orgs = [i.title for i in user_orgs]
+            exclude_orgs = Agency.objects.exclude(title__in=user_orgs)
+
+        objects = objects.exclude(listing__is_private=True,
+                                  listing__agency__in=exclude_orgs)
+        return objects
+
 
 class ApplicationLibraryEntry(models.Model):
     """
@@ -857,6 +877,26 @@ class AccessControlListingManager(models.Manager):
             if not system_has_access_control(username, i.security_marking):
                 ids_to_exclude.append(i.id)
         objects = objects.exclude(pk__in=ids_to_exclude)
+        return objects
+
+    def for_user_organization_minus_security_markings(self, username):
+        # get all listings
+        objects = super(AccessControlListingManager, self).get_queryset()
+        # filter out private listings
+        user = Profile.objects.get(user__username=username)
+        if user.highest_role() == 'APPS_MALL_STEWARD':
+            exclude_orgs = []
+        elif user.highest_role() == 'ORG_STEWARD':
+            user_orgs = user.stewarded_organizations.all()
+            user_orgs = [i.title for i in user_orgs]
+            exclude_orgs = Agency.objects.exclude(title__in=user_orgs)
+        else:
+            user_orgs = user.organizations.all()
+            user_orgs = [i.title for i in user_orgs]
+            exclude_orgs = Agency.objects.exclude(title__in=user_orgs)
+
+        objects = objects.exclude(is_private=True,
+                                  agency__in=exclude_orgs)
         return objects
 
 
