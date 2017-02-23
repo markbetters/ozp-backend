@@ -32,6 +32,9 @@ from ozpcenter.api.listing.model_access_es import check_elasticsearch
 
 from ozpcenter.api.listing import model_access_es
 
+from ozpcenter.recommend import utils
+
+
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center.' + str(__name__))
 
@@ -148,6 +151,7 @@ class Recommender(object):
         Execute recommendation logic
         """
         self.recommendation_logic()
+        print(self.recommender_result_set)
         self.save_to_db()
 
     def save_to_db(self):
@@ -239,19 +243,6 @@ class CustomRecommender(Recommender):
         """
         pass
 
-    def map(self, input_num, in_min, in_max, out_min, out_max):
-        """
-        y2 - y1 / x2 - x1
-        out_max - in_max / out_min - in_min + input_num
-        """
-        slope_top = float(out_max) - float(in_max)
-        slope_bottom = float(out_min) - float(in_min)
-        if slope_bottom == 0:
-            slope_bottom == 1
-        slope = slope_top / slope_bottom
-        output = input_num * slope + input_num
-        return output
-
     def recommendation_logic(self):
         """
         Sample Recommendations for all users
@@ -304,8 +295,8 @@ class CustomRecommender(Recommender):
             library_entries_group_by_count = library_entries.values('listing_id').annotate(count=Count('listing_id'))
             # [{'listing_id': 1, 'total': 1}, {'listing_id': 2, 'total': 1}]
 
-            mapped_max = 10
-            mapped_min = 4
+            mapped_max = 5
+            mapped_min = 2
             count_max = 1
             count_min = 1
             for entry in library_entries_group_by_count:
@@ -321,7 +312,7 @@ class CustomRecommender(Recommender):
                 listing_id = entry['listing_id']
                 count = entry['count']
 
-                calculation = self.map(count, count_min, count_max, mapped_min, mapped_max)
+                calculation = utils.map_numbers(count, count_min, count_max, mapped_min, mapped_max)
                 self.add_listing_to_user_profile(profile_id, listing_id, calculation, True)
 
 
