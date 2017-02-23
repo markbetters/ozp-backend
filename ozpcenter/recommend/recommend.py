@@ -295,24 +295,25 @@ class CustomRecommender(Recommender):
             library_entries_group_by_count = library_entries.values('listing_id').annotate(count=Count('listing_id'))
             # [{'listing_id': 1, 'total': 1}, {'listing_id': 2, 'total': 1}]
 
-            mapped_max = 5
-            mapped_min = 2
-            count_max = 1
-            count_min = 1
+            old_min = 1
+            old_max = 1
+            new_min = 2
+            new_max = 5
+
             for entry in library_entries_group_by_count:
                 count = entry['count']
                 if count == 0:
                     continue
-                if count > count_max:
-                    count_max = count
-                if count < count_min:
-                    count_min = count
+                if count > old_max:
+                    old_max = count
+                if count < old_min:
+                    old_min = count
 
             for entry in library_entries_group_by_count:
                 listing_id = entry['listing_id']
                 count = entry['count']
 
-                calculation = utils.map_numbers(count, count_min, count_max, mapped_min, mapped_max)
+                calculation = utils.map_numbers(count, old_min, old_max, new_min, new_max)
                 self.add_listing_to_user_profile(profile_id, listing_id, calculation, True)
 
 

@@ -4,15 +4,28 @@ Contains Math Functions for recommendations
 """
 
 
-def map_numbers(input_num, in_min, in_max, out_min, out_max):
+def map_numbers(input_num, old_min, old_max, new_min, new_max):
     """
-    y2 - y1 / x2 - x1
-    out_max - in_max / out_min - in_min + input_num
+    Linear Conversion between ranges used for normalization
+
+    http://stackoverflow.com/questions/929103/convert-a-number-range-to-another-range-maintaining-ratio
     """
-    slope_top = float(out_max) - float(in_max)
-    slope_bottom = float(out_min) - float(in_min)
-    if slope_bottom == 0:
-        slope_bottom == 1
-    slope = slope_top / slope_bottom
-    output = input_num * slope + input_num
-    return output
+    old_value = float(input_num)
+    old_min = float(old_min)
+    old_max = float(old_max)
+    new_min = float(new_min)
+    new_max = float(new_max)
+
+    old_range = (old_max - old_min)
+
+    new_value = None
+
+    if new_min == new_max:
+        new_value = new_min
+    elif old_range == 0:
+        new_value = new_min
+    else:
+        new_range = (new_max - new_min)
+        new_value = (((old_value - old_min) * new_range) / old_range) + new_min
+
+    return new_value
