@@ -288,7 +288,7 @@ class CustomHybridRecommender(Recommender):
             library_entries = library_entries.filter(listing__is_enabled=True)
             library_entries = library_entries.filter(listing__is_deleted=False)
             library_entries = library_entries.filter(listing__approval_status=models.Listing.APPROVED)
-            library_entries_group_by_count = library_entries.values('listing_id').annotate(count=Count('listing_id'))  # .order_by(count)
+            library_entries_group_by_count = library_entries.values('listing_id').annotate(count=Count('listing_id')).order_by('count')
             # [{'listing_id': 1, 'count': 1}, {'listing_id': 2, 'count': 1}]
 
             old_min = 1
