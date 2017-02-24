@@ -7,6 +7,20 @@ https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregati
 aggregation that returns interesting or unusual occurrences of terms in a set
 "measures the kind of statistically significant relationships we need to deliver meaningful recommendations"
 
+Might be able to figure out how to implement JLHScore/ChiSquare Scoring to python
+https://github.com/elastic/elasticsearch/blob/master/core/src/main/java/org/elasticsearch/search/aggregations/bucket/significant/heuristics/JLHScore.java
+
+JLHScore:
+Calculates the significance of a term in a sample against a background of
+normal distributions by comparing the changes in frequency.
+
+ChiSquare:
+"Information Retrieval", Manning et al., Eq. 13.19
+
+Google Normalized Distance:
+Calculates Google Normalized Distance, as described in "The Google Similarity Distance", Cilibrasi and Vitanyi, 2007
+link: http://arxiv.org/pdf/cs/0412098v3.pdf
+
 ## Structure
 
 Vertex Types:
