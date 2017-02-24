@@ -135,7 +135,7 @@ class Recommender(object):
         Add listing and score to user profile
         """
         if profile_id in self.recommender_result_set:
-            if self.recommender_result_set[profile_id].get('listing_id'):
+            if self.recommender_result_set[profile_id].get(listing_id):
                 if cumulative:
                     self.recommender_result_set[profile_id][listing_id] = self.recommender_result_set[profile_id][listing_id] + float(score)
                 else:
@@ -217,9 +217,9 @@ class SampleDataRecommender(Recommender):
                     self.add_listing_to_user_profile(profile.id, current_listing.id, 1.0)
 
 
-class CustomRecommender(Recommender):
+class CustomHybridRecommender(Recommender):
     """
-    Custom Recommender
+    Custom Hybrid Recommender
 
     Assumptions:
     - Listing has ratings and possible not to have ratings
@@ -231,11 +231,7 @@ class CustomRecommender(Recommender):
     Requirements:
     - Recommendations should be explainable and believable
     - Must respect private apps
-    - Does not have to repect security markings at recommendation_logic step
-      - Before user see recommendations the results that the user sees will repect security marking
-
-    Profile#1
-        Bookmarked(listing_id)
+    - Does not have to repectborative filtering)
     """
     def initiate(self):
         """
@@ -292,8 +288,8 @@ class CustomRecommender(Recommender):
             library_entries = library_entries.filter(listing__is_enabled=True)
             library_entries = library_entries.filter(listing__is_deleted=False)
             library_entries = library_entries.filter(listing__approval_status=models.Listing.APPROVED)
-            library_entries_group_by_count = library_entries.values('listing_id').annotate(count=Count('listing_id'))
-            # [{'listing_id': 1, 'total': 1}, {'listing_id': 2, 'total': 1}]
+            library_entries_group_by_count = library_entries.values('listing_id').annotate(count=Count('listing_id'))  # .order_by(count)
+            # [{'listing_id': 1, 'count': 1}, {'listing_id': 2, 'count': 1}]
 
             old_min = 1
             old_max = 1
@@ -393,7 +389,7 @@ class RecommenderDirectory(object):
             'elasticsearch_user_base': ElasticsearchUserBaseRecommender,
             'elasticsearch_content_base': ElasticsearchContentBaseRecommender,
             'sample_data': SampleDataRecommender,
-            'custom': CustomRecommender
+            'custom': CustomHybridRecommender
         }
 
     def recommend(self, recommender_string):
