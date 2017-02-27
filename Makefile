@@ -36,7 +36,7 @@ reindex_es:
 	python manage.py runscript reindex_es
 
 recommend:
-	RECOMMENDATION_ENGINE='sample_data' python manage.py runscript recommend
+	RECOMMENDATION_ENGINE='custom' python manage.py runscript recommend
 
 recommend_es_user:
 	ES_ENABLED=TRUE RECOMMENDATION_ENGINE='elasticsearch_user_base' python manage.py runscript recommend
