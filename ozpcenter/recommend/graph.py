@@ -165,11 +165,11 @@ class Element(object):
     An Element has an identifier that must be unique to its inheriting classes (Vertex or Edge)
     An Element can maintain a collection of Property objects.
     """
-    def __init__(self, graph_instance, input_id, label=None, properties={}):
+    def __init__(self, graph_instance, input_id, label=None, properties=None):
         self.graph = graph_instance
         self.label = label
         self.id = input_id  # Internal Id
-        self.properties = properties
+        self.properties = properties or {}
 
     def id(self, input_id=None):
         """
