@@ -23,7 +23,7 @@ Steps:
     - Iterate through the Results to call add_listing_to_user_profile function
 """
 import logging
-
+import time
 
 from django.core.exceptions import ObjectDoesNotExist
 from ozpcenter import models
@@ -150,9 +150,19 @@ class Recommender(object):
         """
         Execute recommendation logic
         """
+        start_ms = time.time() * 1000.0
         self.recommendation_logic()
+        recommendation_ms = time.time() * 1000.0
+        print('--------')
         print(self.recommender_result_set)
+        print('--------')
+        start_db_ms = time.time() * 1000.0
         self.save_to_db()
+        end_db_ms = time.time() * 1000.0
+
+        print('Recommendation Logic took: {} ms'.format(recommendation_ms - start_ms))
+        print('Save to database took: {} ms'.format(end_db_ms - start_db_ms))
+        print('Whole Process: {} ms'.format(end_db_ms - start_ms))
 
     def save_to_db(self):
         """
@@ -244,8 +254,13 @@ class CustomHybridRecommender(Recommender):
         Sample Recommendations for all users
         """
         all_profiles = models.Profile.objects.all()
+        all_profiles_count = all_profiles.count()
 
+        current_profile_count = 0
         for profile in all_profiles:
+            current_profile_count = current_profile_count + 1
+            print('Calculating Profile {}/{}'.format(current_profile_count, all_profiles_count))
+
             profile_id = profile.id
             profile_username = profile.user.username
             # Get Featured Listings
