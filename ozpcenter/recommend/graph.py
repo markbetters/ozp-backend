@@ -22,7 +22,6 @@ Calculates Google Normalized Distance, as described in "The Google Similarity Di
 link: http://arxiv.org/pdf/cs/0412098v3.pdf
 
 ## Structure
-
 Vertex Types:
 Agency
     short_name
@@ -114,13 +113,12 @@ Listing 8 - Category 1
 # TODO Convert into python
 graph = Graph()
 
-graph.createNode('person', {name: 'Rachael'})
-graph.createNode('person', {name: 'Stephanie'})
-graph.createNode('person', {name: 'Michael'})
-graph.createNode('person', {name: 'Donovan'})
+graph.create_vertex('person', {name: 'Rachael'})
+graph.create_vertex('person', {name: 'Stephanie'})
+graph.create_vertex('person', {name: 'Michael'})
+graph.create_vertex('person', {name: 'Donovan'})
 
-graph.nodes('person').query().filter({name__ilike: 'ae'}).units()
-
+graph.query().V('person').filter({name__ilike: 'ae'}).to_list()
 
 
 ## Issues
@@ -145,18 +143,72 @@ http://opensourceconnections.com/blog/2016/10/05/elastic-graph-recommendor/
 ## Lazy Loading Pipe Query System:
 ### VerticesVerticesPipe
 Start with Vertices (1 or more) to get all the other Vertices connected to it.
-
 """
-from enum import Enum
+from ozpcenter.recommend.utils import Direction
+from ozpcenter.recommend.utils import DictKeyValueIterator
+from ozpcenter.recommend.pipeline import Pipeline
 
 
-class Direction(Enum):
+class Query(object):
     """
-    Direction is used to denote the direction of an edge or location of a vertex on an edge.
+    Query Object Compiler/ Pipeline
+
+    graph.query().V('profile_id', 4).out()
     """
-    IN = 1
-    OUT = 2
-    BOTH = 3
+    def __init__(self, graph):
+        self.graph = graph
+        self.pipeline = Pipeline()
+
+    def V(self, vertex_label=None, value=None):
+        """
+        Vertices
+        """
+
+        self.steps.append('V({},{}'.format(vertex_label, value))
+        return self
+
+    def v(self, vertex_id=None):
+        """
+        Get Vertex by internal id
+        """
+        self.steps.append('v({}'.format(vertex_id))
+        return self
+
+    def edge(self, edge_id):
+        """
+        get edge
+        """
+        pass
+
+    def has(self, key, value):
+        pass
+
+    def out(self, edge_label=None, value=None):
+        """
+        VerticesToVertices
+
+        """
+        # current_pipe = VerticesVerticesPipe(Direction.OUT)
+
+        self.steps.append('out({},{}'.format(edge_label, value))
+        return self
+
+    def outE(self, edge_label=None, value=None):
+        """
+        VerticesToEdges
+
+        """
+        self.steps.append('outE({},{}'.format(edge_label, value))
+        return self
+
+    def to_list():
+        """
+        Give results in a list of objects
+        """
+        pass
+
+    def __str__(self):
+        return self.steps
 
 
 class Element(object):
@@ -327,6 +379,15 @@ class Graph(object):
         value: the value to filter
         """
         pass
+
+    def get_vertices_iterator(self, key=None, value=None):
+        """
+        Get Vertices iterator
+
+        key: the label to filter
+        value: the value to filter
+        """
+        return DictKeyValueIterator(self.vertices)
 
     def add_vertex(self, current_id=None, properties=None):
         """
