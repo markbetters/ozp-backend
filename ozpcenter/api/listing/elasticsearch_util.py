@@ -453,7 +453,6 @@ def make_search_query_obj(filter_obj, exclude_agencies=None):
         }
         filter_data.append(listing_type_data)
 
-
     # Tags to filter
     if tags:
         tags_temp = []
@@ -466,7 +465,7 @@ def make_search_query_obj(filter_obj, exclude_agencies=None):
             }
             tags_temp.append(current_tag_data)
 
-        tags_data ={
+        tags_data = {
             "nested": {
                 "boost": 1,
                 "path": "tags",
@@ -479,7 +478,6 @@ def make_search_query_obj(filter_obj, exclude_agencies=None):
         }
 
         filter_data.append(tags_data)
-
 
     # Categories to filter
     if categories:
