@@ -1,5 +1,5 @@
 """
-Tests for (most) of the PkiAuthentication mechanism
+Tests for (most) of the Utils mechanism
 """
 from django.test import TestCase
 
@@ -41,3 +41,28 @@ class UtilsTest(TestCase):
 
         results = utils.map_numbers(input_num, in_min, in_max, out_min, out_max)
         self.assertEqual(results, 10.02004008016032)
+
+    def test_list_iterator(self):
+        list_iterator = utils.ListIterator([1, 2, 3])
+
+        list_out = []
+        while list_iterator.has_next():
+            list_out.append(list_iterator.next())
+
+        # TODO: Test list_iterator.next() to make sure it does not get an IndexError
+        self.assertEqual(list_out, [1, 2, 3])
+
+    def test_dict_key_value_iterator(self):
+        input_dict = {
+            5: 8,
+            2: 100,
+            9: 5,
+            -1: 9
+        }
+        list_iterator = utils.DictKeyValueIterator(input_dict)
+
+        list_out = []
+        while list_iterator.has_next():
+            list_out.append(list_iterator.next())
+
+        self.assertEqual(list_out, [5, 100, 8, 9])

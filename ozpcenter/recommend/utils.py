@@ -2,6 +2,74 @@
 Static Util File
 Contains Math Functions for recommendations
 """
+from enum import Enum
+
+
+class Direction(Enum):
+    """
+    Direction is used to denote the direction of an edge or location of a vertex on an edge.
+    """
+    IN = 1
+    OUT = 2
+    BOTH = 3
+
+
+class GenericIterator(object):
+    """
+
+    """
+    pass
+
+
+class DictKeyValueIterator(GenericIterator):
+
+    def __init__(self, input_dict):
+        self.count = 0
+        self.input_dict = input_dict
+        self.keys = list(input_dict.keys())
+
+    def next(self):
+        """
+        Return:
+            Vertex or Edge Object
+        """
+        if self.count > len(self.keys):
+            raise RuntimeError('FastNoSuchElementException')
+
+        value = self.input_dict[self.keys[self.count]]
+        self.count = self.count + 1
+        return value
+
+    def has_next(self):
+        return self.count < len(self.keys)
+
+    def remove(self):
+        raise RuntimeError('Unsupported Operation')
+
+
+class ListIterator(GenericIterator):
+
+    def __init__(self, input_list):
+        self.count = 0
+        self.input_list = input_list
+
+    def next(self):
+        """
+        Return:
+            Vertex or Edge Object
+        """
+        if self.count > len(self.input_list):
+            raise RuntimeError('FastNoSuchElementException')
+
+        value = self.input_list[self.count]
+        self.count = self.count + 1
+        return value
+
+    def has_next(self):
+        return self.count < len(self.input_list)
+
+    def remove(self):
+        raise RuntimeError('Unsupported Operation')
 
 
 def map_numbers(input_num, old_min, old_max, new_min, new_max):

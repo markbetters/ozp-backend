@@ -22,7 +22,6 @@ Calculates Google Normalized Distance, as described in "The Google Similarity Di
 link: http://arxiv.org/pdf/cs/0412098v3.pdf
 
 ## Structure
-
 Vertex Types:
 Agency
     short_name
@@ -114,13 +113,12 @@ Listing 8 - Category 1
 # TODO Convert into python
 graph = Graph()
 
-graph.createNode('person', {name: 'Rachael'})
-graph.createNode('person', {name: 'Stephanie'})
-graph.createNode('person', {name: 'Michael'})
-graph.createNode('person', {name: 'Donovan'})
+graph.create_vertex('person', {name: 'Rachael'})
+graph.create_vertex('person', {name: 'Stephanie'})
+graph.create_vertex('person', {name: 'Michael'})
+graph.create_vertex('person', {name: 'Donovan'})
 
-graph.nodes('person').query().filter({name__ilike: 'ae'}).units()
-
+graph.query().V('person').filter({name__ilike: 'ae'}).to_list()
 
 
 ## Issues
@@ -145,18 +143,10 @@ http://opensourceconnections.com/blog/2016/10/05/elastic-graph-recommendor/
 ## Lazy Loading Pipe Query System:
 ### VerticesVerticesPipe
 Start with Vertices (1 or more) to get all the other Vertices connected to it.
-
 """
-from enum import Enum
-
-
-class Direction(Enum):
-    """
-    Direction is used to denote the direction of an edge or location of a vertex on an edge.
-    """
-    IN = 1
-    OUT = 2
-    BOTH = 3
+from ozpcenter.recommend.utils import Direction
+from ozpcenter.recommend.utils import DictKeyValueIterator
+from ozpcenter.recommend.query import Query
 
 
 class Element(object):
@@ -197,6 +187,15 @@ class Element(object):
             current_value = properties[key]
             self.properties[key] = current_value
 
+    def get_properties(self, labels=[]):
+        """
+        Get properties
+
+        Args:
+            Filter by properties
+        """
+        return self.properties
+
     def set_property(self, key, value):
         """
         Assign a key/value property to the element.
@@ -214,7 +213,7 @@ class Element(object):
             del self.properties[key]
         return value
 
-    def get(self, key):
+    def get_property(self, key):
         """
         Return the object value associated with the provided string key.
         If no value exists for that key, return null.
@@ -236,7 +235,8 @@ class Vertex(Element):
     An Element is the base class for both Vertex and Edge.
     An Element has an identifier that must be unique to its inheriting classes (Vertex or Edge)
     """
-    def __init__(self, graph, id, label=None, properties=None):
+    def __init__(self, graph_instance, input_id, label=None, properties=None):
+        super().__init__(graph_instance, input_id, label, properties)
         self.in_edges = []
         self.out_edges = []
 
@@ -253,7 +253,8 @@ class Edge(Element):
     An Element is the base class for both Vertex and Edge.
     An Element has an identifier that must be unique to its inheriting classes (Vertex or Edge)
     """
-    def __init__(self, label=None, id=None, properties=None):
+    def __init__(self, graph_instance, input_id, label=None, properties=None):
+        super().__init__(graph_instance, input_id, label, properties)
         self.in_vertex = None
         self.out_vertex = None
 
@@ -293,6 +294,12 @@ class Graph(object):
         self.vertices = {}
         self.edges = {}
 
+    def __str__(self):
+        output = 'Graph(current_id: {}, vertices: {}, edges: {})'.format(self.current_id,
+                                                                         self.node_count(),
+                                                                         self.edge_count())
+        return output
+
     def reset(self):
         """
         Reset Graph
@@ -302,10 +309,10 @@ class Graph(object):
         self.edges = {}
 
     def node_count(self):
-        pass
+        return len(self.vertices)
 
     def edge_count(self):
-        pass
+        return len(self.edges)
 
     def get_next_id(self):
         """
@@ -328,9 +335,19 @@ class Graph(object):
         """
         pass
 
-    def add_vertex(self, current_id=None, properties=None):
+    def get_vertices_iterator(self, key=None, value=None):
+        """
+        Get Vertices iterator
+
+        key: the label to filter
+        value: the value to filter
+        """
+        return DictKeyValueIterator(self.vertices)
+
+    def add_vertex(self, label=None, properties=None, current_id=None):
         """
         Add Vertex to graph
+
         Return:
             Vertex
         """
@@ -346,7 +363,7 @@ class Graph(object):
             if current_id in self.vertices:
                 raise Exception('Vertex with ID Already Exist')
 
-        current_vertex = Vertex(self, current_id, properties=properties)
+        current_vertex = Vertex(self, current_id, label=label, properties=properties)
         self.vertices[current_vertex.id] = current_vertex
         return current_vertex
 
@@ -376,6 +393,12 @@ class Graph(object):
 
     def remove_edge(self, current_id):
         pass
+
+    def query(self):
+        """
+        Make a Query object to query graph
+        """
+        return Query(self)
 
 
 class GraphFactory(object):
