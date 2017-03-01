@@ -18,6 +18,17 @@ class Pipe(object):
         self.current_end = None
         self.next_end = None
 
+    def __str__(self):
+        default_keys = ['starts', 'available', 'current_end', 'next_end']
+        instance_vars = {}
+        variables = vars(self)
+        for variable_key in variables:
+            if variable_key not in default_keys:
+                instance_vars[variable_key] = variables[variable_key]
+
+        output = '{}({})'.format(self.__class__.__name__, instance_vars)
+        return output
+
     def set_starts(self, starts):
         """
         Args:
@@ -76,7 +87,7 @@ class Pipeline(object):
         if self.pipes:
             self.set_pipes()
 
-        self.start = None
+        self.starts = None
         if starts:
             self.set_starts(starts)
 
@@ -88,7 +99,12 @@ class Pipeline(object):
             Iterator of objects
         """
         self.starts = starts
-        self.start_pipe.set_starts(starts)
+
+        if self.start_pipe:
+            self.start_pipe.set_starts(starts)
+
+    def get_starts(self):
+        return self.starts
 
     def set_pipes(self):
         """
@@ -127,6 +143,9 @@ class Pipeline(object):
         """
         This will iterate all the objects out of the pipeline.
         """
+        if self.starts is None:
+            raise Exception('No Start Iterator set')
+
         try:
             while True:
                 self.next()
@@ -138,6 +157,9 @@ class Pipeline(object):
         """
         Drains the pipeline into a list
         """
+        if self.starts is None:
+            raise Exception('No Start Iterator set')
+
         output = []
         try:
             while True:
@@ -151,6 +173,9 @@ class Pipeline(object):
         """
         Count the number of objects in an pipeline
         """
+        if self.starts is None:
+            raise Exception('No Start Iterator set')
+
         count = 0
         try:
             while True:
@@ -160,3 +185,12 @@ class Pipeline(object):
             pass
             # Ignore all Errors
         return count
+
+    def size(self):
+        """
+        Number of pipes in the pipeline
+        """
+        return len(self.pipes)
+
+    def __str__(self):
+        return str([str(pipe) for pipe in self.pipes])
