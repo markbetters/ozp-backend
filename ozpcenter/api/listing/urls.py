@@ -35,6 +35,8 @@ router.register(r'listingtype', views.ListingTypeViewSet)
 # nested routes
 nested_router = routers.NestedSimpleRouter(router, r'listing',
     lookup='listing')
+nested_router.register(r'similar', views.SimilarViewSet,
+    base_name='similar')
 nested_router.register(r'review', views.ReviewViewSet,
     base_name='review')
 nested_router.register(r'activity', views.ListingActivityViewSet,

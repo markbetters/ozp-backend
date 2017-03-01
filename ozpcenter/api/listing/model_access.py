@@ -184,6 +184,22 @@ def get_listings(username):
         return None
 
 
+def get_similar_listings(username, original_listing_id):
+    """
+    Get Similar Listings this user can see
+
+    Get Listings that are in the same category
+
+    categories is a many to many field in Listing model
+    """
+    original_listing_category = get_listing_by_id(username, original_listing_id).categories.all()
+
+    try:
+        return models.Listing.objects.for_user(username).filter(categories=original_listing_category)
+    except ObjectDoesNotExist:
+        return None
+
+
 def get_reviews(username):
     """
     Get Reviews this user can see

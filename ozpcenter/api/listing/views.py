@@ -110,6 +110,68 @@ class ReviewViewSet(viewsets.ModelViewSet):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+class SimilarViewSet(viewsets.ModelViewSet):
+    """
+    Similar Apps for a given listing
+
+    # TODO (Rivera 2017-2-22) Implement Similar Listing Algorithm
+
+    Primarily for that reason, we forgo using Serializers for POST and PUT
+    actions
+    """
+    permission_classes = (permissions.IsUser,)
+    serializer_class = serializers.ListingSerializer
+    # pagination_class = pagination.StandardPagination
+
+    def get_queryset(self, listing_pk):
+        approval_status = self.request.query_params.get('approval_status', None)
+        # org = self.request.query_params.get('org', None)
+        orgs = self.request.query_params.getlist('org', False)
+        enabled = self.request.query_params.get('enabled', None)
+        ordering = self.request.query_params.getlist('ordering', None)
+        if enabled:
+            enabled = enabled.lower()
+            if enabled in ['true', '1']:
+                enabled = True
+            else:
+                enabled = False
+
+        listings = model_access.get_similar_listings(self.request.user.username, listing_pk)
+
+        if approval_status:
+            listings = listings.filter(approval_status=approval_status)
+        if orgs:
+            listings = listings.filter(agency__title__in=orgs)
+        if enabled is not None:
+            listings = listings.filter(is_enabled=enabled)
+        # have to handle this case manually because the ordering includes an app multiple times
+        # if there are multiple owners. We instead do sorting by case insensitive compare of the
+        # app owner that comes first alphabetically
+        param = [s for s in ordering if 'owners__display_name' == s or '-owners__display_name' == s]
+        if ordering is not None and param:
+            orderby = 'min'
+            if param[0].startswith('-'):
+                orderby = '-min'
+            listings = listings.annotate(min=Min(Lower('owners__display_name'))).order_by(orderby)
+            self.ordering = None
+        return listings
+
+    def list(self, request, listing_pk=None):
+        queryset = self.filter_queryset(self.get_queryset(listing_pk))
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = serializers.ListingSerializer(page,
+                context={'request': request}, many=True)
+            r = self.get_paginated_response(serializer.data)
+            return r
+
+        serializer = serializers.ListingSerializer(queryset,
+            context={'request': request}, many=True)
+        r = Response(serializer.data)
+        return r
+
+
 class ListingTypeViewSet(viewsets.ModelViewSet):
     """
     Listing Types
