@@ -335,6 +335,7 @@ def make_search_query_obj(filter_obj, exclude_agencies=None):
     # user_limit_set = filter_params.get('limit_set', False)
 
     # Filtering
+    tags = filter_obj.tags
     categories = filter_obj.categories
     agencies = filter_obj.agencies
     listing_types = filter_obj.listing_types
@@ -451,6 +452,34 @@ def make_search_query_obj(filter_obj, exclude_agencies=None):
             }
         }
         filter_data.append(listing_type_data)
+
+
+    # Tags to filter
+    if tags:
+        tags_temp = []
+
+        for tag in tags:
+            current_tag_data = {
+                "match": {
+                    "tags.name": tag
+                }
+            }
+            tags_temp.append(current_tag_data)
+
+        tags_data ={
+            "nested": {
+                "boost": 1,
+                "path": "tags",
+                "query": {
+                    "bool": {
+                        "should": tags_temp
+                    }
+                }
+            }
+        }
+
+        filter_data.append(tags_data)
+
 
     # Categories to filter
     if categories:
