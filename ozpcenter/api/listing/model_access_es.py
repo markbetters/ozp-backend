@@ -52,6 +52,7 @@ class SearchParamParser(object):
             self.limit = 100
 
         # Filtering
+        self.tags = [str(record) for record in request.query_params.getlist('tag', [])]
         self.categories = [str(record) for record in request.query_params.getlist('category', [])]
         self.agencies = [str(record) for record in request.query_params.getlist('agency', [])]
         self.listing_types = [str(record) for record in request.query_params.getlist('type', [])]
