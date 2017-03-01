@@ -20,6 +20,9 @@ test: clean pre create_static
 softtest: pre
 	python -q -X faulthandler manage.py test
 
+install_git_hooks:
+	cp .hooks/pre-commit .git/hooks/
+
 run:
 	python manage.py runserver
 

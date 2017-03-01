@@ -1,13 +1,14 @@
 """
 Lazy Loading Dataflow
 """
-# from ozpcenter.recommend.utils import Direction
+from ozpcenter.recommend import utils
 
 
 class Pipe(object):
     """
     <S, E>
     """
+
     def __init__(self):
         """
         Args:
@@ -79,6 +80,7 @@ class Pipeline(object):
     """
     A Pipeline is a linear composite of Pipes.
     """
+
     def __init__(self, starts=None, pipes=[]):
         self.start_pipe = None
         self.end_pipe = None
@@ -122,7 +124,7 @@ class Pipeline(object):
         self.set_pipes()
 
     def remove(self):
-        raise RuntimeError('Unsupported Operation')
+        raise utils.UnsupportedOperation()
 
     def has_next(self):
         """
@@ -149,9 +151,9 @@ class Pipeline(object):
         try:
             while True:
                 self.next()
-        except:
+        except utils.FastNoSuchElementException:
+            # Ignore FastNoSuchElementException
             pass
-            # Ignore all Errors
 
     def to_list(self):
         """
@@ -164,9 +166,9 @@ class Pipeline(object):
         try:
             while True:
                 output.append(self.next())
-        except:
+        except utils.FastNoSuchElementException:
+            # Ignore FastNoSuchElementException
             pass
-            # Ignore all Errors
         return output
 
     def count(self):
@@ -181,9 +183,9 @@ class Pipeline(object):
             while True:
                 self.next()
                 count = count + 1
-        except:
+        except utils.FastNoSuchElementException:
+            # Ignore FastNoSuchElementException
             pass
-            # Ignore all Errors
         return count
 
     def size(self):
