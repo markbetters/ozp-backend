@@ -123,7 +123,7 @@ class SimilarViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.ListingSerializer
     # pagination_class = pagination.StandardPagination
 
-    def get_queryset(self):
+    def get_queryset(self, listing_pk):
         approval_status = self.request.query_params.get('approval_status', None)
         # org = self.request.query_params.get('org', None)
         orgs = self.request.query_params.getlist('org', False)
@@ -136,7 +136,8 @@ class SimilarViewSet(viewsets.ModelViewSet):
             else:
                 enabled = False
 
-        listings = model_access.get_listings(self.request.user.username)
+        listings = model_access.get_similar_listings(self.request.user.username, listing_pk)
+
         if approval_status:
             listings = listings.filter(approval_status=approval_status)
         if orgs:
@@ -156,7 +157,7 @@ class SimilarViewSet(viewsets.ModelViewSet):
         return listings
 
     def list(self, request, listing_pk=None):
-        queryset = self.filter_queryset(self.get_queryset())
+        queryset = self.filter_queryset(self.get_queryset(listing_pk))
 
         page = self.paginate_queryset(queryset)
         if page is not None:
