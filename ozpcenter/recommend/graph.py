@@ -28,6 +28,7 @@ Agency
 
 Profile
     profile_id
+    username
     role: APPS_MALL_STEWARD > ORG_STEWARD > USER
 
 Listing

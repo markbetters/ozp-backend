@@ -3,8 +3,8 @@ Quering Graph
 """
 from ozpcenter.recommend.utils import Direction
 from ozpcenter.recommend.utils import DictKeyValueIterator
-from ozpcenter.recommend.pipeline import Pipeline
-from ozpcenter.recommend import pipes
+from ozpcenter.pipe.pipeline import Pipeline
+from ozpcenter.pipe import pipes
 
 
 class Query(object):

@@ -32,9 +32,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from ozpcenter import models
 from django.db.models import Count
 from ozpcenter.api.listing.model_access_es import check_elasticsearch
-
 from ozpcenter.api.listing import model_access_es
-
 from ozpcenter.recommend import utils
 
 
@@ -304,6 +302,7 @@ class CustomHybridRecommender(Recommender):
                     self.add_listing_to_user_profile(profile_id, current_listing.id, current_listing.avg_rate, True)
 
             # Get most popular bookmarked apps for all users
+            # Would it be faster it this code was outside the loop for profiles?
             library_entries = models.ApplicationLibraryEntry.objects.for_user_organization_minus_security_markings(profile_username)
             # library_entries = library_entries.filter(owner__user__username=username)
             library_entries = library_entries.filter(listing__is_enabled=True)

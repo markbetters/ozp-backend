@@ -10,7 +10,7 @@ class FastNoSuchElementException(Exception):
     pass
 
 
-class UnsupportedOperation(Exception):
+class UnsupportedOperationException(Exception):
     pass
 
 
@@ -56,7 +56,7 @@ class DictKeyValueIterator(GenericIterator):
         return self.count <= self.max_count
 
     def remove(self):
-        raise RuntimeError('Unsupported Operation')
+        raise UnsupportedOperationException()
 
 
 class ListIterator(GenericIterator):
@@ -84,7 +84,7 @@ class ListIterator(GenericIterator):
         return self.count <= self.max_count
 
     def remove(self):
-        raise RuntimeError('Unsupported Operation')
+        raise UnsupportedOperationException()
 
 
 def map_numbers(input_num, old_min, old_max, new_min, new_max):
