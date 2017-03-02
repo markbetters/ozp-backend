@@ -288,6 +288,10 @@ class AccessControlApplicationLibraryEntryManager(models.Manager):
             user_orgs = [i.title for i in user_orgs]
             exclude_orgs = Agency.objects.exclude(title__in=user_orgs)
 
+        objects = objects.filter(owner__user__username=username)
+        objects = objects.filter(listing__is_enabled=True)
+        objects = objects.filter(listing__is_deleted=False)
+
         objects = objects.exclude(listing__is_private=True,
                                   listing__agency__in=exclude_orgs)
 
@@ -301,7 +305,10 @@ class AccessControlApplicationLibraryEntryManager(models.Manager):
         objects = objects.exclude(listing__pk__in=ids_to_exclude)
         return objects
 
-    def for_user_organization_minus_security_markings(self, username):
+    def for_user_organization_minus_security_markings(self, username, filter_for_user=False):
+        """
+        This method is used for recommendations
+        """
         # get all listings
         objects = super(AccessControlApplicationLibraryEntryManager, self).get_queryset()
         # filter out private listings
@@ -319,6 +326,12 @@ class AccessControlApplicationLibraryEntryManager(models.Manager):
 
         objects = objects.exclude(listing__is_private=True,
                                   listing__agency__in=exclude_orgs)
+
+        if filter_for_user:
+            objects = objects.filter(owner__user__username=username)
+            objects = objects.filter(listing__is_enabled=True)
+            objects = objects.filter(listing__is_deleted=False)
+
         return objects
 
 
@@ -1077,8 +1090,9 @@ class AccessControlRecommendationsEntryManager(models.Manager):
     """
 
     def for_user(self, username):
-        # get all listings
+        # get all entries
         objects = super(AccessControlRecommendationsEntryManager, self).get_queryset()
+
         # filter out private listings
         user = Profile.objects.get(user__username=username)
         if user.highest_role() == 'APPS_MALL_STEWARD':
@@ -1091,6 +1105,11 @@ class AccessControlRecommendationsEntryManager(models.Manager):
             user_orgs = user.organizations.all()
             user_orgs = [i.title for i in user_orgs]
             exclude_orgs = Agency.objects.exclude(title__in=user_orgs)
+
+        objects = objects.filter(target_profile=user,
+                    listing__is_enabled=True,
+                    listing__approval_status=Listing.APPROVED,
+                    listing__is_deleted=False)
 
         objects = objects.exclude(listing__is_private=True,
                                   listing__agency__in=exclude_orgs)
@@ -1110,6 +1129,7 @@ class AccessControlRecommendationsEntryManager(models.Manager):
         objects = super(AccessControlRecommendationsEntryManager, self).get_queryset()
         # filter out private listings
         user = Profile.objects.get(user__username=username)
+
         if user.highest_role() == 'APPS_MALL_STEWARD':
             exclude_orgs = []
         elif user.highest_role() == 'ORG_STEWARD':
@@ -1120,6 +1140,11 @@ class AccessControlRecommendationsEntryManager(models.Manager):
             user_orgs = user.organizations.all()
             user_orgs = [i.title for i in user_orgs]
             exclude_orgs = Agency.objects.exclude(title__in=user_orgs)
+
+        objects = objects.filter(target_profile=user,
+                    listing__is_enabled=True,
+                    listing__approval_status=Listing.APPROVED,
+                    listing__is_deleted=False)
 
         objects = objects.exclude(listing__is_private=True,
                                   listing__agency__in=exclude_orgs)

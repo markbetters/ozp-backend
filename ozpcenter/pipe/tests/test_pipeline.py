@@ -9,8 +9,8 @@ from django.test import TestCase
 
 from ozpcenter.scripts import sample_data_generator as data_gen
 from ozpcenter.recommend import utils
-from ozpcenter.recommend import pipes
-from ozpcenter.recommend import pipeline
+from ozpcenter.pipe import pipes
+from ozpcenter.pipe import pipeline
 from ozpcenter.recommend.graph import Graph
 
 

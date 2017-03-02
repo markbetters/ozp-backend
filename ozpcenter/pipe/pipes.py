@@ -1,6 +1,6 @@
 import logging
 
-from ozpcenter.recommend.pipeline import Pipe
+from ozpcenter.pipe.pipeline import Pipe
 from ozpcenter.recommend.utils import FastNoSuchElementException
 from plugins_util.plugin_manager import system_has_access_control
 

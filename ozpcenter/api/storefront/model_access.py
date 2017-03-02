@@ -7,8 +7,8 @@ from django.db.models.functions import Lower
 from ozpcenter import models
 import ozpcenter.api.listing.serializers as listing_serializers
 
-from ozpcenter.recommend import pipes
-from ozpcenter.recommend import pipeline
+from ozpcenter.pipe import pipes
+from ozpcenter.pipe import pipeline
 from ozpcenter.recommend import utils
 
 # Get an instance of a logger
@@ -34,50 +34,57 @@ def get_storefront(username):
             'most_popular': [Listing]
         }
     """
-    profile = models.Profile.objects.get(user__username=username)
+    #  profile = models.Profile.objects.get(user__username=username)
     try:
         # Get Recommended Listings for owner
         recommended_listings_raw = models.RecommendationsEntry.objects \
             .for_user_organization_minus_security_markings(username) \
-            .filter(target_profile=profile,
-                    listing__is_enabled=True,
-                    listing__approval_status=models.Listing.APPROVED,
-                    listing__is_deleted=False).order_by('-score')
-        recommended_listings_list = [recommendations_entry.listing for recommendations_entry in recommended_listings_raw]
+            .order_by('-score')
 
         # Post security_marking check - lazy loading
-        recommended_pipeline = pipeline.Pipeline(utils.ListIterator(recommended_listings_list),
+        recommended_listings = pipeline.Pipeline(utils.ListIterator([recommendations_entry.listing for recommendations_entry in recommended_listings_raw]),
                                           [pipes.ListingPostSecurityMarkingCheckPipe(username),
-                                           pipes.LimitPipe(10)])
-
-        recommended_listings = recommended_pipeline.to_list()
+                                           pipes.LimitPipe(10)]).to_list()
 
         # Get Featured Listings
-        featured_listings = models.Listing.objects.for_user(
+        featured_listings_raw = models.Listing.objects.for_user_organization_minus_security_markings(
             username).filter(
                 is_featured=True,
                 approval_status=models.Listing.APPROVED,
                 is_enabled=True,
-                is_deleted=False)[:12]
+                is_deleted=False)
+
+        featured_listings_raw = listing_serializers.ListingSerializer.setup_eager_loading(featured_listings_raw)
+
+        featured_listings = pipeline.Pipeline(utils.ListIterator([listing for listing in featured_listings_raw]),
+                                          [pipes.ListingPostSecurityMarkingCheckPipe(username),
+                                           pipes.LimitPipe(12)]).to_list()
 
         # Get Recent Listings
-        recent_listings = models.Listing.objects.for_user(
-            username).order_by(
-                '-approved_date').filter(
-                    approval_status=models.Listing.APPROVED,
-                    is_enabled=True,
-                    is_deleted=False)[:24]
+        recent_listings_raw = models.Listing.objects.for_user_organization_minus_security_markings(
+            username).order_by('-approved_date').filter(
+            approval_status=models.Listing.APPROVED,
+            is_enabled=True,
+            is_deleted=False)
+
+        recent_listings_raw = listing_serializers.ListingSerializer.setup_eager_loading(recent_listings_raw)
+
+        recent_listings = pipeline.Pipeline(utils.ListIterator([listing for listing in recent_listings_raw]),
+                                          [pipes.ListingPostSecurityMarkingCheckPipe(username),
+                                           pipes.LimitPipe(24)]).to_list()
 
         # Get most popular listings via a weighted average
-        most_popular_listings = models.Listing.objects.for_user(
+        most_popular_listings_raw = models.Listing.objects.for_user_organization_minus_security_markings(
             username).filter(
                 approval_status=models.Listing.APPROVED,
                 is_enabled=True,
-                is_deleted=False).order_by('-avg_rate', '-total_reviews')[:36]
+                is_deleted=False).order_by('-avg_rate', '-total_reviews')
 
-        featured_listings = listing_serializers.ListingSerializer.setup_eager_loading(featured_listings)
-        recent_listings = listing_serializers.ListingSerializer.setup_eager_loading(recent_listings)
-        most_popular_listings = listing_serializers.ListingSerializer.setup_eager_loading(most_popular_listings)
+        most_popular_listings_raw = listing_serializers.ListingSerializer.setup_eager_loading(most_popular_listings_raw)
+
+        most_popular_listings = pipeline.Pipeline(utils.ListIterator([listing for listing in most_popular_listings_raw]),
+                                          [pipes.ListingPostSecurityMarkingCheckPipe(username),
+                                           pipes.LimitPipe(36)]).to_list()
 
         data = {
             'recommended': recommended_listings,
@@ -85,8 +92,9 @@ def get_storefront(username):
             'recent': recent_listings,
             'most_popular': most_popular_listings
         }
-    except Exception as e:
-        raise Exception({'error': True, 'msg': 'Error getting storefront: {0!s}'.format(str(e))})
+    except Exception:
+        # raise Exception({'error': True, 'msg': 'Error getting storefront: {0!s}'.format(str(e))})
+        raise  # Should be catch in the django framwork
     return data
 
 
