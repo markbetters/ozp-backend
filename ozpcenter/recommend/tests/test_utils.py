@@ -46,10 +46,13 @@ class UtilsTest(TestCase):
         list_iterator = utils.ListIterator([1, 2, 3])
 
         list_out = []
-        while list_iterator.has_next():
-            list_out.append(list_iterator.next())
+        try:
+            while list_iterator.has_next():
+                list_out.append(list_iterator.next())
+        except utils.FastNoSuchElementException:
+            # Ignore FastNoSuchElementException
+            pass
 
-        # TODO: Test list_iterator.next() to make sure it does not get an IndexError
         self.assertEqual(list_out, [1, 2, 3])
 
     def test_dict_key_value_iterator(self):
@@ -62,7 +65,10 @@ class UtilsTest(TestCase):
         list_iterator = utils.DictKeyValueIterator(input_dict)
 
         list_out = []
-        while list_iterator.has_next():
-            list_out.append(list_iterator.next())
-
+        try:
+            while list_iterator.has_next():
+                list_out.append(list_iterator.next())
+        except utils.FastNoSuchElementException:
+            # Ignore FastNoSuchElementException
+            pass
         self.assertEqual(list_out, [5, 100, 8, 9])

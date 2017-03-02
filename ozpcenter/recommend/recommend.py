@@ -21,6 +21,9 @@ Steps:
     - Process Data with recommendation algorthim
       - Produces a list of listing's id for each profile = Results
     - Iterate through the Results to call add_listing_to_user_profile function
+
+Idea:
+Jitting Result
 """
 import logging
 import time
@@ -59,6 +62,7 @@ class Recommender(object):
             }
         }
     """
+
     def __init__(self):
         # Set up variables for processing data
         self.recommender_result_set = {}
@@ -202,6 +206,7 @@ class SampleDataRecommender(Recommender):
     """
     Sample Data Recommender
     """
+
     def initiate(self):
         """
         Initiate any variables needed for recommendation_logic function
@@ -243,6 +248,7 @@ class CustomHybridRecommender(Recommender):
     - Must respect private apps
     - Does not have to repectborative filtering)
     """
+
     def initiate(self):
         """
         Initiate any variables needed for recommendation_logic function
@@ -303,7 +309,7 @@ class CustomHybridRecommender(Recommender):
             library_entries = library_entries.filter(listing__is_enabled=True)
             library_entries = library_entries.filter(listing__is_deleted=False)
             library_entries = library_entries.filter(listing__approval_status=models.Listing.APPROVED)
-            library_entries_group_by_count = library_entries.values('listing_id').annotate(count=Count('listing_id')).order_by('count')
+            library_entries_group_by_count = library_entries.values('listing_id').annotate(count=Count('listing_id')).order_by('-count')
             # [{'listing_id': 1, 'count': 1}, {'listing_id': 2, 'count': 1}]
 
             old_min = 1
@@ -332,6 +338,7 @@ class ElasticsearchContentBaseRecommender(Recommender):
     """
     Elasticsearch Content based recommendation engine
     """
+
     def initiate(self):
         """
         Initiate any variables needed for recommendation_logic function
@@ -355,6 +362,7 @@ class ElasticsearchUserBaseRecommender(Recommender):
     """
     Elasticsearch User based recommendation engine
     """
+
     def initiate(self):
         """
         Initiate any variables needed for recommendation_logic function
@@ -380,6 +388,7 @@ class SurpriseUserBaseRecommender(Recommender):
 
     http://surprise.readthedocs.io/en/latest/getting_started.html
     """
+
     def initiate(self):
         """
         Initiate any variables needed for recommendation_logic function
@@ -398,6 +407,7 @@ class RecommenderDirectory(object):
     Wrapper for all Recommenders
     It maps strings to classes.
     """
+
     def __init__(self):
         self.recommender_classes = {
             'surprise_user_base': SurpriseUserBaseRecommender,

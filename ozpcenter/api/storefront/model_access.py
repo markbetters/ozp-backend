@@ -7,6 +7,10 @@ from django.db.models.functions import Lower
 from ozpcenter import models
 import ozpcenter.api.listing.serializers as listing_serializers
 
+from ozpcenter.recommend import pipes
+from ozpcenter.recommend import pipeline
+from ozpcenter.recommend import utils
+
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center.' + str(__name__))
 
@@ -33,12 +37,20 @@ def get_storefront(username):
     profile = models.Profile.objects.get(user__username=username)
     try:
         # Get Recommended Listings for owner
-        # Security filtering to Ensure that the Listing are viewable by the current user
-        recommended_listings_raw = models.RecommendationsEntry.objects.for_user(username).filter(target_profile=profile,
-                                                                         listing__is_enabled=True,
-                                                                         listing__approval_status=models.Listing.APPROVED,
-                                                                         listing__is_deleted=False).order_by('-score')[:10]
-        recommended_listings = [recommendations_entry.listing for recommendations_entry in recommended_listings_raw]
+        recommended_listings_raw = models.RecommendationsEntry.objects \
+            .for_user_organization_minus_security_markings(username) \
+            .filter(target_profile=profile,
+                    listing__is_enabled=True,
+                    listing__approval_status=models.Listing.APPROVED,
+                    listing__is_deleted=False).order_by('-score')
+        recommended_listings_list = [recommendations_entry.listing for recommendations_entry in recommended_listings_raw]
+
+        # Post security_marking check - lazy loading
+        recommended_pipeline = pipeline.Pipeline(utils.ListIterator(recommended_listings_list),
+                                          [pipes.ListingPostSecurityMarkingCheckPipe(username),
+                                           pipes.LimitPipe(10)])
+
+        recommended_listings = recommended_pipeline.to_list()
 
         # Get Featured Listings
         featured_listings = models.Listing.objects.for_user(

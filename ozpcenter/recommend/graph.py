@@ -155,6 +155,7 @@ class Element(object):
     An Element has an identifier that must be unique to its inheriting classes (Vertex or Edge)
     An Element can maintain a collection of Property objects.
     """
+
     def __init__(self, graph_instance, input_id, label=None, properties=None):
         self.graph = graph_instance
         self.label = label
@@ -235,6 +236,7 @@ class Vertex(Element):
     An Element is the base class for both Vertex and Edge.
     An Element has an identifier that must be unique to its inheriting classes (Vertex or Edge)
     """
+
     def __init__(self, graph_instance, input_id, label=None, properties=None):
         super().__init__(graph_instance, input_id, label, properties)
         self.in_edges = []
@@ -253,6 +255,7 @@ class Edge(Element):
     An Element is the base class for both Vertex and Edge.
     An Element has an identifier that must be unique to its inheriting classes (Vertex or Edge)
     """
+
     def __init__(self, graph_instance, input_id, label=None, properties=None):
         super().__init__(graph_instance, input_id, label, properties)
         self.in_vertex = None
@@ -281,6 +284,7 @@ class Graph(object):
     """
     A Graph is a container object for a collection of Vertex, Edge
     """
+
     def __init__(self):
         """
         Current_id:

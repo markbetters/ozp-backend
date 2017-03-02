@@ -13,6 +13,7 @@ class Query(object):
 
     graph.query().V('profile_id', 4).out()
     """
+
     def __init__(self, graph):
         self.graph = graph
         self.pipeline = Pipeline()
@@ -65,6 +66,14 @@ class Query(object):
         Get internal id of Elements
         """
         current_pipe = pipes.ElementIdPipe()
+        self.pipeline.add_pipe(current_pipe)
+        return self
+
+    def limit(self, limit_number):
+        """
+        Limit number Elements
+        """
+        current_pipe = pipes.LimitPipe(limit_number)
         self.pipeline.add_pipe(current_pipe)
         return self
 

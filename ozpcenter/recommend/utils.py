@@ -1,8 +1,17 @@
 """
 Static Util File
 Contains Math Functions for recommendations
+Exception
 """
 from enum import Enum
+
+
+class FastNoSuchElementException(Exception):
+    pass
+
+
+class UnsupportedOperation(Exception):
+    pass
 
 
 class Direction(Enum):
@@ -24,24 +33,27 @@ class GenericIterator(object):
 class DictKeyValueIterator(GenericIterator):
 
     def __init__(self, input_dict):
-        self.count = 0
+        self.count = -1
         self.input_dict = input_dict
         self.keys = list(input_dict.keys())
+        self.max_count = len(self.keys)
 
     def next(self):
         """
         Return:
             Vertex or Edge Object
         """
-        if self.count > len(self.keys):
-            raise RuntimeError('FastNoSuchElementException')
-
-        value = self.input_dict[self.keys[self.count]]
         self.count = self.count + 1
+        if self.count >= self.max_count:
+            raise FastNoSuchElementException()
+        value = self.input_dict[self.keys[self.count]]
         return value
 
     def has_next(self):
-        return self.count < len(self.keys)
+        """
+        TODO: Don't think it works as expected
+        """
+        return self.count <= self.max_count
 
     def remove(self):
         raise RuntimeError('Unsupported Operation')
@@ -50,23 +62,26 @@ class DictKeyValueIterator(GenericIterator):
 class ListIterator(GenericIterator):
 
     def __init__(self, input_list):
-        self.count = 0
+        self.count = -1
         self.input_list = input_list
+        self.max_count = len(self.input_list)
 
     def next(self):
         """
         Return:
             Vertex or Edge Object
         """
-        if self.count > len(self.input_list):
-            raise RuntimeError('FastNoSuchElementException')
-
-        value = self.input_list[self.count]
         self.count = self.count + 1
+        if self.count >= self.max_count:
+            raise FastNoSuchElementException()
+        value = self.input_list[self.count]
         return value
 
     def has_next(self):
-        return self.count < len(self.input_list)
+        """
+        TODO: Don't think it works as expected
+        """
+        return self.count <= self.max_count
 
     def remove(self):
         raise RuntimeError('Unsupported Operation')
