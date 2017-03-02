@@ -511,7 +511,6 @@ def make_search_query_obj(filter_obj, exclude_agencies=None):
         bt = boost_title
         bd = boost_description
         bds = boost_description_short
-        btg = boost_tags
 
         temp_should.append({
             "nested": {
@@ -532,7 +531,7 @@ def make_search_query_obj(filter_obj, exclude_agencies=None):
            "multi_match": {
               "query": user_string,
               "type": "best_fields",
-              "fields": ["title^" + str(bt), "description^" + str(bd), "description_short^" + str(bds), "tags.name^" + str(btg)],
+              "fields": ["title^" + str(bt), "description^" + str(bd), "description_short^" + str(bds)],
               "tie_breaker": 0.3,
               "minimum_should_match": "60%",
               "analyzer": "english",
