@@ -54,7 +54,7 @@ def get_storefront(username):
                 is_enabled=True,
                 is_deleted=False)
 
-        featured_listings = listing_serializers.ListingSerializer.setup_eager_loading(featured_listings_raw)
+        featured_listings_raw = listing_serializers.ListingSerializer.setup_eager_loading(featured_listings_raw)
 
         featured_listings = pipeline.Pipeline(utils.ListIterator([listing for listing in featured_listings_raw]),
                                           [pipes.ListingPostSecurityMarkingCheckPipe(username),
@@ -67,7 +67,7 @@ def get_storefront(username):
             is_enabled=True,
             is_deleted=False)
 
-        recent_listings = listing_serializers.ListingSerializer.setup_eager_loading(recent_listings_raw)
+        recent_listings_raw = listing_serializers.ListingSerializer.setup_eager_loading(recent_listings_raw)
 
         recent_listings = pipeline.Pipeline(utils.ListIterator([listing for listing in recent_listings_raw]),
                                           [pipes.ListingPostSecurityMarkingCheckPipe(username),
@@ -80,7 +80,7 @@ def get_storefront(username):
                 is_enabled=True,
                 is_deleted=False).order_by('-avg_rate', '-total_reviews')
 
-        most_popular_listings = listing_serializers.ListingSerializer.setup_eager_loading(most_popular_listings_raw)
+        most_popular_listings_raw = listing_serializers.ListingSerializer.setup_eager_loading(most_popular_listings_raw)
 
         most_popular_listings = pipeline.Pipeline(utils.ListIterator([listing for listing in most_popular_listings_raw]),
                                           [pipes.ListingPostSecurityMarkingCheckPipe(username),
