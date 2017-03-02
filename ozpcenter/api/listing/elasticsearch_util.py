@@ -514,6 +514,21 @@ def make_search_query_obj(filter_obj, exclude_agencies=None):
         btg = boost_tags
 
         temp_should.append({
+            "nested": {
+                "boost": boost_tags,
+                "query": {
+                    "query_string": {
+                        "fields": [
+                            "tags.name"
+                        ],
+                        "query": user_string
+                    }
+                },
+                "path": "tags"
+            }
+        })
+
+        temp_should.append({
            "multi_match": {
               "query": user_string,
               "type": "best_fields",
@@ -525,6 +540,7 @@ def make_search_query_obj(filter_obj, exclude_agencies=None):
               # fuzziness changes fixes missing first letter issue with searches (10).
            }
         })
+
     else:
         temp_should.append({"match_all": {}})
 
