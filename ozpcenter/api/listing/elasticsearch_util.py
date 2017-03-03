@@ -511,13 +511,27 @@ def make_search_query_obj(filter_obj, exclude_agencies=None):
         bt = boost_title
         bd = boost_description
         bds = boost_description_short
-        btg = boost_tags
+
+        temp_should.append({
+            "nested": {
+                "boost": boost_tags,
+                "query": {
+                    "query_string": {
+                        "fields": [
+                            "tags.name"
+                        ],
+                        "query": user_string
+                    }
+                },
+                "path": "tags"
+            }
+        })
 
         temp_should.append({
            "multi_match": {
               "query": user_string,
               "type": "best_fields",
-              "fields": ["title^" + str(bt), "description^" + str(bd), "description_short^" + str(bds), "tags.name^" + str(btg)],
+              "fields": ["title^" + str(bt), "description^" + str(bd), "description_short^" + str(bds)],
               "tie_breaker": 0.3,
               "minimum_should_match": "60%",
               "analyzer": "english",
@@ -525,6 +539,7 @@ def make_search_query_obj(filter_obj, exclude_agencies=None):
               # fuzziness changes fixes missing first letter issue with searches (10).
            }
         })
+
     else:
         temp_should.append({"match_all": {}})
 
