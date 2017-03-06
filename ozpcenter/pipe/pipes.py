@@ -10,6 +10,26 @@ logger = logging.getLogger('ozp-center.' + str(__name__))
 
 class VerticesVerticesPipe(Pipe):
 
+    def __init__(self, direction, label=None):
+        super().__init__()
+        # Super
+        self.direction = direction
+        self.next_end = None
+
+    def process_next_start(self):
+        """
+        Start at Vertex, return Vertex
+        """
+        while True:
+            if self.next_end.has_next():
+                return self.next_end.next()  # Edge
+            else:
+                self.next_end = self.starts.next().get_vertices_iterator(direction=self.direction,
+                                                                label=self.label)  # Start Vertex
+
+
+class VerticesEdgesPipe(Pipe):
+
     def __init__(self, direction):
         super().__init__()
         # Super
@@ -17,6 +37,21 @@ class VerticesVerticesPipe(Pipe):
 
     def process_next_start(self):
         """
+        Start at Vertex, return Edge
+        """
+        pass
+
+
+class EdgesVerticesPipe(Pipe):
+
+    def __init__(self, direction):
+        super().__init__()
+        # Super
+        self.direction = direction
+
+    def process_next_start(self):
+        """
+        Start at Edge, return Vertex
         """
         pass
 
@@ -122,15 +157,22 @@ class ElementPropertiesPipe(Pipe):
     Start of Graph to vertex flow
     """
 
-    def __init__(self):
+    def __init__(self, internal=False):
         super().__init__()
+        self.internal = internal
 
     def process_next_start(self):
         """
         CapitalizePipe each string object
         """
         current_vertex = self.starts.next()
-        return current_vertex.get_properties()
+        vertex_properties = current_vertex.properties
+
+        if self.internal:
+            vertex_properties['_id'] = current_vertex.id
+            vertex_properties['_label'] = current_vertex.label
+
+        return vertex_properties
 
 
 class ElementHasPipe(Pipe):
@@ -138,7 +180,7 @@ class ElementHasPipe(Pipe):
     Filter Pipe
     """
 
-    def __init__(self, label, value=None):
+    def __init__(self, label, key=None, predicate='EQUALS', value=None):
         super().__init__()
 
     def process_next_start(self):

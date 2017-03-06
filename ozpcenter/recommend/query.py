@@ -77,11 +77,11 @@ class Query(object):
         self.pipeline.add_pipe(current_pipe)
         return self
 
-    def to_dict(self):
+    def to_dict(self, internal=False):
         """
         Convert objects (Elements into )
         """
-        current_pipe = pipes.ElementPropertiesPipe()
+        current_pipe = pipes.ElementPropertiesPipe(internal=internal)
         self.pipeline.add_pipe(current_pipe)
         return self
 
