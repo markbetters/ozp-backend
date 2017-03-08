@@ -65,8 +65,8 @@ class GraphTest(TestCase):
 
         self.assertEqual(str(graph), 'Graph(vertices: 3, edges: 2)')
         # Check Vertex 1
-        self.assertEqual(len(vertex1.get_in_edges('personListing')), 0 )
-        self.assertEqual(len(vertex1.get_out_edges('personListing')), 2 )
+        self.assertEqual(len(vertex1.get_in_edges('personListing')), 0)
+        self.assertEqual(len(vertex1.get_out_edges('personListing')), 2)
 
         # Check Vertex 2
         self.assertEqual(len(vertex2.get_in_edges('personListing')), 1)

@@ -498,7 +498,7 @@ class Graph(object):
         """
         return [self.edges[internal_id] for internal_id in self.edges]
 
-    def add_edge(self, current_id=None, in_vertex_id=None,  out_vertex_id=None, label=None, properties=None):
+    def add_edge(self, current_id=None, in_vertex_id=None, out_vertex_id=None, label=None, properties=None):
         """
         Add edge to graph
         """

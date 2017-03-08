@@ -27,4 +27,3 @@ class GraphTest(TestCase):
         # import pprint
         # print(pprint.pprint(graph.query().V().to_dict(internal=True).to_list()))
         self.assertEqual(str(graph), 'Graph(vertices: 149, edges: 363)')
-        
