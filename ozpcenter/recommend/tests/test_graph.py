@@ -5,7 +5,7 @@ from django.test import TestCase
 
 from ozpcenter.scripts import sample_data_generator as data_gen
 from ozpcenter.recommend.graph import Graph
-#from ozpcenter.recommend.graph_factory import GraphFactory
+# from ozpcenter.recommend.graph_factory import GraphFactory
 
 
 class GraphTest(TestCase):
