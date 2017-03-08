@@ -11,6 +11,8 @@ class Pipe(object):
 
     def __init__(self):
         """
+        Initialize Pipe
+
         Args:
             starts: Start of the Pipe
         """
@@ -27,7 +29,8 @@ class Pipe(object):
             if variable_key not in default_keys:
                 instance_vars[variable_key] = variables[variable_key]
 
-        output = '{}({})'.format(self.__class__.__name__, instance_vars)
+        variables_string = ', '.join(['{}:{}'.format(key, instance_vars[key]) for key in instance_vars])
+        output = '{}({})'.format(self.__class__.__name__, variables_string)
         return output
 
     def set_starts(self, starts):
@@ -82,6 +85,9 @@ class Pipeline(object):
     """
 
     def __init__(self, starts=None, pipes=[]):
+        """
+        Initialize Pipeline
+        """
         self.start_pipe = None
         self.end_pipe = None
 
@@ -106,6 +112,9 @@ class Pipeline(object):
             self.start_pipe.set_starts(starts)
 
     def get_starts(self):
+        """
+        Get start iterable
+        """
         return self.starts
 
     def set_pipes(self):
@@ -120,10 +129,16 @@ class Pipeline(object):
             self.pipes[i].set_starts(self.pipes[i - 1])
 
     def add_pipe(self, iterable):
+        """
+        Add Pipe
+        """
         self.pipes.append(iterable)
         self.set_pipes()
 
     def remove(self):
+        """
+        Remove Pipe
+        """
         raise utils.UnsupportedOperation()
 
     def has_next(self):
@@ -195,4 +210,7 @@ class Pipeline(object):
         return len(self.pipes)
 
     def __str__(self):
-        return str([str(pipe) for pipe in self.pipes])
+        """
+        Pipeline String
+        """
+        return '[{}]'.format(', '.join([str(pipe) for pipe in self.pipes]))
