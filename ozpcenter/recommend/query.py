@@ -2,7 +2,8 @@
 Quering Graph
 """
 from ozpcenter.recommend.utils import Direction
-from ozpcenter.recommend.utils import DictKeyValueIterator
+from ozpcenter.recommend import utils
+
 from ozpcenter.pipe.pipeline import Pipeline
 from ozpcenter.pipe import pipes
 
@@ -25,15 +26,28 @@ class Query(object):
         self.pipeline.add_pipe(pipes.GraphVertexPipe())
 
         if self.pipeline.starts is None:
-            self.pipeline.set_starts(DictKeyValueIterator(self.graph.vertices))
+            self.pipeline.set_starts(utils.DictKeyValueIterator(self.graph.vertices))
 
         return self
 
-    def v(self, vertex_id=None):
+    def v(self, vertex_id, *vertex_ids):
         """
         Get Vertex by internal id
         """
-        self.steps.append('v({}'.format(vertex_id))
+        self.pipeline.add_pipe(pipes.GraphVertexPipe())
+
+        if self.pipeline.starts is None:
+            out_list = []
+
+            if self.graph.vertices.get(vertex_id):
+                out_list.append(self.graph.vertices.get(vertex_id))
+
+            for current_vertex_id in vertex_ids:
+                if self.graph.vertices.get(current_vertex_id):
+                    out_list.append(self.graph.vertices.get(current_vertex_id))
+
+            self.pipeline.set_starts(utils.ListIterator(out_list))
+
         return self
 
     def edge(self, edge_id):
@@ -45,11 +59,19 @@ class Query(object):
     def has(self, key, value):
         pass
 
-    def out(self, edge_label=None, value=None):
+    def out(self, *labels):
         """
         VerticesToVertices
         """
-        current_pipe = pipes.VerticesVerticesPipe(Direction.OUT)
+        current_pipe = pipes.VerticesVerticesPipe(Direction.OUT, labels)
+        self.pipeline.add_pipe(current_pipe)
+        return self
+
+    def inv(self, *labels):
+        """
+        VerticesToVertices
+        """
+        current_pipe = pipes.VerticesVerticesPipe(Direction.IN, labels)
         self.pipeline.add_pipe(current_pipe)
         return self
 

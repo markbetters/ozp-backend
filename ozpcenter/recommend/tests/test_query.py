@@ -18,6 +18,13 @@ class GraphQueryTest(TestCase):
         self.graph.add_vertex('test_label', {'test_field': 2})
         self.graph.add_vertex('test_label', {'test_field': 12, 'time': 'now'})
 
+        self.graph2 = Graph()
+        self.vertex1 = self.graph2.add_vertex('person', {'username': 'first last'}, current_id=10)
+        self.vertex2 = self.graph2.add_vertex('listing', {'title': 'Skyzone1'}, current_id=20)
+        self.vertex3 = self.graph2.add_vertex('listing', {'title': 'Skyzone2'}, current_id=30)
+        self.vertex1.add_edge('personListing', self.vertex2)
+        self.vertex1.add_edge('personListing', self.vertex3)
+
     @classmethod
     def setUpTestData(cls):
         """
@@ -50,4 +57,37 @@ class GraphQueryTest(TestCase):
         all_vertices = query.to_list()
 
         output = [1, 2, 3]
+        self.assertEqual(all_vertices, output)
+
+    def test_graph_query_v_to_list(self):
+        query = self.graph2.query().v(10).id()
+        all_vertices = query.to_list()
+        output = [10]
+        self.assertEqual(all_vertices, output)
+
+        query = self.graph2.query().v(10, 20).id()
+        all_vertices = query.to_list()
+        output = [10, 20]
+        self.assertEqual(all_vertices, output)
+
+    def test_graph_query_v_to_list(self):
+        query = self.graph2.query().v(10).id()
+        all_vertices = query.to_list()
+        output = [10]
+        self.assertEqual(all_vertices, output)
+
+        query = self.graph2.query().v(10, 20).id()
+        all_vertices = query.to_list()
+        output = [10, 20]
+        self.assertEqual(all_vertices, output)
+
+    def test_graph_query_v_out_to_list(self):
+        query = self.graph2.query().v(10).out().id()
+        all_vertices = query.to_list()
+        output = [20, 30]
+        self.assertEqual(all_vertices, output)
+
+        query = self.graph2.query().v(20).out().id()
+        all_vertices = query.to_list()
+        output = []
         self.assertEqual(all_vertices, output)

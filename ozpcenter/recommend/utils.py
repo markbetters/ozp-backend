@@ -22,6 +22,22 @@ class Direction(Enum):
     OUT = 2
     BOTH = 3
 
+from collections import Iterable
+
+def flatten_iterable(input_list, out=None):
+    #print('flatten_iterable: {}, {}'.format(input_list, out))
+    #check a
+    if out is None:
+        #initialize with empty list
+        out = []
+
+    for current_item in input_list:
+        if isinstance(current_item, Iterable) and not isinstance(current_item, str) :
+            flatten_iterable(current_item, out)
+        else:
+            out.append(current_item)
+    return out
+
 
 class GenericIterator(object):
     """
@@ -82,6 +98,22 @@ class ListIterator(GenericIterator):
         TODO: Don't think it works as expected
         """
         return self.count <= self.max_count
+
+    def remove(self):
+        raise UnsupportedOperationException()
+
+
+class EmptyIterator(GenericIterator):
+
+    def next(self):
+        """
+        Return:
+            Vertex or Edge Object
+        """
+        raise FastNoSuchElementException()
+
+    def has_next(self):
+        return False
 
     def remove(self):
         raise UnsupportedOperationException()

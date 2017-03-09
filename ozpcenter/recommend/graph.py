@@ -148,6 +148,8 @@ Start with Vertices (1 or more) to get all the other Vertices connected to it.
 """
 from ozpcenter.recommend.utils import Direction
 from ozpcenter.recommend.utils import DictKeyValueIterator
+from ozpcenter.recommend.utils import ListIterator
+from ozpcenter.recommend import utils
 from ozpcenter.recommend.query import Query
 
 
@@ -186,11 +188,6 @@ class Element(object):
         """
         self.label = input_label
         return self.label
-
-    def load(self, properties):
-        """
-        properties: Dictionary
-        """
 
     def get_properties(self):
         """
@@ -260,7 +257,6 @@ class Vertex(Element):
     An Element is the base class for both Vertex and Edge.
     An Element has an identifier that must be unique to its inheriting classes (Vertex or Edge)
     """
-
     def __init__(self, graph_instance, input_id, label=None, properties=None):
         super().__init__(graph_instance, input_id, label, properties)
         self.in_edges = {}
@@ -269,13 +265,15 @@ class Vertex(Element):
     def __repr__(self):
         return 'Vertex({})'.format(self.label)
 
-    def get_vertices_iterator(self, direction, labels):
-        pass
+    def get_edges_iterator(self, direction, *labels):
+        return ListIterator(self.get_edges(direction, labels))
 
-    def get_edges(self, direction, labels):
+    def get_edges(self, direction, *labels):
         """
 
         """
+        labels = utils.flatten_iterable(labels)
+
         if direction == Direction.OUT:
             return self.get_out_edges(labels)
         elif direction == Direction.IN:
@@ -291,21 +289,48 @@ class Vertex(Element):
 
             return out_list
 
-    def get_in_edges(self, label):
+    def get_in_edges(self, *labels):
         """
         TODO: labels as *arg
         """
-        if not self.in_edges.get(label):
-            return []
-        in_edge_dict = self.in_edges.get(label)
+        labels = utils.flatten_iterable(labels)
+        output_list = []
+        labels_list = []
 
-        return [in_edge_dict[key] for key in in_edge_dict]
+        if not labels:
+            for label in self.in_edges:
+                labels_list.append(label)
+        else:
+            for label in labels:
+                labels_list.append(label)
 
-    def get_out_edges(self, label):
-        if not self.out_edges.get(label):
-            return []
-        out_edges_dict = self.out_edges.get(label)
-        return [out_edges_dict[key] for key in out_edges_dict]
+        for label in labels_list:
+            if self.in_edges.get(label):
+                in_edge_dict = self.in_edges.get(label)
+                for current_edge_key in in_edge_dict:
+                    output_list.append(in_edge_dict[current_edge_key])
+        return output_list
+
+    def get_out_edges(self, *labels):
+        labels = utils.flatten_iterable(labels)
+        print(labels)
+
+        output_list = []
+        labels_list = []
+
+        if not labels:
+            for label in self.out_edges:
+                labels_list.append(label)
+        else:
+            for label in labels:
+                labels_list.append(label)
+
+        for label in labels_list:
+            if self.out_edges.get(label):
+                out_edge_dict = self.out_edges.get(label)
+                for current_edge_key in out_edge_dict:
+                    output_list.append(out_edge_dict[current_edge_key])
+        return output_list
 
     def add_edge(self, label, vertex_instance, properties=None):
         current_edge = self.graph.add_edge(current_id=None,
@@ -344,15 +369,23 @@ class Edge(Element):
     """
     def __init__(self, graph_instance, input_id, label=None, out_vertex=None, in_vertex=None, properties=None):
         super().__init__(graph_instance, input_id, label, properties)
-        self.in_vertex = in_vertex or None
-        self.out_vertex = out_vertex or None
+        self._in_vertex = in_vertex or None
+        self._out_vertex = out_vertex or None
 
     def __repr__(self):
-        return '{}--{}-->{}'.format(self.in_vertex, self.label, self.out_vertex)
+        return '{}--{}-->{}'.format(self._in_vertex, self.label, self._out_vertex)
 
     def link(self, in_vertex, out_vertex):
-        self.in_vertex = in_vertex
-        self.out_vertex = out_vertex
+        self._in_vertex = in_vertex
+        self._out_vertex = out_vertex
+
+    @property
+    def in_vertex(self):
+        return self._in_vertex
+
+    @property
+    def out_vertex(self):
+        return self._out_vertex
 
     def get_vertex(self, direction):
         """
@@ -362,9 +395,9 @@ class Edge(Element):
             direction: Enum Direction
         """
         if direction == Direction.IN:
-            return self.in_vertex
+            return self._in_vertex
         elif direction == Direction.OUT:
-            return self.out_vertex
+            return self._out_vertex
         else:
             raise Exception('Invalid Direction')
 

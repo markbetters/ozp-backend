@@ -1,6 +1,7 @@
 import logging
 
 from ozpcenter.pipe.pipeline import Pipe
+from ozpcenter.recommend import utils
 from ozpcenter.recommend.utils import FastNoSuchElementException
 from plugins_util.plugin_manager import system_has_access_control
 
@@ -10,11 +11,12 @@ logger = logging.getLogger('ozp-center.' + str(__name__))
 
 class VerticesVerticesPipe(Pipe):
 
-    def __init__(self, direction, label=None):
+    def __init__(self, direction, *labels):
         super().__init__()
         # Super
         self.direction = direction
-        self.next_end = None
+        self.labels = labels
+        self.next_end = utils.EmptyIterator()
 
     def process_next_start(self):
         """
@@ -22,10 +24,12 @@ class VerticesVerticesPipe(Pipe):
         """
         while True:
             if self.next_end.has_next():
-                return self.next_end.next()  # Edge
+                current_edge = self.next_end.next()
+                return current_edge.out_vertex  # Edge
             else:
-                self.next_end = self.starts.next().get_vertices_iterator(direction=self.direction,
-                                                                label=self.label)  # Start Vertex
+                current_vertex = self.starts.next()
+                edges_iterator = current_vertex.get_edges_iterator(self.direction, self.labels)
+                self.next_end = edges_iterator
 
 
 class VerticesEdgesPipe(Pipe):
