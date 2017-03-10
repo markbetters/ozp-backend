@@ -28,6 +28,46 @@ class GraphFactory(object):
         return graph
 
     @staticmethod
+    def load_sample_profile_listing_graph():
+        graph = Graph()
+        profile1 = graph.add_vertex('profile', {'username': 'first1 last'}, current_id='p-1')
+        profile2 = graph.add_vertex('profile', {'username': 'first2 last'}, current_id='p-2')
+        profile3 = graph.add_vertex('profile', {'username': 'first3 last'}, current_id='p-3')
+        profile4 = graph.add_vertex('profile', {'username': 'first4 last'}, current_id='p-4')
+        profile5 = graph.add_vertex('profile', {'username': 'first5 last'}, current_id='p-5')
+
+        listing1 = graph.add_vertex('listing', {'title': 'listing1'}, current_id='l-1')
+        listing2 = graph.add_vertex('listing', {'title': 'listing2'}, current_id='l-2')
+        listing3 = graph.add_vertex('listing', {'title': 'listing3'}, current_id='l-3')
+        listing4 = graph.add_vertex('listing', {'title': 'listing4'}, current_id='l-4')
+        listing5 = graph.add_vertex('listing', {'title': 'listing5'}, current_id='l-5')
+        listing6 = graph.add_vertex('listing', {'title': 'listing6'}, current_id='l-6')
+        listing7 = graph.add_vertex('listing', {'title': 'listing7'}, current_id='l-7')
+        listing8 = graph.add_vertex('listing', {'title': 'listing8'}, current_id='l-8')
+
+        profile1.add_edge('bookmarked', listing1)
+        profile1.add_edge('bookmarked', listing2)
+        profile1.add_edge('bookmarked', listing3)
+
+        profile2.add_edge('bookmarked', listing1)
+        profile2.add_edge('bookmarked', listing4)
+        profile2.add_edge('bookmarked', listing5)
+
+        profile3.add_edge('bookmarked', listing1)
+        profile3.add_edge('bookmarked', listing2)
+        profile3.add_edge('bookmarked', listing5)
+        profile3.add_edge('bookmarked', listing6)
+        profile3.add_edge('bookmarked', listing8)
+
+        profile4.add_edge('bookmarked', listing2)
+        profile4.add_edge('bookmarked', listing7)
+
+        profile5.add_edge('bookmarked', listing2)
+        profile5.add_edge('bookmarked', listing3)
+
+        return graph
+
+    @staticmethod
     def load_db_into_graph():
         """
         Load Django Database into graph

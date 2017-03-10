@@ -1,6 +1,7 @@
 import logging
 
 from ozpcenter.pipe.pipeline import Pipe
+from ozpcenter.recommend.utils import Direction
 from ozpcenter.recommend import utils
 from ozpcenter.recommend.utils import FastNoSuchElementException
 from plugins_util.plugin_manager import system_has_access_control
@@ -24,8 +25,17 @@ class VerticesVerticesPipe(Pipe):
         """
         while True:
             if self.next_end.has_next():
-                current_edge = self.next_end.next()
-                return current_edge.out_vertex  # Edge
+                try:
+                    current_edge = self.next_end.next()
+
+                    if self.direction == Direction.OUT:
+                        return current_edge.out_vertex  # Edge
+                    elif self.direction == Direction.IN:
+                        return current_edge.in_vertex
+                    else:
+                        raise Exception('Need to implement')
+                except FastNoSuchElementException:
+                    pass
             else:
                 current_vertex = self.starts.next()
                 edges_iterator = current_vertex.get_edges_iterator(self.direction, self.labels)
@@ -34,16 +44,34 @@ class VerticesVerticesPipe(Pipe):
 
 class VerticesEdgesPipe(Pipe):
 
-    def __init__(self, direction):
+    def __init__(self, direction, *labels):
         super().__init__()
         # Super
         self.direction = direction
+        self.labels = labels
+        self.next_end = utils.EmptyIterator()
 
     def process_next_start(self):
         """
-        Start at Vertex, return Edge
+        Start at Vertex, return Vertex
         """
-        pass
+        while True:
+            if self.next_end.has_next():
+                try:
+                    current_edge = self.next_end.next()
+
+                    if self.direction == Direction.OUT:
+                        return current_edge  # Edge
+                    elif self.direction == Direction.IN:
+                        return current_edge
+                    else:
+                        raise Exception('Need to implement')
+                except FastNoSuchElementException:
+                    pass
+            else:
+                current_vertex = self.starts.next()
+                edges_iterator = current_vertex.get_edges_iterator(self.direction, self.labels)
+                self.next_end = edges_iterator
 
 
 class EdgesVerticesPipe(Pipe):
@@ -119,9 +147,68 @@ class LimitPipe(Pipe):
             if self.count > self.limit_number:
                 raise FastNoSuchElementException()
             else:
-                start = self.starts.next()
+                current_item = self.starts.next()
                 self.count = self.count + 1
-                return start
+                return current_item
+
+
+class DistinctPipe(Pipe):
+
+    def __init__(self):
+        super().__init__()
+        self.items = set()
+
+    def process_next_start(self):
+        """
+        Limit number of items
+        """
+        while True:
+            current_item = self.starts.next()
+
+            if current_item not in self.items:
+                self.items.add(current_item)
+                return current_item
+
+
+class ExcludePipe(Pipe):
+
+    def __init__(self, object_list):
+        super().__init__()
+        self.items = set()
+
+        for current_object in object_list:
+            self.items.add(current_object)
+
+    def process_next_start(self):
+        """
+        Limit number of items
+        """
+        while True:
+            current_item = self.starts.next()
+
+            if current_item not in self.items:
+                return current_item
+
+
+class ExcludeIdsPipe(Pipe):
+
+    def __init__(self, object_list):
+        super().__init__()
+        self.items = set()
+
+        for current_object in object_list:
+            self.items.add(current_object)
+
+    def process_next_start(self):
+        """
+        Limit number of items
+        """
+        while True:
+            current_element = self.starts.next()
+            current_element_id = current_element.id
+
+            if current_element_id not in self.items:
+                return current_element
 
 
 class GraphVertexPipe(Pipe):

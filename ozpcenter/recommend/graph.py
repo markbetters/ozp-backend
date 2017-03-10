@@ -151,6 +151,7 @@ from ozpcenter.recommend.utils import DictKeyValueIterator
 from ozpcenter.recommend.utils import ListIterator
 from ozpcenter.recommend import utils
 from ozpcenter.recommend.query import Query
+from ozpcenter.recommend.algorithms import GraphAlgoritms
 
 
 class Element(object):
@@ -251,6 +252,14 @@ class Element(object):
         else:
             self.graph.remove_edge(self)
 
+    def __hash__(self):
+        return hash(self.id)
+
+    def __eq__(self, other):
+        if isinstance(other, self.__class__):
+            return self.id == other.id
+        else:
+            return False
 
 class Vertex(Element):
     """
@@ -291,7 +300,7 @@ class Vertex(Element):
 
     def get_in_edges(self, *labels):
         """
-        TODO: labels as *arg
+        Get in edges
         """
         labels = utils.flatten_iterable(labels)
         output_list = []
@@ -312,9 +321,10 @@ class Vertex(Element):
         return output_list
 
     def get_out_edges(self, *labels):
+        """
+        Get out edges
+        """
         labels = utils.flatten_iterable(labels)
-        print(labels)
-
         output_list = []
         labels_list = []
 
@@ -585,3 +595,6 @@ class Graph(object):
         Make a Query object to query graph
         """
         return Query(self)
+
+    def algo(self):
+        return GraphAlgoritms(self)

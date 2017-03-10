@@ -67,7 +67,7 @@ class Query(object):
         self.pipeline.add_pipe(current_pipe)
         return self
 
-    def inv(self, *labels):
+    def in_(self, *labels):
         """
         VerticesToVertices
         """
@@ -83,11 +83,27 @@ class Query(object):
         self.steps.append('outE({},{}'.format(edge_label, value))
         return self
 
+    def distinct(self):
+        """
+        distinct
+        """
+        current_pipe = pipes.DistinctPipe()
+        self.pipeline.add_pipe(current_pipe)
+        return self
+
     def id(self):
         """
         Get internal id of Elements
         """
         current_pipe = pipes.ElementIdPipe()
+        self.pipeline.add_pipe(current_pipe)
+        return self
+
+    def exclude_ids(self, id_list):
+        """
+        Get internal id of Elements
+        """
+        current_pipe = pipes.ExcludeIdsPipe(id_list)
         self.pipeline.add_pipe(current_pipe)
         return self
 
