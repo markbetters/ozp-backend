@@ -71,17 +71,6 @@ class GraphQueryTest(TestCase):
         output = [10, 20]
         self.assertEqual(all_vertices, output)
 
-    def test_graph_query_v_to_list(self):
-        query = self.graph2.query().v(10).id()
-        all_vertices = query.to_list()
-        output = [10]
-        self.assertEqual(all_vertices, output)
-
-        query = self.graph2.query().v(10, 20).id()
-        all_vertices = query.to_list()
-        output = [10, 20]
-        self.assertEqual(all_vertices, output)
-
     def test_graph_query_v_out_to_list(self):
         query = self.graph2.query().v(10).out().id()
         all_vertices = query.to_list()

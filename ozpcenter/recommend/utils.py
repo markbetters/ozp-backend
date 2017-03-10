@@ -24,15 +24,16 @@ class Direction(Enum):
 
 from collections import Iterable
 
+
 def flatten_iterable(input_list, out=None):
-    #print('flatten_iterable: {}, {}'.format(input_list, out))
-    #check a
+    # print('flatten_iterable: {}, {}'.format(input_list, out))
+    # check a
     if out is None:
-        #initialize with empty list
+        # initialize with empty list
         out = []
 
     for current_item in input_list:
-        if isinstance(current_item, Iterable) and not isinstance(current_item, str) :
+        if isinstance(current_item, Iterable) and not isinstance(current_item, str):
             flatten_iterable(current_item, out)
         else:
             out.append(current_item)
