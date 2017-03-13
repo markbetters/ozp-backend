@@ -244,7 +244,7 @@ class CustomHybridRecommender(Recommender):
     Requirements:
     - Recommendations should be explainable and believable
     - Must respect private apps
-    - Does not have to repectborative filtering)
+    - Does not have to repect security_marking while saving to db
     """
 
     def initiate(self):

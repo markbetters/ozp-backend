@@ -101,6 +101,21 @@ class CapitalizePipe(Pipe):
         return start
 
 
+class SideEffectPipe(Pipe):
+
+    def __init__(self, function):
+        super().__init__()
+        self.function = function
+
+    def process_next_start(self):
+        """
+        CapitalizePipe each string object
+        """
+        start = self.starts.next()
+        self.function(start)
+        return start
+
+
 class LenPipe(Pipe):
 
     def __init__(self):

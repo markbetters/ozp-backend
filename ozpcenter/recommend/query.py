@@ -1,18 +1,15 @@
 """
 Quering Graph
 """
-from ozpcenter.recommend.utils import Direction
-from ozpcenter.recommend import utils
-
-from ozpcenter.pipe.pipeline import Pipeline
 from ozpcenter.pipe import pipes
+from ozpcenter.pipe.pipeline import Pipeline
+from ozpcenter.recommend import utils
+from ozpcenter.recommend.utils import Direction
 
 
 class Query(object):
     """
     Query Object Compiler/ Pipeline
-
-    graph.query().V('profile_id', 4).out()
     """
 
     def __init__(self, graph):
@@ -78,9 +75,7 @@ class Query(object):
     def outE(self, edge_label=None, value=None):
         """
         VerticesToEdges
-
         """
-        self.steps.append('outE({},{}'.format(edge_label, value))
         return self
 
     def distinct(self):
@@ -115,13 +110,33 @@ class Query(object):
         self.pipeline.add_pipe(current_pipe)
         return self
 
+    def side_effect(self, function):
+        """
+        Limit number Elements
+        """
+        current_pipe = pipes.SideEffectPipe(function)
+        self.pipeline.add_pipe(current_pipe)
+        return self
+
     def to_dict(self, internal=False):
         """
-        Convert objects (Elements into )
+        Convert Element into Dictionary
         """
         current_pipe = pipes.ElementPropertiesPipe(internal=internal)
         self.pipeline.add_pipe(current_pipe)
         return self
+
+    def has_next(self):
+        """
+        Give results in a list of objects
+        """
+        return self.pipeline.has_next()
+
+    def next(self):
+        """
+        Give results in a list of objects
+        """
+        return self.pipeline.next()
 
     def to_list(self):
         """

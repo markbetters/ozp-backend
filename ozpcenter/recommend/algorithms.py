@@ -1,25 +1,6 @@
 """
 # Algorithms using query
 
-TODO: Figure out of MEASURING MEANINGFUL PROFILE-LISTING CONNECTIONS
-https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations-bucket-significantterms-aggregation.html
-aggregation that returns interesting or unusual occurrences of terms in a set
-"measures the kind of statistically significant relationships we need to deliver meaningful recommendations"
-
-Might be able to figure out how to implement JLHScore/ChiSquare Scoring to python
-https://github.com/elastic/elasticsearch/blob/master/core/src/main/java/org/elasticsearch/search/aggregations/bucket/significant/heuristics/JLHScore.java
-
-JLHScore:
-Calculates the significance of a term in a sample against a background of
-normal distributions by comparing the changes in frequency.
-
-ChiSquare:
-"Information Retrieval", Manning et al., Eq. 13.19
-
-Google Normalized Distance:
-Calculates Google Normalized Distance, as described in "The Google Similarity Distance", Cilibrasi and Vitanyi, 2007
-link: http://arxiv.org/pdf/cs/0412098v3.pdf
-
 ## Collaborative filtering based on graph database
 
 ### Structure
@@ -50,21 +31,8 @@ Connections:
     Agency <--agency--          Profile --bookmarked--> Listing --listingCategory--> Category
                                                                 --listingAgency--> Agency
 
-# Algorithms
-# Algorithm 1:  Getting Similar Listings via looking at other Profiles bookmarks
 
-graph.v('profile', '1')  # Select 'profile 1' as start
-    .out('bookmarked') # Go to all Listings that 'profile 1' has bookmarked
-    .in('bookmarked')  # Go to all Profiles that bookmarked the same listings as 'profile 1'
-    .filter(profile!=1)  # Filter out 'profile 1' from profile_username
-    .out('bookmarked') # Go to all Listings that other people has bookmarked (recommendations)
-    # Filter out all listings that 'profile 1' has bookmarked
-    # Group by Listings with Count (recommendation weight) and sort by count DSC
-
-Additions to improve relevance (usefull-ness to profile):
-For the results, sort by Category, then Agency
-
-# Algorithm 2:  Getting Most bookmarked listings across all profiles
+# Algorithm: Getting Most bookmarked listings across all profiles
 
 graph.v('profile')  # Getting all Profiles
     .out('bookmarked') # Go to all Listings that all profiles has bookmarked
@@ -112,14 +80,35 @@ Listing 7 - Category 3
 Listing 8 - Category 1
 
 # Issues
-# Non-useful listings
+## Non-useful listings
 Solution - Also Use listing categories to make recommendation for relevant to user
 
 # New User Problem
 We might have the New User Problem,
 The way to solve this to get the results of a different recommendation engine (CustomHybridRecommender - GlobalBaseline)
 recommendations = CustomHybridRecommender + GraphCollaborativeRecommender
+
+# Other Algorithms
+TODO: Figure out of MEASURING MEANINGFUL PROFILE-LISTING CONNECTIONS
+https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations-bucket-significantterms-aggregation.html
+aggregation that returns interesting or unusual occurrences of terms in a set
+"measures the kind of statistically significant relationships we need to deliver meaningful recommendations"
+
+Might be able to figure out how to implement JLHScore/ChiSquare Scoring to python
+https://github.com/elastic/elasticsearch/blob/master/core/src/main/java/org/elasticsearch/search/aggregations/bucket/significant/heuristics/JLHScore.java
+
+JLHScore:
+Calculates the significance of a term in a sample against a background of
+normal distributions by comparing the changes in frequency.
+
+ChiSquare:
+"Information Retrieval", Manning et al., Eq. 13.19
+
+Google Normalized Distance:
+Calculates Google Normalized Distance, as described in "The Google Similarity Distance", Cilibrasi and Vitanyi, 2007
+link: http://arxiv.org/pdf/cs/0412098v3.pdf
 """
+from ozpcenter.recommend import utils
 
 
 class GraphAlgoritms(object):
@@ -129,7 +118,8 @@ class GraphAlgoritms(object):
 
     def recommend_listings_for_profile(self, profile_id):
         """
-        Collaborative filtering
+        Collaborative filtering:
+        Getting Similar Listings via looking at other Profiles bookmarks
 
         Algorithm Steps:
             - Select 'profile 1' as start
@@ -140,34 +130,36 @@ class GraphAlgoritms(object):
             - Filter out all listings that 'profile 1' has bookmarked
             - Group by Listings with Count (recommendation weight) and sort by count DSC
 
-        Additions to improve relevance (usefull-ness to profile):
+        TODO: Additions to improve relevance (usefull-ness to profile):
         For the results, sort by Category, then Agency
 
         Returns:
-            [(listing_id, recommendation weight), ....]
+            [(listing_id, recommendation weight),
+             (listing_id, recommendation weight) ....]
         """
         profile_ids = self.graph.query().v(profile_id).id().to_list()  # Get target profile id
-        profile_listing_ids = self.graph.query().v(profile_id).out('bookmarked').id().to_list()  # Get listings of target profile ids
 
-        # Out to listings
-        # In to the profiles
+        profile_listing_categories_ids = []
+
+        profile_listing_ids = (self.graph.query()
+                                   .v(profile_id)
+                                   .out('bookmarked')
+                                   .side_effect(lambda current_vertex:
+                                                [profile_listing_categories_ids.append(current) for current in
+                                                 current_vertex.query().out('listingCategory').id().to_list()])
+                                   .id().to_list())  # Get listings of target profile ids
+
         other_profiles_query = (self.graph.query()
                                     .v(profile_id)  # Select Start Profile
                                     .out('bookmarked')  # Go to all Listings that 'Start Profile' has bookmarked
                                     .in_('bookmarked')  # Go to all Profiles that bookmarked the same listings as 'Start Profile'
                                     .distinct().exclude_ids(profile_ids)  # Exclude 'Start Profile'
                                     .out('bookmarked')  # Go to all Listings that other people has bookmarked (recommendations)
-                                    .exclude_ids(profile_listing_ids).id()
+                                    .exclude_ids(profile_listing_ids).id()  # Filter out all listings that 'Start Profile' has bookmarked
                                 )
-        other_profiles_query_list = other_profiles_query.to_list()
 
-        # Group by Listing by count
-        group_by_id_count = {}
-        for listing_id in other_profiles_query_list:
-            if listing_id in group_by_id_count:
-                group_by_id_count[listing_id] = group_by_id_count[listing_id] + 1
-            else:
-                group_by_id_count[listing_id] = 1
+        other_profiles_query_list = other_profiles_query.to_list()
+        group_by_id_count = utils.list_to_group_count(other_profiles_query_list)
 
         # Group by Listings with Count (recommendation weight) and sort by count DSC
         sorted_listing_ids = sorted(group_by_id_count.items(), key=lambda x: (x[1], x[0]), reverse=True)

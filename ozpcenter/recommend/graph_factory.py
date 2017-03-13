@@ -14,6 +14,7 @@ class GraphFactory(object):
     def create_graph_template():
         graph = Graph()
         graph.add_vertex()
+
         return graph
 
     @staticmethod
@@ -44,6 +45,19 @@ class GraphFactory(object):
         listing6 = graph.add_vertex('listing', {'title': 'listing6'}, current_id='l-6')
         listing7 = graph.add_vertex('listing', {'title': 'listing7'}, current_id='l-7')
         listing8 = graph.add_vertex('listing', {'title': 'listing8'}, current_id='l-8')
+
+        category1 = graph.add_vertex('category', {'title': 'category1'}, current_id='c-1')
+        category2 = graph.add_vertex('category', {'title': 'category2'}, current_id='c-2')
+
+        listing1.add_edge('listingCategory', category1)
+        listing2.add_edge('listingCategory', category2)
+        listing3.add_edge('listingCategory', category1)
+        listing4.add_edge('listingCategory', category2)
+
+        listing5.add_edge('listingCategory', category1)
+        listing6.add_edge('listingCategory', category2)
+        listing7.add_edge('listingCategory', category1)
+        listing8.add_edge('listingCategory', category2)
 
         profile1.add_edge('bookmarked', listing1)
         profile1.add_edge('bookmarked', listing2)
@@ -107,15 +121,16 @@ class GraphFactory(object):
                     'is_featured': listing.is_featured,
                     'approval_status': listing.approval_status}
 
-            added_vertex = graph.add_vertex('listing', data, current_id='l-{}'.format(listing.pk))
+            if listing.is_enabled and not listing.is_deleted and listing.approval_status == models.Listing.APPROVED:
+                added_vertex = graph.add_vertex('listing', data, current_id='l-{}'.format(listing.pk))
 
-            # One Agency per listing
-            current_agency = listing.agency
-            added_vertex.add_edge('listingAgency', graph.get_vertex('a-{}'.format(current_agency.pk)))
+                # One Agency per listing
+                current_agency = listing.agency
+                added_vertex.add_edge('listingAgency', graph.get_vertex('a-{}'.format(current_agency.pk)))
 
-            # Many Categories per listing
-            for current_category in listing.categories.all():
-                added_vertex.add_edge('listingCategory', graph.get_vertex('c-{}'.format(current_category.pk)))
+                # Many Categories per listing
+                for current_category in listing.categories.all():
+                    added_vertex.add_edge('listingCategory', graph.get_vertex('c-{}'.format(current_category.pk)))
 
         for profile in models.Profile.objects.all():
             data = {'username': profile.user.username,

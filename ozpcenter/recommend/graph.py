@@ -2,7 +2,6 @@
 # Memory Graph Implementation for Recommendation engine
 
 # Usage
-# TODO Convert into python
 graph = Graph()
 
 graph.create_vertex('person', {name: 'Rachael'})
@@ -13,20 +12,17 @@ graph.create_vertex('person', {name: 'Donovan'})
 graph.query().V('person').filter({name__ilike: 'ae'}).to_list()
 
 # Based on
-https://en.wikipedia.org/wiki/Graph_theory
 https://github.com/keithwhor/UnitGraph
-https://medium.com/@keithwhor/using-graph-theory-to-build-a-simple-recommendation-engine-in-javascript-ec43394b35a3#.iocsamn74
-http://tinkerpop.apache.org/javadocs/3.2.2/core/org/apache/tinkerpop/gremlin/structure/Element.html
+https://en.wikipedia.org/wiki/Graph_theory
+http://opensourceconnections.com/blog/2016/10/05/elastic-graph-recommendor/
 http://www.objectivity.com/building-a-recommendation-engine-using-a-graph-database/
 https://linkurio.us/using-neo4j-to-build-a-recommendation-engine-based-on-collaborative-filtering/
-http://opensourceconnections.com/blog/2016/10/05/elastic-graph-recommendor/
+http://tinkerpop.apache.org/javadocs/3.2.2/core/org/apache/tinkerpop/gremlin/structure/Element.html
+https://medium.com/@keithwhor/using-graph-theory-to-build-a-simple-recommendation-engine-in-javascript-ec43394b35a3#.iocsamn74
 """
-from ozpcenter.recommend.utils import Direction
-from ozpcenter.recommend.utils import DictKeyValueIterator
-from ozpcenter.recommend.utils import ListIterator
 from ozpcenter.recommend import utils
-from ozpcenter.recommend.query import Query
 from ozpcenter.recommend.algorithms import GraphAlgoritms
+from ozpcenter.recommend.query import Query
 
 
 class Element(object):
@@ -152,8 +148,11 @@ class Vertex(Element):
     def __repr__(self):
         return 'Vertex({})'.format(self.label)
 
+    def query(self):
+        return Query(self.graph).v(self.id)
+
     def get_edges_iterator(self, direction, *labels):
-        return ListIterator(self.get_edges(direction, labels))
+        return utils.ListIterator(self.get_edges(direction, labels))
 
     def get_edges(self, direction, *labels):
         """
@@ -161,9 +160,9 @@ class Vertex(Element):
         """
         labels = utils.flatten_iterable(labels)
 
-        if direction == Direction.OUT:
+        if direction == utils.Direction.OUT:
             return self.get_out_edges(labels)
-        elif direction == Direction.IN:
+        elif direction == utils.Direction.IN:
             return self.get_in_edges(labels)
         else:
             out_list = []
@@ -283,9 +282,9 @@ class Edge(Element):
         Arg:
             direction: Enum Direction
         """
-        if direction == Direction.IN:
+        if direction == utils.Direction.IN:
             return self._in_vertex
-        elif direction == Direction.OUT:
+        elif direction == utils.Direction.OUT:
             return self._out_vertex
         else:
             raise Exception('Invalid Direction')
@@ -367,7 +366,7 @@ class Graph(object):
         key: the label to filter
         value: the value to filter
         """
-        return DictKeyValueIterator(self.vertices)
+        return utils.DictKeyValueIterator(self.vertices)
 
     def add_vertex(self, label=None, properties=None, current_id=None):
         """

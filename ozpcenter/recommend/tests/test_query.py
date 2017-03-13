@@ -84,7 +84,7 @@ class GraphQueryTest(TestCase):
 
     def test_graph_sample_profile_listing_in(self):
         graph = GraphFactory.load_sample_profile_listing_graph()
-        self.assertEqual(str(graph), 'Graph(vertices: 13, edges: 15)')
+        self.assertEqual(str(graph), 'Graph(vertices: 15, edges: 23)')
 
         query_results = graph.query().v('l-1').id().to_list()
         output = ['l-1']
@@ -98,9 +98,42 @@ class GraphQueryTest(TestCase):
         output = ['l-1', 'l-2', 'l-3']
         self.assertEqual(query_results, output)
 
+    def test_graph_sample_profile_listing_categories(self):
+        graph = GraphFactory.load_sample_profile_listing_graph()
+        self.assertEqual(str(graph), 'Graph(vertices: 15, edges: 23)')
+
+        query_results = (graph.query()
+                         .v('p-1')  # Profile
+                         .out('bookmarked')  # Listing
+                         .out('listingCategory')
+                         .id().to_list())  # Get listings of target profile ids
+
+        expected_categories = ['c-1', 'c-2', 'c-1']
+
+        self.assertEqual(expected_categories, query_results)
+
+    def test_graph_sample_profile_listing_side_effect(self):
+        graph = GraphFactory.load_sample_profile_listing_graph()
+        self.assertEqual(str(graph), 'Graph(vertices: 15, edges: 23)')
+
+        profile_listing_categories_ids = []
+        query_results = (graph.query()
+                              .v('p-1')
+                              .out('bookmarked')
+                              .side_effect(lambda current_vertex:
+                                           [profile_listing_categories_ids.append(current) for current in
+                                            current_vertex.query().out('listingCategory').id().to_list()])
+                              .id().to_list())  # Get listings of target profile ids
+
+        expected_categories = ['c-1', 'c-2', 'c-1']
+        expected_listing = ['l-1', 'l-2', 'l-3']
+
+        self.assertEqual(expected_categories, profile_listing_categories_ids)
+        self.assertEqual(expected_listing, query_results)
+
     def test_graph_sample_profile_listing(self):
         graph = GraphFactory.load_sample_profile_listing_graph()
-        self.assertEqual(str(graph), 'Graph(vertices: 13, edges: 15)')
+        self.assertEqual(str(graph), 'Graph(vertices: 15, edges: 23)')
 
         query_results = graph.query().v('p-1').id().to_list()
         output = ['p-1']

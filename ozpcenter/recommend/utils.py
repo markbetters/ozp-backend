@@ -4,6 +4,7 @@ Contains Math Functions for recommendations
 Exception
 """
 from enum import Enum
+from collections import Iterable
 
 
 class FastNoSuchElementException(Exception):
@@ -22,7 +23,19 @@ class Direction(Enum):
     OUT = 2
     BOTH = 3
 
-from collections import Iterable
+
+def list_to_group_count(input_list):
+    """
+    List to item occurrences count dictionary
+    """
+    group_count = {}
+    for input_item in input_list:
+        if input_item in group_count:
+            group_count[input_item] = group_count[input_item] + 1
+        else:
+            group_count[input_item] = 1
+
+    return group_count
 
 
 def flatten_iterable(input_list, out=None):
