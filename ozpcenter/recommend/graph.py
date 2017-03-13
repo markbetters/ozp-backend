@@ -1,115 +1,5 @@
 """
 # Memory Graph Implementation for Recommendation engine
-Collaborative filtering based on graph database
-
-TODO: Figure out of MEASURING MEANINGFUL PROFILE-LISTING CONNECTIONS
-https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations-bucket-significantterms-aggregation.html
-aggregation that returns interesting or unusual occurrences of terms in a set
-"measures the kind of statistically significant relationships we need to deliver meaningful recommendations"
-
-Might be able to figure out how to implement JLHScore/ChiSquare Scoring to python
-https://github.com/elastic/elasticsearch/blob/master/core/src/main/java/org/elasticsearch/search/aggregations/bucket/significant/heuristics/JLHScore.java
-
-JLHScore:
-Calculates the significance of a term in a sample against a background of
-normal distributions by comparing the changes in frequency.
-
-ChiSquare:
-"Information Retrieval", Manning et al., Eq. 13.19
-
-Google Normalized Distance:
-Calculates Google Normalized Distance, as described in "The Google Similarity Distance", Cilibrasi and Vitanyi, 2007
-link: http://arxiv.org/pdf/cs/0412098v3.pdf
-
-# Structure
-Vertex Types:
-Agency
-    short_name
-
-Profile
-    profile_id
-    username
-    role: APPS_MALL_STEWARD > ORG_STEWARD > USER
-
-Listing
-    listing_id
-    is_featured
-    is_private
-    total_reviews
-    avg_rate
-
-Category
-    title
-
-Include BookmarkedFolders ?
-Include Review ?
-
-Connections:
-    Agency <--stewardedAgency--
-    Agency <--agency--          Profile --bookmarked--> Listing --listingCategory--> Category
-                                                                --listingAgency--> Agency
-
-# Algorithms
-# Algorithm 1:  Getting Similar Listings via looking at other Profiles bookmarks
-
-graph.v('profile', '1')  # Select 'profile 1' as start
-    .out('bookmarked') # Go to all Listings that 'profile 1' has bookmarked
-    .in('bookmarked')  # Go to all Profiles that bookmarked the same listings as 'profile 1'
-    .filter(profile!=1)  # Filter out 'profile 1' from profile_username
-    .out('bookmarked') # Go to all Listings that other people has bookmarked (recommendations)
-    # Filter out all listings that 'profile 1' has bookmarked
-    # Group by Listings with Count (recommendation weight) and sort by count DSC
-
-Additions to improve relevance (usefull-ness to profile):
-For the results, sort by Category, then Agency
-
-# Algorithm 2:  Getting Most bookmarked listings across all profiles
-
-graph.v('profile')  # Getting all Profiles
-    .out('bookmarked') # Go to all Listings that all profiles has bookmarked
-    # Group by Listings with Count (recommendation weight) and sort by count DSC
-
-# Example Graph
-                                                 +------------------+
-                                                 |                  v
-                                                 |
-                                                 |              +----------+
-                                                 |              |Listing 4 |
-                                          +---------+           +----------+
-                                         ++Profile 2+-------+
-                                         +----------+       |
-                      +----------+       |                  |
-                      |Listing 1 |  <-^--+           +------->  +----------+
-           +------->  +----------+    |              |          |Listing 5 |
-           |                          |   +----------+          +----------+
-           |                          +---+Profile 3+---+
-           |                             +----------+   |
-   +---------+        +----------+ <-----+              |
-   |Profile 1+------> |Listing 2 |     |                |       +----------+
-   +---------+        +----------+     |                +-----> |Listing 6 |
-           |                           +------------+   |       +----------+
-           |                           |  |Profile 4+-------+
-           |                           |  +---------+   |   |
-           |          +----------+     |                |   |
-           +------->  |Listing 3 |     |                |   |   +----------+
-                      +----------+     |                |   +-> |Listing 7 |
-                             ^         |  +---------+   |       +----------+
-                             |         +--+Profile 5|   |
-                             +----------------------+   |
-                                                        |
-                                                        |       +----------+
-                                                        +---->  |Listing 8 |
-                                                                +----------+
-Listing Categories:
-Listing 1 - Category 1
-Listing 2 - Category 1
-Listing 3 - Category 2
-Listing 4 - Category 2
-Listing 5 - Category 2
-Listing 6 - Category 3
-Listing 7 - Category 3
-Listing 8 - Category 1
-
 
 # Usage
 # TODO Convert into python
@@ -122,17 +12,6 @@ graph.create_vertex('person', {name: 'Donovan'})
 
 graph.query().V('person').filter({name__ilike: 'ae'}).to_list()
 
-
-# Issues
-# Non-useful listings
-Solution - Also Use listing categories to make recommendation for relevant to user
-
-# New User Problem
-We might have the New User Problem,
-The way to solve this to get the results of a different recommendation engine (CustomHybridRecommender - GlobalBaseline)
-recommendations = CustomHybridRecommender + GraphCollaborativeRecommender
-
-
 # Based on
 https://en.wikipedia.org/wiki/Graph_theory
 https://github.com/keithwhor/UnitGraph
@@ -141,10 +20,6 @@ http://tinkerpop.apache.org/javadocs/3.2.2/core/org/apache/tinkerpop/gremlin/str
 http://www.objectivity.com/building-a-recommendation-engine-using-a-graph-database/
 https://linkurio.us/using-neo4j-to-build-a-recommendation-engine-based-on-collaborative-filtering/
 http://opensourceconnections.com/blog/2016/10/05/elastic-graph-recommendor/
-
-# Lazy Loading Pipe Query System:
-# VerticesVerticesPipe
-Start with Vertices (1 or more) to get all the other Vertices connected to it.
 """
 from ozpcenter.recommend.utils import Direction
 from ozpcenter.recommend.utils import DictKeyValueIterator

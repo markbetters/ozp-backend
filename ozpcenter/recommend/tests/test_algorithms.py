@@ -27,5 +27,6 @@ class GraphTest(TestCase):
 
         results = graph.algo().recommend_listings_for_profile('p-1')
 
-        output = ['l-4', 'l-5', 'l-6', 'l-8', 'l-7']
+        output = [('l-5', 2), ('l-8', 1), ('l-7', 1), ('l-6', 1), ('l-4', 1)]
+
         self.assertEqual(results, output)
