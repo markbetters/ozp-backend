@@ -1,118 +1,7 @@
 """
 # Memory Graph Implementation for Recommendation engine
-Collaborative filtering based on graph database
-
-TODO: Figure out of MEASURING MEANINGFUL PROFILE-LISTING CONNECTIONS
-https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations-bucket-significantterms-aggregation.html
-aggregation that returns interesting or unusual occurrences of terms in a set
-"measures the kind of statistically significant relationships we need to deliver meaningful recommendations"
-
-Might be able to figure out how to implement JLHScore/ChiSquare Scoring to python
-https://github.com/elastic/elasticsearch/blob/master/core/src/main/java/org/elasticsearch/search/aggregations/bucket/significant/heuristics/JLHScore.java
-
-JLHScore:
-Calculates the significance of a term in a sample against a background of
-normal distributions by comparing the changes in frequency.
-
-ChiSquare:
-"Information Retrieval", Manning et al., Eq. 13.19
-
-Google Normalized Distance:
-Calculates Google Normalized Distance, as described in "The Google Similarity Distance", Cilibrasi and Vitanyi, 2007
-link: http://arxiv.org/pdf/cs/0412098v3.pdf
-
-# Structure
-Vertex Types:
-Agency
-    short_name
-
-Profile
-    profile_id
-    username
-    role: APPS_MALL_STEWARD > ORG_STEWARD > USER
-
-Listing
-    listing_id
-    is_featured
-    is_private
-    total_reviews
-    avg_rate
-
-Category
-    title
-
-Include BookmarkedFolders ?
-Include Review ?
-
-Connections:
-    Agency <--stewardedAgency--
-    Agency <--agency--          Profile --bookmarked--> Listing --listingCategory--> Category
-                                                                --listingAgency--> Agency
-
-# Algorithms
-# Algorithm 1:  Getting Similar Listings via looking at other Profiles bookmarks
-
-graph.v('profile', '1')  # Select 'profile 1' as start
-    .out('bookmarked') # Go to all Listings that 'profile 1' has bookmarked
-    .in('bookmarked')  # Go to all Profiles that bookmarked the same listings as 'profile 1'
-    .filter(profile!=1)  # Filter out 'profile 1' from profile_username
-    .out('bookmarked') # Go to all Listings that other people has bookmarked (recommendations)
-    # Filter out all listings that 'profile 1' has bookmarked
-    # Group by Listings with Count (recommendation weight) and sort by count DSC
-
-Additions to improve relevance (usefull-ness to profile):
-For the results, sort by Category, then Agency
-
-# Algorithm 2:  Getting Most bookmarked listings across all profiles
-
-graph.v('profile')  # Getting all Profiles
-    .out('bookmarked') # Go to all Listings that all profiles has bookmarked
-    # Group by Listings with Count (recommendation weight) and sort by count DSC
-
-# Example Graph
-                                                 +------------------+
-                                                 |                  v
-                                                 |
-                                                 |              +----------+
-                                                 |              |Listing 4 |
-                                          +---------+           +----------+
-                                         ++Profile 2+-------+
-                                         +----------+       |
-                      +----------+       |                  |
-                      |Listing 1 |  <-^--+           +------->  +----------+
-           +------->  +----------+    |              |          |Listing 5 |
-           |                          |   +----------+          +----------+
-           |                          +---+Profile 3+---+
-           |                             +----------+   |
-   +---------+        +----------+ <-----+              |
-   |Profile 1+------> |Listing 2 |     |                |       +----------+
-   +---------+        +----------+     |                +-----> |Listing 6 |
-           |                           +------------+   |       +----------+
-           |                           |  |Profile 4+-------+
-           |                           |  +---------+   |   |
-           |          +----------+     |                |   |
-           +------->  |Listing 3 |     |                |   |   +----------+
-                      +----------+     |                |   +-> |Listing 7 |
-                             ^         |  +---------+   |       +----------+
-                             |         +--+Profile 5|   |
-                             +----------------------+   |
-                                                        |
-                                                        |       +----------+
-                                                        +---->  |Listing 8 |
-                                                                +----------+
-Listing Categories:
-Listing 1 - Category 1
-Listing 2 - Category 1
-Listing 3 - Category 2
-Listing 4 - Category 2
-Listing 5 - Category 2
-Listing 6 - Category 3
-Listing 7 - Category 3
-Listing 8 - Category 1
-
 
 # Usage
-# TODO Convert into python
 graph = Graph()
 
 graph.create_vertex('person', {name: 'Rachael'})
@@ -122,32 +11,17 @@ graph.create_vertex('person', {name: 'Donovan'})
 
 graph.query().V('person').filter({name__ilike: 'ae'}).to_list()
 
-
-# Issues
-# Non-useful listings
-Solution - Also Use listing categories to make recommendation for relevant to user
-
-# New User Problem
-We might have the New User Problem,
-The way to solve this to get the results of a different recommendation engine (CustomHybridRecommender - GlobalBaseline)
-recommendations = CustomHybridRecommender + GraphCollaborativeRecommender
-
-
 # Based on
-https://en.wikipedia.org/wiki/Graph_theory
 https://github.com/keithwhor/UnitGraph
-https://medium.com/@keithwhor/using-graph-theory-to-build-a-simple-recommendation-engine-in-javascript-ec43394b35a3#.iocsamn74
-http://tinkerpop.apache.org/javadocs/3.2.2/core/org/apache/tinkerpop/gremlin/structure/Element.html
+https://en.wikipedia.org/wiki/Graph_theory
+http://opensourceconnections.com/blog/2016/10/05/elastic-graph-recommendor/
 http://www.objectivity.com/building-a-recommendation-engine-using-a-graph-database/
 https://linkurio.us/using-neo4j-to-build-a-recommendation-engine-based-on-collaborative-filtering/
-http://opensourceconnections.com/blog/2016/10/05/elastic-graph-recommendor/
-
-# Lazy Loading Pipe Query System:
-# VerticesVerticesPipe
-Start with Vertices (1 or more) to get all the other Vertices connected to it.
+http://tinkerpop.apache.org/javadocs/3.2.2/core/org/apache/tinkerpop/gremlin/structure/Element.html
+https://medium.com/@keithwhor/using-graph-theory-to-build-a-simple-recommendation-engine-in-javascript-ec43394b35a3#.iocsamn74
 """
-from ozpcenter.recommend.utils import Direction
-from ozpcenter.recommend.utils import DictKeyValueIterator
+from ozpcenter.recommend import utils
+from ozpcenter.recommend.algorithms import GraphAlgoritms
 from ozpcenter.recommend.query import Query
 
 
@@ -157,6 +31,7 @@ class Element(object):
     An Element has an identifier that must be unique to its inheriting classes (Vertex or Edge)
     An Element can maintain a collection of Property objects.
     """
+
     def __init__(self, graph_instance, input_id, label=None, properties=None):
         self.graph = graph_instance
         self.label = label
@@ -186,11 +61,6 @@ class Element(object):
         """
         self.label = input_label
         return self.label
-
-    def load(self, properties):
-        """
-        properties: Dictionary
-        """
 
     def get_properties(self):
         """
@@ -254,6 +124,15 @@ class Element(object):
         else:
             self.graph.remove_edge(self)
 
+    def __hash__(self):
+        return hash(self.id)
+
+    def __eq__(self, other):
+        if isinstance(other, self.__class__):
+            return self.id == other.id
+        else:
+            return False
+
 
 class Vertex(Element):
     """
@@ -269,16 +148,21 @@ class Vertex(Element):
     def __repr__(self):
         return 'Vertex({})'.format(self.label)
 
-    def get_vertices_iterator(self, direction, labels):
-        pass
+    def query(self):
+        return Query(self.graph).v(self.id)
 
-    def get_edges(self, direction, labels):
+    def get_edges_iterator(self, direction, *labels):
+        return utils.ListIterator(self.get_edges(direction, labels))
+
+    def get_edges(self, direction, *labels):
         """
 
         """
-        if direction == Direction.OUT:
+        labels = utils.flatten_iterable(labels)
+
+        if direction == utils.Direction.OUT:
             return self.get_out_edges(labels)
-        elif direction == Direction.IN:
+        elif direction == utils.Direction.IN:
             return self.get_in_edges(labels)
         else:
             out_list = []
@@ -291,21 +175,49 @@ class Vertex(Element):
 
             return out_list
 
-    def get_in_edges(self, label):
+    def get_in_edges(self, *labels):
         """
-        TODO: labels as *arg
+        Get in edges
         """
-        if not self.in_edges.get(label):
-            return []
-        in_edge_dict = self.in_edges.get(label)
+        labels = utils.flatten_iterable(labels)
+        output_list = []
+        labels_list = []
 
-        return [in_edge_dict[key] for key in in_edge_dict]
+        if not labels:
+            for label in self.in_edges:
+                labels_list.append(label)
+        else:
+            for label in labels:
+                labels_list.append(label)
 
-    def get_out_edges(self, label):
-        if not self.out_edges.get(label):
-            return []
-        out_edges_dict = self.out_edges.get(label)
-        return [out_edges_dict[key] for key in out_edges_dict]
+        for label in labels_list:
+            if self.in_edges.get(label):
+                in_edge_dict = self.in_edges.get(label)
+                for current_edge_key in in_edge_dict:
+                    output_list.append(in_edge_dict[current_edge_key])
+        return output_list
+
+    def get_out_edges(self, *labels):
+        """
+        Get out edges
+        """
+        labels = utils.flatten_iterable(labels)
+        output_list = []
+        labels_list = []
+
+        if not labels:
+            for label in self.out_edges:
+                labels_list.append(label)
+        else:
+            for label in labels:
+                labels_list.append(label)
+
+        for label in labels_list:
+            if self.out_edges.get(label):
+                out_edge_dict = self.out_edges.get(label)
+                for current_edge_key in out_edge_dict:
+                    output_list.append(out_edge_dict[current_edge_key])
+        return output_list
 
     def add_edge(self, label, vertex_instance, properties=None):
         current_edge = self.graph.add_edge(current_id=None,
@@ -342,17 +254,26 @@ class Edge(Element):
     An Element is the base class for both Vertex and Edge.
     An Element has an identifier that must be unique to its inheriting classes (Vertex or Edge)
     """
+
     def __init__(self, graph_instance, input_id, label=None, out_vertex=None, in_vertex=None, properties=None):
         super().__init__(graph_instance, input_id, label, properties)
-        self.in_vertex = in_vertex or None
-        self.out_vertex = out_vertex or None
+        self._in_vertex = in_vertex or None
+        self._out_vertex = out_vertex or None
 
     def __repr__(self):
-        return '{}--{}-->{}'.format(self.in_vertex, self.label, self.out_vertex)
+        return '{}--{}-->{}'.format(self._in_vertex, self.label, self._out_vertex)
 
     def link(self, in_vertex, out_vertex):
-        self.in_vertex = in_vertex
-        self.out_vertex = out_vertex
+        self._in_vertex = in_vertex
+        self._out_vertex = out_vertex
+
+    @property
+    def in_vertex(self):
+        return self._in_vertex
+
+    @property
+    def out_vertex(self):
+        return self._out_vertex
 
     def get_vertex(self, direction):
         """
@@ -361,10 +282,10 @@ class Edge(Element):
         Arg:
             direction: Enum Direction
         """
-        if direction == Direction.IN:
-            return self.in_vertex
-        elif direction == Direction.OUT:
-            return self.out_vertex
+        if direction == utils.Direction.IN:
+            return self._in_vertex
+        elif direction == utils.Direction.OUT:
+            return self._out_vertex
         else:
             raise Exception('Invalid Direction')
 
@@ -445,7 +366,7 @@ class Graph(object):
         key: the label to filter
         value: the value to filter
         """
-        return DictKeyValueIterator(self.vertices)
+        return utils.DictKeyValueIterator(self.vertices)
 
     def add_vertex(self, label=None, properties=None, current_id=None):
         """
@@ -552,3 +473,6 @@ class Graph(object):
         Make a Query object to query graph
         """
         return Query(self)
+
+    def algo(self):
+        return GraphAlgoritms(self)
