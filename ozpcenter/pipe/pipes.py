@@ -1,8 +1,8 @@
 import logging
 
 from ozpcenter.pipe.pipeline import Pipe
-from ozpcenter.recommend.utils import Direction
 from ozpcenter.recommend import utils
+from ozpcenter.recommend.utils import Direction
 from ozpcenter.recommend.utils import FastNoSuchElementException
 from plugins_util.plugin_manager import system_has_access_control
 

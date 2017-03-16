@@ -19,11 +19,10 @@ sys.path.insert(0, os.path.realpath(os.path.join(os.path.dirname(__file__), '../
 from django.contrib import auth
 from django.conf import settings
 
-from ozpcenter import models
 from ozpcenter import model_access
-import ozpcenter.api.listing.model_access as listing_model_access
-
+from ozpcenter import models
 from ozpcenter.recommend.recommend import RecommenderDirectory
+import ozpcenter.api.listing.model_access as listing_model_access
 
 
 TEST_IMG_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'test_images') + '/'

@@ -3,8 +3,8 @@ Tests for (most) of the Utils mechanism
 """
 from django.test import TestCase
 
-from ozpcenter.scripts import sample_data_generator as data_gen
 from ozpcenter.recommend import utils
+from ozpcenter.scripts import sample_data_generator as data_gen
 
 
 class UtilsTest(TestCase):
