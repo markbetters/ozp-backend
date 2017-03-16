@@ -24,6 +24,12 @@ class GraphTest(TestCase):
 
     def test_load_db_into_graph(self):
         graph = GraphFactory.load_db_into_graph()
-        # import pprint
-        # print(pprint.pprint(graph.query().V().to_dict(internal=True).to_list()))
-        self.assertEqual(str(graph), 'Graph(vertices: 149, edges: 363)')
+        self.assertEqual(str(graph), 'Graph(vertices: 158, edges: 402)')
+
+        bigbrother_dict = graph.query().v('p-1').to_dict().next()
+        expected_dict = {'highest_role': 'APPS_MALL_STEWARD', 'username': 'bigbrother'}
+        self.assertEqual(bigbrother_dict, expected_dict)
+
+        bigbrother_bookmarks = graph.query().v('p-1').out('bookmarked').id().to_list()
+        expected_bookmarks = ['l-11']
+        self.assertEqual(bigbrother_bookmarks, expected_bookmarks)

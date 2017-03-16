@@ -141,8 +141,13 @@ class GraphFactory(object):
             for current_agency in profile.organizations.all():
                 added_vertex.add_edge('agency', graph.get_vertex('a-{}'.format(current_agency.pk)))
 
-            # Many Agencies per profile
+            # Many stewardedAgency Agencies per profile
             for current_agency in profile.stewarded_organizations.all():
                 added_vertex.add_edge('stewardedAgency', graph.get_vertex('a-{}'.format(current_agency.pk)))
+
+            for current_entry in models.ApplicationLibraryEntry.objects.filter(owner=profile):
+                current_listing = current_entry.listing
+                data = {'folder_name': current_entry.folder}
+                added_vertex.add_edge('bookmarked', graph.get_vertex('l-{}'.format(current_listing.pk)), data)
 
         return graph

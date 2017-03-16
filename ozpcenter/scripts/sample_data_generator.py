@@ -31,6 +31,44 @@ TEST_IMG_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'test_i
 DEMO_APP_ROOT = settings.OZP['DEMO_APP_ROOT']
 
 
+def create_listing_review_batch(*input_list):
+    """
+    Create Listing
+
+    example:
+        [
+            listing,
+            [charrington, 5, "This app is great - well designed and easy to use"],
+            [tparsons, 3, "This app is great - well designed and easy to use"],
+            [syme, 1, "This app is great - well designed and easy to use"]
+        ]
+    """
+    current_listing = input_list[0]
+
+    for input_set in input_list[1:]:
+        profile_obj = input_set[0]
+        current_rating = input_set[1]
+        current_text = input_set[2]
+        listing_model_access.create_listing_review(profile_obj.user.username, current_listing, current_rating,text=current_text)
+
+
+def create_library_entries(*entries):
+    """
+    Create Bookmarks for users
+    """
+    for current_entry in entries:
+        current_profile_string = current_entry[0]
+        current_profile = models.Profile.objects.filter(user__username=current_profile_string).first()
+        current_unique_name = current_entry[1]
+        current_folder_name = current_entry[2]
+
+        library_entry = models.ApplicationLibraryEntry(
+            owner=current_profile,
+            listing=models.Listing.objects.get(unique_name=current_unique_name),
+            folder=current_folder_name)
+        library_entry.save()
+
+
 def run():
     """
     Creates basic sample data
@@ -530,6 +568,7 @@ def run():
         dn='Johnson johnson'
     )
 
+    #-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
     ############################################################################
     #                           System Notifications
     ############################################################################
@@ -560,6 +599,7 @@ def run():
         expires_date=last_week, author=julia)
     n2.save()
 
+    #-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
     ############################################################################
     #                           Contacts
     ############################################################################
@@ -579,20 +619,18 @@ def run():
         email='brienne@stark.com', unsecure_phone='222-324-3846')
     brienne.save()
 
-    ############################################################################
-    ############################################################################
+    #-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+    #===========================================================================
     #                           Listings
-    ############################################################################
+    #===========================================================================
 
+    ############################################################################
+    #                           Air Mail
+    ############################################################################
     # Looping for more sample results
     for i in range(0, 10):
-
         postfix_space = "" if (i == 0) else " " + str(i)
         postfix_dot = "" if (i == 0) else "." + str(i)
-
-        ############################################################################
-        #                           Air Mail
-        ############################################################################
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         #                           Icons
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -674,24 +712,8 @@ def run():
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         #                           Notifications
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-        notification1 = models.Notification(message='Air Mail update next week',
-            expires_date=next_week, listing=listing, author=winston)
+        notification1 = models.Notification(message='Air Mail update next week', expires_date=next_week, listing=listing, author=winston)
         notification1.save()
-
-        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-        #                           Reviews
-        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-        listing_model_access.create_listing_review(charrington.user.username,
-            listing, 5,
-            text="This app is great - well designed and easy to use")
-
-        listing_model_access.create_listing_review(tparsons.user.username,
-            listing, 3,
-            text="Air mail is ok - does what it says and no more")
-
-        listing_model_access.create_listing_review(syme.user.username,
-            listing, 1,
-            text="Air mail crashes all the time - it doesn't even support IE 6!")
 
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         #                           Document URLs
@@ -708,9 +730,21 @@ def run():
         listing_model_access.approve_listing_by_org_steward(winston, listing)
         listing_model_access.approve_listing(winston, listing)
 
-        ############################################################################
-        #                           Bread Basket
-        ############################################################################
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        #                           Reviews
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        create_listing_review_batch(listing,
+            [charrington, 5, "This app is great - well designed and easy to use"],
+            [tparsons, 3, "Air mail is ok - does what it says and no more"],
+            [syme, 1, "Air mail crashes all the time - it doesn't even support IE 6!"]
+        )
+
+    ############################################################################
+    #                           Bread Basket
+    ############################################################################
+    for i in range(0, 10):
+        postfix_space = "" if (i == 0) else " " + str(i)
+        postfix_dot = "" if (i == 0) else "." + str(i)
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         #                           Icons
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -761,20 +795,25 @@ def run():
         listing.tags.add(demo)
         listing.tags.add(example)
 
-        listing_model_access.create_listing_review(jones.user.username, listing, 2,
-            text="This bread is stale!")
-
-        listing_model_access.create_listing_review(julia.user.username, listing, 5,
-            text="Yum!")
-
         listing_model_access.create_listing(julia, listing)
         listing_model_access.submit_listing(julia, listing)
         listing_model_access.approve_listing_by_org_steward(winston, listing)
         listing_model_access.approve_listing(winston, listing)
 
-        ############################################################################
-        #                           Chart Course
-        ############################################################################
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        #                           Reviews
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        create_listing_review_batch(listing,
+            [jones, 2, "This bread is stale!"],
+            [julia, 5, "Yum!"]
+        )
+
+    ############################################################################
+    #                           Chart Course
+    ############################################################################
+    for i in range(0, 10):
+        postfix_space = "" if (i == 0) else " " + str(i)
+        postfix_dot = "" if (i == 0) else "." + str(i)
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         #                           Icons
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -801,7 +840,6 @@ def run():
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         #                           Listing
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
         listing = models.Listing(
             title='Chart Course{0!s}'.format(postfix_space),
             agency=minitrue,
@@ -835,9 +873,20 @@ def run():
         listing_model_access.approve_listing_by_org_steward(winston, listing)
         listing_model_access.approve_listing(winston, listing)
 
-        ############################################################################
-        #                           Chatter Box
-        ############################################################################
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        #                           Reviews
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        create_listing_review_batch(listing,
+            [winston, 2, "This Chart is bad"],
+            [big_brother, 5, "Good Chart!"]
+        )
+
+    ############################################################################
+    #                           Chatter Box
+    ############################################################################
+    for i in range(0, 10):
+        postfix_space = "" if (i == 0) else " " + str(i)
+        postfix_dot = "" if (i == 0) else "." + str(i)
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         #                           Icons
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -857,7 +906,6 @@ def run():
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         #                           Listing
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
         listing = models.Listing(
             title='Chatter Box{0!s}'.format(postfix_space),
             agency=miniluv,
@@ -890,9 +938,12 @@ def run():
         listing_model_access.approve_listing_by_org_steward(winston, listing)
         listing_model_access.approve_listing(winston, listing)
 
-        ############################################################################
-        #                           Clipboard
-        ############################################################################
+    ############################################################################
+    #                           Clipboard
+    ############################################################################
+    for i in range(0, 10):
+        postfix_space = "" if (i == 0) else " " + str(i)
+        postfix_dot = "" if (i == 0) else "." + str(i)
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         #                           Icons
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -912,7 +963,6 @@ def run():
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         #                           Listing
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
         listing = models.Listing(
             title='Clipboard{0!s}'.format(postfix_space),
             agency=minitrue,
@@ -946,9 +996,12 @@ def run():
         listing_model_access.approve_listing_by_org_steward(winston, listing)
         listing_model_access.approve_listing(winston, listing)
 
-        ############################################################################
-        #                           FrameIt
-        ############################################################################
+    ############################################################################
+    #                           FrameIt
+    ############################################################################
+    for i in range(0, 10):
+        postfix_space = "" if (i == 0) else " " + str(i)
+        postfix_dot = "" if (i == 0) else "." + str(i)
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         #                           Icons
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -968,7 +1021,6 @@ def run():
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         #                           Listing
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
         listing = models.Listing(
             title='FrameIt{0!s}'.format(postfix_space),
             agency=minitrue,
@@ -1002,9 +1054,12 @@ def run():
         listing_model_access.approve_listing_by_org_steward(winston, listing)
         listing_model_access.approve_listing(winston, listing)
 
-        ############################################################################
-        #                           Hatch Latch
-        ############################################################################
+    ############################################################################
+    #                           Hatch Latch
+    ############################################################################
+    for i in range(0, 10):
+        postfix_space = "" if (i == 0) else " " + str(i)
+        postfix_dot = "" if (i == 0) else "." + str(i)
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         #                           Icons
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1024,7 +1079,6 @@ def run():
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         #                           Listing
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
         listing = models.Listing(
             title='Hatch Latch{0!s}'.format(postfix_space),
             agency=minitrue,
@@ -1115,13 +1169,14 @@ def run():
         listing_model_access.approve_listing_by_org_steward(winston, listing)
         listing_model_access.approve_listing(winston, listing)
 
-        listing_model_access.create_listing_review(charrington.user.username,
-            listing, 4,
-            text="I really like it")
+        listing_model_access.create_listing_review(charrington.user.username, listing, 4, text="I really like it")
 
-        ############################################################################
-        #                           Location Lister
-        ############################################################################
+    ############################################################################
+    #                           Location Lister
+    ############################################################################
+    for i in range(0, 10):
+        postfix_space = "" if (i == 0) else " " + str(i)
+        postfix_dot = "" if (i == 0) else "." + str(i)
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         #                           Icons
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1175,9 +1230,14 @@ def run():
         listing_model_access.approve_listing_by_org_steward(winston, listing)
         listing_model_access.approve_listing(winston, listing)
 
-        ############################################################################
-        #                           Location Viewer
-        ############################################################################
+        listing_model_access.create_listing_review(charrington.user.username, listing, 4, text="I really like it")
+
+    ############################################################################
+    #                           Location Viewer
+    ############################################################################
+    for i in range(0, 10):
+        postfix_space = "" if (i == 0) else " " + str(i)
+        postfix_dot = "" if (i == 0) else "." + str(i)
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         #                           Icons
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1197,7 +1257,6 @@ def run():
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         #                           Listing
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
         listing = models.Listing(
             title='LocationViewer{0!s}'.format(postfix_space),
             agency=minitrue,
@@ -1231,9 +1290,12 @@ def run():
         listing_model_access.approve_listing_by_org_steward(winston, listing)
         listing_model_access.approve_listing(winston, listing)
 
-        ############################################################################
-        #                           Location Analyzer
-        ############################################################################
+    ############################################################################
+    #                           Location Analyzer
+    ############################################################################
+    for i in range(0, 10):
+        postfix_space = "" if (i == 0) else " " + str(i)
+        postfix_dot = "" if (i == 0) else "." + str(i)
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         #                           Icons
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1253,7 +1315,6 @@ def run():
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         #                           Listing
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
         listing = models.Listing(
             title='LocationAnalyzer{0!s}'.format(postfix_space),
             agency=minitrue,
@@ -1286,80 +1347,95 @@ def run():
         listing_model_access.submit_listing(winston, listing)
         listing_model_access.approve_listing_by_org_steward(winston, listing)
         listing_model_access.approve_listing(winston, listing)
+
     ############################################################################
     #                           Skybox
     ############################################################################
-    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    #                           Icons
-    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    img = Image.open(TEST_IMG_PATH + 'Skybox16.png')
-    small_icon = models.Image.create_image(img, file_extension='png',
-        security_marking=unclass, image_type=small_icon_type.name)
-    img = Image.open(TEST_IMG_PATH + 'Skybox32.png')
-    large_icon = models.Image.create_image(img, file_extension='png',
-        security_marking=unclass, image_type=large_icon_type.name)
-    img = Image.open(TEST_IMG_PATH + 'Skybox.png')
-    banner_icon = models.Image.create_image(img, file_extension='png',
-        security_marking=unclass, image_type=banner_icon_type.name)
-    img = Image.open(TEST_IMG_PATH + 'SkyboxFeatured.png')
-    large_banner_icon = models.Image.create_image(img, file_extension='png',
-        security_marking=unclass, image_type=large_banner_icon_type.name)
+    #   Looping for more sample listings
+    for i in range(0, 10):
+        postfix_space = "" if (i == 0) else " " + str(i)
+        postfix_dot = "" if (i == 0) else "." + str(i)
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        #                           Icons
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        img = Image.open(TEST_IMG_PATH + 'Skybox16.png')
+        small_icon = models.Image.create_image(img, file_extension='png',
+            security_marking=unclass, image_type=small_icon_type.name)
+        img = Image.open(TEST_IMG_PATH + 'Skybox32.png')
+        large_icon = models.Image.create_image(img, file_extension='png',
+            security_marking=unclass, image_type=large_icon_type.name)
+        img = Image.open(TEST_IMG_PATH + 'Skybox.png')
+        banner_icon = models.Image.create_image(img, file_extension='png',
+            security_marking=unclass, image_type=banner_icon_type.name)
+        img = Image.open(TEST_IMG_PATH + 'SkyboxFeatured.png')
+        large_banner_icon = models.Image.create_image(img, file_extension='png',
+            security_marking=unclass, image_type=large_banner_icon_type.name)
 
-    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    #                           Listing
-    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        #                           Listing
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        listing = models.Listing(
+            title='Skybox{0!s}'.format(postfix_space),
+            agency=miniluv,
+            listing_type=web_app,
+            description='Sky Overlord',
+            launch_url='{0!s}/demo_apps/Skybox/index.html'.format(DEMO_APP_ROOT),
+            version_name='1.0.0',
+            unique_name='ozp.test.skybox{0!s}'.format(postfix_dot),
+            small_icon=small_icon,
+            large_icon=large_icon,
+            banner_icon=banner_icon,
+            large_banner_icon=large_banner_icon,
+            what_is_new="It's a box in the sky",
+            description_short='Sky Overlord',
+            requirements='None',
+            is_enabled=True,
+            is_featured=True,
+            iframe_compatible=False,
+            is_private=False,
+            security_marking=unclass
+        )
+        listing.save()
+        listing.contacts.add(rob_baratheon)
+        listing.owners.add(pmurt)
+        listing.categories.add(tools)
+        listing.categories.add(education)
+        listing.tags.add(demo)
 
-    listing = models.Listing(
-        title='Skybox',
-        agency=miniluv,
-        listing_type=web_app,
-        description='Sky Overlord',
-        launch_url='0/demo_apps/Skybox/index.html'.format(DEMO_APP_ROOT),
-        version_name='1.0.0',
-        unique_name='ozp.test.Skybox'.format(postfix_dot),
-        small_icon=small_icon,
-        large_icon=large_icon,
-        banner_icon=banner_icon,
-        large_banner_icon=large_banner_icon,
-        what_is_new="It's a box in the sky",
-        description_short='Sky Overlord',
-        requirements='None',
-        is_enabled=True,
-        is_featured=True,
-        iframe_compatible=False,
-        is_private=False,
-        security_marking=unclass
-    )
-    listing.save()
-    listing.contacts.add(rob_baratheon)
-    listing.owners.add(pmurt)
-    listing.categories.add(tools)
-    listing.categories.add(education)
-    listing.tags.add(demo)
+        listing_model_access.create_listing(winston, listing)
+        listing_model_access.submit_listing(winston, listing)
+        listing_model_access.approve_listing_by_org_steward(winston, listing)
+        listing_model_access.approve_listing(winston, listing)
 
-    listing_model_access.create_listing(winston, listing)
-    listing_model_access.submit_listing(winston, listing)
-    listing_model_access.approve_listing_by_org_steward(winston, listing)
-    listing_model_access.approve_listing(winston, listing)
     ############################################################################
     #                           Library
     ############################################################################
     # bookmark listings
-    library_entry = models.ApplicationLibraryEntry(
-        owner=winston,
-        listing=models.Listing.objects.get(unique_name='ozp.test.bread_basket'))
-    library_entry.save()
+    # [[entry.owner.user.username , entry.listing.unique_name, entry.folder] for entry in ApplicationLibraryEntry.objects.all()]
+    create_library_entries(
+        # wsmith
+        ['wsmith', 'ozp.test.bread_basket', None],
+        ['wsmith', 'ozp.test.air_mail', None],
+        ['wsmith', 'ozp.test.skybox.1', None],
+        ['wsmith', 'ozp.test.skybox.2', None],
+        ['wsmith', 'ozp.test.skybox.3', None],
 
-    library_entry = models.ApplicationLibraryEntry(
-        owner=winston,
-        listing=models.Listing.objects.get(unique_name='ozp.test.air_mail'))
-    library_entry.save()
+        # Hodor
+        ['hodor', 'ozp.test.jotspot', None],
+        ['hodor', 'ozp.test.locationlister', None],
+        ['hodor', 'ozp.test.chartcourse', None],
+        ['hodor', 'ozp.test.air_mail', None],
+        ['hodor', 'ozp.test.skybox', None],
+        ['hodor', 'ozp.test.skybox.1', None],
+
+        ['bigbrother', 'ozp.test.bread_basket', None]
+    )
 
     ############################################################################
     #                           Recommendations
     ############################################################################
     sample_data_recommender = RecommenderDirectory()
-    sample_data_recommender.recommend('sample_data')
+    sample_data_recommender.recommend('sample_data,custom')
 
 
 if __name__ == "__main__":
