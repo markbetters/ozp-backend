@@ -258,12 +258,13 @@ def update_es_listing(current_listing_id, record, is_new):
         if not es_client.indices.exists(settings.ES_INDEX_NAME):
             request_body = get_mapping_setting_obj()
 
-            print("Creating '%s' index..." % (settings.ES_INDEX_NAME))
+            logger.info("Creating '{}' index...".format(settings.ES_INDEX_NAME))
             res = es_client.indices.create(index=settings.ES_INDEX_NAME, body=request_body)
-            print(" response: '%s'" % (res))
+            logger.info("response: '{}'".format(res))
 
             # TODO: Figure out a better method to insure index is created on server than using sleep (rivera 11/14/2016)
-            time.sleep(20)   # Seems like there needs to be a delay if not a 503 error will happen
+            # Seems like there needs to be a delay if not a 503 error will happen
+            time.sleep(20)
 
         es_record_exist = es_client.exists(
             index=settings.ES_INDEX_NAME,
@@ -272,8 +273,6 @@ def update_es_listing(current_listing_id, record, is_new):
             refresh=True
         )
 
-        # print(es_record_exist)
-        # print('is_new:%s, es_record_exist: %s , current_listing_id: %s'%(is_new, es_record_exist, current_listing_id))
         record_clean_obj = prepare_clean_listing_record(record)
         if is_new is not None:
             if es_record_exist:

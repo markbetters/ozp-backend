@@ -214,13 +214,11 @@ class ListingActivitiesApiTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         titles = [i['listing']['title'] for i in response.data]
         titles = list(set(titles))
-        print('for bigbrother, got titles: {0!s}'.format(titles))
         counter = 0
         for i in expected_titles:
             # Bread Basket is a private app, and bigbrother is not in that
             # organization
             if i != 'Bread Basket':
-                print('checking for app {0!s}'.format(i))
                 self.assertTrue(i in titles)
                 counter += 1
         self.assertEqual(counter, len(expected_titles) - 1)

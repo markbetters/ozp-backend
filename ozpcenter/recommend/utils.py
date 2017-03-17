@@ -3,8 +3,8 @@ Static Util File
 Contains Math Functions for recommendations
 Exception
 """
-from enum import Enum
 from collections import Iterable
+from enum import Enum
 
 
 class FastNoSuchElementException(Exception):

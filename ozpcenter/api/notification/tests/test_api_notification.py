@@ -545,7 +545,7 @@ class NotificationApiTest(APITestCase):
         self.assertEqual(response.data['listing']['id'], 4)
 
         # Compare Notifications for users
-        usernames_list = {'wsmith': [1, 2, 5],
+        usernames_list = {'wsmith': [1, 2, 5, 7, 8],
                           'julia': [1, 2],
                           'jones': [1, 2],
                           'bigbrother': [1, 2]}
@@ -562,10 +562,10 @@ class NotificationApiTest(APITestCase):
             self.assertEqual(before_notification_ids, ids_list)
 
         # Compare Library for users
-        usernames_list = {'wsmith': [1, 2, 3, 4],
+        usernames_list = {'wsmith': [1, 2, 3, 4, 5, 13, 14],
                           'julia': [],
                           'jones': [],
-                          'bigbrother': []}
+                          'bigbrother': [12]}
 
         for username, ids_list in usernames_list.items():
             user = generic_model_access.get_profile(username).user
@@ -583,10 +583,10 @@ class NotificationApiTest(APITestCase):
         self.assertEqual(response.data['listing']['id'], 4)
 
         # Compare Library for users
-        usernames_list = {'wsmith': [1, 2, 3, 4],
+        usernames_list = {'wsmith': [1, 2, 3, 4, 5, 13, 14],
                           'julia': [],
                           'jones': [],
-                          'bigbrother': [5]}
+                          'bigbrother': [12, 15]}
 
         for username, ids_list in usernames_list.items():
             user = generic_model_access.get_profile(username).user
@@ -631,10 +631,10 @@ class NotificationApiTest(APITestCase):
             bookmark_notification_ids.append(response.data['id'])
 
             # Compare Notifications for users
-            usernames_list = {'wsmith': [1, 2, 5],
+            usernames_list = {'wsmith': [1, 2, 5, 7, 8],
                               'julia': [1, 2] + bookmark_notification_ids,
                               'jones': [1, 2],
-                              'bigbrother': [1, 2]}
+                              'bigbrother': [1, 2, 8]}
 
             for username, ids_list in usernames_list.items():
                 user = generic_model_access.get_profile(username).user
@@ -653,10 +653,10 @@ class NotificationApiTest(APITestCase):
         _import_bookmarks(self, 'julia', bookmark_notification1_id, status_code=201)
 
         # Compare Library for users
-        usernames_list = {'wsmith': [1, 2, 3, 4],
-                          'julia': [6, 7],
+        usernames_list = {'wsmith': [1, 2, 3, 4, 5, 13, 14],
+                          'julia': [16, 17],
                           'jones': [],
-                          'bigbrother': [5]}
+                          'bigbrother': [12, 15]}
 
         for username, ids_list in usernames_list.items():
             user = generic_model_access.get_profile(username).user
@@ -670,10 +670,10 @@ class NotificationApiTest(APITestCase):
             self.assertEqual(before_notification_ids, ids_list, 'Comparing Library for {}'.format(username))
 
         # Compare Notifications for users
-        usernames_list = {'wsmith': [1, 2, 5],
-                          'julia': [1, 2] + bookmark_notification_ids,
+        usernames_list = {'wsmith': [1, 2, 5, 7, 8],
+                          'julia': [1, 2, 7, 8] + bookmark_notification_ids,
                           'jones': [1, 2],
-                          'bigbrother': [1, 2]}
+                          'bigbrother': [1, 2, 8]}
 
         for username, ids_list in usernames_list.items():
             user = generic_model_access.get_profile(username).user
@@ -684,7 +684,7 @@ class NotificationApiTest(APITestCase):
 
             before_notification_ids = sorted([entry.get('id') for entry in response.data])
             self.assertEqual(response.status_code, status.HTTP_200_OK)
-            self.assertEqual(before_notification_ids, ids_list)
+            self.assertEqual(before_notification_ids, ids_list, 'Comparing Notifications for {}'.format(username))
 
     def test_delete_system_notification_apps_mall_steward(self):
         user = generic_model_access.get_profile('bigbrother').user
