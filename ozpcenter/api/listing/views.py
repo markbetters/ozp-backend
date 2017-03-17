@@ -24,12 +24,96 @@ logger = logging.getLogger('ozp-center.' + str(__name__))
 
 
 class ContactViewSet(viewsets.ModelViewSet):
+    """
+    ModelViewSet for getting all contacts for a given listing
+
+    Access Control
+    ===============
+    - All users can view
+
+    URIs
+    ======
+    GET /api/listing
+    Summary:
+        Get a list of all system-wide Contact entries
+    Response:
+        200 - Successful operation - [ContactSerializer]
+
+    POST /api/listing/
+    Summary:
+        Add a Contact
+    Request:
+        data: ContactSerializer Schema
+    Response:
+        200 - Successful operation - ContactSerializer
+
+    GET /api/listing/{pk}
+    Summary:
+        Find a Contact Entry by ID
+    Response:
+        200 - Successful operation - ContactSerializer
+
+    PUT /api/listing/{pk}
+    Summary:
+        Update a Contact Entry by ID
+
+    PATCH /api/listing/{pk}
+    Summary:
+        Update (Partial) a Contact Entry by ID
+
+    DELETE /api/listing/{pk}
+    Summary:
+        Delete a Contact Entry by ID
+    """
+
     permission_classes = (permissions.IsUser,)
     queryset = model_access.get_all_contacts()
     serializer_class = serializers.ContactSerializer
 
 
 class DocUrlViewSet(viewsets.ModelViewSet):
+    """
+    ModelViewSet for getting all DocUrls for a given listing
+
+    Access Control
+    ===============
+    - All users can view
+
+    URIs
+    ======
+    GET /api/listing
+    Summary:
+        Get a list of all system-wide DocUrl entries
+    Response:
+        200 - Successful operation - [DocUrlSerializer]
+
+    POST /api/listing/
+    Summary:
+        Add a DocUrl
+    Request:
+        data: DocUrlSerializer Schema
+    Response:
+        200 - Successful operation - DocUrlSerializer
+
+    GET /api/listing/{pk}
+    Summary:
+        Find a DocUrl Entry by ID
+    Response:
+        200 - Successful operation - DocUrlSerializer
+
+    PUT /api/listing/{pk}
+    Summary:
+        Update a DocUrl Entry by ID
+
+    PATCH /api/listing/{pk}
+    Summary:
+        Update (Partial) a DocUrl Entry by ID
+
+    DELETE /api/listing/{pk}
+    Summary:
+        Delete a DocUrl Entry by ID
+    """
+
     permission_classes = (permissions.IsUser,)
     queryset = model_access.get_all_doc_urls()
     serializer_class = serializers.DocUrlSerializer
@@ -45,7 +129,32 @@ class ReviewViewSet(viewsets.ModelViewSet):
 
     Primarily for that reason, we forgo using Serializers for POST and PUT
     actions
+
+    ModelViewSet for getting all Reviews for a given listing
+
+    Access Control
+    ===============
+    - All users can view
+
+    URIs
+    ======
+    GET /api/listing
+    Summary:
+        Get a list of all system-wide Review entries
+    Response:
+        200 - Successful operation - [ReviewSerializer]
+
+    GET /api/listing/{pk}
+    Summary:
+        Find a Review Entry by ID
+    Response:
+        200 - Successful operation - ReviewSerializer
+
+    DELETE /api/listing/{pk}
+    Summary:
+        Delete a Review Entry by ID
     """
+
     permission_classes = (permissions.IsUser,)
     serializer_class = serializers.ReviewSerializer
     # pagination_class = pagination.StandardPagination
@@ -118,7 +227,28 @@ class SimilarViewSet(viewsets.ModelViewSet):
 
     Primarily for that reason, we forgo using Serializers for POST and PUT
     actions
+
+    ModelViewSet for getting all Similar Apps for a given listing
+
+    Access Control
+    ===============
+    - All users can view
+
+    URIs
+    ======
+    GET /api/listing
+    Summary:
+        Get a list of all system-wide Similar App entries
+    Response:
+        200 - Successful operation - [ListingSerializer]
+
+    GET /api/listing/{pk}
+    Summary:
+        Find a Similar App Entry by ID
+    Response:
+        200 - Successful operation - ListingSerializer
     """
+
     permission_classes = (permissions.IsUser,)
     serializer_class = serializers.ListingSerializer
     # pagination_class = pagination.StandardPagination
@@ -175,6 +305,46 @@ class SimilarViewSet(viewsets.ModelViewSet):
 class ListingTypeViewSet(viewsets.ModelViewSet):
     """
     Listing Types
+
+    ModelViewSet for getting all Listing Types for a given listing
+
+    Access Control
+    ===============
+    - All users can view
+
+    URIs
+    ======
+    GET /api/listing
+    Summary:
+        Get a list of all system-wide ListingType entries
+    Response:
+        200 - Successful operation - [ListingTypeSerializer]
+
+    POST /api/listing/
+    Summary:
+        Add a ListingType
+    Request:
+        data: ListingTypeSerializer Schema
+    Response:
+        200 - Successful operation - ListingTypeSerializer
+
+    GET /api/listing/{pk}
+    Summary:
+        Find a ListingType Entry by ID
+    Response:
+        200 - Successful operation - ListingTypeSerializer
+
+    PUT /api/listing/{pk}
+    Summary:
+        Update a ListingType Entry by ID
+
+    PATCH /api/listing/{pk}
+    Summary:
+        Update (Partial) a ListingType Entry by ID
+
+    DELETE /api/listing/{pk}
+    Summary:
+        Delete a ListingType Entry by ID
     """
     permission_classes = (permissions.IsUser,)
     queryset = model_access.get_all_listing_types()
@@ -184,7 +354,28 @@ class ListingTypeViewSet(viewsets.ModelViewSet):
 class ListingUserActivitiesViewSet(viewsets.ModelViewSet):
     """
     ListingUserActivitiesViewSet endpoints are read-only
+
+    ModelViewSet for getting all Listing User Activities for a given listing
+
+    Access Control
+    ===============
+    - All users can view
+
+    URIs
+    ======
+    GET /api/listing
+    Summary:
+        Get a list of all system-wide ListingUserActivities entries
+    Response:
+        200 - Successful operation - [ListingActivitySerializer]
+
+    GET /api/listing/{pk}
+    Summary:
+        Find a Listing User Activity Entry by ID
+    Response:
+        200 - Successful operation - ListingActivitySerializer
     """
+
     permission_classes = (permissions.IsUser,)
     serializer_class = serializers.ListingActivitySerializer
 
@@ -207,6 +398,26 @@ class ListingUserActivitiesViewSet(viewsets.ModelViewSet):
 class ListingActivitiesViewSet(viewsets.ModelViewSet):
     """
     ListingActivity endpoints are read-only
+
+    ModelViewSet for getting all Listing Activities for a given listing
+
+    Access Control
+    ===============
+    - AppsMallSteward can view
+
+    URIs
+    ======
+    GET /api/listing
+    Summary:
+        Get a list of all system-wide ListingActivities entries
+    Response:
+        200 - Successful operation - [ListingActivitySerializer]
+
+    GET /api/listing/{pk}
+    Summary:
+        Find a Listing User Activity Entry by ID
+    Response:
+        200 - Successful operation - ListingActivitySerializer
     """
     permission_classes = (permissions.IsOrgSteward,)
     serializer_class = serializers.ListingActivitySerializer
@@ -232,6 +443,26 @@ class ListingActivitiesViewSet(viewsets.ModelViewSet):
 class ListingActivityViewSet(viewsets.ModelViewSet):
     """
     ListingActivity endpoints are read-only
+
+    ModelViewSet for getting all Listing Activities for a given listing
+
+    Access Control
+    ===============
+    - All users can view
+
+    URIs
+    ======
+    GET /api/listing
+    Summary:
+        Get a list of all system-wide Listing Activity entries
+    Response:
+        200 - Successful operation - [ListingActivitySerializer]
+
+    GET /api/listing/{pk}
+    Summary:
+        Find a Listing Activity Entry by ID
+    Response:
+        200 - Successful operation - ListingActivitySerializer
     """
     permission_classes = (permissions.IsUser,)
     serializer_class = serializers.ListingActivitySerializer
@@ -261,6 +492,36 @@ class ListingActivityViewSet(viewsets.ModelViewSet):
 
 
 class ListingRejectionViewSet(viewsets.ModelViewSet):
+    """
+    ModelViewSet for getting all Listing Rejections
+
+    Access Control
+    ===============
+    - AppsMallSteward can view
+
+    URIs
+    ======
+    GET /api/listing
+    Summary:
+        Get a list of all system-wide ListingRejection entries
+    Response:
+        200 - Successful operation - [ListingActivitySerializer]
+
+    POST /api/listing/
+    Summary:
+        Add a ListingRejection
+    Request:
+        data: ListingRejectionSerializer Schema
+    Response:
+        200 - Successful operation - ListingActivitySerializer
+
+    GET /api/listing/{pk}
+    Summary:
+        Find a ListingRejection Entry by ID
+    Response:
+        200 - Successful operation - ListingActivitySerializer
+    """
+
     permission_classes = (permissions.IsOrgStewardOrReadOnly,)
     serializer_class = serializers.ListingActivitySerializer
 
@@ -292,12 +553,100 @@ class ListingRejectionViewSet(viewsets.ModelViewSet):
 
 
 class ScreenshotViewSet(viewsets.ModelViewSet):
+    """
+    Listing Types
+
+    ModelViewSet for getting all Screenshots for a given listing
+
+    Access Control
+    ===============
+    - All users can view
+
+    URIs
+    ======
+    GET /api/listing
+    Summary:
+        Get a list of all system-wide Screenshot entries
+    Response:
+        200 - Successful operation - [ScreenshotSerializer]
+
+    POST /api/listing/
+    Summary:
+        Add a Screenshot
+    Request:
+        data: ScreenshotSerializer Schema
+    Response:
+        200 - Successful operation - ScreenshotSerializer
+
+    GET /api/listing/{pk}
+    Summary:
+        Find a Screenshot Entry by ID
+    Response:
+        200 - Successful operation - ScreenshotSerializer
+
+    PUT /api/listing/{pk}
+    Summary:
+        Update a Screenshot Entry by ID
+
+    PATCH /api/listing/{pk}
+    Summary:
+        Update (Partial) a Screenshot Entry by ID
+
+    DELETE /api/listing/{pk}
+    Summary:
+        Delete a Screenshot Entry by ID
+    """
+
     permission_classes = (permissions.IsUser,)
     queryset = model_access.get_all_screenshots()
     serializer_class = serializers.ScreenshotSerializer
 
 
 class TagViewSet(viewsets.ModelViewSet):
+    """
+    Listing Types
+
+    ModelViewSet for getting all Tags for a given listing
+
+    Access Control
+    ===============
+    - All users can view
+
+    URIs
+    ======
+    GET /api/listing
+    Summary:
+        Get a list of all system-wide Tag entries
+    Response:
+        200 - Successful operation - [TagSerializer]
+
+    POST /api/listing/
+    Summary:
+        Add a Tag
+    Request:
+        data: TagSerializer Schema
+    Response:
+        200 - Successful operation - TagSerializer
+
+    GET /api/listing/{pk}
+    Summary:
+        Find a Tag Entry by ID
+    Response:
+        200 - Successful operation - TagSerializer
+
+    PUT /api/listing/{pk}
+    Summary:
+        Update a Tag Entry by ID
+
+    PATCH /api/listing/{pk}
+    Summary:
+        Update (Partial) a Tag Entry by ID
+
+    DELETE /api/listing/{pk}
+    Summary:
+        Delete a Tag Entry by ID
+    """
+
     permission_classes = (permissions.IsUser,)
     queryset = model_access.get_all_tags()
     serializer_class = serializers.TagSerializer
@@ -306,7 +655,50 @@ class TagViewSet(viewsets.ModelViewSet):
 class ListingViewSet(viewsets.ModelViewSet):
     """
     Get all listings this user can see
+
+    Listing Types
+
+    ModelViewSet for getting all Listings
+
+    Access Control
+    ===============
+    - All users can view
+
+    URIs
+    ======
+    GET /api/listing
+    Summary:
+        Get a list of all system-wide Listings
+    Response:
+        200 - Successful operation - [ListingSerializer]
+
+    POST /api/listing/
+    Summary:
+        Add a Listing
+    Request:
+        data: ListingSerializer Schema
+    Response:
+        200 - Successful operation - ListingSerializer
+
+    GET /api/listing/{pk}
+    Summary:
+        Find a Listing Entry by ID
+    Response:
+        200 - Successful operation - ListingSerializer
+
+    PUT /api/listing/{pk}
+    Summary:
+        Update a Listing Entry by ID
+
+    PATCH /api/listing/{pk}
+    Summary:
+        Update (Partial) a Listing Entry by ID
+
+    DELETE /api/listing/{pk}
+    Summary:
+        Delete a Listing Entry by ID
     """
+
     permission_classes = (permissions.IsUser,)
     serializer_class = serializers.ListingSerializer
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
@@ -579,7 +971,29 @@ class ListingViewSet(viewsets.ModelViewSet):
 
 class ListingUserViewSet(viewsets.ModelViewSet):
     """
+    Listing Types
+
     Get all listings owned by this user
+
+    ModelViewSet for getting all ListingUserViewSets
+
+    Access Control
+    ===============
+    - All users can view
+
+    URIs
+    ======
+    GET /api/listing
+    Summary:
+        Get a list of all system-wide Listing User entries
+    Response:
+        200 - Successful operation - [ListingSerializer]
+
+    GET /api/listing/{pk}
+    Summary:
+        Find a ListingUserViewSet Entry by ID
+    Response:
+        200 - Successful operation - ListingSerializer
     """
     permission_classes = (permissions.IsUser,)
     serializer_class = serializers.ListingSerializer
@@ -594,7 +1008,28 @@ class ListingUserViewSet(viewsets.ModelViewSet):
 class ListingSearchViewSet(viewsets.ModelViewSet):
     """
     Search for listings
+
+    ModelViewSet for getting all Listing Searches
+
+    Access Control
+    ===============
+    - All users can view
+
+    URIs
+    ======
+    GET /api/listing
+    Summary:
+        Get a list of all system-wide Listing Search entries
+    Response:
+        200 - Successful operation - [ListingSerializer]
+
+    GET /api/listing/{pk}
+    Summary:
+        Find a ListingSearchViewSet Entry by ID
+    Response:
+        200 - Successful operation - ListingSerializer
     """
+
     permission_classes = (permissions.IsUser,)
     serializer_class = serializers.ListingSerializer
     filter_backends = (filters.SearchFilter, )
@@ -661,6 +1096,16 @@ class ElasticsearchListingSearchViewSet(viewsets.ViewSet):
     GET /api/listings/essearch/?search=6&offset=0&limit=24 HTTP/1.1
 
     GET api/listings/essearch/?search=6&offset=0&category=Education&limit=24&type=web+application&agency=Minitrue&agency=Miniluv&minscore=0.4
+
+    ModelViewSet for searching all Listings with Elasticsearch
+
+    Access Control
+    ===============
+    - All users can view
+
+    URIs
+    ======
+    GET /api/listing
     """
     permission_classes = (permissions.IsUser,)
 

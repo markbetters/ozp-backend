@@ -4,7 +4,20 @@ Storefront and Metadata Views for the Discovery page
 These are GET only views for retrieving a) metadata (categories, organizations,
 etc) and b) the apps displayed in the storefront (featured, recent, and
 most popular)
+
+Access Control
+===============
+- All users can view
+
+URIs
+======
+GET /api/storefront
+Summary:
+    Get the Storefront view
+Response:
+    200 - Successful operation - [StorefrontSerializer]
 """
+
 import logging
 
 from django.conf import settings
