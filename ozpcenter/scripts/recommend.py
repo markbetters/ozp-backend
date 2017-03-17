@@ -16,6 +16,7 @@ obj.save_to_db()
 Running this script will delete existing Recommendations in database
 ************************************WARNING************************************
 """
+import logging
 import sys
 import os
 
@@ -25,11 +26,14 @@ from ozpcenter.recommend.recommend import RecommenderDirectory
 
 RECOMMENDATION_ENGINE = os.getenv('RECOMMENDATION_ENGINE', 'sample_data')
 
+# Get an instance of a logger
+logger = logging.getLogger('ozp-center.' + str(__name__))
+
 def run():
     """
     Run the Recommendation Engine
     """
-    print('RECOMMENDATION_ENGINE: {}'.format(RECOMMENDATION_ENGINE))
+    logger.info('RECOMMENDATION_ENGINE: {}'.format(RECOMMENDATION_ENGINE))
 
     recommender_wrapper_obj = RecommenderDirectory()
     recommender_wrapper_obj.recommend(RECOMMENDATION_ENGINE)

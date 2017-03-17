@@ -699,28 +699,6 @@ class Profile(models.Model):
     # TODO: on create, update, or delete, do the same for the related
     # django_user
 
-    # @classmethod
-    # def from_db(cls, db, field_names, values):
-    #
-    #
-    #     raw = dict(zip(field_names, values))
-    #     print("*"*30)
-    #     print(cls._deferred)
-    #     print(cls.user)
-    #     print(raw)
-    #     print("*"*30)
-    #     # for key, value in raw.items():
-    #     #     if 'display_name' == key:
-    #     #         #raw[key] = 'Unknown'
-    #     #         print(key)
-    #     #         print(value)
-    #
-    #     new = cls(**raw)
-    #
-    #     new._state.adding = False
-    #     new._state.db = db
-    #     return new
-
     def __repr__(self):
         return 'Profile: {0!s}'.format(self.user.username)
 

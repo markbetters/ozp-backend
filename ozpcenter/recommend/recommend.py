@@ -104,10 +104,10 @@ class Recommender(object):
         start_ms = time.time() * 1000.0
         self.recommendation_logic()
         recommendation_ms = time.time() * 1000.0
-        print('--------')
-        print(self.recommender_result_set)
-        print('--------')
-        print('Recommendation Logic took: {} ms'.format(recommendation_ms - start_ms))
+        print('--------')  # Print statement for debugging output
+        logger.info(self.recommender_result_set)
+        print('--------')  # Print statement for debugging output
+        logger.info('Recommendation Logic took: {} ms'.format(recommendation_ms - start_ms))
         return self.recommender_result_set
 
 
@@ -174,7 +174,7 @@ class CustomHybridRecommender(Recommender):
         current_profile_count = 0
         for profile in all_profiles:
             current_profile_count = current_profile_count + 1
-            print('Calculating Profile {}/{}'.format(current_profile_count, all_profiles_count))
+            logger.info('Calculating Profile {}/{}'.format(current_profile_count, all_profiles_count))
 
             profile_id = profile.id
             profile_username = profile.user.username
@@ -215,7 +215,6 @@ class CustomHybridRecommender(Recommender):
             # Get most popular bookmarked apps for all users
             # Would it be faster it this code was outside the loop for profiles?
             library_entries = models.ApplicationLibraryEntry.objects.for_user_organization_minus_security_markings(profile_username)
-            # library_entries = library_entries.filter(owner__user__username=username)
             library_entries = library_entries.filter(listing__is_enabled=True)
             library_entries = library_entries.filter(listing__is_deleted=False)
             library_entries = library_entries.filter(listing__approval_status=models.Listing.APPROVED)
@@ -264,8 +263,8 @@ class ElasticsearchContentBaseRecommender(Recommender):
         Template Code to make sure that Elasticsearch client is working
         This code should be replace by real algorthim
         """
-        print('Elasticsearch Content Base Recommendation Engine')
-        print('Elasticsearch Health : {}'.format(es_client.cluster.health()))
+        logger.debug('Elasticsearch Content Base Recommendation Engine')
+        logger.debug('Elasticsearch Health : {}'.format(es_client.cluster.health()))
 
 
 class ElasticsearchUserBaseRecommender(Recommender):
@@ -288,8 +287,8 @@ class ElasticsearchUserBaseRecommender(Recommender):
         Template Code to make sure that Elasticsearch client is working
         This code should be replace by real algorthim
         """
-        print('Elasticsearch User Base Recommendation Engine')
-        print('Elasticsearch Health : {}'.format(es_client.cluster.health()))
+        logger.debug('Elasticsearch User Base Recommendation Engine')
+        logger.debug('Elasticsearch Health : {}'.format(es_client.cluster.health()))
 
 
 class GraphCollaborativeFilteringBaseRecommender(Recommender):
@@ -415,16 +414,15 @@ class RecommenderDirectory(object):
         start_ms = time.time() * 1000.0
 
         for current_recommender_obj in recommender_list:
-            print('======{}======='.format(current_recommender_obj.__class__.__name__))
+            logger.info('=={}=='.format(current_recommender_obj.__class__.__name__))
             recommender_obj = current_recommender_obj
             self.merge(recommender_obj.recommend())
-            print('=============')
 
         start_db_ms = time.time() * 1000.0
         self.save_to_db()
         end_db_ms = time.time() * 1000.0
-        print('Save to database took: {} ms'.format(end_db_ms - start_db_ms))
-        print('Whole Process: {} ms'.format(end_db_ms - start_ms))
+        logger.info('Save to database took: {} ms'.format(end_db_ms - start_db_ms))
+        logger.info('Whole Process: {} ms'.format(end_db_ms - start_ms))
 
     def save_to_db(self):
         """
