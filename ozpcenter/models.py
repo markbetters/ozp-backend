@@ -1420,3 +1420,97 @@ class Notification(models.Model):
 
     def __str__(self):
         return '{0!s}: {1!s}'.format(self.author.user.username, self.message)
+
+
+class NotificationV2(models.Model):
+    # Mailbox Profile ID
+    profile_target_id = models.ForeignKey(Profile, related_name='mailbox_notifications')
+
+    # It is a unique id for notifications that allow to correlate between different 'mailboxes'
+    # Example) For deleting system-wide notifications,
+    # for every 'mailbox' delete the notification with notification_id
+    notification_id = models.UUIDField(default=uuid.uuid4, editable=False, db_index=True)
+
+    created_date = models.DateTimeField(default=utils.get_now_utc)
+    expires_date = models.DateTimeField()
+
+    # Author of Notification
+    author = models.ForeignKey(Profile, related_name='authored_notificationsv2')
+    message = models.CharField(max_length=4096)
+
+    # Notification Type
+    SYSTEM = 'system'  # System-wide Notifications
+    AGENCY = 'agency'  # Agency-wide Notifications
+    AGENCY_BOOKMARK = 'agency_bookmark'  # Agency-wide Bookmark Notifications # Not requirement (erivera 20160621)
+    LISTING = 'listing'  # Listing Notifications
+    PEER = 'peer'  # Peer to Peer Notifications
+    PEER_BOOKMARK = 'peer_bookmark'  # PEER.BOOKMARK - Peer to Peer Bookmark Notifications
+
+    NOTIFICATION_TYPE_CHOICES = (
+        (SYSTEM, 'system'),
+        (AGENCY, 'agency'),
+        (AGENCY_BOOKMARK, 'agency_bookmark'),
+        (LISTING, 'listing'),
+        (PEER, 'peer'),
+        (PEER_BOOKMARK, 'peer_bookmark'),
+    )
+
+    notification_type = models.CharField(max_length=24, choices=NOTIFICATION_TYPE_CHOICES, db_index=True)
+
+    # Depending on notification_type, it could be listing_id/agency_id/profile_user_id/category_id/tag_id
+    entity_id = models.IntegerField(default=0, null=True, blank=True)
+
+    # If it has been emailed. then make value true
+    email_status = models.BooleanField(default=False)
+
+    # Field use to store extra data.
+    # For PEER.BOOKMARK Notifications this field will be use to store FolderName and Listing Ids
+    _metadata = models.CharField(max_length=4096, null=True, blank=True, db_column='metadata')
+
+    # User Target
+    ALL = 'all'  # All users
+    STEWARDS = 'stewards'
+    APP_STEWARD = 'app_steward'
+    ORG_STEWARD = 'org_steward'
+    USER = 'user'
+
+    TARGET_USER_CHOICES = (
+        (ALL, 'all'),
+        (STEWARDS, 'stewards'),
+        (APP_STEWARD, 'app_steward'),
+        (ORG_STEWARD, 'org_steward'),
+        (USER, 'user'),
+    )
+    user_target = models.CharField(max_length=24, choices=TARGET_USER_CHOICES)  # db_index=True)
+
+    @property
+    def metadata(self):
+        if self._metadata:
+            json_str_to_dict = json.loads(self._metadata)
+            return json_str_to_dict
+        else:
+            return None
+
+    @metadata.setter
+    def metadata(self, value):
+        """
+        Setter for metadata variable
+        {
+            '_bookmark_listing_ids': list[int],
+            'folder_name': str
+        }
+
+        Args:
+            value (dict): dictionary
+        """
+        if value:
+            assert isinstance(value, dict), 'Argument of wrong type is not a dict'
+            self._metadata = json.dumps(value)
+        else:
+            return None
+
+    def __repr__(self):
+        return '{0!s}: {1!s}'.format(self.author.user.username, self.message)
+
+    def __str__(self):
+        return '{0!s}: {1!s}'.format(self.author.user.username, self.message)
