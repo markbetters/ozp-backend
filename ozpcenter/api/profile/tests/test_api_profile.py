@@ -148,9 +148,9 @@ class ProfileApiTest(APITestCase):
         data = response.data
         # print(data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        ids = [i['id'] for i in data]
-        self.assertTrue(110 in ids)
-        self.assertEquals(len(ids), 90)
+        listing_unique_names = [i['unique_name'] for i in data]
+        self.assertTrue('ozp.test.air_mail' in listing_unique_names)
+        self.assertEquals(len(listing_unique_names), 90)
 
     @patch('plugins_util.plugin_manager.requests.get', side_effect=helper.mocked_requests_get)
     def test_all_listing_for_app_profile_from_multi_org_profile_auth_enabled(self, mock_request):
@@ -184,9 +184,9 @@ class ProfileApiTest(APITestCase):
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         data = response.data
-        ids = [i['id'] for i in data]
-        self.assertTrue(59 in ids)
-        self.assertEquals(len(ids), 10)
+        listing_unique_names = [i['unique_name'] for i in data]
+        self.assertTrue('ozp.test.chatterbox.8' in listing_unique_names)
+        self.assertEquals(len(listing_unique_names), 10)
 
     @patch('plugins_util.plugin_manager.requests.get', side_effect=helper.mocked_requests_get)
     def test_all_listing_for_minitrue_profile_from_minitrue_profile(self, mock_request):

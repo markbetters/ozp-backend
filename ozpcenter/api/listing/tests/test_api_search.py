@@ -171,7 +171,7 @@ class ListingSearchApiTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         ids = [record.get('id') for record in response.data]
-        self.assertEqual(ids, [1, 12, 23, 34, 45, 56, 67, 78, 89, 100])
+        self.assertEqual(ids, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
 
         for listing_map in response.data:
             self.assertEquals(self._validate_listing_map_keys(listing_map), [])
@@ -248,7 +248,7 @@ class ListingSearchApiTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         ids = [record.get('id') for record in response.data]
-        self.assertEqual(ids, [12, 23, 34, 45, 56, 67, 78, 89, 100])
+        self.assertEqual(ids, [2, 3, 4, 5, 6, 7, 8, 9, 10])
         for listing_map in response.data:
             self.assertEquals(self._validate_listing_map_keys(listing_map), [])
 

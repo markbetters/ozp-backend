@@ -175,11 +175,14 @@ def bulk_reindex():
       "total_reviews": 0,
       "is_featured": true,
 
+    To check index in elasticsearch:
+        http://127.0.0.1:9200/appsmall/_search?size=10000&pretty
+
     Resources:
     https://www.elastic.co/guide/en/elasticsearch/reference/2.4/analyzer.html
     https://qbox.io/blog/quick-and-dirty-autocomplete-with-elasticsearch-completion-suggest
     """
-    print('Starting Indexing Process')
+    logger.info('Starting Indexing Process')
     check_elasticsearch()
 
     all_listings = models.Listing.objects.all()
@@ -203,26 +206,25 @@ def bulk_reindex():
         bulk_data.append(op_dict)
         bulk_data.append(record_clean_obj)
 
-    print('Checking to see if Index exist')
+    logger.info('Checking to see if Index [{}] exist'.format(settings.ES_INDEX_NAME))
 
     if es_client.indices.exists(settings.ES_INDEX_NAME):
-        print("deleting '%s' index..." % (settings.ES_INDEX_NAME))
+        logger.info("deleting '%s' index..." % (settings.ES_INDEX_NAME))
         res = es_client.indices.delete(index=settings.ES_INDEX_NAME)
-        print(" response: '%s'" % (res))
+        logger.info(" response: '%s'" % (res))
 
     request_body = elasticsearch_util.get_mapping_setting_obj()
 
-    print("Creating '%s' index..." % (settings.ES_INDEX_NAME))
+    logger.info("Creating '%s' index..." % (settings.ES_INDEX_NAME))
     res = es_client.indices.create(index=settings.ES_INDEX_NAME, body=request_body)
-    print(" response: '%s'" % (res))
+    logger.info(" response: '%s'" % (res))
 
     # Bulk index the data
-    print("Bulk indexing listings...")
+    logger.info("Bulk indexing listings...")
     res = es_client.bulk(index=settings.ES_INDEX_NAME, body=bulk_data, refresh=True)
-    print(" response: '%s'" % (res))
+    logger.info(" response: '%s'" % (res))
 
-    print("Done Indexing")
-    # http://127.0.0.1:9200/appsmall/_search?size=10000&pretty
+    logger.info("Done Indexing")
 
 
 def get_user_exclude_orgs(username):
@@ -275,7 +277,7 @@ def suggest(request_username, params_obj):
     search_query = elasticsearch_util.make_search_query_obj(params_obj, exclude_agencies=user_exclude_orgs)
     search_query['_source'] = ['title', 'security_marking', 'id']  # Only Retrieve these fields from Elasticsearch
 
-    # print(json.dumps(search_query, indent=4))
+    # print(json.dumps(search_query, indent=4))  #  Print statement for debugging output
     res = es_client.search(index=settings.ES_INDEX_NAME, body=search_query)
 
     hits = res.get('hits', {}).get('hits', None)

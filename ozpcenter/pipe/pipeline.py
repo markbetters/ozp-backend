@@ -1,5 +1,10 @@
 """
-Lazy Loading Dataflow
+# Lazy Loading Dataflow
+
+## Lazy Loading Pipe Query System:
+# VerticesVerticesPipe
+Start with Vertices (1 or more) to get all the other Vertices connected to it.
+
 """
 from ozpcenter.recommend import utils
 

@@ -22,14 +22,18 @@ class GraphTest(TestCase):
         """
         data_gen.run()
 
-    def test_load_db_into_graph(self):
+    def test_graph_recommendation(self):
+        graph = GraphFactory.load_sample_profile_listing_graph()
+        results = graph.algo().recommend_listings_for_profile('p-1')
+
+        output = [('l-5', 2), ('l-8', 1), ('l-7', 1), ('l-6', 1), ('l-4', 1)]
+
+        self.assertEqual(results, output)
+
+    def test_graph_recommendation_db(self):
         graph = GraphFactory.load_db_into_graph()
-        self.assertEqual(str(graph), 'Graph(vertices: 158, edges: 402)')
+        results = graph.algo().recommend_listings_for_profile('p-1')  # bigbrother
 
-        bigbrother_dict = graph.query().v('p-1').to_dict().next()
-        expected_dict = {'highest_role': 'APPS_MALL_STEWARD', 'username': 'bigbrother'}
-        self.assertEqual(bigbrother_dict, expected_dict)
+        output = [('l-114', 1), ('l-113', 1), ('l-112', 1), ('l-1', 1)]
 
-        bigbrother_bookmarks = graph.query().v('p-1').out('bookmarked').id().to_list()
-        expected_bookmarks = ['l-11']
-        self.assertEqual(bigbrother_bookmarks, expected_bookmarks)
+        self.assertEqual(results, output)

@@ -3,9 +3,8 @@ Make sure that Pipe and Pipeline classes work
 """
 from django.test import TestCase
 
-from ozpcenter.scripts import sample_data_generator as data_gen
 from ozpcenter.recommend.graph import Graph
-# from ozpcenter.recommend.graph_factory import GraphFactory
+from ozpcenter.scripts import sample_data_generator as data_gen
 
 
 class GraphTest(TestCase):
@@ -55,23 +54,40 @@ class GraphTest(TestCase):
         self.assertEqual(added_vertex.label, 'test_label1')
         self.assertEqual(added_vertex.get_property('test_field'), 2)
 
-    def test_graph_add_two_vertex_edges(self):
+    def test_graph_three_vertices_simple(self):
         graph = Graph()
-        vertex1 = graph.add_vertex('person', {'username': 'first last'})
-        vertex2 = graph.add_vertex('listing', {'title': 'Skyzone1'})
-        vertex3 = graph.add_vertex('listing', {'title': 'Skyzone2'})
+        vertex1 = graph.add_vertex('person', {'username': 'first last'}, current_id=10)
+        vertex2 = graph.add_vertex('listing', {'title': 'Skyzone1'}, current_id=20)
+        vertex3 = graph.add_vertex('listing', {'title': 'Skyzone2'}, current_id=30)
         vertex1.add_edge('personListing', vertex2)
         vertex1.add_edge('personListing', vertex3)
+        vertex1.add_edge('testListing', vertex3)
 
-        self.assertEqual(str(graph), 'Graph(vertices: 3, edges: 2)')
+        self.assertEqual(str(graph), 'Graph(vertices: 3, edges: 3)')
         # Check Vertex 1
         self.assertEqual(len(vertex1.get_in_edges('personListing')), 0)
+        self.assertEqual([edge.label for edge in vertex1.get_in_edges('personListing')], [])
+        self.assertEqual([edge.in_vertex.id for edge in vertex1.get_in_edges('personListing')], [])
+
         self.assertEqual(len(vertex1.get_out_edges('personListing')), 2)
+        self.assertEqual(len(vertex1.get_out_edges()), 3)
+        self.assertEqual([edge.label for edge in vertex1.get_out_edges('personListing')], ['personListing', 'personListing'])
+        self.assertEqual([edge.out_vertex.id for edge in vertex1.get_out_edges('personListing')], [20, 30])
 
         # Check Vertex 2
         self.assertEqual(len(vertex2.get_in_edges('personListing')), 1)
+        self.assertEqual([edge.label for edge in vertex2.get_in_edges('personListing')], ['personListing'])
+        self.assertEqual([edge.in_vertex.id for edge in vertex2.get_in_edges('personListing')], [10])
+
         self.assertEqual(len(vertex2.get_out_edges('personListing')), 0)
+        self.assertEqual([edge.label for edge in vertex2.get_out_edges('personListing')], [])
+        self.assertEqual([edge.out_vertex.id for edge in vertex2.get_out_edges('personListing')], [])
 
         # Check Vertex 3
         self.assertEqual(len(vertex3.get_in_edges('personListing')), 1)
+        self.assertEqual([edge.label for edge in vertex3.get_in_edges('personListing')], ['personListing'])
+        self.assertEqual([edge.in_vertex.id for edge in vertex3.get_in_edges('personListing')], [10])
+
         self.assertEqual(len(vertex3.get_out_edges('personListing')), 0)
+        self.assertEqual([edge.label for edge in vertex3.get_out_edges('personListing')], [])
+        self.assertEqual([edge.out_vertex.id for edge in vertex3.get_out_edges('personListing')], [])

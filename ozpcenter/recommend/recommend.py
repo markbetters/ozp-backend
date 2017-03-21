@@ -29,11 +29,13 @@ import logging
 import time
 
 from django.core.exceptions import ObjectDoesNotExist
-from ozpcenter import models
 from django.db.models import Count
-from ozpcenter.api.listing.model_access_es import check_elasticsearch
+
+from ozpcenter import models
 from ozpcenter.api.listing import model_access_es
+from ozpcenter.api.listing.model_access_es import check_elasticsearch
 from ozpcenter.recommend import utils
+# from ozpcenter.recommend.graph_factory import GraphFactory
 
 
 # Get an instance of a logger
@@ -46,23 +48,9 @@ es_client = model_access_es.es_client
 class Recommender(object):
     """
     This class is to behave like a superclass for recommendation engine
-
-    recommender_result_set: Dictionary with profile id, nested listing id with score pairs
-        {
-            profile_id#1: {
-                listing_id#1: score#1,
-                listing_id#2: score#2
-            },
-            profile_id#2: {
-                listing_id#1: score#1,
-                listing_id#2: score#2,
-                listing_id#3: score#3,
-            }
-        }
     """
 
     def __init__(self):
-        # Set up variables for processing data
         self.recommender_result_set = {}
         self.initiate()
 
@@ -80,61 +68,22 @@ class Recommender(object):
         """
         raise NotImplementedError()
 
-    def merge(self):
-        """
-        Purpose is to merge all of the different Recommender's algorthim recommender result together.
-        This function is responsible for merging the results of the other Recommender recommender_result_set diction into self recommender_result_set
-
-        Self recommender_result_set
-        {
-            profile_id#1: {
-                listing_id#1: score#1,
-                listing_id#2: score#2
-            },
-            profile_id#2: {
-                listing_id#1: score#1,
-                listing_id#2: score#2,
-                listing_id#3: score#3,
-            }
-        }
-
-        Other recommender_result_set:
-        {
-            profile_id#3: {
-                listing_id#1: score#1,
-                listing_id#2: score#2
-            },
-            profile_id#1: {
-                listing_id#5: score#1,
-            }
-        }
-
-        Merged recommender_result_set
-        {
-            profile_id#1: {
-                listing_id#1: score#1,
-                listing_id#2: score#2,
-                listing_id#5: score#1,
-            },
-            profile_id#2: {
-                listing_id#1: score#1,
-                listing_id#2: score#2,
-                listing_id#3: score#3,
-            },
-            profile_id#3: {
-                listing_id#1: score#1,
-                listing_id#2: score#2
-            },
-        }
-
-        When there is a conflict in the profile/listing/score, average the two scores together
-        TODO Implement Code
-        """
-        pass
-
     def add_listing_to_user_profile(self, profile_id, listing_id, score, cumulative=False):
         """
         Add listing and score to user profile
+
+        recommender_result_set: Dictionary with profile id, nested listing id with score pairs
+            {
+                profile_id#1: {
+                    listing_id#1: score#1,
+                    listing_id#2: score#2
+                },
+                profile_id#2: {
+                    listing_id#1: score#1,
+                    listing_id#2: score#2,
+                    listing_id#3: score#3,
+                }
+            }
         """
         if profile_id in self.recommender_result_set:
             if self.recommender_result_set[profile_id].get(listing_id):
@@ -155,49 +104,11 @@ class Recommender(object):
         start_ms = time.time() * 1000.0
         self.recommendation_logic()
         recommendation_ms = time.time() * 1000.0
-        print('--------')
-        print(self.recommender_result_set)
-        print('--------')
-        start_db_ms = time.time() * 1000.0
-        self.save_to_db()
-        end_db_ms = time.time() * 1000.0
-
-        print('Recommendation Logic took: {} ms'.format(recommendation_ms - start_ms))
-        print('Save to database took: {} ms'.format(end_db_ms - start_db_ms))
-        print('Whole Process: {} ms'.format(end_db_ms - start_ms))
-
-    def save_to_db(self):
-        """
-        This function is responsible for storing the recommendations into the database
-        """
-        for profile_id in self.recommender_result_set:
-
-            profile = None
-            try:
-                profile = models.Profile.objects.get(pk=profile_id)
-            except ObjectDoesNotExist:
-                profile = None
-
-            if profile:
-                # Clear Recommendations Entries before putting new ones.
-                models.RecommendationsEntry.objects.filter(target_profile=profile).delete()
-
-                listing_ids = self.recommender_result_set[profile_id]
-
-                for current_listing_id in listing_ids:
-                    score = listing_ids[current_listing_id]
-                    current_listing = None
-                    try:
-                        current_listing = models.Listing.objects.get(pk=current_listing_id)
-                    except ObjectDoesNotExist:
-                        current_listing = None
-
-                    if current_listing:
-                        recommendations_entry = models.RecommendationsEntry(
-                            target_profile=profile,
-                            listing=current_listing,
-                            score=score)
-                        recommendations_entry.save()
+        print('--------')  # Print statement for debugging output
+        logger.info(self.recommender_result_set)
+        print('--------')  # Print statement for debugging output
+        logger.info('Recommendation Logic took: {} ms'.format(recommendation_ms - start_ms))
+        return self.recommender_result_set
 
 
 class SampleDataRecommender(Recommender):
@@ -244,7 +155,7 @@ class CustomHybridRecommender(Recommender):
     Requirements:
     - Recommendations should be explainable and believable
     - Must respect private apps
-    - Does not have to repectborative filtering)
+    - Does not have to repect security_marking while saving to db
     """
 
     def initiate(self):
@@ -263,7 +174,7 @@ class CustomHybridRecommender(Recommender):
         current_profile_count = 0
         for profile in all_profiles:
             current_profile_count = current_profile_count + 1
-            print('Calculating Profile {}/{}'.format(current_profile_count, all_profiles_count))
+            logger.info('Calculating Profile {}/{}'.format(current_profile_count, all_profiles_count))
 
             profile_id = profile.id
             profile_username = profile.user.username
@@ -304,7 +215,6 @@ class CustomHybridRecommender(Recommender):
             # Get most popular bookmarked apps for all users
             # Would it be faster it this code was outside the loop for profiles?
             library_entries = models.ApplicationLibraryEntry.objects.for_user_organization_minus_security_markings(profile_username)
-            # library_entries = library_entries.filter(owner__user__username=username)
             library_entries = library_entries.filter(listing__is_enabled=True)
             library_entries = library_entries.filter(listing__is_deleted=False)
             library_entries = library_entries.filter(listing__approval_status=models.Listing.APPROVED)
@@ -353,8 +263,8 @@ class ElasticsearchContentBaseRecommender(Recommender):
         Template Code to make sure that Elasticsearch client is working
         This code should be replace by real algorthim
         """
-        print('Elasticsearch Content Base Recommendation Engine')
-        print('Elasticsearch Health : {}'.format(es_client.cluster.health()))
+        logger.debug('Elasticsearch Content Base Recommendation Engine')
+        logger.debug('Elasticsearch Health : {}'.format(es_client.cluster.health()))
 
 
 class ElasticsearchUserBaseRecommender(Recommender):
@@ -377,15 +287,13 @@ class ElasticsearchUserBaseRecommender(Recommender):
         Template Code to make sure that Elasticsearch client is working
         This code should be replace by real algorthim
         """
-        print('Elasticsearch User Base Recommendation Engine')
-        print('Elasticsearch Health : {}'.format(es_client.cluster.health()))
+        logger.debug('Elasticsearch User Base Recommendation Engine')
+        logger.debug('Elasticsearch Health : {}'.format(es_client.cluster.health()))
 
 
-class SurpriseUserBaseRecommender(Recommender):
+class GraphCollaborativeFilteringBaseRecommender(Recommender):
     """
-    Surprise Based Recommendation Engine
-
-    http://surprise.readthedocs.io/en/latest/getting_started.html
+    Graph Collaborative Filtering based on Bookmarkes
     """
 
     def initiate(self):
@@ -406,22 +314,145 @@ class RecommenderDirectory(object):
     Wrapper for all Recommenders
     It maps strings to classes.
     """
-
     def __init__(self):
         self.recommender_classes = {
-            'surprise_user_base': SurpriseUserBaseRecommender,
+            'graph_cf': GraphCollaborativeFilteringBaseRecommender,
             'elasticsearch_user_base': ElasticsearchUserBaseRecommender,
             'elasticsearch_content_base': ElasticsearchContentBaseRecommender,
             'sample_data': SampleDataRecommender,
             'custom': CustomHybridRecommender
         }
+        self.recommender_result_set = {}
+
+    def get_recommender_class_obj(self, recommender_class_string):
+        """
+        Get Recommender class and make a instance of it
+        """
+        if recommender_class_string in self.recommender_classes:
+            return self.recommender_classes[recommender_class_string]()
+        else:
+            raise Exception('Recommender Engine [{}] Not Found'.format(recommender_class_string))
+
+    def _merge_add_entry(self, profile_id, listing_id, score):
+        """
+        Merge the results together
+        When there is a conflict in the profile/listing/score, average the two scores together
+        """
+        if profile_id in self.recommender_result_set:
+            if self.recommender_result_set[profile_id].get(listing_id):
+                self.recommender_result_set[profile_id][listing_id] = (self.recommender_result_set[profile_id][listing_id] + float(score)) / 2
+            else:
+                self.recommender_result_set[profile_id][listing_id] = float(score)
+        else:
+            self.recommender_result_set[profile_id] = {}
+            self.recommender_result_set[profile_id][listing_id] = float(score)
+
+    def merge(self, recommender_result_set):
+        """
+        Purpose is to merge all of the different Recommender's algorthim recommender result together.
+        This function is responsible for merging the results of the other Recommender recommender_result_set diction into self recommender_result_set
+
+        Self recommender_result_set
+        {
+            profile_id#1: {
+                listing_id#1: score#1,
+                listing_id#2: score#2
+            },
+            profile_id#2: {
+                listing_id#1: score#1,
+                listing_id#2: score#2,
+                listing_id#3: score#3,
+            }
+        }
+
+        Other recommender_result_set:
+        {
+            profile_id#3: {
+                listing_id#1: score#1,
+                listing_id#2: score#2
+            },
+            profile_id#1: {
+                listing_id#5: score#1,
+            }
+        }
+
+        Merged recommender_result_set
+        {
+            profile_id#1: {
+                listing_id#1: score#1,
+                listing_id#2: score#2,
+                listing_id#5: score#3,
+            },
+            profile_id#2: {
+                listing_id#1: score#1,
+                listing_id#2: score#2,
+                listing_id#3: score#3,
+            },
+            profile_id#3: {
+                listing_id#1: score#1,
+                listing_id#2: score#2
+            },
+        }
+        """
+        if recommender_result_set is None:
+            return False
+        for profile_id in recommender_result_set:
+            for listing_id in recommender_result_set[profile_id]:
+                score = recommender_result_set[profile_id][listing_id]
+                self._merge_add_entry(profile_id, listing_id, score)
+        return True
 
     def recommend(self, recommender_string):
         """
-        Creates Recommender Object, and excute the recommend
-        """
-        if recommender_string not in self.recommender_classes:
-            raise Exception('Recommender Engine Not Found')
+        Creates Recommender Object, and execute the recommend
 
-        recommender_obj = self.recommender_classes[recommender_string]()
-        recommender_obj.recommend()
+        Args:
+            recommender_string: Comma Delimited list of Recommender Engine to execute
+        """
+        recommender_list = [self.get_recommender_class_obj(current_recommender.strip()) for current_recommender in recommender_string.split(',')]
+
+        start_ms = time.time() * 1000.0
+
+        for current_recommender_obj in recommender_list:
+            logger.info('=={}=='.format(current_recommender_obj.__class__.__name__))
+            recommender_obj = current_recommender_obj
+            self.merge(recommender_obj.recommend())
+
+        start_db_ms = time.time() * 1000.0
+        self.save_to_db()
+        end_db_ms = time.time() * 1000.0
+        logger.info('Save to database took: {} ms'.format(end_db_ms - start_db_ms))
+        logger.info('Whole Process: {} ms'.format(end_db_ms - start_ms))
+
+    def save_to_db(self):
+        """
+        This function is responsible for storing the recommendations into the database
+        """
+        for profile_id in self.recommender_result_set:
+
+            profile = None
+            try:
+                profile = models.Profile.objects.get(pk=profile_id)
+            except ObjectDoesNotExist:
+                profile = None
+
+            if profile:
+                # Clear Recommendations Entries before putting new ones.
+                models.RecommendationsEntry.objects.filter(target_profile=profile).delete()
+
+                listing_ids = self.recommender_result_set[profile_id]
+
+                for current_listing_id in listing_ids:
+                    score = listing_ids[current_listing_id]
+                    current_listing = None
+                    try:
+                        current_listing = models.Listing.objects.get(pk=current_listing_id)
+                    except ObjectDoesNotExist:
+                        current_listing = None
+
+                    if current_listing:
+                        recommendations_entry = models.RecommendationsEntry(
+                            target_profile=profile,
+                            listing=current_listing,
+                            score=score)
+                        recommendations_entry.save()

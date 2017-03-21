@@ -925,13 +925,13 @@ class ListingApiTest(APITestCase):
                 "4": 0,
                 "2": 0,
                 "1": 100,
-                "3": 11
+                "3": 20
                 },
             "REJECTED": 0,
-            "enabled": 111,
+            "enabled": 120,
             "APPROVED_ORG": 0,
-            "total": 111,
-            "APPROVED": 111,
+            "total": 120,
+            "APPROVED": 120,
             "PENDING": 0,
             "PENDING_DELETION": 0,
             "IN_PROGRESS": 0,

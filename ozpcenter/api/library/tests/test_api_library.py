@@ -114,9 +114,6 @@ class LibraryApiTest(APITestCase):
         self.assertEqual(response.data['listing']['id'], 1)
 
     def test_get_library_list(self):
-        """
-        GET /self/library
-        """
         user = generic_model_access.get_profile('wsmith').user
         self.client.force_authenticate(user=user)
 
@@ -124,7 +121,7 @@ class LibraryApiTest(APITestCase):
         response = self.client.get(url, format='json')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(2, len(response.data))
+        self.assertEqual(5, len(response.data))
         self.assertIn('listing', response.data[0])
         self.assertIn('id', response.data[0]['listing'])
         self.assertIn('title', response.data[0]['listing'])
@@ -132,9 +129,6 @@ class LibraryApiTest(APITestCase):
         self.assertIn('folder', response.data[0])
 
     def test_get_library_self_when_listing_disabled_enabled(self):
-        """
-        GET /self/library
-        """
         user = generic_model_access.get_profile('wsmith').user
         self.client.force_authenticate(user=user)
 
@@ -144,7 +138,7 @@ class LibraryApiTest(APITestCase):
         listing_ids = [record['listing']['id'] for record in response.data]
         first_listing_id = listing_ids[0]  # Should be 2
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(listing_ids, [2, 1], 'Comparing Ids #1')
+        self.assertEqual(listing_ids, [11, 1, 112, 113, 114], 'Comparing Ids #1')
 
         # Get Library for current user after listing was disabled
         _edit_listing(self, first_listing_id, {'is_enabled': False})
@@ -157,7 +151,7 @@ class LibraryApiTest(APITestCase):
 
         listing_ids = [record['listing']['id'] for record in response.data]
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(listing_ids, [1], 'Comparing Ids #2')
+        self.assertEqual(listing_ids, [1, 112, 113, 114], 'Comparing Ids #2')
 
         # Get Library for current user after listing was Enable
         _edit_listing(self, first_listing_id, {'is_enabled': True})
@@ -170,12 +164,9 @@ class LibraryApiTest(APITestCase):
 
         listing_ids = [record['listing']['id'] for record in response.data]
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(listing_ids, [2, 1], 'Comparings Ids #3')
+        self.assertEqual(listing_ids, [11, 1, 112, 113, 114], 'Comparings Ids #3')
 
     def test_get_library_list_listing_type(self):
-        """
-        GET /self/library
-        """
         user = generic_model_access.get_profile('wsmith').user
         self.client.force_authenticate(user=user)
 
@@ -183,7 +174,7 @@ class LibraryApiTest(APITestCase):
         response = self.client.get(url, format='json')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(2, len(response.data))
+        self.assertEqual(5, len(response.data))
         self.assertIn('listing', response.data[0])
         self.assertIn('id', response.data[0]['listing'])
         self.assertIn('title', response.data[0]['listing'])
@@ -191,9 +182,6 @@ class LibraryApiTest(APITestCase):
         self.assertIn('folder', response.data[0])
 
     def test_get_library_list_listing_type_empty(self):
-        """
-        GET /self/library
-        """
         user = generic_model_access.get_profile('wsmith').user
         self.client.force_authenticate(user=user)
 
@@ -204,9 +192,6 @@ class LibraryApiTest(APITestCase):
         self.assertEqual(0, len(response.data))
 
     def test_get_library_pk(self):
-        """
-        GET /self/library/1
-        """
         user = generic_model_access.get_profile('wsmith').user
         self.client.force_authenticate(user=user)
 
@@ -221,9 +206,6 @@ class LibraryApiTest(APITestCase):
         self.assertIn('folder', response.data)
 
     def test_update_library(self):
-        """
-        PUT self/library/update_all
-        """
         user = generic_model_access.get_profile('wsmith').user
         self.client.force_authenticate(user=user)
 
