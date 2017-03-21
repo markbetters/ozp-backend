@@ -120,13 +120,7 @@ class ProfileListingViewSet(viewsets.ModelViewSet):
 
     URIs
     ======
-    GET /api/listing/
-    Summary:
-        Get a list of all system-wide Profile Listings
-    Response:
-        200 - Successful operation - [ListingSerializer]
-
-    POST /api/listing/
+    POST /api/profile/{pk}/listing/
     Summary:
         Add a Profile Listing
     Request:
@@ -134,21 +128,21 @@ class ProfileListingViewSet(viewsets.ModelViewSet):
     Response:
         200 - Successful operation - ListingSerializer
 
-    GET /api/listing/{pk}
+    GET /api/profile/{pk}/listing/
     Summary:
         Find a Profile Listing by ID
     Response:
         200 - Successful operation - ListingSerializer
 
-    PUT /api/listing/{pk}
+    PUT /api/profile/{pk}/listing/
     Summary:
         Update a Profile Listing by ID
 
-    PATCH /api/listing/{pk}
+    PATCH /api/profile/{pk}/listing/
     Summary:
         Update (Partial) a Profile Listing by ID
 
-    DELETE /api/listing/{pk}
+    DELETE /api/profile/{pk}/listing/
     Summary:
         Delete a Profile Listing by ID
     """
