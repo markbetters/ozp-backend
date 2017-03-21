@@ -106,13 +106,13 @@ class UserNotificationViewSet(viewsets.ModelViewSet):
     URIs
     ======
 
-    GET /api/notification/
+    GET /api/self/notification/
         Summary:
             Get a list of all user Notification entries
         Response:
             200 - Successful operation - [NotificationSerializer]
 
-    DELETE /api/notification/{pk}
+    DELETE /api/self/notification/{pk}
     Summary:
         Delete a user Notification Entry by ID
     """
@@ -146,15 +146,15 @@ class PendingNotificationView(generics.ListCreateAPIView):
     URIs
     ======
 
-    GET /api/notification/
+    GET /api/notifications/pending/
         Summary:
             Get a list of all Pending Notification entries
         Response:
             200 - Successful operation - [NotificationSerializer]
 
-    DELETE /api/notification/{pk}
+    DELETE /api/notifications/pending/
     Summary:
-        Delete a Pending Notification Entry by ID
+        Delete a Pending Notification Entry
     """
 
     permission_classes = (permissions.IsOrgSteward,)

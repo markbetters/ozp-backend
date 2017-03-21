@@ -33,13 +33,13 @@ class ContactViewSet(viewsets.ModelViewSet):
 
     URIs
     ======
-    GET /api/listing
+    GET /api/contact
     Summary:
         Get a list of all system-wide Contact entries
     Response:
         200 - Successful operation - [ContactSerializer]
 
-    POST /api/listing/
+    POST /api/contact/
     Summary:
         Add a Contact
     Request:
@@ -47,21 +47,21 @@ class ContactViewSet(viewsets.ModelViewSet):
     Response:
         200 - Successful operation - ContactSerializer
 
-    GET /api/listing/{pk}
+    GET /api/contact/{pk}
     Summary:
         Find a Contact Entry by ID
     Response:
         200 - Successful operation - ContactSerializer
 
-    PUT /api/listing/{pk}
+    PUT /api/contact/{pk}
     Summary:
         Update a Contact Entry by ID
 
-    PATCH /api/listing/{pk}
+    PATCH /api/contact/{pk}
     Summary:
         Update (Partial) a Contact Entry by ID
 
-    DELETE /api/listing/{pk}
+    DELETE /api/contact/{pk}
     Summary:
         Delete a Contact Entry by ID
     """
@@ -73,45 +73,7 @@ class ContactViewSet(viewsets.ModelViewSet):
 
 class DocUrlViewSet(viewsets.ModelViewSet):
     """
-    ModelViewSet for getting all DocUrls for a given listing
-
-    Access Control
-    ===============
-    - All users can view
-
-    URIs
-    ======
-    GET /api/listing
-    Summary:
-        Get a list of all system-wide DocUrl entries
-    Response:
-        200 - Successful operation - [DocUrlSerializer]
-
-    POST /api/listing/
-    Summary:
-        Add a DocUrl
-    Request:
-        data: DocUrlSerializer Schema
-    Response:
-        200 - Successful operation - DocUrlSerializer
-
-    GET /api/listing/{pk}
-    Summary:
-        Find a DocUrl Entry by ID
-    Response:
-        200 - Successful operation - DocUrlSerializer
-
-    PUT /api/listing/{pk}
-    Summary:
-        Update a DocUrl Entry by ID
-
-    PATCH /api/listing/{pk}
-    Summary:
-        Update (Partial) a DocUrl Entry by ID
-
-    DELETE /api/listing/{pk}
-    Summary:
-        Delete a DocUrl Entry by ID
+    TODO: Remove?
     """
 
     permission_classes = (permissions.IsUser,)
@@ -138,19 +100,13 @@ class ReviewViewSet(viewsets.ModelViewSet):
 
     URIs
     ======
-    GET /api/listing
-    Summary:
-        Get a list of all system-wide Review entries
-    Response:
-        200 - Successful operation - [ReviewSerializer]
-
-    GET /api/listing/{pk}
+    GET /api/listing/{pk}/review
     Summary:
         Find a Review Entry by ID
     Response:
         200 - Successful operation - ReviewSerializer
 
-    DELETE /api/listing/{pk}
+    DELETE /api/listing/{pk}/review
     Summary:
         Delete a Review Entry by ID
     """
@@ -236,13 +192,7 @@ class SimilarViewSet(viewsets.ModelViewSet):
 
     URIs
     ======
-    GET /api/listing
-    Summary:
-        Get a list of all system-wide Similar App entries
-    Response:
-        200 - Successful operation - [ListingSerializer]
-
-    GET /api/listing/{pk}
+    GET /api/listing/{pk}/similar
     Summary:
         Find a Similar App Entry by ID
     Response:
@@ -314,13 +264,13 @@ class ListingTypeViewSet(viewsets.ModelViewSet):
 
     URIs
     ======
-    GET /api/listing
+    GET /api/listingtype
     Summary:
         Get a list of all system-wide ListingType entries
     Response:
         200 - Successful operation - [ListingTypeSerializer]
 
-    POST /api/listing/
+    POST /api/listingtype
     Summary:
         Add a ListingType
     Request:
@@ -328,21 +278,21 @@ class ListingTypeViewSet(viewsets.ModelViewSet):
     Response:
         200 - Successful operation - ListingTypeSerializer
 
-    GET /api/listing/{pk}
+    GET /api/listingtype/{pk}
     Summary:
         Find a ListingType Entry by ID
     Response:
         200 - Successful operation - ListingTypeSerializer
 
-    PUT /api/listing/{pk}
+    PUT /api/listingtype/{pk}
     Summary:
         Update a ListingType Entry by ID
 
-    PATCH /api/listing/{pk}
+    PATCH /api/listingtype/{pk}
     Summary:
         Update (Partial) a ListingType Entry by ID
 
-    DELETE /api/listing/{pk}
+    DELETE /api/listingtype/{pk}
     Summary:
         Delete a ListingType Entry by ID
     """
@@ -363,13 +313,13 @@ class ListingUserActivitiesViewSet(viewsets.ModelViewSet):
 
     URIs
     ======
-    GET /api/listing
+    GET /api/self/listings/activity
     Summary:
         Get a list of all system-wide ListingUserActivities entries
     Response:
         200 - Successful operation - [ListingActivitySerializer]
 
-    GET /api/listing/{pk}
+    GET /api/self/listings/activity/{pk}
     Summary:
         Find a Listing User Activity Entry by ID
     Response:
@@ -407,13 +357,13 @@ class ListingActivitiesViewSet(viewsets.ModelViewSet):
 
     URIs
     ======
-    GET /api/listing
+    GET /api/listings/activity
     Summary:
         Get a list of all system-wide ListingActivities entries
     Response:
         200 - Successful operation - [ListingActivitySerializer]
 
-    GET /api/listing/{pk}
+    GET /api/listings/activity/{pk}
     Summary:
         Find a Listing User Activity Entry by ID
     Response:
@@ -452,13 +402,7 @@ class ListingActivityViewSet(viewsets.ModelViewSet):
 
     URIs
     ======
-    GET /api/listing
-    Summary:
-        Get a list of all system-wide Listing Activity entries
-    Response:
-        200 - Successful operation - [ListingActivitySerializer]
-
-    GET /api/listing/{pk}
+    GET /api/listing/{pk}/activity
     Summary:
         Find a Listing Activity Entry by ID
     Response:
@@ -501,13 +445,7 @@ class ListingRejectionViewSet(viewsets.ModelViewSet):
 
     URIs
     ======
-    GET /api/listing
-    Summary:
-        Get a list of all system-wide ListingRejection entries
-    Response:
-        200 - Successful operation - [ListingActivitySerializer]
-
-    POST /api/listing/
+    POST /api/listing/{pk}/rejection
     Summary:
         Add a ListingRejection
     Request:
@@ -515,7 +453,7 @@ class ListingRejectionViewSet(viewsets.ModelViewSet):
     Response:
         200 - Successful operation - ListingActivitySerializer
 
-    GET /api/listing/{pk}
+    GET /api/listing/{pk}/rejection
     Summary:
         Find a ListingRejection Entry by ID
     Response:
@@ -564,13 +502,13 @@ class ScreenshotViewSet(viewsets.ModelViewSet):
 
     URIs
     ======
-    GET /api/listing
+    GET /api/screenshot/
     Summary:
         Get a list of all system-wide Screenshot entries
     Response:
         200 - Successful operation - [ScreenshotSerializer]
 
-    POST /api/listing/
+    POST /api/screenshot/
     Summary:
         Add a Screenshot
     Request:
@@ -578,21 +516,21 @@ class ScreenshotViewSet(viewsets.ModelViewSet):
     Response:
         200 - Successful operation - ScreenshotSerializer
 
-    GET /api/listing/{pk}
+    GET /api/screenshot/{pk}
     Summary:
         Find a Screenshot Entry by ID
     Response:
         200 - Successful operation - ScreenshotSerializer
 
-    PUT /api/listing/{pk}
+    PUT /api/screenshot/{pk}
     Summary:
         Update a Screenshot Entry by ID
 
-    PATCH /api/listing/{pk}
+    PATCH /api/screenshot/{pk}
     Summary:
         Update (Partial) a Screenshot Entry by ID
 
-    DELETE /api/listing/{pk}
+    DELETE /api/screenshot/{pk}
     Summary:
         Delete a Screenshot Entry by ID
     """
@@ -614,13 +552,13 @@ class TagViewSet(viewsets.ModelViewSet):
 
     URIs
     ======
-    GET /api/listing
+    GET /api/tag/
     Summary:
         Get a list of all system-wide Tag entries
     Response:
         200 - Successful operation - [TagSerializer]
 
-    POST /api/listing/
+    POST /api/tag/
     Summary:
         Add a Tag
     Request:
@@ -628,21 +566,21 @@ class TagViewSet(viewsets.ModelViewSet):
     Response:
         200 - Successful operation - TagSerializer
 
-    GET /api/listing/{pk}
+    GET /api/tag/{pk}
     Summary:
         Find a Tag Entry by ID
     Response:
         200 - Successful operation - TagSerializer
 
-    PUT /api/listing/{pk}
+    PUT /api/tag/{pk}
     Summary:
         Update a Tag Entry by ID
 
-    PATCH /api/listing/{pk}
+    PATCH /api/tag/{pk}
     Summary:
         Update (Partial) a Tag Entry by ID
 
-    DELETE /api/listing/{pk}
+    DELETE /api/tag/{pk}
     Summary:
         Delete a Tag Entry by ID
     """
@@ -983,13 +921,13 @@ class ListingUserViewSet(viewsets.ModelViewSet):
 
     URIs
     ======
-    GET /api/listing
+    GET /api/self/listing
     Summary:
         Get a list of all system-wide Listing User entries
     Response:
         200 - Successful operation - [ListingSerializer]
 
-    GET /api/listing/{pk}
+    GET /api/self/listing/{pk}
     Summary:
         Find a ListingUserViewSet Entry by ID
     Response:
@@ -1017,13 +955,13 @@ class ListingSearchViewSet(viewsets.ModelViewSet):
 
     URIs
     ======
-    GET /api/listing
+    GET /api/listings/search
     Summary:
         Get a list of all system-wide Listing Search entries
     Response:
         200 - Successful operation - [ListingSerializer]
 
-    GET /api/listing/{pk}
+    GET /api/listings/search/{pk}
     Summary:
         Find a ListingSearchViewSet Entry by ID
     Response:
@@ -1105,7 +1043,7 @@ class ElasticsearchListingSearchViewSet(viewsets.ViewSet):
 
     URIs
     ======
-    GET /api/listing
+    GET /api/listings/essearch
     """
     permission_classes = (permissions.IsUser,)
 

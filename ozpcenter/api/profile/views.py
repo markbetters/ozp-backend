@@ -120,13 +120,13 @@ class ProfileListingViewSet(viewsets.ModelViewSet):
 
     URIs
     ======
-    GET /api/profile
+    GET /api/listing/
     Summary:
         Get a list of all system-wide Profile Listings
     Response:
         200 - Successful operation - [ListingSerializer]
 
-    POST /api/profile/
+    POST /api/listing/
     Summary:
         Add a Profile Listing
     Request:
@@ -134,21 +134,21 @@ class ProfileListingViewSet(viewsets.ModelViewSet):
     Response:
         200 - Successful operation - ListingSerializer
 
-    GET /api/profile/{pk}
+    GET /api/listing/{pk}
     Summary:
         Find a Profile Listing by ID
     Response:
         200 - Successful operation - ListingSerializer
 
-    PUT /api/profile/{pk}
+    PUT /api/listing/{pk}
     Summary:
         Update a Profile Listing by ID
 
-    PATCH /api/profile/{pk}
+    PATCH /api/listing/{pk}
     Summary:
         Update (Partial) a Profile Listing by ID
 
-    DELETE /api/profile/{pk}
+    DELETE /api/listing/{pk}
     Summary:
         Delete a Profile Listing by ID
     """
@@ -240,13 +240,13 @@ class UserViewSet(viewsets.ModelViewSet):
 
     URIs
     ======
-    GET /api/profile
+    GET /api/user/
     Summary:
         Get a list of all system-wide Users
     Response:
         200 - Successful operation - [UserSerializer]
 
-    POST /api/profile/
+    POST /api/user/
     Summary:
         Add a User
     Request:
@@ -254,21 +254,21 @@ class UserViewSet(viewsets.ModelViewSet):
     Response:
         200 - Successful operation - UserSerializer
 
-    GET /api/profile/{pk}
+    GET /api/user/{pk}
     Summary:
         Find a User by ID
     Response:
         200 - Successful operation - UserSerializer
 
-    PUT /api/profile/{pk}
+    PUT /api/user/{pk}
     Summary:
         Update a User by ID
 
-    PATCH /api/profile/{pk}
+    PATCH /api/user/{pk}
     Summary:
         Update (Partial) a User by ID
 
-    DELETE /api/profile/{pk}
+    DELETE /api/user/{pk}
     Summary:
         Delete a User by ID
     """
@@ -288,13 +288,13 @@ class GroupViewSet(viewsets.ModelViewSet):
 
     URIs
     ======
-    GET /api/profile
+    GET /api/group/
     Summary:
         Get a list of all system-wide Groups
     Response:
         200 - Successful operation - [GroupSerializer]
 
-    POST /api/profile/
+    POST /api/group/
     Summary:
         Add a Group
     Request:
@@ -302,21 +302,21 @@ class GroupViewSet(viewsets.ModelViewSet):
     Response:
         200 - Successful operation - GroupSerializer
 
-    GET /api/profile/{pk}
+    GET /api/group/{pk}
     Summary:
         Find a Group by ID
     Response:
         200 - Successful operation - GroupSerializer
 
-    PUT /api/profile/{pk}
+    PUT /api/group/{pk}
     Summary:
         Update a Group by ID
 
-    PATCH /api/profile/{pk}
+    PATCH /api/group/{pk}
     Summary:
         Update (Partial) a Group by ID
 
-    DELETE /api/profile/{pk}
+    DELETE /api/group/{pk}
     Summary:
         Delete a Group by ID
     """
@@ -336,19 +336,19 @@ class CurrentUserViewSet(viewsets.ViewSet):
 
     URIs
     ======
-    GET /api/profile/{pk}
+    GET /api/self/profile/
     Summary:
-        Find the Current User by ID
+        Find the Current User
     Response:
         200 - Successful operation - ProfileSerializer
 
-    PUT /api/profile/{pk}
+    PUT /api/self/profile/
     Summary:
-        Update the Current User by ID
+        Update the Current User
 
-    PATCH /api/profile/{pk}
+    PATCH /api/self/profile/
     Summary:
-        Update (Partial) the Current User by ID
+        Update (Partial) the Current User
     """
 
     permission_classes = (permissions.IsUser,)
