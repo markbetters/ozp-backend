@@ -157,6 +157,9 @@ def get_mapping_setting_obj(number_of_shards=None, number_of_replicas=None):
                   "type": "string",
                   "analyzer": "autocomplete",
                   "search_analyzer": "autocomplete"
+                },
+                "name_string": {
+                  "type": "string",
                 }
               }
             },
@@ -459,7 +462,7 @@ def make_search_query_obj(filter_obj, exclude_agencies=None):
         for tag in tags:
             current_tag_data = {
                 "match": {
-                    "tags.name": tag
+                    "tags.name_string": tag
                 }
             }
             tags_temp.append(current_tag_data)
@@ -665,5 +668,13 @@ def prepare_clean_listing_record(record):
     record_clean_obj['listing_type_description'] = record_clean_obj['listing_type']['description']
     record_clean_obj['listing_type_title'] = record_clean_obj['listing_type']['title']
     del record_clean_obj['listing_type']
+
+    tags = []
+
+    for tag_entry in record_clean_obj['tags']:
+        tag_entry['name_string'] = tag_entry['name']
+        tags.append(tag_entry)
+
+    record_clean_obj['tags'] = tags
 
     return record_clean_obj
