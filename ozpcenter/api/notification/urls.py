@@ -11,8 +11,15 @@ router = routers.DefaultRouter()
 
 router.register(r'notification', views.NotificationViewSet,
     base_name='notification')
+
+router.register(r'notificationv2', views.NotificationV2ViewSet,
+    base_name='notificationv2')
+
 router.register(r'self/notification', views.UserNotificationViewSet,
     base_name='notification')
+
+router.register(r'self/notificationv2', views.UserNotificationV2ViewSet,
+    base_name='notificationv2')
 
 # Wire up our API using automatic URL routing.
 urlpatterns = [

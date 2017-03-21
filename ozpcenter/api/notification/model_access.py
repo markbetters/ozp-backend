@@ -161,6 +161,57 @@ def _check_profile_permission(user_role_type, notification_action, notification_
     return permissions.get(user_role_type, {}).get(notification_action, {}).get(notification_type, lambda: raise_(errors.PermissionDenied('Unknown Permissions')))
 
 
+def get_profile_target_list(notification_type, group_target=None, entities=None):
+    """
+    This functions get a list of target profiles to send notifications to
+
+    Notification Type
+        SYSTEM = 'system'  # System-wide Notifications
+            Get all users
+        AGENCY = 'agency'  # Agency-wide Notifications
+            Get all users from one or more agencies
+        AGENCY_BOOKMARK = 'agency_bookmark'  # Agency-wide Bookmark Notifications # Not requirement (erivera 20160621)
+            Get all users from one or more agencies and add Bookmark Folder id
+        LISTING = 'listing'  # Listing Notifications
+            Get all users that has Bookmark one or more listings
+        PEER = 'peer'  # Peer to Peer Notifications
+            Get list of users
+        PEER_BOOKMARK = 'peer_bookmark'  # PEER.BOOKMARK - Peer to Peer Bookmark Notifications
+            Get list of users
+
+    Group Target
+        ALL = 'all'  # All users
+        STEWARDS = 'stewards'
+        APP_STEWARD = 'app_steward'
+        ORG_STEWARD = 'org_steward'
+        USER = 'user'
+
+    Args:
+        notification_type: list of strings
+        group_target: string
+        entities: Model Objects of entities for the notification_type
+
+
+    returns:
+        [Profile, Profile, ...]
+    """
+    group_target = group_target or 'all'
+    entities = entities or []
+    query = None
+
+    if notification_type == 'system':
+        query = models.Profile.objects
+    elif notification_type == 'agency':
+        query = models.Profile.objects.filter(organizations__in=entities)
+    elif notification_type == 'agency_bookmark':
+        query = models.Profile.objects.filter(organizations__in=entities)
+    elif notification_type == 'listing':
+        query = models.Profile.objects.filter(organizations__in=entities)
+    else:
+        return []
+    return query.all()
+
+
 def create_notification(author_username, expires_date, message, listing=None, agency=None, peer=None):
     """
     Create Notification
@@ -283,6 +334,48 @@ def get_self(username):
         models.Profile if username exist, None if username does not exist
     """
     return generic_model_access.get_profile(username)
+
+
+def get_all_notifications():
+    """
+    Get all notifications (expired and un-expired notifications)
+
+    Includes
+    * Listing Notifications
+    * Agency Notifications
+    * System Notifications
+    * Peer Notifications
+    * Peer.Bookmark Notifications
+
+    Returns:
+        django.db.models.query.QuerySet(models.Notification): List of all notifications
+    """
+    return models.Notification.objects.all()
+
+
+def get_all_notifications_v2():
+    """
+    Get all notifications (expired and un-expired notifications)
+
+    Includes
+    * Listing Notifications
+    * Agency Notifications
+    * System Notifications
+    * Peer Notifications
+    * Peer.Bookmark Notifications
+
+    Returns:
+        django.db.models.query.QuerySet(models.Notification): List of all notifications
+    """
+    query = models.NotificationV2.objects.all()
+    # values('notification_id',
+    #         'created_date',
+    #         'expires_date',
+    #         'author_username',
+    #         'message',
+    #         'notification_type',
+    #         '_metadata').distinct()
+    return query
 
 
 def get_all_pending_notifications(for_user=False):
@@ -424,23 +517,6 @@ def get_all_expired_notifications():
     return expired_system_notifications
 
 
-def get_all_notifications():
-    """
-    Get all notifications (expired and un-expired notifications)
-
-    Includes
-    * Listing Notifications
-    * Agency Notifications
-    * System Notifications
-    * Peer Notifications
-    * Peer.Bookmark Notifications
-
-    Returns:
-        django.db.models.query.QuerySet(models.Notification): List of all notifications
-    """
-    return models.Notification.objects.all()
-
-
 def get_dismissed_notifications(username):
     """
     Get all dismissed notifications for a user
@@ -509,5 +585,20 @@ def get_self_notifications(username):
     # unexpired_listing_notifications) - dismissed_notifications
     notifications = (unexpired_system_notifications | unexpired_agency_notifications | unexpired_peer_notifications |
                      unexpired_listing_notifications).exclude(pk__in=dismissed_notifications)
+
+    return notifications
+
+
+def get_self_notifications_v2(username):
+    """
+    Get notifications for current user
+
+    Args:
+        username (str): current username to get notifications
+
+    Returns:
+        django.db.models.query.QuerySet(models.Notification): List of notifications for username
+    """
+    notifications = models.NotificationV2.objects.filter(target_profile=get_self(username))
 
     return notifications
