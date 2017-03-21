@@ -1424,7 +1424,7 @@ class Notification(models.Model):
 
 class NotificationV2(models.Model):
     # Mailbox Profile ID
-    profile_target_id = models.ForeignKey(Profile, related_name='mailbox_notifications')
+    target_profile = models.ForeignKey(Profile, related_name='mailbox_notifications')
 
     # It is a unique id for notifications that allow to correlate between different 'mailboxes'
     # Example) For deleting system-wide notifications,
@@ -1435,7 +1435,8 @@ class NotificationV2(models.Model):
     expires_date = models.DateTimeField()
 
     # Author of Notification
-    author = models.ForeignKey(Profile, related_name='authored_notificationsv2')
+    author_username = models.CharField(max_length=150, help_text='150 characters or fewer')
+
     message = models.CharField(max_length=4096)
 
     # Notification Type
@@ -1455,7 +1456,7 @@ class NotificationV2(models.Model):
         (PEER_BOOKMARK, 'peer_bookmark'),
     )
 
-    notification_type = models.CharField(max_length=24, choices=NOTIFICATION_TYPE_CHOICES, db_index=True)
+    notification_type = models.CharField(max_length=24, choices=NOTIFICATION_TYPE_CHOICES)  # db_index=True)
 
     # Depending on notification_type, it could be listing_id/agency_id/profile_user_id/category_id/tag_id
     entity_id = models.IntegerField(default=0, null=True, blank=True)
@@ -1474,14 +1475,14 @@ class NotificationV2(models.Model):
     ORG_STEWARD = 'org_steward'
     USER = 'user'
 
-    TARGET_USER_CHOICES = (
+    GROUP_TARGET_CHOICES = (
         (ALL, 'all'),
         (STEWARDS, 'stewards'),
         (APP_STEWARD, 'app_steward'),
         (ORG_STEWARD, 'org_steward'),
         (USER, 'user'),
     )
-    user_target = models.CharField(max_length=24, choices=TARGET_USER_CHOICES)  # db_index=True)
+    group_target = models.CharField(max_length=24, choices=GROUP_TARGET_CHOICES)  # db_index=True)
 
     @property
     def metadata(self):

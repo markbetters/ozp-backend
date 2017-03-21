@@ -5,9 +5,7 @@ This is for "make dev"
 For existing databases, 0013_notification_script will run
 
 """
-from PIL import Image
 import datetime
-import json
 import os
 import pytz
 import sys
@@ -15,17 +13,7 @@ import uuid
 
 sys.path.insert(0, os.path.realpath(os.path.join(os.path.dirname(__file__), '../../')))
 
-from django.contrib import auth
-from django.conf import settings
-
-from ozpcenter import model_access
 from ozpcenter import models
-import ozpcenter.api.listing.model_access as listing_model_access
-
-
-TEST_IMG_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'test_images') + '/'
-
-DEMO_APP_ROOT = settings.OZP['DEMO_APP_ROOT']
 
 
 def get_self_notifications(username):
@@ -94,89 +82,57 @@ def run():
             for current_notification in current_notifications:
                 current_notification_created_date = current_notification.created_date
                 current_notification_expires_date = current_notification.expires_date
-                current_notification_author = current_notification.author
+                current_notification_author_username = current_notification.author.user.username
                 current_notification_message = current_notification.message
-
-                # notifications type
-                type_list = []
-                peer_list = []
-
-                if current_notification._peer:
-                    peer_list.append('PEER')
-
-                    try:
-                        json_obj = (current_notification._peer)
-                        if json_obj and 'folder_name' in json_obj:
-                            peer_list.append('BOOKMARK')
-                    except ValueError:
-                        # Ignore Value Errors
-                        pass
-
-                if peer_list:
-                    type_list.append('.'.join(peer_list))
-
-                if current_notification.listing:
-                    type_list.append('LISTING')
-
-                if current_notification.agency:
-                    type_list.append('AGENCY')
-
-                if not type_list:
-                    type_list.append('SYSTEM')
-
-                current_notification_notification_type = ','.join(type_list)
+                current_notification_notification_type = current_notification.notification_type()
                 current_notification_listing = current_notification.listing
                 current_notification_agency = current_notification.agency
-
-                current_notification_peer = None
-                if current_notification._peer:
-                    current_notification_peer = json.loads(current_notification._peer)
-                else:
-                    current_notification_peer = None
+                current_notification_peer = current_notification.peer
 
                 # NotificationV2
                 notification_id = uuid.uuid5(uuid.NAMESPACE_DNS, str(current_notification.pk))
 
                 notificationv2 = models.NotificationV2()
-                notificationv2.profile_target_id = current_profile
+                notificationv2.target_profile = current_profile
 
                 notificationv2.created_date = current_notification_created_date
                 notificationv2.expires_date = current_notification_expires_date
-                notificationv2.author = current_notification_author
+                notificationv2.author_username = current_notification_author_username
                 notificationv2.message = current_notification_message
 
                 notificationv2.notification_id = notification_id
 
                 if current_notification_notification_type == 'SYSTEM':
                     notificationv2.notification_type = 'system'
-                    notificationv2.user_target = 'all'
+                    notificationv2.group_target = 'all'
                     notificationv2.entity_id = None
 
                 elif current_notification_notification_type == 'AGENCY':
                     notificationv2.notification_type = 'agency'
-                    notificationv2.user_target = 'all'
+                    notificationv2.group_target = 'all'
                     notificationv2.entity_id = current_notification_agency.pk
 
                 elif current_notification_notification_type == 'AGENCY.BOOKMARK':
                     notificationv2.notification_type = 'agency_bookmark'
-                    notificationv2.user_target = 'all'
+                    notificationv2.group_target = 'all'
                     notificationv2.entity_id = current_notification_agency.pk
-                    notificationv2.metadata = current_notification_peer
 
                 elif current_notification_notification_type == 'LISTING':
                     notificationv2.notification_type = 'listing'
-                    notificationv2.user_target = 'all'
+                    notificationv2.group_target = 'all'
                     notificationv2.entity_id = current_notification_listing.pk
 
                 elif current_notification_notification_type == 'PEER':
                     notificationv2.notification_type = 'peer'
-                    notificationv2.user_target = 'user'
+                    notificationv2.group_target = 'user'
                     notificationv2.entity_id = None
 
                 elif current_notification_notification_type == 'PEER.BOOKMARK':
                     notificationv2.notification_type = 'peer_bookmark'
-                    notificationv2.user_target = 'user'
+                    notificationv2.group_target = 'user'
                     notificationv2.entity_id = None
-                    notificationv2.metadata = current_notification_peer
 
+                notificationv2.metadata = current_notification_peer
                 notificationv2.save()
+    else:
+        print('Notifications has already been migrated to NotificationV2')

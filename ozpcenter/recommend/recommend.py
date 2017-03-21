@@ -314,6 +314,7 @@ class RecommenderDirectory(object):
     Wrapper for all Recommenders
     It maps strings to classes.
     """
+
     def __init__(self):
         self.recommender_classes = {
             'graph_cf': GraphCollaborativeFilteringBaseRecommender,

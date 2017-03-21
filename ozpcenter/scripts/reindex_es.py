@@ -10,8 +10,6 @@ import os
 
 sys.path.insert(0, os.path.realpath(os.path.join(os.path.dirname(__file__), '../../')))
 
-import ozpcenter.api.listing.model_access as listing_model_access
-
 from ozpcenter.api.listing.model_access_es import bulk_reindex
 
 

@@ -16,10 +16,8 @@ import sys
 
 sys.path.insert(0, os.path.realpath(os.path.join(os.path.dirname(__file__), '../../')))
 
-from django.contrib import auth
 from django.conf import settings
 
-from ozpcenter import model_access
 from ozpcenter import models
 from ozpcenter.recommend.recommend import RecommenderDirectory
 import ozpcenter.api.listing.model_access as listing_model_access
@@ -48,7 +46,7 @@ def create_listing_review_batch(*input_list):
         profile_obj = input_set[0]
         current_rating = input_set[1]
         current_text = input_set[2]
-        listing_model_access.create_listing_review(profile_obj.user.username, current_listing, current_rating,text=current_text)
+        listing_model_access.create_listing_review(profile_obj.user.username, current_listing, current_rating, text=current_text)
 
 
 def create_library_entries(*entries):
@@ -78,18 +76,18 @@ def run():
     ############################################################################
     #                           Security Markings
     ############################################################################
-    unclass = 'UNCLASSIFIED'
-    secret = 'SECRET'
-    secret_n = 'SECRET//NOVEMBER'
-    ts = 'TOP SECRET'
-    ts_s = 'TOP SECRET//SIERRA'
-    ts_st = 'TOP SECRET//SIERRA//TANGO'
-    ts_stgh = 'TOP SECRET//SIERRA//TANGO//GOLF//HOTEL'
+    unclass = 'UNCLASSIFIED'  # noqa: F841
+    secret = 'SECRET'    # noqa: F841
+    secret_n = 'SECRET//NOVEMBER'    # noqa: F841
+    ts = 'TOP SECRET'    # noqa: F841
+    ts_s = 'TOP SECRET//SIERRA'    # noqa: F841
+    ts_st = 'TOP SECRET//SIERRA//TANGO'    # noqa: F841
+    ts_stgh = 'TOP SECRET//SIERRA//TANGO//GOLF//HOTEL'    # noqa: F841
 
-    ts_n = 'TOP SECRET//NOVEMBER'
-    ts_sn = 'TOP SECRET//SIERRA//NOVEMBER'
-    ts_stn = 'TOP SECRET//SIERRA//TANGO//NOVEMBER'
-    ts_stghn = 'TOP SECRET//SIERRA//TANGO//GOLF//HOTEL//NOVEMBER'
+    ts_n = 'TOP SECRET//NOVEMBER'    # noqa: F841
+    ts_sn = 'TOP SECRET//SIERRA//NOVEMBER'    # noqa: F841
+    ts_stn = 'TOP SECRET//SIERRA//TANGO//NOVEMBER'    # noqa: F841
+    ts_stghn = 'TOP SECRET//SIERRA//TANGO//GOLF//HOTEL//NOVEMBER'    # noqa: F841
 
     ############################################################################
     #                           Categories
@@ -269,7 +267,7 @@ def run():
         'formal_accesses': ['SIERRA', 'TANGO', 'GOLF', 'HOTEL'],
         'visas': ['NOVEMBER']
     })
-    big_brother = models.Profile.create_user('bigbrother',
+    big_brother = models.Profile.create_user('bigbrother',  # noqa: F841
         email='bigbrother@oceania.gov',
         display_name='Big Brother',
         bio='I make everyones life better',
@@ -285,7 +283,7 @@ def run():
         'formal_accesses': ['SIERRA', 'TANGO', 'GOLF', 'HOTEL'],
         'visas': ['NOVEMBER']
     })
-    big_brother2 = models.Profile.create_user('bigbrother2',
+    big_brother2 = models.Profile.create_user('bigbrother2',  # noqa: F841
         email='bigbrother2@oceania.gov',
         display_name='Big Brother2',
         bio='I also make everyones life better',
@@ -301,7 +299,7 @@ def run():
         'formal_accesses': ['SIERRA', 'TANGO', 'GOLF', 'HOTEL'],
         'visas': ['DRS']
     })
-    khaleesi = models.Profile.create_user('khaleesi',
+    khaleesi = models.Profile.create_user('khaleesi',  # noqa: F841
         email='khaleesi@dragonborn.gov',
         display_name='Daenerys Targaryen',
         bio='I am Queen of Meereen, Queen of the Andals(, the Rhoynar) and the First Men, Lady Regnant of the Seven Kingdoms, Khaleesi of the Great Grass Sea, Mhysa, Breaker of Chains, the Unburnt, Mother of Dragons".',
@@ -319,7 +317,7 @@ def run():
         'formal_accesses': ['SIERRA', 'TANGO'],
         'visas': ['NOVEMBER']
     })
-    winston = models.Profile.create_user('wsmith',
+    winston = models.Profile.create_user('wsmith',  # noqa: F841
         email='wsmith@oceania.gov',
         display_name='Winston Smith',
         bio='I work at the Ministry of Truth',
@@ -335,7 +333,7 @@ def run():
         'formal_accesses': ['SIERRA'],
         'visas': []
     })
-    julia = models.Profile.create_user('julia',
+    julia = models.Profile.create_user('julia',  # noqa: F841
         email='julia@oceania.gov',
         display_name='Julia Dixon',
         bio='An especially zealous propagandist',
@@ -351,7 +349,7 @@ def run():
         'formal_accesses': ['SIERRA', 'TANGO', 'GOLF', 'HOTEL'],
         'visas': ['NOVEMBER']
     })
-    obrien = models.Profile.create_user('obrien',
+    obrien = models.Profile.create_user('obrien',  # noqa: F841
         email='obrien@oceania.gov',
         display_name='O\'brien',
         bio='I will find you, winston and julia',
@@ -372,7 +370,7 @@ def run():
         'formal_accesses': [],
         'visas': ['NOVEMBER']
     })
-    aaronson = models.Profile.create_user('aaronson',
+    aaronson = models.Profile.create_user('aaronson',  # noqa: F841
         email='aaronson@airstripone.com',
         display_name='Aaronson',
         bio='Nothing special',
@@ -381,7 +379,7 @@ def run():
         groups=['USER'],
         dn='Aaronson aaronson'
     )
-    pmurt = models.Profile.create_user('pmurt',
+    pmurt = models.Profile.create_user('pmurt',  # noqa: F841
         email='pmurt@airstripone.com',
         display_name='pmurt',
         bio='Nothing special',
@@ -397,7 +395,7 @@ def run():
         'formal_accesses': [],
         'visas': ['STE', 'RVR', 'PKI']
     })
-    hodor = models.Profile.create_user('hodor',
+    hodor = models.Profile.create_user('hodor',  # noqa: F841
         email='hodor@hodor.com',
         display_name='Hodor',
         bio='Hold the door',
@@ -413,7 +411,7 @@ def run():
         'formal_accesses': [],
         'visas': ['NOVEMBER']
     })
-    jones = models.Profile.create_user('jones',
+    jones = models.Profile.create_user('jones',  # noqa: F841
         email='jones@airstripone.com',
         display_name='Jones',
         bio='I am a normal person',
@@ -429,7 +427,7 @@ def run():
         'formal_accesses': [],
         'visas': ['NOVEMBER', 'PKI']
     })
-    tammy = models.Profile.create_user('tammy',
+    tammy = models.Profile.create_user('tammy',  # noqa: F841
         email='tammy@airstripone.com',
         display_name='Tammy',
         bio='I am a normal person also',
@@ -445,7 +443,7 @@ def run():
         'formal_accesses': [],
         'visas': []
     })
-    rutherford = models.Profile.create_user('rutherford',
+    rutherford = models.Profile.create_user('rutherford',  # noqa: F841
         email='rutherford@airstripone.com',
         display_name='Rutherford',
         bio='I am a normal person',
@@ -461,7 +459,7 @@ def run():
         'formal_accesses': [],
         'visas': ['PKI']
     })
-    noah = models.Profile.create_user('noah',
+    noah = models.Profile.create_user('noah',  # noqa: F841
         email='noah@airstripone.com',
         display_name='Noah',
         bio='I am a cool normal person',
@@ -477,7 +475,7 @@ def run():
         'formal_accesses': ['SIERRA'],
         'visas': []
     })
-    syme = models.Profile.create_user('syme',
+    syme = models.Profile.create_user('syme',  # noqa: F841
         email='syme@airstripone.com',
         display_name='Syme',
         bio='I am too smart for my own good',
@@ -493,7 +491,7 @@ def run():
         'formal_accesses': ['SIERRA'],
         'visas': ['PKI']
     })
-    abe = models.Profile.create_user('abe',
+    abe = models.Profile.create_user('abe',  # noqa: F841
         email='abe@airstripone.com',
         display_name='Abe',
         bio='I am too smart for my own good also',
@@ -509,7 +507,7 @@ def run():
         'formal_accesses': [],
         'visas': []
     })
-    tparsons = models.Profile.create_user('tparsons',
+    tparsons = models.Profile.create_user('tparsons',  # noqa: F841
         email='tparsons@airstripone.com',
         display_name='Tom Parsons',
         bio='I am uneducated and loyal',
@@ -525,7 +523,7 @@ def run():
         'formal_accesses': [],
         'visas': ['TWN', 'PKI']
     })
-    jsnow = models.Profile.create_user('jsnow',
+    jsnow = models.Profile.create_user('jsnow',  # noqa: F841
         email='jsnow@forthewatch.com',
         display_name='Jon Snow',
         bio='I know nothing.',
@@ -541,7 +539,7 @@ def run():
         'formal_accesses': ['SIERRA', 'TANGO', 'GOLF', 'HOTEL'],
         'visas': ['NOVEMBER']
     })
-    charrington = models.Profile.create_user('charrington',
+    charrington = models.Profile.create_user('charrington',  # noqa: F841
         email='charrington@airstripone.com',
         display_name='Charrington',
         bio='A member of the Thought Police',
@@ -557,7 +555,7 @@ def run():
         'formal_accesses': ['SIERRA', 'TANGO', 'GOLF', 'HOTEL'],
         'visas': ['NOVEMBER', 'PKI']
     })
-    johnson = models.Profile.create_user('johnson',
+    johnson = models.Profile.create_user('johnson',  # noqa: F841
         email='johnson@airstripone.com',
         display_name='Johnson',
         bio='A member of the Thought Police also',
@@ -567,7 +565,7 @@ def run():
         dn='Johnson johnson'
     )
 
-    #-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+    # -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
     ############################################################################
     #                           System Notifications
     ############################################################################
@@ -598,7 +596,7 @@ def run():
         expires_date=last_week, author=julia)
     n2.save()
 
-    #-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+    # -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
     ############################################################################
     #                           Contacts
     ############################################################################
@@ -618,10 +616,10 @@ def run():
         email='brienne@stark.com', unsecure_phone='222-324-3846')
     brienne.save()
 
-    #-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
-    #===========================================================================
+    # -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+    # ===========================================================================
     #                           Listings
-    #===========================================================================
+    # ===========================================================================
 
     ############################################################################
     #                           Air Mail

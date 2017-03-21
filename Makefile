@@ -30,10 +30,13 @@ runp:
 	gunicorn --workers=`nproc` ozp.wsgi -b localhost:8000 --access-logfile logs.txt --error-logfile logs.txt -p gunicorn.pid
 
 codecheck:
-	flake8 ozp ozpcenter ozpiwc plugins plugins_util --ignore=E501,E123,E128,E121,E124,E711,E402 --exclude=ozpcenter/scripts/* --show-source
+	flake8 ozp ozpcenter ozpiwc plugins plugins_util --ignore=E501,E123,E128,E121,E124,E711,E402 --show-source
+
+autopep:
+	autopep8 ozp ozpcenter ozpiwc plugins plugins_util --ignore=E501,E123,E128,E121,E124,E711,E402 --recursive --in-place
 
 autopepdiff:
-	autopep8 ozp ozpcenter ozpiwc plugins plugins_util --ignore=E501,E123,E128,E121,E124,E711,E402 --exclude=ozpcenter/scripts/* --recursive --diff
+	autopep8 ozp ozpcenter ozpiwc plugins plugins_util --ignore=E501,E123,E128,E121,E124,E711,E402 --recursive --diff
 
 reindex_es:
 	python manage.py runscript reindex_es
@@ -46,9 +49,6 @@ recommend_es_user:
 
 recommend_es_content:
 	ES_ENABLED=TRUE RECOMMENDATION_ENGINE='elasticsearch_content_base' python manage.py runscript recommend
-
-autopep:
-	autopep8 ozp ozpcenter ozpiwc plugins plugins_util --ignore=E501,E123,E128,E121,E124,E711,E402 --exclude=ozpcenter/scripts/* --recursive --in-place
 
 dev: clean pre create_static
 	python manage.py makemigrations ozpcenter
