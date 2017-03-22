@@ -2,6 +2,7 @@
 Model access
 """
 import datetime
+import json
 import logging
 import pytz
 from enum import Enum
@@ -28,10 +29,12 @@ class NotificationActionEnum(Enum):
 
 
 class NotificationTypeEnum(Enum):
-    SYSTEM = 'System-Wide Notification'
-    AGENCY = 'Agency-Wide Notification'
-    LISTING = 'Listing-Specific Notification'
-    PEER = 'Peer-Specific Notification'
+    SYSTEM = 'system'
+    AGENCY = 'agency'
+    AGENCY_BOOKMARK = 'agency_bookmark'
+    LISTING = 'lising'
+    PEER = 'peer'
+    PEER_BOOKMARK = 'peer_bookmark'
 
 
 def org_create_listing_condition(profile_obj, listing):
@@ -191,7 +194,6 @@ def get_profile_target_list(notification_type, group_target=None, entities=None)
         group_target: string
         entities: Model Objects of entities for the notification_type
 
-
     returns:
         [Profile, Profile, ...]
     """
@@ -206,10 +208,58 @@ def get_profile_target_list(notification_type, group_target=None, entities=None)
     elif notification_type == 'agency_bookmark':
         query = models.Profile.objects.filter(organizations__in=entities)
     elif notification_type == 'listing':
+        # bookmarked_listing_ids = models.ApplicationLibraryEntry.objects \
+        #     .filter(listing__in=entities,
+        #             listing__isnull=False,
+        #             listing__is_enabled=True,
+        #             listing__is_deleted=False) \
+        #     .values_list('owner', flat=True)
+
         query = models.Profile.objects.filter(organizations__in=entities)
     else:
         return []
     return query.all()
+
+
+def get_notification_type(notification):
+    """
+    Dynamically figure out Notification Type
+
+    Types:
+        SYSTEM - System-wide Notifications
+        AGENCY - Agency-wide Notifications
+        AGENCY_BOOKMARK - Agency-wide Bookmark Notifications # Not requirement (erivera 20160621)
+        LISTING - Listing Notifications
+        PEER - Peer to Peer Notifications
+        PEER_BOOKMARK - Peer to Peer Bookmark Notifications
+    """
+    type_list = []
+    peer_list = []
+
+    if notification._peer:
+        peer_list.append('PEER')
+
+        try:
+            json_obj = (json.loads(notification._peer))
+            if json_obj and 'folder_name' in json_obj:
+                peer_list.append('BOOKMARK')
+        except ValueError:
+            # Ignore Value Errors
+            pass
+
+    if peer_list:
+        type_list.append('.'.join(peer_list))
+
+    if notification.listing:
+        type_list.append('LISTING')
+
+    if notification.agency:
+        type_list.append('AGENCY')
+
+    if not type_list:
+        type_list.append('SYSTEM')
+
+    return '_'.join(type_list)
 
 
 def create_notification(author_username, expires_date, message, listing=None, agency=None, peer=None):
@@ -269,7 +319,41 @@ def create_notification(author_username, expires_date, message, listing=None, ag
         agency=agency,
         peer=peer)
 
+    current_notification_type = get_notification_type(notification)
+
+    if current_notification_type == 'SYSTEM':
+        notification.notification_type = 'system'
+        notification.group_target = 'all'
+        notification.entity_id = None
+
+    elif current_notification_type == 'AGENCY':
+        notification.notification_type = 'agency'
+        notification.group_target = 'all'
+        notification.entity_id = notification.agency.pk
+
+    elif current_notification_type == 'AGENCY.BOOKMARK':
+        notification.notification_type = 'agency_bookmark'
+        notification.group_target = 'all'
+        notification.entity_id = notification.agency.pk
+
+    elif current_notification_type == 'LISTING':
+        notification.notification_type = 'listing'
+        notification.group_target = 'all'
+        notification.entity_id = notification.listing.pk
+
+    elif current_notification_type == 'PEER':
+        notification.notification_type = 'peer'
+        notification.group_target = 'user'
+        notification.entity_id = None
+
+    elif current_notification_type == 'PEER.BOOKMARK':
+        notification.notification_type = 'peer_bookmark'
+        notification.group_target = 'user'
+        notification.entity_id = None
+
     notification.save()
+
+    # Add NotificationV2
     return notification
 
 
@@ -352,30 +436,30 @@ def get_all_notifications():
     """
     return models.Notification.objects.all()
 
-
-def get_all_notifications_v2():
-    """
-    Get all notifications (expired and un-expired notifications)
-
-    Includes
-    * Listing Notifications
-    * Agency Notifications
-    * System Notifications
-    * Peer Notifications
-    * Peer.Bookmark Notifications
-
-    Returns:
-        django.db.models.query.QuerySet(models.Notification): List of all notifications
-    """
-    query = models.NotificationV2.objects.all()
-    # values('notification_id',
-    #         'created_date',
-    #         'expires_date',
-    #         'author_username',
-    #         'message',
-    #         'notification_type',
-    #         '_metadata').distinct()
-    return query
+#
+# def get_all_notifications_v2():
+#     """
+#     Get all notifications (expired and un-expired notifications)
+#
+#     Includes
+#     * Listing Notifications
+#     * Agency Notifications
+#     * System Notifications
+#     * Peer Notifications
+#     * Peer.Bookmark Notifications
+#
+#     Returns:
+#         django.db.models.query.QuerySet(models.Notification): List of all notifications
+#     """
+#     query = models.NotificationV2.objects.all()
+#     # values('notification_id',
+#     #         'created_date',
+#     #         'expires_date',
+#     #         'author_username',
+#     #         'message',
+#     #         'notification_type',
+#     #         '_metadata').distinct()
+#     return query
 
 
 def get_all_pending_notifications(for_user=False):
@@ -588,17 +672,17 @@ def get_self_notifications(username):
 
     return notifications
 
-
-def get_self_notifications_v2(username):
-    """
-    Get notifications for current user
-
-    Args:
-        username (str): current username to get notifications
-
-    Returns:
-        django.db.models.query.QuerySet(models.Notification): List of notifications for username
-    """
-    notifications = models.NotificationV2.objects.filter(target_profile=get_self(username))
-
-    return notifications
+#
+# def get_self_notifications_v2(username):
+#     """
+#     Get notifications for current user
+#
+#     Args:
+#         username (str): current username to get notifications
+#
+#     Returns:
+#         django.db.models.query.QuerySet(models.Notification): List of notifications for username
+#     """
+#     notifications = models.NotificationV2.objects.filter(target_profile=get_self(username))
+#
+#     return notifications

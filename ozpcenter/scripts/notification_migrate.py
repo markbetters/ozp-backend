@@ -65,6 +65,47 @@ def get_self_notifications(username):
     return notifications
 
 
+def notification_type(notification):
+    """
+    Dynamically figure out Notification Type
+
+    Types:
+        SYSTEM - System-wide Notifications
+        AGENCY - Agency-wide Notifications
+        AGENCY.BOOKMARK - Agency-wide Bookmark Notifications # Not requirement (erivera 20160621)
+        LISTING - Listing Notifications
+        PEER - Peer to Peer Notifications
+        PEER.BOOKMARK - Peer to Peer Bookmark Notifications
+    """
+    type_list = []
+    peer_list = []
+
+    if notification.peer:
+        peer_list.append('PEER')
+
+        try:
+            json_obj = (notification.peer)
+            if json_obj and 'folder_name' in json_obj:
+                peer_list.append('BOOKMARK')
+        except ValueError:
+            # Ignore Value Errors
+            pass
+
+    if peer_list:
+        type_list.append('.'.join(peer_list))
+
+    if notification.listing:
+        type_list.append('LISTING')
+
+    if notification.agency:
+        type_list.append('AGENCY')
+
+    if not type_list:
+        type_list.append('SYSTEM')
+
+    return ','.join(type_list)
+
+
 def run():
     """
     Creates basic sample data
@@ -84,7 +125,7 @@ def run():
                 current_notification_expires_date = current_notification.expires_date
                 current_notification_author_username = current_notification.author.user.username
                 current_notification_message = current_notification.message
-                current_notification_notification_type = current_notification.notification_type()
+                current_notification_notification_type = notification_type(current_notification)
                 current_notification_listing = current_notification.listing
                 current_notification_agency = current_notification.agency
                 current_notification_peer = current_notification.peer
@@ -93,7 +134,7 @@ def run():
                 notification_id = uuid.uuid5(uuid.NAMESPACE_DNS, str(current_notification.pk))
 
                 notificationv2 = models.NotificationV2()
-                notificationv2.target_profile = current_profile
+                # notificationv2.target_profile = current_profile
 
                 notificationv2.created_date = current_notification_created_date
                 notificationv2.expires_date = current_notification_expires_date

@@ -709,8 +709,14 @@ def run():
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         #                           Notifications
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-        notification1 = models.Notification(message='Air Mail update next week', expires_date=next_week, listing=listing, author=winston)
-        notification1.save()
+        listing_notification = models.Notification(message='{} update next week'.format(listing.title),
+                                            expires_date=next_week,
+                                            listing=listing,
+                                            author=winston,
+                                            entity_id=listing.pk,
+                                            notification_type=models.Notification.LISTING
+                                            )
+        listing_notification.save()
 
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         #                           Document URLs
@@ -805,6 +811,18 @@ def run():
             [julia, 5, "Yum!"]
         )
 
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        #                           Notifications
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        listing_notification = models.Notification(message='{} update next week'.format(listing.title),
+                                            expires_date=next_week,
+                                            listing=listing,
+                                            author=winston,
+                                            entity_id=listing.pk,
+                                            notification_type=models.Notification.LISTING
+                                            )
+        listing_notification.save()
+
     ############################################################################
     #                           Chart Course
     ############################################################################
@@ -877,6 +895,17 @@ def run():
             [winston, 2, "This Chart is bad"],
             [big_brother, 5, "Good Chart!"]
         )
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        #                           Notifications
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        listing_notification = models.Notification(message='{} update next week'.format(listing.title),
+                                            expires_date=next_week,
+                                            listing=listing,
+                                            author=winston,
+                                            entity_id=listing.pk,
+                                            notification_type=models.Notification.LISTING
+                                            )
+        listing_notification.save()
 
     ############################################################################
     #                           Chatter Box
@@ -934,6 +963,18 @@ def run():
         listing_model_access.submit_listing(julia, listing)
         listing_model_access.approve_listing_by_org_steward(winston, listing)
         listing_model_access.approve_listing(winston, listing)
+
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        #                           Notifications
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        listing_notification = models.Notification(message='{} update next week'.format(listing.title),
+                                            expires_date=next_week,
+                                            listing=listing,
+                                            author=winston,
+                                            entity_id=listing.pk,
+                                            notification_type=models.Notification.LISTING
+                                            )
+        listing_notification.save()
 
     ############################################################################
     #                           Clipboard
@@ -993,6 +1034,17 @@ def run():
         listing_model_access.approve_listing_by_org_steward(winston, listing)
         listing_model_access.approve_listing(winston, listing)
 
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        #                           Notifications
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        listing_notification = models.Notification(message='{} update next week'.format(listing.title),
+                                            expires_date=next_week,
+                                            listing=listing,
+                                            author=winston,
+                                            entity_id=listing.pk,
+                                            notification_type=models.Notification.LISTING
+                                            )
+        listing_notification.save()
     ############################################################################
     #                           FrameIt
     ############################################################################
@@ -1050,6 +1102,18 @@ def run():
         listing_model_access.submit_listing(winston, listing)
         listing_model_access.approve_listing_by_org_steward(winston, listing)
         listing_model_access.approve_listing(winston, listing)
+
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        #                           Notifications
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        listing_notification = models.Notification(message='{} update next week'.format(listing.title),
+                                            expires_date=next_week,
+                                            listing=listing,
+                                            author=winston,
+                                            entity_id=listing.pk,
+                                            notification_type=models.Notification.LISTING
+                                            )
+        listing_notification.save()
 
     ############################################################################
     #                           Hatch Latch
@@ -1110,6 +1174,18 @@ def run():
         listing_model_access.approve_listing_by_org_steward(winston, listing)
         listing_model_access.approve_listing(winston, listing)
 
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        #                           Notifications
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        listing_notification = models.Notification(message='{} update next week'.format(listing.title),
+                                            expires_date=next_week,
+                                            listing=listing,
+                                            author=winston,
+                                            entity_id=listing.pk,
+                                            notification_type=models.Notification.LISTING
+                                            )
+        listing_notification.save()
+
         ############################################################################
         #                           Jot Spot
         ############################################################################
@@ -1167,6 +1243,18 @@ def run():
         listing_model_access.approve_listing(winston, listing)
 
         listing_model_access.create_listing_review(charrington.user.username, listing, 4, text="I really like it")
+
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        #                           Notifications
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        listing_notification = models.Notification(message='{} update next week'.format(listing.title),
+                                            expires_date=next_week,
+                                            listing=listing,
+                                            author=winston,
+                                            entity_id=listing.pk,
+                                            notification_type=models.Notification.LISTING
+                                            )
+        listing_notification.save()
 
     ############################################################################
     #                           Location Lister
@@ -1229,6 +1317,18 @@ def run():
 
         listing_model_access.create_listing_review(charrington.user.username, listing, 4, text="I really like it")
 
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        #                           Notifications
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        listing_notification = models.Notification(message='{} update next week'.format(listing.title),
+                                            expires_date=next_week,
+                                            listing=listing,
+                                            author=winston,
+                                            entity_id=listing.pk,
+                                            notification_type=models.Notification.LISTING
+                                            )
+        listing_notification.save()
+
     ############################################################################
     #                           Location Viewer
     ############################################################################
@@ -1286,6 +1386,18 @@ def run():
         listing_model_access.submit_listing(winston, listing)
         listing_model_access.approve_listing_by_org_steward(winston, listing)
         listing_model_access.approve_listing(winston, listing)
+
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        #                           Notifications
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        listing_notification = models.Notification(message='{} update next week'.format(listing.title),
+                                            expires_date=next_week,
+                                            listing=listing,
+                                            author=winston,
+                                            entity_id=listing.pk,
+                                            notification_type=models.Notification.LISTING
+                                            )
+        listing_notification.save()
 
     ############################################################################
     #                           Location Analyzer
@@ -1345,6 +1457,18 @@ def run():
         listing_model_access.approve_listing_by_org_steward(winston, listing)
         listing_model_access.approve_listing(winston, listing)
 
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        #                           Notifications
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        listing_notification = models.Notification(message='{} update next week'.format(listing.title),
+                                            expires_date=next_week,
+                                            listing=listing,
+                                            author=winston,
+                                            entity_id=listing.pk,
+                                            notification_type=models.Notification.LISTING
+                                            )
+        listing_notification.save()
+
     ############################################################################
     #                           Skybox
     ############################################################################
@@ -1403,6 +1527,18 @@ def run():
         listing_model_access.submit_listing(winston, listing)
         listing_model_access.approve_listing_by_org_steward(winston, listing)
         listing_model_access.approve_listing(winston, listing)
+
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        #                           Notifications
+        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        listing_notification = models.Notification(message='{} update next week'.format(listing.title),
+                                            expires_date=next_week,
+                                            listing=listing,
+                                            author=winston,
+                                            entity_id=listing.pk,
+                                            notification_type=models.Notification.LISTING
+                                            )
+        listing_notification.save()
 
     ############################################################################
     #                           Library

@@ -11,7 +11,6 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 
 from ozpcenter import errors
-from ozpcenter import models
 from ozpcenter import permissions
 import ozpcenter.api.notification.model_access as model_access
 import ozpcenter.api.notification.serializers as serializers
@@ -70,58 +69,58 @@ class NotificationViewSet(viewsets.ModelViewSet):
         notification_instance.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-
-class NotificationV2ViewSet(viewsets.ModelViewSet):
-    serializer_class = serializers.NotificationV2Serializer
-    permission_classes = (permissions.IsUser,)
-    # lookup_field = 'notification_id'
-
-    def get_queryset(self):
-        queryset = model_access.get_all_notifications_v2()
-
-        listing_id = self.request.query_params.get('listing', None)
-        if listing_id is not None:
-            queryset = queryset.filter(notification_type=models.NotificationV2.LISTING)
-            queryset = queryset.filter(entity_id=listing_id)
-
-        return queryset
-
-    def create(self, request):
-        serializer = serializers.NotificationSerializer(data=request.data,
-            context={'request': request}, partial=True)
-
-        if not serializer.is_valid():
-            logger.error('{0!s}'.format(serializer.errors))
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        serializer.save()
-
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-    def update(self, request, pk=None):
-        """
-        Update is used only change the expiration date of the message
-        """
-        instance = self.get_queryset().get(pk=pk)
-        serializer = serializers.NotificationSerializer(instance,
-            data=request.data, context={'request': request}, partial=True)
-
-        if not serializer.is_valid():
-            logger.error('{0!s}'.format(serializer.errors))
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        serializer.save()
-
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-    def destroy(self, request, pk=None):
-        current_request_profile = model_access.get_self(request.user.username)
-
-        if not current_request_profile.is_steward():
-            raise errors.PermissionDenied('Only Stewards can delete notifications')
-
-        queryset = self.get_queryset()
-        notification_instance = get_object_or_404(queryset, pk=pk)
-        notification_instance.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+#
+# class NotificationV2ViewSet(viewsets.ModelViewSet):
+#     serializer_class = serializers.NotificationV2Serializer
+#     permission_classes = (permissions.IsUser,)
+#     # lookup_field = 'notification_id'
+#
+#     def get_queryset(self):
+#         queryset = model_access.get_all_notifications_v2()
+#
+#         listing_id = self.request.query_params.get('listing', None)
+#         if listing_id is not None:
+#             queryset = queryset.filter(notification_type=models.NotificationV2.LISTING)
+#             queryset = queryset.filter(entity_id=listing_id)
+#
+#         return queryset
+#
+#     def create(self, request):
+#         serializer = serializers.NotificationSerializer(data=request.data,
+#             context={'request': request}, partial=True)
+#
+#         if not serializer.is_valid():
+#             logger.error('{0!s}'.format(serializer.errors))
+#             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#         serializer.save()
+#
+#         return Response(serializer.data, status=status.HTTP_201_CREATED)
+#
+#     def update(self, request, pk=None):
+#         """
+#         Update is used only change the expiration date of the message
+#         """
+#         instance = self.get_queryset().get(pk=pk)
+#         serializer = serializers.NotificationSerializer(instance,
+#             data=request.data, context={'request': request}, partial=True)
+#
+#         if not serializer.is_valid():
+#             logger.error('{0!s}'.format(serializer.errors))
+#             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#         serializer.save()
+#
+#         return Response(serializer.data, status=status.HTTP_200_OK)
+#
+#     def destroy(self, request, pk=None):
+#         current_request_profile = model_access.get_self(request.user.username)
+#
+#         if not current_request_profile.is_steward():
+#             raise errors.PermissionDenied('Only Stewards can delete notifications')
+#
+#         queryset = self.get_queryset()
+#         notification_instance = get_object_or_404(queryset, pk=pk)
+#         notification_instance.delete()
+#         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class UserNotificationViewSet(viewsets.ModelViewSet):
@@ -146,30 +145,30 @@ class UserNotificationViewSet(viewsets.ModelViewSet):
         model_access.dismiss_notification(notification, self.request.user.username)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-
-class UserNotificationV2ViewSet(viewsets.ModelViewSet):
-    permission_classes = (permissions.IsUser,)
-    serializer_class = serializers.NotificationV2Serializer
-    filter_backends = (filters.OrderingFilter,)
-    ordering_fields = ('created_date',)
-    ordering = ('-created_date',)
-    # lookup_field = 'notification_id'
-
-    def get_queryset(self):
-        """
-        Get current user's notifications
-        """
-        return model_access.get_self_notifications_v2(self.request.user.username)
-
-    def destroy(self, request, pk=None):
-        """
-        Dismiss notification
-        """
-        queryset = self.get_queryset()
-        notification = get_object_or_404(queryset, pk=pk)
-        notification.delete()
-        # model_access.dismiss_notification_v2(notification, self.request.user.username)
-        return Response(status=status.HTTP_204_NO_CONTENT)
+#
+# class UserNotificationV2ViewSet(viewsets.ModelViewSet):
+#     permission_classes = (permissions.IsUser,)
+#     serializer_class = serializers.NotificationV2Serializer
+#     filter_backends = (filters.OrderingFilter,)
+#     ordering_fields = ('created_date',)
+#     ordering = ('-created_date',)
+#     # lookup_field = 'notification_id'
+#
+#     def get_queryset(self):
+#         """
+#         Get current user's notifications
+#         """
+#         return model_access.get_self_notifications_v2(self.request.user.username)
+#
+#     def destroy(self, request, pk=None):
+#         """
+#         Dismiss notification
+#         """
+#         queryset = self.get_queryset()
+#         notification = get_object_or_404(queryset, pk=pk)
+#         notification.delete()
+#         # model_access.dismiss_notification_v2(notification, self.request.user.username)
+#         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class PendingNotificationView(generics.ListCreateAPIView):
