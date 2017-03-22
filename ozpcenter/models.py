@@ -1419,23 +1419,24 @@ class Notification(models.Model):
         return '{0!s}: {1!s}'.format(self.author.user.username, self.message)
 
 
-# class NotificationMailBox(models.Model):
-#     # Mailbox Profile ID
-#     target_profile = models.ForeignKey(Profile, related_name='mailbox_profiles)
-#
-#     # It is a unique id for notifications that allow to correlate between different 'mailboxes'
-#     # Example) For deleting system-wide notifications,
-#     # for every 'mailbox' delete the notification with notification
-#     notification= models.ForeignKey(Profile, related_name='mailbox_notifications')
-#
-#     # If it has been emailed. then make value true
-#     emailed_status = models.BooleanField(default=False)
-#     # Read Flag
-#     read_status = models.BooleanField(default=False)
-#     # acknowledged Flag
-#     acknowledged_status = models.BooleanField(default=False)
-#     def __repr__(self):
-#         return '{0!s}: {1!s}'.format(self.author.user.username, self.message)
-#
-#     def __str__(self):
-#         return '{0!s}: {1!s}'.format(self.author.user.username, self.message)
+class NotificationMailBox(models.Model):
+    # Mailbox Profile ID
+    target_profile = models.ForeignKey(Profile, related_name='mailbox_profiles')
+
+    # It is a unique id for notifications that allow to correlate between different 'mailboxes'
+    # Example) For deleting system-wide notifications,
+    # for every 'mailbox' delete the notification with notification
+    notification = models.ForeignKey(Profile, related_name='mailbox_notifications')
+
+    # If it has been emailed. then make value true
+    emailed_status = models.BooleanField(default=False)
+    # Read Flag
+    read_status = models.BooleanField(default=False)
+    # Acknowledged Flag
+    acknowledged_status = models.BooleanField(default=False)
+
+    def __repr__(self):
+        return '{0!s}: {1!s}'.format(self.target_profile, self.notification.pk)
+
+    def __str__(self):
+        return '{0!s}: {1!s}'.format(self.target_profile, self.notification.pk)

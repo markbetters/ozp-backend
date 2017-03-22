@@ -57,6 +57,6 @@ dev: clean pre create_static
 
 	echo 'Loading sample data...'
 	python manage.py runscript sample_data_generator
-	#python manage.py runscript notification_migrate  # Temp Solution - Once notifications is completely refactored, remove this line
+	python manage.py runscript notification_mailbox  # Temp Solution - Once notifications is completely refactored, remove this line
 
 	python manage.py runserver
