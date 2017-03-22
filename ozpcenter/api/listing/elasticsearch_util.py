@@ -159,7 +159,7 @@ def get_mapping_setting_obj(number_of_shards=None, number_of_replicas=None):
                   "search_analyzer": "autocomplete"
                 },
                 "name_string": {
-                  "type": "string",
+                  "type": "string"
                 }
               }
             },
