@@ -1364,7 +1364,7 @@ class Notification(models.Model):
     group_target = models.CharField(default=ALL, max_length=24, choices=GROUP_TARGET_CHOICES)  # db_index=True)
 
     # Depending on notification_type, it could be listing_id/agency_id/profile_user_id/category_id/tag_id
-    entity_id = models.IntegerField(default=None, null=True, blank=True)
+    entity_id = models.IntegerField(default=None, null=True, blank=True, db_index=True)
 
     @property
     def peer(self):

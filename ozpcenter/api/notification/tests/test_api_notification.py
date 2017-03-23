@@ -78,10 +78,21 @@ class NotificationApiTest(APITestCase):
 
         url = '/api/self/notification/'
         response = self.client.get(url, format='json')
-
-        default_ids = [record['id'] for record in response.data]
-        self.assertEqual(default_ids, [118, 117, 116, 15, 5, 2, 1])
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        notification_list = ['{}-{}-{}'.format(entry['entity_id'], entry['notification_type'], ''.join(entry['message'].split())) for entry in response.data]
+        expected_data = ['11-listing-BreadBasketupdatenextweek',
+                         '112-listing-Skybox1updatenextweek',
+                         '1-listing-AirMailupdatenextweek',
+                         '114-listing-Skybox3updatenextweek',
+                         '113-listing-Skybox2updatenextweek',
+                         '112-listing-Skybox1updatenextweek',
+                         '1-listing-AirMailupdatenextweek',
+                         '11-listing-BreadBasketupdatenextweek',
+                         'None-system-Systemwillbefunctioninginadegredadedstatebetween1800Z-0400ZonA/B',
+                         'None-system-Systemwillbegoingdownforapproximately30minutesonX/Yat1100Z']
+
+        self.assertEqual(notification_list, expected_data)
 
         # Get reversed order
         user = generic_model_access.get_profile('wsmith').user
@@ -89,10 +100,20 @@ class NotificationApiTest(APITestCase):
 
         url = '/api/self/notification/?ordering=-created_date'
         response = self.client.get(url, format='json')
-
-        reverse_order_ids = [record['id'] for record in response.data]
-        self.assertEqual(reverse_order_ids, default_ids)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        notification_list = ['{}-{}-{}'.format(entry['entity_id'], entry['notification_type'], ''.join(entry['message'].split())) for entry in response.data]
+        expected_data = ['11-listing-BreadBasketupdatenextweek',
+                         '112-listing-Skybox1updatenextweek',
+                         '1-listing-AirMailupdatenextweek',
+                         '114-listing-Skybox3updatenextweek',
+                         '113-listing-Skybox2updatenextweek',
+                         '112-listing-Skybox1updatenextweek',
+                         '1-listing-AirMailupdatenextweek',
+                         '11-listing-BreadBasketupdatenextweek',
+                         'None-system-Systemwillbefunctioninginadegredadedstatebetween1800Z-0400ZonA/B',
+                         'None-system-Systemwillbegoingdownforapproximately30minutesonX/Yat1100Z']
+        self.assertEqual(notification_list, expected_data)
 
         # Get ascending order
         user = generic_model_access.get_profile('wsmith').user
@@ -100,10 +121,20 @@ class NotificationApiTest(APITestCase):
 
         url = '/api/self/notification/?ordering=created_date'
         response = self.client.get(url, format='json')
-
-        order_ids = [record['id'] for record in response.data]
-        self.assertEqual(reverse_order_ids, list(reversed(order_ids)))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        notification_list = ['{}-{}-{}'.format(entry['entity_id'], entry['notification_type'], ''.join(entry['message'].split())) for entry in response.data]
+        expected_data = ['None-system-Systemwillbegoingdownforapproximately30minutesonX/Yat1100Z',
+                         'None-system-Systemwillbefunctioninginadegredadedstatebetween1800Z-0400ZonA/B',
+                         '11-listing-BreadBasketupdatenextweek',
+                         '1-listing-AirMailupdatenextweek',
+                         '112-listing-Skybox1updatenextweek',
+                         '113-listing-Skybox2updatenextweek',
+                         '114-listing-Skybox3updatenextweek',
+                         '1-listing-AirMailupdatenextweek',
+                         '112-listing-Skybox1updatenextweek',
+                         '11-listing-BreadBasketupdatenextweek']
+        self.assertEqual(notification_list, expected_data)
 
     def test_dismiss_self_notification(self):
         user = generic_model_access.get_profile('wsmith').user
@@ -115,19 +146,18 @@ class NotificationApiTest(APITestCase):
         for i in response.data:
             notification_ids.append([i['id'], ''.join(i['message'].split())])
 
-        # New
-        [[16, 'BreadBasketupdatenextweek(12)'],
-         [15, 'Skybox1updatenextweek(11)'],
-         [13, 'AirMailupdatenextweek(9)'],
-         [9, 'Skybox3updatenextweek(5)'],
-         [8, 'Skybox2updatenextweek(4)'],
-         [7, 'Skybox1updatenextweek(3)'],
-         [6, 'AirMailupdatenextweek(2)'],
-         [5, 'BreadBasketupdatenextweek(1)'],
-         [2, 'Systemwillbefunctioninginadegredadedstatebetween1800Z-0400ZonA/B'],
-         [1, 'Systemwillbegoingdownforapproximately30minutesonX/Yat1100Z']]
+        expected = [[16, 'BreadBasketupdatenextweek'],
+                    [15, 'Skybox1updatenextweek'],
+                    [13, 'AirMailupdatenextweek'],
+                    [9, 'Skybox3updatenextweek'],
+                    [8, 'Skybox2updatenextweek'],
+                    [7, 'Skybox1updatenextweek'],
+                    [6, 'AirMailupdatenextweek'],
+                    [5, 'BreadBasketupdatenextweek'],
+                    [2, 'Systemwillbefunctioninginadegredadedstatebetween1800Z-0400ZonA/B'],
+                    [1, 'Systemwillbegoingdownforapproximately30minutesonX/Yat1100Z']]
 
-        self.assertEqual(100, len(notification_ids))
+        self.assertEqual(expected, notification_ids)
 
         # now dismiss the first notification
         dismissed_notification_id = notification_ids[0][0]
@@ -142,8 +172,17 @@ class NotificationApiTest(APITestCase):
         for i in response.data:
             notification_ids.append([i['id'], ''.join(i['message'].split())])
 
-        self.assertEqual(6, len(notification_ids))
-        self.assertTrue(notification_ids[0][0] != dismissed_notification_id)
+        expected = [[15, 'Skybox1updatenextweek'],
+                    [13, 'AirMailupdatenextweek'],
+                    [9, 'Skybox3updatenextweek'],
+                    [8, 'Skybox2updatenextweek'],
+                    [7, 'Skybox1updatenextweek'],
+                    [6, 'AirMailupdatenextweek'],
+                    [5, 'BreadBasketupdatenextweek'],
+                    [2, 'Systemwillbefunctioninginadegredadedstatebetween1800Z-0400ZonA/B'],
+                    [1, 'Systemwillbegoingdownforapproximately30minutesonX/Yat1100Z']]
+
+        self.assertEqual(expected, notification_ids)
 
     def test_get_pending_notifications(self):
         user = generic_model_access.get_profile('wsmith').user
@@ -177,12 +216,15 @@ class NotificationApiTest(APITestCase):
         url = '/api/notifications/pending/?listing=1'
         response = self.client.get(url, format='json')
 
-        ids = [i['id'] for i in response.data]
-        expires_at = [i['expires_date'] for i in response.data]
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertTrue(ids, [1])
-        self.assertTrue(len(expires_at) == 1)
+
+        notification_list = [['{}-{}-{}'.format(entry['entity_id'], entry['notification_type'], ''.join(entry['message'].split())), entry['expires_date']] for entry in response.data]
+        expected = ['1-listing-AirMailupdatenextweek', '1-listing-AirMailupdatenextweek']
+
+        self.assertEqual(expected, [entry[0] for entry in notification_list])
+
         now = datetime.datetime.now(pytz.utc)
+        expires_at = [entry[1] for entry in notification_list]
         for i in expires_at:
             test_time = datetime.datetime.strptime(i,
                 "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=pytz.utc)
@@ -194,7 +236,6 @@ class NotificationApiTest(APITestCase):
 
         url = '/api/notifications/pending/?listing=1'
         response = self.client.get(url, format='json')
-
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_get_expired_notifications(self):
@@ -268,6 +309,7 @@ class NotificationApiTest(APITestCase):
         self.assertEqual(response.data['notification_type'], 'system')
 
     def test_create_system_notification_unauthorized_user(self):
+        # test_create_system_notification_unauthorized_user
         # test unauthorized user - only org stewards and above can create
         user = generic_model_access.get_profile('jones').user
         self.client.force_authenticate(user=user)
@@ -558,13 +600,14 @@ class NotificationApiTest(APITestCase):
         self.assertEqual(response.data['listing']['id'], 4)
 
         # Compare Notifications for users
-        usernames_list = {'wsmith': ['listing-Skybox3updatenextweek',
+        usernames_list = {'wsmith': ['listing-BreadBasketupdatenextweek',
+                                     'listing-Skybox1updatenextweek',
+                                     'listing-AirMailupdatenextweek',
+                                     'listing-Skybox3updatenextweek',
                                      'listing-Skybox2updatenextweek',
                                      'listing-Skybox1updatenextweek',
-                                     'listing-BreadBasketupdatenextweek',
-                                     'listing-AirMail3updatenextweek',
-                                     'listing-AirMail2updatenextweek',
                                      'listing-AirMailupdatenextweek',
+                                     'listing-BreadBasketupdatenextweek',
                                      'system-Systemwillbefunctioninginadegredadedstatebetween1800Z-0400ZonA/B',
                                      'system-Systemwillbegoingdownforapproximately30minutesonX/Yat1100Z'],
                           'julia': ['system-Systemwillbefunctioninginadegredadedstatebetween1800Z-0400ZonA/B',
@@ -572,6 +615,7 @@ class NotificationApiTest(APITestCase):
                           'jones': ['system-Systemwillbefunctioninginadegredadedstatebetween1800Z-0400ZonA/B',
                                    'system-Systemwillbegoingdownforapproximately30minutesonX/Yat1100Z'],
                           'bigbrother': ['listing-BreadBasketupdatenextweek',
+                                         'listing-BreadBasketupdatenextweek',
                                          'system-Systemwillbefunctioninginadegredadedstatebetween1800Z-0400ZonA/B',
                                          'system-Systemwillbegoingdownforapproximately30minutesonX/Yat1100Z']
                           }
@@ -585,7 +629,7 @@ class NotificationApiTest(APITestCase):
 
             before_notification_ids = ['{}-{}'.format(entry.get('notification_type'), ''.join(entry.get('message').split())) for entry in response.data]
             self.assertEqual(response.status_code, status.HTTP_200_OK)
-            self.assertEqual(before_notification_ids, ids_list, 'Checking for {}'.format(username))
+            self.assertEqual(ids_list, before_notification_ids, 'Checking for {}'.format(username))
 
         # Compare Library for users
         usernames_list = {'wsmith': ['Bread Basket-None',
@@ -670,13 +714,14 @@ class NotificationApiTest(APITestCase):
             bookmark_notification_ids_raw.append(response.data['id'])
 
             # Compare Notifications for users
-            usernames_list = {'wsmith': ['listing-Skybox3updatenextweek',
+            usernames_list = {'wsmith': ['listing-BreadBasketupdatenextweek',
+                                         'listing-Skybox1updatenextweek',
+                                         'listing-AirMailupdatenextweek',
+                                         'listing-Skybox3updatenextweek',
                                          'listing-Skybox2updatenextweek',
                                          'listing-Skybox1updatenextweek',
-                                         'listing-BreadBasketupdatenextweek',
-                                         'listing-AirMail3updatenextweek',
-                                         'listing-AirMail2updatenextweek',
                                          'listing-AirMailupdatenextweek',
+                                         'listing-BreadBasketupdatenextweek',
                                          'system-Systemwillbefunctioninginadegredadedstatebetween1800Z-0400ZonA/B',
                                          'system-Systemwillbegoingdownforapproximately30minutesonX/Yat1100Z'],
                               'julia': bookmark_notification_ids[::-1] + ['system-Systemwillbefunctioninginadegredadedstatebetween1800Z-0400ZonA/B',
@@ -684,7 +729,7 @@ class NotificationApiTest(APITestCase):
                               'jones': ['system-Systemwillbefunctioninginadegredadedstatebetween1800Z-0400ZonA/B',
                                         'system-Systemwillbegoingdownforapproximately30minutesonX/Yat1100Z'],
                               'bigbrother': ['listing-BreadBasketupdatenextweek',
-                                             'listing-AirMail3updatenextweek',
+                                             'listing-BreadBasketupdatenextweek',
                                              'system-Systemwillbefunctioninginadegredadedstatebetween1800Z-0400ZonA/B',
                                              'system-Systemwillbegoingdownforapproximately30minutesonX/Yat1100Z']}
 
@@ -694,10 +739,10 @@ class NotificationApiTest(APITestCase):
 
                 url = '/api/self/notification/'
                 response = self.client.get(url, format='json')
+                self.assertEqual(response.status_code, status.HTTP_200_OK)
 
                 before_notification_ids = ['{}-{}'.format(entry.get('notification_type'), ''.join(entry.get('message').split())) for entry in response.data]
-                self.assertEqual(response.status_code, status.HTTP_200_OK)
-                self.assertEqual(before_notification_ids, ids_list, 'comparing {}'.format(username))
+                self.assertEqual(ids_list, before_notification_ids, 'comparing {}'.format(username))
 
         bookmark_notification1_id = bookmark_notification_ids_raw[0]
 
@@ -728,23 +773,22 @@ class NotificationApiTest(APITestCase):
             self.assertEqual(before_notification_ids, ids_list, 'Comparing Library for {}'.format(username))
 
         # Compare Notifications for users
-        usernames_list = {'wsmith': ['listing-Skybox3updatenextweek',
+        usernames_list = {'wsmith': ['listing-BreadBasketupdatenextweek',
+                                     'listing-Skybox1updatenextweek',
+                                     'listing-AirMailupdatenextweek',
+                                     'listing-Skybox3updatenextweek',
                                      'listing-Skybox2updatenextweek',
                                      'listing-Skybox1updatenextweek',
-                                     'listing-BreadBasketupdatenextweek',
-                                     'listing-AirMail3updatenextweek',
-                                     'listing-AirMail2updatenextweek',
                                      'listing-AirMailupdatenextweek',
+                                     'listing-BreadBasketupdatenextweek',
                                      'system-Systemwillbefunctioninginadegredadedstatebetween1800Z-0400ZonA/B',
                                      'system-Systemwillbegoingdownforapproximately30minutesonX/Yat1100Z'],
-                          'julia': bookmark_notification_ids[::-1] + ['listing-AirMail3updatenextweek',
-                                                                      'listing-AirMail2updatenextweek',
-                                                                      'system-Systemwillbefunctioninginadegredadedstatebetween1800Z-0400ZonA/B',
+                          'julia': bookmark_notification_ids[::-1] + ['system-Systemwillbefunctioninginadegredadedstatebetween1800Z-0400ZonA/B',
                                                                       'system-Systemwillbegoingdownforapproximately30minutesonX/Yat1100Z'],
                           'jones': ['system-Systemwillbefunctioninginadegredadedstatebetween1800Z-0400ZonA/B',
                                     'system-Systemwillbegoingdownforapproximately30minutesonX/Yat1100Z'],
                           'bigbrother': ['listing-BreadBasketupdatenextweek',
-                                         'listing-AirMail3updatenextweek',
+                                         'listing-BreadBasketupdatenextweek',
                                          'system-Systemwillbefunctioninginadegredadedstatebetween1800Z-0400ZonA/B',
                                          'system-Systemwillbegoingdownforapproximately30minutesonX/Yat1100Z']}
 
@@ -757,7 +801,10 @@ class NotificationApiTest(APITestCase):
 
             before_notification_ids = ['{}-{}'.format(entry.get('notification_type'), ''.join(entry.get('message').split())) for entry in response.data]
             self.assertEqual(response.status_code, status.HTTP_200_OK)
-            self.assertEqual(before_notification_ids, ids_list, 'Comparing Notifications for {}'.format(username))
+
+            import pprint
+            print(pprint.pprint(before_notification_ids))
+            self.assertEqual(ids_list, before_notification_ids, 'Comparing Notifications for {}'.format(username))
 
     def test_delete_system_notification_apps_mall_steward(self):
         user = generic_model_access.get_profile('bigbrother').user

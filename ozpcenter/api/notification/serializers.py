@@ -158,6 +158,7 @@ class NotificationSerializer(serializers.ModelSerializer):
             if not target_username_profile:
                 raise serializers.ValidationError('Valid User is Required')
 
+            validated_data['entity_id'] = target_username_profile.pk
             # Folder Validation - Optional Field
             temp_folder_name = temp_peer.get('folder_name')
             if temp_folder_name:
@@ -189,7 +190,8 @@ class NotificationSerializer(serializers.ModelSerializer):
                                                         validated_data['message'],
                                                         validated_data['listing'],
                                                         validated_data['agency'],
-                                                        validated_data['peer'])
+                                                        validated_data['peer'],
+                                                        validated_data.get('entity_id'))
         return notification
 
     def update(self, instance, validated_data):

@@ -235,7 +235,6 @@ def get_profile_target_list(notification_type, group_target=None, entities=None)
 
     elif notification_type == Notification.PEER or notification_type == Notification.PEER_BOOKMARK:
         query = Profile.objects.filter(id__in=entities)
-
     else:
         raise Exception('Notification Type not valid')
 
@@ -250,7 +249,7 @@ def get_profile_target_list(notification_type, group_target=None, entities=None)
     return query.all()
 
 
-def create_notification(author_username, expires_date, message, listing=None, agency=None, peer=None):
+def create_notification(author_username, expires_date, message, listing=None, agency=None, peer=None, peer_profile_id=None):
     """
     Create Notification
 
@@ -334,11 +333,11 @@ def create_notification(author_username, expires_date, message, listing=None, ag
 
     elif notification_type == Notification.PEER:
         notification.group_target = 'user'
-        notification.entity_id = None
+        notification.entity_id = peer_profile_id
 
     elif notification_type == Notification.PEER_BOOKMARK:
         notification.group_target = 'user'
-        notification.entity_id = None
+        notification.entity_id = peer_profile_id
 
     notification.save()
 
@@ -346,8 +345,10 @@ def create_notification(author_username, expires_date, message, listing=None, ag
     entities = None
     if notification_type == Notification.LISTING:
         entities = [listing.pk]
-    if notification_type == Notification.AGENCY or notification_type == Notification.AGENCY_BOOKMARK:
+    elif notification_type == Notification.AGENCY or notification_type == Notification.AGENCY_BOOKMARK:
         entities = [agency.pk]
+    elif notification_type == Notification.PEER or notification_type == Notification.PEER_BOOKMARK:
+        entities = [notification.entity_id]
 
     target_list = get_profile_target_list(notification_type, entities=entities)
     for target_profile in target_list:

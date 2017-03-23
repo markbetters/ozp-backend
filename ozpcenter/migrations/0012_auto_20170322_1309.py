@@ -24,6 +24,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='notification',
             name='entity_id',
-            field=models.IntegerField(blank=True, null=True, default=None),
+            field=models.IntegerField(blank=True, db_index=True, null=True, default=None),
         )
     ]

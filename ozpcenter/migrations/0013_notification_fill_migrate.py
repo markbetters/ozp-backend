@@ -80,12 +80,12 @@ def forwards(apps, schema_editor):
         elif current_notification_notification_type == 'PEER':
             current_notification.notification_type = 'peer'
             current_notification.group_target = 'user'
-            current_notification.entity_id = None
+            current_notification.entity_id = None  # TODO: GET Profile ID
 
         elif current_notification_notification_type == 'PEER.BOOKMARK':
             current_notification.notification_type = 'peer_bookmark'
             current_notification.group_target = 'user'
-            current_notification.entity_id = None
+            current_notification.entity_id = None  # TODO: GET Profile ID
 
         current_notification.save()
 
