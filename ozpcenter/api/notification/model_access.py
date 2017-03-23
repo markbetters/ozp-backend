@@ -2,15 +2,20 @@
 Model access
 """
 import datetime
-import json
 import logging
 import pytz
 from enum import Enum
 
-from ozpcenter import errors
-from ozpcenter import models
-import ozpcenter.model_access as generic_model_access
+from django.db.models import Q
 
+from ozpcenter import errors
+
+from ozpcenter.models import Notification
+from ozpcenter.models import NotificationMailBox
+from ozpcenter.models import Profile
+from ozpcenter.models import ApplicationLibraryEntry
+
+import ozpcenter.model_access as generic_model_access
 
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center.' + str(__name__))
@@ -28,15 +33,6 @@ class NotificationActionEnum(Enum):
     DELETE = 'Delete'
 
 
-class NotificationTypeEnum(Enum):
-    SYSTEM = 'system'
-    AGENCY = 'agency'
-    AGENCY_BOOKMARK = 'agency_bookmark'
-    LISTING = 'lising'
-    PEER = 'peer'
-    PEER_BOOKMARK = 'peer_bookmark'
-
-
 def org_create_listing_condition(profile_obj, listing):
     """
     """
@@ -51,7 +47,7 @@ def user_create_listing_condition(profile_obj, listing):
     Listing create condition for user
 
     Args:
-        profile_obj (models.Profile): Profile
+        profile_obj (Profile): Profile
         listing (models.Listing): Listing
 
     Return:
@@ -98,70 +94,92 @@ def _check_profile_permission(user_role_type, notification_action, notification_
     permissions = {
         UserRoleType.APPS_MALL_STEWARD: {
             NotificationActionEnum.CREATE: {
-                NotificationTypeEnum.SYSTEM: lambda: True,
-                NotificationTypeEnum.AGENCY: lambda: True,
-                NotificationTypeEnum.LISTING: lambda: True,
-                NotificationTypeEnum.PEER: lambda: True
+                Notification.SYSTEM: lambda: True,
+                Notification.AGENCY: lambda: True,
+                Notification.LISTING: lambda: True,
+                Notification.PEER: lambda: True,
+                Notification.PEER_BOOKMARK: lambda: True
             },
             NotificationActionEnum.UPDATE: {
-                NotificationTypeEnum.SYSTEM: lambda: True,
-                NotificationTypeEnum.AGENCY: lambda: True,
-                NotificationTypeEnum.LISTING: lambda: True,
-                NotificationTypeEnum.PEER: lambda: True
+                Notification.SYSTEM: lambda: True,
+                Notification.AGENCY: lambda: True,
+                Notification.LISTING: lambda: True,
+                Notification.PEER: lambda: True,
+                Notification.PEER_BOOKMARK: lambda: True
             },
             NotificationActionEnum.DELETE: {
-                NotificationTypeEnum.SYSTEM: lambda: True,
-                NotificationTypeEnum.AGENCY: lambda: True,
-                NotificationTypeEnum.LISTING: lambda: True,
-                NotificationTypeEnum.PEER: lambda: True
+                Notification.SYSTEM: lambda: True,
+                Notification.AGENCY: lambda: True,
+                Notification.LISTING: lambda: True,
+                Notification.PEER: lambda: True,
+                Notification.PEER_BOOKMARK: lambda: True
             }
         },
         UserRoleType.ORG_STEWARD: {
             NotificationActionEnum.CREATE: {
-                NotificationTypeEnum.SYSTEM: lambda: raise_(errors.PermissionDenied('Only app mall stewards can create system notifications')),
-                NotificationTypeEnum.AGENCY: lambda: True,
-                NotificationTypeEnum.LISTING: lambda: True,  # TODO: org_create_listing_condition(profile_obj, listing)
-                NotificationTypeEnum.PEER: lambda: True
+                Notification.SYSTEM: lambda: True,  # TODO: raise_(errors.PermissionDenied('Only app mall stewards can create system notifications')),
+                Notification.AGENCY: lambda: True,
+                Notification.LISTING: lambda: True,  # TODO: org_create_listing_condition(profile_obj, listing)
+                Notification.PEER: lambda: True,
+                Notification.PEER_BOOKMARK: lambda: True
             },
             NotificationActionEnum.UPDATE: {
                 # lambda: raise_(errors.PermissionDenied('Only app mall
                 # stewards can update system notifications')),
-                NotificationTypeEnum.SYSTEM: lambda: True,
-                NotificationTypeEnum.AGENCY: lambda: True,
-                NotificationTypeEnum.LISTING: lambda: True,
-                NotificationTypeEnum.PEER: lambda: True
+                Notification.SYSTEM: lambda: True,
+                Notification.AGENCY: lambda: True,
+                Notification.LISTING: lambda: True,
+                Notification.PEER: lambda: True,
+                Notification.PEER_BOOKMARK: lambda: True
             },
             NotificationActionEnum.DELETE: {
                 # lambda: raise_(errors.PermissionDenied('Only app mall
                 # stewards can delete system notifications')),
-                NotificationTypeEnum.SYSTEM: lambda: True,
-                NotificationTypeEnum.AGENCY: lambda: True,
-                NotificationTypeEnum.LISTING: lambda: True,
-                NotificationTypeEnum.PEER: lambda: True
+                Notification.SYSTEM: lambda: True,
+                Notification.AGENCY: lambda: True,
+                Notification.LISTING: lambda: True,
+                Notification.PEER: lambda: True,
+                Notification.PEER_BOOKMARK: lambda: True
             }
         },
         UserRoleType.USER: {
             NotificationActionEnum.CREATE: {
-                NotificationTypeEnum.SYSTEM: lambda: raise_(errors.PermissionDenied('Only app mall stewards can create system notifications')),
-                NotificationTypeEnum.AGENCY: lambda: raise_(errors.PermissionDenied('Only org stewards can create agency notifications')),
-                NotificationTypeEnum.LISTING: lambda: user_create_listing_condition(profile_obj, listing),
-                NotificationTypeEnum.PEER: lambda: True
+                Notification.SYSTEM: lambda: raise_(errors.PermissionDenied('Only app mall stewards can create system notifications')),
+                Notification.AGENCY: lambda: raise_(errors.PermissionDenied('Only org stewards can create agency notifications')),
+                Notification.LISTING: lambda: user_create_listing_condition(profile_obj, listing),
+                Notification.PEER: lambda: True,
+                Notification.PEER_BOOKMARK: lambda: True
             },
             NotificationActionEnum.UPDATE: {
-                NotificationTypeEnum.SYSTEM: lambda: raise_(errors.PermissionDenied('Only app mall stewards can update system notifications')),
-                NotificationTypeEnum.AGENCY: lambda: raise_(errors.PermissionDenied('Only org stewards can create agency notifications')),
-                NotificationTypeEnum.LISTING: None,
-                NotificationTypeEnum.PEER: lambda: True
+                Notification.SYSTEM: lambda: raise_(errors.PermissionDenied('Only app mall stewards can update system notifications')),
+                Notification.AGENCY: lambda: raise_(errors.PermissionDenied('Only org stewards can create agency notifications')),
+                Notification.LISTING: None,
+                Notification.PEER: lambda: True,
+                Notification.PEER_BOOKMARK: lambda: True
             },
             NotificationActionEnum.DELETE: {
-                NotificationTypeEnum.SYSTEM: lambda: raise_(errors.PermissionDenied('Only app mall stewards can delete system notifications')),
-                NotificationTypeEnum.AGENCY: lambda: raise_(errors.PermissionDenied('Only org stewards can create agency notifications')),
-                NotificationTypeEnum.LISTING: None,
-                NotificationTypeEnum.PEER: lambda: True
+                Notification.SYSTEM: lambda: raise_(errors.PermissionDenied('Only app mall stewards can delete system notifications')),
+                Notification.AGENCY: lambda: raise_(errors.PermissionDenied('Only org stewards can create agency notifications')),
+                Notification.LISTING: None,
+                Notification.PEER: lambda: True,
+                Notification.PEER_BOOKMARK: lambda: True
             }
         }
     }
     return permissions.get(user_role_type, {}).get(notification_action, {}).get(notification_type, lambda: raise_(errors.PermissionDenied('Unknown Permissions')))
+
+
+def get_self(username):
+    """
+    Get Profile for username
+
+    Args:
+        username (str): current username
+
+    Returns:
+        Profile if username exist, None if username does not exist
+    """
+    return generic_model_access.get_profile(username)
 
 
 def get_profile_target_list(notification_type, group_target=None, entities=None):
@@ -201,65 +219,35 @@ def get_profile_target_list(notification_type, group_target=None, entities=None)
     entities = entities or []
     query = None
 
-    if notification_type == 'system':
-        query = models.Profile.objects
-    elif notification_type == 'agency':
-        query = models.Profile.objects.filter(organizations__in=entities)
-    elif notification_type == 'agency_bookmark':
-        query = models.Profile.objects.filter(organizations__in=entities)
-    elif notification_type == 'listing':
-        # bookmarked_listing_ids = models.ApplicationLibraryEntry.objects \
-        #     .filter(listing__in=entities,
-        #             listing__isnull=False,
-        #             listing__is_enabled=True,
-        #             listing__is_deleted=False) \
-        #     .values_list('owner', flat=True)
+    if notification_type == Notification.SYSTEM:
+        query = Profile.objects
 
-        query = models.Profile.objects.filter(organizations__in=entities)
+    elif notification_type == Notification.AGENCY or notification_type == Notification.AGENCY_BOOKMARK:
+        query = Profile.objects.filter(Q(organizations__in=entities) | Q(stewarded_organizations__in=entities))
+
+    elif notification_type == Notification.LISTING:
+        # TODO: Respect Private Apps
+        owner_id_list = ApplicationLibraryEntry.objects.filter(listing__in=entities,
+                                                               listing__isnull=False,
+                                                               listing__is_enabled=True,
+                                                               listing__is_deleted=False).values_list('owner', flat=True).distinct()
+        query = Profile.objects.filter(id__in=owner_id_list)
+
+    elif notification_type == Notification.PEER or notification_type == Notification.PEER_BOOKMARK:
+        query = Profile.objects.filter(id__in=entities)
+
     else:
-        return []
+        raise Exception('Notification Type not valid')
+
+    print('group filtering')
+    if group_target == Notification.ALL:
+        pass  # No Filtering Needed
+    elif group_target == Notification.STEWARDS:
+        pass  # TODO
+    elif group_target == Notification.USER:
+        pass  # TODO
+
     return query.all()
-
-
-def get_notification_type(notification):
-    """
-    Dynamically figure out Notification Type
-
-    Types:
-        SYSTEM - System-wide Notifications
-        AGENCY - Agency-wide Notifications
-        AGENCY_BOOKMARK - Agency-wide Bookmark Notifications # Not requirement (erivera 20160621)
-        LISTING - Listing Notifications
-        PEER - Peer to Peer Notifications
-        PEER_BOOKMARK - Peer to Peer Bookmark Notifications
-    """
-    type_list = []
-    peer_list = []
-
-    if notification._peer:
-        peer_list.append('PEER')
-
-        try:
-            json_obj = (json.loads(notification._peer))
-            if json_obj and 'folder_name' in json_obj:
-                peer_list.append('BOOKMARK')
-        except ValueError:
-            # Ignore Value Errors
-            pass
-
-    if peer_list:
-        type_list.append('.'.join(peer_list))
-
-    if notification.listing:
-        type_list.append('LISTING')
-
-    if notification.agency:
-        type_list.append('AGENCY')
-
-    if not type_list:
-        type_list.append('SYSTEM')
-
-    return '_'.join(type_list)
 
 
 def create_notification(author_username, expires_date, message, listing=None, agency=None, peer=None):
@@ -279,7 +267,7 @@ def create_notification(author_username, expires_date, message, listing=None, ag
         Agency (models.Agency)-Optional: Agency
 
     Return:
-        models.Notification: Created Notification
+        Notification: Created Notification
 
     Raises:
         AssertionError: If author_username or expires_date or message is None
@@ -291,14 +279,20 @@ def create_notification(author_username, expires_date, message, listing=None, ag
         listing is not None and agency is not None), 'Notications can not have listing and agency at the same time'
 
     notification_action = NotificationActionEnum.CREATE
-    notification_type = NotificationTypeEnum.SYSTEM
+    notification_type = Notification.SYSTEM
 
     if listing is not None:
-        notification_type = NotificationTypeEnum.LISTING
+        notification_type = Notification.LISTING
     elif agency is not None:
-        notification_type = NotificationTypeEnum.AGENCY
+        notification_type = Notification.AGENCY
     elif peer is not None:
-        notification_type = NotificationTypeEnum.PEER
+        notification_type = Notification.PEER
+        try:
+            if peer and 'folder_name' in peer:
+                notification_type = Notification.PEER_BOOKMARK
+        except ValueError:
+            # Ignore Value Errors
+            pass
 
     user = generic_model_access.get_profile(author_username)
     # TODO: Check if user exist, if not throw Exception Error ?
@@ -308,52 +302,62 @@ def create_notification(author_username, expires_date, message, listing=None, ag
     _check_profile_permission(user_role_type,
                               notification_action,
                               notification_type,
+                              profile_obj=user,
                               listing=listing,
                               agency=agency)()
 
-    notification = models.Notification(
+    notification = Notification(
         expires_date=expires_date,
         author=user,
         message=message,
-        listing=listing,
-        agency=agency,
+        listing=listing,  # TODO (RIVERA): Remove
+        agency=agency,  # TODO (RIVERA): Remove
         peer=peer)
 
-    current_notification_type = get_notification_type(notification)
+    notification.notification_type = notification_type
 
-    if current_notification_type == 'SYSTEM':
-        notification.notification_type = 'system'
+    if notification_type == Notification.SYSTEM:
         notification.group_target = 'all'
         notification.entity_id = None
 
-    elif current_notification_type == 'AGENCY':
-        notification.notification_type = 'agency'
+    elif notification_type == Notification.AGENCY:
         notification.group_target = 'all'
-        notification.entity_id = notification.agency.pk
+        notification.entity_id = agency.pk
 
-    elif current_notification_type == 'AGENCY.BOOKMARK':
-        notification.notification_type = 'agency_bookmark'
+    elif notification_type == Notification.AGENCY_BOOKMARK:
         notification.group_target = 'all'
-        notification.entity_id = notification.agency.pk
+        notification.entity_id = agency.pk
 
-    elif current_notification_type == 'LISTING':
-        notification.notification_type = 'listing'
+    elif notification_type == Notification.LISTING:
         notification.group_target = 'all'
-        notification.entity_id = notification.listing.pk
+        notification.entity_id = listing.pk
 
-    elif current_notification_type == 'PEER':
-        notification.notification_type = 'peer'
+    elif notification_type == Notification.PEER:
         notification.group_target = 'user'
         notification.entity_id = None
 
-    elif current_notification_type == 'PEER.BOOKMARK':
-        notification.notification_type = 'peer_bookmark'
+    elif notification_type == Notification.PEER_BOOKMARK:
         notification.group_target = 'user'
         notification.entity_id = None
 
     notification.save()
 
-    # Add NotificationV2
+    # Add NotificationMail
+    entities = None
+    if notification_type == Notification.LISTING:
+        entities = [listing.pk]
+    if notification_type == Notification.AGENCY or notification_type == Notification.AGENCY_BOOKMARK:
+        entities = [agency.pk]
+
+    target_list = get_profile_target_list(notification_type, entities=entities)
+    for target_profile in target_list:
+        notificationv2 = NotificationMailBox()
+        notificationv2.target_profile = target_profile
+        notificationv2.notification = notification
+        # All the flags default to false
+        notificationv2.emailed_status = False
+        notificationv2.save()
+
     return notification
 
 
@@ -362,7 +366,7 @@ def dismiss_notification(notification_instance, username):
     Dismissed a Notification
 
     Args:
-        notification_instance (models.Notification): notification_instance
+        notification_instance (Notification): notification_instance
         username (string)
 
     Return:
@@ -370,7 +374,6 @@ def dismiss_notification(notification_instance, username):
     """
     user = generic_model_access.get_profile(username)
     notification_instance.dismissed_by.add(user)
-
     return True
 
 
@@ -379,45 +382,31 @@ def update_notification(author_username, notification_instance, expires_date):
     Update Notification
 
     Args:
-        notification_instance (models.Notification): notification_instance
+        notification_instance (Notification): notification_instance
         author_username (str): Username of author
 
     Return:
-        models.Notification: Updated Notification
+        Notification: Updated Notification
     """
     notification_action = NotificationActionEnum.UPDATE
 
-    notification_type = NotificationTypeEnum.SYSTEM
+    notification_type = Notification.SYSTEM
 
     if notification_instance.listing is not None:
-        notification_type = NotificationTypeEnum.LISTING
+        notification_type = Notification.LISTING
     elif notification_instance.agency is not None:
-        notification_type = NotificationTypeEnum.AGENCY
+        notification_type = Notification.AGENCY
 
     user = generic_model_access.get_profile(author_username)
     # TODO: Check if user exist, if not throw Exception Error ?
 
     user_role_type = UserRoleType(user.highest_role())
 
-    _check_profile_permission(
-        user_role_type, notification_action, notification_type)()
+    _check_profile_permission(user_role_type, notification_action, notification_type)()
 
     notification_instance.expires_date = expires_date
     notification_instance.save()
     return notification_instance
-
-
-def get_self(username):
-    """
-    Get Profile for username
-
-    Args:
-        username (str): current username
-
-    Returns:
-        models.Profile if username exist, None if username does not exist
-    """
-    return generic_model_access.get_profile(username)
 
 
 def get_all_notifications():
@@ -432,34 +421,9 @@ def get_all_notifications():
     * Peer.Bookmark Notifications
 
     Returns:
-        django.db.models.query.QuerySet(models.Notification): List of all notifications
+        django.db.models.query.QuerySet(Notification): List of all notifications
     """
-    return models.Notification.objects.all()
-
-#
-# def get_all_notifications_v2():
-#     """
-#     Get all notifications (expired and un-expired notifications)
-#
-#     Includes
-#     * Listing Notifications
-#     * Agency Notifications
-#     * System Notifications
-#     * Peer Notifications
-#     * Peer.Bookmark Notifications
-#
-#     Returns:
-#         django.db.models.query.QuerySet(models.Notification): List of all notifications
-#     """
-#     query = models.NotificationV2.objects.all()
-#     # values('notification_id',
-#     #         'created_date',
-#     #         'expires_date',
-#     #         'author_username',
-#     #         'message',
-#     #         'notification_type',
-#     #         '_metadata').distinct()
-#     return query
+    return Notification.objects.all()
 
 
 def get_all_pending_notifications(for_user=False):
@@ -478,9 +442,9 @@ def get_all_pending_notifications(for_user=False):
          * Peer.Bookmark Notifications
 
     Returns:
-        django.db.models.query.QuerySet(models.Notification): List of system-wide pending notifications
+        django.db.models.query.QuerySet(Notification): List of system-wide pending notifications
     """
-    unexpired_system_notifications = models.Notification.objects.filter(
+    unexpired_system_notifications = Notification.objects.filter(
         expires_date__gt=datetime.datetime.now(pytz.utc))
 
     if for_user:
@@ -505,9 +469,9 @@ def get_pending_peer_notifications(username):
      * Agency Notifications
 
     Returns:
-        django.db.models.query.QuerySet(models.Notification): List of system-wide pending notifications
+        django.db.models.query.QuerySet(Notification): List of system-wide pending notifications
     """
-    unexpired_peer_notifications = models.Notification.objects \
+    unexpired_peer_notifications = Notification.objects \
         .filter(_peer__isnull=False,
                 agency__isnull=True,  # Ensure there are no agency notifications
                 listing__isnull=True,  # Ensure there are no listing notifications
@@ -534,16 +498,16 @@ def get_listing_pending_notifications(username):
         username (str): current username to get notifications
 
     Returns:
-        django.db.models.query.QuerySet(models.Notification): List of user's listing pending notifications
+        django.db.models.query.QuerySet(Notification): List of user's listing pending notifications
     """
-    bookmarked_listing_ids = models.ApplicationLibraryEntry.objects \
+    bookmarked_listing_ids = ApplicationLibraryEntry.objects \
         .filter(owner__user__username=username,
                 listing__isnull=False,
                 listing__is_enabled=True,
                 listing__is_deleted=False) \
         .values_list('listing', flat=True)
 
-    unexpired_listing_notifications = models.Notification.objects.filter(
+    unexpired_listing_notifications = Notification.objects.filter(
         expires_date__gt=datetime.datetime.now(pytz.utc),
         listing__pk_in=bookmarked_listing_ids,
         agency__isnull=True,  # Ensure there are no agency notifications
@@ -569,12 +533,12 @@ def get_agency_pending_notifications(username):
         username (str): current username to get notifications
 
     Returns:
-        django.db.models.query.QuerySet(models.Notification): List of user's agencies pending notifications
+        django.db.models.query.QuerySet(Notification): List of user's agencies pending notifications
     """
     user_agency = generic_model_access.get_profile(
         username).organizations.all()
 
-    unexpired_agency_notifications = models.Notification.objects.filter(
+    unexpired_agency_notifications = Notification.objects.filter(
         expires_date__gt=datetime.datetime.now(pytz.utc),
         agency__pk_in=user_agency,
         listing__isnull=True)
@@ -594,9 +558,9 @@ def get_all_expired_notifications():
     * Peer.Bookmark Notifications
 
     Returns:
-        django.db.models.query.QuerySet(models.Notification): List of system-wide pending notifications
+        django.db.models.query.QuerySet(Notification): List of system-wide pending notifications
     """
-    expired_system_notifications = models.Notification.objects.filter(
+    expired_system_notifications = Notification.objects.filter(
         expires_date__lt=datetime.datetime.now(pytz.utc))
     return expired_system_notifications
 
@@ -609,9 +573,9 @@ def get_dismissed_notifications(username):
         username (str): current username to get dismissed notifications
 
     Returns:
-        django.db.models.query.QuerySet(models.Notification): List of dismissed notifications
+        django.db.models.query.QuerySet(Notification): List of dismissed notifications
     """
-    return models.Notification.objects.filter(dismissed_by__user__username=username)
+    return Notification.objects.filter(dismissed_by__user__username=username)
 
 
 def get_notification_by_id(username, id, reraise=False):
@@ -623,8 +587,8 @@ def get_notification_by_id(username, id, reraise=False):
     """
     try:
         dismissed_notifications = get_dismissed_notifications(username)
-        return models.Notification.objects.exclude(pk__in=dismissed_notifications).get(id=id)
-    except models.Notification.DoesNotExist as err:
+        return Notification.objects.exclude(pk__in=dismissed_notifications).get(id=id)
+    except Notification.DoesNotExist as err:
         if reraise:
             raise err
         else:
@@ -646,7 +610,7 @@ def get_self_notifications(username):
         username (str): current username to get notifications
 
     Returns:
-        django.db.models.query.QuerySet(models.Notification): List of notifications for username
+        django.db.models.query.QuerySet(Notification): List of notifications for username
     """
     # Get all notifications that have been dismissed by this user
     dismissed_notifications = get_dismissed_notifications(username)
@@ -672,17 +636,39 @@ def get_self_notifications(username):
 
     return notifications
 
-#
-# def get_self_notifications_v2(username):
-#     """
-#     Get notifications for current user
-#
-#     Args:
-#         username (str): current username to get notifications
-#
-#     Returns:
-#         django.db.models.query.QuerySet(models.Notification): List of notifications for username
-#     """
-#     notifications = models.NotificationV2.objects.filter(target_profile=get_self(username))
-#
-#     return notifications
+
+def get_self_notifications_mailbox(username):
+    """
+    Get notifications for current user
+
+    Args:
+        username (str): current username to get notifications
+
+    Returns:
+        django.db.models.query.QuerySet(Notification): List of notifications for username
+    """
+    # TODO: Figure out how to do join query
+    notifications_mailbox = NotificationMailBox.objects.filter(target_profile=get_self(username)).values_list('notification', flat=True)
+    unexpired_notifications = Notification.objects.filter(pk__in=notifications_mailbox,
+                                                expires_date__gt=datetime.datetime.now(pytz.utc))
+
+    return unexpired_notifications
+
+
+def dismiss_notification_mailbox(notification_instance, username):
+    """
+    Dismissed a Notification
+
+    It delete the Mailbox Entry for user
+
+    Args:
+        notification_instance (Notification): notification_instance
+        username (string)
+
+    Return:
+        bool: Notification Dismissed
+    """
+    profile_instance = get_self(username)
+    NotificationMailBox.objects.filter(target_profile=profile_instance,
+                                       notification=notification_instance).delete()
+    return True

@@ -113,12 +113,24 @@ class NotificationApiTest(APITestCase):
         response = self.client.get(url, format='json')
         notification_ids = []
         for i in response.data:
-            notification_ids.append(i['id'])
+            notification_ids.append([i['id'], ''.join(i['message'].split())])
 
-        self.assertEqual(7, len(notification_ids))
+        # New
+        [[16, 'BreadBasketupdatenextweek(12)'],
+         [15, 'Skybox1updatenextweek(11)'],
+         [13, 'AirMailupdatenextweek(9)'],
+         [9, 'Skybox3updatenextweek(5)'],
+         [8, 'Skybox2updatenextweek(4)'],
+         [7, 'Skybox1updatenextweek(3)'],
+         [6, 'AirMailupdatenextweek(2)'],
+         [5, 'BreadBasketupdatenextweek(1)'],
+         [2, 'Systemwillbefunctioninginadegredadedstatebetween1800Z-0400ZonA/B'],
+         [1, 'Systemwillbegoingdownforapproximately30minutesonX/Yat1100Z']]
+
+        self.assertEqual(100, len(notification_ids))
 
         # now dismiss the first notification
-        dismissed_notification_id = notification_ids[0]
+        dismissed_notification_id = notification_ids[0][0]
         url = url + str(dismissed_notification_id) + '/'
         response = self.client.delete(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
@@ -128,10 +140,10 @@ class NotificationApiTest(APITestCase):
         response = self.client.get(url, format='json')
         notification_ids = []
         for i in response.data:
-            notification_ids.append(i['id'])
+            notification_ids.append([i['id'], ''.join(i['message'].split())])
 
         self.assertEqual(6, len(notification_ids))
-        self.assertTrue(notification_ids[0] != dismissed_notification_id)
+        self.assertTrue(notification_ids[0][0] != dismissed_notification_id)
 
     def test_get_pending_notifications(self):
         user = generic_model_access.get_profile('wsmith').user

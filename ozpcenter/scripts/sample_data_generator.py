@@ -19,6 +19,7 @@ sys.path.insert(0, os.path.realpath(os.path.join(os.path.dirname(__file__), '../
 from django.conf import settings
 
 from ozpcenter import models
+from ozpcenter.api.notification import model_access as notification_model_access
 from ozpcenter.recommend.recommend import RecommenderDirectory
 import ozpcenter.api.listing.model_access as listing_model_access
 
@@ -49,7 +50,7 @@ def create_listing_review_batch(*input_list):
         listing_model_access.create_listing_review(profile_obj.user.username, current_listing, current_rating, text=current_text)
 
 
-def create_library_entries(*entries):
+def create_library_entries(entries):
     """
     Create Bookmarks for users
     """
@@ -573,28 +574,25 @@ def run():
     next_week = datetime.datetime.now() + datetime.timedelta(days=7)
     eastern = pytz.timezone('US/Eastern')
     next_week = eastern.localize(next_week)
-    n1 = models.Notification(message='System will be going down for \
-        approximately 30 minutes on X/Y at 1100Z',
-        expires_date=next_week, author=winston)
-    n1.save()
+    n1 = notification_model_access.create_notification(winston,  # noqa: F841
+                                                       next_week,
+                                                       'System will be going down for approximately 30 minutes on X/Y at 1100Z')
 
-    n2 = models.Notification(message='System will be functioning in a \
-        degredaded state between 1800Z-0400Z on A/B',
-        expires_date=next_week, author=julia)
-    n2.save()
+    n2 = notification_model_access.create_notification(julia,  # noqa: F841
+                                                       next_week,
+                                                       'System will be functioning in a degredaded state between 1800Z-0400Z on A/B')
 
     # create some expired notifications
     last_week = datetime.datetime.now() - datetime.timedelta(days=7)
     last_week = eastern.localize(last_week)
-    n1 = models.Notification(message='System will be going down for \
-        approximately 30 minutes on C/D at 1700Z',
-        expires_date=last_week, author=winston)
-    n1.save()
 
-    n2 = models.Notification(message='System will be functioning in a \
-        degredaded state between 2100Z-0430Z on F/G',
-        expires_date=last_week, author=julia)
-    n2.save()
+    n1 = notification_model_access.create_notification(winston,  # noqa: F841
+                                                       last_week,
+                                                       'System will be going down for approximately 30 minutes on C/D at 1700Z')
+
+    n2 = notification_model_access.create_notification(julia,  # noqa: F841
+                                                       last_week,
+                                                       'System will be functioning in a degredaded state between 2100Z-0430Z on F/G')
 
     # -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
     ############################################################################
@@ -625,6 +623,7 @@ def run():
     #                           Air Mail
     ############################################################################
     # Looping for more sample results
+    print('== Creating Air Mail Listings')
     for i in range(0, 10):
         postfix_space = "" if (i == 0) else " " + str(i)
         postfix_dot = "" if (i == 0) else "." + str(i)
@@ -706,17 +705,6 @@ def run():
             large_image=large_img,
             listing=listing)
         screenshot.save()
-        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-        #                           Notifications
-        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-        listing_notification = models.Notification(message='{} update next week'.format(listing.title),
-                                            expires_date=next_week,
-                                            listing=listing,
-                                            author=winston,
-                                            entity_id=listing.pk,
-                                            notification_type=models.Notification.LISTING
-                                            )
-        listing_notification.save()
 
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         #                           Document URLs
@@ -745,6 +733,7 @@ def run():
     ############################################################################
     #                           Bread Basket
     ############################################################################
+    print('== Creating Bread Basket Listings')
     for i in range(0, 10):
         postfix_space = "" if (i == 0) else " " + str(i)
         postfix_dot = "" if (i == 0) else "." + str(i)
@@ -811,21 +800,10 @@ def run():
             [julia, 5, "Yum!"]
         )
 
-        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-        #                           Notifications
-        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-        listing_notification = models.Notification(message='{} update next week'.format(listing.title),
-                                            expires_date=next_week,
-                                            listing=listing,
-                                            author=winston,
-                                            entity_id=listing.pk,
-                                            notification_type=models.Notification.LISTING
-                                            )
-        listing_notification.save()
-
     ############################################################################
     #                           Chart Course
     ############################################################################
+    print('== Creating Chart Course Listings')
     for i in range(0, 10):
         postfix_space = "" if (i == 0) else " " + str(i)
         postfix_dot = "" if (i == 0) else "." + str(i)
@@ -895,21 +873,11 @@ def run():
             [winston, 2, "This Chart is bad"],
             [big_brother, 5, "Good Chart!"]
         )
-        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-        #                           Notifications
-        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-        listing_notification = models.Notification(message='{} update next week'.format(listing.title),
-                                            expires_date=next_week,
-                                            listing=listing,
-                                            author=winston,
-                                            entity_id=listing.pk,
-                                            notification_type=models.Notification.LISTING
-                                            )
-        listing_notification.save()
 
     ############################################################################
     #                           Chatter Box
     ############################################################################
+    print('== Creating Chatter Box Listings')
     for i in range(0, 10):
         postfix_space = "" if (i == 0) else " " + str(i)
         postfix_dot = "" if (i == 0) else "." + str(i)
@@ -964,21 +932,10 @@ def run():
         listing_model_access.approve_listing_by_org_steward(winston, listing)
         listing_model_access.approve_listing(winston, listing)
 
-        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-        #                           Notifications
-        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-        listing_notification = models.Notification(message='{} update next week'.format(listing.title),
-                                            expires_date=next_week,
-                                            listing=listing,
-                                            author=winston,
-                                            entity_id=listing.pk,
-                                            notification_type=models.Notification.LISTING
-                                            )
-        listing_notification.save()
-
     ############################################################################
     #                           Clipboard
     ############################################################################
+    print('== Creating Clipboard Listings')
     for i in range(0, 10):
         postfix_space = "" if (i == 0) else " " + str(i)
         postfix_dot = "" if (i == 0) else "." + str(i)
@@ -1034,20 +991,10 @@ def run():
         listing_model_access.approve_listing_by_org_steward(winston, listing)
         listing_model_access.approve_listing(winston, listing)
 
-        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-        #                           Notifications
-        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-        listing_notification = models.Notification(message='{} update next week'.format(listing.title),
-                                            expires_date=next_week,
-                                            listing=listing,
-                                            author=winston,
-                                            entity_id=listing.pk,
-                                            notification_type=models.Notification.LISTING
-                                            )
-        listing_notification.save()
     ############################################################################
     #                           FrameIt
     ############################################################################
+    print('== Creating FrameIt Listings')
     for i in range(0, 10):
         postfix_space = "" if (i == 0) else " " + str(i)
         postfix_dot = "" if (i == 0) else "." + str(i)
@@ -1103,21 +1050,10 @@ def run():
         listing_model_access.approve_listing_by_org_steward(winston, listing)
         listing_model_access.approve_listing(winston, listing)
 
-        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-        #                           Notifications
-        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-        listing_notification = models.Notification(message='{} update next week'.format(listing.title),
-                                            expires_date=next_week,
-                                            listing=listing,
-                                            author=winston,
-                                            entity_id=listing.pk,
-                                            notification_type=models.Notification.LISTING
-                                            )
-        listing_notification.save()
-
     ############################################################################
     #                           Hatch Latch
     ############################################################################
+    print('== Creating Hatch Latch Listings')
     for i in range(0, 10):
         postfix_space = "" if (i == 0) else " " + str(i)
         postfix_dot = "" if (i == 0) else "." + str(i)
@@ -1173,18 +1109,6 @@ def run():
         listing_model_access.submit_listing(winston, listing)
         listing_model_access.approve_listing_by_org_steward(winston, listing)
         listing_model_access.approve_listing(winston, listing)
-
-        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-        #                           Notifications
-        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-        listing_notification = models.Notification(message='{} update next week'.format(listing.title),
-                                            expires_date=next_week,
-                                            listing=listing,
-                                            author=winston,
-                                            entity_id=listing.pk,
-                                            notification_type=models.Notification.LISTING
-                                            )
-        listing_notification.save()
 
         ############################################################################
         #                           Jot Spot
@@ -1244,21 +1168,10 @@ def run():
 
         listing_model_access.create_listing_review(charrington.user.username, listing, 4, text="I really like it")
 
-        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-        #                           Notifications
-        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-        listing_notification = models.Notification(message='{} update next week'.format(listing.title),
-                                            expires_date=next_week,
-                                            listing=listing,
-                                            author=winston,
-                                            entity_id=listing.pk,
-                                            notification_type=models.Notification.LISTING
-                                            )
-        listing_notification.save()
-
     ############################################################################
     #                           Location Lister
     ############################################################################
+    print('== Creating Location Lister Listings')
     for i in range(0, 10):
         postfix_space = "" if (i == 0) else " " + str(i)
         postfix_dot = "" if (i == 0) else "." + str(i)
@@ -1317,21 +1230,10 @@ def run():
 
         listing_model_access.create_listing_review(charrington.user.username, listing, 4, text="I really like it")
 
-        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-        #                           Notifications
-        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-        listing_notification = models.Notification(message='{} update next week'.format(listing.title),
-                                            expires_date=next_week,
-                                            listing=listing,
-                                            author=winston,
-                                            entity_id=listing.pk,
-                                            notification_type=models.Notification.LISTING
-                                            )
-        listing_notification.save()
-
     ############################################################################
     #                           Location Viewer
     ############################################################################
+    print('== Creating Location Viewer Listings')
     for i in range(0, 10):
         postfix_space = "" if (i == 0) else " " + str(i)
         postfix_dot = "" if (i == 0) else "." + str(i)
@@ -1387,21 +1289,10 @@ def run():
         listing_model_access.approve_listing_by_org_steward(winston, listing)
         listing_model_access.approve_listing(winston, listing)
 
-        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-        #                           Notifications
-        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-        listing_notification = models.Notification(message='{} update next week'.format(listing.title),
-                                            expires_date=next_week,
-                                            listing=listing,
-                                            author=winston,
-                                            entity_id=listing.pk,
-                                            notification_type=models.Notification.LISTING
-                                            )
-        listing_notification.save()
-
     ############################################################################
     #                           Location Analyzer
     ############################################################################
+    print('== Creating Location Analyzer Listings')
     for i in range(0, 10):
         postfix_space = "" if (i == 0) else " " + str(i)
         postfix_dot = "" if (i == 0) else "." + str(i)
@@ -1457,22 +1348,11 @@ def run():
         listing_model_access.approve_listing_by_org_steward(winston, listing)
         listing_model_access.approve_listing(winston, listing)
 
-        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-        #                           Notifications
-        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-        listing_notification = models.Notification(message='{} update next week'.format(listing.title),
-                                            expires_date=next_week,
-                                            listing=listing,
-                                            author=winston,
-                                            entity_id=listing.pk,
-                                            notification_type=models.Notification.LISTING
-                                            )
-        listing_notification.save()
-
     ############################################################################
     #                           Skybox
     ############################################################################
     #   Looping for more sample listings
+    print('== Creating Skybox Listings')
     for i in range(0, 10):
         postfix_space = "" if (i == 0) else " " + str(i)
         postfix_dot = "" if (i == 0) else "." + str(i)
@@ -1528,24 +1408,13 @@ def run():
         listing_model_access.approve_listing_by_org_steward(winston, listing)
         listing_model_access.approve_listing(winston, listing)
 
-        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-        #                           Notifications
-        # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-        listing_notification = models.Notification(message='{} update next week'.format(listing.title),
-                                            expires_date=next_week,
-                                            listing=listing,
-                                            author=winston,
-                                            entity_id=listing.pk,
-                                            notification_type=models.Notification.LISTING
-                                            )
-        listing_notification.save()
-
     ############################################################################
     #                           Library
     ############################################################################
     # bookmark listings
     # [[entry.owner.user.username , entry.listing.unique_name, entry.folder] for entry in ApplicationLibraryEntry.objects.all()]
-    create_library_entries(
+
+    library_entries = [
         # wsmith
         ['wsmith', 'ozp.test.bread_basket', None],
         ['wsmith', 'ozp.test.air_mail', None],
@@ -1562,7 +1431,20 @@ def run():
         ['hodor', 'ozp.test.skybox.1', None],
 
         ['bigbrother', 'ozp.test.bread_basket', None]
+    ]
+
+    create_library_entries(
+        library_entries
     )
+
+    for current_unique_name in [entry[1] for entry in library_entries]:
+        print('======={}======'.format(current_unique_name))
+        current_listing = models.Listing.objects.get(unique_name=current_unique_name)
+        current_listing_owner = current_listing.owners.first()
+        listing_notification = notification_model_access.create_notification(current_listing_owner,  # noqa: F841
+                                                                      next_week,
+                                                                      '{} update next week'.format(current_listing.title),
+                                                                      listing=current_listing)
 
     ############################################################################
     #                           Recommendations

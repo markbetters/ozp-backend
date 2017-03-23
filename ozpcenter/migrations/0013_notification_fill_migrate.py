@@ -49,7 +49,7 @@ def notification_type(notification):
 def forwards(apps, schema_editor):
     if not schema_editor.connection.alias == 'default':
         return
-    print('Starting Process')
+    print('Starting Notification Fill Migration')
 
     Notification = apps.get_model('ozpcenter', 'Notification')
 
@@ -67,7 +67,7 @@ def forwards(apps, schema_editor):
             current_notification.group_target = 'all'
             current_notification.entity_id = current_notification.agency.pk
 
-        elif current_notification_notification_type == 'AGENCY.BOOKMARK':
+        elif current_notification_notification_type == 'AGENCY.BOOKMARK':  # This should not be common
             current_notification.notification_type = 'agency_bookmark'
             current_notification.group_target = 'all'
             current_notification.entity_id = current_notification.agency.pk

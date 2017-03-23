@@ -1422,11 +1422,7 @@ class Notification(models.Model):
 class NotificationMailBox(models.Model):
     # Mailbox Profile ID
     target_profile = models.ForeignKey(Profile, related_name='mailbox_profiles')
-
-    # It is a unique id for notifications that allow to correlate between different 'mailboxes'
-    # Example) For deleting system-wide notifications,
-    # for every 'mailbox' delete the notification with notification
-    notification = models.ForeignKey(Profile, related_name='mailbox_notifications')
+    notification = models.ForeignKey(Notification, related_name='mailbox_notifications')
 
     # If it has been emailed. then make value true
     emailed_status = models.BooleanField(default=False)
@@ -1436,7 +1432,7 @@ class NotificationMailBox(models.Model):
     acknowledged_status = models.BooleanField(default=False)
 
     def __repr__(self):
-        return '{0!s}: {1!s}'.format(self.target_profile, self.notification.pk)
+        return '{0!s}: {1!s}'.format(self.target_profile.user.username, self.notification.pk)
 
     def __str__(self):
-        return '{0!s}: {1!s}'.format(self.target_profile, self.notification.pk)
+        return '{0!s}: {1!s}'.format(self.target_profile.user.username, self.notification.pk)

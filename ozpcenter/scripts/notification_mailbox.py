@@ -2,14 +2,13 @@
 Migrating Old Notification Model to NotificationV2 Model for development
 This is for "make dev"
 
-For existing databases, 0013_notification_script will run
+For existing databases, 0015_notification_script will run
 
 """
 import datetime
 import os
 import pytz
 import sys
-import uuid
 
 sys.path.insert(0, os.path.realpath(os.path.join(os.path.dirname(__file__), '../../')))
 
@@ -32,7 +31,7 @@ def get_self_notifications(username):
         .values_list('listing', flat=True)
 
     unexpired_listing_notifications = models.Notification.objects.filter(
-        expires_date__gt=datetime.datetime.now(pytz.utc),
+        # expires_date__gt=datetime.datetime.now(pytz.utc),
         listing__pk_in=bookmarked_listing_ids,
         agency__isnull=True,  # Ensure there are no agency notifications
         _peer__isnull=True,  # Ensure there are no peer notifications
@@ -42,7 +41,7 @@ def get_self_notifications(username):
     # agencies
     user_agency = models.Profile.objects.get(user__username=username).organizations.all()
     unexpired_agency_notifications = models.Notification.objects.filter(
-        expires_date__gt=datetime.datetime.now(pytz.utc),
+        # expires_date__gt=datetime.datetime.now(pytz.utc),
         agency__pk_in=user_agency,
         listing__isnull=True)
 
@@ -51,14 +50,15 @@ def get_self_notifications(username):
         .filter(_peer__isnull=False,
                 agency__isnull=True,  # Ensure there are no agency notifications
                 listing__isnull=True,  # Ensure there are no listing notifications
-                expires_date__gt=datetime.datetime.now(pytz.utc),
+                # expires_date__gt=datetime.datetime.now(pytz.utc),
                 _peer__contains='"user": {"username": "%s"}' % (username))
 
     # Get all unexpired system-wide notifications
     unexpired_system_notifications = models.Notification.objects.filter(
-        expires_date__gt=datetime.datetime.now(pytz.utc)).filter(agency__isnull=True,
-                                              listing__isnull=True,
-                                              _peer__isnull=True)
+        # expires_date__gt=datetime.datetime.now(pytz.utc)
+        agency__isnull=True,
+        listing__isnull=True,
+        _peer__isnull=True)
 
     # return (unexpired_system_notifications +
     # unexpired_listing_notifications) - dismissed_notifications
@@ -76,7 +76,7 @@ def run():
 
     if models.NotificationMailBox.objects.count() == 0:
         # Migration code goes here
-        print('Starting Notification to NotificationV2 Migration')
+        print('Starting Notification Mailbox Migration')
 
         total_count = 0
         for current_profile in models.Profile.objects.all():
