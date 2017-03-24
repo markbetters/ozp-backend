@@ -4,7 +4,6 @@ Model access
 import datetime
 import logging
 import pytz
-from enum import Enum
 
 from django.db.models import Q
 
@@ -13,6 +12,7 @@ from ozpcenter import errors
 from ozpcenter.models import Notification
 from ozpcenter.models import NotificationMailBox
 from ozpcenter.models import Profile
+from ozpcenter.models import Listing
 from ozpcenter.models import ApplicationLibraryEntry
 
 import ozpcenter.model_access as generic_model_access
@@ -21,152 +21,94 @@ import ozpcenter.model_access as generic_model_access
 logger = logging.getLogger('ozp-center.' + str(__name__))
 
 
-class UserRoleType(Enum):
-    APPS_MALL_STEWARD = 'APPS_MALL_STEWARD'
-    ORG_STEWARD = 'ORG_STEWARD'
-    USER = 'USER'
+permission_dict = {
+    'APPS_MALL_STEWARD': [
+        'add_system_notification',
+        'change_system_notification',
+        'delete_system_notification',
+
+        'add_agency_notification',
+        'change_agency_notification',
+        'delete_agency_notification',
+
+        'add_listing_notification',
+        'change_listing_notification',
+        'delete_listing_notification',
+
+        'add_peer_notification',
+        'change_peer_notification',
+        'delete_peer_notification',
+
+        'add_peer_bookmark_notification',
+        'change_peer_bookmark_notification',
+        'delete_peer_bookmark_notification',
+    ],
+    'ORG_STEWARD': [
+        'add_system_notification',
+        'change_system_notification',
+        'delete_system_notification',
+
+        'add_agency_notification',
+        'change_agency_notification',
+        'delete_agency_notification',
+
+        'add_listing_notification',
+        'change_listing_notification',
+        'delete_listing_notification',
+
+        'add_peer_notification',
+        'change_peer_notification',
+        'delete_peer_notification',
+
+        'add_peer_bookmark_notification',
+        'change_peer_bookmark_notification',
+        'delete_peer_bookmark_notification',
+    ],
+    'USER': [
+        'add_listing_notification',
+        'change_listing_notification',
+        'delete_listing_notification',
+
+        'add_peer_notification',
+        'change_peer_notification',
+        'delete_peer_notification',
+
+        'add_peer_bookmark_notification',
+        'change_peer_bookmark_notification',
+        'delete_peer_bookmark_notification',
+        ]
+}
 
 
-class NotificationActionEnum(Enum):
-    CREATE = 'Create'
-    UPDATE = 'Update'
-    DELETE = 'Delete'
-
-
-def org_create_listing_condition(profile_obj, listing):
+def check_notification_permission(profile_instance, action, notification_type, **kwargs):
     """
+    Check to see if user has permission
     """
-    if profile_obj not in listing.owners.all():
-        raise errors.PermissionDenied(
-            'Cannot create a notification for a listing you do not own')
-    return True
-
-
-def user_create_listing_condition(profile_obj, listing):
-    """
-    Listing create condition for user
-
-    Args:
-        profile_obj (Profile): Profile
-        listing (models.Listing): Listing
-
-    Return:
-        bool: if user can create listings
-    """
-    if profile_obj not in listing.owners.all():
-        raise errors.PermissionDenied(
-            'Cannot create a notification for a listing you do not own')
-    return True
-
-
-def raise_(exception):
-    """
-    Helper Function to raise exceptions
-
-    Arg:
-        exception (Exception): Exception class
-    """
-    raise exception
-
-
-def _check_profile_permission(user_role_type, notification_action, notification_type, **kwargs):
-    """
-    Check Permission
-
-    Permissions:
-        APP_MALL_STEWARD
-            can [CREATE, UPDATE, DISMISS, DELETE]
-            notification type [SYSTEM, AGENCY, LISTING]
-
-        ORG_STEWARD
-            can [CREATE, UPDATE, DISMISS]
-            notification type [AGENCY(org_steward_agency_condition), LISTING(c2)]
-        USER
-            can [CREATE, DISMISS]
-            notification type [LISTING(c3)]
-
-    Return:
-        lambda function
-    """
-    profile_obj = kwargs.get('profile_obj')
     listing = kwargs.get('listing')
+    notification = kwargs.get('notification')
 
-    permissions = {
-        UserRoleType.APPS_MALL_STEWARD: {
-            NotificationActionEnum.CREATE: {
-                Notification.SYSTEM: lambda: True,
-                Notification.AGENCY: lambda: True,
-                Notification.LISTING: lambda: True,
-                Notification.PEER: lambda: True,
-                Notification.PEER_BOOKMARK: lambda: True
-            },
-            NotificationActionEnum.UPDATE: {
-                Notification.SYSTEM: lambda: True,
-                Notification.AGENCY: lambda: True,
-                Notification.LISTING: lambda: True,
-                Notification.PEER: lambda: True,
-                Notification.PEER_BOOKMARK: lambda: True
-            },
-            NotificationActionEnum.DELETE: {
-                Notification.SYSTEM: lambda: True,
-                Notification.AGENCY: lambda: True,
-                Notification.LISTING: lambda: True,
-                Notification.PEER: lambda: True,
-                Notification.PEER_BOOKMARK: lambda: True
-            }
-        },
-        UserRoleType.ORG_STEWARD: {
-            NotificationActionEnum.CREATE: {
-                Notification.SYSTEM: lambda: True,  # TODO: raise_(errors.PermissionDenied('Only app mall stewards can create system notifications')),
-                Notification.AGENCY: lambda: True,
-                Notification.LISTING: lambda: True,  # TODO: org_create_listing_condition(profile_obj, listing)
-                Notification.PEER: lambda: True,
-                Notification.PEER_BOOKMARK: lambda: True
-            },
-            NotificationActionEnum.UPDATE: {
-                # lambda: raise_(errors.PermissionDenied('Only app mall
-                # stewards can update system notifications')),
-                Notification.SYSTEM: lambda: True,
-                Notification.AGENCY: lambda: True,
-                Notification.LISTING: lambda: True,
-                Notification.PEER: lambda: True,
-                Notification.PEER_BOOKMARK: lambda: True
-            },
-            NotificationActionEnum.DELETE: {
-                # lambda: raise_(errors.PermissionDenied('Only app mall
-                # stewards can delete system notifications')),
-                Notification.SYSTEM: lambda: True,
-                Notification.AGENCY: lambda: True,
-                Notification.LISTING: lambda: True,
-                Notification.PEER: lambda: True,
-                Notification.PEER_BOOKMARK: lambda: True
-            }
-        },
-        UserRoleType.USER: {
-            NotificationActionEnum.CREATE: {
-                Notification.SYSTEM: lambda: raise_(errors.PermissionDenied('Only app mall stewards can create system notifications')),
-                Notification.AGENCY: lambda: raise_(errors.PermissionDenied('Only org stewards can create agency notifications')),
-                Notification.LISTING: lambda: user_create_listing_condition(profile_obj, listing),
-                Notification.PEER: lambda: True,
-                Notification.PEER_BOOKMARK: lambda: True
-            },
-            NotificationActionEnum.UPDATE: {
-                Notification.SYSTEM: lambda: raise_(errors.PermissionDenied('Only app mall stewards can update system notifications')),
-                Notification.AGENCY: lambda: raise_(errors.PermissionDenied('Only org stewards can create agency notifications')),
-                Notification.LISTING: None,
-                Notification.PEER: lambda: True,
-                Notification.PEER_BOOKMARK: lambda: True
-            },
-            NotificationActionEnum.DELETE: {
-                Notification.SYSTEM: lambda: raise_(errors.PermissionDenied('Only app mall stewards can delete system notifications')),
-                Notification.AGENCY: lambda: raise_(errors.PermissionDenied('Only org stewards can create agency notifications')),
-                Notification.LISTING: None,
-                Notification.PEER: lambda: True,
-                Notification.PEER_BOOKMARK: lambda: True
-            }
-        }
-    }
-    return permissions.get(user_role_type, {}).get(notification_action, {}).get(notification_type, lambda: raise_(errors.PermissionDenied('Unknown Permissions')))
+    profile_role = profile_instance.highest_role()
+    assert (profile_role in permission_dict), 'Profile group {} not found in permissions'.format(profile_role)
+
+    user_action = '{}_{}_notification'.format(action, notification_type)
+
+    profile_permission_list = permission_dict[profile_role]
+
+    if user_action not in profile_permission_list:
+        raise errors.PermissionDenied('Profile does not have [{}] permissions'.format(user_action))
+
+    # If APP_MALL_STEWARD (Super User) Skip all sub check_notification_permission
+    # TODO: Figure out if this correct (rivera)
+    if profile_role == 'APPS_MALL_STEWARD' or profile_role == 'ORG_STEWARD':
+        return True
+
+    if notification_type == 'listing':
+        if notification:
+            listing = Listing.objects.get(id=notification.entity_id)
+
+        if profile_instance not in listing.owners.all():
+            raise errors.PermissionDenied('Cannot create a notification for a listing you do not own')
+    return True
 
 
 def get_self(username):
@@ -277,7 +219,6 @@ def create_notification(author_username, expires_date, message, listing=None, ag
     assert not(
         listing is not None and agency is not None), 'Notications can not have listing and agency at the same time'
 
-    notification_action = NotificationActionEnum.CREATE
     notification_type = Notification.SYSTEM
 
     if listing is not None:
@@ -296,14 +237,7 @@ def create_notification(author_username, expires_date, message, listing=None, ag
     user = generic_model_access.get_profile(author_username)
     # TODO: Check if user exist, if not throw Exception Error ?
 
-    user_role_type = UserRoleType(user.highest_role())
-
-    _check_profile_permission(user_role_type,
-                              notification_action,
-                              notification_type,
-                              profile_obj=user,
-                              listing=listing,
-                              agency=agency)()
+    check_notification_permission(user, 'add', notification_type, listing=listing)
 
     notification = Notification(
         expires_date=expires_date,
@@ -389,21 +323,9 @@ def update_notification(author_username, notification_instance, expires_date):
     Return:
         Notification: Updated Notification
     """
-    notification_action = NotificationActionEnum.UPDATE
+    user = generic_model_access.get_profile(author_username)  # TODO: Check if user exist, if not throw Exception Error ?
 
-    notification_type = Notification.SYSTEM
-
-    if notification_instance.listing is not None:
-        notification_type = Notification.LISTING
-    elif notification_instance.agency is not None:
-        notification_type = Notification.AGENCY
-
-    user = generic_model_access.get_profile(author_username)
-    # TODO: Check if user exist, if not throw Exception Error ?
-
-    user_role_type = UserRoleType(user.highest_role())
-
-    _check_profile_permission(user_role_type, notification_action, notification_type)()
+    check_notification_permission(user, 'change', notification_instance.notification_type, notification=notification_instance)
 
     notification_instance.expires_date = expires_date
     notification_instance.save()

@@ -5,9 +5,7 @@ This is for "make dev"
 For existing databases, 0015_notification_script will run
 
 """
-import datetime
 import os
-import pytz
 import sys
 
 sys.path.insert(0, os.path.realpath(os.path.join(os.path.dirname(__file__), '../../')))
