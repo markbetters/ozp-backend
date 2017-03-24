@@ -22,6 +22,7 @@ import ozpcenter.api.intent.model_access as intent_model_access
 import ozpcenter.api.listing.model_access as model_access
 import ozpcenter.api.profile.serializers as profile_serializers
 import ozpcenter.model_access as generic_model_access
+from ozpcenter.pubsub import dispatcher
 
 
 # Get an instance of a logger
@@ -672,6 +673,7 @@ class ListingSerializer(serializers.ModelSerializer):
         # create a new activity
         model_access.create_listing(user, listing)
 
+        dispatcher.publish('listing_created', user=user, listing=listing)
         return listing
 
     def update(self, instance, validated_data):
@@ -707,10 +709,17 @@ class ListingSerializer(serializers.ModelSerializer):
 
             instance.is_enabled = validated_data['is_enabled']
 
+            if validated_data['approval_status'] == models.Listing.APPROVED:
+                dispatcher.publish('listing_enabled_status_changed', listing=instance)
+
         if validated_data['is_private'] != instance.is_private:
+            print('changed')
             change_details.append({'old_value': model_access.bool_to_string(instance.is_private),
                     'new_value': model_access.bool_to_string(validated_data['is_private']), 'field_name': 'is_private'})
             instance.is_private = validated_data['is_private']
+
+            if validated_data['approval_status'] == models.Listing.APPROVED:
+                dispatcher.publish('listing_private_status_changed', listing=instance)
 
         if validated_data['is_featured'] != instance.is_featured:
             if user.highest_role() not in ['APPS_MALL_STEWARD', 'ORG_STEWARD']:
@@ -720,7 +729,7 @@ class ListingSerializer(serializers.ModelSerializer):
             instance.is_featured = validated_data['is_featured']
 
         s = validated_data['approval_status']
-        if s and s != instance.approval_status:
+        if s and s != instance.approval_status:  # Check to see if approval_status has changed
             if s == models.Listing.APPROVED and user.highest_role() != 'APPS_MALL_STEWARD':
                 raise errors.PermissionDenied('Only an APPS_MALL_STEWARD can mark a listing as APPROVED')
             if s == models.Listing.APPROVED_ORG and user.highest_role() not in ['APPS_MALL_STEWARD', 'ORG_STEWARD']:
@@ -736,6 +745,8 @@ class ListingSerializer(serializers.ModelSerializer):
             if s == models.Listing.REJECTED:
                 # TODO: need to get the rejection text from somewhere
                 model_access.reject_listing(user, instance, 'TODO: rejection reason')
+
+            dispatcher.publish('listing_approval_status_change', listing=instance, approval_status=instance.approval_status)
 
         if instance.listing_type != validated_data['listing_type']:
             if instance.listing_type:
