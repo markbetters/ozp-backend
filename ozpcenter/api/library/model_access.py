@@ -231,7 +231,7 @@ def import_bookmarks(current_username, peer_bookmark_notification_id):
     validated_data = []
     errors = []
 
-    notification_entry = notification_model_access.get_notification_by_id(current_username, peer_bookmark_notification_id)
+    notification_entry = notification_model_access.get_notification_by_id_mailbox(current_username, peer_bookmark_notification_id)
 
     if not notification_entry:
         errors.append('Could not find Notification Entry')
