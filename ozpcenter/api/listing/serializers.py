@@ -673,7 +673,7 @@ class ListingSerializer(serializers.ModelSerializer):
         # create a new activity
         model_access.create_listing(user, listing)
 
-        dispatcher.publish('listing_created', user=user, listing=listing)
+        dispatcher.publish('listing_created', listing=listing, profile=user)
         return listing
 
     def update(self, instance, validated_data):
@@ -710,15 +710,22 @@ class ListingSerializer(serializers.ModelSerializer):
             instance.is_enabled = validated_data['is_enabled']
 
             if validated_data['approval_status'] == models.Listing.APPROVED:
-                dispatcher.publish('listing_enabled_status_changed', listing=instance)
+                dispatcher.publish('listing_enabled_status_changed',
+                                   listing=instance,
+                                   profile=user,
+                                   is_enabled=validated_data['is_enabled'])
 
         if validated_data['is_private'] != instance.is_private:
-            change_details.append({'old_value': model_access.bool_to_string(instance.is_private),
-                    'new_value': model_access.bool_to_string(validated_data['is_private']), 'field_name': 'is_private'})
+            changeset = {'old_value': model_access.bool_to_string(instance.is_private),
+                    'new_value': model_access.bool_to_string(validated_data['is_private']), 'field_name': 'is_private'}
+            change_details.append(changeset)
             instance.is_private = validated_data['is_private']
 
             if validated_data['approval_status'] == models.Listing.APPROVED:
-                dispatcher.publish('listing_private_status_changed', listing=instance)
+                dispatcher.publish('listing_private_status_changed',
+                                   listing=instance,
+                                   profile=user,
+                                   is_private=validated_data['is_private'])
 
         if validated_data['is_featured'] != instance.is_featured:
             if user.highest_role() not in ['APPS_MALL_STEWARD', 'ORG_STEWARD']:
@@ -745,7 +752,10 @@ class ListingSerializer(serializers.ModelSerializer):
                 # TODO: need to get the rejection text from somewhere
                 model_access.reject_listing(user, instance, 'TODO: rejection reason')
 
-            dispatcher.publish('listing_approval_status_change', listing=instance, approval_status=instance.approval_status)
+            dispatcher.publish('listing_approval_status_change',
+                               listing=instance,
+                               profile=user,
+                               approval_status=instance.approval_status)
 
         if instance.listing_type != validated_data['listing_type']:
             if instance.listing_type:
@@ -827,12 +837,21 @@ class ListingSerializer(serializers.ModelSerializer):
             old_category_instances = instance.categories.all()
             old_categories = model_access.categories_to_string(old_category_instances, True)
             new_categories = model_access.categories_to_string(validated_data['categories'], True)
+
             if old_categories != new_categories:
-                change_details.append({'old_value': old_categories,
-                    'new_value': new_categories, 'field_name': 'categories'})
+                changeset = {'old_value': old_categories,
+                    'new_value': new_categories, 'field_name': 'categories'}
+                change_details.append(changeset)
                 instance.categories.clear()
                 for category in validated_data['categories']:
                     instance.categories.add(category)
+
+                if validated_data['approval_status'] == models.Listing.APPROVED:
+                    dispatcher.publish('listing_categories_changed',
+                                       listing=instance,
+                                       profile=user,
+                                       old_categories=old_category_instances,
+                                       new_categories=validated_data['categories'])
 
         if 'owners' in validated_data:
             old_owner_instances = instance.owners.all()
@@ -850,19 +869,29 @@ class ListingSerializer(serializers.ModelSerializer):
             old_tag_instances = instance.tags.all()
             old_tags = model_access.tags_to_string(old_tag_instances, True)
             new_tags = model_access.tags_to_string(validated_data['tags'])
+
             if old_tags != new_tags:
-                change_details.append({'old_value': old_tags,
-                    'new_value': new_tags, 'field_name': 'tags'})
+                changeset = {'old_value': old_tags,
+                             'new_value': new_tags, 'field_name': 'tags'}
+                change_details.append(changeset)
                 instance.tags.clear()
+                new_tags_instances = []
                 for tag in validated_data['tags']:
                     obj, created = models.Tag.objects.get_or_create(
                         name=tag['name'])
                     instance.tags.add(obj)
+                    new_tags_instances.append(obj)
+
+                if validated_data['approval_status'] == models.Listing.APPROVED:
+                    dispatcher.publish('listing_tags_changed',
+                                       listing=instance,
+                                       profile=user,
+                                       old_tags=old_tag_instances,
+                                       new_tags=new_tags_instances)
 
         if 'intents' in validated_data:
             old_intent_instances = instance.intents.all()
-            old_intents = model_access.intents_to_string(old_intent_instances,
-                True)
+            old_intents = model_access.intents_to_string(old_intent_instances, True)
             new_intents = model_access.intents_to_string(validated_data['intents'], True)
             if old_intents != new_intents:
                 change_details.append({'old_value': old_intents,
@@ -904,7 +933,6 @@ class ListingSerializer(serializers.ModelSerializer):
             new_screenshot_instances = []
 
             for s in validated_data['screenshots']:
-
                 new_small_image = image_model_access.get_image_by_id(s['small_image']['id'])
                 new_small_image.security_marking = s['small_image']['security_marking']
                 new_small_image.save()
