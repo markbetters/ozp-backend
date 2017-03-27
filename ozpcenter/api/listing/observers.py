@@ -5,7 +5,7 @@ import datetime
 import pytz
 
 from ozpcenter.pubsub import Observer
-# import ozpcenter.api.notification.model_access as notification_model_access
+import ozpcenter.api.notification.model_access as notification_model_access
 
 
 class ListingObserver(Observer):
@@ -96,7 +96,20 @@ class ListingObserver(Observer):
             profile(Profile Instance): Profile that triggered a change ()
             is_private: boolean value
         """
-        pass
+        username = profile.user.username
+
+        message = None
+
+        if is_private:
+            message = '{} was changed to be a private listing '.format(listing.title)
+        else:
+            message = '{} was changed to be a public listing '.format(listing.title)
+
+        now_plus_month = datetime.datetime.now(pytz.utc) + datetime.timedelta(days=30)
+        notification_model_access.create_notification(username,
+                                                      now_plus_month,
+                                                      message,
+                                                      listing)
 
     def listing_enabled_status_changed(self, listing=None, profile=None, is_enabled=None):
         """
