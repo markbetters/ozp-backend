@@ -374,7 +374,6 @@ def get_profile_target_list(notification_type, group_target=None, entities=None)
     else:
         raise Exception('Notification Type not valid')
 
-    print('group filtering')
     if group_target == Notification.ALL:
         pass  # No Filtering Needed
     elif group_target == Notification.STEWARDS:

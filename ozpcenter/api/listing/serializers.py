@@ -713,7 +713,6 @@ class ListingSerializer(serializers.ModelSerializer):
                 dispatcher.publish('listing_enabled_status_changed', listing=instance)
 
         if validated_data['is_private'] != instance.is_private:
-            print('changed')
             change_details.append({'old_value': model_access.bool_to_string(instance.is_private),
                     'new_value': model_access.bool_to_string(validated_data['is_private']), 'field_name': 'is_private'})
             instance.is_private = validated_data['is_private']
