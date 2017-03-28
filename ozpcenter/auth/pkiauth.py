@@ -14,6 +14,9 @@ from rest_framework import authentication
 from ozpcenter import models
 from ozpcenter import utils
 
+from ozpcenter.pubsub import dispatcher
+
+
 try:
     from django.contrib.auth import get_user_model
 
@@ -136,4 +139,5 @@ def _get_profile_by_dn(dn, issuer_dn='default issuer dn'):
 
         profile = models.Profile.create_user(username, **kwargs)
         logger.info('created new profile for user {0!s}'.format(profile.user.username))
+        dispatcher.publish('profile_created', profile=profile)
         return profile
