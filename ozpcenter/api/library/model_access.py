@@ -231,16 +231,16 @@ def import_bookmarks(current_username, peer_bookmark_notification_id):
     validated_data = []
     errors = []
 
-    notification_entry = notification_model_access.get_notification_by_id(current_username, peer_bookmark_notification_id)
+    notification_entry = notification_model_access.get_notification_by_id_mailbox(current_username, peer_bookmark_notification_id)
 
     if not notification_entry:
         errors.append('Could not find Notification Entry')
         return errors, None
 
-    notification_entry_type = notification_entry.notification_type()
+    notification_entry_type = notification_entry.notification_type
 
-    if not notification_entry_type == 'PEER.BOOKMARK':
-        errors.append('Notification Entry should be \'PEER.BOOKMARK\' but it is \'{0}\''.format(notification_entry_type))
+    if not notification_entry_type == models.Notification.PEER_BOOKMARK:
+        errors.append('Notification Entry should be \'peer_bookmark\' but it is \'{0}\''.format(notification_entry_type))
         return errors, None
 
     peer_data = notification_entry.peer

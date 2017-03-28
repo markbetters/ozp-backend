@@ -57,7 +57,7 @@ class NotificationViewSet(viewsets.ModelViewSet):
 
         listing_id = self.request.query_params.get('listing', None)
         if listing_id is not None:
-            queryset = queryset.filter(listing__id=listing_id)
+            queryset = queryset.filter(notification_type='listing', entity_id=listing_id)
 
         return queryset
 
@@ -127,7 +127,7 @@ class UserNotificationViewSet(viewsets.ModelViewSet):
         """
         Get current user's notifications
         """
-        return model_access.get_self_notifications(self.request.user.username)
+        return model_access.get_self_notifications_mailbox(self.request.user.username)
 
     def destroy(self, request, pk=None):
         """
@@ -135,7 +135,7 @@ class UserNotificationViewSet(viewsets.ModelViewSet):
         """
         queryset = self.get_queryset()
         notification = get_object_or_404(queryset, pk=pk)
-        model_access.dismiss_notification(notification, self.request.user.username)
+        model_access.dismiss_notification_mailbox(notification, self.request.user.username)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
@@ -165,7 +165,7 @@ class PendingNotificationView(generics.ListCreateAPIView):
 
         listing_id = self.request.query_params.get('listing', None)
         if listing_id is not None:
-            queryset = queryset.filter(listing__id=listing_id)
+            queryset = queryset.filter(notification_type='listing', entity_id=listing_id)
 
         return queryset
 
@@ -203,7 +203,7 @@ class ExpiredNotificationView(generics.ListCreateAPIView):
 
         listing_id = self.request.query_params.get('listing', None)
         if listing_id is not None:
-            queryset = queryset.filter(listing__id=listing_id)
+            queryset = queryset.filter(notification_type='listing', entity_id=listing_id)
 
         return queryset
 

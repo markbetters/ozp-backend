@@ -42,15 +42,6 @@ class NotificationAgencySerializer(serializers.ModelSerializer):
         }
 
 
-class GenericField(serializers.ReadOnlyField):
-    """
-    Read Only Field
-    """
-
-    def to_native(self, obj):
-        return obj
-
-
 class DictField(serializers.ReadOnlyField):
     """
     Read Only Field
@@ -64,13 +55,11 @@ class NotificationSerializer(serializers.ModelSerializer):
     author = profile_serializers.ShortProfileSerializer(required=False)
     listing = NotificationListingSerializer(required=False)
     agency = NotificationAgencySerializer(required=False)
-    # notification_type is a runtime generated GenericField from the model
-    notification_type = GenericField(required=False)
 
     class Meta:
         model = models.Notification
         fields = ('id', 'created_date', 'expires_date', 'author',
-            'message', 'notification_type', 'listing', 'agency', 'peer', )
+            'message', 'notification_type', 'listing', 'agency', 'entity_id', 'peer', )
 
         extra_kwargs = {
             'listing': {'validators': []},
@@ -92,6 +81,8 @@ class NotificationSerializer(serializers.ModelSerializer):
                 peer['user']['username'] = access_control_instance.anonymize_value('username')
             # TODO: Hide Peer data (erivera 2016-07-29)
 
+        # del ret['agency']
+        # del ret['listing']
         return ret
 
     def validate(self, validated_data):
@@ -167,6 +158,7 @@ class NotificationSerializer(serializers.ModelSerializer):
             if not target_username_profile:
                 raise serializers.ValidationError('Valid User is Required')
 
+            validated_data['entity_id'] = target_username_profile.pk
             # Folder Validation - Optional Field
             temp_folder_name = temp_peer.get('folder_name')
             if temp_folder_name:
@@ -198,7 +190,8 @@ class NotificationSerializer(serializers.ModelSerializer):
                                                         validated_data['message'],
                                                         validated_data['listing'],
                                                         validated_data['agency'],
-                                                        validated_data['peer'])
+                                                        validated_data['peer'],
+                                                        validated_data.get('entity_id'))
         return notification
 
     def update(self, instance, validated_data):

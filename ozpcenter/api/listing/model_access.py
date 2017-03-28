@@ -11,6 +11,7 @@ from ozpcenter import errors
 from ozpcenter import utils
 import ozpcenter.model_access as generic_model_access
 from plugins_util.plugin_manager import system_anonymize_identifiable_data
+from ozpcenter.pubsub import dispatcher
 
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center.' + str(__name__))
@@ -536,6 +537,8 @@ def create_listing_review(username, listing, rating, text=None):
     review = models.Review(listing=listing, author=author,
                 rate=rating, text=text)
     review.save()
+
+    dispatcher.publish('listing_review_created', listing=listing)
     # update this listing's rating
     _update_rating(username, listing)
 

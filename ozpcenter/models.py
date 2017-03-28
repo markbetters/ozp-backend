@@ -1329,6 +1329,43 @@ class Notification(models.Model):
     # peer_org = models.ForeignKey(Profile, related_name='peer_notifications', null=True)
     _peer = models.CharField(max_length=4096, null=True, blank=True, db_column='peer')
 
+    # Notification Type
+    SYSTEM = 'system'  # System-wide Notifications
+    AGENCY = 'agency'  # Agency-wide Notifications
+    AGENCY_BOOKMARK = 'agency_bookmark'  # Agency-wide Bookmark Notifications # Not requirement (erivera 20160621)
+    LISTING = 'listing'  # Listing Notifications
+    PEER = 'peer'  # Peer to Peer Notifications
+    PEER_BOOKMARK = 'peer_bookmark'  # PEER.BOOKMARK - Peer to Peer Bookmark Notifications
+
+    NOTIFICATION_TYPE_CHOICES = (
+        (SYSTEM, 'system'),
+        (AGENCY, 'agency'),
+        (AGENCY_BOOKMARK, 'agency_bookmark'),
+        (LISTING, 'listing'),
+        (PEER, 'peer'),
+        (PEER_BOOKMARK, 'peer_bookmark'),
+    )
+    notification_type = models.CharField(default=SYSTEM, max_length=24, choices=NOTIFICATION_TYPE_CHOICES)  # db_index=True)
+
+    # User Target
+    ALL = 'all'  # All users
+    STEWARDS = 'stewards'
+    APP_STEWARD = 'app_steward'
+    ORG_STEWARD = 'org_steward'
+    USER = 'user'
+
+    GROUP_TARGET_CHOICES = (
+        (ALL, 'all'),
+        (STEWARDS, 'stewards'),
+        (APP_STEWARD, 'app_steward'),
+        (ORG_STEWARD, 'org_steward'),
+        (USER, 'user'),
+    )
+    group_target = models.CharField(default=ALL, max_length=24, choices=GROUP_TARGET_CHOICES)  # db_index=True)
+
+    # Depending on notification_type, it could be listing_id/agency_id/profile_user_id/category_id/tag_id
+    entity_id = models.IntegerField(default=None, null=True, blank=True, db_index=True)
+
     @property
     def peer(self):
         if self._peer:
@@ -1375,48 +1412,27 @@ class Notification(models.Model):
         else:
             return None
 
-    def notification_type(self):
-        """
-        Dynamically figure out Notification Type
-
-        Types:
-            SYSTEM - System-wide Notifications
-            AGENCY - Agency-wide Notifications
-            AGENCY.BOOKMARK - Agency-wide Bookmark Notifications # Not requirement (erivera 20160621)
-            LISTING - Listing Notifications
-            PEER - Peer to Peer Notifications
-            PEER.BOOKMARK - Peer to Peer Bookmark Notifications
-        """
-        type_list = []
-        peer_list = []
-
-        if self.peer:
-            peer_list.append('PEER')
-
-            try:
-                json_obj = (self.peer)
-                if json_obj and 'folder_name' in json_obj:
-                    peer_list.append('BOOKMARK')
-            except ValueError:
-                # Ignore Value Errors
-                pass
-
-        if peer_list:
-            type_list.append('.'.join(peer_list))
-
-        if self.listing:
-            type_list.append('LISTING')
-
-        if self.agency:
-            type_list.append('AGENCY')
-
-        if not type_list:
-            type_list.append('SYSTEM')
-
-        return ','.join(type_list)
-
     def __repr__(self):
         return '{0!s}: {1!s}'.format(self.author.user.username, self.message)
 
     def __str__(self):
         return '{0!s}: {1!s}'.format(self.author.user.username, self.message)
+
+
+class NotificationMailBox(models.Model):
+    # Mailbox Profile ID
+    target_profile = models.ForeignKey(Profile, related_name='mailbox_profiles')
+    notification = models.ForeignKey(Notification, related_name='mailbox_notifications')
+
+    # If it has been emailed. then make value true
+    emailed_status = models.BooleanField(default=False)
+    # Read Flag
+    read_status = models.BooleanField(default=False)
+    # Acknowledged Flag
+    acknowledged_status = models.BooleanField(default=False)
+
+    def __repr__(self):
+        return '{0!s}: {1!s}'.format(self.target_profile.user.username, self.notification.pk)
+
+    def __str__(self):
+        return '{0!s}: {1!s}'.format(self.target_profile.user.username, self.notification.pk)

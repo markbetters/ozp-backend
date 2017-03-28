@@ -29,6 +29,7 @@ RECOMMENDATION_ENGINE = os.getenv('RECOMMENDATION_ENGINE', 'sample_data')
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center.' + str(__name__))
 
+
 def run():
     """
     Run the Recommendation Engine
