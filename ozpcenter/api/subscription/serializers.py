@@ -7,12 +7,10 @@ from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import serializers
 
 from ozpcenter import models
-from plugins_util import plugin_manager
 
 import ozpcenter.api.subscription.model_access as model_access
 import ozpcenter.api.listing.model_access as listing_model_access
 import ozpcenter.api.category.model_access as category_model_access
-import ozpcenter.model_access as generic_model_access
 import ozpcenter.api.profile.serializers as profile_serializers
 
 # Get an instance of a logger
@@ -31,7 +29,7 @@ class SubscriptionSerializer(serializers.ModelSerializer):
         try:
             if ret['entity_type'] == 'category':
                 ret['entity_description'] = category_model_access.get_category_by_id(ret['entity_id'], True).title
-            elif ret['entity_type']  == 'tag':
+            elif ret['entity_type'] == 'tag':
                 ret['entity_description'] = listing_model_access.get_tag_by_id(ret['entity_id'], True).name
         except ObjectDoesNotExist:
             # Incase Category/Tag has been delete
@@ -42,7 +40,7 @@ class SubscriptionSerializer(serializers.ModelSerializer):
     def validate(self, validated_data):
         """ Responsible of cleaning and validating user input data """
         validated_data['error'] = None
-        username = self.context['request'].user.username
+        # username = self.context['request'].user.username
 
         if 'entity_type' not in validated_data or 'entity_id' not in validated_data:
             raise serializers.ValidationError('Subscriptions can only be one type.')

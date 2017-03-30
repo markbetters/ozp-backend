@@ -1461,8 +1461,8 @@ def run():
     #  'pmurt', 'hodor', 'jones', 'tammy', 'rutherford', 'noah', 'syme', 'abe',
     #  'tparsons', 'jsnow', 'charrington', 'johnson']
 
-    subscriptions = [
-        ['bigbrother', 'category', 'Books and Reference']
+    subscriptions = [  # flake8: noqa
+        ['bigbrother', 'category', 'Books and Reference'],
         ['bigbrother', 'category', 'Business']
     ]
     ############################################################################

@@ -1,15 +1,10 @@
 """
 Model access
 """
-import datetime
 import logging
-import pytz
 
-from django.db.models import Q
-
-from ozpcenter import errors
-
-from ozpcenter.models import Profile
+# from django.db.models import Q
+# from ozpcenter import errors
 from ozpcenter.models import Subscription
 
 import ozpcenter.model_access as generic_model_access
@@ -106,11 +101,10 @@ def update_subscription(author_username, subscription_instance):
     Return:
         Subscription: Updated Subscription
     """
-    user = generic_model_access.get_profile(author_username)  # TODO: Check if user exist, if not throw Exception Error ?
-
-    subscription_instance.expires_date = expires_date
+    # user = generic_model_access.get_profile(author_username)  # TODO: Check if user exist, if not throw Exception Error ?
     subscription_instance.save()
-    return Subscription_instance
+    # TODO Update
+    return subscription_instance
 
 
 def delete_self_subscription(subscription_instance, username):

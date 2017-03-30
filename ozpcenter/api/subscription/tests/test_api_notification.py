@@ -1,17 +1,10 @@
 """
 Tests for notification endpoints
 """
-from unittest import skip
-import datetime
-import pytz
-
-from rest_framework import status
+# from rest_framework import status
 from rest_framework.test import APITestCase
 
-from ozpcenter import model_access as generic_model_access
 from ozpcenter.scripts import sample_data_generator as data_gen
-from ozpcenter.api.library.tests.test_api_library import _create_create_bookmark
-
 
 
 class SubscriptionApiTest(APITestCase):
