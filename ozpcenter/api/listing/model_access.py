@@ -250,6 +250,18 @@ def get_all_tags():
     return models.Tag.objects.all()
 
 
+def get_tag_by_id(input_id, reraise=False):
+    """
+    Get a tag by id
+    """
+    try:
+        return models.Tag.objects.get(id=input_id)
+    except models.Tag.DoesNotExist as err:
+        if reraise:
+            raise err
+        return None
+
+
 def get_all_screenshots():
     """
     Get all screenshots

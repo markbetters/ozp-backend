@@ -28,3 +28,15 @@ def get_category_by_title(title, reraise=False):
         if reraise:
             raise err
         return None
+
+
+def get_category_by_id(input_id, reraise=False):
+    """
+    Get a category by id
+    """
+    try:
+        return models.Category.objects.get(id=input_id)
+    except models.Category.DoesNotExist as err:
+        if reraise:
+            raise err
+        return None

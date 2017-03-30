@@ -52,7 +52,7 @@ class StorefrontTest(TestCase):
         metadata = model_access.get_metadata('wsmith')
         categories = metadata['categories']
         keys = list(categories[0].keys()).sort()
-        expected_keys = ['description', 'title'].sort()
+        expected_keys = ['description', 'id', 'title'].sort()
         self.assertEqual(keys, expected_keys)
 
         agencies = metadata['agencies']
