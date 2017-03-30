@@ -2,6 +2,8 @@
 """
 Model Definitions for ozpcenter
 """
+from __future__ import absolute_import, unicode_literals
+
 import json
 import logging
 import os

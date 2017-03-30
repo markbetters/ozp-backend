@@ -297,3 +297,6 @@ ES_HOST = [{
 ES_BASIC_AUTH = bool(os.getenv('ES_BASIC_AUTH', False))
 ES_AUTH_USERNAME = os.getenv('ES_AUTH_USERNAME', 'user')
 ES_AUTH_PASSWORD = os.getenv('ES_AUTH_PASSWORD', 'password')
+
+# Celery configs
+CELERY_BROKER_URL = 'redis://localhost:6379/0'  # memory://'
