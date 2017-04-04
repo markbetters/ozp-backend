@@ -349,7 +349,7 @@ def search(request_username, search_param_parser):
     user_exclude_orgs = get_user_exclude_orgs(request_username)
     search_query = elasticsearch_util.make_search_query_obj(search_param_parser, exclude_agencies=user_exclude_orgs)
 
-    print(json.dumps(search_query, indent=4))
+    # print(json.dumps(search_query, indent=4))
 
     res = es_client.search(index=settings.ES_INDEX_NAME, body=search_query)
 
