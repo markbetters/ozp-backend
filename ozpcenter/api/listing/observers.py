@@ -4,6 +4,7 @@ Observers
 import datetime
 import pytz
 
+from ozpcenter import models
 from ozpcenter.pubsub import Observer
 import ozpcenter.api.notification.model_access as notification_model_access
 
@@ -25,22 +26,58 @@ class ListingObserver(Observer):
         """
         print('message: event_type:{}, kwards:{}'.format(event_type, kwargs))
 
-        if event_type == 'listing_private_status_changed':
-            self.listing_private_status_changed(**kwargs)
-        elif event_type == 'listing_created':
-            self.listing_created(**kwargs)
-
-    def listing_approval_status_change(self, listing=None, profile=None, approval_status=None):
+    def listing_approval_status_change(self, listing=None, profile=None, old_approval_status=None, new_approval_status=None):
         """
         AMLNG-170 - As an Owner I want to receive notice of whether my deletion request has been approved or rejected
         AMLNG-173 - As an Admin I want notification if an owner has cancelled an app that was pending deletion
+        AMLNG-380 - As a user, I want to receive notification when a Listing is added to a subscribed category or tag
+
+        State Transitions:
+            User Submitted Listings
+                {'old_approval_status': 'IN_PROGRESS', 'new_approval_status': 'PENDING'}
+            User put Listing in deletion pending
+                {'old_approval_status': 'PENDING', 'new_approval_status': 'PENDING_DELETION'}
+                {'old_approval_status': 'APPROVED', 'new_approval_status': 'PENDING_DELETION'}
+            User undeleted the listing
+                {'old_approval_status': 'PENDING_DELETION', 'new_approval_status': 'PENDING'}
+            Org Steward APPROVED listing
+                {'old_approval_status': 'PENDING', 'new_approval_status': 'APPROVED_ORG'}
+            App Mall Steward Rejected Listing
+                {'old_approval_status': 'APPROVED_ORG', 'new_approval_status': 'REJECTED')
+            App Mall Steward Approved Lising
+                {'old_approval_status': 'APPROVED_ORG', 'new_approval_status': 'APPROVED'}
+            Listing DELETED
+                {'old_approval_status': 'PENDING_DELETION', 'new_approval_status': 'DELETED'}
+                {'old_approval_status': 'APPROVED', 'new_approval_status': 'DELETED'}
 
         Args:
             listing: Listing instance
             profile(Profile Instance): Profile that triggered a change
             approval_status(String): Status
         """
-        pass
+        if new_approval_status == models.Listing.APPROVED and profile.highest_role() != 'APPS_MALL_STEWARD':
+            return None
+            # raise errors.PermissionDenied('Only an APPS_MALL_STEWARD can mark a listing as APPROVED')
+        if new_approval_status == models.Listing.APPROVED_ORG and profile.highest_role() not in ['APPS_MALL_STEWARD', 'ORG_STEWARD']:
+            return None
+            # raise errors.PermissionDenied('Only stewards can mark a listing as APPROVED_ORG')
+        if new_approval_status == models.Listing.PENDING:
+            pass
+            # model_access.submit_listing(user, instance)
+        if new_approval_status == models.Listing.PENDING_DELETION:
+            pass
+            # model_access.pending_delete_listing(user, instance)
+        if new_approval_status == models.Listing.APPROVED_ORG:
+            pass
+            # model_access.approve_listing_by_org_steward(user, instance)
+        if new_approval_status == models.Listing.APPROVED:
+            pass
+            # model_access.approve_listing(user, instance)
+        if new_approval_status == models.Listing.REJECTED:
+            pass
+        if new_approval_status == models.Listing.DELETED:
+            pass
+
 
     def listing_categories_changed(self, listing=None, profile=None, old_categories=None, new_categories=None):
         """
@@ -69,7 +106,6 @@ class ListingObserver(Observer):
     def listing_created(self, listing=None, profile=None):
         """
         AMLNG-376 - As a CS, I want to receive notification of Listings submitted for my organization
-        AMLNG-380 - As a user, I want to receive notification when a Listing is added to a subscribed category or tag
 
         Args:
             listing: Listing Instance
