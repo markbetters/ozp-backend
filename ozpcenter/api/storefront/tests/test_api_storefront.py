@@ -32,7 +32,6 @@ class StorefrontApiTest(APITestCase):
         self.assertIn('contact_types', response.data)
         self.assertIn('listing_types', response.data)
         self.assertIn('intents', response.data)
-        self.assertIn('listing_titles', response.data)
 
         for i in response.data['agencies']:
             self.assertTrue('listing_count' in i)

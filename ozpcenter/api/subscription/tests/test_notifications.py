@@ -8,7 +8,7 @@ from ozpcenter.scripts import sample_data_generator as data_gen
 # import ozpcenter.api.notification.model_access as model_access
 
 
-class NotificationTest(TestCase):
+class SubscriptionTest(TestCase):
 
     def setUp(self):
         """
@@ -23,7 +23,7 @@ class NotificationTest(TestCase):
         """
         data_gen.run()
 
-    def test_get_self_notifications(self):
+    def test_get_self_subscription(self):
         # models.Notifications
         # create three system-wide notifications (not listing-specific). Make
         # one of them expire in the past

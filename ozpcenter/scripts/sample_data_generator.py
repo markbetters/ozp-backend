@@ -1447,6 +1447,25 @@ def run():
                                                                       listing=current_listing)
 
     ############################################################################
+    #                           Subscription
+    ############################################################################
+    # Categories
+    # ['Books and Reference', 'Business', 'Communication', 'Education', 'Entertainment', 'Finance',
+    #  'Health and Fitness', 'Media and Video', 'Music and Audio', 'News',
+    #  'Productivity', 'Shopping', 'Sports', 'Tools', 'Weather']
+    # Tags
+    # ['demo', 'example', 'tag_0', 'tag_1', 'tag_2', 'tag_3',
+    #  'tag_4', 'tag_5', 'tag_6', 'tag_7', 'tag_8', 'tag_9']
+    # Usernames
+    # ['bigbrother', 'bigbrother2', 'khaleesi', 'wsmith', 'julia', 'obrien', 'aaronson',
+    #  'pmurt', 'hodor', 'jones', 'tammy', 'rutherford', 'noah', 'syme', 'abe',
+    #  'tparsons', 'jsnow', 'charrington', 'johnson']
+
+    subscriptions = [  # flake8: noqa
+        ['bigbrother', 'category', 'Books and Reference'],
+        ['bigbrother', 'category', 'Business']
+    ]
+    ############################################################################
     #                           Recommendations
     ############################################################################
     sample_data_recommender = RecommenderDirectory()
