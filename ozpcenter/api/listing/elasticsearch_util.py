@@ -65,7 +65,7 @@ def get_mapping_setting_obj(number_of_shards=None, number_of_replicas=None):
                 "autocomplete_filter"
               ]
             }
-          }
+          },
         }
       },
       "mappings": {
@@ -314,6 +314,20 @@ def update_es_listing(current_listing_id, record, is_new):
                 )
 
 
+def encode_special_characters(user_string):
+    sp_chars = ['+', '-', '=', '|', '<', '>', '!', '(', ')', '{', '}', '[', ']', '^', '"', '~', '*', '?', ':', '\\', '/']
+    output_string = []
+
+    for char in user_string:
+        if char in sp_chars:
+            # replace
+            output_string.append(char.replace(char, '\\' + char))
+        else:
+            output_string.append(char)
+
+    return "".join(output_string)
+
+
 def make_search_query_obj(filter_obj, exclude_agencies=None):
     """
     Function is used to make elasticsearch query for searching
@@ -330,6 +344,9 @@ def make_search_query_obj(filter_obj, exclude_agencies=None):
 
     """
     user_string = filter_obj.search_string
+    # print(user_string)
+    user_string = encode_special_characters(user_string)
+    # print(encode_special_characters(user_string))
 
     # Pagination
     user_offset = filter_obj.offset
