@@ -315,6 +315,9 @@ def update_es_listing(current_listing_id, record, is_new):
 
 
 def encode_special_characters(user_string):
+    if user_string is None:
+        return ""
+
     sp_chars = ['+', '-', '=', '|', '<', '>', '!', '(', ')', '{', '}', '[', ']', '^', '"', '~', '*', '?', ':', '\\', '/']
     # List of special characters can be found here: https://www.elastic.co/guide/en/elasticsearch/reference/2.4/query-dsl-query-string-query.html#_reserved_characters
     output_list = []
