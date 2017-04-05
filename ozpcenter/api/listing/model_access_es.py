@@ -307,7 +307,6 @@ def generate_link(search_param_parser, offset_prediction):
     """
     Generate next/previous links
     """
-
     query_temp = QueryDict(mutable=True)
     query_temp.update({'search': search_param_parser.search_string})
     query_temp.update({'offset': offset_prediction})

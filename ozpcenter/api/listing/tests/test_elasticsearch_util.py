@@ -31,6 +31,11 @@ class ElasticsearchUtilTest(TestCase):
         mapping_obj = elasticsearch_util.get_mapping_setting_obj()
         self.assertTrue('settings' in mapping_obj)
 
+    def test_encode_special_characters(self):
+        actual_string = elasticsearch_util.encode_special_characters('Air^Por>')
+        expected_string = 'Air\\^Por\\>'
+        self.assertEquals(actual_string, expected_string)
+
     @skip("TODO Finish (rivera 20161207)")
     def test_prepare_clean_listing_record(self):
         raw_record = {}
