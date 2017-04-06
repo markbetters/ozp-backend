@@ -36,6 +36,10 @@ class ElasticsearchUtilTest(TestCase):
         expected_string = 'Air\\^Por\\>'
         self.assertEquals(actual_string, expected_string)
 
+        actual_string = elasticsearch_util.encode_special_characters(None)
+        expected_string = ''
+        self.assertEquals(actual_string, expected_string)
+
     @skip("TODO Finish (rivera 20161207)")
     def test_prepare_clean_listing_record(self):
         raw_record = {}
