@@ -9,7 +9,7 @@ import ozpcenter.api.listing.serializers as listing_serializers
 
 from ozpcenter.pipe import pipes
 from ozpcenter.pipe import pipeline
-from ozpcenter.recommend import utils
+from ozpcenter.recommend import recommend_utils
 
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center.' + str(__name__))
@@ -42,7 +42,7 @@ def get_storefront(username):
             .order_by('-score')
 
         # Post security_marking check - lazy loading
-        recommended_listings = pipeline.Pipeline(utils.ListIterator([recommendations_entry.listing for recommendations_entry in recommended_listings_raw]),
+        recommended_listings = pipeline.Pipeline(recommend_utils.ListIterator([recommendations_entry.listing for recommendations_entry in recommended_listings_raw]),
                                           [pipes.ListingPostSecurityMarkingCheckPipe(username),
                                            pipes.LimitPipe(10)]).to_list()
 
@@ -56,7 +56,7 @@ def get_storefront(username):
 
         featured_listings_raw = listing_serializers.ListingSerializer.setup_eager_loading(featured_listings_raw)
 
-        featured_listings = pipeline.Pipeline(utils.ListIterator([listing for listing in featured_listings_raw]),
+        featured_listings = pipeline.Pipeline(recommend_utils.ListIterator([listing for listing in featured_listings_raw]),
                                           [pipes.ListingPostSecurityMarkingCheckPipe(username),
                                            pipes.LimitPipe(12)]).to_list()
 
@@ -69,7 +69,7 @@ def get_storefront(username):
 
         recent_listings_raw = listing_serializers.ListingSerializer.setup_eager_loading(recent_listings_raw)
 
-        recent_listings = pipeline.Pipeline(utils.ListIterator([listing for listing in recent_listings_raw]),
+        recent_listings = pipeline.Pipeline(recommend_utils.ListIterator([listing for listing in recent_listings_raw]),
                                           [pipes.ListingPostSecurityMarkingCheckPipe(username),
                                            pipes.LimitPipe(24)]).to_list()
 
@@ -82,7 +82,7 @@ def get_storefront(username):
 
         most_popular_listings_raw = listing_serializers.ListingSerializer.setup_eager_loading(most_popular_listings_raw)
 
-        most_popular_listings = pipeline.Pipeline(utils.ListIterator([listing for listing in most_popular_listings_raw]),
+        most_popular_listings = pipeline.Pipeline(recommend_utils.ListIterator([listing for listing in most_popular_listings_raw]),
                                           [pipes.ListingPostSecurityMarkingCheckPipe(username),
                                            pipes.LimitPipe(36)]).to_list()
 

@@ -1,9 +1,9 @@
 import logging
 
 from ozpcenter.pipe.pipeline import Pipe
-from ozpcenter.recommend import utils
-from ozpcenter.recommend.utils import Direction
-from ozpcenter.recommend.utils import FastNoSuchElementException
+from ozpcenter.recommend import recommend_utils
+from ozpcenter.recommend.recommend_utils import Direction
+from ozpcenter.recommend.recommend_utils import FastNoSuchElementException
 from plugins_util.plugin_manager import system_has_access_control
 
 # Get an instance of a logger
@@ -17,7 +17,7 @@ class VerticesVerticesPipe(Pipe):
         # Super
         self.direction = direction
         self.labels = labels
-        self.next_end = utils.EmptyIterator()
+        self.next_end = recommend_utils.EmptyIterator()
 
     def process_next_start(self):
         """
@@ -49,7 +49,7 @@ class VerticesEdgesPipe(Pipe):
         # Super
         self.direction = direction
         self.labels = labels
-        self.next_end = utils.EmptyIterator()
+        self.next_end = recommend_utils.EmptyIterator()
 
     def process_next_start(self):
         """

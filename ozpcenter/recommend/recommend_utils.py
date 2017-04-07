@@ -158,3 +158,42 @@ def map_numbers(input_num, old_min, old_max, new_min, new_max):
         new_value = (((old_value - old_min) * new_range) / old_range) + new_min
 
     return new_value
+
+
+def get_top_n_score(recommendations_results, size_n=30):
+    """
+    Getting the top scores and limiting number of records
+
+    If N = 2, Get the top 2 listings based on the score
+    {
+        profile_id#1: {
+            listing_id#1: score#1,
+            listing_id#2: score#2
+        },
+        profile_id#2: {
+            listing_id#1: score#1,
+            listing_id#2: score#2,
+            listing_id#3: score#3,
+        }
+    }
+    TO
+    {
+        profile_id#1: [
+            [listing_id#1, score#1],
+            [listing_id#2, score#2]
+        ],
+        profile_id#2: [
+            [listing_id#3, score#1],
+            [listing_id#4, score#2]
+        ]
+    }
+    """
+    output = {}
+
+    for profile_id in recommendations_results:
+        listing_scores = recommendations_results[profile_id]
+        sorted_listing_scores = [[key, listing_scores[key]] for key in sorted(listing_scores, key=listing_scores.get, reverse=True)][:size_n]
+        print(sorted_listing_scores)
+        output[profile_id] = sorted_listing_scores
+
+    return output
