@@ -30,6 +30,7 @@ Jitting Result
 import logging
 import time
 
+import msgpack
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Count
 
@@ -119,7 +120,7 @@ class SampleDataRecommender(Recommender):
     """
     Sample Data Recommender
     """
-    friendly_name = 'Baseline'
+    friendly_name = 'Sample Data Gen'
     recommendation_weight = 0.5
 
     def initiate(self):
@@ -390,7 +391,7 @@ class RecommenderDirectory(object):
         else:
             raise Exception('Recommender Engine [{}] Not Found'.format(recommender_class_string))
 
-    def merge(self, friendly_name, recommendation_weight, recommendations_results, recommendations_time):
+    def merge(self, recommender_friendly_name, recommendation_weight, recommendations_results, recommendations_time):
         """
         Purpose is to merge all of the different Recommender's algorthim recommender result together.
         This function is responsible for merging the results of the other Recommender recommender_result_set diction into self recommender_result_set
@@ -412,23 +413,25 @@ class RecommenderDirectory(object):
                 }
             recommendations_time: Recommender time
         """
-        # if recommender_result_set is None:
-        #     return False
-        # for profile_id in recommender_result_set:
-        #
-        #     # get_top_n_score
-        #
-        #     for listing_id in recommender_result_set[profile_id]:
-        #         score = recommender_result_set[profile_id][listing_id]
-        #
-        #         if profile_id in self.recommender_result_set:
-        #             if self.recommender_result_set[profile_id].get(listing_id):
-        #                 self.recommender_result_set[profile_id][listing_id] = (self.recommender_result_set[profile_id][listing_id] + float(score)) / 2
-        #             else:
-        #                 self.recommender_result_set[profile_id][listing_id] = float(score)
-        #         else:
-        #             self.recommender_result_set[profile_id] = {}
-        #             self.recommender_result_set[profile_id][listing_id] = float(score)
+        # print('recommender_friendly_name: {}'.format(recommender_friendly_name))
+        # print('recommendation_weight: {}'.format(recommendation_weight))
+        # print('recommendations_results: {}'.format(recommendations_results))
+        # print('recommendations_time: {}'.format(recommendations_time))
+        sorted_recommendations = recommend_utils.get_top_n_score(recommendations_results, 20)
+
+        if recommendations_results is None:
+            return False
+        for profile_id in sorted_recommendations:
+            current_recommendations = sorted_recommendations[profile_id]
+
+            if profile_id not in self.recommender_result_set:
+                self.recommender_result_set[profile_id] = {}
+            if recommender_friendly_name not in self.recommender_result_set[profile_id]:
+                self.recommender_result_set[profile_id][recommender_friendly_name] = {
+                    'recommendations': current_recommendations,
+                    'weight': recommendation_weight,
+                    'ms_took': recommendations_time
+                }
 
         return True
 
@@ -472,38 +475,40 @@ class RecommenderDirectory(object):
     def save_to_db(self):
         """
         This function is responsible for storing the recommendations into the database
-
-
         """
         for profile_id in self.recommender_result_set:
-            import json
-            print('*-*-*-*-')
-            print(len(json.dumps(self.recommender_result_set[profile_id])))
-            print('*-*-*-*-')
-            #
-            # profile = None
-            # try:
-            #     profile = models.Profile.objects.get(pk=profile_id)
-            # except ObjectDoesNotExist:
-            #     profile = None
-            #
-            # if profile:
-            #     # Clear Recommendations Entries before putting new ones.
-            #     models.RecommendationsEntry.objects.filter(target_profile=profile).delete()
-            #
-            #     listing_ids = self.recommender_result_set[profile_id]
-            #
-            #     for current_listing_id in listing_ids:
-            #         score = listing_ids[current_listing_id]
-            #         current_listing = None
-            #         try:
-            #             current_listing = models.Listing.objects.get(pk=current_listing_id)
-            #         except ObjectDoesNotExist:
-            #             current_listing = None
-            #
-            #         if current_listing:
-            #             recommendations_entry = models.RecommendationsEntry(
-            #                 target_profile=profile,
-            #                 listing=current_listing,
-            #                 score=score)
-            #             recommendations_entry.save()
+            # print('*-*-*-*-'); import json; print(json.dumps(self.recommender_result_set[profile_id])); print('*-*-*-*-')
+
+            profile = None
+            try:
+                profile = models.Profile.objects.get(pk=profile_id)
+            except ObjectDoesNotExist:
+                profile = None
+
+            if profile:
+                # Clear Recommendations Entries before putting new ones.
+                models.RecommendationsEntry.objects.filter(target_profile=profile).delete()
+
+                for current_recommender_friendly_name in self.recommender_result_set[profile_id]:
+                    output_current_tuples = []
+
+                    current_recommendations = self.recommender_result_set[profile_id][current_recommender_friendly_name]['recommendations']
+
+                    for current_recommendation_tuple in current_recommendations:
+                        current_listing_id = current_recommendation_tuple[0]
+                        # current_listing_score = current_recommendation_tuple[1]
+
+                        current_listing = None
+                        try:
+                            current_listing = models.Listing.objects.get(pk=current_listing_id)
+                        except ObjectDoesNotExist:
+                            current_listing = None
+
+                        if current_listing:
+                            output_current_tuples.append(current_recommendation_tuple)
+
+                    self.recommender_result_set[profile_id][current_recommender_friendly_name]['recommendations'] = output_current_tuples
+
+                recommendations_entry = models.RecommendationsEntry(target_profile=profile,
+                                                                    recommendation_data=msgpack.packb(self.recommender_result_set[profile_id]))
+                recommendations_entry.save()

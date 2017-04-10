@@ -189,11 +189,8 @@ def get_top_n_score(recommendations_results, size_n=30):
     }
     """
     output = {}
-
     for profile_id in recommendations_results:
         listing_scores = recommendations_results[profile_id]
         sorted_listing_scores = [[key, listing_scores[key]] for key in sorted(listing_scores, key=listing_scores.get, reverse=True)][:size_n]
-        print(sorted_listing_scores)
         output[profile_id] = sorted_listing_scores
-
     return output

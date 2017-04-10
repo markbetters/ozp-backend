@@ -99,3 +99,19 @@ class UtilsTest(TestCase):
             # Ignore FastNoSuchElementException
             pass
         self.assertEqual(list_out, [5, 100, 8, 9])
+
+    # def test_combine(self):
+    #     data = {"Sample Data Gen":
+    #             {"recommendations": [[1, 1.0], [2, 1.0], [3, 1.0], [4, 1.0],
+    #                                  [5, 1.0], [6, 1.0], [7, 1.0], [8, 1.0],
+    #                                  [9, 1.0], [10, 1.0]],
+    #              "weight": 0.5,
+    #              "ms_took": 2546.332763671875},
+    #             "Baseline":
+    #                 {"recommendations": [[11, 8.5], [112, 8.0], [85, 7.0], [86, 7.0],
+    #                                      [87, 7.0], [88, 7.0], [89, 7.0], [90, 7.0],
+    #                                      [62, 6.0], [81, 6.0], [21, 5.5], [1, 5.0], [111, 5.0],
+    #                                     [113, 5.0], [114, 5.0], [64, 4.0], [66, 4.0],
+    #                                     [68, 4.0], [70, 4.0], [72, 4.0]],
+    #                 "weight": 1.0,
+    #                 "ms_took": 1143.02734375}}
