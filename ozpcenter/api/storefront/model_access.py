@@ -62,7 +62,10 @@ def get_storefront(username):
         sorted_recommendations_combined_dict = recommend_utils.get_top_n_score(recommendation_combined_dict, 40)
         listing_ids_list = [entry[0] for entry in sorted_recommendations_combined_dict['profile']]
 
-        recommended_listings_queryset = models.Listing.objects.for_user_organization_minus_security_markings(username).filter(pk__in=listing_ids_list).all()
+        recommended_listings_queryset = models.Listing.objects.for_user_organization_minus_security_markings(username).filter(pk__in=listing_ids_list,
+                                                                                                                              approval_status=models.Listing.APPROVED,
+                                                                                                                              is_enabled=True,
+                                                                                                                              is_deleted=False).all()
 
         recommended_listings_objects = [recommendations_listing for recommendations_listing in recommended_listings_queryset]
 
