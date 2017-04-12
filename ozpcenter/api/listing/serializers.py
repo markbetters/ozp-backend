@@ -950,6 +950,7 @@ class ListingSerializer(serializers.ModelSerializer):
                 obj, created = models.Screenshot.objects.get_or_create(
                     small_image=new_small_image,
                     large_image=new_large_image,
+                    description=s['description'],
                     listing=instance)
 
                 new_screenshot_instances.append(obj)
