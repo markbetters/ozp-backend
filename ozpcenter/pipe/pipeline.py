@@ -6,7 +6,7 @@
 Start with Vertices (1 or more) to get all the other Vertices connected to it.
 
 """
-from ozpcenter.recommend import utils
+from ozpcenter.recommend import recommend_utils
 
 
 class Pipe(object):
@@ -144,7 +144,7 @@ class Pipeline(object):
         """
         Remove Pipe
         """
-        raise utils.UnsupportedOperation()
+        raise recommend_utils.UnsupportedOperation()
 
     def has_next(self):
         """
@@ -171,7 +171,7 @@ class Pipeline(object):
         try:
             while True:
                 self.next()
-        except utils.FastNoSuchElementException:
+        except recommend_utils.FastNoSuchElementException:
             # Ignore FastNoSuchElementException
             pass
 
@@ -186,7 +186,7 @@ class Pipeline(object):
         try:
             while True:
                 output.append(self.next())
-        except utils.FastNoSuchElementException:
+        except recommend_utils.FastNoSuchElementException:
             # Ignore FastNoSuchElementException
             pass
         return output
@@ -203,7 +203,7 @@ class Pipeline(object):
             while True:
                 self.next()
                 count = count + 1
-        except utils.FastNoSuchElementException:
+        except recommend_utils.FastNoSuchElementException:
             # Ignore FastNoSuchElementException
             pass
         return count

@@ -3,13 +3,14 @@ Storefront and Metadata Model Access
 """
 import logging
 
+import msgpack
 from django.db.models.functions import Lower
 from ozpcenter import models
 import ozpcenter.api.listing.serializers as listing_serializers
 
 from ozpcenter.pipe import pipes
 from ozpcenter.pipe import pipeline
-from ozpcenter.recommend import utils
+from ozpcenter.recommend import recommend_utils
 
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center.' + str(__name__))
@@ -34,15 +35,42 @@ def get_storefront(username):
             'most_popular': [Listing]
         }
     """
-    #  profile = models.Profile.objects.get(user__username=username)
+    profile = models.Profile.objects.get(user__username=username)
     try:
         # Get Recommended Listings for owner
-        recommended_listings_raw = models.RecommendationsEntry.objects \
-            .for_user_organization_minus_security_markings(username) \
-            .order_by('-score')
+        target_profile_recommended_entry = models.RecommendationsEntry.objects.filter(target_profile=profile).first()  # Get
+
+        recommended_entry_data = msgpack.unpackb(target_profile_recommended_entry.recommendation_data)
+
+        recommendation_combined_dict = {'profile': {}}
+
+        for recommender_friendly_name in recommended_entry_data:
+            recommender_name_data = recommended_entry_data[recommender_friendly_name]
+            # print(recommender_name_data)
+            recommender_name_weight = recommender_name_data[b'weight']
+            recommender_name_recommendations = recommender_name_data[b'recommendations']
+
+            for recommendation_tuple in recommender_name_recommendations:
+                current_listing_id = recommendation_tuple[0]
+                current_listing_score = recommendation_tuple[1]
+
+                if current_listing_id in recommendation_combined_dict['profile']:
+                    recommendation_combined_dict['profile'][current_listing_id] = recommendation_combined_dict['profile'][current_listing_id] + (current_listing_score * recommender_name_weight)
+                else:
+                    recommendation_combined_dict['profile'][current_listing_id] = current_listing_score * recommender_name_weight
+
+        sorted_recommendations_combined_dict = recommend_utils.get_top_n_score(recommendation_combined_dict, 40)
+        listing_ids_list = [entry[0] for entry in sorted_recommendations_combined_dict['profile']]
+
+        recommended_listings_queryset = models.Listing.objects.for_user_organization_minus_security_markings(username).filter(pk__in=listing_ids_list,
+                                                                                                                              approval_status=models.Listing.APPROVED,
+                                                                                                                              is_enabled=True,
+                                                                                                                              is_deleted=False).all()
+
+        recommended_listings_objects = [recommendations_listing for recommendations_listing in recommended_listings_queryset]
 
         # Post security_marking check - lazy loading
-        recommended_listings = pipeline.Pipeline(utils.ListIterator([recommendations_entry.listing for recommendations_entry in recommended_listings_raw]),
+        recommended_listings = pipeline.Pipeline(recommend_utils.ListIterator(recommended_listings_objects),
                                           [pipes.ListingPostSecurityMarkingCheckPipe(username),
                                            pipes.LimitPipe(10)]).to_list()
 
@@ -56,7 +84,7 @@ def get_storefront(username):
 
         featured_listings_raw = listing_serializers.ListingSerializer.setup_eager_loading(featured_listings_raw)
 
-        featured_listings = pipeline.Pipeline(utils.ListIterator([listing for listing in featured_listings_raw]),
+        featured_listings = pipeline.Pipeline(recommend_utils.ListIterator([listing for listing in featured_listings_raw]),
                                           [pipes.ListingPostSecurityMarkingCheckPipe(username),
                                            pipes.LimitPipe(12)]).to_list()
 
@@ -69,7 +97,7 @@ def get_storefront(username):
 
         recent_listings_raw = listing_serializers.ListingSerializer.setup_eager_loading(recent_listings_raw)
 
-        recent_listings = pipeline.Pipeline(utils.ListIterator([listing for listing in recent_listings_raw]),
+        recent_listings = pipeline.Pipeline(recommend_utils.ListIterator([listing for listing in recent_listings_raw]),
                                           [pipes.ListingPostSecurityMarkingCheckPipe(username),
                                            pipes.LimitPipe(24)]).to_list()
 
@@ -82,7 +110,7 @@ def get_storefront(username):
 
         most_popular_listings_raw = listing_serializers.ListingSerializer.setup_eager_loading(most_popular_listings_raw)
 
-        most_popular_listings = pipeline.Pipeline(utils.ListIterator([listing for listing in most_popular_listings_raw]),
+        most_popular_listings = pipeline.Pipeline(recommend_utils.ListIterator([listing for listing in most_popular_listings_raw]),
                                           [pipes.ListingPostSecurityMarkingCheckPipe(username),
                                            pipes.LimitPipe(36)]).to_list()
 

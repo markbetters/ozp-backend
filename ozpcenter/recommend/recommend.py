@@ -13,8 +13,10 @@ Data that could be used for recommendations
 Recommendations are based on individual users
 
 Assumptions:
-    30,000 Users
-    300 Listings
+    45,000 Users
+    350 Listings
+
+Worst Case Number of Recommendations = 15,750,000
 
 Steps:
     - Load Data for each users
@@ -28,13 +30,14 @@ Jitting Result
 import logging
 import time
 
+import msgpack
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Count
 
 from ozpcenter import models
 from ozpcenter.api.listing import model_access_es
 from ozpcenter.api.listing.model_access_es import check_elasticsearch
-from ozpcenter.recommend import utils
+from ozpcenter.recommend import recommend_utils
 # from ozpcenter.recommend.graph_factory import GraphFactory
 
 
@@ -49,6 +52,8 @@ class Recommender(object):
     """
     This class is to behave like a superclass for recommendation engine
     """
+    friendly_name = None
+    recommendation_weight = None
 
     def __init__(self):
         self.recommender_result_set = {}
@@ -115,6 +120,8 @@ class SampleDataRecommender(Recommender):
     """
     Sample Data Recommender
     """
+    friendly_name = 'Sample Data Gen'
+    recommendation_weight = 0.5
 
     def initiate(self):
         """
@@ -157,6 +164,8 @@ class CustomHybridRecommender(Recommender):
     - Must respect private apps
     - Does not have to repect security_marking while saving to db
     """
+    friendly_name = 'Baseline'
+    recommendation_weight = 1.0
 
     def initiate(self):
         """
@@ -239,7 +248,7 @@ class CustomHybridRecommender(Recommender):
                 listing_id = entry['listing_id']
                 count = entry['count']
 
-                calculation = utils.map_numbers(count, old_min, old_max, new_min, new_max)
+                calculation = recommend_utils.map_numbers(count, old_min, old_max, new_min, new_max)
                 self.add_listing_to_user_profile(profile_id, listing_id, calculation, True)
 
 
@@ -247,6 +256,8 @@ class ElasticsearchContentBaseRecommender(Recommender):
     """
     Elasticsearch Content based recommendation engine
     """
+    friendly_name = 'Elasticsearch Filtering'
+    recommendation_weight = 1.0
 
     def initiate(self):
         """
@@ -271,6 +282,8 @@ class ElasticsearchUserBaseRecommender(Recommender):
     """
     Elasticsearch User based recommendation engine
     """
+    friendly_name = 'Elasticsearch Filtering'
+    recommendation_weight = 1.0
 
     def initiate(self):
         """
@@ -295,6 +308,8 @@ class GraphCollaborativeFilteringBaseRecommender(Recommender):
     """
     Graph Collaborative Filtering based on Bookmarkes
     """
+    friendly_name = 'Bookmark Collaborative Filtering'
+    recommendation_weight = 2.0
 
     def initiate(self):
         """
@@ -313,6 +328,48 @@ class RecommenderDirectory(object):
     """
     Wrapper for all Recommenders
     It maps strings to classes.
+
+    recommender_result_set
+    {
+        profile_id#1: {
+            recommender_friendly_name#1:{
+                recommendations:[
+                    [listing_id#1, score#1],
+                    [listing_id#2, score#2]
+                ]
+                weight: 1.0
+                ms_took: 5050
+            },
+            recommender_friendly_name#2:{
+                recommendations:[
+                    [listing_id#1, score#1],
+                    [listing_id#2, score#2]
+                ]
+                weight: 2.0
+                ms_took: 5050
+            }
+        },
+        profile_id#2: {
+            recommender_friendly_name#1:{
+                recommendations:[
+                    [listing_id#1, score#1],
+                    [listing_id#2, score#2]
+                ]
+                weight: 1.0,
+                ms_took: 5050
+            },
+            recommender_friendly_name#2:{
+                recommendations:[
+                    [listing_id#1, score#1],
+                    [listing_id#2, score#2]
+                ]
+                weight: 1.0
+                ms_took: 5050
+            }
+        }
+    }
+
+    recommendations key is a list of tuples of listing_id and scores in which it is sorted by value
     """
 
     def __init__(self):
@@ -334,73 +391,48 @@ class RecommenderDirectory(object):
         else:
             raise Exception('Recommender Engine [{}] Not Found'.format(recommender_class_string))
 
-    def _merge_add_entry(self, profile_id, listing_id, score):
-        """
-        Merge the results together
-        When there is a conflict in the profile/listing/score, average the two scores together
-        """
-        if profile_id in self.recommender_result_set:
-            if self.recommender_result_set[profile_id].get(listing_id):
-                self.recommender_result_set[profile_id][listing_id] = (self.recommender_result_set[profile_id][listing_id] + float(score)) / 2
-            else:
-                self.recommender_result_set[profile_id][listing_id] = float(score)
-        else:
-            self.recommender_result_set[profile_id] = {}
-            self.recommender_result_set[profile_id][listing_id] = float(score)
-
-    def merge(self, recommender_result_set):
+    def merge(self, recommender_friendly_name, recommendation_weight, recommendations_results, recommendations_time):
         """
         Purpose is to merge all of the different Recommender's algorthim recommender result together.
         This function is responsible for merging the results of the other Recommender recommender_result_set diction into self recommender_result_set
 
-        Self recommender_result_set
-        {
-            profile_id#1: {
-                listing_id#1: score#1,
-                listing_id#2: score#2
-            },
-            profile_id#2: {
-                listing_id#1: score#1,
-                listing_id#2: score#2,
-                listing_id#3: score#3,
-            }
-        }
-
-        Other recommender_result_set:
-        {
-            profile_id#3: {
-                listing_id#1: score#1,
-                listing_id#2: score#2
-            },
-            profile_id#1: {
-                listing_id#5: score#1,
-            }
-        }
-
-        Merged recommender_result_set
-        {
-            profile_id#1: {
-                listing_id#1: score#1,
-                listing_id#2: score#2,
-                listing_id#5: score#3,
-            },
-            profile_id#2: {
-                listing_id#1: score#1,
-                listing_id#2: score#2,
-                listing_id#3: score#3,
-            },
-            profile_id#3: {
-                listing_id#1: score#1,
-                listing_id#2: score#2
-            },
-        }
+        Args:
+            friendly_name: Recommender friendly name
+            recommendation_weight: Recommender weight
+            recommendations_results: Recommender results
+                {
+                    profile_id#1: {
+                        listing_id#1: score#1,
+                        listing_id#2: score#2
+                    },
+                    profile_id#2: {
+                        listing_id#1: score#1,
+                        listing_id#2: score#2,
+                        listing_id#3: score#3,
+                    }
+                }
+            recommendations_time: Recommender time
         """
-        if recommender_result_set is None:
+        # print('recommender_friendly_name: {}'.format(recommender_friendly_name))
+        # print('recommendation_weight: {}'.format(recommendation_weight))
+        # print('recommendations_results: {}'.format(recommendations_results))
+        # print('recommendations_time: {}'.format(recommendations_time))
+        sorted_recommendations = recommend_utils.get_top_n_score(recommendations_results, 20)
+
+        if recommendations_results is None:
             return False
-        for profile_id in recommender_result_set:
-            for listing_id in recommender_result_set[profile_id]:
-                score = recommender_result_set[profile_id][listing_id]
-                self._merge_add_entry(profile_id, listing_id, score)
+        for profile_id in sorted_recommendations:
+            current_recommendations = sorted_recommendations[profile_id]
+
+            if profile_id not in self.recommender_result_set:
+                self.recommender_result_set[profile_id] = {}
+            if recommender_friendly_name not in self.recommender_result_set[profile_id]:
+                self.recommender_result_set[profile_id][recommender_friendly_name] = {
+                    'recommendations': current_recommendations,
+                    'weight': recommendation_weight,
+                    'ms_took': recommendations_time
+                }
+
         return True
 
     def recommend(self, recommender_string):
@@ -416,8 +448,23 @@ class RecommenderDirectory(object):
 
         for current_recommender_obj in recommender_list:
             logger.info('=={}=='.format(current_recommender_obj.__class__.__name__))
+
+            friendly_name = current_recommender_obj.__class__.__name__
+            if hasattr(current_recommender_obj.__class__, 'friendly_name'):
+                friendly_name = current_recommender_obj.__class__.friendly_name
+
+            recommendation_weight = 1.0
+            if hasattr(current_recommender_obj.__class__, 'recommendation_weight'):
+                recommendation_weight = current_recommender_obj.__class__.recommendation_weight
+
             recommender_obj = current_recommender_obj
-            self.merge(recommender_obj.recommend())
+
+            recommendations_start_ms = time.time() * 1000.0
+            recommendations_results = recommender_obj.recommend()
+            recommendations_end_ms = time.time() * 1000.0
+            recommendations_time = recommendations_end_ms - recommendations_start_ms
+
+            self.merge(friendly_name, recommendation_weight, recommendations_results, recommendations_time)
 
         start_db_ms = time.time() * 1000.0
         self.save_to_db()
@@ -430,6 +477,7 @@ class RecommenderDirectory(object):
         This function is responsible for storing the recommendations into the database
         """
         for profile_id in self.recommender_result_set:
+            # print('*-*-*-*-'); import json; print(json.dumps(self.recommender_result_set[profile_id])); print('*-*-*-*-')
 
             profile = None
             try:
@@ -441,19 +489,26 @@ class RecommenderDirectory(object):
                 # Clear Recommendations Entries before putting new ones.
                 models.RecommendationsEntry.objects.filter(target_profile=profile).delete()
 
-                listing_ids = self.recommender_result_set[profile_id]
+                for current_recommender_friendly_name in self.recommender_result_set[profile_id]:
+                    output_current_tuples = []
 
-                for current_listing_id in listing_ids:
-                    score = listing_ids[current_listing_id]
-                    current_listing = None
-                    try:
-                        current_listing = models.Listing.objects.get(pk=current_listing_id)
-                    except ObjectDoesNotExist:
+                    current_recommendations = self.recommender_result_set[profile_id][current_recommender_friendly_name]['recommendations']
+
+                    for current_recommendation_tuple in current_recommendations:
+                        current_listing_id = current_recommendation_tuple[0]
+                        # current_listing_score = current_recommendation_tuple[1]
+
                         current_listing = None
+                        try:
+                            current_listing = models.Listing.objects.get(pk=current_listing_id)
+                        except ObjectDoesNotExist:
+                            current_listing = None
 
-                    if current_listing:
-                        recommendations_entry = models.RecommendationsEntry(
-                            target_profile=profile,
-                            listing=current_listing,
-                            score=score)
-                        recommendations_entry.save()
+                        if current_listing:
+                            output_current_tuples.append(current_recommendation_tuple)
+
+                    self.recommender_result_set[profile_id][current_recommender_friendly_name]['recommendations'] = output_current_tuples
+
+                recommendations_entry = models.RecommendationsEntry(target_profile=profile,
+                                                                    recommendation_data=msgpack.packb(self.recommender_result_set[profile_id]))
+                recommendations_entry.save()

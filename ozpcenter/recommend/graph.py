@@ -20,7 +20,7 @@ https://linkurio.us/using-neo4j-to-build-a-recommendation-engine-based-on-collab
 http://tinkerpop.apache.org/javadocs/3.2.2/core/org/apache/tinkerpop/gremlin/structure/Element.html
 https://medium.com/@keithwhor/using-graph-theory-to-build-a-simple-recommendation-engine-in-javascript-ec43394b35a3#.iocsamn74
 """
-from ozpcenter.recommend import utils
+from ozpcenter.recommend import recommend_utils
 from ozpcenter.recommend.algorithms import GraphAlgoritms
 from ozpcenter.recommend.query import Query
 
@@ -152,17 +152,17 @@ class Vertex(Element):
         return Query(self.graph).v(self.id)
 
     def get_edges_iterator(self, direction, *labels):
-        return utils.ListIterator(self.get_edges(direction, labels))
+        return recommend_utils.ListIterator(self.get_edges(direction, labels))
 
     def get_edges(self, direction, *labels):
         """
 
         """
-        labels = utils.flatten_iterable(labels)
+        labels = recommend_utils.flatten_iterable(labels)
 
-        if direction == utils.Direction.OUT:
+        if direction == recommend_utils.Direction.OUT:
             return self.get_out_edges(labels)
-        elif direction == utils.Direction.IN:
+        elif direction == recommend_utils.Direction.IN:
             return self.get_in_edges(labels)
         else:
             out_list = []
@@ -179,7 +179,7 @@ class Vertex(Element):
         """
         Get in edges
         """
-        labels = utils.flatten_iterable(labels)
+        labels = recommend_utils.flatten_iterable(labels)
         output_list = []
         labels_list = []
 
@@ -201,7 +201,7 @@ class Vertex(Element):
         """
         Get out edges
         """
-        labels = utils.flatten_iterable(labels)
+        labels = recommend_utils.flatten_iterable(labels)
         output_list = []
         labels_list = []
 
@@ -282,9 +282,9 @@ class Edge(Element):
         Arg:
             direction: Enum Direction
         """
-        if direction == utils.Direction.IN:
+        if direction == recommend_utils.Direction.IN:
             return self._in_vertex
-        elif direction == utils.Direction.OUT:
+        elif direction == recommend_utils.Direction.OUT:
             return self._out_vertex
         else:
             raise Exception('Invalid Direction')
@@ -366,7 +366,7 @@ class Graph(object):
         key: the label to filter
         value: the value to filter
         """
-        return utils.DictKeyValueIterator(self.vertices)
+        return recommend_utils.DictKeyValueIterator(self.vertices)
 
     def add_vertex(self, label=None, properties=None, current_id=None):
         """
