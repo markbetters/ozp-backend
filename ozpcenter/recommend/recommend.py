@@ -151,7 +151,7 @@ class SampleDataRecommender(Recommender):
 
 class BaselineRecommender(Recommender):
     """
-    Custom Hybrid Recommender
+    Baseline Recommender
 
     Assumptions:
     - Listing has ratings and possible not to have ratings
@@ -391,6 +391,7 @@ class RecommenderDirectory(object):
 
     recommendations key is a list of tuples of listing_id and scores in which it is sorted by value
     """
+
     def __init__(self):
         self.recommender_classes = {
             'elasticsearch_user_base': ElasticsearchUserBaseRecommender,

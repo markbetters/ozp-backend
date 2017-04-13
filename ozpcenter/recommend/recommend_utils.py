@@ -55,9 +55,17 @@ def flatten_iterable(input_list, out=None):
 
 class GenericIterator(object):
     """
-
+    Generic Iterator
     """
-    pass
+
+    def next(self):
+        raise NotImplementedError()
+
+    def has_next(self):
+        raise NotImplementedError()
+
+    def remove(self):
+        raise NotImplementedError()
 
 
 class DictKeyValueIterator(GenericIterator):

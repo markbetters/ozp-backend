@@ -1,6 +1,5 @@
 import logging
 
-from ozpcenter.pipe.pipeline import Pipe
 from ozpcenter.recommend import recommend_utils
 from ozpcenter.recommend.recommend_utils import Direction
 from ozpcenter.recommend.recommend_utils import FastNoSuchElementException
@@ -8,6 +7,128 @@ from plugins_util.plugin_manager import system_has_access_control
 
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center.' + str(__name__))
+
+
+class Pipe(object):
+    """
+    <S, E>
+    """
+
+    def __init__(self):
+        """
+        Initialize Pipe
+
+        Args:
+            starts: Start of the Pipe
+        """
+        self.starts = None
+        self.available = False
+        self.current_end = None
+        self.next_end = None
+
+    def set_starts(self, starts):
+        """
+        Args:
+            starts: iterable of s objects to the head (start) of pipe
+        """
+        self.starts = starts
+
+    def next(self):
+        """
+        Return one E Object
+        """
+        if self.available:
+            self.available = False
+            self.current_end = self.next_end
+            return self.current_end
+        else:
+            self.current_end = self.process_next_start()
+            return self.current_end
+
+    def has_next(self):
+        """
+        Return Boolean
+        """
+        if self.available:
+            return True
+        else:
+            try:
+                self.next_end = self.process_next_start()
+                self.available = True
+                return self.available
+            except IndexError as err:  # TODO: Fix to RuntimeError
+                self.available = False
+                return self.available
+            except Exception as err:  # NoSuchElementException
+                raise err
+
+    def process_next_start(self):
+        """
+        Returns E
+
+        Raise:
+            NoSuchElementException
+        """
+        raise NotImplementedError("Need to implement in subclasses")
+
+    def reset(self):
+        if isinstance(self.starts, self.__class__):
+            self.starts.reset()
+
+        self.next_end = None
+        self.current_end = None
+        self.available = False
+
+    def __str__(self):
+        default_keys = ['starts', 'available', 'current_end', 'next_end']
+        instance_vars = {}
+        variables = vars(self)
+        for variable_key in variables:
+            if variable_key not in default_keys:
+                instance_vars[variable_key] = variables[variable_key]
+
+        variables_string = ', '.join(['{}:{}'.format(key, instance_vars[key]) for key in instance_vars])
+        output = '{}({})'.format(self.__class__.__name__, variables_string)
+        return output
+
+
+class MetaPipe(Pipe):
+
+    def get_pipes(self):
+        raise NotImplementedError("Need to implement in subclasses")
+
+    def reset(self):
+        for pipe in self.get_pipes():
+            pipe.reset()
+        super().reset()
+
+
+class AsPipe(MetaPipe):
+
+    def __init__(self, name, pipe):
+        super().__init__()
+        self.name = name
+        self.pipe = pipe
+
+    def set_starts(self, starts):
+        """
+        Args:
+            starts: iterable of s objects to the head (start) of pipe
+        """
+        self.pipe.set_starts(starts)
+        self.starts = starts
+
+    def get_current_end(self):
+        return self.current_end
+
+    def get_name(self):
+        return self.name
+
+    def process_next_start(self):
+        return self.pipe.next()
+
+    def get_pipes(self):
+        return [self.pipe]
 
 
 class VerticesVerticesPipe(Pipe):
@@ -109,7 +230,7 @@ class SideEffectPipe(Pipe):
 
     def process_next_start(self):
         """
-        CapitalizePipe each string object
+        SideEffectPipe
         """
         start = self.starts.next()
         self.function(start)

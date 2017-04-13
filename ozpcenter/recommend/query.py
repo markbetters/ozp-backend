@@ -102,6 +102,15 @@ class Query(object):
         self.pipeline.add_pipe(current_pipe)
         return self
 
+    def as_(self, step_name):
+        # current_pipe = pipes.AsPipe(step_name, self.pipeline.get_pipes()[1])
+        # self.pipeline.add_pipe(current_pipe)
+        self.pipeline.refresh_as_pipes()
+        return self
+
+    def except_(self, step_name):
+        return self
+
     def limit(self, limit_number):
         """
         Limit number Elements
