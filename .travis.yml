@@ -13,5 +13,5 @@ before_script:
  - python manage.py migrate --noinput
  - python manage.py collectstatic --noinput
 script:
- - python manage.py test
  - flake8 ozp ozpcenter ozpiwc plugins plugins_util --ignore=E501,E123,E128,E121,E124,E711,E402 --show-source
+ - python manage.py test
