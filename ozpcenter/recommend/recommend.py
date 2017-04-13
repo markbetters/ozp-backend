@@ -38,6 +38,7 @@ from ozpcenter import models
 from ozpcenter.api.listing import model_access_es
 from ozpcenter.api.listing.model_access_es import check_elasticsearch
 from ozpcenter.recommend import recommend_utils
+from ozpcenter.recommend.graph_factory import GraphFactory
 # from ozpcenter.recommend.graph_factory import GraphFactory
 
 
@@ -148,9 +149,9 @@ class SampleDataRecommender(Recommender):
                     self.add_listing_to_user_profile(profile.id, current_listing.id, 1.0)
 
 
-class CustomHybridRecommender(Recommender):
+class BaselineRecommender(Recommender):
     """
-    Custom Hybrid Recommender
+    Baseline Recommender
 
     Assumptions:
     - Listing has ratings and possible not to have ratings
@@ -309,7 +310,7 @@ class GraphCollaborativeFilteringBaseRecommender(Recommender):
     Graph Collaborative Filtering based on Bookmarkes
     """
     friendly_name = 'Bookmark Collaborative Filtering'
-    recommendation_weight = 2.0
+    recommendation_weight = 5.0
 
     def initiate(self):
         """
@@ -321,7 +322,26 @@ class GraphCollaborativeFilteringBaseRecommender(Recommender):
         """
         Recommendation logic
         """
-        pass
+        all_profiles = models.Profile.objects.all()
+        all_profiles_count = all_profiles.count()
+
+        graph = GraphFactory.load_db_into_graph()
+
+        current_profile_count = 0
+        for profile in all_profiles:
+            current_profile_count = current_profile_count + 1
+            logger.info('Calculating Profile {}/{}'.format(current_profile_count, all_profiles_count))
+
+            profile_id = profile.id
+
+            results = graph.algo().recommend_listings_for_profile('p-{}'.format(profile_id))  # bigbrother
+
+            for current_tuple in results:
+                listing_raw = current_tuple[0]  # 'l-#'
+                listing_id = int(listing_raw.split('-')[1])
+                score = current_tuple[1]
+
+                self.add_listing_to_user_profile(profile_id, listing_id, score)
 
 
 class RecommenderDirectory(object):
@@ -374,11 +394,11 @@ class RecommenderDirectory(object):
 
     def __init__(self):
         self.recommender_classes = {
-            'graph_cf': GraphCollaborativeFilteringBaseRecommender,
             'elasticsearch_user_base': ElasticsearchUserBaseRecommender,
             'elasticsearch_content_base': ElasticsearchContentBaseRecommender,
             'sample_data': SampleDataRecommender,
-            'custom': CustomHybridRecommender
+            'baseline': BaselineRecommender,
+            'graph_cf': GraphCollaborativeFilteringBaseRecommender,
         }
         self.recommender_result_set = {}
 

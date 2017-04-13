@@ -85,8 +85,8 @@ Solution - Also Use listing categories to make recommendation for relevant to us
 
 # New User Problem
 We might have the New User Problem,
-The way to solve this to get the results of a different recommendation engine (CustomHybridRecommender - GlobalBaseline)
-recommendations = CustomHybridRecommender + GraphCollaborativeRecommender
+The way to solve this to get the results of a different recommendation engine (BaselineRecommender - GlobalBaseline)
+recommendations = BaselineRecommender + GraphCollaborativeRecommender
 
 # Other Algorithms
 TODO: Figure out of MEASURING MEANINGFUL PROFILE-LISTING CONNECTIONS
@@ -144,18 +144,21 @@ class GraphAlgoritms(object):
         profile_listing_ids = (self.graph.query()
                                    .v(profile_id)
                                    .out('bookmarked')
-                                   .side_effect(lambda current_vertex:
-                                                [profile_listing_categories_ids.append(current) for current in
-                                                 current_vertex.query().out('listingCategory').id().to_list()])
                                    .id().to_list())  # Get listings of target profile ids
 
         other_profiles_query = (self.graph.query()
-                                    .v(profile_id)  # Select Start Profile
-                                    .out('bookmarked')  # Go to all Listings that 'Start Profile' has bookmarked
+                                    .v(profile_id).as_('start_profile')  # Select Start Profile
+                                    .out('bookmarked').as_('start_listings')  # Go to all Listings that 'Start Profile' has bookmarked
+                                    .side_effect(lambda current_vertex:
+                                                 [profile_listing_categories_ids.append(current) for current in
+                                                  current_vertex.query().out('listingCategory').id().to_list()])
                                     .in_('bookmarked')  # Go to all Profiles that bookmarked the same listings as 'Start Profile'
                                     .distinct().exclude_ids(profile_ids)  # Exclude 'Start Profile'
+                                    .except_('start_profile')  # Exclude 'Start Profile' TODO: Make this work
                                     .out('bookmarked')  # Go to all Listings that other people has bookmarked (recommendations)
-                                    .exclude_ids(profile_listing_ids).id()  # Filter out all listings that 'Start Profile' has bookmarked
+                                    .exclude_ids(profile_listing_ids)  # Filter out all listings that 'Start Profile' has bookmarked
+                                    .except_('start_listings')  # Filter out all listings that 'Start Profile' has bookmarked
+                                    .id()
                                 )
 
         other_profiles_query_list = other_profiles_query.to_list()
