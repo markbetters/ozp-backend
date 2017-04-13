@@ -1132,22 +1132,17 @@ class RecommendationsEntry(models.Model):
     Recommendations Entry
 
     """
-    target_profile = models.ForeignKey(
-        'Profile', related_name='recommendations_profile')
-    listing = models.ForeignKey(
-        'Listing', related_name='recommendations_lisiting')
-    score = models.FloatField(default=0.0)
+    target_profile = models.ForeignKey('Profile', related_name='recommendations_profile')
+    recommendation_data = models.BinaryField(default=None)
 
     # use a custom Manager class to limit returned Listings
     objects = AccessControlRecommendationsEntryManager()
 
     def __str__(self):
-        return '{0!s}:{1!s}:{2!s}'.format(self.target_profile, self.listing,
-                             self.score)
+        return '{0!s}:RecommendationsEntry'.format(self.target_profile)
 
     def __repr__(self):
-        return '{0!s}:{1!s}:{2!s}'.format(self.target_profile, self.listing,
-                             self.score)
+        return '{0!s}:RecommendationsEntry'.format(self.target_profile)
 
     class Meta:
         verbose_name_plural = "recommendations entries"

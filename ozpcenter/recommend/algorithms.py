@@ -108,7 +108,7 @@ Google Normalized Distance:
 Calculates Google Normalized Distance, as described in "The Google Similarity Distance", Cilibrasi and Vitanyi, 2007
 link: http://arxiv.org/pdf/cs/0412098v3.pdf
 """
-from ozpcenter.recommend import utils
+from ozpcenter.recommend import recommend_utils
 
 
 class GraphAlgoritms(object):
@@ -159,7 +159,7 @@ class GraphAlgoritms(object):
                                 )
 
         other_profiles_query_list = other_profiles_query.to_list()
-        group_by_id_count = utils.list_to_group_count(other_profiles_query_list)
+        group_by_id_count = recommend_utils.list_to_group_count(other_profiles_query_list)
 
         # Group by Listings with Count (recommendation weight) and sort by count DSC
         sorted_listing_ids = sorted(group_by_id_count.items(), key=lambda x: (x[1], x[0]), reverse=True)
