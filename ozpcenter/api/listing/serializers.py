@@ -143,7 +143,11 @@ class ScreenshotSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Screenshot
-        fields = ('small_image', 'large_image')
+        fields = ('small_image', 'large_image', 'description')
+
+        extra_kwargs = {
+            'description': {'validators': []}
+        }
 
 
 class TagSerializer(serializers.ModelSerializer):
@@ -458,6 +462,7 @@ class ListingSerializer(serializers.ModelSerializer):
             screenshots_out = []
             image_require_fields = ['id']
             for screenshot_set in screenshots:
+
                 if ('small_image' not in screenshot_set or
                         'large_image' not in screenshot_set):
                     raise serializers.ValidationError(
@@ -667,6 +672,7 @@ class ListingSerializer(serializers.ModelSerializer):
                 screenshot = models.Screenshot(
                     small_image=image_model_access.get_image_by_id(screenshot_dict['small_image']['id']),
                     large_image=image_model_access.get_image_by_id(screenshot_dict['large_image']['id']),
+                    description=screenshot_dict.get('description'),
                     listing=listing)
                 screenshot.save()
 
@@ -944,6 +950,7 @@ class ListingSerializer(serializers.ModelSerializer):
                 obj, created = models.Screenshot.objects.get_or_create(
                     small_image=new_small_image,
                     large_image=new_large_image,
+                    description=s['description'],
                     listing=instance)
 
                 new_screenshot_instances.append(obj)

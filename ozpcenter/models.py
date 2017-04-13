@@ -1258,6 +1258,7 @@ class Screenshot(models.Model):
     small_image = models.ForeignKey(Image, related_name='screenshot_small')
     large_image = models.ForeignKey(Image, related_name='screenshot_large')
     listing = models.ForeignKey('Listing', related_name='screenshots')
+    description = models.CharField(max_length=160, null=True, blank=True)
 
     def __repr__(self):
         return '{0!s}: {1!s}, {2!s}'.format(self.listing.title, self.large_image.id, self.small_image.id)
