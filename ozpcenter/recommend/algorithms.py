@@ -85,8 +85,8 @@ Solution - Also Use listing categories to make recommendation for relevant to us
 
 # New User Problem
 We might have the New User Problem,
-The way to solve this to get the results of a different recommendation engine (CustomHybridRecommender - GlobalBaseline)
-recommendations = CustomHybridRecommender + GraphCollaborativeRecommender
+The way to solve this to get the results of a different recommendation engine (BaselineRecommender - GlobalBaseline)
+recommendations = BaselineRecommender + GraphCollaborativeRecommender
 
 # Other Algorithms
 TODO: Figure out of MEASURING MEANINGFUL PROFILE-LISTING CONNECTIONS
