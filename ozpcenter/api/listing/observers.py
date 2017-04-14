@@ -78,7 +78,6 @@ class ListingObserver(Observer):
         if new_approval_status == models.Listing.DELETED:
             pass
 
-
     def listing_categories_changed(self, listing=None, profile=None, old_categories=None, new_categories=None):
         """
         AMLNG-380 - As a user, I want to receive notification when a Listing is added to a subscribed category
