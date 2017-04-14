@@ -1132,22 +1132,17 @@ class RecommendationsEntry(models.Model):
     Recommendations Entry
 
     """
-    target_profile = models.ForeignKey(
-        'Profile', related_name='recommendations_profile')
-    listing = models.ForeignKey(
-        'Listing', related_name='recommendations_lisiting')
-    score = models.FloatField(default=0.0)
+    target_profile = models.ForeignKey('Profile', related_name='recommendations_profile')
+    recommendation_data = models.BinaryField(default=None)
 
     # use a custom Manager class to limit returned Listings
     objects = AccessControlRecommendationsEntryManager()
 
     def __str__(self):
-        return '{0!s}:{1!s}:{2!s}'.format(self.target_profile, self.listing,
-                             self.score)
+        return '{0!s}:RecommendationsEntry'.format(self.target_profile)
 
     def __repr__(self):
-        return '{0!s}:{1!s}:{2!s}'.format(self.target_profile, self.listing,
-                             self.score)
+        return '{0!s}:RecommendationsEntry'.format(self.target_profile)
 
     class Meta:
         verbose_name_plural = "recommendations entries"
@@ -1263,6 +1258,7 @@ class Screenshot(models.Model):
     small_image = models.ForeignKey(Image, related_name='screenshot_small')
     large_image = models.ForeignKey(Image, related_name='screenshot_large')
     listing = models.ForeignKey('Listing', related_name='screenshots')
+    description = models.CharField(max_length=160, null=True, blank=True)
 
     def __repr__(self):
         return '{0!s}: {1!s}, {2!s}'.format(self.listing.title, self.large_image.id, self.small_image.id)

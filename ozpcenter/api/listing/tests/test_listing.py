@@ -309,16 +309,17 @@ class ListingTest(TestCase):
                     "url": "http://localhost:8000/api/image/2/",
                     "id": 2,
                     "security_marking": "UNCLASSIFIED"
-                }
+                },
+                "description": "Test Description"
             }
         ]
 
         out = model_access.screenshots_to_string(screenshots)
-        self.assertEqual(out, "[(1, 'UNCLASSIFIED', 2, 'UNCLASSIFIED')]")
+        self.assertEqual(out, "[(1, 'UNCLASSIFIED', 2, 'UNCLASSIFIED', 'Test Description')]")
 
         screenshots = models.Screenshot.objects.filter(listing__id=1)
         out = model_access.screenshots_to_string(screenshots, True)
-        self.assertEqual(out, "[(10, 'UNCLASSIFIED', 11, 'UNCLASSIFIED')]")
+        self.assertEqual(out, "[(10, 'UNCLASSIFIED', 11, 'UNCLASSIFIED', None)]")
 
     def test_image_to_string(self):
         image = {

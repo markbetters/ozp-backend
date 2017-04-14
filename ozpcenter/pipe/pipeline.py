@@ -1,87 +1,12 @@
 """
-# Lazy Loading Dataflow
+Lazy Loading Dataflow
 
 ## Lazy Loading Pipe Query System:
 # VerticesVerticesPipe
 Start with Vertices (1 or more) to get all the other Vertices connected to it.
 
 """
-from ozpcenter.recommend import utils
-
-
-class Pipe(object):
-    """
-    <S, E>
-    """
-
-    def __init__(self):
-        """
-        Initialize Pipe
-
-        Args:
-            starts: Start of the Pipe
-        """
-        self.starts = None
-        self.available = False
-        self.current_end = None
-        self.next_end = None
-
-    def __str__(self):
-        default_keys = ['starts', 'available', 'current_end', 'next_end']
-        instance_vars = {}
-        variables = vars(self)
-        for variable_key in variables:
-            if variable_key not in default_keys:
-                instance_vars[variable_key] = variables[variable_key]
-
-        variables_string = ', '.join(['{}:{}'.format(key, instance_vars[key]) for key in instance_vars])
-        output = '{}({})'.format(self.__class__.__name__, variables_string)
-        return output
-
-    def set_starts(self, starts):
-        """
-        Args:
-            starts: iterable of s objects to the head (start) of pipe
-        """
-        self.starts = starts
-
-    def next(self):
-        """
-        Return one E Object
-        """
-        if self.available:
-            self.available = False
-            self.current_end = self.next_end
-            return self.current_end
-        else:
-            self.current_end = self.process_next_start()
-            return self.current_end
-
-    def has_next(self):
-        """
-        Return Boolean
-        """
-        if self.available:
-            return True
-        else:
-            try:
-                self.next_end = self.process_next_start()
-                self.available = True
-                return self.available
-            except IndexError as err:  # TODO: Fix to RuntimeError
-                self.available = False
-                return self.available
-            except Exception as err:  # NoSuchElementException
-                raise err
-
-    def process_next_start(self):
-        """
-        Returns E
-
-        Raise:
-            NoSuchElementException
-        """
-        raise NotImplementedError("Need to implement in subclasses")
+from ozpcenter.recommend import recommend_utils
 
 
 class Pipeline(object):
@@ -97,6 +22,8 @@ class Pipeline(object):
         self.end_pipe = None
 
         self.pipes = pipes or []
+        self.as_map = {}
+
         if self.pipes:
             self.set_pipes()
 
@@ -133,6 +60,21 @@ class Pipeline(object):
         for i in list(range(1, pipeline_size)):
             self.pipes[i].set_starts(self.pipes[i - 1])
 
+    def refresh_as_pipes(self):
+        """
+        As Pipes
+        """
+        for pipe in self.pipes:
+            current_type_str = str(pipe.__class__)
+            if current_type_str == 'AsPipe':
+                self.as_map[pipe.get_name()] = pipe
+
+    def get_pipes(self):
+        """
+        Get Pipes
+        """
+        return self.pipes
+
     def add_pipe(self, iterable):
         """
         Add Pipe
@@ -144,7 +86,7 @@ class Pipeline(object):
         """
         Remove Pipe
         """
-        raise utils.UnsupportedOperation()
+        raise recommend_utils.UnsupportedOperation()
 
     def has_next(self):
         """
@@ -171,7 +113,7 @@ class Pipeline(object):
         try:
             while True:
                 self.next()
-        except utils.FastNoSuchElementException:
+        except recommend_utils.FastNoSuchElementException:
             # Ignore FastNoSuchElementException
             pass
 
@@ -186,7 +128,7 @@ class Pipeline(object):
         try:
             while True:
                 output.append(self.next())
-        except utils.FastNoSuchElementException:
+        except recommend_utils.FastNoSuchElementException:
             # Ignore FastNoSuchElementException
             pass
         return output
@@ -203,7 +145,7 @@ class Pipeline(object):
             while True:
                 self.next()
                 count = count + 1
-        except utils.FastNoSuchElementException:
+        except recommend_utils.FastNoSuchElementException:
             # Ignore FastNoSuchElementException
             pass
         return count

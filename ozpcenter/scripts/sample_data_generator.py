@@ -1469,7 +1469,7 @@ def run():
     #                           Recommendations
     ############################################################################
     sample_data_recommender = RecommenderDirectory()
-    sample_data_recommender.recommend('sample_data,custom')
+    sample_data_recommender.recommend('baseline,graph_cf')
 
 
 if __name__ == "__main__":

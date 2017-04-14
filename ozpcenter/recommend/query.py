@@ -3,8 +3,8 @@ Quering Graph
 """
 from ozpcenter.pipe import pipes
 from ozpcenter.pipe.pipeline import Pipeline
-from ozpcenter.recommend import utils
-from ozpcenter.recommend.utils import Direction
+from ozpcenter.recommend import recommend_utils
+from ozpcenter.recommend.recommend_utils import Direction
 
 
 class Query(object):
@@ -23,7 +23,7 @@ class Query(object):
         self.pipeline.add_pipe(pipes.GraphVertexPipe())
 
         if self.pipeline.starts is None:
-            self.pipeline.set_starts(utils.DictKeyValueIterator(self.graph.vertices))
+            self.pipeline.set_starts(recommend_utils.DictKeyValueIterator(self.graph.vertices))
 
         return self
 
@@ -43,7 +43,7 @@ class Query(object):
                 if self.graph.vertices.get(current_vertex_id):
                     out_list.append(self.graph.vertices.get(current_vertex_id))
 
-            self.pipeline.set_starts(utils.ListIterator(out_list))
+            self.pipeline.set_starts(recommend_utils.ListIterator(out_list))
 
         return self
 
@@ -100,6 +100,15 @@ class Query(object):
         """
         current_pipe = pipes.ExcludeIdsPipe(id_list)
         self.pipeline.add_pipe(current_pipe)
+        return self
+
+    def as_(self, step_name):
+        # current_pipe = pipes.AsPipe(step_name, self.pipeline.get_pipes()[1])
+        # self.pipeline.add_pipe(current_pipe)
+        self.pipeline.refresh_as_pipes()
+        return self
+
+    def except_(self, step_name):
         return self
 
     def limit(self, limit_number):

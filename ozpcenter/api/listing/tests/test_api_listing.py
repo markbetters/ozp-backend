@@ -397,8 +397,8 @@ class ListingApiTest(APITestCase):
                 {"name": "guide", "url": "http://www.google.com/guide2"}
             ],
             "screenshots": [
-                {"small_image": {"id": 1}, "large_image": {"id": 2}},
-                {"small_image": {"id": 3}, "large_image": {"id": 4}}
+                {"small_image": {"id": 1}, "large_image": {"id": 2}, "description": "Test Description"},
+                {"small_image": {"id": 3}, "large_image": {"id": 4}, "description": "Test Description"}
             ]
 
         }

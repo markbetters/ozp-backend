@@ -314,6 +314,24 @@ def update_es_listing(current_listing_id, record, is_new):
                 )
 
 
+def encode_special_characters(user_string):
+    if user_string is None:
+        return ""
+
+    sp_chars = ['+', '-', '=', '|', '<', '>', '!', '(', ')', '{', '}', '[', ']', '^', '"', '~', '*', '?', ':', '\\', '/']
+    # List of special characters can be found here: https://www.elastic.co/guide/en/elasticsearch/reference/2.4/query-dsl-query-string-query.html#_reserved_characters
+    output_list = []
+
+    for char in user_string:
+        if char in sp_chars:
+            # replace
+            output_list.append(char.replace(char, '\\' + char))
+        else:
+            output_list.append(char)
+
+    return "".join(output_list)
+
+
 def make_search_query_obj(filter_obj, exclude_agencies=None):
     """
     Function is used to make elasticsearch query for searching
@@ -330,6 +348,7 @@ def make_search_query_obj(filter_obj, exclude_agencies=None):
 
     """
     user_string = filter_obj.search_string
+    user_string = encode_special_characters(user_string)
 
     # Pagination
     user_offset = filter_obj.offset
