@@ -272,7 +272,7 @@ def get_profile_target_list(notification_type, group_target=None, entities=None)
         query = Profile.objects.filter(Q(organizations__in=entities) | Q(stewarded_organizations__in=entities))
 
     elif notification_type == Notification.LISTING:
-        # Assumes that entities is [models.Listings,...]
+        # Assumes that entities is [models.Listings, ...]
         # TODO: Respect Private Apps
         if group_target == Notification.USER or group_target == Notification.ALL:
             # Get users that bookmarked that listing
@@ -283,12 +283,20 @@ def get_profile_target_list(notification_type, group_target=None, entities=None)
             query = Profile.objects.filter(id__in=owner_id_list)
         elif group_target == Notification.ORG_STEWARD:
             # get the ORG_STEWARD(s) for that listing's agency
-            entities_agency = [entity.agency for entity in entities]
-            query = Profile.objects.filter(stewarded_organizations__in=entities_agency)
+            entities_agency = [entity.agency.id for entity in entities]
+            query = Profile.objects.filter(stewarded_organizations__in=entities_agency).distinct()
 
+        elif group_target == Notification.OWNER:
+            # get the Owner(s) for that listing's agency
+            entities_ids = [entity.id for entity in entities]
+            listings_owners = Listing.objects.filter(id__in=entities_ids).values_list('owners').distinct()
+            query = Profile.objects.filter(id__in=listings_owners).distinct()
 
     elif notification_type == Notification.PEER or notification_type == Notification.PEER_BOOKMARK:
-        query = Profile.objects.filter(id__in=entities)
+        # Assumes that entities is [models.Profile, ...]
+        entities_id = [entity.id for entity in entities]
+        query = Profile.objects.filter(id__in=entities_id)
+
     else:
         raise Exception('Notification Type not valid')
 
@@ -308,7 +316,7 @@ def create_notification(author_username=None,
                         listing=None,
                         agency=None,
                         peer=None,
-                        peer_profile_id=None,
+                        peer_profile=None,
                         group_target=Notification.ALL):
     """
     Create Notification
@@ -368,39 +376,39 @@ def create_notification(author_username=None,
     notification.notification_type = notification_type
 
     if notification_type == Notification.SYSTEM:
-        notification.group_target = 'all'
+        notification.group_target = group_target
         notification.entity_id = None
 
     elif notification_type == Notification.AGENCY:
-        notification.group_target = 'all'
+        notification.group_target = group_target
         notification.entity_id = agency.pk
 
     elif notification_type == Notification.AGENCY_BOOKMARK:
-        notification.group_target = 'all'
+        notification.group_target = group_target
         notification.entity_id = agency.pk
 
     elif notification_type == Notification.LISTING:
-        notification.group_target = 'all'
+        notification.group_target = group_target
         notification.entity_id = listing.pk
 
     elif notification_type == Notification.PEER:
         notification.group_target = 'user'
-        notification.entity_id = peer_profile_id
+        notification.entity_id = peer_profile.id
 
     elif notification_type == Notification.PEER_BOOKMARK:
         notification.group_target = 'user'
-        notification.entity_id = peer_profile_id
+        notification.entity_id = peer_profile.id
 
     notification.save()
 
     # Add NotificationMail
     entities = None
     if notification_type == Notification.LISTING:
-        entities = [listing.pk]
+        entities = [listing]
     elif notification_type == Notification.AGENCY or notification_type == Notification.AGENCY_BOOKMARK:
-        entities = [agency.pk]
+        entities = [agency]
     elif notification_type == Notification.PEER or notification_type == Notification.PEER_BOOKMARK:
-        entities = [notification.entity_id]
+        entities = [peer_profile]
 
     target_list = get_profile_target_list(notification_type, group_target=group_target, entities=entities)
     for target_profile in target_list:

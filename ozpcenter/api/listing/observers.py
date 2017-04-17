@@ -71,7 +71,6 @@ class ListingObserver(Observer):
         username = profile.user.username
         now_plus_month = datetime.datetime.now(pytz.utc) + datetime.timedelta(days=30)
 
-
         if old_approval_status == models.Listing.IN_PROGRESS and new_approval_status == models.Listing.PENDING:
             message = '{} listing was submitted'.format(listing.title)
 
@@ -80,7 +79,6 @@ class ListingObserver(Observer):
                                                           message=message,
                                                           listing=listing,
                                                           group_target=Notification.ORG_STEWARD)
-
 
         if new_approval_status == models.Listing.APPROVED and profile.highest_role() != 'APPS_MALL_STEWARD':
             return None
