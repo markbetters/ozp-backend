@@ -40,7 +40,11 @@ def get_storefront(username):
         # Get Recommended Listings for owner
         target_profile_recommended_entry = models.RecommendationsEntry.objects.filter(target_profile=profile).first()  # Get
 
-        recommended_entry_data = msgpack.unpackb(target_profile_recommended_entry.recommendation_data)
+        recommended_entry_data = {}
+        if target_profile_recommended_entry:
+            recommendation_data = target_profile_recommended_entry.recommendation_data
+            if recommendation_data:
+                recommended_entry_data = msgpack.unpackb(recommendation_data)
 
         recommendation_combined_dict = {'profile': {}}
 
