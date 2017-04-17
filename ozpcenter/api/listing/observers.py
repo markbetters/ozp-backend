@@ -6,6 +6,7 @@ import pytz
 
 from ozpcenter import models
 from ozpcenter.pubsub import Observer
+from ozpcenter.models import Notification
 import ozpcenter.api.notification.model_access as notification_model_access
 
 
@@ -28,33 +29,59 @@ class ListingObserver(Observer):
 
     def listing_approval_status_change(self, listing=None, profile=None, old_approval_status=None, new_approval_status=None):
         """
+        Listing Approval Status Change
+
+        State Transitions:
+            {Action}
+                {old_approval_status} --> {new_approval_status}
+
+            User Submitted Listings
+                IN_PROGRESS --> PENDING
+
+            User put Listing in deletion pending
+                PENDING --> PENDING_DELETION
+                APPROVED --> PENDING_DELETION
+
+            User undeleted the listing
+                PENDING_DELETION --> PENDING
+
+            Org Steward APPROVED listing
+                PENDING --> APPROVED_ORG
+
+            App Mall Steward Rejected Listing
+                APPROVED_ORG --> REJECTED
+
+            App Mall Steward Approved Lising
+                APPROVED_ORG --> APPROVED
+
+            Listing DELETED
+                PENDING_DELETION --> DELETED
+                APPROVED --> DELETED
+
         AMLNG-170 - As an Owner I want to receive notice of whether my deletion request has been approved or rejected
         AMLNG-173 - As an Admin I want notification if an owner has cancelled an app that was pending deletion
         AMLNG-380 - As a user, I want to receive notification when a Listing is added to a subscribed category or tag
-
-        State Transitions:
-            User Submitted Listings
-                {'old_approval_status': 'IN_PROGRESS', 'new_approval_status': 'PENDING'}
-            User put Listing in deletion pending
-                {'old_approval_status': 'PENDING', 'new_approval_status': 'PENDING_DELETION'}
-                {'old_approval_status': 'APPROVED', 'new_approval_status': 'PENDING_DELETION'}
-            User undeleted the listing
-                {'old_approval_status': 'PENDING_DELETION', 'new_approval_status': 'PENDING'}
-            Org Steward APPROVED listing
-                {'old_approval_status': 'PENDING', 'new_approval_status': 'APPROVED_ORG'}
-            App Mall Steward Rejected Listing
-                {'old_approval_status': 'APPROVED_ORG', 'new_approval_status': 'REJECTED')
-            App Mall Steward Approved Lising
-                {'old_approval_status': 'APPROVED_ORG', 'new_approval_status': 'APPROVED'}
-            Listing DELETED
-                {'old_approval_status': 'PENDING_DELETION', 'new_approval_status': 'DELETED'}
-                {'old_approval_status': 'APPROVED', 'new_approval_status': 'DELETED'}
+        AMLNG-376 - As a CS, I want to receive notification of Listings submitted for my organization
 
         Args:
             listing: Listing instance
             profile(Profile Instance): Profile that triggered a change
             approval_status(String): Status
         """
+        username = profile.user.username
+        now_plus_month = datetime.datetime.now(pytz.utc) + datetime.timedelta(days=30)
+
+
+        if old_approval_status == models.Listing.IN_PROGRESS and new_approval_status == models.Listing.PENDING:
+            message = '{} listing was submitted'.format(listing.title)
+
+            notification_model_access.create_notification(author_username=username,
+                                                          expires_date=now_plus_month,
+                                                          message=message,
+                                                          listing=listing,
+                                                          group_target=Notification.ORG_STEWARD)
+
+
         if new_approval_status == models.Listing.APPROVED and profile.highest_role() != 'APPS_MALL_STEWARD':
             return None
             # raise errors.PermissionDenied('Only an APPS_MALL_STEWARD can mark a listing as APPROVED')
@@ -104,8 +131,6 @@ class ListingObserver(Observer):
 
     def listing_created(self, listing=None, profile=None):
         """
-        AMLNG-376 - As a CS, I want to receive notification of Listings submitted for my organization
-
         Args:
             listing: Listing Instance
             user(Profile Instance): The user that created listing
@@ -124,7 +149,7 @@ class ListingObserver(Observer):
     def listing_private_status_changed(self, listing=None, profile=None, is_private=None):
         """
         AMLNG-383 - As a owner, I want to notify users who have bookmarked my listing when the
-        listing is changed from public to private and vice-versa
+            listing is changed from public to private and vice-versa
 
         Args:
             listing: Listing instance
@@ -141,10 +166,11 @@ class ListingObserver(Observer):
             message = '{} was changed to be a public listing '.format(listing.title)
 
         now_plus_month = datetime.datetime.now(pytz.utc) + datetime.timedelta(days=30)
-        notification_model_access.create_notification(username,
-                                                      now_plus_month,
-                                                      message,
-                                                      listing)
+        notification_model_access.create_notification(author_username=username,
+                                                      expires_date=now_plus_month,
+                                                      message=message,
+                                                      listing=listing,
+                                                      group_target=Notification.USER)
 
     def listing_enabled_status_changed(self, listing=None, profile=None, is_enabled=None):
         """

@@ -185,13 +185,13 @@ class NotificationSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError('{0}'.format(validated_data['error']))
 
         username = self.context['request'].user.username
-        notification = model_access.create_notification(username,
-                                                        validated_data['expires_date'],
-                                                        validated_data['message'],
-                                                        validated_data['listing'],
-                                                        validated_data['agency'],
-                                                        validated_data['peer'],
-                                                        validated_data.get('entity_id'))
+        notification = model_access.create_notification(author_username=username,
+                                                        expires_date=validated_data['expires_date'],
+                                                        message=validated_data['message'],
+                                                        listing=validated_data['listing'],
+                                                        agency=validated_data['agency'],
+                                                        peer=validated_data['peer'],
+                                                        peer_profile_id=validated_data.get('entity_id'))
         return notification
 
     def update(self, instance, validated_data):
