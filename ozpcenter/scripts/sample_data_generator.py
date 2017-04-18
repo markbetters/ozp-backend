@@ -361,6 +361,22 @@ def run():
         dn='OBrien obrien'
     )
 
+    access_control = json.dumps({
+        'clearances': ['UNCLASSIFIED', 'CONFIDENTIAL', 'SECRET', 'TOP SECRET'],
+        'formal_accesses': ['SIERRA', 'TANGO', 'GOLF', 'HOTEL'],
+        'visas': ['NOVEMBER']
+    })
+    david = models.Profile.create_user('david',  # noqa: F841
+        email='david@oceania.gov',
+        display_name='David',
+        bio='David Minister of Love',
+        access_control=access_control,
+        organizations=['Ministry of Love'],
+        stewarded_organizations=['Ministry of Love'],
+        groups=['ORG_STEWARD'],
+        dn='David david'
+    )
+
     ############################################################################
     #                               Regular user
     ############################################################################
@@ -677,6 +693,7 @@ def run():
         #                           Owners
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         listing.owners.add(winston)
+
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         #                           Categories
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1398,9 +1415,13 @@ def run():
         )
         listing.save()
         listing.contacts.add(rob_baratheon)
+
         listing.owners.add(pmurt)
+        listing.owners.add(david)
+
         listing.categories.add(tools)
         listing.categories.add(education)
+
         listing.tags.add(demo)
 
         listing_model_access.create_listing(winston, listing)
