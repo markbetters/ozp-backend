@@ -6,6 +6,7 @@ import logging
 import pytz
 
 from django.db.models import Q
+from django.db import transaction
 
 from ozpcenter import errors
 
@@ -144,6 +145,7 @@ def get_all_notifications():
 def get_all_pending_notifications(for_user=False):
     """
     Gets all system-wide pending notifications
+    V2
 
     if for_user:
         Includes
@@ -168,97 +170,6 @@ def get_all_pending_notifications(for_user=False):
                                               _peer__isnull=True)
 
     return unexpired_system_notifications
-
-
-def get_pending_peer_notifications(username):
-    """
-    Gets all pending peer notifications
-
-    Includes
-     * Peer Notifications
-     * Peer.Bookmark Notifications
-
-    Excludes
-     * System Notifications
-     * Listing Notifications
-     * Agency Notifications
-
-    Returns:
-        django.db.models.query.QuerySet(Notification): List of system-wide pending notifications
-    """
-    unexpired_peer_notifications = Notification.objects \
-        .filter(_peer__isnull=False,
-                agency__isnull=True,  # Ensure there are no agency notifications
-                listing__isnull=True,  # Ensure there are no listing notifications
-                expires_date__gt=datetime.datetime.now(pytz.utc),
-                _peer__contains='"user": {"username": "%s"}' % (username))
-
-    return unexpired_peer_notifications
-
-
-def get_listing_pending_notifications(username):
-    """
-    Gets all notifications that are regarding a listing in this user's library
-
-    Includes
-     * Listing Notifications
-
-    Does not include
-     * System Notifications
-     * Agency Notifications
-     * Peer Notifications
-     * Peer.Bookmark Notifications
-
-    Args:
-        username (str): current username to get notifications
-
-    Returns:
-        django.db.models.query.QuerySet(Notification): List of user's listing pending notifications
-    """
-    bookmarked_listing_ids = ApplicationLibraryEntry.objects \
-        .filter(owner__user__username=username,
-                listing__isnull=False,
-                listing__is_enabled=True,
-                listing__is_deleted=False) \
-        .values_list('listing', flat=True)
-
-    unexpired_listing_notifications = Notification.objects.filter(
-        expires_date__gt=datetime.datetime.now(pytz.utc),
-        listing__pk_in=bookmarked_listing_ids,
-        agency__isnull=True,  # Ensure there are no agency notifications
-        _peer__isnull=True,  # Ensure there are no peer notifications
-        listing__isnull=False)
-
-    return unexpired_listing_notifications
-
-
-def get_agency_pending_notifications(username):
-    """
-    Gets all notifications that are regarding a listing in this user's agencies
-
-    Includes
-     * Agency Notifications
-
-    Does not include
-     * System Notifications
-     * Listing Notifications
-
-
-    Args:
-        username (str): current username to get notifications
-
-    Returns:
-        django.db.models.query.QuerySet(Notification): List of user's agencies pending notifications
-    """
-    user_agency = generic_model_access.get_profile(
-        username).organizations.all()
-
-    unexpired_agency_notifications = Notification.objects.filter(
-        expires_date__gt=datetime.datetime.now(pytz.utc),
-        agency__pk_in=user_agency,
-        listing__isnull=True)
-
-    return unexpired_agency_notifications
 
 
 def get_all_expired_notifications():
@@ -351,7 +262,7 @@ def get_profile_target_list(notification_type, group_target=None, entities=None)
     returns:
         [Profile, Profile, ...]
     """
-    group_target = group_target or 'all'
+    group_target = group_target or Notification.ALL
     entities = entities or []
     query = None
 
@@ -362,15 +273,31 @@ def get_profile_target_list(notification_type, group_target=None, entities=None)
         query = Profile.objects.filter(Q(organizations__in=entities) | Q(stewarded_organizations__in=entities))
 
     elif notification_type == Notification.LISTING:
+        # Assumes that entities is [models.Listings, ...]
         # TODO: Respect Private Apps
-        owner_id_list = ApplicationLibraryEntry.objects.filter(listing__in=entities,
-                                                               listing__isnull=False,
-                                                               listing__is_enabled=True,
-                                                               listing__is_deleted=False).values_list('owner', flat=True).distinct()
-        query = Profile.objects.filter(id__in=owner_id_list)
+        if group_target == Notification.USER or group_target == Notification.ALL:
+            # Get users that bookmarked that listing
+            owner_id_list = ApplicationLibraryEntry.objects.filter(listing__in=entities,
+                                                                   listing__isnull=False,
+                                                                   listing__is_enabled=True,
+                                                                   listing__is_deleted=False).values_list('owner', flat=True).distinct()
+            query = Profile.objects.filter(id__in=owner_id_list)
+        elif group_target == Notification.ORG_STEWARD:
+            # get the ORG_STEWARD(s) for that listing's agency
+            entities_agency = [entity.agency.id for entity in entities]
+            query = Profile.objects.filter(stewarded_organizations__in=entities_agency).distinct()
+
+        elif group_target == Notification.OWNER:
+            # get the Owner(s) for that listing's agency
+            entities_ids = [entity.id for entity in entities]
+            listings_owners = Listing.objects.filter(id__in=entities_ids).values_list('owners').distinct()
+            query = Profile.objects.filter(id__in=listings_owners).distinct()
 
     elif notification_type == Notification.PEER or notification_type == Notification.PEER_BOOKMARK:
-        query = Profile.objects.filter(id__in=entities)
+        # Assumes that entities is [models.Profile, ...]
+        entities_id = [entity.id for entity in entities]
+        query = Profile.objects.filter(id__in=entities_id)
+
     else:
         raise Exception('Notification Type not valid')
 
@@ -384,7 +311,22 @@ def get_profile_target_list(notification_type, group_target=None, entities=None)
     return query.all()
 
 
-def create_notification(author_username, expires_date, message, listing=None, agency=None, peer=None, peer_profile_id=None):
+# Method is decorated with @transaction.atomic to ensure all logic is executed in a single transaction
+@transaction.atomic
+def bulk_notifications_saver(notification_instances):
+    # Loop over each store and invoke save() on each entry
+    for notification_instance in notification_instances:
+        notification_instance.save()
+
+
+def create_notification(author_username=None,
+                        expires_date=None,
+                        message=None,
+                        listing=None,
+                        agency=None,
+                        peer=None,
+                        peer_profile=None,
+                        group_target=Notification.ALL):
     """
     Create Notification
 
@@ -443,48 +385,59 @@ def create_notification(author_username, expires_date, message, listing=None, ag
     notification.notification_type = notification_type
 
     if notification_type == Notification.SYSTEM:
-        notification.group_target = 'all'
+        notification.group_target = group_target
         notification.entity_id = None
 
     elif notification_type == Notification.AGENCY:
-        notification.group_target = 'all'
+        notification.group_target = group_target
         notification.entity_id = agency.pk
 
     elif notification_type == Notification.AGENCY_BOOKMARK:
-        notification.group_target = 'all'
+        notification.group_target = group_target
         notification.entity_id = agency.pk
 
     elif notification_type == Notification.LISTING:
-        notification.group_target = 'all'
+        notification.group_target = group_target
         notification.entity_id = listing.pk
 
     elif notification_type == Notification.PEER:
         notification.group_target = 'user'
-        notification.entity_id = peer_profile_id
+        notification.entity_id = peer_profile.id
 
     elif notification_type == Notification.PEER_BOOKMARK:
         notification.group_target = 'user'
-        notification.entity_id = peer_profile_id
+        notification.entity_id = peer_profile.id
 
     notification.save()
 
     # Add NotificationMail
     entities = None
     if notification_type == Notification.LISTING:
-        entities = [listing.pk]
+        entities = [listing]
     elif notification_type == Notification.AGENCY or notification_type == Notification.AGENCY_BOOKMARK:
-        entities = [agency.pk]
+        entities = [agency]
     elif notification_type == Notification.PEER or notification_type == Notification.PEER_BOOKMARK:
-        entities = [notification.entity_id]
+        entities = [peer_profile]
 
-    target_list = get_profile_target_list(notification_type, entities=entities)
+    target_list = get_profile_target_list(notification_type, group_target=group_target, entities=entities)
+
+    bulk_notification_list = []
+
     for target_profile in target_list:
         notificationv2 = NotificationMailBox()
         notificationv2.target_profile = target_profile
         notificationv2.notification = notification
         # All the flags default to false
         notificationv2.emailed_status = False
-        notificationv2.save()
+
+        bulk_notification_list.append(notificationv2)
+
+        if len(bulk_notification_list) >= 2000:
+            bulk_notifications_saver(bulk_notification_list)
+            bulk_notification_list = []
+
+    if bulk_notification_list:
+        bulk_notifications_saver(bulk_notification_list)
 
     return notification
 

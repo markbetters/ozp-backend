@@ -27,19 +27,16 @@ install_git_hooks:
 	cp .hooks/pre-commit .git/hooks/
 
 run:
-	export MAIN_DATABASE=sqlite
-	python manage.py runserver localhost:8001
+	MAIN_DATABASE=sqlite python manage.py runserver localhost:8001
 
 run_es:
 	ES_ENABLED=True python manage.py runserver localhost:8001
 
 run_psql:
-	export MAIN_DATABASE=psql
-	python manage.py runserver localhost:8001
+	MAIN_DATABASE=psql python manage.py runserver localhost:8001
 
 run_psql_es:
-	export MAIN_DATABASE=psql
-	ES_ENABLED=True python manage.py runserver localhost:8001
+	MAIN_DATABASE=psql ES_ENABLED=True python manage.py runserver localhost:8001
 
 runp:
 	gunicorn --workers=`nproc` ozp.wsgi -b localhost:8000 --access-logfile logs.txt --error-logfile logs.txt -p gunicorn.pid
@@ -59,6 +56,9 @@ reindex_es:
 recommend:
 	python manage.py runscript recommend
 
+recommend_psql:
+	MAIN_DATABASE=psql python manage.py runscript recommend
+
 recommend_es_user:
 	ES_ENABLED=TRUE RECOMMENDATION_ENGINE='elasticsearch_user_base' python manage.py runscript recommend
 
@@ -66,16 +66,14 @@ recommend_es_content:
 	ES_ENABLED=TRUE RECOMMENDATION_ENGINE='elasticsearch_content_base' python manage.py runscript recommend
 
 dev: clean pre create_static
-	export MAIN_DATABASE=sqlite
-	python manage.py makemigrations ozpcenter
-	python manage.py makemigrations ozpiwc
-	python manage.py migrate
+	MAIN_DATABASE=sqlite python manage.py makemigrations ozpcenter
+	MAIN_DATABASE=sqlite python manage.py makemigrations ozpiwc
+	MAIN_DATABASE=sqlite python manage.py migrate
 
 	echo 'Loading sample data...'
-	python manage.py runscript sample_data_generator
+	MAIN_DATABASE=sqlite python manage.py runscript sample_data_generator
 
-	python manage.py runserver localhost:8001
-
+	MAIN_DATABASE=sqlite python manage.py runserver localhost:8001
 # sudo apt-get install postgresql postgresql-contrib
 # sudo -i -u postgres
 # createuser ozp_user
@@ -83,14 +81,13 @@ dev: clean pre create_static
 # createdb ozp
 # psql -c 'GRANT ALL PRIVILEGES ON DATABASE ozp TO ozp_user;'
 dev_psql: clean pre create_static
-	export MAIN_DATABASE=psql
-	python manage.py makemigrations ozpcenter
-	python manage.py makemigrations ozpiwc
-	python manage.py migrate
+	MAIN_DATABASE=psql python manage.py makemigrations ozpcenter
+	MAIN_DATABASE=psql python manage.py makemigrations ozpiwc
+	MAIN_DATABASE=psql python manage.py migrate
 
-	python manage.py flush --noinput # For Postgres
+	MAIN_DATABASE=psql python manage.py flush --noinput # For Postgres
 
 	echo 'Loading sample data...'
-	python manage.py runscript sample_data_generator
+	MAIN_DATABASE=psql python manage.py runscript sample_data_generator
 
-	python manage.py runserver localhost:8001
+	MAIN_DATABASE=psql python manage.py runserver localhost:8001

@@ -1349,6 +1349,7 @@ class Notification(models.Model):
     APP_STEWARD = 'app_steward'
     ORG_STEWARD = 'org_steward'
     USER = 'user'
+    OWNER = 'owner'
 
     GROUP_TARGET_CHOICES = (
         (ALL, 'all'),
@@ -1356,6 +1357,7 @@ class Notification(models.Model):
         (APP_STEWARD, 'app_steward'),
         (ORG_STEWARD, 'org_steward'),
         (USER, 'user'),
+        (OWNER, 'owner'),
     )
     group_target = models.CharField(default=ALL, max_length=24, choices=GROUP_TARGET_CHOICES)  # db_index=True)
 

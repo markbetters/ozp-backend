@@ -158,6 +158,7 @@ class NotificationSerializer(serializers.ModelSerializer):
             if not target_username_profile:
                 raise serializers.ValidationError('Valid User is Required')
 
+            validated_data['entity_target'] = target_username_profile
             validated_data['entity_id'] = target_username_profile.pk
             # Folder Validation - Optional Field
             temp_folder_name = temp_peer.get('folder_name')
@@ -185,13 +186,13 @@ class NotificationSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError('{0}'.format(validated_data['error']))
 
         username = self.context['request'].user.username
-        notification = model_access.create_notification(username,
-                                                        validated_data['expires_date'],
-                                                        validated_data['message'],
-                                                        validated_data['listing'],
-                                                        validated_data['agency'],
-                                                        validated_data['peer'],
-                                                        validated_data.get('entity_id'))
+        notification = model_access.create_notification(author_username=username,
+                                                        expires_date=validated_data['expires_date'],
+                                                        message=validated_data['message'],
+                                                        listing=validated_data['listing'],
+                                                        agency=validated_data['agency'],
+                                                        peer=validated_data['peer'],
+                                                        peer_profile=validated_data.get('entity_target'))
         return notification
 
     def update(self, instance, validated_data):
