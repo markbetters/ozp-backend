@@ -16,9 +16,9 @@ import pytz
 import sys
 
 sys.path.insert(0, os.path.realpath(os.path.join(os.path.dirname(__file__), '../../')))
-
 from django.conf import settings
 from django.db import transaction
+import yaml
 
 from ozpcenter import models
 from ozpcenter.api.notification import model_access as notification_model_access
@@ -27,6 +27,7 @@ import ozpcenter.api.listing.model_access as listing_model_access
 
 
 TEST_IMG_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'test_images') + '/'
+TEST_DATA_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'test_data')
 
 DEMO_APP_ROOT = settings.OZP['DEMO_APP_ROOT']
 
@@ -42,9 +43,9 @@ def create_listing_review_batch(*input_list):
     example:
         [
             listing,
-            [charrington, 5, "This app is great - well designed and easy to use"],
-            [tparsons, 3, "This app is great - well designed and easy to use"],
-            [syme, 1, "This app is great - well designed and easy to use"]
+            [profile_ref['charrington'], 5, "This app is great - well designed and easy to use"],
+            [profile_ref['tparsons'], 3, "This app is great - well designed and easy to use"],
+            [profile_ref['syme'], 1, "This app is great - well designed and easy to use"]
         ]
     """
     current_listing = input_list[0]
@@ -253,329 +254,29 @@ def run():
         example.save()
 
     ############################################################################
-    #                               Apps Mall Stewards
+    #                               Profiles
     ############################################################################
     with transaction.atomic():
-        # bigbrother
-        access_control = json.dumps({
-            'clearances': ['UNCLASSIFIED', 'CONFIDENTIAL', 'SECRET', 'TOP SECRET'],
-            'formal_accesses': ['SIERRA', 'TANGO', 'GOLF', 'HOTEL'],
-            'visas': ['NOVEMBER']
-        })
-        big_brother = models.Profile.create_user('bigbrother',  # noqa: F841
-            email='bigbrother@oceania.gov',
-            display_name='Big Brother',
-            bio='I make everyones life better',
-            access_control=access_control,
-            organizations=['Ministry of Peace'],
-            groups=['APPS_MALL_STEWARD'],
-            dn='Big Brother bigbrother'
-        )
+        profile_ref = {}
+        profile_data = None
+        with open(os.path.join(TEST_DATA_PATH, 'profile.yaml'), 'r') as stream:
+            try:
+                profile_data= yaml.load(stream)
+            except yaml.YAMLError as exc:
+                print(exc)
 
-        # bigbrother2
-        access_control = json.dumps({
-            'clearances': ['UNCLASSIFIED', 'CONFIDENTIAL', 'SECRET', 'TOP SECRET'],
-            'formal_accesses': ['SIERRA', 'TANGO', 'GOLF', 'HOTEL'],
-            'visas': ['NOVEMBER']
-        })
-        big_brother2 = models.Profile.create_user('bigbrother2',  # noqa: F841
-            email='bigbrother2@oceania.gov',
-            display_name='Big Brother2',
-            bio='I also make everyones life better',
-            access_control=access_control,
-            organizations=['Ministry of Truth'],
-            groups=['APPS_MALL_STEWARD'],
-            dn='Big Brother 2 bigbrother2'
-        )
-
-        # khaleesi
-        access_control = json.dumps({
-            'clearances': ['UNCLASSIFIED', 'CONFIDENTIAL', 'SECRET', 'TOP SECRET'],
-            'formal_accesses': ['SIERRA', 'TANGO', 'GOLF', 'HOTEL'],
-            'visas': ['DRS']
-        })
-        khaleesi = models.Profile.create_user('khaleesi',  # noqa: F841
-            email='khaleesi@dragonborn.gov',
-            display_name='Daenerys Targaryen',
-            bio='I am Queen of Meereen, Queen of the Andals(, the Rhoynar) and the First Men, Lady Regnant of the Seven Kingdoms, Khaleesi of the Great Grass Sea, Mhysa, Breaker of Chains, the Unburnt, Mother of Dragons".',
-            access_control=access_control,
-            organizations=['Ministry of Plenty'],
-            groups=['APPS_MALL_STEWARD'],
-            dn='Daenerys Targaryen khaleesi'
-        )
-
-    ############################################################################
-    #                               Org Stewards
-    ############################################################################
-    with transaction.atomic():
-        access_control = json.dumps({
-            'clearances': ['UNCLASSIFIED', 'CONFIDENTIAL', 'SECRET', 'TOP SECRET'],
-            'formal_accesses': ['SIERRA', 'TANGO'],
-            'visas': ['NOVEMBER']
-        })
-        winston = models.Profile.create_user('wsmith',  # noqa: F841
-            email='wsmith@oceania.gov',
-            display_name='Winston Smith',
-            bio='I work at the Ministry of Truth',
-            access_control=access_control,
-            organizations=['Ministry of Truth'],
-            stewarded_organizations=['Ministry of Truth'],
-            groups=['ORG_STEWARD'],
-            dn='Winston Smith wsmith'
-        )
-
-        access_control = json.dumps({
-            'clearances': ['UNCLASSIFIED', 'CONFIDENTIAL', 'SECRET', 'TOP SECRET'],
-            'formal_accesses': ['SIERRA'],
-            'visas': []
-        })
-        julia = models.Profile.create_user('julia',  # noqa: F841
-            email='julia@oceania.gov',
-            display_name='Julia Dixon',
-            bio='An especially zealous propagandist',
-            access_control=access_control,
-            organizations=['Ministry of Truth'],
-            stewarded_organizations=['Ministry of Truth', 'Ministry of Love'],
-            groups=['ORG_STEWARD'],
-            dn='Julia Dixon jdixon'
-        )
-
-        access_control = json.dumps({
-            'clearances': ['UNCLASSIFIED', 'CONFIDENTIAL', 'SECRET', 'TOP SECRET'],
-            'formal_accesses': ['SIERRA', 'TANGO', 'GOLF', 'HOTEL'],
-            'visas': ['NOVEMBER']
-        })
-        obrien = models.Profile.create_user('obrien',  # noqa: F841
-            email='obrien@oceania.gov',
-            display_name='O\'brien',
-            bio='I will find you, winston and julia',
-            access_control=access_control,
-            organizations=['Ministry of Peace'],
-            stewarded_organizations=['Ministry of Peace', 'Ministry of Plenty'],
-            groups=['ORG_STEWARD'],
-            dn='OBrien obrien'
-        )
-
-        access_control = json.dumps({
-            'clearances': ['UNCLASSIFIED', 'CONFIDENTIAL', 'SECRET', 'TOP SECRET'],
-            'formal_accesses': ['SIERRA', 'TANGO', 'GOLF', 'HOTEL'],
-            'visas': ['NOVEMBER']
-        })
-        david = models.Profile.create_user('david',  # noqa: F841
-            email='david@oceania.gov',
-            display_name='David',
-            bio='David Minister of Love',
-            access_control=access_control,
-            organizations=['Ministry of Love'],
-            stewarded_organizations=['Ministry of Love'],
-            groups=['ORG_STEWARD'],
-            dn='David david'
-        )
-
-    ############################################################################
-    #                               Regular user
-    ############################################################################
-    with transaction.atomic():
-        # USER - Ministry of Love
-        access_control = json.dumps({
-            'clearances': ['UNCLASSIFIED', 'CONFIDENTIAL', 'SECRET'],
-            'formal_accesses': [],
-            'visas': ['NOVEMBER']
-        })
-        aaronson = models.Profile.create_user('aaronson',  # noqa: F841
-            email='aaronson@airstripone.com',
-            display_name='Aaronson',
-            bio='Nothing special',
-            access_control=access_control,
-            organizations=['Ministry of Love'],
-            groups=['USER'],
-            dn='Aaronson aaronson'
-        )
-        pmurt = models.Profile.create_user('pmurt',  # noqa: F841
-            email='pmurt@airstripone.com',
-            display_name='pmurt',
-            bio='Nothing special',
-            access_control=access_control,
-            organizations=['Ministry of Love'],
-            groups=['USER'],
-            dn='dlanod pmurt'
-        )
-
-        # PKI USER - Ministry of Love
-        access_control = json.dumps({
-            'clearances': ['UNCLASSIFIED', 'CONFIDENTIAL', 'SECRET'],
-            'formal_accesses': [],
-            'visas': ['STE', 'RVR', 'PKI']
-        })
-        hodor = models.Profile.create_user('hodor',  # noqa: F841
-            email='hodor@hodor.com',
-            display_name='Hodor',
-            bio='Hold the door',
-            access_control=access_control,
-            organizations=['Ministry of Love'],
-            groups=['USER'],
-            dn='Hodor hodor'
-        )
-
-        # USER - Ministry of Truth
-        access_control = json.dumps({
-            'clearances': ['UNCLASSIFIED', 'CONFIDENTIAL', 'SECRET'],
-            'formal_accesses': [],
-            'visas': ['NOVEMBER']
-        })
-        jones = models.Profile.create_user('jones',  # noqa: F841
-            email='jones@airstripone.com',
-            display_name='Jones',
-            bio='I am a normal person',
-            access_control=access_control,
-            organizations=['Ministry of Truth'],
-            groups=['USER'],
-            dn='Jones jones'
-        )
-
-        # PKI USER - Ministry of Truth
-        access_control = json.dumps({
-            'clearances': ['UNCLASSIFIED', 'CONFIDENTIAL', 'SECRET'],
-            'formal_accesses': [],
-            'visas': ['NOVEMBER', 'PKI']
-        })
-        tammy = models.Profile.create_user('tammy',  # noqa: F841
-            email='tammy@airstripone.com',
-            display_name='Tammy',
-            bio='I am a normal person also',
-            access_control=access_control,
-            organizations=['Ministry of Truth'],
-            groups=['USER'],
-            dn='Tammy tammy'
-        )
-
-        # USER - Ministry of Plenty
-        access_control = json.dumps({
-            'clearances': ['UNCLASSIFIED', 'CONFIDENTIAL', 'SECRET'],
-            'formal_accesses': [],
-            'visas': []
-        })
-        rutherford = models.Profile.create_user('rutherford',  # noqa: F841
-            email='rutherford@airstripone.com',
-            display_name='Rutherford',
-            bio='I am a normal person',
-            access_control=access_control,
-            organizations=['Ministry of Plenty'],
-            groups=['USER'],
-            dn='Rutherford rutherford'
-        )
-
-        # PKI USER - Ministry of Plenty
-        access_control = json.dumps({
-            'clearances': ['UNCLASSIFIED', 'CONFIDENTIAL', 'SECRET'],
-            'formal_accesses': [],
-            'visas': ['PKI']
-        })
-        noah = models.Profile.create_user('noah',  # noqa: F841
-            email='noah@airstripone.com',
-            display_name='Noah',
-            bio='I am a cool normal person',
-            access_control=access_control,
-            organizations=['Ministry of Plenty'],
-            groups=['USER'],
-            dn='Noah noah'
-        )
-
-        # USER - Ministry of Peace
-        access_control = json.dumps({
-            'clearances': ['UNCLASSIFIED', 'CONFIDENTIAL', 'SECRET', 'TOP SECRET'],
-            'formal_accesses': ['SIERRA'],
-            'visas': []
-        })
-        syme = models.Profile.create_user('syme',  # noqa: F841
-            email='syme@airstripone.com',
-            display_name='Syme',
-            bio='I am too smart for my own good',
-            access_control=access_control,
-            organizations=['Ministry of Peace'],
-            groups=['USER'],
-            dn='Syme syme'
-        )
-
-        # PKI USER - Ministry of Peace
-        access_control = json.dumps({
-            'clearances': ['UNCLASSIFIED', 'CONFIDENTIAL', 'SECRET', 'TOP SECRET'],
-            'formal_accesses': ['SIERRA'],
-            'visas': ['PKI']
-        })
-        abe = models.Profile.create_user('abe',  # noqa: F841
-            email='abe@airstripone.com',
-            display_name='Abe',
-            bio='I am too smart for my own good also',
-            access_control=access_control,
-            organizations=['Ministry of Peace'],
-            groups=['USER'],
-            dn='Abe abe'
-        )
-
-        # USER - Ministry of Peace, Ministry of Love
-        access_control = json.dumps({
-            'clearances': ['UNCLASSIFIED'],
-            'formal_accesses': [],
-            'visas': []
-        })
-        tparsons = models.Profile.create_user('tparsons',  # noqa: F841
-            email='tparsons@airstripone.com',
-            display_name='Tom Parsons',
-            bio='I am uneducated and loyal',
-            access_control=access_control,
-            organizations=['Ministry of Peace', 'Ministry of Love'],
-            groups=['USER'],
-            dn='Tparsons tparsons'
-        )
-
-        # PKI USER - Ministry of Peace, Ministry of Love
-        access_control = json.dumps({
-            'clearances': ['UNCLASSIFIED'],
-            'formal_accesses': [],
-            'visas': ['TWN', 'PKI']
-        })
-        jsnow = models.Profile.create_user('jsnow',  # noqa: F841
-            email='jsnow@forthewatch.com',
-            display_name='Jon Snow',
-            bio='I know nothing.',
-            access_control=access_control,
-            organizations=['Ministry of Peace', 'Ministry of Love'],
-            groups=['USER'],
-            dn='Jonsnow jsnow'
-        )
-
-        # USER - Ministry of Peace, Ministry of Love, Ministry of Truth
-        access_control = json.dumps({
-            'clearances': ['UNCLASSIFIED', 'CONFIDENTIAL', 'SECRET', 'TOP SECRET'],
-            'formal_accesses': ['SIERRA', 'TANGO', 'GOLF', 'HOTEL'],
-            'visas': ['NOVEMBER']
-        })
-        charrington = models.Profile.create_user('charrington',  # noqa: F841
-            email='charrington@airstripone.com',
-            display_name='Charrington',
-            bio='A member of the Thought Police',
-            access_control=access_control,
-            organizations=['Ministry of Peace', 'Ministry of Love', 'Ministry of Truth'],
-            groups=['USER'],
-            dn='Charrington charrington'
-        )
-
-        # PKI USER - Ministry of Peace, Ministry of Love, Ministry of Truth
-        access_control = json.dumps({
-            'clearances': ['UNCLASSIFIED', 'CONFIDENTIAL', 'SECRET', 'TOP SECRET'],
-            'formal_accesses': ['SIERRA', 'TANGO', 'GOLF', 'HOTEL'],
-            'visas': ['NOVEMBER', 'PKI']
-        })
-        johnson = models.Profile.create_user('johnson',  # noqa: F841
-            email='johnson@airstripone.com',
-            display_name='Johnson',
-            bio='A member of the Thought Police also',
-            access_control=access_control,
-            organizations=['Ministry of Peace', 'Ministry of Love', 'Ministry of Truth'],
-            groups=['USER'],
-            dn='Johnson johnson'
-        )
+        for current_profile_data in profile_data:
+            access_control = json.dumps(current_profile_data['access_control'])
+            profile_ref[current_profile_data['username']] = models.Profile.create_user(current_profile_data['username'],  # noqa: F841
+                email=current_profile_data['email'],
+                display_name=current_profile_data['display_name'],
+                bio=current_profile_data['bio'],
+                access_control=access_control,
+                organizations=current_profile_data['organizations'],
+                stewarded_organizations=current_profile_data['stewarded_organizations'],
+                groups=current_profile_data['groups'],
+                dn=current_profile_data['dn']
+            )
 
     # -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
     ############################################################################
@@ -586,11 +287,11 @@ def run():
         next_week = datetime.datetime.now() + datetime.timedelta(days=7)
         eastern = pytz.timezone('US/Eastern')
         next_week = eastern.localize(next_week)
-        n1 = notification_model_access.create_notification(winston,  # noqa: F841
+        n1 = notification_model_access.create_notification(profile_ref['wsmith'],  # noqa: F841
                                                            next_week,
                                                            'System will be going down for approximately 30 minutes on X/Y at 1100Z')
 
-        n2 = notification_model_access.create_notification(julia,  # noqa: F841
+        n2 = notification_model_access.create_notification(profile_ref['julia'],  # noqa: F841
                                                            next_week,
                                                            'System will be functioning in a degredaded state between 1800Z-0400Z on A/B')
 
@@ -598,11 +299,11 @@ def run():
         last_week = datetime.datetime.now() - datetime.timedelta(days=7)
         last_week = eastern.localize(last_week)
 
-        n1 = notification_model_access.create_notification(winston,  # noqa: F841
+        n1 = notification_model_access.create_notification(profile_ref['wsmith'],  # noqa: F841
                                                            last_week,
                                                            'System will be going down for approximately 30 minutes on C/D at 1700Z')
 
-        n2 = notification_model_access.create_notification(julia,  # noqa: F841
+        n2 = notification_model_access.create_notification(profile_ref['julia'],  # noqa: F841
                                                            last_week,
                                                            'System will be functioning in a degredaded state between 2100Z-0430Z on F/G')
 
@@ -690,7 +391,7 @@ def run():
             # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
             #                           Owners
             # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            listing.owners.add(winston)
+            listing.owners.add(profile_ref['wsmith'])
 
             # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
             #                           Categories
@@ -731,18 +432,18 @@ def run():
                 listing=listing)
             guide.save()
 
-            listing_model_access.create_listing(winston, listing)
-            listing_model_access.submit_listing(winston, listing)
-            listing_model_access.approve_listing_by_org_steward(winston, listing)
-            listing_model_access.approve_listing(winston, listing)
+            listing_model_access.create_listing(profile_ref['wsmith'], listing)
+            listing_model_access.submit_listing(profile_ref['wsmith'], listing)
+            listing_model_access.approve_listing_by_org_steward(profile_ref['wsmith'], listing)
+            listing_model_access.approve_listing(profile_ref['wsmith'], listing)
 
             # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
             #                           Reviews
             # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
             create_listing_review_batch(listing,
-                [charrington, 5, "This app is great - well designed and easy to use"],
-                [tparsons, 3, "Air mail is ok - does what it says and no more"],
-                [syme, 1, "Air mail crashes all the time - it doesn't even support IE 6!"]
+                [profile_ref['charrington'], 5, "This app is great - well designed and easy to use"],
+                [profile_ref['tparsons'], 3, "Air mail is ok - does what it says and no more"],
+                [profile_ref['syme'], 1, "Air mail crashes all the time - it doesn't even support IE 6!"]
             )
 
     ############################################################################
@@ -796,24 +497,24 @@ def run():
             listing.save()
 
             listing.contacts.add(osha)
-            listing.owners.add(julia)
+            listing.owners.add(profile_ref['julia'])
             listing.categories.add(categories_ref['health_fitness'])
             listing.categories.add(categories_ref['shopping'])
 
             listing.tags.add(demo)
             listing.tags.add(example)
 
-            listing_model_access.create_listing(julia, listing)
-            listing_model_access.submit_listing(julia, listing)
-            listing_model_access.approve_listing_by_org_steward(winston, listing)
-            listing_model_access.approve_listing(winston, listing)
+            listing_model_access.create_listing(profile_ref['julia'], listing)
+            listing_model_access.submit_listing(profile_ref['julia'], listing)
+            listing_model_access.approve_listing_by_org_steward(profile_ref['wsmith'], listing)
+            listing_model_access.approve_listing(profile_ref['wsmith'], listing)
 
             # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
             #                           Reviews
             # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
             create_listing_review_batch(listing,
-                [jones, 2, "This bread is stale!"],
-                [julia, 5, "Yum!"]
+                [profile_ref['jones'], 2, "This bread is stale!"],
+                [profile_ref['julia'], 5, "Yum!"]
             )
 
     ############################################################################
@@ -873,22 +574,22 @@ def run():
             )
             listing.save()
             listing.contacts.add(rob_baratheon)
-            listing.owners.add(winston)
+            listing.owners.add(profile_ref['wsmith'])
             listing.categories.add(categories_ref['tools'])
             listing.categories.add(categories_ref['education'])
             listing.tags.add(demo)
 
-            listing_model_access.create_listing(winston, listing)
-            listing_model_access.submit_listing(winston, listing)
-            listing_model_access.approve_listing_by_org_steward(winston, listing)
-            listing_model_access.approve_listing(winston, listing)
+            listing_model_access.create_listing(profile_ref['wsmith'], listing)
+            listing_model_access.submit_listing(profile_ref['wsmith'], listing)
+            listing_model_access.approve_listing_by_org_steward(profile_ref['wsmith'], listing)
+            listing_model_access.approve_listing(profile_ref['wsmith'], listing)
 
             # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
             #                           Reviews
             # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
             create_listing_review_batch(listing,
-                [winston, 2, "This Chart is bad"],
-                [big_brother, 5, "Good Chart!"]
+                [profile_ref['wsmith'], 2, "This Chart is bad"],
+                [profile_ref['bigbrother'], 5, "Good Chart!"]
             )
 
     ############################################################################
@@ -941,14 +642,14 @@ def run():
             )
             listing.save()
             listing.contacts.add(rob_baratheon)
-            listing.owners.add(julia)
+            listing.owners.add(profile_ref['julia'])
             listing.categories.add(categories_ref['communication'])
             listing.tags.add(demo)
 
-            listing_model_access.create_listing(julia, listing)
-            listing_model_access.submit_listing(julia, listing)
-            listing_model_access.approve_listing_by_org_steward(winston, listing)
-            listing_model_access.approve_listing(winston, listing)
+            listing_model_access.create_listing(profile_ref['julia'], listing)
+            listing_model_access.submit_listing(profile_ref['julia'], listing)
+            listing_model_access.approve_listing_by_org_steward(profile_ref['wsmith'], listing)
+            listing_model_access.approve_listing(profile_ref['wsmith'], listing)
 
     ############################################################################
     #                           Clipboard
@@ -1000,15 +701,15 @@ def run():
             )
             listing.save()
             listing.contacts.add(rob_baratheon)
-            listing.owners.add(winston)
+            listing.owners.add(profile_ref['wsmith'])
             listing.categories.add(categories_ref['tools'])
             listing.categories.add(categories_ref['education'])
             listing.tags.add(demo)
 
-            listing_model_access.create_listing(winston, listing)
-            listing_model_access.submit_listing(winston, listing)
-            listing_model_access.approve_listing_by_org_steward(winston, listing)
-            listing_model_access.approve_listing(winston, listing)
+            listing_model_access.create_listing(profile_ref['wsmith'], listing)
+            listing_model_access.submit_listing(profile_ref['wsmith'], listing)
+            listing_model_access.approve_listing_by_org_steward(profile_ref['wsmith'], listing)
+            listing_model_access.approve_listing(profile_ref['wsmith'], listing)
 
     ############################################################################
     #                           FrameIt
@@ -1060,15 +761,15 @@ def run():
             )
             listing.save()
             listing.contacts.add(rob_baratheon)
-            listing.owners.add(winston)
+            listing.owners.add(profile_ref['wsmith'])
             listing.categories.add(categories_ref['tools'])
             listing.categories.add(categories_ref['education'])
             listing.tags.add(demo)
 
-            listing_model_access.create_listing(winston, listing)
-            listing_model_access.submit_listing(winston, listing)
-            listing_model_access.approve_listing_by_org_steward(winston, listing)
-            listing_model_access.approve_listing(winston, listing)
+            listing_model_access.create_listing(profile_ref['wsmith'], listing)
+            listing_model_access.submit_listing(profile_ref['wsmith'], listing)
+            listing_model_access.approve_listing_by_org_steward(profile_ref['wsmith'], listing)
+            listing_model_access.approve_listing(profile_ref['wsmith'], listing)
 
     ############################################################################
     #                           Hatch Latch
@@ -1120,16 +821,16 @@ def run():
             )
             listing.save()
             listing.contacts.add(rob_baratheon)
-            listing.owners.add(winston)
+            listing.owners.add(profile_ref['wsmith'])
             listing.categories.add(categories_ref['tools'])
             listing.categories.add(categories_ref['education'])
             listing.categories.add(categories_ref['health_fitness'])
             listing.tags.add(demo)
 
-            listing_model_access.create_listing(winston, listing)
-            listing_model_access.submit_listing(winston, listing)
-            listing_model_access.approve_listing_by_org_steward(winston, listing)
-            listing_model_access.approve_listing(winston, listing)
+            listing_model_access.create_listing(profile_ref['wsmith'], listing)
+            listing_model_access.submit_listing(profile_ref['wsmith'], listing)
+            listing_model_access.approve_listing_by_org_steward(profile_ref['wsmith'], listing)
+            listing_model_access.approve_listing(profile_ref['wsmith'], listing)
 
             ############################################################################
             #                           Jot Spot
@@ -1177,17 +878,17 @@ def run():
             )
             listing.save()
             listing.contacts.add(rob_baratheon)
-            listing.owners.add(winston)
+            listing.owners.add(profile_ref['wsmith'])
             listing.categories.add(categories_ref['tools'])
             listing.categories.add(categories_ref['education'])
             listing.tags.add(demo)
 
-            listing_model_access.create_listing(winston, listing)
-            listing_model_access.submit_listing(winston, listing)
-            listing_model_access.approve_listing_by_org_steward(winston, listing)
-            listing_model_access.approve_listing(winston, listing)
+            listing_model_access.create_listing(profile_ref['wsmith'], listing)
+            listing_model_access.submit_listing(profile_ref['wsmith'], listing)
+            listing_model_access.approve_listing_by_org_steward(profile_ref['wsmith'], listing)
+            listing_model_access.approve_listing(profile_ref['wsmith'], listing)
 
-            listing_model_access.create_listing_review(charrington.user.username, listing, 4, text="I really like it")
+            listing_model_access.create_listing_review(profile_ref['charrington'].user.username, listing, 4, text="I really like it")
 
     ############################################################################
     #                           Location Lister
@@ -1240,17 +941,17 @@ def run():
             )
             listing.save()
             listing.contacts.add(rob_baratheon)
-            listing.owners.add(winston)
+            listing.owners.add(profile_ref['wsmith'])
             listing.categories.add(categories_ref['tools'])
             listing.categories.add(categories_ref['education'])
             listing.tags.add(demo)
 
-            listing_model_access.create_listing(winston, listing)
-            listing_model_access.submit_listing(winston, listing)
-            listing_model_access.approve_listing_by_org_steward(winston, listing)
-            listing_model_access.approve_listing(winston, listing)
+            listing_model_access.create_listing(profile_ref['wsmith'], listing)
+            listing_model_access.submit_listing(profile_ref['wsmith'], listing)
+            listing_model_access.approve_listing_by_org_steward(profile_ref['wsmith'], listing)
+            listing_model_access.approve_listing(profile_ref['wsmith'], listing)
 
-            listing_model_access.create_listing_review(charrington.user.username, listing, 4, text="I really like it")
+            listing_model_access.create_listing_review(profile_ref['charrington'].user.username, listing, 4, text="I really like it")
 
     ############################################################################
     #                           Location Viewer
@@ -1302,15 +1003,15 @@ def run():
             )
             listing.save()
             listing.contacts.add(rob_baratheon)
-            listing.owners.add(winston)
+            listing.owners.add(profile_ref['wsmith'])
             listing.categories.add(categories_ref['tools'])
             listing.categories.add(categories_ref['education'])
             listing.tags.add(demo)
 
-            listing_model_access.create_listing(winston, listing)
-            listing_model_access.submit_listing(winston, listing)
-            listing_model_access.approve_listing_by_org_steward(winston, listing)
-            listing_model_access.approve_listing(winston, listing)
+            listing_model_access.create_listing(profile_ref['wsmith'], listing)
+            listing_model_access.submit_listing(profile_ref['wsmith'], listing)
+            listing_model_access.approve_listing_by_org_steward(profile_ref['wsmith'], listing)
+            listing_model_access.approve_listing(profile_ref['wsmith'], listing)
 
     ############################################################################
     #                           Location Analyzer
@@ -1362,15 +1063,15 @@ def run():
             )
             listing.save()
             listing.contacts.add(rob_baratheon)
-            listing.owners.add(winston)
+            listing.owners.add(profile_ref['wsmith'])
             listing.categories.add(categories_ref['tools'])
             listing.categories.add(categories_ref['education'])
             listing.tags.add(demo)
 
-            listing_model_access.create_listing(winston, listing)
-            listing_model_access.submit_listing(winston, listing)
-            listing_model_access.approve_listing_by_org_steward(winston, listing)
-            listing_model_access.approve_listing(winston, listing)
+            listing_model_access.create_listing(profile_ref['wsmith'], listing)
+            listing_model_access.submit_listing(profile_ref['wsmith'], listing)
+            listing_model_access.approve_listing_by_org_steward(profile_ref['wsmith'], listing)
+            listing_model_access.approve_listing(profile_ref['wsmith'], listing)
 
     ############################################################################
     #                           Skybox
@@ -1424,18 +1125,18 @@ def run():
             listing.save()
             listing.contacts.add(rob_baratheon)
 
-            listing.owners.add(pmurt)
-            listing.owners.add(david)
+            listing.owners.add(profile_ref['pmurt'])
+            listing.owners.add(profile_ref['david'])
 
             listing.categories.add(categories_ref['tools'])
             listing.categories.add(categories_ref['education'])
 
             listing.tags.add(demo)
 
-            listing_model_access.create_listing(winston, listing)
-            listing_model_access.submit_listing(winston, listing)
-            listing_model_access.approve_listing_by_org_steward(winston, listing)
-            listing_model_access.approve_listing(winston, listing)
+            listing_model_access.create_listing(profile_ref['wsmith'], listing)
+            listing_model_access.submit_listing(profile_ref['wsmith'], listing)
+            listing_model_access.approve_listing_by_org_steward(profile_ref['wsmith'], listing)
+            listing_model_access.approve_listing(profile_ref['wsmith'], listing)
 
     ############################################################################
     #                           Library
