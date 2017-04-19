@@ -132,8 +132,8 @@ def run():
     #                           Contact Types
     ############################################################################
     with transaction.atomic():
-        civillian = models.ContactType(name='Civillian')
-        civillian.save()
+        Civilian = models.ContactType(name='Civilian')
+        Civilian.save()
 
         government = models.ContactType(name='Government')
         government.save()
@@ -313,7 +313,7 @@ def run():
     ############################################################################
     with transaction.atomic():
         osha = models.Contact(name='Osha', organization='House Stark',
-            contact_type=models.ContactType.objects.get(name='Civillian'),
+            contact_type=models.ContactType.objects.get(name='Civilian'),
             email='osha@stark.com', unsecure_phone='321-123-7894')
         osha.save()
 

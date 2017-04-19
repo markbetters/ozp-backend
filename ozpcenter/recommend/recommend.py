@@ -33,6 +33,7 @@ import time
 import msgpack
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Count
+from django.db import transaction
 
 from ozpcenter import models
 from ozpcenter.api.listing import model_access_es
@@ -344,6 +345,23 @@ class GraphCollaborativeFilteringBaseRecommender(Recommender):
                 self.add_listing_to_user_profile(profile_id, listing_id, score)
 
 
+# Method is decorated with @transaction.atomic to ensure all logic is executed in a single transaction
+@transaction.atomic
+def bulk_recommendations_saver(recommendation_entries):
+    # Loop over each store and invoke save() on each entry
+    for recommendation_entry in recommendation_entries:
+        target_profile = recommendation_entry['target_profile']
+        recommendation_data = recommendation_entry['recommendation_data']
+
+        try:
+            obj = models.RecommendationsEntry.objects.get(target_profile=target_profile)
+            obj.recommendation_data = recommendation_data
+            obj.save()
+        except models.RecommendationsEntry.DoesNotExist:
+            obj = models.RecommendationsEntry(target_profile=target_profile, recommendation_data=recommendation_data)
+            obj.save()
+
+
 class RecommenderDirectory(object):
     """
     Wrapper for all Recommenders
@@ -495,10 +513,15 @@ class RecommenderDirectory(object):
     def save_to_db(self):
         """
         This function is responsible for storing the recommendations into the database
+
+        Performance:
+            transaction.atomic() - 430 ms
+            Without Atomic and Batch - 1400 ms
         """
+        batch_list = []
+
         for profile_id in self.recommender_result_set:
             # print('*-*-*-*-'); import json; print(json.dumps(self.recommender_result_set[profile_id])); print('*-*-*-*-')
-
             profile = None
             try:
                 profile = models.Profile.objects.get(pk=profile_id)
@@ -507,7 +530,10 @@ class RecommenderDirectory(object):
 
             if profile:
                 # Clear Recommendations Entries before putting new ones.
-                models.RecommendationsEntry.objects.filter(target_profile=profile).delete()
+                recommendations_query = models.RecommendationsEntry.objects.filter(target_profile=profile)
+
+                if recommendations_query.count() > 1:
+                    recommendations_query.delete()
 
                 for current_recommender_friendly_name in self.recommender_result_set[profile_id]:
                     output_current_tuples = []
@@ -529,6 +555,12 @@ class RecommenderDirectory(object):
 
                     self.recommender_result_set[profile_id][current_recommender_friendly_name]['recommendations'] = output_current_tuples
 
-                recommendations_entry = models.RecommendationsEntry(target_profile=profile,
-                                                                    recommendation_data=msgpack.packb(self.recommender_result_set[profile_id]))
-                recommendations_entry.save()
+                batch_list.append({'target_profile': profile,
+                                   'recommendation_data': msgpack.packb(self.recommender_result_set[profile_id])})
+
+                if len(batch_list) >= 1000:
+                    bulk_recommendations_saver(batch_list)
+                    batch_list = []
+
+        if batch_list:
+            bulk_recommendations_saver(batch_list)

@@ -737,7 +737,7 @@ class ListingApiTest(APITestCase):
               "email": "test1@domain.com",
               "secure_phone": "240-544-8777",
               "contact_type": {
-                "name": "Civillian"
+                "name": "Civilian"
               }
             },
             {
@@ -745,7 +745,7 @@ class ListingApiTest(APITestCase):
               "email": "test2@domain.com",
               "secure_phone": "240-888-7477",
               "contact_type": {
-                "name": "Civillian"
+                "name": "Civilian"
               }
             }
           ],
@@ -807,7 +807,7 @@ class ListingApiTest(APITestCase):
             {
               "id": 5,
               "contact_type": {
-                "name": "Civillian"
+                "name": "Civilian"
               },
               "secure_phone": "240-888-7477",
               "unsecure_phone": None,
@@ -863,7 +863,7 @@ class ListingApiTest(APITestCase):
 
         contacts = response.data['contacts']
         contact_types = [i['contact_type']['name'] for i in contacts]
-        self.assertEqual(str(contact_types), str(['Civillian', 'Government']))
+        self.assertEqual(str(contact_types), str(['Civilian', 'Government']))
         self.assertEquals(self._validate_listing_map_keys(response.data), [])
 
     def test_update_listing_approval_status_deny_user(self):
