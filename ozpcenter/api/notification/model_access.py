@@ -6,6 +6,7 @@ import logging
 import pytz
 
 from django.db.models import Q
+from django.db import transaction
 
 from ozpcenter import errors
 
@@ -310,6 +311,14 @@ def get_profile_target_list(notification_type, group_target=None, entities=None)
     return query.all()
 
 
+# Method is decorated with @transaction.atomic to ensure all logic is executed in a single transaction
+@transaction.atomic
+def bulk_notifications_saver(notification_instances):
+    # Loop over each store and invoke save() on each entry
+    for notification_instance in notification_instances:
+        notification_instance.save()
+
+
 def create_notification(author_username=None,
                         expires_date=None,
                         message=None,
@@ -411,13 +420,24 @@ def create_notification(author_username=None,
         entities = [peer_profile]
 
     target_list = get_profile_target_list(notification_type, group_target=group_target, entities=entities)
+
+    bulk_notification_list = []
+
     for target_profile in target_list:
         notificationv2 = NotificationMailBox()
         notificationv2.target_profile = target_profile
         notificationv2.notification = notification
         # All the flags default to false
         notificationv2.emailed_status = False
-        notificationv2.save()
+
+        bulk_notification_list.append(notificationv2)
+
+        if len(bulk_notification_list) >= 2000:
+            bulk_notifications_saver(bulk_notification_list)
+            bulk_notification_list = []
+
+    if bulk_notification_list:
+        bulk_notifications_saver(bulk_notification_list)
 
     return notification
 
