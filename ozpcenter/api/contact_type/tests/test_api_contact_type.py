@@ -32,7 +32,7 @@ class ContactTypeApiTest(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         names = [i['name'] for i in response.data]
-        self.assertTrue('Civillian' in names)
+        self.assertTrue('Civilian' in names)
         self.assertTrue('Government' in names)
         self.assertTrue(len(names) > 2)
 
@@ -45,7 +45,7 @@ class ContactTypeApiTest(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         name = response.data['name']
-        self.assertEqual(name, 'Civillian')
+        self.assertEqual(name, 'Civilian')
 
     def test_create_contact_type(self):
         user = generic_model_access.get_profile('bigbrother').user
