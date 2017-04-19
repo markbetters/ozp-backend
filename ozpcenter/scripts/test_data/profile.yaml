@@ -2,7 +2,7 @@
     clearances: [UNCLASSIFIED, CONFIDENTIAL, SECRET, TOP SECRET]
     formal_accesses: [SIERRA, TANGO, GOLF, HOTEL]
     visas: [NOVEMBER]
-  bio: ''
+  bio: 'I make everyones life better'
   display_name: Big Brother
   dn: Big Brother bigbrother
   email: bigbrother@oceania.gov
@@ -14,7 +14,7 @@
     clearances: [UNCLASSIFIED, CONFIDENTIAL, SECRET, TOP SECRET]
     formal_accesses: [SIERRA, TANGO, GOLF, HOTEL]
     visas: [NOVEMBER]
-  bio: ''
+  bio: 'I also make everyones life better'
   display_name: Big Brother2
   dn: Big Brother 2 bigbrother2
   email: bigbrother2@oceania.gov
@@ -26,7 +26,7 @@
     clearances: [UNCLASSIFIED, CONFIDENTIAL, SECRET, TOP SECRET]
     formal_accesses: [SIERRA, TANGO, GOLF, HOTEL]
     visas: [DRS]
-  bio: ''
+  bio: 'I am Queen of Meereen, Queen of the Andals(, the Rhoynar) and the First Men, Lady Regnant of the Seven Kingdoms, Khaleesi of the Great Grass Sea, Mhysa, Breaker of Chains, the Unburnt, Mother of Dragons'
   display_name: Daenerys Targaryen
   dn: Daenerys Targaryen khaleesi
   email: khaleesi@dragonborn.gov
@@ -38,7 +38,7 @@
     clearances: [UNCLASSIFIED, CONFIDENTIAL, SECRET, TOP SECRET]
     formal_accesses: [SIERRA, TANGO]
     visas: [NOVEMBER]
-  bio: ''
+  bio: 'I work at the Ministry of Truth'
   display_name: Winston Smith
   dn: Winston Smith wsmith
   email: wsmith@oceania.gov
@@ -50,7 +50,7 @@
     clearances: [UNCLASSIFIED, CONFIDENTIAL, SECRET, TOP SECRET]
     formal_accesses: [SIERRA]
     visas: []
-  bio: ''
+  bio: 'An especially zealous propagandist'
   display_name: Julia Dixon
   dn: Julia Dixon jdixon
   email: julia@oceania.gov
@@ -62,7 +62,7 @@
     clearances: [UNCLASSIFIED, CONFIDENTIAL, SECRET, TOP SECRET]
     formal_accesses: [SIERRA, TANGO, GOLF, HOTEL]
     visas: [NOVEMBER]
-  bio: ''
+  bio: 'I will find you, winston and julia'
   display_name: O'brien
   dn: OBrien obrien
   email: obrien@oceania.gov
@@ -74,7 +74,7 @@
     clearances: [UNCLASSIFIED, CONFIDENTIAL, SECRET, TOP SECRET]
     formal_accesses: [SIERRA, TANGO, GOLF, HOTEL]
     visas: [NOVEMBER]
-  bio: ''
+  bio: 'Minister of Love'
   display_name: David
   dn: David david
   email: david@oceania.gov
@@ -86,7 +86,7 @@
     clearances: [UNCLASSIFIED, CONFIDENTIAL, SECRET]
     formal_accesses: []
     visas: [NOVEMBER]
-  bio: ''
+  bio: 'Nothing special'
   display_name: Aaronson
   dn: Aaronson aaronson
   email: aaronson@airstripone.com
@@ -98,7 +98,7 @@
     clearances: [UNCLASSIFIED, CONFIDENTIAL, SECRET]
     formal_accesses: []
     visas: [NOVEMBER]
-  bio: ''
+  bio: 'Nothing special 2'
   display_name: pmurt
   dn: dlanod pmurt
   email: pmurt@airstripone.com
@@ -110,7 +110,7 @@
     clearances: [UNCLASSIFIED, CONFIDENTIAL, SECRET]
     formal_accesses: []
     visas: [STE, RVR, PKI]
-  bio: ''
+  bio: 'Hold the door'
   display_name: Hodor
   dn: Hodor hodor
   email: hodor@hodor.com
@@ -122,7 +122,7 @@
     clearances: [UNCLASSIFIED, CONFIDENTIAL, SECRET]
     formal_accesses: []
     visas: [NOVEMBER]
-  bio: ''
+  bio: 'I am a normal person'
   display_name: Jones
   dn: Jones jones
   email: jones@airstripone.com
@@ -134,7 +134,7 @@
     clearances: [UNCLASSIFIED, CONFIDENTIAL, SECRET]
     formal_accesses: []
     visas: [NOVEMBER, PKI]
-  bio: ''
+  bio: 'I am a normal person also'
   display_name: Tammy
   dn: Tammy tammy
   email: tammy@airstripone.com
@@ -146,7 +146,7 @@
     clearances: [UNCLASSIFIED, CONFIDENTIAL, SECRET]
     formal_accesses: []
     visas: []
-  bio: ''
+  bio: 'I am a normal person'
   display_name: Rutherford
   dn: Rutherford rutherford
   email: rutherford@airstripone.com
@@ -158,7 +158,7 @@
     clearances: [UNCLASSIFIED, CONFIDENTIAL, SECRET]
     formal_accesses: []
     visas: [PKI]
-  bio: ''
+  bio: 'I am a cool normal person'
   display_name: Noah
   dn: Noah noah
   email: noah@airstripone.com
@@ -170,7 +170,7 @@
     clearances: [UNCLASSIFIED, CONFIDENTIAL, SECRET, TOP SECRET]
     formal_accesses: [SIERRA]
     visas: []
-  bio: ''
+  bio: 'I am too smart for my own good also'
   display_name: Syme
   dn: Syme syme
   email: syme@airstripone.com
@@ -182,7 +182,7 @@
     clearances: [UNCLASSIFIED, CONFIDENTIAL, SECRET, TOP SECRET]
     formal_accesses: [SIERRA]
     visas: [PKI]
-  bio: ''
+  bio: 'I am uneducated and loyal'
   display_name: Abe
   dn: Abe abe
   email: abe@airstripone.com
@@ -194,7 +194,7 @@
     clearances: [UNCLASSIFIED]
     formal_accesses: []
     visas: []
-  bio: ''
+  bio: 'I know nothing.'
   display_name: Tom Parsons
   dn: Tparsons tparsons
   email: tparsons@airstripone.com
@@ -206,7 +206,7 @@
     clearances: [UNCLASSIFIED]
     formal_accesses: []
     visas: [TWN, PKI]
-  bio: ''
+  bio: 'A member of the Thought Police'
   display_name: Jon Snow
   dn: Jonsnow jsnow
   email: jsnow@forthewatch.com
@@ -218,7 +218,7 @@
     clearances: [UNCLASSIFIED, CONFIDENTIAL, SECRET, TOP SECRET]
     formal_accesses: [SIERRA, TANGO, GOLF, HOTEL]
     visas: [NOVEMBER]
-  bio: ''
+  bio: 'A member of the Thought Police also'
   display_name: Charrington
   dn: Charrington charrington
   email: charrington@airstripone.com
@@ -230,7 +230,7 @@
     clearances: [UNCLASSIFIED, CONFIDENTIAL, SECRET, TOP SECRET]
     formal_accesses: [SIERRA, TANGO, GOLF, HOTEL]
     visas: [NOVEMBER, PKI]
-  bio: ''
+  bio: 'I am uneducated and loyal'
   display_name: Johnson
   dn: Johnson johnson
   email: johnson@airstripone.com
