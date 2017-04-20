@@ -77,9 +77,12 @@ dev: clean pre create_static
 # sudo apt-get install postgresql postgresql-contrib
 # sudo -i -u postgres
 # createuser ozp_user
+# psql -c 'ALTER USER ozp_user CREATEDB;'
 # psql -c "ALTER USER "ozp_user" WITH PASSWORD 'password';"
 # createdb ozp
 # psql -c 'GRANT ALL PRIVILEGES ON DATABASE ozp TO ozp_user;'
+
+# tail -f /var/log/postgresql/postgresql-9.3-main.log
 dev_psql: clean pre create_static
 	MAIN_DATABASE=psql python manage.py makemigrations ozpcenter
 	MAIN_DATABASE=psql python manage.py makemigrations ozpiwc

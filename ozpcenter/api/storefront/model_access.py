@@ -3,25 +3,255 @@ Storefront and Metadata Model Access
 """
 import logging
 
-import msgpack
 from django.db.models.functions import Lower
-from ozpcenter import models
-import ozpcenter.api.listing.serializers as listing_serializers
+from django.db import connection
+from django.forms.models import model_to_dict
+import msgpack
 
+import ozpcenter.api.listing.serializers as listing_serializers
+from ozpcenter import models
 from ozpcenter.pipe import pipes
 from ozpcenter.pipe import pipeline
 from ozpcenter.recommend import recommend_utils
-
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center.' + str(__name__))
 
 
-def get_storefront(username):
+def dictfetchall(cursor):
+    "Returns all rows from a cursor as a dict"
+    desc = cursor.description
+    return [
+        dict(zip([col[0] for col in desc], row))
+        for row in cursor.fetchall()
+    ]
+
+
+def get_user_listings(username):
+    """
+    Get User listings
+
+    Returns:
+        Python object of listings
+    """
+    mapping_dict = {}
+
+    cursor = connection.cursor()
+    cursor.execute("""
+        SELECT
+              ozpcenter_listing.id,
+              ozpcenter_listing.title,
+              ozpcenter_listing.approved_date,
+              ozpcenter_listing.edited_date,
+              ozpcenter_listing.description,
+              ozpcenter_listing.launch_url,
+              ozpcenter_listing.version_name,
+              ozpcenter_listing.unique_name,
+              ozpcenter_listing.what_is_new,
+              ozpcenter_listing.requirements,
+              ozpcenter_listing.description_short,
+              ozpcenter_listing.approval_status,
+              ozpcenter_listing.is_enabled,
+              ozpcenter_listing.is_featured,
+              ozpcenter_listing.avg_rate,
+              ozpcenter_listing.total_votes,
+              ozpcenter_listing.total_rate4,
+              ozpcenter_listing.total_rate5,
+              ozpcenter_listing.total_rate3,
+              ozpcenter_listing.total_rate2,
+              ozpcenter_listing.total_rate1,
+              ozpcenter_listing.total_reviews,
+              ozpcenter_listing.iframe_compatible,
+              ozpcenter_listing.security_marking,
+              ozpcenter_listing.is_private,
+              ozpcenter_agency.title,
+              ozpcenter_agency.short_name,
+              ozpcenter_listing.banner_icon_id,
+              ozpcenter_listing.current_rejection_id,
+              ozpcenter_listing.large_banner_icon_id,
+              ozpcenter_listing.large_icon_id,
+              ozpcenter_listing.last_activity_id,
+              ozpcenter_listing.listing_type_id,
+              ozpcenter_listing.required_listings_id,
+              ozpcenter_listing.small_icon_id,
+              ozpcenter_listing.is_deleted,
+              category_listing.category_id,
+              contact_listing.contact_id,
+              tag_listing.tag_id,
+              profile_listing.profile_id,
+              intent_listing.intent_id
+            FROM
+              ozpcenter_listing
+            LEFT JOIN ozpcenter_agency ON (ozpcenter_listing.id = ozpcenter_listing.agency_id)
+            LEFT JOIN category_listing ON (category_listing.listing_id = ozpcenter_listing.id)
+            LEFT JOIN contact_listing ON (contact_listing.listing_id = ozpcenter_listing.id)
+            LEFT JOIN tag_listing ON (tag_listing.listing_id = ozpcenter_listing.id)
+            LEFT JOIN profile_listing ON (profile_listing.listing_id = ozpcenter_listing.id)
+            LEFT JOIN intent_listing ON ( intent_listing.listing_id = ozpcenter_listing.id);
+          """)
+    rows = dictfetchall(cursor)
+
+    categories_set = set()
+    tags_set = set()
+    contacts_set = set()
+    profile_set = set()
+    intents_set = set()
+
+    for row in rows:
+        if row['id'] not in mapping_dict:
+            mapping_dict[row['id']] = {
+                "is_enabled": row['is_enabled'],
+                "required_listings_id": row['required_listings_id'],
+                "is_private": row['is_private'],
+                "banner_icon_id": row['banner_icon_id'],
+                "large_banner_icon_id": row['large_banner_icon_id'],
+                "total_rate2": row['total_rate2'],
+                "id": row['id'],
+                "avg_rate": row['avg_rate'],
+                "unique_name": row['unique_name'],
+                "short_name": row['short_name'],
+                "approved_date": row['approved_date'],
+                "total_rate5": row['total_rate5'],
+                "requirements": row['requirements'],
+                "iframe_compatible": row['iframe_compatible'],
+                "last_activity_id": row['last_activity_id'],
+                "total_rate4": row['total_rate4'],
+                "total_rate3": row['total_rate3'],
+                "what_is_new": row['what_is_new'],
+                "total_rate1": row['total_rate1'],
+                "is_deleted": row['is_deleted'],
+                "security_marking": row['security_marking'],
+                "version_name": row['version_name'],
+                "approval_status": row['approval_status'],
+                "current_rejection_id": row['current_rejection_id'],
+                "is_featured": row['is_featured'],
+                "title": row['title'],
+                "description_short": row['description_short'],
+                "total_reviews": row['total_reviews'],
+                "small_icon_id": row['small_icon_id'],
+                "listing_type_id": row['listing_type_id'],
+                "launch_url": row['launch_url'],
+                "large_icon_id": row['large_icon_id'],
+                "edited_date": row['edited_date'],
+                "description": row['description'],
+                "total_votes": row['total_votes'],
+            }
+
+            # Many to Many
+            if row['category_id']:
+                mapping_dict[row['id']]['categories'] = {row['category_id']: None}
+                categories_set.add(row['category_id'])
+            else:
+                mapping_dict[row['id']]['categories'] = {}
+
+            if row['tag_id']:
+                mapping_dict[row['id']]['tags'] = {row['tag_id']: None}
+                tags_set.add(row['tag_id'])
+            else:
+                mapping_dict[row['id']]['tags'] = {}
+
+            if row['contact_id']:
+                mapping_dict[row['id']]['contacts'] = {row['contact_id']: None}
+                contacts_set.add(row['contact_id'])
+            else:
+                mapping_dict[row['id']]['contacts'] = {}
+
+            if row['profile_id']:
+                mapping_dict[row['id']]['owners'] = {row['profile_id']: None}
+                profile_set.add(row['profile_id'])
+            else:
+                mapping_dict[row['id']]['owners'] = {}
+
+            if row['intent_id']:
+                mapping_dict[row['id']]['intents'] = {row['intent_id']: None}
+                intents_set.add(row['intent_id'])
+            else:
+                mapping_dict[row['id']]['intents'] = {}
+
+        else:
+            if row['category_id']:
+                if row['category_id'] not in mapping_dict[row['id']]['categories']:
+                    mapping_dict[row['id']]['categories'][row['category_id']] = None
+                    categories_set.add(row['category_id'])
+
+            if row['tag_id']:
+                if row['tag_id'] not in mapping_dict[row['id']]['tags']:
+                    mapping_dict[row['id']]['tags'][row['tag_id']] = None
+                    tags_set.add(row['tag_id'])
+
+            if row['contact_id']:
+                if row['contact_id'] not in mapping_dict[row['id']]['contacts']:
+                    mapping_dict[row['id']]['contacts'][row['contact_id']] = None
+                    contacts_set.add(row['contact_id'])
+
+            if row['profile_id']:
+                if row['profile_id'] not in mapping_dict[row['id']]['owners']:
+                    mapping_dict[row['id']]['owners'][row['profile_id']] = None
+                    profile_set.add(row['profile_id'])
+
+            if row['intent_id']:
+                if row['intent_id'] not in mapping_dict[row['id']]['intents']:
+                    mapping_dict[row['id']]['intents'][row['intent_id']] = None
+                    intents_set.add(row['intent_id'])
+
+    profiles = {}
+    for profile in models.Profile.objects.filter(id__in=profile_set).all():
+        profiles[profile.id] = {'id': profile.id, 'display_name': profile.display_name}
+
+    tags = {}
+    for tag_instance in models.Tag.objects.filter(id__in=tags_set).all():
+        tags[tag_instance.id] = {'name': tag_instance.name}
+
+    categories = {}
+    for category_instance in models.Category.objects.filter(id__in=categories_set).all():
+        categories[category_instance.id] = {'title': category_instance.title,
+                                      'description': category_instance.description}
+
+    intents = {}
+    for intent_instance in models.Intent.objects.filter(id__in=intents_set).all():
+        intents[intent_instance.id] = {'action': intent_instance.action}
+
+    contacts = {}
+    for contact_instance in models.Contact.objects.filter(id__in=contacts_set).all():
+        contacts[contact_instance.id] = {'id': contact_instance.id,
+                                         'secure_phone': contact_instance.secure_phone,
+                                         'unsecure_phone': contact_instance.unsecure_phone,
+                                         'email': contact_instance.email,
+                                         'name': contact_instance.name,
+                                         'organization': contact_instance.organization,
+                                         # 'contact_type': contact_instance.contact_type.id  # JOIN
+                                         }
+
+    print(categories_set)
+    print(categories)
+    for profile_key in mapping_dict:
+
+        profile_map = mapping_dict[profile_key]
+        print(profile_map['categories'])
+        profile_map['owners'] = [profiles[p_key] for p_key in profile_map['owners']]
+        profile_map['tags'] = [tags[p_key] for p_key in profile_map['tags']]
+        profile_map['categories'] = [categories[p_key] for p_key in profile_map['categories']]
+        profile_map['contacts'] = [contacts[p_key] for p_key in profile_map['contacts']]
+        profile_map['intents'] = [intents[p_key] for p_key in profile_map['intents']]
+
+    return list(mapping_dict.values())
+
+    featured_listings_raw = models.Listing.objects.for_user_organization_minus_security_markings(
+        username).filter(
+            is_featured=True,
+            approval_status=models.Listing.APPROVED,
+            is_enabled=True,
+            is_deleted=False).all()
+    featured_listings_raw = listing_serializers.ListingSerializer.setup_eager_loading(featured_listings_raw)
+    return [model_to_dict(listing) for listing in featured_listings_raw]
+
+
+def get_storefront(username, pre_fetch=False):
     """
     Returns data for /storefront api invocation including:
-        * featured listings (max=12?)
-        * recent (new) listings (max=24?)
-        * most popular listings (max=36?)
+        * recommended listings (max=10)
+        * featured listings (max=12)
+        * recent (new) listings (max=24)
+        * most popular listings (max=36)
 
     NOTE: think about adding Bookmark status to this later on
 
@@ -30,6 +260,7 @@ def get_storefront(username):
 
     Returns:
         {
+            'recommended': [Listing],
             'featured': [Listing],
             'recent': [Listing],
             'most_popular': [Listing]
@@ -71,10 +302,13 @@ def get_storefront(username):
                                                                                                                               is_enabled=True,
                                                                                                                               is_deleted=False).all()
 
-        recommended_listings_objects = [recommendations_listing for recommendations_listing in recommended_listings_queryset]
+        recommended_listings_raw = listing_serializers.ListingSerializer.setup_eager_loading(recommended_listings_queryset)
+
+        if pre_fetch:
+            recommended_listings_raw = [recommendations_listing for recommendations_listing in recommended_listings_raw]
 
         # Post security_marking check - lazy loading
-        recommended_listings = pipeline.Pipeline(recommend_utils.ListIterator(recommended_listings_objects),
+        recommended_listings = pipeline.Pipeline(recommend_utils.ListIterator([recommendations_listing for recommendations_listing in recommended_listings_raw]),
                                           [pipes.ListingPostSecurityMarkingCheckPipe(username),
                                            pipes.LimitPipe(10)]).to_list()
 
@@ -86,7 +320,8 @@ def get_storefront(username):
                 is_enabled=True,
                 is_deleted=False)
 
-        featured_listings_raw = listing_serializers.ListingSerializer.setup_eager_loading(featured_listings_raw)
+        if pre_fetch:
+            featured_listings_raw = listing_serializers.ListingSerializer.setup_eager_loading(featured_listings_raw)
 
         featured_listings = pipeline.Pipeline(recommend_utils.ListIterator([listing for listing in featured_listings_raw]),
                                           [pipes.ListingPostSecurityMarkingCheckPipe(username),
@@ -99,7 +334,8 @@ def get_storefront(username):
             is_enabled=True,
             is_deleted=False)
 
-        recent_listings_raw = listing_serializers.ListingSerializer.setup_eager_loading(recent_listings_raw)
+        if pre_fetch:
+            recent_listings_raw = listing_serializers.ListingSerializer.setup_eager_loading(recent_listings_raw)
 
         recent_listings = pipeline.Pipeline(recommend_utils.ListIterator([listing for listing in recent_listings_raw]),
                                           [pipes.ListingPostSecurityMarkingCheckPipe(username),
@@ -112,7 +348,8 @@ def get_storefront(username):
                 is_enabled=True,
                 is_deleted=False).order_by('-avg_rate', '-total_reviews')
 
-        most_popular_listings_raw = listing_serializers.ListingSerializer.setup_eager_loading(most_popular_listings_raw)
+        if pre_fetch:
+            most_popular_listings_raw = listing_serializers.ListingSerializer.setup_eager_loading(most_popular_listings_raw)
 
         most_popular_listings = pipeline.Pipeline(recommend_utils.ListIterator([listing for listing in most_popular_listings_raw]),
                                           [pipes.ListingPostSecurityMarkingCheckPipe(username),

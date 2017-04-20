@@ -54,7 +54,9 @@ def StorefrontView(request):
     ---
     serializer: ozpcenter.api.storefront.serializers.StorefrontSerializer
     """
-    data = model_access.get_storefront(request.user)
+    # return Response(model_access.get_user_listings(request.user))
+
+    data = model_access.get_storefront(request.user, True)
     serializer = serializers.StorefrontSerializer(data,
         context={'request': request})
 

@@ -261,7 +261,7 @@ def run():
         profile_data = None
         with open(os.path.join(TEST_DATA_PATH, 'profile.yaml'), 'r') as stream:
             try:
-                profile_data= yaml.load(stream)
+                profile_data = yaml.load(stream)
             except yaml.YAMLError as exc:
                 print(exc)
 
