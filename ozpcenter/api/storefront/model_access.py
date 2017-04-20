@@ -37,56 +37,102 @@ def get_user_listings(username):
 
     cursor = connection.cursor()
     cursor.execute("""
-        SELECT
-              ozpcenter_listing.id,
-              ozpcenter_listing.title,
-              ozpcenter_listing.approved_date,
-              ozpcenter_listing.edited_date,
-              ozpcenter_listing.description,
-              ozpcenter_listing.launch_url,
-              ozpcenter_listing.version_name,
-              ozpcenter_listing.unique_name,
-              ozpcenter_listing.what_is_new,
-              ozpcenter_listing.requirements,
-              ozpcenter_listing.description_short,
-              ozpcenter_listing.approval_status,
-              ozpcenter_listing.is_enabled,
-              ozpcenter_listing.is_featured,
-              ozpcenter_listing.avg_rate,
-              ozpcenter_listing.total_votes,
-              ozpcenter_listing.total_rate4,
-              ozpcenter_listing.total_rate5,
-              ozpcenter_listing.total_rate3,
-              ozpcenter_listing.total_rate2,
-              ozpcenter_listing.total_rate1,
-              ozpcenter_listing.total_reviews,
-              ozpcenter_listing.iframe_compatible,
-              ozpcenter_listing.security_marking,
-              ozpcenter_listing.is_private,
-              ozpcenter_agency.title,
-              ozpcenter_agency.short_name,
-              ozpcenter_listing.banner_icon_id,
-              ozpcenter_listing.current_rejection_id,
-              ozpcenter_listing.large_banner_icon_id,
-              ozpcenter_listing.large_icon_id,
-              ozpcenter_listing.last_activity_id,
-              ozpcenter_listing.listing_type_id,
-              ozpcenter_listing.required_listings_id,
-              ozpcenter_listing.small_icon_id,
-              ozpcenter_listing.is_deleted,
-              category_listing.category_id,
-              contact_listing.contact_id,
-              tag_listing.tag_id,
-              profile_listing.profile_id,
-              intent_listing.intent_id
-            FROM
-              ozpcenter_listing
-            LEFT JOIN ozpcenter_agency ON (ozpcenter_listing.id = ozpcenter_listing.agency_id)
-            LEFT JOIN category_listing ON (category_listing.listing_id = ozpcenter_listing.id)
-            LEFT JOIN contact_listing ON (contact_listing.listing_id = ozpcenter_listing.id)
-            LEFT JOIN tag_listing ON (tag_listing.listing_id = ozpcenter_listing.id)
-            LEFT JOIN profile_listing ON (profile_listing.listing_id = ozpcenter_listing.id)
-            LEFT JOIN intent_listing ON ( intent_listing.listing_id = ozpcenter_listing.id);
+SELECT
+  ozpcenter_listing.id,
+  ozpcenter_listing.title,
+  ozpcenter_listing.approved_date,
+  ozpcenter_listing.edited_date,
+  ozpcenter_listing.description,
+  ozpcenter_listing.launch_url,
+  ozpcenter_listing.version_name,
+  ozpcenter_listing.unique_name,
+  ozpcenter_listing.what_is_new,
+  ozpcenter_listing.requirements,
+  ozpcenter_listing.description_short,
+  ozpcenter_listing.approval_status,
+  ozpcenter_listing.is_enabled,
+  ozpcenter_listing.is_featured,
+  ozpcenter_listing.avg_rate,
+  ozpcenter_listing.total_votes,
+  ozpcenter_listing.total_rate4,
+  ozpcenter_listing.total_rate5,
+  ozpcenter_listing.total_rate3,
+  ozpcenter_listing.total_rate2,
+  ozpcenter_listing.total_rate1,
+  ozpcenter_listing.total_reviews,
+  ozpcenter_listing.iframe_compatible,
+  ozpcenter_listing.security_marking,
+  ozpcenter_listing.is_private,
+  ozpcenter_listing.current_rejection_id,
+  ozpcenter_listing.last_activity_id,
+  ozpcenter_listing.listing_type_id,
+  ozpcenter_listing.required_listings_id,
+
+  ozpcenter_listing.is_deleted,
+
+  /* One to Many */
+  ozpcenter_listing.listing_type_id,
+  ozpcenter_listingtype.title listing_type_title,
+
+  /* One to Many Images*/
+  ozpcenter_listing.agency_id agency_id,
+  ozpcenter_agency.title agency_title,
+  ozpcenter_agency.short_name agency_short_name,
+
+  ozpcenter_listing.small_icon_id,
+  small_image.security_marking small_image_security_marking,
+
+  ozpcenter_listing.large_icon_id,
+  large_icon.security_marking large_icon_security_marking,
+
+  ozpcenter_listing.banner_icon_id,
+  banner_icon.security_marking banner_icon_security_marking,
+
+  ozpcenter_listing.large_banner_icon_id,
+  large_banner_icon.security_marking large_banner_icon_security_marking,
+
+  /* Many to Many */
+  category_listing.category_id,
+  ozpcenter_category.title,
+  ozpcenter_category.description,
+
+  contact_listing.contact_id contact_id,
+  ozpcenter_contact.contact_type_id contact_type_id, /* Check to see if contact_id and contact_type_id is correct*/
+  ozpcenter_contacttype.name,
+  ozpcenter_contact.secure_phone contact_secure_phone,
+  ozpcenter_contact.unsecure_phone contact_unsecure_phone,
+  ozpcenter_contact.email contact_email,
+  ozpcenter_contact.name contact_name,
+  ozpcenter_contact.organization contact_organization,
+
+  tag_listing.tag_id,
+  ozpcenter_tag.name,
+
+  owners.profile_id,
+  intent_listing.intent_id
+FROM
+  ozpcenter_listing
+/* One to Many Joins */
+JOIN ozpcenter_agency ON (ozpcenter_listing.agency_id = ozpcenter_agency.id)
+JOIN ozpcenter_listingtype ON (ozpcenter_listingtype.id = ozpcenter_listing.listing_type_id)
+JOIN ozpcenter_image small_image ON (small_image.id = ozpcenter_listing.small_icon_id)
+JOIN ozpcenter_image large_icon ON (large_icon.id = ozpcenter_listing.small_icon_id)
+JOIN ozpcenter_image banner_icon ON (banner_icon.id = ozpcenter_listing.small_icon_id)
+JOIN ozpcenter_image large_banner_icon ON (large_banner_icon.id = ozpcenter_listing.small_icon_id)
+/* Many to Many Joins */
+LEFT JOIN category_listing ON (category_listing.listing_id = ozpcenter_listing.id)
+JOIN ozpcenter_category on (category_listing.category_id = ozpcenter_category.id)
+
+LEFT JOIN contact_listing ON (contact_listing.listing_id = ozpcenter_listing.id)
+JOIN ozpcenter_contact on (contact_listing.contact_id = ozpcenter_contact.id)
+JOIN ozpcenter_contacttype on (ozpcenter_contact.contact_type_id = ozpcenter_contacttype.id)
+
+LEFT JOIN tag_listing ON (tag_listing.listing_id = ozpcenter_listing.id)
+JOIN ozpcenter_tag ON (tag_listing.tag_id = ozpcenter_tag.id)
+
+LEFT JOIN profile_listing owners ON (owners.listing_id = ozpcenter_listing.id)
+
+LEFT JOIN intent_listing ON ( intent_listing.listing_id = ozpcenter_listing.id);
           """)
     rows = dictfetchall(cursor)
 
