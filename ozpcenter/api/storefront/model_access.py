@@ -1,5 +1,32 @@
 """
 Storefront and Metadata Model Access
+
+Query to get user roles and orgs
+SELECT
+  ozpcenter_profile.id profile_id,
+  ozpcenter_profile.display_name profile_display_name,
+  auth_user.username profile_username,
+  auth_group.name profile_group_name,
+  CASE auth_group.name
+    WHEN 'APPS_MALL_STEWARD' THEN 1
+    WHEN 'ORG_STEWARD' THEN 2
+    WHEN 'USER' THEN 3
+  END role_priority,
+  agency.title agency_title,
+  steward_agency.title steward_agency
+
+FROM ozpcenter_profile
+  JOIN auth_user ON (ozpcenter_profile.user_id = auth_user.id)
+  JOIN auth_user_groups ON (auth_user_groups.user_id = auth_user.id)
+  JOIN auth_group ON (auth_user_groups.group_id = auth_group.id)
+
+  LEFT JOIN agency_profile ON (ozpcenter_profile.id = agency_profile.profile_id)
+  LEFT JOIN ozpcenter_agency agency ON (agency_profile.agency_id = agency.id)
+
+  LEFT JOIN stewarded_agency_profile ON (ozpcenter_profile.id = stewarded_agency_profile.profile_id)
+  LEFT JOIN ozpcenter_agency steward_agency ON (stewarded_agency_profile.agency_id = steward_agency.id)
+
+ORDER BY profile_username, role_priority
 """
 import logging
 
@@ -24,31 +51,6 @@ def dictfetchall(cursor):
         dict(zip([col[0] for col in desc], row))
         for row in cursor.fetchall()
     ]
-
-# SELECT
-#   ozpcenter_profile.id profile_id,
-#   ozpcenter_profile.display_name profile_display_name,
-#   auth_user.username profile_username,
-#   auth_group.name profile_group_name,
-#   CASE auth_group.name
-#     WHEN 'APPS_MALL_STEWARD' THEN 1
-#     WHEN 'ORG_STEWARD' THEN 2
-#     WHEN 'USER' THEN 3
-#   END role_priority,
-#   agency.title agency_title,
-#   steward_agency.title steward_agency
-#
-# FROM ozpcenter_profile
-#   JOIN auth_user ON (ozpcenter_profile.user_id = auth_user.id)
-#   JOIN auth_user_groups ON (auth_user_groups.user_id = auth_user.id)
-#   JOIN auth_group ON (auth_user_groups.group_id = auth_group.id)
-#
-#   LEFT JOIN agency_profile ON (ozpcenter_profile.id = agency_profile.profile_id)
-#   LEFT JOIN ozpcenter_agency agency ON (agency_profile.agency_id = agency.id)
-#
-#   LEFT JOIN stewarded_agency_profile ON (ozpcenter_profile.id = stewarded_agency_profile.profile_id)
-#   LEFT JOIN ozpcenter_agency steward_agency ON (stewarded_agency_profile.agency_id = steward_agency.id)
-# ORDER BY role_priority
 
 
 def get_sql_statement():
@@ -150,7 +152,7 @@ SELECT DISTINCT
   ozpcenter_intent.action intent_action,
 
   /* Bookmarks */
-  lib_entries.count bookmark_count
+  lib_entries.bookmark_count
 FROM
   ozpcenter_listing
 /* One to Many Joins */
@@ -185,7 +187,7 @@ LEFT JOIN intent_listing ON (intent_listing.listing_id = ozpcenter_listing.id)
 LEFT JOIN ozpcenter_intent ON (intent_listing.intent_id = ozpcenter_intent.id)
 
 /* Bookmarks */
-LEFT JOIN (SELECT ozpcenter_applicationlibraryentry.listing_id, count(ozpcenter_applicationlibraryentry.listing_id)
+LEFT JOIN (SELECT ozpcenter_applicationlibraryentry.listing_id, count(ozpcenter_applicationlibraryentry.listing_id) bookmark_count
            FROM ozpcenter_applicationlibraryentry
            GROUP BY ozpcenter_applicationlibraryentry.listing_id) lib_entries ON (lib_entries.listing_id = ozpcenter_listing.id)
 /*
@@ -199,7 +201,7 @@ ORDER BY ozpcenter_listing.approved_date DESC;
     return sql_statement
 
 
-def get_user_listings(username):
+def get_user_listings(username, exclude_orgs=[]):
     """
     Get User listings
 
@@ -222,23 +224,29 @@ def get_user_listings(username):
     for row in rows:
         if row['id'] not in mapping_dict:
             mapping_dict[row['id']] = {
-                "is_enabled": row['is_enabled'],
-                "required_listings_id": row['required_listings_id'],
-                "is_private": row['is_private'],
-                "total_rate2": row['total_rate2'],
                 "id": row['id'],
-                "avg_rate": row['avg_rate'],
                 "unique_name": row['unique_name'],
+                "is_enabled": row['is_enabled'],
+                "is_private": row['is_private'],
+
+                "required_listings_id": row['required_listings_id'],
+
+                "total_rate1": row['total_rate1'],
+                "total_rate2": row['total_rate2'],
+                "total_rate3": row['total_rate3'],
+                "total_rate4": row['total_rate4'],
+                "total_rate5": row['total_rate5'],
+                "avg_rate": row['avg_rate'],
+                "total_reviews": row['total_reviews'],
+                "total_votes": row['total_votes'],
 
                 "approved_date": row['approved_date'],
-                "total_rate5": row['total_rate5'],
+
                 "requirements": row['requirements'],
                 "iframe_compatible": row['iframe_compatible'],
-                "last_activity_id": row['last_activity_id'],
-                "total_rate4": row['total_rate4'],
-                "total_rate3": row['total_rate3'],
+
                 "what_is_new": row['what_is_new'],
-                "total_rate1": row['total_rate1'],
+
                 "is_deleted": row['is_deleted'],
                 "security_marking": row['security_marking'],
                 "version_name": row['version_name'],
@@ -247,28 +255,42 @@ def get_user_listings(username):
                 "is_featured": row['is_featured'],
                 "title": row['title'],
                 "description_short": row['description_short'],
-                "total_reviews": row['total_reviews'],
-                "listing_type_id": row['listing_type_id'],
+
+
                 "launch_url": row['launch_url'],
                 "edited_date": row['edited_date'],
                 "description": row['description'],
-                "total_votes": row['total_votes'],
+
                 # One to One
+                "listing_type": {"title": row['listing_type_title']},
+
                 "agency": {'title': row['agency_title'],
                            'short_name': row['agency_short_name']},
+
                 "small_icon": {"id": row['small_icon_id'],
-                               'url': None,
+                               'url': 'TODO: GET URL',
                                "security_marking": row['small_icon_security_marking']},
+
                 "large_icon": {"id": row['large_icon_id'],
-                               'url': None,
+                               'url': 'TODO: GET URL',
                                "security_marking": row['large_icon_security_marking']},
+
                 "banner_icon": {"id": row['banner_icon_id'],
-                                'url': None,
+                                'url': 'TODO: GET URL',
                                 "security_marking": row['banner_icon_security_marking']},
+
                 "large_banner_icon": {"id": row['large_banner_icon_id'],
-                                      'url': None,
-                                      "security_marking": row['large_banner_icon_security_marking']}
+                                      'url': 'TODO: GET URL',
+                                      "security_marking": row['large_banner_icon_security_marking']},
+
+                "last_activity_id": row['last_activity_id']
+
             }
+
+            if row['bookmark_count']:
+                mapping_dict[row['id']]['is_bookmarked'] = True
+            else:
+                mapping_dict[row['id']]['is_bookmarked'] = False
 
             # Many to Many
             if row['category_id']:
@@ -354,7 +376,121 @@ def get_user_listings(username):
         profile_map['contacts'] = [profile_map['contacts'][p_key] for p_key in profile_map['contacts']]
         profile_map['intents'] = [profile_map['intents'][p_key] for p_key in profile_map['intents']]
 
-    return list(mapping_dict.values())
+    output_list = []
+
+    for listing_id in mapping_dict:
+        listing_values = mapping_dict[listing_id]
+
+        if listing_values['is_private'] is True:
+            if listing_values['agency']['title'] not in exclude_orgs:
+                output_list.append(listing_values)
+        else:
+            output_list.append(listing_values)
+
+    return output_list
+
+
+def get_recommendation_listing_ids(profile_instance):
+    # Get Recommended Listings for owner
+    target_profile_recommended_entry = models.RecommendationsEntry.objects.filter(target_profile=profile_instance).first()  # Get
+
+    recommended_entry_data = {}
+    if target_profile_recommended_entry:
+        recommendation_data = target_profile_recommended_entry.recommendation_data
+        if recommendation_data:
+            recommended_entry_data = msgpack.unpackb(recommendation_data)
+
+    recommendation_combined_dict = {'profile': {}}
+
+    for recommender_friendly_name in recommended_entry_data:
+        recommender_name_data = recommended_entry_data[recommender_friendly_name]
+        # print(recommender_name_data)
+        recommender_name_weight = recommender_name_data[b'weight']
+        recommender_name_recommendations = recommender_name_data[b'recommendations']
+
+        for recommendation_tuple in recommender_name_recommendations:
+            current_listing_id = recommendation_tuple[0]
+            current_listing_score = recommendation_tuple[1]
+
+            if current_listing_id in recommendation_combined_dict['profile']:
+                recommendation_combined_dict['profile'][current_listing_id] = recommendation_combined_dict['profile'][current_listing_id] + (current_listing_score * recommender_name_weight)
+            else:
+                recommendation_combined_dict['profile'][current_listing_id] = current_listing_score * recommender_name_weight
+
+    sorted_recommendations_combined_dict = recommend_utils.get_top_n_score(recommendation_combined_dict, 40)
+    listing_ids_list = [entry[0] for entry in sorted_recommendations_combined_dict['profile']]
+    return listing_ids_list
+
+
+def get_storefront_new(username):
+    """
+    Returns data for /storefront api invocation including:
+        * recommended listings (max=10)
+        * featured listings (max=12)
+        * recent (new) listings (max=24)
+        * most popular listings (max=36)
+
+    Args:
+        username
+
+    Returns:
+        {
+            'recommended': [Listing],
+            'featured': [Listing],
+            'recent': [Listing],
+            'most_popular': [Listing]
+        }
+
+
+    """
+    profile = models.Profile.objects.get(user__username=username)
+
+    if profile.highest_role() == 'APPS_MALL_STEWARD':
+        exclude_orgs = []
+    elif profile.highest_role() == 'ORG_STEWARD':
+        user_orgs = profile.stewarded_organizations.all()
+        user_orgs = [i.title for i in user_orgs]
+        exclude_orgs = [agency.title for agency in models.Agency.objects.exclude(title__in=user_orgs)]
+    else:
+        user_orgs = profile.organizations.all()
+        user_orgs = [i.title for i in user_orgs]
+        exclude_orgs = [agency.title for agency in models.Agency.objects.exclude(title__in=user_orgs)]
+
+    current_listings = get_user_listings(username, exclude_orgs)
+
+    # Get Recommended Listings for owner
+    listing_ids_list = set(get_recommendation_listing_ids(profile))
+
+    recommended_listings_raw = []
+    for current_listing in current_listings:
+        if current_listing['id'] in listing_ids_list:
+            recommended_listings_raw.append(current_listing)
+
+    recommended_listings = pipeline.Pipeline(recommend_utils.ListIterator(recommended_listings_raw),
+                                      [pipes.ListingDictPostSecurityMarkingCheckPipe(username),
+                                       pipes.LimitPipe(10)]).to_list()
+
+    # Get Featured Listings
+    featured_listings = pipeline.Pipeline(recommend_utils.ListIterator(current_listings),
+                                      [pipes.ListingDictPostSecurityMarkingCheckPipe(username, featured=True),
+                                       pipes.LimitPipe(12)]).to_list()
+    # Get Recent Listings
+    recent_listings = pipeline.Pipeline(recommend_utils.ListIterator(current_listings),
+                                      [pipes.ListingDictPostSecurityMarkingCheckPipe(username),
+                                       pipes.LimitPipe(24)]).to_list()
+
+    most_popular_listings = pipeline.Pipeline(recommend_utils.ListIterator(sorted(current_listings, key=lambda k: (k['avg_rate'], ['total_reviews']), reverse=True)),
+                                      [pipes.ListingDictPostSecurityMarkingCheckPipe(username),
+                                       pipes.LimitPipe(36)]).to_list()
+
+    data = {
+        'recommended': recommended_listings,
+        'featured': featured_listings,
+        'recent': recent_listings,
+        'most_popular': most_popular_listings
+    }
+
+    return data
 
 
 def get_storefront(username, pre_fetch=False):
@@ -380,35 +516,7 @@ def get_storefront(username, pre_fetch=False):
     """
     profile = models.Profile.objects.get(user__username=username)
     try:
-        # Get Recommended Listings for owner
-        target_profile_recommended_entry = models.RecommendationsEntry.objects.filter(target_profile=profile).first()  # Get
-
-        recommended_entry_data = {}
-        if target_profile_recommended_entry:
-            recommendation_data = target_profile_recommended_entry.recommendation_data
-            if recommendation_data:
-                recommended_entry_data = msgpack.unpackb(recommendation_data)
-
-        recommendation_combined_dict = {'profile': {}}
-
-        for recommender_friendly_name in recommended_entry_data:
-            recommender_name_data = recommended_entry_data[recommender_friendly_name]
-            # print(recommender_name_data)
-            recommender_name_weight = recommender_name_data[b'weight']
-            recommender_name_recommendations = recommender_name_data[b'recommendations']
-
-            for recommendation_tuple in recommender_name_recommendations:
-                current_listing_id = recommendation_tuple[0]
-                current_listing_score = recommendation_tuple[1]
-
-                if current_listing_id in recommendation_combined_dict['profile']:
-                    recommendation_combined_dict['profile'][current_listing_id] = recommendation_combined_dict['profile'][current_listing_id] + (current_listing_score * recommender_name_weight)
-                else:
-                    recommendation_combined_dict['profile'][current_listing_id] = current_listing_score * recommender_name_weight
-
-        sorted_recommendations_combined_dict = recommend_utils.get_top_n_score(recommendation_combined_dict, 40)
-        listing_ids_list = [entry[0] for entry in sorted_recommendations_combined_dict['profile']]
-
+        listing_ids_list = get_recommendation_listing_ids(profile)
         recommended_listings_queryset = models.Listing.objects.for_user_organization_minus_security_markings(username).filter(pk__in=listing_ids_list,
                                                                                                                               approval_status=models.Listing.APPROVED,
                                                                                                                               is_enabled=True,

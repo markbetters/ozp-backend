@@ -268,6 +268,32 @@ class ListingPostSecurityMarkingCheckPipe(Pipe):
                 return listing
 
 
+class ListingDictPostSecurityMarkingCheckPipe(Pipe):
+
+    def __init__(self, username, featured=False):
+        super().__init__()
+        self.username = username
+        self.featured = featured
+
+    def process_next_start(self):
+        """
+        execute security_marking check on each listing
+        """
+        while True:
+            listing = self.starts.next()
+
+            if not listing['security_marking']:
+                logger.debug('Listing {0!s} has no security_marking'.format(listing['title']))
+            else:
+                if self.featured:
+                    if listing['is_featured'] is True:
+                        if system_has_access_control(self.username, listing['security_marking']):
+                            return listing
+                else:
+                    if system_has_access_control(self.username, listing['security_marking']):
+                        return listing
+
+
 class LimitPipe(Pipe):
 
     def __init__(self, limit_number):
