@@ -30,10 +30,10 @@ ORDER BY profile_username, role_priority
 """
 import logging
 
+from django.core.urlresolvers import reverse
 from django.db.models.functions import Lower
 from django.db import connection
 import msgpack
-
 
 import ozpcenter.api.listing.serializers as listing_serializers
 from ozpcenter import models
@@ -201,13 +201,15 @@ ORDER BY ozpcenter_listing.approved_date DESC;
     return sql_statement
 
 
-def get_user_listings(username, exclude_orgs=[]):
+def get_user_listings(username, request, exclude_orgs=None):
     """
     Get User listings
 
     Returns:
         Python object of listings
     """
+    exclude_orgs = exclude_orgs or []
+    
     mapping_dict = {}
 
     cursor = connection.cursor()
@@ -268,19 +270,19 @@ def get_user_listings(username, exclude_orgs=[]):
                            'short_name': row['agency_short_name']},
 
                 "small_icon": {"id": row['small_icon_id'],
-                               'url': 'TODO: GET URL',
+                               'url': request.build_absolute_uri(reverse('image-detail', args=[row['small_icon_id']])),
                                "security_marking": row['small_icon_security_marking']},
 
                 "large_icon": {"id": row['large_icon_id'],
-                               'url': 'TODO: GET URL',
+                               'url': request.build_absolute_uri(reverse('image-detail', args=[row['large_icon_id']])),
                                "security_marking": row['large_icon_security_marking']},
 
                 "banner_icon": {"id": row['banner_icon_id'],
-                                'url': 'TODO: GET URL',
+                                'url': request.build_absolute_uri(reverse('image-detail', args=[row['banner_icon_id']])),
                                 "security_marking": row['banner_icon_security_marking']},
 
                 "large_banner_icon": {"id": row['large_banner_icon_id'],
-                                      'url': 'TODO: GET URL',
+                                      'url': request.build_absolute_uri(reverse('image-detail', args=[row['large_banner_icon_id']])),
                                       "security_marking": row['large_banner_icon_security_marking']},
 
                 "last_activity_id": row['last_activity_id']
@@ -422,7 +424,7 @@ def get_recommendation_listing_ids(profile_instance):
     return listing_ids_list
 
 
-def get_storefront_new(username):
+def get_storefront_new(username, request):
     """
     Returns data for /storefront api invocation including:
         * recommended listings (max=10)
@@ -456,7 +458,7 @@ def get_storefront_new(username):
         user_orgs = [i.title for i in user_orgs]
         exclude_orgs = [agency.title for agency in models.Agency.objects.exclude(title__in=user_orgs)]
 
-    current_listings = get_user_listings(username, exclude_orgs)
+    current_listings = get_user_listings(username, request, exclude_orgs)
 
     # Get Recommended Listings for owner
     listing_ids_list = set(get_recommendation_listing_ids(profile))
@@ -495,6 +497,9 @@ def get_storefront_new(username):
 
 def get_storefront(username, pre_fetch=False):
     """
+    Note:
+        No longer used
+
     Returns data for /storefront api invocation including:
         * recommended listings (max=10)
         * featured listings (max=12)
