@@ -196,7 +196,8 @@ def get_similar_listings(username, original_listing_id):
     original_listing_category = get_listing_by_id(username, original_listing_id).categories.all()
 
     try:
-        return models.Listing.objects.for_user(username).filter(categories=original_listing_category).distinct()
+        return models.Listing.objects.for_user_organization_minus_security_markings(username).filter(categories=original_listing_category,
+                                                                                                     approval_status=models.Listing.APPROVED).distinct()
     except ObjectDoesNotExist:
         return None
 
