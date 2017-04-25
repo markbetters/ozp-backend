@@ -84,12 +84,12 @@ SELECT DISTINCT
   ozpcenter_listing.is_enabled,
   ozpcenter_listing.is_featured,
   ozpcenter_listing.avg_rate,
-  ozpcenter_listing.total_votes,
+  ozpcenter_listing.total_rate1,
+  ozpcenter_listing.total_rate2,
+  ozpcenter_listing.total_rate3,
   ozpcenter_listing.total_rate4,
   ozpcenter_listing.total_rate5,
-  ozpcenter_listing.total_rate3,
-  ozpcenter_listing.total_rate2,
-  ozpcenter_listing.total_rate1,
+  ozpcenter_listing.total_votes,
   ozpcenter_listing.total_reviews,
   ozpcenter_listing.iframe_compatible,
   ozpcenter_listing.security_marking,
@@ -209,7 +209,7 @@ def get_user_listings(username, request, exclude_orgs=None):
         Python object of listings
     """
     exclude_orgs = exclude_orgs or []
-    
+
     mapping_dict = {}
 
     cursor = connection.cursor()
@@ -294,81 +294,62 @@ def get_user_listings(username, request, exclude_orgs=None):
             else:
                 mapping_dict[row['id']]['is_bookmarked'] = False
 
-            # Many to Many
-            if row['category_id']:
-                mapping_dict[row['id']]['categories'] = {row['category_id']:
-                                                         {'title': row['category_title'],
-                                                          'description': row['category_description']}}
-                categories_set.add(row['category_id'])
-            else:
-                mapping_dict[row['id']]['categories'] = {}
+        # Many to Many
+        # Categorys
 
-            if row['tag_id']:
-                mapping_dict[row['id']]['tags'] = {row['tag_id']: {'name': row['tag_name']}}
-                tags_set.add(row['tag_id'])
-            else:
-                mapping_dict[row['id']]['tags'] = {}
+        if not mapping_dict[row['id']].get('categories'):
+            mapping_dict[row['id']]['categories'] = {}
+        if row['category_id']:
+            current_data = {'title': row['category_title'], 'description': row['category_description']}
+            categories_set.add(row['category_id'])
 
-            if row['contact_id']:
-                mapping_dict[row['id']]['contacts'] = {row['contact_id']: {'id': row['contact_id'],
-                                                     'secure_phone': row['contact_secure_phone'],
-                                                     'unsecure_phone': row['contact_unsecure_phone'],
-                                                     'email': row['contact_email'],
-                                                     'name': row['contact_name'],
-                                                     'organization': row['contact_organization'],
-                                                     'contact_type': {'name': row['contact_type_name']}
-                    }}
-                contacts_set.add(row['contact_id'])
-            else:
-                mapping_dict[row['id']]['contacts'] = {}
+            if row['category_id'] not in mapping_dict[row['id']]['categories']:
+                mapping_dict[row['id']]['categories'][row['category_id']] = current_data
 
-            if row['profile_id']:
-                mapping_dict[row['id']]['owners'] = {row['profile_id']: {'display_name': row['owner_display_name'],
-                    'user': {'username': row['owner_username']}}}
-                profile_set.add(row['profile_id'])
-            else:
-                mapping_dict[row['id']]['owners'] = {}
+        # Tags
+        if not mapping_dict[row['id']].get('tags'):
+            mapping_dict[row['id']]['tags'] = {}
+        if row['tag_id']:
+            current_data = {'name': row['tag_name']}
+            tags_set.add(row['tag_id'])
 
-            if row['intent_id']:
-                mapping_dict[row['id']]['intents'] = {row['intent_id']: None}
-                intents_set.add(row['intent_id'])
-            else:
-                mapping_dict[row['id']]['intents'] = {}
+            if row['tag_id'] not in mapping_dict[row['id']]['tags']:
+                mapping_dict[row['id']]['tags'][row['tag_id']] = current_data
 
-        else:
-            if row['category_id']:
-                if row['category_id'] not in mapping_dict[row['id']]['categories']:
-                    mapping_dict[row['id']]['categories'][row['category_id']] = {'title': row['category_title'],
-                                                                                 'description': row['category_description']}
-                    categories_set.add(row['category_id'])
+        # Contacts
+        if not mapping_dict[row['id']].get('contacts'):
+            mapping_dict[row['id']]['contacts'] = {}
+        if row['contact_id']:
+            current_data = {'id': row['contact_id'],
+                            'secure_phone': row['contact_secure_phone'],
+                            'unsecure_phone': row['contact_unsecure_phone'],
+                            'email': row['contact_email'],
+                            'name': row['contact_name'],
+                            'organization': row['contact_organization'],
+                            'contact_type': {'name': row['contact_type_name']}}
+            contacts_set.add(row['contact_id'])
 
-            if row['tag_id']:
-                if row['tag_id'] not in mapping_dict[row['id']]['tags']:
-                    mapping_dict[row['id']]['tags'][row['tag_id']] = {'name': row['tag_name']}
-                    tags_set.add(row['tag_id'])
+            if row['contact_id'] not in mapping_dict[row['id']]['contacts']:
+                mapping_dict[row['id']]['contacts'][row['contact_id']] = current_data
 
-            if row['contact_id']:
-                if row['contact_id'] not in mapping_dict[row['id']]['contacts']:
-                    mapping_dict[row['id']]['contacts'][row['contact_id']] = {'id': row['contact_id'],
-                                                         'secure_phone': row['contact_secure_phone'],
-                                                         'unsecure_phone': row['contact_unsecure_phone'],
-                                                         'email': row['contact_email'],
-                                                         'name': row['contact_name'],
-                                                         'organization': row['contact_organization'],
-                                                         'contact_type': {'name': row['contact_type_name']}
-                        }
-                    contacts_set.add(row['contact_id'])
+        # Profile
+        if not mapping_dict[row['id']].get('owners'):
+            mapping_dict[row['id']]['owners'] = {}
+        if row['profile_id']:
+            current_data = {'display_name': row['owner_display_name'],
+                'user': {'username': row['owner_username']}}
+            profile_set.add(row['profile_id'])
 
-            if row['profile_id']:
-                if row['profile_id'] not in mapping_dict[row['id']]['owners']:
-                    mapping_dict[row['id']]['owners'][row['profile_id']] = {'display_name': row['owner_display_name'],
-                        'user': {'username': row['owner_username']}}
-                    profile_set.add(row['profile_id'])
+            if row['profile_id'] not in mapping_dict[row['id']]['owners']:
+                mapping_dict[row['id']]['owners'][row['profile_id']] = current_data
 
-            if row['intent_id']:
-                if row['intent_id'] not in mapping_dict[row['id']]['intents']:
-                    mapping_dict[row['id']]['intents'][row['intent_id']] = None
-                    intents_set.add(row['intent_id'])
+        # Intent
+        if not mapping_dict[row['id']].get('intents'):
+            mapping_dict[row['id']]['intents'] = {}
+        if row['intent_id']:
+            intents_set.add(row['intent_id'])
+            if row['intent_id'] not in mapping_dict[row['id']]['intents']:
+                mapping_dict[row['id']]['intents'][row['intent_id']] = None
 
     for profile_key in mapping_dict:
         profile_map = mapping_dict[profile_key]
@@ -394,7 +375,7 @@ def get_user_listings(username, request, exclude_orgs=None):
 
 def get_recommendation_listing_ids(profile_instance):
     # Get Recommended Listings for owner
-    target_profile_recommended_entry = models.RecommendationsEntry.objects.filter(target_profile=profile_instance).first()  # Get
+    target_profile_recommended_entry = models.RecommendationsEntry.objects.filter(target_profile=profile_instance).first()
 
     recommended_entry_data = {}
     if target_profile_recommended_entry:
