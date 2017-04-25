@@ -20,15 +20,12 @@ Response:
 
 import logging
 
-from django.conf import settings
-from django.core.cache import cache
 from rest_framework.decorators import api_view
 from rest_framework.decorators import permission_classes
 from rest_framework.response import Response
 
 from ozpcenter import permissions
 import ozpcenter.api.storefront.model_access as model_access
-import ozpcenter.api.storefront.serializers as serializers
 
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center.' + str(__name__))
@@ -54,14 +51,16 @@ def StorefrontView(request):
     ---
     serializer: ozpcenter.api.storefront.serializers.StorefrontSerializer
     """
-    data = model_access.get_storefront(request.user)
-    serializer = serializers.StorefrontSerializer(data,
-        context={'request': request})
+    return Response(model_access.get_storefront_new(request.user, request))
 
-    request_username = request.user.username
-    cache_key = 'storefront-{0}'.format(request_username)
-    cache_data = cache.get(cache_key)
-    if not cache_data:
-        cache_data = serializer.data
-        cache.set(cache_key, cache_data, timeout=settings.GLOBAL_SECONDS_TO_CACHE_DATA)
-    return Response(cache_data)
+    # data = model_access.get_storefront(request.user, True)
+    # serializer = serializers.StorefrontSerializer(data,
+    #     context={'request': request})
+    #
+    # request_username = request.user.username
+    # cache_key = 'storefront-{0}'.format(request_username)
+    # cache_data = cache.get(cache_key)
+    # if not cache_data:
+    #     cache_data = serializer.data
+    #     cache.set(cache_key, cache_data, timeout=settings.GLOBAL_SECONDS_TO_CACHE_DATA)
+    # return Response(cache_data)
