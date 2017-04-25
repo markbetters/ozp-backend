@@ -801,13 +801,15 @@ def screenshots_to_string(screenshots, queryset=False):
         "[(<small_image_id>, <large_image_id>), ...]"
     """
     if queryset:
-        new_screenshots = [(i.small_image.id,
+        new_screenshots = [(i.order,
+                            i.small_image.id,
                             i.small_image.security_marking,
                             i.large_image.id,
                             i.large_image.security_marking,
                             i.description) for i in screenshots]
     else:
-        new_screenshots = [(i['small_image']['id'],
+        new_screenshots = [(i.get('order'),
+                            i['small_image']['id'],
                             i['small_image'].get('security_marking',
                                                  constants.DEFAULT_SECURITY_MARKING),
                             i['large_image']['id'],

@@ -1255,6 +1255,7 @@ class Screenshot(models.Model):
     Additional db.relationships:
         * listing
     """
+    order = models.IntegerField(default=0, null=True)
     small_image = models.ForeignKey(Image, related_name='screenshot_small')
     large_image = models.ForeignKey(Image, related_name='screenshot_large')
     listing = models.ForeignKey('Listing', related_name='screenshots')
