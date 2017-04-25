@@ -238,3 +238,28 @@
   organizations: [Ministry of Truth, Ministry of Peace, Ministry of Love]
   stewarded_organizations: []
   username: johnson
+- access_control:
+    clearances: [UNCLASSIFIED, CONFIDENTIAL, SECRET, TOP SECRET]
+    formal_accesses: [SIERRA, TANGO, GOLF, HOTEL]
+    visas: [NOVEMBER]
+  bio: 'A territorial fish prone to high levels of aggression toward each other'
+  display_name: Betta Fish
+  dn: Bettafish bettafish
+  email: bettafish@oceania.gov
+  groups: [APPS_MALL_STEWARD, BETA_USER]
+  organizations: [Ministry of Love]
+  stewarded_organizations: []
+  username: bettafish
+- access_control:
+    clearances: [UNCLASSIFIED, CONFIDENTIAL, SECRET, TOP SECRET]
+    formal_accesses: [SIERRA, TANGO, GOLF, HOTEL]
+    visas: [NOVEMBER]
+  bio: 'Regular person worthy to weild Mjolnir'
+  display_name: Beta Ray Bill
+  dn: BetaRayBill betaraybill
+  email: betaraybill@oceania.gov
+  groups: [USER, BETA_USER]
+  organizations: [Ministry of Love]
+  stewarded_organizations: []
+  username: betaraybill
+  

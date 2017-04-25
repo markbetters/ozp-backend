@@ -40,6 +40,7 @@ from ozpcenter import models
 from ozpcenter.pipe import pipes
 from ozpcenter.pipe import pipeline
 from ozpcenter.recommend import recommend_utils
+
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center.' + str(__name__))
 
@@ -442,16 +443,19 @@ def get_storefront_new(username, request):
     current_listings = get_user_listings(username, request, exclude_orgs)
 
     # Get Recommended Listings for owner
-    listing_ids_list = set(get_recommendation_listing_ids(profile))
+    if profile.is_beta_user():
+        listing_ids_list = set(get_recommendation_listing_ids(profile))
 
-    recommended_listings_raw = []
-    for current_listing in current_listings:
-        if current_listing['id'] in listing_ids_list:
-            recommended_listings_raw.append(current_listing)
+        recommended_listings_raw = []
+        for current_listing in current_listings:
+            if current_listing['id'] in listing_ids_list:
+                recommended_listings_raw.append(current_listing)
 
-    recommended_listings = pipeline.Pipeline(recommend_utils.ListIterator(recommended_listings_raw),
-                                      [pipes.ListingDictPostSecurityMarkingCheckPipe(username),
-                                       pipes.LimitPipe(10)]).to_list()
+        recommended_listings = pipeline.Pipeline(recommend_utils.ListIterator(recommended_listings_raw),
+                                            [pipes.ListingDictPostSecurityMarkingCheckPipe(username),
+                                            pipes.LimitPipe(10)]).to_list()
+    else:
+        recommended_listings = []
 
     # Get Featured Listings
     featured_listings = pipeline.Pipeline(recommend_utils.ListIterator(current_listings),

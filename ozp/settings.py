@@ -251,15 +251,17 @@ OZP = {
         'SERVER_CRT': '/ozp/server.crt',
         'SERVER_KEY': '/ozp/server.key',
         # assumes the real URL is <root>/users/<DN>/
-        'USER_INFO_URL': r'http://localhost:8000/demo-auth/users/%s/info.json?issuerDN=%s',
+        'USER_INFO_URL': r'http://localhost:8003/demo-auth/users/%s/info.json?issuerDN=%s',
         # assumes the real URL is <root>/users/<DN>/groups/<PROJECT_NAME>/
-        'USER_GROUPS_URL': r'http://localhost:8000/demo-auth/users/%s/groups/%s/',
+        'USER_GROUPS_URL': r'http://localhost:8003/demo-auth/users/%s/groups/%s/',
         # name of the group in the auth service for apps mall stewards
         'APPS_MALL_STEWARD_GROUP_NAME': 'OZP_APPS_MALL_STEWARD',
         # name of the group in the auth service for org stewards
         'ORG_STEWARD_GROUP_NAME': 'OZP_ORG_STEWARD',
         # name of the group in the auth service for metrics users
         'METRICS_GROUP_NAME': 'OZP_METRICS_USER',
+        # name of the group in the auth service for beta users
+        'BETA_USER_GROUP_NAME': 'OZP_BETA_USER',
         # name of the project in the auth serice
         'PROJECT_NAME': 'OZP',
         # seconds to treat cached authorization data as valid before trying to

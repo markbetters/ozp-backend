@@ -716,6 +716,7 @@ class Profile(models.Model):
         auth.models.Group.objects.create(name='USER')
         auth.models.Group.objects.create(name='ORG_STEWARD')
         auth.models.Group.objects.create(name='APPS_MALL_STEWARD')
+        auth.models.Group.objects.create(name='BETA_USER')
 
     def highest_role(self):
         """
@@ -749,6 +750,11 @@ class Profile(models.Model):
         if self.highest_role() == 'USER':
             return True
         return False
+
+    def is_beta_user(self):
+        groups = self.user.groups.all()
+        group_names = [i.name for i in groups]
+        return 'BETA_USER' in group_names
 
     @staticmethod
     def create_user(username, **kwargs):

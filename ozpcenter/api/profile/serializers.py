@@ -108,10 +108,11 @@ class ProfileSerializer(serializers.ModelSerializer):
         model = models.Profile
         fields = ('id', 'display_name', 'bio', 'organizations',
             'stewarded_organizations', 'user', 'highest_role', 'dn',
-            'center_tour_flag', 'hud_tour_flag', 'webtop_tour_flag')
+            'center_tour_flag', 'hud_tour_flag', 'webtop_tour_flag',
+            'is_beta_user')
 
         read_only_fields = ('id', 'bio', 'organizations', 'user',
-            'highest_role')
+            'highest_role', 'is_beta_user')
 
     def to_representation(self, data):
         access_control_instance = plugin_manager.get_system_access_control_plugin()
@@ -123,11 +124,10 @@ class ProfileSerializer(serializers.ModelSerializer):
         from_current_view = self.context.get('self')
 
         if from_current_view:
-            ret['second_party_user'] = False
-
-        if anonymize_identifiable_data:
-            if from_current_view:
+            if anonymize_identifiable_data:
                 ret['second_party_user'] = True
+            else:
+                ret['second_party_user'] = False
 
         check_request_self = False
         if self.context['request'].user.id == ret['id']:
