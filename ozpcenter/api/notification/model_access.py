@@ -1,6 +1,88 @@
 """
 Model access
+
+https://github.com/aml-development/ozp-documentation/wiki/Notifications
+
+=====Notification Type=====
+
+                +--> SystemWide
+                |
+                +--> AgencyWide
+                |
+                +--> AgencyWideBookmark
+                |
+Notification +------+--> Listing
+                |   |
+                |   +--> ListingReview
+                |   |
+                |   +--> ListingPrivateStatus
+                |   |
+                |   +--> PendingDeletionRequest
+                |   |
+                |   +--> PendingDeletionCancellation
+                |   |
+                |   +--> ListingSubmission
+                |
+                +--> Peer
+                |
+                +--> PeerBookmark (PeerBookmark)
+                |
+                +--> CategorySubscription
+                |
+                +--> TagSubscription
+
+=====Vocab=====
+Target: is a Profile that should receive a notification
+Target List: A list of Profiles that should receive notifications
+Direct notification: The notification is produced by an action that the user does.
+In-direct Notification: The notification is produced by the observing a user action.
+
+=====Direct Notifications=====
+AMLNG-395 - SystemWide - As a user, I want to receive System-Wide Notifications
+Targets: All Users
+Permission Constraint: Only APP_MALL_STEWARDs can send notifications
+
+AMLNG-398 - AgencyWide - As a user, I want to receive Agency-Wide Notifications
+Targets: All Users in an agency
+Permission Constraint: Only APP_MALL_STEWARDs, ORG_STEWARDs can send notifications
+
+AMLNG-396 - Listing - Listing Notifications
+Targets: All users that bookmarked listing
+Permission Constraint: Only APP_MALL_STEWARDs and ORG_STEWARDs or owners of listing can send notifications
+
+AMLNG-381 - PeerBookmark - As a user, I want to receive notification when someone shares a folder with me
+Targets: User Given Target
+Permission Constraint:  Must be owner of shared folder to send
+
+=====In-direct Notifications=====
+
+AMLNG-377 - ListingReview - As an owner or CS, I want to receive notification of user rating and reviews
+Targets: Users that ___
+
+AMLNG-383 - ListingPrivateStatus - As a owner, I want to notify users who have bookmarked my listing when the
+    listing is changed from public to private and vice-versa
+Permission Constraint: Only APP_MALL_STEWARDs and ORG_STEWARDs or owners of listing can
+Targets: Users that bookmarked listing
+
+AMLNG-392 - TagSubscription - As a user, I want to receive notification when a Listing is added to a subscribed tag
+Targets: Users that ___
+
+AMLNG-380 - CategorySubscription - As a user, I want to receive notification when a Listing is added to a subscribed category
+Targets: Users that ___
+
+AMLNG-170 - PendingDeletionRequest - As an Owner I want to receive notice of whether my deletion request has been approved or rejected
+Targets: Users that ___
+
+AMLNG-173 - PendingDeletionCancellation - As an Admin I want notification if an owner has cancelled a listing that was pending deletion
+Targets: Users that ___
+
+AMLNG-376 - ListingSubmission - As a CS, I want to receive notification of Listings submitted for my organization
+Targets: Users that ___
+
+AMLNG-378 - As a user, I want to receive notification about changes on Listings I've bookmarked ????
+Targets: Users that bookmarked listing
 """
+
 import datetime
 import logging
 import pytz
@@ -227,6 +309,151 @@ def get_self_notifications_mailbox(username):
                                                 expires_date__gt=datetime.datetime.now(pytz.utc))
 
     return unexpired_notifications
+
+
+class Notification(object):
+
+    def __init__(self, sender_profile, entities):
+        self.sender_profile = sender_profile
+        self.entities = entities
+
+    def get_notification_db_type(self):
+        raise RuntimeError('Not Implemented')
+
+    def get_target_list(self):
+        raise RuntimeError('Not Implemented')
+
+    def notify(self, expired_date, message):
+        target_list = self.get_target_list()
+
+
+class SystemWideNotification(Notification):
+
+    def get_notification_db_type(self):
+        return Notification.SYSTEM
+
+    def get_target_list(self):
+        return Profile.objects.all()
+
+
+class AgencyWideNotification(Notification):
+
+    def get_notification_db_type(self):
+        return Notification.AGENCY
+
+    def get_target_list(self):
+        return Profile.objects.filter(Q(organizations__in=self.entities) | Q(stewarded_organizations__in=self.entities)).all()
+
+
+class AgencyWideBookmarkNotification(Notification):
+
+    def get_notification_db_type(self):
+        return Notification.AGENCY_BOOKMARK
+
+    def get_target_list(self):
+        return Profile.objects.filter(Q(organizations__in=self.entities) | Q(stewarded_organizations__in=self.entities)).all()
+
+
+class ListingNotification(Notification):
+
+    def get_notification_db_type(self):
+        return Notification.LISTING
+
+    def get_target_list(self):
+        owner_id_list = ApplicationLibraryEntry.objects.filter(listing__in=entities,
+                                                               listing__isnull=False,
+                                                               listing__is_enabled=True,
+                                                               listing__is_deleted=False).values_list('owner', flat=True).distinct()
+        return Profile.objects.filter(id__in=owner_id_list).all()
+
+
+class ListingReviewNotification(Notification):
+
+    def get_notification_db_type(self):
+        return Notification.LISTING
+
+    def get_target_list(self):
+        entities_ids = [entity.id for entity in entities]
+        listings_owners = Listing.objects.filter(id__in=entities_ids).values_list('owners').distinct()
+        return Profile.objects.filter(id__in=listings_owners).distinct().all()
+
+
+class ListingPrivateStatusNotification(Notification):
+
+    def get_notification_db_type(self):
+        return Notification.LISTING
+
+    def get_target_list(self):
+        owner_id_list = ApplicationLibraryEntry.objects.filter(listing__in=entities,
+                                                               listing__isnull=False,
+                                                               listing__is_enabled=True,
+                                                               listing__is_deleted=False).values_list('owner', flat=True).distinct()
+        return Profile.objects.filter(id__in=owner_id_list).all()
+
+
+class PeerNotification(Notification):
+
+    def get_notification_db_type(self):
+        return Notification.PEER
+
+    def get_target_list(self):
+        entities_id = [entity.id for entity in self.entities]
+        return Profile.objects.filter(id__in=entities_id).all()
+
+
+class PeerBookmarkNotification(Notification):
+
+    def get_notification_db_type(self):
+        return Notification.PEER_BOOKMARK
+
+    def get_target_list(self):
+        entities_id = [entity.id for entity in self.entities]
+        return Profile.objects.filter(id__in=entities_id).all()
+
+
+class TagSubscriptionNotification(Notification):
+
+    def get_notification_db_type(self):
+        return Notification.LISTING
+
+    def get_target_list(self):
+        raise RuntimeError('Not Implemented')
+
+
+class CategorySubscriptionNotification(Notification):
+
+    def get_notification_db_type(self):
+        return Notification.LISTING
+
+    def get_target_list(self):
+        raise RuntimeError('Not Implemented')
+
+
+class PendingDeletionRequestNotification(Notification):
+
+    def get_notification_db_type(self):
+        return Notification.LISTING
+
+    def get_target_list(self):
+        raise RuntimeError('Not Implemented')
+
+
+class PendingDeletionCancellationNotification(Notification):
+
+    def get_notification_db_type(self):
+        return Notification.LISTING
+
+    def get_target_list(self):
+        raise RuntimeError('Not Implemented')
+
+
+class ListingSubmissionNotification(Notification):
+
+    def get_notification_db_type(self):
+        return Notification.LISTING
+
+    def get_target_list(self):
+        raise RuntimeError('Not Implemented')
 
 
 def get_profile_target_list(notification_type, group_target=None, entities=None):
