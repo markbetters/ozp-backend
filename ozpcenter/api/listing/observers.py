@@ -61,7 +61,6 @@ class ListingObserver(Observer):
         AMLNG-170 - As an Owner I want to receive notice of whether my deletion request has been approved or rejected
         AMLNG-173 - As an Admin I want notification if an owner has cancelled an app that was pending deletion
         AMLNG-380 - As a user, I want to receive notification when a Listing is added to a subscribed category or tag
-        AMLNG-376 - As a CS, I want to receive notification of Listings submitted for my organization
 
         Args:
             listing: Listing instance
@@ -72,6 +71,7 @@ class ListingObserver(Observer):
         now_plus_month = datetime.datetime.now(pytz.utc) + datetime.timedelta(days=30)
 
         if old_approval_status == models.Listing.IN_PROGRESS and new_approval_status == models.Listing.PENDING:
+            # AMLNG-376 - As a CS, I want to receive notification of Listings submitted for my organization
             message = '{} listing was submitted'.format(listing.title)
 
             notification_model_access.create_notification(author_username=username,
