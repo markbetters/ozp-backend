@@ -2,6 +2,7 @@
 Listing Views
 """
 import logging
+import operator
 
 from django.shortcuts import get_object_or_404
 from django.db.models import Min
@@ -790,6 +791,8 @@ class ListingViewSet(viewsets.ModelViewSet):
         queryset = self.get_queryset().get(pk=pk)
         serializer = serializers.ListingSerializer(queryset,
             context={'request': request})
+        temp = serializer.data.get('screenshots')
+        temp.sort(key=operator.itemgetter('order'))
         return Response(serializer.data)
 
     def destroy(self, request, pk=None):
