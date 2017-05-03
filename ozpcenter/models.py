@@ -713,10 +713,10 @@ class Profile(models.Model):
         after the server has started)
         """
         # create the different Groups (Roles) of users
-        auth.models.Group.objects.create(name='USER')
-        auth.models.Group.objects.create(name='ORG_STEWARD')
-        auth.models.Group.objects.create(name='APPS_MALL_STEWARD')
-        auth.models.Group.objects.create(name='BETA_USER')
+        auth.models.Group.objects.get_or_create(name='USER')
+        auth.models.Group.objects.get_or_create(name='ORG_STEWARD')
+        auth.models.Group.objects.get_or_create(name='APPS_MALL_STEWARD')
+        auth.models.Group.objects.get_or_create(name='BETA_USER')
 
     def highest_role(self):
         """
