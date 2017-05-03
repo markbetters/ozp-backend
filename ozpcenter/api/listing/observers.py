@@ -78,7 +78,8 @@ class ListingObserver(Observer):
                                                           expires_date=now_plus_month,
                                                           message=message,
                                                           listing=listing,
-                                                          group_target=Notification.ORG_STEWARD)
+                                                          group_target=Notification.ORG_STEWARD,
+                                                          notification_type='ListingSubmissionNotification')
 
         if new_approval_status == models.Listing.APPROVED and profile.highest_role() != 'APPS_MALL_STEWARD':
             return None

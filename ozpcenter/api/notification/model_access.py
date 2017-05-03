@@ -333,7 +333,7 @@ class ListingNotification(NotificationBase):
         return False
 
 
-class ListingReviewNotification(NotificationBase):
+class ListingReviewNotification(NotificationBase):  # Not Verified
     """
     AMLNG-377 - ListingReview - As an owner or CS, I want to receive notification of user rating and reviews
     Targets: Users that ___
@@ -344,7 +344,7 @@ class ListingReviewNotification(NotificationBase):
         return Notification.LISTING
 
     def get_group_target(self):
-        return Notification.STEWARDS
+        return Notification.ORG_STEWARD
 
     def get_target_list(self):
         entities_ids = [entity.id for entity in [self.entity]]
@@ -372,6 +372,9 @@ class ListingPrivateStatusNotification(NotificationBase):
         return Profile.objects.filter(id__in=owner_id_list).all()
 
     def check_local_permission(self, entity):
+        if self.sender_profile.highest_role() in ['APPS_MALL_STEWARD', 'ORG_STEWARD']:
+            return True
+
         if self.sender_profile not in entity.owners.all():
             raise errors.PermissionDenied('Cannot create a notification for a listing you do not own')
         else:
@@ -415,7 +418,7 @@ class PeerBookmarkNotification(NotificationBase):
         return Profile.objects.filter(id__in=entities_id).all()
 
 
-class TagSubscriptionNotification(NotificationBase):
+class TagSubscriptionNotification(NotificationBase):  # Not Verified
     """
     AMLNG-392 - TagSubscription - As a user, I want to receive notification when a Listing is added to a subscribed tag
     Targets: Users that ___
@@ -429,7 +432,7 @@ class TagSubscriptionNotification(NotificationBase):
         raise RuntimeError('Not Implemented')
 
 
-class CategorySubscriptionNotification(NotificationBase):
+class CategorySubscriptionNotification(NotificationBase):  # Not Verified
     """
     AMLNG-380 - CategorySubscription - As a user, I want to receive notification when a Listing is added to a subscribed category
     Targets: Users that ___
@@ -443,7 +446,7 @@ class CategorySubscriptionNotification(NotificationBase):
         raise RuntimeError('Not Implemented')
 
 
-class PendingDeletionRequestNotification(NotificationBase):
+class PendingDeletionRequestNotification(NotificationBase):  # Not Verified
     """
     AMLNG-170 - PendingDeletionRequest - As an Owner I want to receive notice of whether my deletion request has been approved or rejected
     Targets: Users that ___
@@ -459,7 +462,7 @@ class PendingDeletionRequestNotification(NotificationBase):
         return Profile.objects.filter(id__in=listings_owners).distinct()
 
 
-class PendingDeletionCancellationNotification(NotificationBase):
+class PendingDeletionCancellationNotification(NotificationBase):  # Not Verified
 
     def get_notification_db_type(self):
         return Notification.LISTING
@@ -474,7 +477,7 @@ class PendingDeletionCancellationNotification(NotificationBase):
         raise RuntimeError('Not Implemented')
 
 
-class ListingSubmissionNotification(NotificationBase):
+class ListingSubmissionNotification(NotificationBase):  # Not Verified
     """
     AMLNG-376 - ListingSubmission - As a CS, I want to receive notification of Listings submitted for my organization
     Targets: Users that ___
@@ -620,7 +623,8 @@ def create_notification(author_username=None,
                         agency=None,
                         peer=None,
                         peer_profile=None,
-                        group_target=Notification.ALL):
+                        group_target=Notification.ALL,
+                        notification_type=None):
     """
     Create Notification
 
@@ -642,7 +646,10 @@ def create_notification(author_username=None,
     Raises:
         AssertionError: If author_username or expires_date or message is None
     """
-    if listing is not None:
+    if notification_type == 'ListingSubmissionNotification':
+        notification_instance = ListingSubmissionNotification()
+        notification_instance.set_sender_and_entity(author_username, listing)
+    elif listing is not None:
         notification_instance = ListingNotification()
         notification_instance.set_sender_and_entity(author_username, listing)
     elif agency is not None:
