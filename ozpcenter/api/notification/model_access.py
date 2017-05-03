@@ -343,6 +343,9 @@ class ListingReviewNotification(NotificationBase):
     def get_notification_db_type(self):
         return Notification.LISTING
 
+    def get_group_target(self):
+        return Notification.STEWARDS
+
     def get_target_list(self):
         entities_ids = [entity.id for entity in [self.entity]]
         listings_owners = Listing.objects.filter(id__in=entities_ids).values_list('owners').distinct()
@@ -386,6 +389,9 @@ class PeerNotification(NotificationBase):
     def get_notification_db_type(self):
         return Notification.PEER
 
+    def get_group_target(self):
+        return Notification.USER
+
     def get_target_list(self):
         entities_id = [entity.id for entity in [self.entity]]
         return Profile.objects.filter(id__in=entities_id).all()
@@ -400,6 +406,9 @@ class PeerBookmarkNotification(NotificationBase):
 
     def get_notification_db_type(self):
         return Notification.PEER_BOOKMARK
+
+    def get_group_target(self):
+        return Notification.USER
 
     def get_target_list(self):
         entities_id = [entity.id for entity in [self.entity]]
@@ -594,24 +603,6 @@ def get_self_notifications_mailbox(username):
                                                 expires_date__gt=datetime.datetime.now(pytz.utc))
 
     return unexpired_notifications
-
-
-# def get_profile_target_list(notification_type, group_target=None, entities=None):
-#     """
-#     This functions get a list of target profiles to send notifications to
-#
-
-#         elif group_target == Notification.ORG_STEWARD:
-#             # get the ORG_STEWARD(s) for that listing's agency
-#             entities_agency = [entity.agency.id for entity in entities]
-#             query = Profile.objects.filter(stewarded_organizations__in=entities_agency).distinct()
-#
-#         elif group_target == Notification.OWNER:
-#             # get the Owner(s) for that listing's agency
-#             entities_ids = [entity.id for entity in entities]
-#             listings_owners = Listing.objects.filter(id__in=entities_ids).values_list('owners').distinct()
-#             query = Profile.objects.filter(id__in=listings_owners).distinct()
-#
 
 
 # Method is decorated with @transaction.atomic to ensure all logic is executed in a single transaction
