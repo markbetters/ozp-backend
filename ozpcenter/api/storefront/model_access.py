@@ -469,7 +469,7 @@ def get_storefront_new(username, request):
     most_popular_listings = pipeline.Pipeline(recommend_utils.ListIterator(sorted(current_listings, key=lambda k: (k['avg_rate'], ['total_reviews']), reverse=True)),
                                       [pipes.ListingDictPostSecurityMarkingCheckPipe(username),
                                        pipes.LimitPipe(36)]).to_list()
-
+    # TODO 2PI filtering
     data = {
         'recommended': recommended_listings,
         'featured': featured_listings,
@@ -506,21 +506,24 @@ def get_storefront(username, pre_fetch=False):
     """
     profile = models.Profile.objects.get(user__username=username)
     try:
-        listing_ids_list = get_recommendation_listing_ids(profile)
-        recommended_listings_queryset = models.Listing.objects.for_user_organization_minus_security_markings(username).filter(pk__in=listing_ids_list,
-                                                                                                                              approval_status=models.Listing.APPROVED,
-                                                                                                                              is_enabled=True,
-                                                                                                                              is_deleted=False).all()
+        if profile.is_beta_user():
+            listing_ids_list = get_recommendation_listing_ids(profile)
+            recommended_listings_queryset = models.Listing.objects.for_user_organization_minus_security_markings(username).filter(pk__in=listing_ids_list,
+                                                                                                                                  approval_status=models.Listing.APPROVED,
+                                                                                                                                  is_enabled=True,
+                                                                                                                                  is_deleted=False).all()
 
-        recommended_listings_raw = listing_serializers.ListingSerializer.setup_eager_loading(recommended_listings_queryset)
+            recommended_listings_raw = listing_serializers.ListingSerializer.setup_eager_loading(recommended_listings_queryset)
 
-        if pre_fetch:
-            recommended_listings_raw = [recommendations_listing for recommendations_listing in recommended_listings_raw]
+            if pre_fetch:
+                recommended_listings_raw = [recommendations_listing for recommendations_listing in recommended_listings_raw]
 
-        # Post security_marking check - lazy loading
-        recommended_listings = pipeline.Pipeline(recommend_utils.ListIterator([recommendations_listing for recommendations_listing in recommended_listings_raw]),
-                                          [pipes.ListingPostSecurityMarkingCheckPipe(username),
-                                           pipes.LimitPipe(10)]).to_list()
+            # Post security_marking check - lazy loading
+            recommended_listings = pipeline.Pipeline(recommend_utils.ListIterator([recommendations_listing for recommendations_listing in recommended_listings_raw]),
+                                              [pipes.ListingPostSecurityMarkingCheckPipe(username),
+                                               pipes.LimitPipe(10)]).to_list()
+        else:
+            recommended_listings = []
 
         # Get Featured Listings
         featured_listings_raw = models.Listing.objects.for_user_organization_minus_security_markings(
