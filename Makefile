@@ -97,3 +97,9 @@ dev_psql: clean pre create_static
 
 email:
 	python manage.py runscript notification_email
+
+shell_psql:
+	MAIN_DATABASE='psql' python manage.py shell_plus
+
+shell:
+	python manage.py shell_plus

@@ -396,9 +396,19 @@ class ListingReviewNotification(NotificationBase):  # Not Verified
         return Notification.USER
 
     def get_target_list(self):
-        entities_ids = [entity.id for entity in [self.entity]]
-        listings_owners = Listing.objects.filter(id__in=entities_ids).values_list('owners').distinct()
-        return Profile.objects.filter(id__in=listings_owners).distinct().all()
+        current_listing = self.entity
+
+        target_set = set()
+
+        for owner in current_listing.owners.all():
+            target_set.add(owner)
+
+        current_listing_agency_id = current_listing.agency.id
+
+        for steward in Profile.objects.filter(stewarded_organizations__in=[current_listing_agency_id]).all():
+            target_set.add(steward)
+
+        return list(target_set)
 
 
 class ListingPrivateStatusNotification(NotificationBase):
@@ -417,6 +427,7 @@ class ListingPrivateStatusNotification(NotificationBase):
     def get_target_list(self):
         owner_id_list = ApplicationLibraryEntry.objects.filter(listing__in=[self.entity],
                                                                listing__isnull=False,
+                                                               listing__approval_status=Listing.APPROVED,
                                                                listing__is_enabled=True,
                                                                listing__is_deleted=False).values_list('owner', flat=True).distinct()
         return Profile.objects.filter(id__in=owner_id_list).all()
@@ -451,15 +462,14 @@ class PendingDeletionRequestNotification(NotificationBase):  # Not Verified
         return Notification.LISTING
 
     def get_target_list(self):
-        entities_ids = [entity.id for entity in [self.entity]]
-        listings_owners = Listing.objects.filter(id__in=entities_ids).values_list('owners').distinct()
-        return Profile.objects.filter(id__in=listings_owners).distinct()
+        current_listing = self.entity
+        return current_listing.owners.all().distinct()
 
 
 class PendingDeletionCancellationNotification(NotificationBase):  # Not Verified
     """
     AMLNG-173 - PendingDeletionCancellation
-        As an admin I want notification if an owner has cancelled an app
+        As an cs I want a notification if an owner has cancelled an app
         that was pending deletion
 
     This event occurs when
