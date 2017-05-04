@@ -94,3 +94,6 @@ dev_psql: clean pre create_static
 	MAIN_DATABASE=psql python manage.py runscript sample_data_generator
 
 	MAIN_DATABASE=psql python manage.py runserver localhost:8001
+
+email:
+	python manage.py runscript notification_email
