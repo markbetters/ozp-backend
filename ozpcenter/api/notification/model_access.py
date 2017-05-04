@@ -297,6 +297,7 @@ class AgencyWideBookmarkNotification(NotificationBase):
     Permission Constraint: Only APP_MALL_STEWARDs, ORG_STEWARDs can send notifications
     Invoked: Directly
     """
+
     def get_notification_db_type(self):
         return Notification.AGENCY_BOOKMARK
 
@@ -392,7 +393,7 @@ class ListingReviewNotification(NotificationBase):  # Not Verified
         return Notification.LISTING
 
     def get_group_target(self):
-        return Notification.ORG_STEWARD
+        return Notification.USER
 
     def get_target_list(self):
         entities_ids = [entity.id for entity in [self.entity]]
@@ -431,6 +432,76 @@ class ListingPrivateStatusNotification(NotificationBase):
         return False
 
 
+class PendingDeletionRequestNotification(NotificationBase):  # Not Verified
+    """
+    AMLNG-170 - PendingDeletionRequest
+        As an Owner I want to receive notice of whether my deletion request has been approved or rejected
+    Targets: Users that ___
+    Invoked: In-directly
+
+    This event occurs when
+        Listing DELETED - Steward approved deletion
+            PENDING_DELETION --> DELETED
+
+        User undeleted the listing - Steward rejects deletion
+            PENDING_DELETION --> PENDING
+    """
+
+    def get_notification_db_type(self):
+        return Notification.LISTING
+
+    def get_target_list(self):
+        entities_ids = [entity.id for entity in [self.entity]]
+        listings_owners = Listing.objects.filter(id__in=entities_ids).values_list('owners').distinct()
+        return Profile.objects.filter(id__in=listings_owners).distinct()
+
+
+class PendingDeletionCancellationNotification(NotificationBase):  # Not Verified
+    """
+    AMLNG-173 - PendingDeletionCancellation
+        As an admin I want notification if an owner has cancelled an app
+        that was pending deletion
+
+    This event occurs when
+        User undeleted the listing
+            PENDING_DELETION --> PENDING
+    """
+
+    def get_notification_db_type(self):
+        return Notification.LISTING
+
+    def get_target_list(self):
+        current_listing = self.entity
+        current_listing_agency_id = current_listing.agency.id
+        return Profile.objects.filter(stewarded_organizations__in=[current_listing_agency_id]).all().distinct()
+
+
+class ListingSubmissionNotification(NotificationBase):
+    """
+    AMLNG-376 - ListingSubmission
+        As a CS, I want to receive notification of Listings submitted for my organization
+    Targets: Listing Agency ORG_STEWARDs
+    Invoked: In-directly
+
+    This event occurs when
+        User Submitted Listings
+            IN_PROGRESS --> PENDING
+
+    a = Listing.objects.last(); a.approval_status = Listing.IN_PROGRESS; a.save()
+    """
+
+    def get_group_target(self):
+        return Notification.ORG_STEWARD
+
+    def get_notification_db_type(self):
+        return Notification.LISTING
+
+    def get_target_list(self):
+        current_listing = self.entity
+        current_listing_agency_id = current_listing.agency.id
+        return Profile.objects.filter(stewarded_organizations__in=[current_listing_agency_id]).all().distinct()
+
+
 class TagSubscriptionNotification(NotificationBase):  # Not Verified
     """
     AMLNG-392 - TagSubscription
@@ -459,72 +530,6 @@ class CategorySubscriptionNotification(NotificationBase):  # Not Verified
 
     def get_target_list(self):
         raise RuntimeError('Not Implemented')
-
-
-class PendingDeletionRequestNotification(NotificationBase):  # Not Verified
-    """
-    AMLNG-170 - PendingDeletionRequest
-        As an Owner I want to receive notice of whether my deletion request has been approved or rejected
-    Targets: Users that ___
-    Invoked: In-directly
-
-    This event occurs when
-        Listing DELETED - Steward approved deletion
-            PENDING_DELETION --> DELETED
-
-        User undeleted the listing - Steward rejects deletion
-            PENDING_DELETION --> PENDING
-    """
-
-    def get_notification_db_type(self):
-        return Notification.LISTING
-
-    def get_target_list(self):
-        entities_ids = [entity.id for entity in [self.entity]]
-        listings_owners = Listing.objects.filter(id__in=entities_ids).values_list('owners').distinct()
-        return Profile.objects.filter(id__in=listings_owners).distinct()
-
-
-class PendingDeletionCancellationNotification(NotificationBase):  # Not Verified
-    """
-    AMLNG-173 - PendingDeletionCancellation
-        As an admin I want notification if an owner has cancelled an app that was pending deletion
-
-    This event occurs when
-        User undeleted the listing
-            PENDING_DELETION --> PENDING
-    """
-    def get_notification_db_type(self):
-        return Notification.LISTING
-
-    def get_target_list(self):
-        """
-        Get the Owner(s) for that listing's agency
-        """
-        # get the ORG_STEWARD(s) for that listing's agency
-        # entities_agency = [entity.agency.id for entity in entities]
-        # query = Profile.objects.filter(stewarded_organizations__in=entities_agency).distinct()
-        raise RuntimeError('Not Implemented')
-
-
-class ListingSubmissionNotification(NotificationBase):  # Not Verified
-    """
-    AMLNG-376 - ListingSubmission - As a CS, I want to receive notification of Listings submitted for my organization
-    Targets: Users that ___
-    Invoked: In-directly
-
-    This event occurs when
-        User Submitted Listings
-            IN_PROGRESS --> PENDING
-    """
-
-    def get_notification_db_type(self):
-        return Notification.LISTING
-
-    def get_target_list(self):
-        current_listing = self.entity
-        current_listing_agency_id = current_listing.id
-        return Profile.objects.filter(stewarded_organizations__in=[current_listing_agency_id]).all().distinct()
 
 
 def get_self(username):
@@ -685,12 +690,27 @@ def create_notification(author_username=None,
     if notification_type == 'ListingSubmissionNotification':
         notification_instance = ListingSubmissionNotification()
         notification_instance.set_sender_and_entity(author_username, listing)
+
+    elif notification_type == 'ListingReviewNotification':
+        notification_instance = ListingReviewNotification()
+        notification_instance.set_sender_and_entity(author_username, listing)
+
+    elif notification_type == 'PendingDeletionRequestNotification':
+        notification_instance = PendingDeletionRequestNotification()
+        notification_instance.set_sender_and_entity(author_username, listing)
+
+    elif notification_type == 'PendingDeletionCancellationNotification':
+        notification_instance = PendingDeletionCancellationNotification()
+        notification_instance.set_sender_and_entity(author_username, listing)
+
     elif listing is not None:
         notification_instance = ListingNotification()
         notification_instance.set_sender_and_entity(author_username, listing)
+
     elif agency is not None:
         notification_instance = AgencyWideNotification()
         notification_instance.set_sender_and_entity(author_username, agency)
+
     elif peer is not None:
         notification_instance = PeerNotification()
         try:

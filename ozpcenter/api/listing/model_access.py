@@ -559,7 +559,6 @@ def create_listing_review(username, listing, rating, text=None):
                 rate=rating, text=text)
     review.save()
 
-    dispatcher.publish('listing_review_created', listing=listing)
     # update this listing's rating
     _update_rating(username, listing)
 
@@ -570,6 +569,9 @@ def create_listing_review(username, listing, rating, text=None):
         "listing": listing.id,
         "id": review.id
     }
+
+    dispatcher.publish('listing_review_created', listing=listing, profile=author, rating=rating, text=text)
+
     return resp
 
 
@@ -614,6 +616,8 @@ def edit_listing_review(username, review, rate, text=None):
     review.save()
 
     _update_rating(username, listing)
+
+    dispatcher.publish('listing_review_changed', listing=listing, profile=user, rating=rate, text=text)
     return review
 
 
