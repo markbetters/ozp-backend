@@ -252,7 +252,8 @@ class NotificationBase(object):
 
 class SystemWideNotification(NotificationBase):
     """
-    AMLNG-395 - SystemWide - As a user, I want to receive System-Wide Notifications
+    AMLNG-395 - SystemWide
+        As a user, I want to receive System-Wide Notifications
     Targets: All Users
     Permission Constraint: Only APP_MALL_STEWARDs can send notifications
     Invoked: Directly
@@ -270,7 +271,8 @@ class SystemWideNotification(NotificationBase):
 
 class AgencyWideNotification(NotificationBase):
     """
-    AMLNG-398 - AgencyWide - As a user, I want to receive Agency-Wide Notifications
+    AMLNG-398 - AgencyWide
+        As a user, I want to receive Agency-Wide Notifications
     Targets: All Users in an agency
     Permission Constraint: Only APP_MALL_STEWARDs, ORG_STEWARDs can send notifications
     Invoked: Directly
@@ -288,7 +290,13 @@ class AgencyWideNotification(NotificationBase):
 
 
 class AgencyWideBookmarkNotification(NotificationBase):
-
+    """
+    AMLNG-398 - AgencyWide Bookmark
+        As a user, I want to receive Agency-Wide Notifications
+    Targets: All Users in an agency
+    Permission Constraint: Only APP_MALL_STEWARDs, ORG_STEWARDs can send notifications
+    Invoked: Directly
+    """
     def get_notification_db_type(self):
         return Notification.AGENCY_BOOKMARK
 
@@ -302,7 +310,8 @@ class AgencyWideBookmarkNotification(NotificationBase):
 
 class ListingNotification(NotificationBase):
     """
-    AMLNG-396 - Listing - Listing Notifications
+    AMLNG-396 - Listing
+        Listing Notifications
     Targets: All users that bookmarked listing
     Permission Constraint: Only APP_MALL_STEWARDs and ORG_STEWARDs or owners of listing can send notifications
     Invoked: Directly
@@ -333,9 +342,48 @@ class ListingNotification(NotificationBase):
         return False
 
 
+class PeerNotification(NotificationBase):
+    """
+    Peer
+        As a user, I want to receive notification when someone send a message to me
+    Targets: User Given Target
+    Permission Constraint:
+    """
+
+    def get_notification_db_type(self):
+        return Notification.PEER
+
+    def get_group_target(self):
+        return Notification.USER
+
+    def get_target_list(self):
+        entities_id = [entity.id for entity in [self.entity]]
+        return Profile.objects.filter(id__in=entities_id).all()
+
+
+class PeerBookmarkNotification(NotificationBase):
+    """
+    AMLNG-381 - PeerBookmark
+        As a user, I want to receive notification when someone shares a folder with me
+    Targets: User Given Target
+    Permission Constraint:  Must be owner of shared folder to send
+    """
+
+    def get_notification_db_type(self):
+        return Notification.PEER_BOOKMARK
+
+    def get_group_target(self):
+        return Notification.USER
+
+    def get_target_list(self):
+        entities_id = [entity.id for entity in [self.entity]]
+        return Profile.objects.filter(id__in=entities_id).all()
+
+
 class ListingReviewNotification(NotificationBase):  # Not Verified
     """
-    AMLNG-377 - ListingReview - As an owner or CS, I want to receive notification of user rating and reviews
+    AMLNG-377 - ListingReview
+        As an owner or CS, I want to receive notification of user rating and reviews
     Targets: Users that ___
     Invoked: In-directly
     """
@@ -354,7 +402,8 @@ class ListingReviewNotification(NotificationBase):  # Not Verified
 
 class ListingPrivateStatusNotification(NotificationBase):
     """
-    AMLNG-383 - ListingPrivateStatus - As a owner, I want to notify users who have bookmarked my listing when the
+    AMLNG-383 - ListingPrivateStatus
+        As a owner, I want to notify users who have bookmarked my listing when the
         listing is changed from public to private and vice-versa
     Permission Constraint: Only APP_MALL_STEWARDs and ORG_STEWARDs or owners of listing can
     Targets: Users that bookmarked listing
@@ -382,45 +431,10 @@ class ListingPrivateStatusNotification(NotificationBase):
         return False
 
 
-class PeerNotification(NotificationBase):
-    """
-    Peer - As a user, I want to receive notification when someone send a message to me
-    Targets: User Given Target
-    Permission Constraint:
-    """
-
-    def get_notification_db_type(self):
-        return Notification.PEER
-
-    def get_group_target(self):
-        return Notification.USER
-
-    def get_target_list(self):
-        entities_id = [entity.id for entity in [self.entity]]
-        return Profile.objects.filter(id__in=entities_id).all()
-
-
-class PeerBookmarkNotification(NotificationBase):
-    """
-    AMLNG-381 - PeerBookmark - As a user, I want to receive notification when someone shares a folder with me
-    Targets: User Given Target
-    Permission Constraint:  Must be owner of shared folder to send
-    """
-
-    def get_notification_db_type(self):
-        return Notification.PEER_BOOKMARK
-
-    def get_group_target(self):
-        return Notification.USER
-
-    def get_target_list(self):
-        entities_id = [entity.id for entity in [self.entity]]
-        return Profile.objects.filter(id__in=entities_id).all()
-
-
 class TagSubscriptionNotification(NotificationBase):  # Not Verified
     """
-    AMLNG-392 - TagSubscription - As a user, I want to receive notification when a Listing is added to a subscribed tag
+    AMLNG-392 - TagSubscription
+        As a user, I want to receive notification when a Listing is added to a subscribed tag
     Targets: Users that ___
     Invoked: In-directly
     """
@@ -434,7 +448,8 @@ class TagSubscriptionNotification(NotificationBase):  # Not Verified
 
 class CategorySubscriptionNotification(NotificationBase):  # Not Verified
     """
-    AMLNG-380 - CategorySubscription - As a user, I want to receive notification when a Listing is added to a subscribed category
+    AMLNG-380 - CategorySubscription
+        As a user, I want to receive notification when a Listing is added to a subscribed category
     Targets: Users that ___
     Invoked: In-directly
     """
@@ -448,9 +463,17 @@ class CategorySubscriptionNotification(NotificationBase):  # Not Verified
 
 class PendingDeletionRequestNotification(NotificationBase):  # Not Verified
     """
-    AMLNG-170 - PendingDeletionRequest - As an Owner I want to receive notice of whether my deletion request has been approved or rejected
+    AMLNG-170 - PendingDeletionRequest
+        As an Owner I want to receive notice of whether my deletion request has been approved or rejected
     Targets: Users that ___
     Invoked: In-directly
+
+    This event occurs when
+        Listing DELETED - Steward approved deletion
+            PENDING_DELETION --> DELETED
+
+        User undeleted the listing - Steward rejects deletion
+            PENDING_DELETION --> PENDING
     """
 
     def get_notification_db_type(self):
@@ -463,7 +486,14 @@ class PendingDeletionRequestNotification(NotificationBase):  # Not Verified
 
 
 class PendingDeletionCancellationNotification(NotificationBase):  # Not Verified
+    """
+    AMLNG-173 - PendingDeletionCancellation
+        As an admin I want notification if an owner has cancelled an app that was pending deletion
 
+    This event occurs when
+        User undeleted the listing
+            PENDING_DELETION --> PENDING
+    """
     def get_notification_db_type(self):
         return Notification.LISTING
 
@@ -482,13 +512,19 @@ class ListingSubmissionNotification(NotificationBase):  # Not Verified
     AMLNG-376 - ListingSubmission - As a CS, I want to receive notification of Listings submitted for my organization
     Targets: Users that ___
     Invoked: In-directly
+
+    This event occurs when
+        User Submitted Listings
+            IN_PROGRESS --> PENDING
     """
 
     def get_notification_db_type(self):
         return Notification.LISTING
 
     def get_target_list(self):
-        raise RuntimeError('Not Implemented')
+        current_listing = self.entity
+        current_listing_agency_id = current_listing.id
+        return Profile.objects.filter(stewarded_organizations__in=[current_listing_agency_id]).all().distinct()
 
 
 def get_self(username):
