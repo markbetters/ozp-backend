@@ -974,6 +974,18 @@ class ListingSerializer(serializers.ModelSerializer):
         if change_details:
             model_access.log_listing_modification(user, instance, change_details)
 
+            new_change_details = []
+            field_to_exclude = ['is_private', 'categories', 'tags']
+            for change_detail in change_details:
+                if change_detail['field_name'] not in field_to_exclude:
+                    new_change_details.append(change_detail)
+
+            if new_change_details:
+                dispatcher.publish('listing_changed',
+                                   listing=instance,
+                                   profile=user,
+                                   change_details=new_change_details)
+
         instance.edited_date = datetime.datetime.now(pytz.utc)
         return instance
 

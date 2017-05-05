@@ -20,7 +20,8 @@ class ListingObserver(Observer):
                 'listing_review_created',
                 'listing_review_changed',
                 'listing_categories_changed',
-                'listing_tags_changed']
+                'listing_tags_changed',
+                'listing_changed']
 
     def execute(self, event_type, **kwargs):
         """
@@ -149,6 +150,23 @@ class ListingObserver(Observer):
             user(Profile Instance): The user that created listing
         """
         pass
+
+    def listing_changed(self, listing=None, profile=None, change_details=None):
+        """
+        Args:
+            listing: Listing Instance
+            user(Profile Instance): The user that created listing
+        """
+        username = profile.user.username
+
+        message = '{} listing was changed. The following fields changed: {}'.format(listing.title, [change_detail['field_name'] for change_detail in change_details])
+
+        now_plus_month = datetime.datetime.now(pytz.utc) + datetime.timedelta(days=30)
+        notification_model_access.create_notification(author_username=username,
+                                                      expires_date=now_plus_month,
+                                                      message=message,
+                                                      listing=listing,
+                                                      group_target=Notification.USER)
 
     def listing_review_created(self, listing=None, profile=None, rating=None, text=None):
         """
