@@ -618,7 +618,7 @@ def get_metadata(username):
             # i['icon'] = '/TODO'
             i['listing_count'] = models.Listing.objects.for_user(
                 username).filter(agency__title=i['title'],
-                approval_status=models.Listing.APPROVED).count()
+                approval_status=models.Listing.APPROVED, is_enabled=True).count()
 
         for i in data['intents']:
             # i['icon'] = models.Image.objects.get(id=i['icon']).image_url()
