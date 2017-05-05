@@ -110,6 +110,17 @@ class ListingObserver(Observer):
 
             if (old_approval_status == models.Listing.PENDING_DELETION and
                     new_approval_status == models.Listing.PENDING):
+                message = '{} listing was undeleted by steward'.format(listing.title)
+
+                notification_model_access.create_notification(author_username=username,
+                                                              expires_date=now_plus_month,
+                                                              message=message,
+                                                              listing=listing,
+                                                              group_target=Notification.USER,
+                                                              notification_type='PendingDeletionRequestNotification')
+
+            if (old_approval_status == models.Listing.PENDING_DELETION and
+                    new_approval_status == models.Listing.REJECTED):
                 message = '{} listing was rejected for deletion by steward'.format(listing.title)
 
                 notification_model_access.create_notification(author_username=username,
@@ -118,6 +129,7 @@ class ListingObserver(Observer):
                                                               listing=listing,
                                                               group_target=Notification.USER,
                                                               notification_type='PendingDeletionRequestNotification')
+
 
     def listing_categories_changed(self, listing=None, profile=None, old_categories=None, new_categories=None):
         """
