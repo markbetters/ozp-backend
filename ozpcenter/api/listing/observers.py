@@ -153,6 +153,8 @@ class ListingObserver(Observer):
 
     def listing_changed(self, listing=None, profile=None, change_details=None):
         """
+        AMLNG-378 - As a user, I want to receive notification about changes on Listings I've bookmarked
+
         Args:
             listing: Listing Instance
             user(Profile Instance): The user that created listing
@@ -230,7 +232,7 @@ class ListingObserver(Observer):
 
     def listing_enabled_status_changed(self, listing=None, profile=None, is_enabled=None):
         """
-        AMLNG-378 - As a user, I want to receive notification about changes on Listings I've bookmarked
+
 
         Args:
             listing: Listing instance
