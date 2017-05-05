@@ -130,7 +130,6 @@ class ListingObserver(Observer):
                                                               group_target=Notification.USER,
                                                               notification_type='PendingDeletionRequestNotification')
 
-
     def listing_categories_changed(self, listing=None, profile=None, old_categories=None, new_categories=None):
         """
         AMLNG-380 - As a user, I want to receive notification when a Listing is added to a subscribed category

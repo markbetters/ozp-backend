@@ -1249,3 +1249,11 @@ class NotificationApiTest(APITestCase):
         response = self.client.delete(url, format='json')
 
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    # TODO: Unittest for below
+    # AMLNG-378 - As a user, I want to receive notification about changes on Listings I've bookmarked
+    # AMLNG-377 - As an owner or ORG CS, I want to receive notification of user rating and reviews
+    # AMLNG-376 - As a ORG CS, I want to receive notification of Listings submitted for my organization
+    # AMLNG-173 - As Org Content Steward, I want notification if an owner has cancelled an app that was pending deletion
+    # AMLNG-170 - As an Owner I want to receive notice of whether my deletion request has been approved or rejected
+    # AMLNG-461 - As Developer, I want to refactor code to make it modular and easier way to add Notification Types
