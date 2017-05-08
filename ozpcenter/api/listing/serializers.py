@@ -801,7 +801,6 @@ class ListingSerializer(serializers.ModelSerializer):
                         if new_value_image is None:
                             raise errors.InvalidInput('Error while saving, can not find image by id')
 
-
                     change_details.append({'old_value': old_value,
                             'new_value': new_value, 'field_name': image_key})
 
