@@ -7,13 +7,13 @@ from django.db import models, migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('ozpcenter', '0021_auto_20170425_1427'),
+        ('ozpcenter', '0019_screenshot_order'),
     ]
 
     operations = [
         migrations.AlterField(
             model_name='screenshot',
             name='order',
-            field=models.IntegerField(default=0),
+            field=models.IntegerField(null=True, default=0),
         ),
     ]
