@@ -713,9 +713,10 @@ class Profile(models.Model):
         after the server has started)
         """
         # create the different Groups (Roles) of users
-        auth.models.Group.objects.create(name='USER')
-        auth.models.Group.objects.create(name='ORG_STEWARD')
-        auth.models.Group.objects.create(name='APPS_MALL_STEWARD')
+        auth.models.Group.objects.get_or_create(name='USER')
+        auth.models.Group.objects.get_or_create(name='ORG_STEWARD')
+        auth.models.Group.objects.get_or_create(name='APPS_MALL_STEWARD')
+        auth.models.Group.objects.get_or_create(name='BETA_USER')
 
     def highest_role(self):
         """
@@ -749,6 +750,11 @@ class Profile(models.Model):
         if self.highest_role() == 'USER':
             return True
         return False
+
+    def is_beta_user(self):
+        groups = self.user.groups.all()
+        group_names = [i.name for i in groups]
+        return 'BETA_USER' in group_names
 
     @staticmethod
     def create_user(username, **kwargs):
@@ -1350,6 +1356,7 @@ class Notification(models.Model):
     APP_STEWARD = 'app_steward'
     ORG_STEWARD = 'org_steward'
     USER = 'user'
+    OWNER = 'owner'
 
     GROUP_TARGET_CHOICES = (
         (ALL, 'all'),
@@ -1357,6 +1364,7 @@ class Notification(models.Model):
         (APP_STEWARD, 'app_steward'),
         (ORG_STEWARD, 'org_steward'),
         (USER, 'user'),
+        (OWNER, 'owner'),
     )
     group_target = models.CharField(default=ALL, max_length=24, choices=GROUP_TARGET_CHOICES)  # db_index=True)
 

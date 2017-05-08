@@ -15,6 +15,9 @@ from rest_framework.decorators import list_route
 
 #  from ozpcenter import pagination  # TODO: Is Necessary?
 from ozpcenter import permissions
+from ozpcenter.pipe import pipes
+from ozpcenter.pipe import pipeline
+from ozpcenter.recommend import recommend_utils
 import ozpcenter.api.listing.model_access as model_access
 import ozpcenter.api.listing.serializers as serializers
 import ozpcenter.model_access as generic_model_access
@@ -239,17 +242,13 @@ class SimilarViewSet(viewsets.ModelViewSet):
 
     def list(self, request, listing_pk=None):
         queryset = self.filter_queryset(self.get_queryset(listing_pk))
+        serializer = serializers.ListingSerializer(queryset, context={'request': request}, many=True)
 
-        page = self.paginate_queryset(queryset)
-        if page is not None:
-            serializer = serializers.ListingSerializer(page,
-                context={'request': request}, many=True)
-            r = self.get_paginated_response(serializer.data)
-            return r
+        similar_listings = pipeline.Pipeline(recommend_utils.ListIterator(serializer.data),
+                                          [pipes.ListingDictPostSecurityMarkingCheckPipe(self.request.user.username),
+                                           pipes.LimitPipe(10)]).to_list()
 
-        serializer = serializers.ListingSerializer(queryset,
-            context={'request': request}, many=True)
-        r = Response(serializer.data)
+        r = Response(similar_listings)
         return r
 
 

@@ -37,6 +37,7 @@ class SettingsTest(TestCase):
                                         'APPS_MALL_STEWARD_GROUP_NAME',
                                         'ORG_STEWARD_GROUP_NAME',
                                         'METRICS_GROUP_NAME',
+                                        'BETA_USER_GROUP_NAME',
                                         'PROJECT_NAME',
                                         'SECONDS_TO_CACHE_DATA']
         for current_key in ozp_ozp_authorization_levels:

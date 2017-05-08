@@ -30,6 +30,12 @@ class Dispatcher(object):
             if event_type in class_object.events_to_listen():
                 class_object.execute(event_type, **kwargs)
 
+                if hasattr(class_object, event_type):  # Check to see if method exist
+                    event_method = getattr(class_object, event_type)  # Getting Method
+                    if hasattr(event_method, '__self__'):   # Check to see if method is a bounded
+                        event_method(**kwargs)
+
+
 # Import Observers
 import ozpcenter.auth.observers as auth_observers
 import ozpcenter.api.listing.observers as listing_observers

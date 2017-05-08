@@ -196,7 +196,8 @@ def get_similar_listings(username, original_listing_id):
     original_listing_category = get_listing_by_id(username, original_listing_id).categories.all()
 
     try:
-        return models.Listing.objects.for_user(username).filter(categories=original_listing_category).distinct()
+        return models.Listing.objects.for_user_organization_minus_security_markings(username).filter(categories=original_listing_category,
+                                                                                                     approval_status=models.Listing.APPROVED).distinct()
     except ObjectDoesNotExist:
         return None
 
@@ -483,11 +484,19 @@ def reject_listing(steward, listing, rejection_description):
     Return:
         Listing
     """
+    old_approval_status = listing.approval_status
     listing = _add_listing_activity(steward, listing,
         models.ListingActivity.REJECTED, description=rejection_description)
     listing.approval_status = models.Listing.REJECTED
     listing.edited_date = utils.get_now_utc()
     listing.save()
+
+    dispatcher.publish('listing_approval_status_change',
+                       listing=listing,
+                       profile=steward,
+                       old_approval_status=old_approval_status,
+                       new_approval_status=listing.approval_status)
+
     return listing
 
 
@@ -677,17 +686,22 @@ def delete_listing(username, listing):
 
     if listing.is_deleted:
         raise errors.PermissionDenied('The listing has already been deleted')
-
+    old_approval_status = listing.approval_status
     listing = _add_listing_activity(profile, listing, models.ListingActivity.DELETED)
     listing.is_deleted = True
     listing.is_enabled = False
     listing.is_featured = False
     listing.approval_status = models.Listing.DELETED
-
     # TODO Delete the values of other field
     # Keep lisiting as shell listing for history
     listing.save()
     # listing.delete()
+
+    dispatcher.publish('listing_approval_status_change',
+                       listing=listing,
+                       profile=profile,
+                       old_approval_status=old_approval_status,
+                       new_approval_status=listing.approval_status)
 
 
 def put_counts_in_listings_endpoint(queryset):

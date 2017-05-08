@@ -366,7 +366,7 @@ class ListingTest(TestCase):
         out = model_access.contacts_to_string(contacts, True)
 
         ext = ("[('Brienne Tarth', 'brienne@stark.com', None, '222-324-3846', 'House Stark', 'Military')," +
-               " ('Osha', 'osha@stark.com', None, '321-123-7894', 'House Stark', 'Civillian')]")
+               " ('Osha', 'osha@stark.com', None, '321-123-7894', 'House Stark', 'Civilian')]")
 
         self.assertEqual(out, ext)
 
