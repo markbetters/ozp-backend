@@ -143,7 +143,7 @@ class ScreenshotSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Screenshot
-        fields = ('small_image', 'large_image', 'description')
+        fields = ('order', 'small_image', 'large_image', 'description')
 
         extra_kwargs = {
             'description': {'validators': []}
@@ -670,6 +670,7 @@ class ListingSerializer(serializers.ModelSerializer):
         if validated_data.get('screenshots') is not None:
             for screenshot_dict in validated_data['screenshots']:
                 screenshot = models.Screenshot(
+                    order=screenshot_dict.get('order'),
                     small_image=image_model_access.get_image_by_id(screenshot_dict['small_image']['id']),
                     large_image=image_model_access.get_image_by_id(screenshot_dict['large_image']['id']),
                     description=screenshot_dict.get('description'),
@@ -950,6 +951,7 @@ class ListingSerializer(serializers.ModelSerializer):
                 new_large_image.save()
 
                 obj, created = models.Screenshot.objects.get_or_create(
+                    order=s.get('order'),
                     small_image=new_small_image,
                     large_image=new_large_image,
                     description=s.get('description'),
