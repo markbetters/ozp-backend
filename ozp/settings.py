@@ -299,3 +299,7 @@ ES_HOST = [{
 ES_BASIC_AUTH = bool(os.getenv('ES_BASIC_AUTH', False))
 ES_AUTH_USERNAME = os.getenv('ES_AUTH_USERNAME', 'user')
 ES_AUTH_PASSWORD = os.getenv('ES_AUTH_PASSWORD', 'password')
+
+# Email Settings
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_PORT = 1025

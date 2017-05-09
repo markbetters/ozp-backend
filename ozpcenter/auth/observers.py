@@ -11,13 +11,7 @@ class AuthObserver(Observer):
         return ['profile_created']
 
     def execute(self, event_type, **kwargs):
-        """
-        TODO: Finish
-        """
         print('AuthObserver message: event_type:{}, kwards:{}'.format(event_type, kwargs))
-
-        if event_type == 'profile_created':
-            self.profile_created(**kwargs)
 
     def profile_created(self, profile=None):
         """
@@ -25,5 +19,12 @@ class AuthObserver(Observer):
 
         Args:
             listing: Listing instance
+        """
+        pass
+
+    def listing_owner_certificate_expired(self, profile=None):
+        """
+        AMLNG-384
+            As a owner, I want myself and CS to be notified when one of the Listing owner's certificates expire
         """
         pass
