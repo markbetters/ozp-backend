@@ -790,6 +790,7 @@ class ListingViewSet(viewsets.ModelViewSet):
         queryset = self.get_queryset().get(pk=pk)
         serializer = serializers.ListingSerializer(queryset,
             context={'request': request})
+        # TODO: Refactor in future to use django ordering (mlee)
         temp = serializer.data.get('screenshots')
         temp.sort(key=operator.itemgetter('order'))
         return Response(serializer.data)
