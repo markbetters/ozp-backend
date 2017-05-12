@@ -44,7 +44,7 @@
   email: wsmith@oceania.gov
   groups: [ORG_STEWARD]
   organizations: [Ministry of Truth]
-  stewarded_organizations: [Ministry of Truth]
+  stewarded_organizations: [Test, Test 1, Ministry of Truth, Test 2, Test 3, Test 4]
   username: wsmith
 - access_control:
     clearances: [UNCLASSIFIED, CONFIDENTIAL, SECRET, TOP SECRET]
@@ -262,4 +262,3 @@
   organizations: [Ministry of Love]
   stewarded_organizations: []
   username: betaraybill
-  

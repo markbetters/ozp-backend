@@ -243,6 +243,36 @@ def run():
         miniplenty = models.Agency(title='Ministry of Plenty', short_name='Miniplen', icon=icon)
         miniplenty.save()
 
+        img = Image.open(TEST_IMG_PATH + 'ministry_of_plenty.png')
+        icon = models.Image.create_image(img, file_extension='png',
+            security_marking='UNCLASSIFIED', image_type='agency_icon')
+        test = models.Agency(title='Test', short_name='Test', icon=icon)
+        test.save()
+
+        img = Image.open(TEST_IMG_PATH + 'ministry_of_plenty.png')
+        icon = models.Image.create_image(img, file_extension='png',
+            security_marking='UNCLASSIFIED', image_type='agency_icon')
+        test1 = models.Agency(title='Test 1', short_name='Test 1', icon=icon)
+        test1.save()
+
+        img = Image.open(TEST_IMG_PATH + 'ministry_of_plenty.png')
+        icon = models.Image.create_image(img, file_extension='png',
+            security_marking='UNCLASSIFIED', image_type='agency_icon')
+        test2 = models.Agency(title='Test 2', short_name='Test2', icon=icon)
+        test2.save()
+
+        img = Image.open(TEST_IMG_PATH + 'ministry_of_plenty.png')
+        icon = models.Image.create_image(img, file_extension='png',
+            security_marking='UNCLASSIFIED', image_type='agency_icon')
+        test3 = models.Agency(title='Test 3', short_name='Test 3', icon=icon)
+        test3.save()
+
+        img = Image.open(TEST_IMG_PATH + 'ministry_of_plenty.png')
+        icon = models.Image.create_image(img, file_extension='png',
+            security_marking='UNCLASSIFIED', image_type='agency_icon')
+        test4 = models.Agency(title='Test 4', short_name='Test 4', icon=icon)
+        test4.save()
+
     ############################################################################
     #                               Tags
     ############################################################################
