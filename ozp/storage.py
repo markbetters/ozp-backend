@@ -5,6 +5,26 @@ from io import StringIO; from ozp.storage import MediaFilesStorage; MediaFilesSt
 
 http://stackoverflow.com/questions/29383373/creating-signed-cookies-for-amazon-cloudfront
 
+
+Steps for Minio:
+
+# Make Local Dev
+make dev
+
+wget https://dl.minio.io/server/minio/release/linux-amd64/minio
+chmod +x minio
+./minio server media
+
+# Login into minio and create bucket called ozp-media
+
+export AWS_ACCESS_KEY_ID=2Q87EJPVQ0739BYNXMGH;export AWS_SECRET_ACCESS_KEY=UmjiZ8qnNqGSexo49yVcJmzaJ1x835/na0TcIFFa;export DEFAULT_MEDIA_FILE_STORAGE=ozp.storage.MediaS3Storage
+
+Under MediaS3Storage in ozp/storage.py uncomment endpoint_url
+
+python manage.py runscript upload_media
+
+make run
+
 """
 import os
 
@@ -72,10 +92,15 @@ class MediaFileStorage(FileSystemStorage):
 
 
 class MediaS3Storage(S3Boto3Storage):
+    """
+    https://github.com/jschneier/django-storages/blob/master/storages/backends/s3boto3.py
+    """
     # location = settings.MEDIA_ROOT
     custom_domain = settings.AWS_MEDIA_S3_CUSTOM_DOMAIN
     bucket_name = settings.AWS_MEDIA_STORAGE_BUCKET_NAME
     default_acl = settings.AWS_MEDIA_DEFAULT_ACL
+    # Use endpoint_url for testing with minio
+    # endpoint_url = 'http://127.0.0.1:9000'
 
 
 media_storage = get_media_storage_class()()
