@@ -33,7 +33,7 @@ class SampleDataGeneratorTest(TestCase):
         # william smith should be an org steward for the Ministry of Truth
         # first, get from profile
         u = models.Profile.objects.filter(stewarded_organizations__title='Ministry of Truth')
-        self.assertEquals(len(u), 2)
+        self.assertEquals(len(u), 3)
         u = u[0]
         self.assertEquals(u.user.username, 'wsmith')
         # for kicks, also test by getting this from the Agency model
