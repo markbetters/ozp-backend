@@ -925,7 +925,12 @@ class ListingApiTest(APITestCase):
                 "4": 0,
                 "2": 0,
                 "1": 100,
-                "3": 20
+                "3": 20,
+                "5": 0,
+                "6": 0,
+                "7": 0,
+                "8": 0,
+                "9": 0
                 },
             "REJECTED": 0,
             "enabled": 120,
