@@ -2,9 +2,6 @@
 Image Model Access
 """
 import logging
-import os
-
-from django.conf import settings
 
 from ozpcenter import models
 
@@ -25,20 +22,6 @@ def get_all_image_types():
     Get all the image types
     """
     return models.ImageType.objects.all()
-
-
-def get_image_path(pk):
-    """
-    Return absolute file path to an image given its id (pk)
-    """
-    image = models.Image.objects.get(id=pk)
-    image_path = settings.MEDIA_ROOT + '/' + str(image.id) + '_' + image.image_type.name + '.' + image.file_extension
-    if os.path.isfile(image_path):
-        return image_path
-    else:
-        logger.error('image for pk {0:d} does not exist'.format(pk))
-        # TODO: raise exception
-        return '/does/not/exist'
 
 
 def get_image_by_id(id):

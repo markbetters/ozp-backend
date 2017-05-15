@@ -41,6 +41,8 @@ class AgencySerializer(serializers.ModelSerializer):
             'short_name': {'validators': []}
         }
 
+# TODO: Remove this Serializer, import from api.image.serializers
+
 
 class ImageSerializer(serializers.HyperlinkedModelSerializer):
 
@@ -71,6 +73,14 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
                 'Security marking is required')
 
         return value
+
+    def to_representation(self, image):
+        ret = super(ImageSerializer, self).to_representation(image)
+        # # ATo get Presigned URLS # We Don't want to do this
+        # from ozp.storage import media_storage
+        # image_path = str(image.id) + '_' + image.image_type.name + '.' + image.file_extension
+        # ret['url'] = media_storage.url(image_path)
+        return ret
 
 
 class ContactTypeSerializer(serializers.ModelSerializer):

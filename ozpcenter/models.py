@@ -6,6 +6,8 @@ import json
 import logging
 import os
 import uuid
+from io import BytesIO
+import PIL
 
 from django.conf import settings
 from django.contrib import auth
@@ -24,6 +26,7 @@ from ozpcenter import constants
 from ozpcenter import utils
 from ozpcenter.api.listing import elasticsearch_util
 from plugins_util.plugin_manager import system_has_access_control
+from ozp.storage import media_storage
 
 
 # Get an instance of a logger
@@ -162,17 +165,27 @@ class Image(models.Model):
         image_type = ImageType.objects.get(name=image_type)
 
         # create database entry
-        img = Image(uuid=random_uuid, security_marking=security_marking,
-                    file_extension=file_extension, image_type=image_type)
+        img = Image(uuid=random_uuid,
+                    security_marking=security_marking,
+                    file_extension=file_extension,
+                    image_type=image_type)
         img.save()
 
         # write the image to the file system
-        file_name = settings.MEDIA_ROOT + str(img.id) + '_' + img.image_type.name + '.' + file_extension
+
+        file_name = str(img.id) + '_' + img.image_type.name + '.' + file_extension
+        ext = os.path.splitext(file_name)[1].lower()
+        try:
+            current_format = PIL.Image.EXTENSION[ext]
+        except KeyError:
+            raise ValueError('unknown file extension: {}'.format(ext))
+
         # logger.debug('saving image %s' % file_name)
-        pil_img.save(file_name)
+        image_binary = BytesIO()
+        pil_img.save(image_binary, format=current_format)
 
         # check size requirements
-        size_bytes = os.path.getsize(file_name)
+        size_bytes = image_binary.tell()
 
         # TODO: PIL saved images can be larger than submitted images.
         # To avoid unexpected image save error, make the max_size_bytes
@@ -182,8 +195,12 @@ class Image(models.Model):
                 allowed {1:d} bytes'.format(size_bytes, 2 * image_type.max_size_bytes))
             # TODO raise exception and remove file
             return
-
         # TODO: check width and height
+
+        # image_binary.seek(0)
+
+        # if not media_storage.exists(file_name):  # If
+        media_storage.save(file_name, image_binary)
 
         return img
 

@@ -165,24 +165,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-# for details regarding media vs static files:
-#   http://timmyomahony.com/blog/static-vs-media-and-root-vs-path-in-django/
-
-# STATIC_ROOT is the absolute path to the folder within which static files will
-#   be collected by the staticfiles application
-STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
-
-# STATIC_URL is the relative browser URL to be used when accessing static files
-#   from the browser
-STATIC_URL = '/static/'
-
-# MEDIA_ROOT is the absolute path to the folder that will hold user uploads
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
-
-# MEDIA_URL is the relative browser URL to be used when accessing media files
-#   from the browser
-MEDIA_URL = 'media/'
-
 REST_FRAMEWORK = {
     'EXCEPTION_HANDLER': 'ozpcenter.errors.exception_handler',
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -303,3 +285,63 @@ ES_AUTH_PASSWORD = os.getenv('ES_AUTH_PASSWORD', 'password')
 # Email Settings
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_PORT = 1025
+# EMAIL_HOST localhost
+# EMAIL_HOST_PASSWORD
+# EMAIL_HOST_USER
+# EMAIL_SSL_CERTFILE None
+# EMAIL_SSL_KEYFILE None
+# EMAIL_SUBJECT_PREFIX [Django]
+# EMAIL_TIMEOUT None
+# EMAIL_USE_SSL False
+# EMAIL_USE_TLS False
+
+# AWS settings
+AWS_STORAGE_BUCKET_NAME = 'ozp-static'
+AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID', 'MISSING AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY', 'MISSING AWS_SECRET_ACCESS_KEY')
+
+# Tell django-storages that when coming up with the URL for an item in S3 storage, keep
+# it simple - just use this domain plus the path. (If this isn't set, things get complicated).
+# This controls how the `static` template tag from `staticfiles` gets expanded, if you're using it.
+# We also use it in the next setting.
+# AWS_S3_HOST =
+AWS_S3_SECURE_URLS = False
+AWS_S3_CUSTOM_DOMAIN = '{}.s3-website-us-east-1.amazonaws.com'.format(AWS_STORAGE_BUCKET_NAME)
+
+# This is used by the `static` template tag from `static`, if you're using that. Or if anything else
+# refers directly to STATIC_URL. So it's safest to always set it.
+# STATIC_URL = "http://%s/" % AWS_S3_CUSTOM_DOMAIN
+# STATIC_ROOT is the absolute path to the folder within which static files will
+#   be collected by the staticfiles application
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+
+# STATIC_URL is the relative browser URL to be used when accessing static files
+#   from the browser
+
+STATIC_URL = '/static/'
+#
+# if not DEBUG:
+# Tell the staticfiles app to use S3Boto storage when writing the collected static files (when
+# you run `collectstatic`).
+# STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+
+
+# for details regarding media vs static files:
+#   http://timmyomahony.com/blog/static-vs-media-and-root-vs-path-in-django/
+
+# For S3 - ozp.storage.MediaS3Storage
+# For File System - ozp.storage.MediaFileStorage
+DEFAULT_MEDIA_FILE_STORAGE = os.getenv('DEFAULT_MEDIA_FILE_STORAGE', 'ozp.storage.MediaFileStorage')
+
+# MEDIA_ROOT is the absolute path to the folder that will hold user uploads
+AWS_MEDIA_STORAGE_BUCKET_NAME = 'ozp-media'
+AWS_MEDIA_S3_CUSTOM_DOMAIN = '{}.s3-website-us-east-1.amazonaws.com'.format(AWS_MEDIA_STORAGE_BUCKET_NAME)
+AWS_MEDIA_DEFAULT_ACL = 'private'  # http://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html
+# AWS_MEDIA_S3_CUSTOM_DOMAIN = None  # Make AWS_MEDIA_S3_CUSTOM_DOMAIN to None to get Presigned URLS
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+# AWS_QUERYSTRING_AUTH = False
+# AWS_S3_SIGNATURE_VERSION = 's3v4'  # Presigned URLs
+
+# MEDIA_URL is the relative browser URL to be used when accessing media files
+#   from the browser
+MEDIA_URL = 'media/'
