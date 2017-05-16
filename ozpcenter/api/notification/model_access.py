@@ -73,6 +73,8 @@ from ozpcenter.models import NotificationMailBox
 from ozpcenter.models import Profile
 from ozpcenter.models import Listing
 from ozpcenter.models import ApplicationLibraryEntry
+from ozpcenter.models import Subscription
+
 
 import ozpcenter.model_access as generic_model_access
 
@@ -524,7 +526,12 @@ class TagSubscriptionNotification(NotificationBase):  # Not Verified
         return Notification.LISTING
 
     def get_target_list(self):
-        raise RuntimeError('Not Implemented')
+        subscription_entries = Subscription.objects.filter(entity_type='tag', entity_id__in=list(self.metadata))
+        target_profiles = set()
+        for subscription_entry in subscription_entries:
+            target_profiles.add(subscription_entry.target_profile)
+
+        return list(target_profiles)
 
 
 class CategorySubscriptionNotification(NotificationBase):  # Not Verified
@@ -539,7 +546,12 @@ class CategorySubscriptionNotification(NotificationBase):  # Not Verified
         return Notification.LISTING
 
     def get_target_list(self):
-        raise RuntimeError('Not Implemented')
+        subscription_entries = Subscription.objects.filter(entity_type='category', entity_id__in=list(self.metadata))
+        target_profiles = set()
+        for subscription_entry in subscription_entries:
+            target_profiles.add(subscription_entry.target_profile)
+
+        return list(target_profiles)
 
 
 def get_self(username):
@@ -675,7 +687,8 @@ def create_notification(author_username=None,
                         peer=None,
                         peer_profile=None,
                         group_target=Notification.ALL,
-                        notification_type=None):
+                        notification_type=None,
+                        entities=None):
     """
     Create Notification
 
@@ -712,6 +725,14 @@ def create_notification(author_username=None,
     elif notification_type == 'PendingDeletionCancellationNotification':
         notification_instance = PendingDeletionCancellationNotification()
         notification_instance.set_sender_and_entity(author_username, listing)
+
+    elif notification_type == 'CategorySubscriptionNotification':
+        notification_instance = CategorySubscriptionNotification()
+        notification_instance.set_sender_and_entity(author_username, listing, entities)
+
+    elif notification_type == 'TagSubscriptionNotification':
+        notification_instance = TagSubscriptionNotification()
+        notification_instance.set_sender_and_entity(author_username, listing, entities)
 
     elif listing is not None:
         notification_instance = ListingNotification()

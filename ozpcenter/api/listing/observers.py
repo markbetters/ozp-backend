@@ -140,7 +140,25 @@ class ListingObserver(Observer):
             old_categories: List of category instances
             new_categories: List of category instances
         """
-        pass
+        username = profile.user.username
+        now_plus_month = datetime.datetime.now(pytz.utc) + datetime.timedelta(days=30)
+
+        old_categories_set = set(old_categories)
+        new_categories_set = set(new_categories)
+        new_categories_diff = set()
+        for new_category in new_categories_set:
+            if new_category not in old_categories_set:
+                new_categories_diff.add(new_category)
+
+        for current_category in new_categories_diff:
+            message = 'A new listing in category {}'.format(current_category)
+
+            notification_model_access.create_notification(author_username=username,
+                                                          expires_date=now_plus_month,
+                                                          message=message,
+                                                          listing=listing,
+                                                          entities=[current_category.id],
+                                                          notification_type='CategorySubscriptionNotification')
 
     def listing_tags_changed(self, listing=None, profile=None, old_tags=None, new_tags=None):
         """
@@ -152,7 +170,25 @@ class ListingObserver(Observer):
             old_tags: List of Tag instances
             new_tags: List of Tag instances
         """
-        pass
+        username = profile.user.username
+        now_plus_month = datetime.datetime.now(pytz.utc) + datetime.timedelta(days=30)
+
+        old_tags_set = set(old_tags)
+        new_tags_set = set(new_tags)
+        new_tags_diff = set()
+        for new_tag in new_tags_set:
+            if new_tag not in old_tags_set:
+                new_tags_diff.add(new_tag)
+
+        for current_tag in new_tags_diff:
+            message = 'A new listing in tag {}'.format(current_tag)
+
+            notification_model_access.create_notification(author_username=username,
+                                                          expires_date=now_plus_month,
+                                                          message=message,
+                                                          listing=listing,
+                                                          entities=[current_tag.id],
+                                                          notification_type='TagSubscriptionNotification')
 
     def listing_created(self, listing=None, profile=None):
         """
