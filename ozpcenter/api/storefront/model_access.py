@@ -487,7 +487,7 @@ def get_storefront(username, pre_fetch=False):
 
     Returns data for /storefront api invocation including:
         * recommended listings (max=10)
-        * featured listings (max=12)
+        * featured listings (no limit)
         * recent (new) listings (max=24)
         * most popular listings (max=36)
 
@@ -537,8 +537,7 @@ def get_storefront(username, pre_fetch=False):
             featured_listings_raw = listing_serializers.ListingSerializer.setup_eager_loading(featured_listings_raw)
 
         featured_listings = pipeline.Pipeline(recommend_utils.ListIterator([listing for listing in featured_listings_raw]),
-                                          [pipes.ListingPostSecurityMarkingCheckPipe(username),
-                                           pipes.LimitPipe(12)]).to_list()
+                                          [pipes.ListingPostSecurityMarkingCheckPipe(username)]).to_list()
 
         # Get Recent Listings
         recent_listings_raw = models.Listing.objects.for_user_organization_minus_security_markings(
