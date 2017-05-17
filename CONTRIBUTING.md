@@ -9,7 +9,7 @@ need contributors to follow so that we can have a chance of keeping on top of th
 ## Getting Started
 
 * Make sure you have a [GitHub account](https://github.com/signup/free)
-* Setup your development environment [Developer Setup](https://github.com/ozone-development/ozp-documentation/wiki/Developer_Setup)
+* Setup your development environment [Setup Local Environment](https://github.com/aml-development/ozp-documentation/wiki/Setup-Local-Environment)
 * Submit a ticket for your issue, assuming one does not already exist.
   * Clearly describe the issue including steps to reproduce when it is a bug.
   * Make sure you fill in the earliest version that you know has the issue.
