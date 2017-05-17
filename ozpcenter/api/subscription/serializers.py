@@ -26,6 +26,7 @@ class SubscriptionSerializer(serializers.ModelSerializer):
 
     def to_representation(self, data):
         ret = super(SubscriptionSerializer, self).to_representation(data)
+
         try:
             if ret['entity_type'] == 'category':
                 ret['entity_description'] = category_model_access.get_category_by_id(ret['entity_id'], True).title
@@ -83,8 +84,12 @@ class SubscriptionSerializer(serializers.ModelSerializer):
         if validated_data['error']:
             raise serializers.ValidationError('{0}'.format(validated_data['error']))
 
-        username = self.context['request'].user.username
-        subscription = model_access.update_subscription(username,
-                                                        instance,
-                                                        validated_data['expires_date'])
+        try:
+            username = self.context['request'].user.username
+            subscription = model_access.update_subscription(username,
+                                                            instance,
+                                                            validated_data['entity_type'],
+                                                            validated_data['entity_id'])
+        except Exception as err:
+            raise serializers.ValidationError('{0}'.format(err))
         return subscription
