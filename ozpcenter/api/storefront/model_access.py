@@ -513,10 +513,15 @@ def get_storefront(username, pre_fetch=False):
                                                                                                                                   is_enabled=True,
                                                                                                                                   is_deleted=False).all()
 
-            recommended_listings_raw = listing_serializers.ListingSerializer.setup_eager_loading(recommended_listings_queryset)
-
             if pre_fetch:
-                recommended_listings_raw = [recommendations_listing for recommendations_listing in recommended_listings_raw]
+                recommended_listings_raw = listing_serializers.ListingSerializer.setup_eager_loading(recommended_listings_queryset)
+
+            id_recommended_object_mapper = {}
+
+            for recommendation_entry in recommended_listings_queryset:
+                id_recommended_object_mapper[recommendation_entry.id] = recommendation_entry
+
+            recommended_listings_raw = [id_recommended_object_mapper[listing_id] for listing_id in listing_ids_list]
 
             # Post security_marking check - lazy loading
             recommended_listings = pipeline.Pipeline(recommend_utils.ListIterator([recommendations_listing for recommendations_listing in recommended_listings_raw]),
