@@ -20,9 +20,14 @@ https://linkurio.us/using-neo4j-to-build-a-recommendation-engine-based-on-collab
 http://tinkerpop.apache.org/javadocs/3.2.2/core/org/apache/tinkerpop/gremlin/structure/Element.html
 https://medium.com/@keithwhor/using-graph-theory-to-build-a-simple-recommendation-engine-in-javascript-ec43394b35a3#.iocsamn74
 """
+import logging
+
 from ozpcenter.recommend import recommend_utils
 from ozpcenter.recommend.algorithms import GraphAlgoritms
 from ozpcenter.recommend.query import Query
+
+# Get an instance of a logger
+logger = logging.getLogger('ozp-center.' + str(__name__))
 
 
 class Element(object):
@@ -220,11 +225,18 @@ class Vertex(Element):
         return output_list
 
     def add_edge(self, label, vertex_instance, properties=None):
-        current_edge = self.graph.add_edge(current_id=None,
-                                           in_vertex_id=self.id,
-                                           out_vertex_id=vertex_instance.id,
-                                           label=label,
-                                           properties=properties)
+        # print("vertex_id: ", vertex_instance.id)  # Debug statement for vertex instance tracking bug.
+        current_edge = None  # Initialize Variable
+
+        # vertex_instance = None  # Uncomment to test when a vertex_instance is none, meaning that there are no out vertices what the behvior is.
+        if (vertex_instance == None):
+            logger.warn("No Out Path for Vertex Instance: {}-{}".format(self.id, vertex_instance))  # Output edge information that has no Vertex according to check.
+        else:
+            current_edge = self.graph.add_edge(current_id=None,
+                                               in_vertex_id=self.id,
+                                               out_vertex_id=vertex_instance.id,
+                                               label=label,
+                                               properties=properties)
         return current_edge
 
     def add_in_edge(self, label, edge_instance):
