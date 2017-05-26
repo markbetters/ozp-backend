@@ -507,14 +507,29 @@ def get_storefront(username, pre_fetch=False):
     profile = models.Profile.objects.get(user__username=username)
     try:
         if profile.is_beta_user():
+            # Retrieve List of Recommended Apps for profile:
             listing_ids_list = get_recommendation_listing_ids(profile)
+            # Retrieve Profile Bookmarks:
+            bookmarked_apps = models.ApplicationLibraryEntry.objects.for_user(username)
+
+            # Compare Bookmarks to recommendation list and remove from recommendation list:
+            # TODO: There might be a faster way to cycle through a list and remove them from another list:
+            bklist = []
+            for bkapp in bookmarked_apps:
+                bklist.append(bkapp.listing.id)
+
+            # Create sets for bookmarks and recommended lists:
+            setbklist = set(bklist)
+            setreclist = set(listing_ids_list)
+
+            # Set New Recommended Listings taking out the Bookmarked Listings:
+            listing_ids_list = list(setreclist - setbklist)
+
+            # Send new recommendation list minus bookmarked apps to User Interface
             recommended_listings_queryset = models.Listing.objects.for_user_organization_minus_security_markings(username).filter(pk__in=listing_ids_list,
                                                                                                                                   approval_status=models.Listing.APPROVED,
                                                                                                                                   is_enabled=True,
                                                                                                                                   is_deleted=False).all()
-
-            if pre_fetch:
-                recommended_listings_raw = listing_serializers.ListingSerializer.setup_eager_loading(recommended_listings_queryset)
 
             id_recommended_object_mapper = {}
 
@@ -522,6 +537,9 @@ def get_storefront(username, pre_fetch=False):
                 id_recommended_object_mapper[recommendation_entry.id] = recommendation_entry
 
             recommended_listings_raw = [id_recommended_object_mapper[listing_id] for listing_id in listing_ids_list]
+
+            if pre_fetch:
+                recommended_listings_raw = listing_serializers.ListingSerializer.setup_eager_loading(recommended_listings_queryset)
 
             # Post security_marking check - lazy loading
             recommended_listings = pipeline.Pipeline(recommend_utils.ListIterator([recommendations_listing for recommendations_listing in recommended_listings_raw]),
