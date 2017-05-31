@@ -20,8 +20,8 @@ Response:
 
 import logging
 
-from django.conf import settings
-from django.core.cache import cache
+# from django.conf import settings
+# from django.core.cache import cache
 from rest_framework.decorators import api_view
 from rest_framework.decorators import permission_classes
 from rest_framework.response import Response
@@ -59,10 +59,11 @@ def StorefrontView(request):
     serializer = serializers.StorefrontSerializer(data,
         context={'request': request})
 
-    request_username = request.user.username
-    cache_key = 'storefront-{0}'.format(request_username)
-    cache_data = cache.get(cache_key)
-    if not cache_data:
-        cache_data = serializer.data
-        cache.set(cache_key, cache_data, timeout=settings.GLOBAL_SECONDS_TO_CACHE_DATA)
-    return Response(cache_data)
+    # request_username = request.user.username
+    # cache_key = 'storefront-{0}'.format(request_username)
+    # cache_data = cache.get(cache_key)
+    # if not cache_data:
+    #    cache_data = serializer.data
+    #    cache.set(cache_key, cache_data, timeout=settings.GLOBAL_SECONDS_TO_CACHE_DATA)
+    # return Response(cache_data)
+    return Response(serializer.data)
