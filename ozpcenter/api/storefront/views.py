@@ -20,8 +20,8 @@ Response:
 
 import logging
 
-from django.conf import settings
-from django.core.cache import cache
+# from django.conf import settings
+# from django.core.cache import cache
 from rest_framework.decorators import api_view
 from rest_framework.decorators import permission_classes
 from rest_framework.response import Response
