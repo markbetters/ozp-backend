@@ -164,7 +164,7 @@ class TagSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Tag
-        fields = ('name',)
+        fields = ('id', 'name',)
 
         extra_kwargs = {
             'name': {'validators': []}
