@@ -208,7 +208,14 @@ class ListingObserver(Observer):
         """
         username = profile.user.username
 
-        message = '{} listing was changed. The following fields changed: {}'.format(listing.title, [change_detail['field_name'] for change_detail in change_details])
+        changes = []
+        for change_detail in change_details:
+            changes.append(change_detail['field_name'].title().replace('_', ' '))
+
+        message = '{} listing was changed. The following fields changed: {}'.format(
+            listing.title,
+            ', '.join(changes)
+            )
 
         now_plus_month = datetime.datetime.now(pytz.utc) + datetime.timedelta(days=30)
         notification_model_access.create_notification(author_username=username,
