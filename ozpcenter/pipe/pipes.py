@@ -1,4 +1,5 @@
 import logging
+import random
 
 from ozpcenter.recommend import recommend_utils
 from ozpcenter.recommend.recommend_utils import Direction
@@ -265,6 +266,24 @@ class ListingPostSecurityMarkingCheckPipe(Pipe):
             if not listing.security_marking:
                 logger.debug('Listing {0!s} has no security_marking'.format(listing.title))
             if system_has_access_control(self.username, listing.security_marking):
+                return listing
+
+
+class JitterPipe(Pipe):
+
+    def __init__(self):
+        super().__init__()
+
+    def process_next_start(self):
+        """
+        execute on each listing
+        """
+        while True:
+            listing = self.starts.next()
+
+            random_number = random.randint(0, 10)
+
+            if random_number <= 8:
                 return listing
 
 
