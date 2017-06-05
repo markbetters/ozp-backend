@@ -452,8 +452,9 @@ def get_storefront_new(username, request):
                 recommended_listings_raw.append(current_listing)
 
         recommended_listings = pipeline.Pipeline(recommend_utils.ListIterator(recommended_listings_raw),
-                                            [pipes.ListingDictPostSecurityMarkingCheckPipe(username),
-                                            pipes.LimitPipe(10)]).to_list()
+                                            [pipes.JitterPipe(),
+                                             pipes.ListingDictPostSecurityMarkingCheckPipe(username),
+                                             pipes.LimitPipe(10)]).to_list()
     else:
         recommended_listings = []
 
@@ -543,7 +544,8 @@ def get_storefront(username, pre_fetch=False):
 
             # Post security_marking check - lazy loading
             recommended_listings = pipeline.Pipeline(recommend_utils.ListIterator([recommendations_listing for recommendations_listing in recommended_listings_raw]),
-                                              [pipes.ListingPostSecurityMarkingCheckPipe(username),
+                                              [pipes.JitterPipe(),
+                                               pipes.ListingPostSecurityMarkingCheckPipe(username),
                                                pipes.LimitPipe(10)]).to_list()
         else:
             recommended_listings = []
