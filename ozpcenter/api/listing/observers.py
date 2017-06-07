@@ -75,7 +75,7 @@ class ListingObserver(Observer):
         # AMLNG-376 - ListingSubmission
         if (old_approval_status == models.Listing.IN_PROGRESS and
                 new_approval_status == models.Listing.PENDING):
-            message = '{} listing was submitted'.format(listing.title)
+            message = 'The <b>{}</b> listing was submitted'.format(listing.title)
             notification_model_access.create_notification(author_username=username,
                                                           expires_date=now_plus_month,
                                                           message=message,
@@ -87,7 +87,7 @@ class ListingObserver(Observer):
         if profile in listing.owners.all():  # Check to see if current profile is owner of listing
             if (old_approval_status == models.Listing.PENDING_DELETION and
                     new_approval_status == models.Listing.PENDING):
-                message = 'Listing Owner cancelled deletion of {} listing'.format(listing.title)
+                message = 'A Listing Owner cancelled the deletion of the <b>{}</b> listing'.format(listing.title)
                 notification_model_access.create_notification(author_username=username,
                                                               expires_date=now_plus_month,
                                                               message=message,
@@ -99,7 +99,7 @@ class ListingObserver(Observer):
         elif profile.highest_role() in ['APPS_MALL_STEWARD', 'ORG_STEWARD']:
             if (old_approval_status == models.Listing.PENDING_DELETION and
                     new_approval_status == models.Listing.DELETED):
-                message = '{} listing was approved for deletion by steward'.format(listing.title)
+                message = 'The <b>{}</b> listing was approved for deletion by an Organization Steward'.format(listing.title)
 
                 notification_model_access.create_notification(author_username=username,
                                                               expires_date=now_plus_month,
@@ -110,7 +110,7 @@ class ListingObserver(Observer):
 
             if (old_approval_status == models.Listing.PENDING_DELETION and
                     new_approval_status == models.Listing.PENDING):
-                message = '{} listing was undeleted by steward'.format(listing.title)
+                message = 'The <b>{}</b> listing was undeleted by an Organization Steward'.format(listing.title)
 
                 notification_model_access.create_notification(author_username=username,
                                                               expires_date=now_plus_month,
@@ -121,7 +121,7 @@ class ListingObserver(Observer):
 
             if (old_approval_status == models.Listing.PENDING_DELETION and
                     new_approval_status == models.Listing.REJECTED):
-                message = '{} listing was rejected for deletion by steward'.format(listing.title)
+                message = 'The <b>{}</b> listing was rejected for deletion by an Organization Steward'.format(listing.title)
 
                 notification_model_access.create_notification(author_username=username,
                                                               expires_date=now_plus_month,
@@ -151,7 +151,7 @@ class ListingObserver(Observer):
                 new_categories_diff.add(new_category)
 
         for current_category in new_categories_diff:
-            message = 'A new listing in category {}'.format(current_category)
+            message = 'A new listing, <b>{}</b>, is available in the category <i>{}</i>'.format(listing.title, current_category)
 
             notification_model_access.create_notification(author_username=username,
                                                           expires_date=now_plus_month,
@@ -181,7 +181,7 @@ class ListingObserver(Observer):
                 new_tags_diff.add(new_tag)
 
         for current_tag in new_tags_diff:
-            message = 'A new listing in tag {}'.format(current_tag)
+            message = 'A new listing, <b>{}</b>, is available in the tag <i>{}</i>'.format(listing.title, current_tag)
 
             notification_model_access.create_notification(author_username=username,
                                                           expires_date=now_plus_month,
@@ -208,7 +208,17 @@ class ListingObserver(Observer):
         """
         username = profile.user.username
 
-        message = '{} listing was changed. The following fields changed: {}'.format(listing.title, [change_detail['field_name'] for change_detail in change_details])
+        changes = []
+        for change_detail in change_details:
+            changes.append(change_detail['field_name'].title().replace('_', ' '))
+
+        # Notifications with html markup will display with the change in
+        # ActiveNotification.jsx using dangerouslySetInnerHTML.
+        message = 'The <b>{}</b> listing was updated. The following field{} changed: {}'.format(
+            listing.title,
+            's have' if len(change_details) != 1 else ' has',
+            ', '.join(changes)
+            )
 
         now_plus_month = datetime.datetime.now(pytz.utc) + datetime.timedelta(days=30)
         notification_model_access.create_notification(author_username=username,
@@ -227,7 +237,12 @@ class ListingObserver(Observer):
         username = profile.user.username
         now_plus_month = datetime.datetime.now(pytz.utc) + datetime.timedelta(days=30)
 
-        message = 'User has rated listing [{}] {} stars'.format(listing.title, rating)
+        message = 'A user has rated listing <b>{}</b> {} star{}'.format(
+            listing.title,
+            rating,
+            's' if rating != 1 else ''
+            )
+
         notification_model_access.create_notification(author_username=username,
                                                       expires_date=now_plus_month,
                                                       message=message,
@@ -244,7 +259,12 @@ class ListingObserver(Observer):
         username = profile.user.username
         now_plus_month = datetime.datetime.now(pytz.utc) + datetime.timedelta(days=30)
 
-        message = 'User has changed rating for listing [{}] to {} stars'.format(listing.title, rating)
+        message = 'A user has changed the rating for listing <b>{}</b> to {} star{}'.format(
+            listing.title,
+            rating,
+            's' if rating != 1 else ''
+            )
+
         notification_model_access.create_notification(author_username=username,
                                                       expires_date=now_plus_month,
                                                       message=message,
@@ -266,9 +286,9 @@ class ListingObserver(Observer):
         message = None
 
         if is_private:
-            message = '{} was changed to be a private listing '.format(listing.title)
+            message = '<b>{}</b> was changed to be a private listing '.format(listing.title)
         else:
-            message = '{} was changed to be a public listing '.format(listing.title)
+            message = '<b>{}</b> was changed to be a public listing '.format(listing.title)
 
         now_plus_month = datetime.datetime.now(pytz.utc) + datetime.timedelta(days=30)
         notification_model_access.create_notification(author_username=username,
