@@ -1,3 +1,24 @@
+"""
+Purpose of this script: To send Emails to users that have Notifications that has not been emailed yet
+
+Pull Request that refactored Notifications Tables to be able to do emails
+https://github.com/aml-development/ozp-backend/pull/272
+
+Steps to send out emails:
+Open connection to stmp email server
+
+Iterate all profiles
+    Validate to make sure user has emailed, if not continue to next user
+
+Development Setup:
+setting.py
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+    EMAIL_PORT = 1025
+
+In a terminal
+    python -m smtpd -n -c DebuggingServer localhost:1025
+"""
+
 import os
 import sys
 
@@ -6,7 +27,7 @@ sys.path.insert(0, os.path.realpath(os.path.join(os.path.dirname(__file__), '../
 from django.core import mail
 
 # from django.core.exceptions import ObjectDoesNotExist
-# from ozpcenter import models
+from ozpcenter import models
 
 
 def run():
@@ -14,32 +35,57 @@ def run():
     # Manually open the connection
     connection.open()
 
-    # Construct an email message that uses the connection
-    email1 = mail.EmailMessage(
-        'Hello',
-        'Body goes here',
-        'from@example.com',
-        ['to1@example.com'],
-        connection=connection,
-    )
-    email1.send()  # Send the email
+    email_batch_list = []
 
-    # Construct two more messages
-    email2 = mail.EmailMessage(
-        'Hello',
-        'Body goes here',
-        'from@example.com',
-        ['to2@example.com'],
-    )
-    email3 = mail.EmailMessage(
-        'Hello',
-        'Body goes here',
-        'from@example.com',
-        ['to3@example.com'],
-    )
+    print('==Notifications Email==')
+    for current_profile in models.Profile.objects.all():
+        print('Processing Username: {}'.format(current_profile.user.username))
+        current_profile_email = current_profile.user.email
+        # Validate to make sure user has emailed, if not continue to next user
+        if not current_profile_email:
+            continue  # Skip this user, not validate email
 
-    # Send the two emails in a single call -
-    connection.send_messages([email2, email3])
+        # Check to see if profile disabled email to be set_sender_and_entity
+        # if check:
+        #     continue
+
+        # Retrieve All the Notifications for 'current_profile' that are not emailed yet
+        notifications_mailbox_non_email = models.NotificationMailBox.objects.filter(target_profile=current_profile, emailed_status=False).all()
+        notifications_mailbox_non_email_count = len(notifications_mailbox_non_email)
+
+        if notifications_mailbox_non_email_count >= 1:
+            # Construct messages
+            current_email = mail.EmailMessage(
+                'New Notifications',
+                'You have {} new Notifications'.format(notifications_mailbox_non_email_count),
+                'from@example.com',
+                [current_profile_email],
+            )
+
+            email_batch_list.append(current_email)
+
+            print('\t{} New Notifications for username: {}'.format(notifications_mailbox_non_email_count, current_profile.user.username))
+        else:
+            print('\tNo New Notifications for username: {}'.format(current_profile.user.username))
+
+        # After Sending Email to user, mark those Notifications as emailed
+        for current_notification in notifications_mailbox_non_email:
+            current_notification.emailed_status = True
+            current_notification.save()
+
+        if len(email_batch_list) >= 50:
+            print('Starting Batch Email Send')
+            connection.send_messages(email_batch_list)
+            print('Finished Batch Email Send')
+            email_batch_list = []
+
+    # If there are any email to send
+    if email_batch_list:
+        print('Starting Batch Email Send (extra)')
+        connection.send_messages(email_batch_list)
+        print('Finished Batch Email Send (extra)')
+        email_batch_list = []
+
     # The connection was already open so send_messages() doesn't close it.
     # We need to manually close the connection.
     connection.close()
