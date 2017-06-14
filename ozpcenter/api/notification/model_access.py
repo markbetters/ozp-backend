@@ -663,12 +663,9 @@ def get_self_notifications_mailbox(username):
     Returns:
         django.db.models.query.QuerySet(Notification): List of notifications for username
     """
-    # TODO: Figure out how to do join query
-    notifications_mailbox = NotificationMailBox.objects.filter(target_profile=get_self(username)).values_list('notification', flat=True)
-    unexpired_notifications = Notification.objects.filter(pk__in=notifications_mailbox,
-                                                expires_date__gt=datetime.datetime.now(pytz.utc))
 
-    return unexpired_notifications
+    notifications_mailbox = NotificationMailBox.objects.filter(target_profile=get_self(username), notification__expires_date__gt=datetime.datetime.now(pytz.utc)).all()
+    return notifications_mailbox
 
 
 # Method is decorated with @transaction.atomic to ensure all logic is executed in a single transaction
@@ -779,20 +776,19 @@ def update_notification(author_username, notification_instance, expires_date):
     return notification_instance
 
 
-def dismiss_notification_mailbox(notification_instance, username):
+def dismiss_notification_mailbox(notification_mailbox_instance, username):
     """
-    Dismissed a Notification
+    Dismissed a Notification Mailbox entry
 
-    It delete the Mailbox Entry for user
+    It deletes the Mailbox Entry for user
 
     Args:
-        notification_instance (Notification): notification_instance
+        notification_mailbox_instance (NotificationMailBox): notification_mailbox_instance
         username (string)
 
     Return:
-        bool: Notification Dismissed
+        bool: Notification Mailbox Dismissed
     """
     profile_instance = get_self(username)
-    NotificationMailBox.objects.filter(target_profile=profile_instance,
-                                       notification=notification_instance).delete()
+    NotificationMailBox.objects.filter(target_profile=profile_instance, pk=notification_mailbox_instance.id).delete()
     return True

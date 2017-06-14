@@ -108,20 +108,24 @@ class UserNotificationViewSet(viewsets.ModelViewSet):
 
     GET /api/self/notification/
         Summary:
-            Get a list of all user Notification entries
+            Get a list of all user Notification (NotificationMailBox) entries
         Response:
-            200 - Successful operation - [NotificationSerializer]
+            200 - Successful operation - [NotificationMailboxSerializer]
 
     DELETE /api/self/notification/{pk}
     Summary:
-        Delete a user Notification Entry by ID
+        Delete a user Notification (NotificationMailBox) Entry by ID
+
+    PUT /api/self/notification/{pk}
+    Summary:
+        Update user Notification (NotificationMailBox) Entry by ID
     """
 
     permission_classes = (permissions.IsUser,)
-    serializer_class = serializers.NotificationSerializer
+    serializer_class = serializers.NotificationMailBoxSerializer
     filter_backends = (filters.OrderingFilter,)
-    ordering_fields = ('created_date',)
-    ordering = ('-created_date',)
+    ordering_fields = ('notification__created_date',)
+    ordering = ('-notification__created_date',)
 
     def get_queryset(self):
         """
@@ -137,6 +141,21 @@ class UserNotificationViewSet(viewsets.ModelViewSet):
         notification = get_object_or_404(queryset, pk=pk)
         model_access.dismiss_notification_mailbox(notification, self.request.user.username)
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+    def update(self, request, pk=None):
+        """
+        Update is used only change the read_status or acknowledged_status of the NotificationMailBox
+        """
+        instance = self.get_queryset().get(pk=pk)
+        serializer = serializers.NotificationMailBoxSerializer(instance,
+            data=request.data, context={'request': request}, partial=True)
+
+        if not serializer.is_valid():
+            logger.error('{0!s}'.format(serializer.errors))
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        serializer.save()
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class PendingNotificationView(generics.ListCreateAPIView):

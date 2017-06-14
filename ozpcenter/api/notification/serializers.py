@@ -51,7 +51,26 @@ class DictField(serializers.ReadOnlyField):
         return None
 
 
-class NotificationSerializer(serializers.ModelSerializer):
+class NotificationMailBoxSerializer(serializers.HyperlinkedModelSerializer):
+    created_date = serializers.DateTimeField(required=False, source='notification.created_date')
+    expires_date = serializers.DateTimeField(required=False, source='notification.expires_date')
+    author = profile_serializers.ShortProfileSerializer(required=False, source='notification.author')
+    message = serializers.CharField(required=False, source='notification.message')
+    listing = NotificationListingSerializer(required=False, source='notification.listing')
+    agency = NotificationAgencySerializer(required=False, source='notification.agency')
+    peer = serializers.CharField(required=False, source='notification.peer')
+    notification_type = serializers.CharField(required=False, source='notification.notification_type')
+    entity_id = serializers.IntegerField(required=False, source='notification.entity_id')
+    notification_id = serializers.IntegerField(required=False, source='notification.id')
+
+    class Meta:
+        model = models.NotificationMailBox
+        fields = ('id', 'notification_id', 'created_date', 'expires_date', 'author',
+            'message', 'notification_type', 'listing', 'agency', 'entity_id', 'peer',
+            'read_status', 'acknowledged_status', )
+
+
+class NotificationSerializer(serializers.HyperlinkedModelSerializer):
     author = profile_serializers.ShortProfileSerializer(required=False)
     listing = NotificationListingSerializer(required=False)
     agency = NotificationAgencySerializer(required=False)

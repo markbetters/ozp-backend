@@ -65,6 +65,9 @@ class NotificationApiTest(APITestCase):
             self.assertIn('agency', current_notification)
             self.assertIn('notification_type', current_notification)
             self.assertIn('peer', current_notification)
+            self.assertIn('notification_id', current_notification)
+            self.assertIn('read_status', current_notification)
+            self.assertIn('acknowledged_status', current_notification)
 
     def test_get_self_notification_unauthorized(self):
         url = '/api/self/notification/'
@@ -189,7 +192,7 @@ class NotificationApiTest(APITestCase):
         user = generic_model_access.get_profile('wsmith').user
         self.client.force_authenticate(user=user)
 
-        url = '/api/self/notification/?ordering=-created_date'
+        url = '/api/self/notification/?ordering=-notification__created_date'
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -201,7 +204,7 @@ class NotificationApiTest(APITestCase):
         user = generic_model_access.get_profile('wsmith').user
         self.client.force_authenticate(user=user)
 
-        url = '/api/self/notification/?ordering=created_date'
+        url = '/api/self/notification/?ordering=notification__created_date'
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -214,9 +217,11 @@ class NotificationApiTest(APITestCase):
 
         url = '/api/self/notification/'
         response = self.client.get(url, format='json')
+        mailbox_ids = []
         notification_ids = []
         for i in response.data:
-            notification_ids.append([i['id'], ''.join(i['message'].split())])
+            notification_ids.append([i['notification_id'], ''.join(i['message'].split())])
+            mailbox_ids.append(i['id'])
 
         expected = [[106, 'BreadBasketupdatenextweek'],
                     [105, 'Skybox1updatenextweek'],
@@ -322,8 +327,8 @@ class NotificationApiTest(APITestCase):
         self.assertEqual(expected, notification_ids)
 
         # now dismiss the first notification
-        dismissed_notification_id = notification_ids[0][0]
-        url = url + str(dismissed_notification_id) + '/'
+        dismissed_mailbox_id = mailbox_ids[0]
+        url = url + str(dismissed_mailbox_id) + '/'
         response = self.client.delete(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
@@ -332,7 +337,7 @@ class NotificationApiTest(APITestCase):
         response = self.client.get(url, format='json')
         notification_ids = []
         for i in response.data:
-            notification_ids.append([i['id'], ''.join(i['message'].split())])
+            notification_ids.append([i['notification_id'], ''.join(i['message'].split())])
 
         expected = [[105, 'Skybox1updatenextweek'],
                     [103, 'AirMailupdatenextweek'],
