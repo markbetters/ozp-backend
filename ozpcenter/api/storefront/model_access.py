@@ -382,15 +382,15 @@ def get_recommendation_listing_ids(profile_instance):
     if target_profile_recommended_entry:
         recommendation_data = target_profile_recommended_entry.recommendation_data
         if recommendation_data:
-            recommended_entry_data = msgpack.unpackb(recommendation_data)
+            recommended_entry_data = msgpack.unpackb(recommendation_data, encoding='utf-8')
 
     recommendation_combined_dict = {'profile': {}}
 
     for recommender_friendly_name in recommended_entry_data:
         recommender_name_data = recommended_entry_data[recommender_friendly_name]
         # print(recommender_name_data)
-        recommender_name_weight = recommender_name_data[b'weight']
-        recommender_name_recommendations = recommender_name_data[b'recommendations']
+        recommender_name_weight = recommender_name_data['weight']
+        recommender_name_recommendations = recommender_name_data['recommendations']
 
         for recommendation_tuple in recommender_name_recommendations:
             current_listing_id = recommendation_tuple[0]
@@ -402,8 +402,11 @@ def get_recommendation_listing_ids(profile_instance):
                 recommendation_combined_dict['profile'][current_listing_id] = current_listing_score * recommender_name_weight
 
     sorted_recommendations_combined_dict = recommend_utils.get_top_n_score(recommendation_combined_dict, 40)
+    # sorted_recommendations_combined_dict = {'profile': [[11, 8.5], [112, 8.0], [85, 7.0], [86, 7.0], [87, 7.0],
+    #    [88, 7.0], [89, 7.0], [90, 7.0], [81, 6.0], [62, 6.0],
+    #    [21, 5.5], [1, 5.0], [113, 5.0], [111, 5.0], [114, 5.0], [64, 4.0], [66, 4.0], [68, 4.0], [70, 4.0], [72, 4.0]]}
     listing_ids_list = [entry[0] for entry in sorted_recommendations_combined_dict['profile']]
-    return listing_ids_list
+    return listing_ids_list, recommended_entry_data
 
 
 def get_storefront_new(username, request):
@@ -427,6 +430,7 @@ def get_storefront_new(username, request):
 
 
     """
+    extra_data = {}
     profile = models.Profile.objects.get(user__username=username)
 
     if profile.highest_role() == 'APPS_MALL_STEWARD':
@@ -444,7 +448,8 @@ def get_storefront_new(username, request):
 
     # Get Recommended Listings for owner
     if profile.is_beta_user():
-        listing_ids_list = set(get_recommendation_listing_ids(profile))
+        recommendation_listing_ids, recommended_entry_data = get_recommendation_listing_ids(profile)
+        listing_ids_list = set(recommendation_listing_ids)
 
         recommended_listings_raw = []
         for current_listing in current_listings:
@@ -478,7 +483,7 @@ def get_storefront_new(username, request):
         'most_popular': most_popular_listings
     }
 
-    return data
+    return data, extra_data
 
 
 def get_storefront(username, pre_fetch=False):
@@ -505,26 +510,24 @@ def get_storefront(username, pre_fetch=False):
             'most_popular': [Listing]
         }
     """
+    extra_data = {}
     profile = models.Profile.objects.get(user__username=username)
     try:
         if profile.is_beta_user():
             # Retrieve List of Recommended Apps for profile:
-            listing_ids_list = get_recommendation_listing_ids(profile)
-            # Retrieve Profile Bookmarks:
-            bookmarked_apps = models.ApplicationLibraryEntry.objects.for_user(username)
+            listing_ids_list, recommended_entry_data = get_recommendation_listing_ids(profile)
+            extra_data['recommended_entry_data'] = recommended_entry_data
 
-            # Compare Bookmarks to recommendation list and remove from recommendation list:
-            # TODO: There might be a faster way to cycle through a list and remove them from another list:
-            bklist = []
-            for bkapp in bookmarked_apps:
-                bklist.append(bkapp.listing.id)
+            # Retrieve Profile Bookmarks and remove bookmarked from recommendation list
+            bookmarked_apps_list = set([record['id'] for record in models.ApplicationLibraryEntry.objects.for_user('bigbrother').values('id')])
 
-            # Create sets for bookmarks and recommended lists:
-            setbklist = set(bklist)
-            setreclist = set(listing_ids_list)
+            listing_ids_list_temp = []
 
-            # Set New Recommended Listings taking out the Bookmarked Listings:
-            listing_ids_list = list(setreclist - setbklist)
+            for current_listing_id in listing_ids_list:
+                if current_listing_id not in bookmarked_apps_list:
+                    listing_ids_list_temp.append(current_listing_id)
+
+            listing_ids_list = listing_ids_list_temp
 
             # Send new recommendation list minus bookmarked apps to User Interface
             recommended_listings_queryset = models.Listing.objects.for_user_organization_minus_security_markings(username).filter(pk__in=listing_ids_list,
@@ -532,15 +535,15 @@ def get_storefront(username, pre_fetch=False):
                                                                                                                                   is_enabled=True,
                                                                                                                                   is_deleted=False).all()
 
-            id_recommended_object_mapper = {}
+            if pre_fetch:
+                recommended_listings_queryset = listing_serializers.ListingSerializer.setup_eager_loading(recommended_listings_queryset)
 
+            # Fix Order of Recommendations
+            id_recommended_object_mapper = {}
             for recommendation_entry in recommended_listings_queryset:
                 id_recommended_object_mapper[recommendation_entry.id] = recommendation_entry
 
             recommended_listings_raw = [id_recommended_object_mapper[listing_id] for listing_id in listing_ids_list]
-
-            if pre_fetch:
-                recommended_listings_raw = listing_serializers.ListingSerializer.setup_eager_loading(recommended_listings_queryset)
 
             # Post security_marking check - lazy loading
             recommended_listings = pipeline.Pipeline(recommend_utils.ListIterator([recommendations_listing for recommendations_listing in recommended_listings_raw]),
@@ -601,7 +604,7 @@ def get_storefront(username, pre_fetch=False):
     except Exception:
         # raise Exception({'error': True, 'msg': 'Error getting storefront: {0!s}'.format(str(e))})
         raise  # Should be catch in the django framwork
-    return data
+    return data, extra_data
 
 
 def values_query_set_to_dict(vqs):

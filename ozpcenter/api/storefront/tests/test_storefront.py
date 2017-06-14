@@ -33,7 +33,7 @@ class StorefrontTest(TestCase):
 
         """
         username = 'wsmith'
-        data = model_access.get_storefront(username)
+        data, extra_data = model_access.get_storefront(username)
 
         # test that only APPROVED listings are returned
         for i in data['featured']:

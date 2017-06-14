@@ -502,6 +502,7 @@ class RecommenderDirectory(object):
             recommendations_end_ms = time.time() * 1000.0
             recommendations_time = recommendations_end_ms - recommendations_start_ms
 
+            logger.info('Merging {} into results'.format(friendly_name))
             self.merge(friendly_name, recommendation_weight, recommendations_results, recommendations_time)
 
         start_db_ms = time.time() * 1000.0
