@@ -519,7 +519,7 @@ def get_storefront(username, pre_fetch=False):
             extra_data['recommended_entry_data'] = recommended_entry_data
 
             # Retrieve Profile Bookmarks and remove bookmarked from recommendation list
-            bookmarked_apps_list = set([record['id'] for record in models.ApplicationLibraryEntry.objects.for_user('bigbrother').values('id')])
+            bookmarked_apps_list = set([application_library_entry.listing.id for application_library_entry in models.ApplicationLibraryEntry.objects.for_user(username)])
 
             listing_ids_list_temp = []
 
