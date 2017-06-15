@@ -85,7 +85,7 @@ def StorefrontView(request):
                 current_listing = current_recommendations[0]
                 current_score = current_recommendations[1]
 
-                if current_score in listing_recommend_data:
+                if current_listing in listing_recommend_data:
                     listing_recommend_data[current_listing][friendly_name] = {'raw_score': current_score, 'weight': current_weight}
                 else:
                     listing_recommend_data[current_listing] = {}
