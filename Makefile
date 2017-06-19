@@ -56,6 +56,9 @@ reindex_es:
 recommend:
 	python manage.py runscript recommend
 
+recommend_es:
+	ES_ENABLED=TRUE python manage.py runscript recommend
+
 recommend_psql:
 	MAIN_DATABASE=psql python manage.py runscript recommend
 
