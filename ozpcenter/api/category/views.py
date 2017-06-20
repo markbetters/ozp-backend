@@ -8,6 +8,7 @@ from rest_framework import viewsets
 from rest_framework import status
 from rest_framework.response import Response
 
+from ozpcenter.errors import RequestException
 from ozpcenter import permissions
 import ozpcenter.api.category.model_access as model_access
 import ozpcenter.api.category.serializers as serializers
@@ -77,7 +78,7 @@ class CategoryViewSet(viewsets.ModelViewSet):
         category_listing_count = Listing.objects.filter(categories__in=[category]).count()
 
         if category_listing_count >= 1:
-            return Response({'error': True, 'msg': 'Can not delete category, {} listings use this category'.format(category_listing_count)}, status=status.HTTP_400_BAD_REQUEST)
+            raise RequestException('Can not delete category {}, {} listings use this category'.format(category.title, category_listing_count))
 
         category.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
