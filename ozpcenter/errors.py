@@ -28,6 +28,10 @@ class InvalidInput(Exception):
     pass
 
 
+class RequestException(Exception):
+    pass
+
+
 class AuthorizationFailure(Exception):
     pass
 
@@ -94,6 +98,13 @@ def exception_handler(exc, context):
         message = six.text_type(exc)
         if message:
             data['message'] = message
+
+        set_rollback()
+        return Response(data, status=status.HTTP_400_BAD_REQUEST)
+
+    elif isinstance(exc, RequestException):
+        msg = _(str(exc))
+        data = {'error': True, 'detail': six.text_type(msg)}
 
         set_rollback()
         return Response(data, status=status.HTTP_400_BAD_REQUEST)
