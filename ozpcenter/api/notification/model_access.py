@@ -604,12 +604,12 @@ def get_all_pending_notifications(for_user=False):
         django.db.models.query.QuerySet(Notification): List of system-wide pending notifications
     """
     unexpired_system_notifications = Notification.objects.filter(
-        expires_date__gt=datetime.datetime.now(pytz.utc))
+        expires_date__gt=datetime.datetime.now(pytz.utc)).order_by('-created_date')
 
     if for_user:
         unexpired_system_notifications = unexpired_system_notifications.filter(agency__isnull=True,
                                               listing__isnull=True,
-                                              _peer__isnull=True)
+                                              _peer__isnull=True).order_by('-created_date')
 
     return unexpired_system_notifications
 
@@ -629,7 +629,7 @@ def get_all_expired_notifications():
         django.db.models.query.QuerySet(Notification): List of system-wide pending notifications
     """
     expired_system_notifications = Notification.objects.filter(
-        expires_date__lt=datetime.datetime.now(pytz.utc))
+        expires_date__lt=datetime.datetime.now(pytz.utc)).order_by('-created_date')
     return expired_system_notifications
 
 
