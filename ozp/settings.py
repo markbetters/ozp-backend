@@ -269,6 +269,9 @@ ES_ENABLED = bool(os.getenv('ES_ENABLED', False))  # This needs to be false for 
 ES_INDEX_NAME = 'appsmall'
 ES_TYPE_NAME = 'listings'
 ES_ID_FIELD = 'id'
+ES_RECOMMEND_USER = 'es_recommend_user'
+ES_RECOMMEND_CONTENT = 'es_recommend_content'
+ES_RECOMMEND_TYPE = 'recommend'
 
 ES_NUMBER_OF_SHARDS = 1
 ES_NUMBER_OF_REPLICAS = 0
