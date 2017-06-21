@@ -476,11 +476,11 @@ class NotificationApiTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         notification_list = [['{}-{}-{}'.format(entry['entity_id'], entry['notification_type'], ''.join(entry['message'].split())), entry['expires_date']] for entry in response.data]
-        expected = ['1-listing-Auserhasratedlisting<b>AirMail</b>5stars',
-                    '1-listing-Auserhasratedlisting<b>AirMail</b>3stars',
-                    '1-listing-Auserhasratedlisting<b>AirMail</b>1star',
+        expected = ['1-listing-AirMailupdatenextweek',
                     '1-listing-AirMailupdatenextweek',
-                    '1-listing-AirMailupdatenextweek']
+                    '1-listing-Auserhasratedlisting<b>AirMail</b>1star',
+                    '1-listing-Auserhasratedlisting<b>AirMail</b>3stars',
+                    '1-listing-Auserhasratedlisting<b>AirMail</b>5stars']
 
         self.assertEqual(expected, [entry[0] for entry in notification_list])
 
