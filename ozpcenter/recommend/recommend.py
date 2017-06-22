@@ -49,6 +49,8 @@ logger = logging.getLogger('ozp-center.' + str(__name__))
 
 # Create ES client
 es_client = model_access_es.es_client
+# Get ES Listing link:
+es_listing = model_access_es.es_client
 
 
 class Recommender(object):
@@ -326,6 +328,11 @@ class ElasticsearchUserBaseRecommender(Recommender):
         logger.debug('Elasticsearch User Base Recommendation Engine: Loading data from Review model')
         reviews_listings = models.Review.objects.all()
         reviews_listing_uname = reviews_listings.values_list('id', 'listing_id', 'rate', 'author')
+        # category_listings = models.Category.objects.all()
+        # category_listings_uname = category_listings.values_list('id', 'title')
+        # Think about changing to use with Elasticsearch table already in place to speed up processing:
+        # listings = models.Listing.objects.all()
+        # listings_uname = listings.values_list('id', 'categories')
         # End loading of Reviews Table data
         ###########
 
@@ -356,10 +363,16 @@ class ElasticsearchUserBaseRecommender(Recommender):
                                 "rate": {
                                     "type": "long",
                                     "boost": 10
+                                },
+                                "listing_categories": {
+                                    "type": "long"
                                 }
                             }
                         },
                         "bookmark_ids": {
+                            "type": "long"
+                        },
+                        "categories": {
                             "type": "long"
                         }
                     }
@@ -402,7 +415,35 @@ class ElasticsearchUserBaseRecommender(Recommender):
             ratings_items = []
             ratings_items.append({"listing_id": record[1], "rate": record[2]})
 
+            # For each reviewed listing_id in ratings_items get the categories associated with the listing:
+            es_cat_query_term = {
+                "_source": ["id", "categories"],
+                "query": {
+                    "bool": {
+                        "must": [
+                            {"term": {"id": record[1]}}
+                        ]
+                    }
+                }
+            }
+            es_cat_search = es_listing.search(
+                index=settings.ES_INDEX_NAME,
+                body=es_cat_query_term
+            )
+            # print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+            # print("CAT SEARCH RESULTS: ", es_cat_search)
+
+            # Set category_items array with category id's:
+            category_items = []
+            if es_cat_search['hits']['total'] <= 1:
+                category_items = [cat['id'] for cat in es_cat_search['hits']['hits'][0]['_source']['categories']]
+            else:
+                logger.debug("== CATEGORY ITEMS MORE THAN 1 ({}) ==".format(es_cat_search['hits']['total']))
+
+            # print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+
             if es_search_result['hits']['total'] == 0:
+                # If rescord does not exist in Recommendation List, then create it:
                 result_es = es_client.create(
                     index=settings.ES_RECOMMEND_USER,
                     doc_type=settings.ES_RECOMMEND_TYPE,
@@ -410,9 +451,11 @@ class ElasticsearchUserBaseRecommender(Recommender):
                     refresh=True,
                     body={
                         "author_id": record[3],
-                        "ratings": ratings_items
+                        "ratings": ratings_items,
+                        "categories": category_items
                     })
             else:
+                # Update existing record:
                 record_to_update = es_search_result['hits']['hits'][0]['_id']
                 current_ratings = es_search_result['hits']['hits'][0]['_source']['ratings']
                 new_ratings = current_ratings + ratings_items
@@ -426,7 +469,8 @@ class ElasticsearchUserBaseRecommender(Recommender):
                    id=record_to_update,
                    refresh=True,
                    body={"doc": {
-                       "ratings": new_ratings
+                       "ratings": new_ratings,
+                       "categories": category_items
                        }
                    })
 
@@ -451,7 +495,7 @@ class ElasticsearchUserBaseRecommender(Recommender):
 
         # Set Aggrelation List size for number of results to return:
         AGG_LIST_SIZE = 50  # Will return up to 30 results based on query.  Default is 10 if parameter is left out of query.
-        MIN_RATING = 3  # Minimum rating to have results meet before being recommended
+        MIN_RATING = 3.5  # Minimum rating to have results meet before being recommended
 
         # Retreive all of the profiles from database:
         all_profiles = models.Profile.objects.all()
@@ -487,7 +531,40 @@ class ElasticsearchUserBaseRecommender(Recommender):
 
             # Only add/change documents if the user has any bookmarks, otherwise no need to update
             # documents with null information:
+            category_items = []
             if len(bookmarked_list) > 0:
+                for bk_item in bookmarked_list:
+                    # For each listing_id in ratings_items get the categories associated with the listing:
+                    es_cat_query_term = {
+                        "_source": ["id", "categories"],
+                        "query": {
+                            "bool": {
+                                "must": [
+                                    {"term": {"id": bk_item}}
+                                ]
+                            }
+                        }
+                    }
+                    es_cat_search = es_listing.search(
+                        index=settings.ES_INDEX_NAME,
+                        body=es_cat_query_term
+                    )
+                    # print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+                    # print("CAT SEARCH RESULTS: ", es_cat_search)
+
+                    if es_cat_search['hits']['total'] <= 1:
+                        category_items = list(set(category_items + [cat['id'] for cat in es_cat_search['hits']['hits'][0]['_source']['categories']]))
+                    else:
+                        logger.debug("== CATEGORY ITEMS MORE THAN 1 ({}) ==".format(es_cat_search['hits']['total']))
+
+                    print("CAT    SEARCH: ", es_cat_search)
+                    print("CAT     ITEMS: ", category_items)
+
+                # Get Categories for bookmarked apps:
+                categories = []
+                if es_search_result['hits']['total'] > 0:
+                    categories = es_search_result['hits']['hits'][0]['_source']['categories']
+
                 # No Reviews were made, but user has bookmarked apps:
                 if es_search_result['hits']['total'] == 0:
                     # print("PROFILE: ", profile_id)
@@ -498,11 +575,14 @@ class ElasticsearchUserBaseRecommender(Recommender):
                         refresh=True,
                         body={
                             "author_id": profile_id,
-                            "bookmark_ids": bookmarked_list
+                            "bookmark_ids": bookmarked_list,
+                            "categories": category_items
                         })
                     logger.info("Bookmarks Created for profile: {} with result: {}".format(profile_id, result_es))
                 else:
                     record_to_update = es_search_result['hits']['hits'][0]['_id']
+                    # Get current categories and then use to add to category_items:
+                    current_categories = es_search_result['hits']['hits'][0]['_source']['categories']
                     result_es = es_client.update(
                        index=settings.ES_RECOMMEND_USER,
                        doc_type=settings.ES_RECOMMEND_TYPE,
@@ -510,7 +590,8 @@ class ElasticsearchUserBaseRecommender(Recommender):
                        refresh=True,
                        body={"doc":
                             {
-                                "bookmark_ids": bookmarked_list
+                                "bookmark_ids": bookmarked_list,
+                                "categories": list(set(current_categories + category_items))
                             }
                        })
                     # print("Bookmarks Updated for profile: {} with result: {}".format(profile_id, result_es))
@@ -518,41 +599,82 @@ class ElasticsearchUserBaseRecommender(Recommender):
             agg_query_term = {}
 
             if len(bookmarked_list) > 0:
-                agg_query_term = {
-                    "constant_score": {
-                        "filter": {
-                            "bool": {
-                                "must_not":
-                                    {"term": {"author_id": profile_id}},
-                                "should": [
-                                    {"terms": {"bookmark_ids": bookmarked_list}},
-                                    {
-                                        "nested": {
-                                            "path": "ratings",
-                                            "query": {
-                                                "bool": {
-                                                    "should": [
-                                                        {"terms": {"ratings.listing_id": bookmarked_list}}
-                                                    ]
+                if len(categories) > 0:
+                    agg_query_term = {
+                        "constant_score": {
+                            "filter": {
+                                "bool": {
+                                    "must_not":
+                                        {"term": {"author_id": profile_id}},
+                                    "should": [
+                                        {"terms": {"bookmark_ids": bookmarked_list}},
+                                        {"terms": {"categories": categories}},
+                                        {
+                                            "nested": {
+                                                "path": "ratings",
+                                                "query": {
+                                                    "bool": {
+                                                        "should": [
+                                                            {"terms": {"ratings.listing_id": bookmarked_list}}
+                                                        ]
+                                                    }
                                                 }
                                             }
-                                        }
-                                    }]
+                                        }]
+                                }
                             }
                         }
                     }
-                }
+                else:
+                    agg_query_term = {
+                        "constant_score": {
+                            "filter": {
+                                "bool": {
+                                    "must_not":
+                                        {"term": {"author_id": profile_id}},
+                                    "should": [
+                                        {"terms": {"bookmark_ids": bookmarked_list}},
+                                        {
+                                            "nested": {
+                                                "path": "ratings",
+                                                "query": {
+                                                    "bool": {
+                                                        "should": [
+                                                            {"terms": {"ratings.listing_id": bookmarked_list}}
+                                                        ]
+                                                    }
+                                                }
+                                            }
+                                        }]
+                                }
+                            }
+                        }
+                    }
             else:
-                agg_query_term = {
-                    "constant_score": {
-                        "filter": {
-                            "bool": {
-                                "must_not":
-                                    {"term": {"author_id": profile_id}}
+                if len(categories) > 0:
+                    agg_query_term = {
+                        "constant_score": {
+                            "filter": {
+                                "bool": {
+                                    "must_not":
+                                        {"term": {"author_id": profile_id}},
+                                    "should": [
+                                        {"terms": {"categories": categories}}]
+                                }
                             }
                         }
                     }
-                }
+                else:
+                    agg_query_term = {
+                        "constant_score": {
+                            "filter": {
+                                "bool": {
+                                    "must_not":
+                                        {"term": {"author_id": profile_id}}
+                                }
+                            }
+                        }
+                    }
 
             agg_search_query = {
                 "size": 0,
