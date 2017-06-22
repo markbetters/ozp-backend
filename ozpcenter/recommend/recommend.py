@@ -412,9 +412,6 @@ class ElasticsearchUserBaseRecommender(Recommender):
                 body=query_term
             )
 
-            ratings_items = []
-            ratings_items.append({"listing_id": record[1], "rate": record[2]})
-
             # For each reviewed listing_id in ratings_items get the categories associated with the listing:
             es_cat_query_term = {
                 "_source": ["id", "categories"],
@@ -430,8 +427,6 @@ class ElasticsearchUserBaseRecommender(Recommender):
                 index=settings.ES_INDEX_NAME,
                 body=es_cat_query_term
             )
-            # print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-            # print("CAT SEARCH RESULTS: ", es_cat_search)
 
             # Set category_items array with category id's:
             category_items = []
@@ -440,7 +435,8 @@ class ElasticsearchUserBaseRecommender(Recommender):
             else:
                 logger.debug("== CATEGORY ITEMS MORE THAN 1 ({}) ==".format(es_cat_search['hits']['total']))
 
-            # print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+            ratings_items = []
+            ratings_items.append({"listing_id": record[1], "rate": record[2], "listing_categories": category_items})
 
             if es_search_result['hits']['total'] == 0:
                 # If rescord does not exist in Recommendation List, then create it:
