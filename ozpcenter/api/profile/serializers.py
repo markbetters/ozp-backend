@@ -69,6 +69,33 @@ class UserSerializer(serializers.ModelSerializer):
 
         return ret
 
+    def validate(self, data):
+        groups = None
+
+        if 'groups' in data:
+            groups = []
+            groups.append({'name': 'USER'})
+
+        data['groups'] = groups
+
+        return data
+
+    def update(self, profile_instance, validated_data):
+        current_request_profile = generic_model_access.get_profile(self.context['request'].user.username)
+
+        if current_request_profile.highest_role() == 'APPS_MALL_STEWARD':
+
+            if validated_data['groups'] is not None:
+                profile_instance.groups.clear()
+                for group in validated_data['groups']:
+                    print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+                    print(group)
+                    profile_instance.groups.add(group['groups'])
+
+        profile_instance.save()
+        print(profile_instance)
+        return profile_instance
+
 
 class ShortUserSerializer(serializers.ModelSerializer):
 
@@ -141,13 +168,15 @@ class ProfileSerializer(serializers.ModelSerializer):
         return ret
 
     def validate(self, data):
-        stewarded_organizations = []
+        stewarded_organizations = None
 
         if 'stewarded_organizations' in data:
+            stewarded_organizations = []
             for org in data['stewarded_organizations']:
                 stewarded_organizations.append(agency_model_access.get_agency_by_title(
                     org['title']))
         data['stewarded_organizations'] = stewarded_organizations
+
         return data
 
     def update(self, profile_instance, validated_data):
@@ -163,10 +192,12 @@ class ProfileSerializer(serializers.ModelSerializer):
         current_request_profile = generic_model_access.get_profile(self.context['request'].user.username)
 
         if current_request_profile.highest_role() == 'APPS_MALL_STEWARD':
-            if validated_data['stewarded_organizations']:
+
+            if validated_data['stewarded_organizations'] is not None:
                 profile_instance.stewarded_organizations.clear()
                 for org in validated_data['stewarded_organizations']:
                     profile_instance.stewarded_organizations.add(org)
+
         profile_instance.save()
         return profile_instance
 

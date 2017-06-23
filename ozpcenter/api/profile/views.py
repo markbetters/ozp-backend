@@ -92,6 +92,7 @@ class ProfileViewSet(viewsets.ModelViewSet):
         return queryset
 
     def update(self, request, pk=None):
+        # print(request.data)
         current_request_profile = model_access.get_self(request.user.username)
         if current_request_profile.highest_role() != 'APPS_MALL_STEWARD':
             raise errors.PermissionDenied
@@ -266,10 +267,44 @@ class UserViewSet(viewsets.ModelViewSet):
     Summary:
         Delete a User by ID
     """
-
+    print('HERE 1')
     permission_classes = (permissions.IsOrgSteward,)
     queryset = model_access.get_all_users()
     serializer_class = serializers.UserSerializer
+    filter_backends = (filters.SearchFilter,)
+
+    def get_queryset(self):
+        role = self.request.query_params.get('role', None)
+        if role:
+            queryset = model_access.get_profiles_by_role(role)
+        else:
+            queryset = model_access.get_all_users()
+        # support starts-with matching for finding users in the
+        # Submit/Edit Listing form
+        username_starts_with = self.request.query_params.get(
+            'username_starts_with', None)
+        if username_starts_with:
+            queryset = model_access.filter_queryset_by_username_starts_with(
+                queryset, username_starts_with)
+        return queryset
+
+    def update(self, request, pk=None):
+        print('HERE 2')
+        current_request_profile = model_access.get_self(request.user.username)
+        if current_request_profile.highest_role() != 'APPS_MALL_STEWARD':
+            raise errors.PermissionDenied
+        profile_instance = self.get_queryset().get(pk=pk)
+        print(profile_instance)
+        serializer = serializers.UserSerializer(profile_instance,
+            data=request.data, context={'request': request}, partial=True)
+        if not serializer.is_valid():
+            logger.error('{0!s}'.format(serializer.errors))
+            return Response(serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST)
+
+        serializer.save()
+        print('HERE 3')
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class GroupViewSet(viewsets.ModelViewSet):
