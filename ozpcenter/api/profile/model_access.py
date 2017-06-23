@@ -27,10 +27,16 @@ def get_self(username):
 
 
 def get_all_profiles():
+    """
+    Get All Profiles
+    """
     return models.Profile.objects.all().order_by('display_name')
 
 
 def get_profile_by_id(profile_id):
+    """
+    Get profile by id
+    """
     try:
         return models.Profile.objects.get(id=profile_id)
     except models.Listing.DoesNotExist:
@@ -38,6 +44,15 @@ def get_profile_by_id(profile_id):
 
 
 def get_all_listings_for_profile_by_id(current_request_username, profile_id, listing_id=None):
+    """
+    Get all Listing for a profile by profile_id and listing_id
+
+    Args:
+        current_request_username
+        profile_id
+        listing_id
+
+    """
     try:
         if profile_id == 'self':
             profile_instance = models.Profile.objects.get(user__username=current_request_username).user
@@ -69,6 +84,12 @@ def get_all_listings_for_profile_by_id(current_request_username, profile_id, lis
 
 
 def get_profiles_by_role(role):
+    """
+    Get Profiles by the role and ordered by display_name
+
+    Args:
+        role(str): Role of user - USER, ORG_STEWARD..
+    """
     return models.Profile.objects.filter(
         user__groups__name__exact=role).order_by('display_name')
 
@@ -78,8 +99,14 @@ def filter_queryset_by_username_starts_with(queryset, starts_with):
 
 
 def get_all_users():
+    """
+    Get all Users (User Objects)
+    """
     return auth.models.User.objects.all()
 
 
 def get_all_groups():
+    """
+    Get all groups
+    """
     return auth.models.Group.objects.all()

@@ -71,7 +71,7 @@ recommend_es_content:
 dev: clean pre create_static
 	MAIN_DATABASE=sqlite python manage.py makemigrations ozpcenter
 	MAIN_DATABASE=sqlite python manage.py makemigrations ozpiwc
-	MAIN_DATABASE=sqlite python manage.py migrate
+	MAIN_DATABASE=sqlite DEV_MODE=True python manage.py migrate
 
 	echo 'Loading sample data...'
 	MAIN_DATABASE=sqlite python manage.py runscript sample_data_generator
