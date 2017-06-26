@@ -49,8 +49,6 @@ logger = logging.getLogger('ozp-center.' + str(__name__))
 
 # Create ES client
 es_client = model_access_es.es_client
-# Get ES Listing link:
-es_listing = model_access_es.es_client
 
 
 class Recommender(object):
@@ -307,6 +305,7 @@ class ElasticsearchUserBaseRecommender(Recommender):
     # The weights that are returned by Elasticsearch will be 0.X and hence the reason that we need to multiply
     # by factors of 10 to get reasonable values for ranking.
     recommendation_weight = 50.0
+    MIN_ES_RATING = 3.5  # Minimum rating to have results meet before being recommended for ES Recommender Systems
 
     def initiate(self):
         """
@@ -328,11 +327,6 @@ class ElasticsearchUserBaseRecommender(Recommender):
         logger.debug('Elasticsearch User Base Recommendation Engine: Loading data from Review model')
         reviews_listings = models.Review.objects.all()
         reviews_listing_uname = reviews_listings.values_list('id', 'listing_id', 'rate', 'author')
-        # category_listings = models.Category.objects.all()
-        # category_listings_uname = category_listings.values_list('id', 'title')
-        # Think about changing to use with Elasticsearch table already in place to speed up processing:
-        # listings = models.Listing.objects.all()
-        # listings_uname = listings.values_list('id', 'categories')
         # End loading of Reviews Table data
         ###########
 
@@ -423,23 +417,27 @@ class ElasticsearchUserBaseRecommender(Recommender):
                     }
                 }
             }
-            es_cat_search = es_listing.search(
-                index=settings.ES_INDEX_NAME,
-                body=es_cat_query_term
-            )
 
-            # Set category_items array with category id's:
             category_items = []
-            if es_cat_search['hits']['total'] <= 1:
-                category_items = [cat['id'] for cat in es_cat_search['hits']['hits'][0]['_source']['categories']]
-            else:
-                logger.debug("== CATEGORY ITEMS MORE THAN 1 ({}) ==".format(es_cat_search['hits']['total']))
+
+            # Only take categories when the rating is above a 3, do not look at categories when the rating is 3 and below:
+            if record[2] > self.MIN_ES_RATING:
+                es_cat_search = es_client.search(
+                    index=settings.ES_INDEX_NAME,
+                    body=es_cat_query_term
+                )
+
+                # Set category_items array with category id's:
+                if es_cat_search['hits']['total'] <= 1:
+                    category_items = [cat['id'] for cat in es_cat_search['hits']['hits'][0]['_source']['categories']]
+                else:
+                    logger.debug("== MORE THAN ONE ID WAS FOUND ({}) ==".format(es_cat_search['hits']['total']))
 
             ratings_items = []
             ratings_items.append({"listing_id": record[1], "rate": record[2], "listing_categories": category_items})
 
             if es_search_result['hits']['total'] == 0:
-                # If rescord does not exist in Recommendation List, then create it:
+                # If record does not exist in Recommendation List, then create it:
                 result_es = es_client.create(
                     index=settings.ES_RECOMMEND_USER,
                     doc_type=settings.ES_RECOMMEND_TYPE,
@@ -455,6 +453,7 @@ class ElasticsearchUserBaseRecommender(Recommender):
                 record_to_update = es_search_result['hits']['hits'][0]['_id']
                 current_ratings = es_search_result['hits']['hits'][0]['_source']['ratings']
                 new_ratings = current_ratings + ratings_items
+                current_categories = es_search_result['hits']['hits'][0]['_source']['categories']
 
                 # Since exisiting recommendation lists have been deleted, no need to worry about
                 # adding duplicate data.
@@ -466,7 +465,7 @@ class ElasticsearchUserBaseRecommender(Recommender):
                    refresh=True,
                    body={"doc": {
                        "ratings": new_ratings,
-                       "categories": category_items
+                       "categories": list(set(current_categories + category_items))
                        }
                    })
 
@@ -491,7 +490,6 @@ class ElasticsearchUserBaseRecommender(Recommender):
 
         # Set Aggrelation List size for number of results to return:
         AGG_LIST_SIZE = 50  # Will return up to 30 results based on query.  Default is 10 if parameter is left out of query.
-        MIN_RATING = 3.5  # Minimum rating to have results meet before being recommended
 
         # Retreive all of the profiles from database:
         all_profiles = models.Profile.objects.all()
@@ -528,6 +526,7 @@ class ElasticsearchUserBaseRecommender(Recommender):
             # Only add/change documents if the user has any bookmarks, otherwise no need to update
             # documents with null information:
             category_items = []
+            agg_query_term = {}
             if len(bookmarked_list) > 0:
                 for bk_item in bookmarked_list:
                     # For each listing_id in ratings_items get the categories associated with the listing:
@@ -541,20 +540,15 @@ class ElasticsearchUserBaseRecommender(Recommender):
                             }
                         }
                     }
-                    es_cat_search = es_listing.search(
+                    es_cat_search = es_client.search(
                         index=settings.ES_INDEX_NAME,
                         body=es_cat_query_term
                     )
-                    # print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-                    # print("CAT SEARCH RESULTS: ", es_cat_search)
 
                     if es_cat_search['hits']['total'] <= 1:
                         category_items = list(set(category_items + [cat['id'] for cat in es_cat_search['hits']['hits'][0]['_source']['categories']]))
                     else:
                         logger.debug("== CATEGORY ITEMS MORE THAN 1 ({}) ==".format(es_cat_search['hits']['total']))
-
-                    print("CAT    SEARCH: ", es_cat_search)
-                    print("CAT     ITEMS: ", category_items)
 
                 # Get Categories for bookmarked apps:
                 categories = []
@@ -592,9 +586,6 @@ class ElasticsearchUserBaseRecommender(Recommender):
                        })
                     # print("Bookmarks Updated for profile: {} with result: {}".format(profile_id, result_es))
 
-            agg_query_term = {}
-
-            if len(bookmarked_list) > 0:
                 if len(categories) > 0:
                     agg_query_term = {
                         "constant_score": {
@@ -647,30 +638,16 @@ class ElasticsearchUserBaseRecommender(Recommender):
                         }
                     }
             else:
-                if len(categories) > 0:
-                    agg_query_term = {
-                        "constant_score": {
-                            "filter": {
-                                "bool": {
-                                    "must_not":
-                                        {"term": {"author_id": profile_id}},
-                                    "should": [
-                                        {"terms": {"categories": categories}}]
-                                }
+                agg_query_term = {
+                    "constant_score": {
+                        "filter": {
+                            "bool": {
+                                "must_not":
+                                    {"term": {"author_id": profile_id}}
                             }
                         }
                     }
-                else:
-                    agg_query_term = {
-                        "constant_score": {
-                            "filter": {
-                                "bool": {
-                                    "must_not":
-                                        {"term": {"author_id": profile_id}}
-                                }
-                            }
-                        }
-                    }
+                }
 
             agg_search_query = {
                 "size": 0,
@@ -685,7 +662,7 @@ class ElasticsearchUserBaseRecommender(Recommender):
                                 "filter": {
                                     "range": {
                                         "ratings.rate": {
-                                            "gte": MIN_RATING
+                                            "gte": self.MIN_ES_RATING
                                         }
                                     }
                                 }
