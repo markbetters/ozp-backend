@@ -38,7 +38,7 @@ def run():
     email_batch_list = []
 
     print('==Notifications Email==')
-    for current_profile in models.Profile.objects.all():
+    for current_profile in models.Profile.objects.filter(email_notification_flag=True).iterator():
         print('Processing Username: {}'.format(current_profile.user.username))
         current_profile_email = current_profile.user.email
         # Validate to make sure user has emailed, if not continue to next user

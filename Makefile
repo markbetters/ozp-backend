@@ -18,10 +18,10 @@ pre:
 	export DJANGO_SETTINGS_MODULE=ozp.settings
 
 test: clean pre create_static
-	python -q -X faulthandler manage.py test
+	DEV_MODE=True python -q -X faulthandler manage.py test
 
 softtest: pre
-	python -q -X faulthandler manage.py test
+	DEV_MODE=True python -q -X faulthandler manage.py test
 
 install_git_hooks:
 	cp .hooks/pre-commit .git/hooks/
@@ -71,7 +71,7 @@ recommend_es_content:
 dev: clean pre create_static
 	MAIN_DATABASE=sqlite python manage.py makemigrations ozpcenter
 	MAIN_DATABASE=sqlite python manage.py makemigrations ozpiwc
-	MAIN_DATABASE=sqlite python manage.py migrate
+	MAIN_DATABASE=sqlite DEV_MODE=True python manage.py migrate
 
 	echo 'Loading sample data...'
 	MAIN_DATABASE=sqlite python manage.py runscript sample_data_generator
@@ -89,7 +89,7 @@ dev: clean pre create_static
 dev_psql: clean pre create_static
 	MAIN_DATABASE=psql python manage.py makemigrations ozpcenter
 	MAIN_DATABASE=psql python manage.py makemigrations ozpiwc
-	MAIN_DATABASE=psql python manage.py migrate
+	MAIN_DATABASE=psql DEV_MODE=True python manage.py migrate
 
 	MAIN_DATABASE=psql python manage.py flush --noinput # For Postgres
 

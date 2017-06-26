@@ -543,7 +543,13 @@ def get_storefront(username, pre_fetch=False):
             for recommendation_entry in recommended_listings_queryset:
                 id_recommended_object_mapper[recommendation_entry.id] = recommendation_entry
 
-            recommended_listings_raw = [id_recommended_object_mapper[listing_id] for listing_id in listing_ids_list]
+            # recommended_listings_raw = [id_recommended_object_mapper[listing_id] for listing_id in listing_ids_list]
+
+            recommended_listings_raw = []
+
+            for listing_id in listing_ids_list:
+                if listing_id in id_recommended_object_mapper:
+                    recommended_listings_raw.append(id_recommended_object_mapper[listing_id])
 
             # Post security_marking check - lazy loading
             recommended_listings = pipeline.Pipeline(recommend_utils.ListIterator([recommendations_listing for recommendations_listing in recommended_listings_raw]),
