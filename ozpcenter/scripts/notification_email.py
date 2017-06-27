@@ -25,6 +25,11 @@ import sys
 sys.path.insert(0, os.path.realpath(os.path.join(os.path.dirname(__file__), '../../')))
 
 from django.core import mail
+from django.template import Context
+from django.template import Template
+
+from django.conf import settings
+
 
 # from django.core.exceptions import ObjectDoesNotExist
 from ozpcenter import models
@@ -55,12 +60,20 @@ def run():
 
         if notifications_mailbox_non_email_count >= 1:
             # Construct messages
+            template_context = Context({'non_emailed_count': notifications_mailbox_non_email_count})
+
+            subject_line_template = Template(settings.EMAIL_SUBJECT_FIELD_TEMPLATE)
+            body_template = Template(settings.EMAIL_BODY_FIELD_TEMPLATE)
+
+            subject_line_template.render(template_context)
+
             current_email = mail.EmailMessage(
-                'New Notifications',
-                'You have {} new Notifications'.format(notifications_mailbox_non_email_count),
-                'from@example.com',
+                subject_line_template.render(template_context),
+                body_template.render(template_context),
+                settings.EMAIL_FROM_FIELD,
                 [current_profile_email],
             )
+            current_email.content_subtype = "html"  # Main content is now text/html
 
             email_batch_list.append(current_email)
 
