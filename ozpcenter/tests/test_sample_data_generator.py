@@ -23,19 +23,21 @@ class SampleDataGeneratorTest(TestCase):
         data_gen.run()
 
     def test_categories(self):
-        categories = models.Category.objects.values_list('title', flat=True)
-        expected_categories = ['Books and Reference', 'Business', 'Education',
-            'Entertainment', 'Tools']
-        for i in expected_categories:
-            self.assertIn(i, categories)
+        categories = list(models.Category.objects.values_list('title', flat=True))
+        expected_categories = ['Books and Reference', 'Business', 'Communication', 'Education',
+                               'Entertainment', 'Finance', 'Health and Fitness', 'Media and Video',
+                               'Music and Audio', 'News', 'Productivity', 'Shopping', 'Sports', 'Tools', 'Weather']
+
+        self.assertListEqual(categories, expected_categories)
 
     def test_stewards(self):
         # william smith should be an org steward for the Ministry of Truth
         # first, get from profile
-        u = models.Profile.objects.filter(stewarded_organizations__title='Ministry of Truth')
-        self.assertEquals(len(u), 3)
-        u = u[0]
-        self.assertEquals(u.user.username, 'wsmith')
+        ministry_of_truth_stewards = list(models.Profile.objects.filter(stewarded_organizations__title='Ministry of Truth').values_list('user__username', flat=True))
+        expected_ministry_of_truth_stewards = ['bettafish', 'wsmith', 'julia']
+
+        self.assertListEqual(ministry_of_truth_stewards, expected_ministry_of_truth_stewards)
+
         # for kicks, also test by getting this from the Agency model
         a = models.Agency.objects.filter(stewarded_profiles__user__username='wsmith')
         self.assertEquals(len(a), 1)
