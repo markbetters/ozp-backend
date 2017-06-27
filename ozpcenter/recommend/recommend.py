@@ -301,6 +301,44 @@ class ElasticsearchUserBaseRecommender(Recommender):
                          ms_took: 5050
                      },
     """
+    '''
+    # Algorithm detailed information
+    # Structure to setup for storing Elasticsearch data:
+        Mapping of data:
+            MAPPING:
+                recommend - document property to store the contents under
+                    fields used:
+                        author_id - Stores the id of the user the data is about
+                        bookmark_ids - Stores a list of bookmarks ids that the user has bookmarked
+                        categories - Stores a list of the categories for associating with the user
+                        ratings - Nested object
+                            - listing_id - Listing Id for rated app
+                            - rate - Rating given to app by user
+                            - listing_categories - Category(ies) that the app is listed under
+                (All of the fields are of type long so as to store numeric values)
+                TODO: Need to check if storing as a String might be better
+
+    # Theory Information for Elasticsearch:
+    # Information on Significant Term Aggregations that is used in this algorithm can be found here:
+    #        https://www.elastic.co/guide/en/elasticsearch/reference/2.4/search-aggregations-bucket-significantterms-aggregation.html
+    # The Elasticsearch process is based on significant terms aggregations of data.
+    # The process will derive scores based on frequencies in the foreground and background sets.
+    #   The terms are then considered significant if there is a noticeable difference in
+    #   frequency in how it appears in the subset and also in the background data set.
+    # The frequency is based on bookmarked, reviewed items and categories that the listings are based
+    #   on per user to create the background and foreground items for calculating the term frequency.
+    # There is no clear way to explain how this works, but based on implementation if you were to have people
+    #   review similar listings in the same category and then a person that has those categories bookmarked but
+    #   not all of tha apps should see the other apps from the category that are reviewed and bookmarked by other users.
+    # The apps will be then ranked based on the number of occurrences that they have compared to the total number in the set.
+    # Once the score is created one will show the ranking based on the number of matching documents including occurrences
+    #   versus the total number of documents in the set that is being compared.
+    #
+    # To explain simply, the more of a category items that are bookmarked and reviewed the chances are the items
+    #   will be recommended.  Items that have no reviews or bookmarks will not be included in the recommended items.
+    #   Recommendation depends on having items that have been reviewed and/or bookmarked to even appear in the list.
+    '''
+
     friendly_name = 'Elasticsearch User Based Filtering'
     # The weights that are returned by Elasticsearch will be 0.X and hence the reason that we need to multiply
     # by factors of 10 to get reasonable values for ranking.
@@ -316,6 +354,21 @@ class ElasticsearchUserBaseRecommender(Recommender):
         - Ensure that variables are setup and working properly.
         - Import data into Elasticsearch
         """
+        '''
+        # Process Creating Documents (Importing) for searching:
+        - Initially create a mapping for Elasticsearch using the above mapping data
+        - Check to see if Elasticsearch table already exists
+            - if so then remove the table
+        - Create a new table to store data
+        - Loop through all reviews:
+            - Search for user (aka author_id) to get all reviewed listings by user
+            - Add only items that are rated above the MIN_ES_RATING to the categories to be added to
+                the user profile.  This makes items that are not ranked high to not play a role in which categories
+                the user is associated with.
+            - If new record, then create the contents just retrieved into a document
+            - Else, append the information to the existing document
+        '''
+
         check_elasticsearch()
         # TODO: Make sure the elasticsearch index is created here with the mappings
 
@@ -373,9 +426,8 @@ class ElasticsearchUserBaseRecommender(Recommender):
                 }
             }
         }
-        '''
-        Initialize Tables:
-        '''
+
+        # Initialize Tables:
         # Initializing Recommended by Ratings ES Table by removing old Elasticsearch Table:
         if es_client.indices.exists(settings.ES_RECOMMEND_USER):
             resdel = es_client.indices.delete(index=settings.ES_RECOMMEND_USER)
@@ -476,6 +528,27 @@ class ElasticsearchUserBaseRecommender(Recommender):
         Recommendation logic
         - Create a search that will use the selected algorithm to create a recommendation list
         """
+        '''
+        # Process for creating recommendations:
+        - Loop through all of the profiles and for each profile:
+            - Get all of the bookmarked apps and store in user recommendation profile
+            - Add category for all apps that were bookmarked to category field
+            - if so then remove the table
+        - Create a new table to store data
+        - Loop through all reviews:
+            - Search for user (aka author_id) to get all reviewed listings by user
+            - Add only items that are rated above the MIN_ES_RATING to the categories to be added to
+                the user profile.  This makes items that are not ranked high to not play a role in which categories
+                the user is associated with.
+            - If new record, then create the contents just retrieved into a document
+            - Else, append the information to the existing document
+            - Create query using bookmarked apps and categories and then search for reviewed listings
+                that match the bookmarked apps based on search results
+            - Form qurey for Elasticsearch that will take listings greater than MIN_ES_RATING and exclude bookmarked
+                apps for user in reviewed listings and then remove bookmarked apps from searching the bookmarked app listings.
+            - Run Query for each user and append recommended list to the user profile recommendations
+        '''
+
         logger.debug('Elasticsearch User Base Recommendation Engine')
         logger.debug('Elasticsearch Health : {}'.format(es_client.cluster.health()))
 
@@ -591,8 +664,6 @@ class ElasticsearchUserBaseRecommender(Recommender):
                         "constant_score": {
                             "filter": {
                                 "bool": {
-                                    "must_not":
-                                        {"term": {"author_id": profile_id}},
                                     "should": [
                                         {"terms": {"bookmark_ids": bookmarked_list}},
                                         {"terms": {"categories": categories}},
@@ -617,8 +688,6 @@ class ElasticsearchUserBaseRecommender(Recommender):
                         "constant_score": {
                             "filter": {
                                 "bool": {
-                                    "must_not":
-                                        {"term": {"author_id": profile_id}},
                                     "should": [
                                         {"terms": {"bookmark_ids": bookmarked_list}},
                                         {
@@ -637,17 +706,6 @@ class ElasticsearchUserBaseRecommender(Recommender):
                             }
                         }
                     }
-            else:
-                agg_query_term = {
-                    "constant_score": {
-                        "filter": {
-                            "bool": {
-                                "must_not":
-                                    {"term": {"author_id": profile_id}}
-                            }
-                        }
-                    }
-                }
 
             agg_search_query = {
                 "size": 0,
