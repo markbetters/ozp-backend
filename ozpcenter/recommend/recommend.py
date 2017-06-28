@@ -342,7 +342,10 @@ class ElasticsearchUserBaseRecommender(Recommender):
     friendly_name = 'Elasticsearch User Based Filtering'
     # The weights that are returned by Elasticsearch will be 0.X and hence the reason that we need to multiply
     # by factors of 10 to get reasonable values for ranking.
-    recommendation_weight = 50.0
+    # Making weight of 25 so that results will correlate well with other recommendation engines when combined.
+    # Reasoning: Results of scores are between 0 and 1 with results mainly around 0.0X, thus the recommendation weight
+    #            will mix well with other recommendations and not become too large at the same time.
+    recommendation_weight = 25.0
     MIN_ES_RATING = 3.5  # Minimum rating to have results meet before being recommended for ES Recommender Systems
 
     def initiate(self):
