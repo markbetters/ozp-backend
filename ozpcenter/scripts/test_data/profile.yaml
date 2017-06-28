@@ -4,7 +4,7 @@
 # - miniluv - Ministry of Love
 # - minipax - Ministry of Peace
 # - miniplenty - Ministry of Plenty
-#
+# -- Base Userset --
 # **Admins:**
 # - bigbrother (minipax)
 # - bigbrother2 (minitrue)
@@ -30,10 +30,24 @@
 # - charrington (minipax, miniluv, minitrue)
 # - johnson (minipax, miniluv, minitrue - PKI)
 #
-# TODO: Create 45,000 Users
-# 1 APPS_MALL_STEWARDs for each organization: 4
+# TODO: Create > 45,000 Users
+# 1 APPS_MALL_STEWARDs for each organization: 4 with one being part of beta_user group
 # 1 ORG_STEWARDs for each organization: 4
 #
+# combos group
+# USER GROUP - miniluv
+# USER GROUP - miniluv - PKI
+# USER GROUP - minitrue
+# USER GROUP - minitrue - PKI
+# USER GROUP - miniplenty
+# USER GROUP - miniplenty - PKI
+# USER GROUP - minipax
+# USER GROUP - minipax - PKI
+# USER GROUP - minipax, miniluv
+# USER GROUP - minipax, miniluv - PKI
+# USER GROUP - minipax, miniluv, minitrue
+# USER GROUP - minipax, miniluv, minitrue - PKI
+# 12 combos - 4000 Per combo - for total of 48000
 # ------------------------
 # APPS_MALL_STEWARD
 # ------------------------
