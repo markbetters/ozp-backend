@@ -301,10 +301,52 @@ class ElasticsearchUserBaseRecommender(Recommender):
                          ms_took: 5050
                      },
     """
+    '''
+    # Algorithm detailed information
+    # Structure to setup for storing Elasticsearch data:
+        Mapping of data:
+            MAPPING:
+                recommend - document property to store the contents under
+                    fields used:
+                        author_id - Stores the id of the user the data is about
+                        bookmark_ids - Stores a list of bookmarks ids that the user has bookmarked
+                        categories - Stores a list of the categories for associating with the user
+                        ratings - Nested object
+                            - listing_id - Listing Id for rated app
+                            - rate - Rating given to app by user
+                            - listing_categories - Category(ies) that the app is listed under
+                (All of the fields are of type long so as to store numeric values)
+                TODO: Need to check if storing as a String might be better
+
+    # Theory Information for Elasticsearch:
+    # Information on Significant Term Aggregations that is used in this algorithm can be found here:
+    #        https://www.elastic.co/guide/en/elasticsearch/reference/2.4/search-aggregations-bucket-significantterms-aggregation.html
+    # The Elasticsearch process is based on significant terms aggregations of data.
+    # The process will derive scores based on frequencies in the foreground and background sets.
+    #   The terms are then considered significant if there is a noticeable difference in
+    #   frequency in how it appears in the subset and also in the background data set.
+    # The frequency is based on bookmarked, reviewed items and categories that the listings are based
+    #   on per user to create the background and foreground items for calculating the term frequency.
+    # There is no clear way to explain how this works, but based on implementation if you were to have people
+    #   review similar listings in the same category and then a person that has those categories bookmarked but
+    #   not all of tha apps should see the other apps from the category that are reviewed and bookmarked by other users.
+    # The apps will be then ranked based on the number of occurrences that they have compared to the total number in the set.
+    # Once the score is created one will show the ranking based on the number of matching documents including occurrences
+    #   versus the total number of documents in the set that is being compared.
+    #
+    # To explain simply, the more of a category items that are bookmarked and reviewed the chances are the items
+    #   will be recommended.  Items that have no reviews or bookmarks will not be included in the recommended items.
+    #   Recommendation depends on having items that have been reviewed and/or bookmarked to even appear in the list.
+    '''
+
     friendly_name = 'Elasticsearch User Based Filtering'
     # The weights that are returned by Elasticsearch will be 0.X and hence the reason that we need to multiply
     # by factors of 10 to get reasonable values for ranking.
-    recommendation_weight = 50.0
+    # Making weight of 25 so that results will correlate well with other recommendation engines when combined.
+    # Reasoning: Results of scores are between 0 and 1 with results mainly around 0.0X, thus the recommendation weight
+    #            will mix well with other recommendations and not become too large at the same time.
+    recommendation_weight = 25.0
+    MIN_ES_RATING = 3.5  # Minimum rating to have results meet before being recommended for ES Recommender Systems
 
     def initiate(self):
         """
@@ -315,6 +357,21 @@ class ElasticsearchUserBaseRecommender(Recommender):
         - Ensure that variables are setup and working properly.
         - Import data into Elasticsearch
         """
+        '''
+        # Process Creating Documents (Importing) for searching:
+        - Initially create a mapping for Elasticsearch using the above mapping data
+        - Check to see if Elasticsearch table already exists
+            - if so then remove the table
+        - Create a new table to store data
+        - Loop through all reviews:
+            - Search for user (aka author_id) to get all reviewed listings by user
+            - Add only items that are rated above the MIN_ES_RATING to the categories to be added to
+                the user profile.  This makes items that are not ranked high to not play a role in which categories
+                the user is associated with.
+            - If new record, then create the contents just retrieved into a document
+            - Else, append the information to the existing document
+        '''
+
         check_elasticsearch()
         # TODO: Make sure the elasticsearch index is created here with the mappings
 
@@ -356,19 +413,24 @@ class ElasticsearchUserBaseRecommender(Recommender):
                                 "rate": {
                                     "type": "long",
                                     "boost": 10
+                                },
+                                "listing_categories": {
+                                    "type": "long"
                                 }
                             }
                         },
                         "bookmark_ids": {
+                            "type": "long"
+                        },
+                        "categories": {
                             "type": "long"
                         }
                     }
                 }
             }
         }
-        '''
-        Initialize Tables:
-        '''
+
+        # Initialize Tables:
         # Initializing Recommended by Ratings ES Table by removing old Elasticsearch Table:
         if es_client.indices.exists(settings.ES_RECOMMEND_USER):
             resdel = es_client.indices.delete(index=settings.ES_RECOMMEND_USER)
@@ -399,10 +461,38 @@ class ElasticsearchUserBaseRecommender(Recommender):
                 body=query_term
             )
 
+            # For each reviewed listing_id in ratings_items get the categories associated with the listing:
+            es_cat_query_term = {
+                "_source": ["id", "categories"],
+                "query": {
+                    "bool": {
+                        "must": [
+                            {"term": {"id": record[1]}}
+                        ]
+                    }
+                }
+            }
+
+            category_items = []
+
+            # Only take categories when the rating is above a 3, do not look at categories when the rating is 3 and below:
+            if record[2] > self.MIN_ES_RATING:
+                es_cat_search = es_client.search(
+                    index=settings.ES_INDEX_NAME,
+                    body=es_cat_query_term
+                )
+
+                # Set category_items array with category id's:
+                if es_cat_search['hits']['total'] <= 1:
+                    category_items = [cat['id'] for cat in es_cat_search['hits']['hits'][0]['_source']['categories']]
+                else:
+                    logger.debug("== MORE THAN ONE ID WAS FOUND ({}) ==".format(es_cat_search['hits']['total']))
+
             ratings_items = []
-            ratings_items.append({"listing_id": record[1], "rate": record[2]})
+            ratings_items.append({"listing_id": record[1], "rate": record[2], "listing_categories": category_items})
 
             if es_search_result['hits']['total'] == 0:
+                # If record does not exist in Recommendation List, then create it:
                 result_es = es_client.create(
                     index=settings.ES_RECOMMEND_USER,
                     doc_type=settings.ES_RECOMMEND_TYPE,
@@ -410,12 +500,15 @@ class ElasticsearchUserBaseRecommender(Recommender):
                     refresh=True,
                     body={
                         "author_id": record[3],
-                        "ratings": ratings_items
+                        "ratings": ratings_items,
+                        "categories": category_items
                     })
             else:
+                # Update existing record:
                 record_to_update = es_search_result['hits']['hits'][0]['_id']
                 current_ratings = es_search_result['hits']['hits'][0]['_source']['ratings']
                 new_ratings = current_ratings + ratings_items
+                current_categories = es_search_result['hits']['hits'][0]['_source']['categories']
 
                 # Since exisiting recommendation lists have been deleted, no need to worry about
                 # adding duplicate data.
@@ -426,7 +519,8 @@ class ElasticsearchUserBaseRecommender(Recommender):
                    id=record_to_update,
                    refresh=True,
                    body={"doc": {
-                       "ratings": new_ratings
+                       "ratings": new_ratings,
+                       "categories": list(set(current_categories + category_items))
                        }
                    })
 
@@ -437,6 +531,27 @@ class ElasticsearchUserBaseRecommender(Recommender):
         Recommendation logic
         - Create a search that will use the selected algorithm to create a recommendation list
         """
+        '''
+        # Process for creating recommendations:
+        - Loop through all of the profiles and for each profile:
+            - Get all of the bookmarked apps and store in user recommendation profile
+            - Add category for all apps that were bookmarked to category field
+            - if so then remove the table
+        - Create a new table to store data
+        - Loop through all reviews:
+            - Search for user (aka author_id) to get all reviewed listings by user
+            - Add only items that are rated above the MIN_ES_RATING to the categories to be added to
+                the user profile.  This makes items that are not ranked high to not play a role in which categories
+                the user is associated with.
+            - If new record, then create the contents just retrieved into a document
+            - Else, append the information to the existing document
+            - Create query using bookmarked apps and categories and then search for reviewed listings
+                that match the bookmarked apps based on search results
+            - Form qurey for Elasticsearch that will take listings greater than MIN_ES_RATING and exclude bookmarked
+                apps for user in reviewed listings and then remove bookmarked apps from searching the bookmarked app listings.
+            - Run Query for each user and append recommended list to the user profile recommendations
+        '''
+
         logger.debug('Elasticsearch User Base Recommendation Engine')
         logger.debug('Elasticsearch Health : {}'.format(es_client.cluster.health()))
 
@@ -451,7 +566,6 @@ class ElasticsearchUserBaseRecommender(Recommender):
 
         # Set Aggrelation List size for number of results to return:
         AGG_LIST_SIZE = 50  # Will return up to 30 results based on query.  Default is 10 if parameter is left out of query.
-        MIN_RATING = 3  # Minimum rating to have results meet before being recommended
 
         # Retreive all of the profiles from database:
         all_profiles = models.Profile.objects.all()
@@ -487,7 +601,36 @@ class ElasticsearchUserBaseRecommender(Recommender):
 
             # Only add/change documents if the user has any bookmarks, otherwise no need to update
             # documents with null information:
+            category_items = []
+            agg_query_term = {}
             if len(bookmarked_list) > 0:
+                for bk_item in bookmarked_list:
+                    # For each listing_id in ratings_items get the categories associated with the listing:
+                    es_cat_query_term = {
+                        "_source": ["id", "categories"],
+                        "query": {
+                            "bool": {
+                                "must": [
+                                    {"term": {"id": bk_item}}
+                                ]
+                            }
+                        }
+                    }
+                    es_cat_search = es_client.search(
+                        index=settings.ES_INDEX_NAME,
+                        body=es_cat_query_term
+                    )
+
+                    if es_cat_search['hits']['total'] <= 1:
+                        category_items = list(set(category_items + [cat['id'] for cat in es_cat_search['hits']['hits'][0]['_source']['categories']]))
+                    else:
+                        logger.debug("== CATEGORY ITEMS MORE THAN 1 ({}) ==".format(es_cat_search['hits']['total']))
+
+                # Get Categories for bookmarked apps:
+                categories = []
+                if es_search_result['hits']['total'] > 0:
+                    categories = es_search_result['hits']['hits'][0]['_source']['categories']
+
                 # No Reviews were made, but user has bookmarked apps:
                 if es_search_result['hits']['total'] == 0:
                     # print("PROFILE: ", profile_id)
@@ -498,11 +641,14 @@ class ElasticsearchUserBaseRecommender(Recommender):
                         refresh=True,
                         body={
                             "author_id": profile_id,
-                            "bookmark_ids": bookmarked_list
+                            "bookmark_ids": bookmarked_list,
+                            "categories": category_items
                         })
                     logger.info("Bookmarks Created for profile: {} with result: {}".format(profile_id, result_es))
                 else:
                     record_to_update = es_search_result['hits']['hits'][0]['_id']
+                    # Get current categories and then use to add to category_items:
+                    current_categories = es_search_result['hits']['hits'][0]['_source']['categories']
                     result_es = es_client.update(
                        index=settings.ES_RECOMMEND_USER,
                        doc_type=settings.ES_RECOMMEND_TYPE,
@@ -510,49 +656,59 @@ class ElasticsearchUserBaseRecommender(Recommender):
                        refresh=True,
                        body={"doc":
                             {
-                                "bookmark_ids": bookmarked_list
+                                "bookmark_ids": bookmarked_list,
+                                "categories": list(set(current_categories + category_items))
                             }
                        })
                     # print("Bookmarks Updated for profile: {} with result: {}".format(profile_id, result_es))
 
-            agg_query_term = {}
-
-            if len(bookmarked_list) > 0:
-                agg_query_term = {
-                    "constant_score": {
-                        "filter": {
-                            "bool": {
-                                "must_not":
-                                    {"term": {"author_id": profile_id}},
-                                "should": [
-                                    {"terms": {"bookmark_ids": bookmarked_list}},
-                                    {
-                                        "nested": {
-                                            "path": "ratings",
-                                            "query": {
-                                                "bool": {
-                                                    "should": [
-                                                        {"terms": {"ratings.listing_id": bookmarked_list}}
-                                                    ]
+                if len(categories) > 0:
+                    agg_query_term = {
+                        "constant_score": {
+                            "filter": {
+                                "bool": {
+                                    "should": [
+                                        {"terms": {"bookmark_ids": bookmarked_list}},
+                                        {"terms": {"categories": categories}},
+                                        {
+                                            "nested": {
+                                                "path": "ratings",
+                                                "query": {
+                                                    "bool": {
+                                                        "should": [
+                                                            {"terms": {"ratings.listing_id": bookmarked_list}}
+                                                        ]
+                                                    }
                                                 }
                                             }
-                                        }
-                                    }]
+                                        }]
+                                }
                             }
                         }
                     }
-                }
-            else:
-                agg_query_term = {
-                    "constant_score": {
-                        "filter": {
-                            "bool": {
-                                "must_not":
-                                    {"term": {"author_id": profile_id}}
+                else:
+                    agg_query_term = {
+                        "constant_score": {
+                            "filter": {
+                                "bool": {
+                                    "should": [
+                                        {"terms": {"bookmark_ids": bookmarked_list}},
+                                        {
+                                            "nested": {
+                                                "path": "ratings",
+                                                "query": {
+                                                    "bool": {
+                                                        "should": [
+                                                            {"terms": {"ratings.listing_id": bookmarked_list}}
+                                                        ]
+                                                    }
+                                                }
+                                            }
+                                        }]
+                                }
                             }
                         }
                     }
-                }
 
             agg_search_query = {
                 "size": 0,
@@ -567,7 +723,7 @@ class ElasticsearchUserBaseRecommender(Recommender):
                                 "filter": {
                                     "range": {
                                         "ratings.rate": {
-                                            "gte": MIN_RATING
+                                            "gte": self.MIN_ES_RATING
                                         }
                                     }
                                 }
