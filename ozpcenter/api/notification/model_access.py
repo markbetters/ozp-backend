@@ -5,17 +5,12 @@ https://github.com/aml-development/ozp-documentation/wiki/Notifications
 
 Notification Type
     SYSTEM = 'system'  # System-wide Notifications
-        Get all users
     AGENCY = 'agency'  # Agency-wide Notifications
-        Get all users from one or more agencies
     AGENCY_BOOKMARK = 'agency_bookmark'  # Agency-wide Bookmark Notifications # Not requirement (erivera 20160621)
-        Get all users from one or more agencies and add Bookmark Folder id
     LISTING = 'listing'  # Listing Notifications
-        Get all users that has Bookmark one or more listings
     PEER = 'peer'  # Peer to Peer Notifications
-        Get list of users
     PEER_BOOKMARK = 'peer_bookmark'  # Peer to Peer Bookmark Notifications
-        Get list of users
+    SUBSCRIPTION = 'subscription' # Category and Tag Subscription Notification
 
 Group Target
     ALL = 'all'  # All users
@@ -332,7 +327,7 @@ class ListingNotification(NotificationBase):
                                                                listing__is_enabled=True,
                                                                listing__approval_status=Listing.APPROVED,
                                                                listing__is_deleted=False).values_list('owner', flat=True).distinct()
-        return Profile.objects.filter(id__in=owner_id_list).all()
+        return Profile.objects.filter(id__in=owner_id_list, listing_notification_flag=True).all()
 
     def check_local_permission(self, entity):
         if self.sender_profile.highest_role() in ['APPS_MALL_STEWARD', 'ORG_STEWARD']:
@@ -407,7 +402,7 @@ class ListingReviewNotification(NotificationBase):  # Not Verified
 
         current_listing_agency_id = current_listing.agency.id
 
-        for steward in Profile.objects.filter(stewarded_organizations__in=[current_listing_agency_id]).all():
+        for steward in Profile.objects.filter(stewarded_organizations__in=[current_listing_agency_id], listing_notification_flag=True).all():
             target_set.add(steward)
 
         return list(target_set)
@@ -432,7 +427,7 @@ class ListingPrivateStatusNotification(NotificationBase):
                                                                listing__approval_status=Listing.APPROVED,
                                                                listing__is_enabled=True,
                                                                listing__is_deleted=False).values_list('owner', flat=True).distinct()
-        return Profile.objects.filter(id__in=owner_id_list).all()
+        return Profile.objects.filter(id__in=owner_id_list, listing_notification_flag=True).all()
 
     def check_local_permission(self, entity):
         if self.sender_profile.highest_role() in ['APPS_MALL_STEWARD', 'ORG_STEWARD']:
@@ -465,7 +460,7 @@ class PendingDeletionRequestNotification(NotificationBase):  # Not Verified
 
     def get_target_list(self):
         current_listing = self.entity
-        return current_listing.owners.all().distinct()
+        return current_listing.owners.filter(listing_notification_flag=True).all().distinct()
 
 
 class PendingDeletionCancellationNotification(NotificationBase):  # Not Verified
@@ -485,7 +480,7 @@ class PendingDeletionCancellationNotification(NotificationBase):  # Not Verified
     def get_target_list(self):
         current_listing = self.entity
         current_listing_agency_id = current_listing.agency.id
-        return Profile.objects.filter(stewarded_organizations__in=[current_listing_agency_id]).all().distinct()
+        return Profile.objects.filter(stewarded_organizations__in=[current_listing_agency_id], listing_notification_flag=True).all().distinct()
 
 
 class ListingSubmissionNotification(NotificationBase):
@@ -511,7 +506,7 @@ class ListingSubmissionNotification(NotificationBase):
     def get_target_list(self):
         current_listing = self.entity
         current_listing_agency_id = current_listing.agency.id
-        return Profile.objects.filter(stewarded_organizations__in=[current_listing_agency_id]).all().distinct()
+        return Profile.objects.filter(stewarded_organizations__in=[current_listing_agency_id], listing_notification_flag=True).all().distinct()
 
 
 class TagSubscriptionNotification(NotificationBase):  # Not Verified
@@ -523,13 +518,15 @@ class TagSubscriptionNotification(NotificationBase):  # Not Verified
     """
 
     def get_notification_db_type(self):
-        return Notification.LISTING
+        return Notification.SUBSCRIPTION
 
     def get_target_list(self):
         subscription_entries = Subscription.objects.filter(entity_type='tag', entity_id__in=list(self.metadata))
         target_profiles = set()
         for subscription_entry in subscription_entries:
-            target_profiles.add(subscription_entry.target_profile)
+            target_profile = subscription_entry.target_profile
+            if target_profile.subscription_notification_flag:
+                target_profiles.add(target_profile)
 
         return list(target_profiles)
 
@@ -543,13 +540,15 @@ class CategorySubscriptionNotification(NotificationBase):  # Not Verified
     """
 
     def get_notification_db_type(self):
-        return Notification.LISTING
+        return Notification.SUBSCRIPTION
 
     def get_target_list(self):
         subscription_entries = Subscription.objects.filter(entity_type='category', entity_id__in=list(self.metadata))
         target_profiles = set()
         for subscription_entry in subscription_entries:
-            target_profiles.add(subscription_entry.target_profile)
+            target_profile = subscription_entry.target_profile
+            if target_profile.subscription_notification_flag:
+                target_profiles.add(target_profile)
 
         return list(target_profiles)
 

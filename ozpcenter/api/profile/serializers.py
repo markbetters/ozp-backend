@@ -129,7 +129,8 @@ class ProfileSerializer(serializers.ModelSerializer):
         model = models.Profile
         fields = ('id', 'display_name', 'bio', 'organizations',
             'stewarded_organizations', 'user', 'highest_role', 'dn',
-            'center_tour_flag', 'hud_tour_flag', 'webtop_tour_flag', 'email_notification_flag',
+            'center_tour_flag', 'hud_tour_flag', 'webtop_tour_flag',
+            'email_notification_flag', 'listing_notification_flag', 'subscription_notification_flag',
             'is_beta_user')
 
         read_only_fields = ('id', 'bio', 'organizations', 'user',
@@ -183,6 +184,12 @@ class ProfileSerializer(serializers.ModelSerializer):
 
         if 'email_notification_flag' in validated_data:
             profile_instance.email_notification_flag = validated_data['email_notification_flag']
+
+        if 'listing_notification_flag' in validated_data:
+            profile_instance.listing_notification_flag = validated_data['listing_notification_flag']
+
+        if 'subscription_notification_flag' in validated_data:
+            profile_instance.subscription_notification_flag = validated_data['subscription_notification_flag']
 
         current_request_profile = generic_model_access.get_profile(self.context['request'].user.username)
 

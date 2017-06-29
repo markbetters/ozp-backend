@@ -704,8 +704,7 @@ class Profile(models.Model):
     # instead of overriding the builtin Django User model used
     # for authentication, we extend it
     # https://docs.djangoproject.com/en/1.8/topics/auth/customizing/#extending-the-existing-user-model
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, null=True,
-                                blank=True)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, null=True, blank=True)
 
     # Preferences
     # center_tour_flag: True = Show Tour for center
@@ -716,8 +715,13 @@ class Profile(models.Model):
     webtop_tour_flag = models.BooleanField(default=True)
     # email_notification_flag: True = Send Emails out for notification
     email_notification_flag = models.BooleanField(default=True)
-    # in_site_notification_flag: True
-    # in_site_notification_flag = models.BooleanField(default=True)
+    # listing_notification_flag will disable/enable:
+    #   ListingSubmissionNotification, PendingDeletionCancellationNotification, PendingDeletionRequestNotification,
+    #  ListingPrivateStatusNotification, ListingReviewNotification, ListingNotification, Listing Change
+    listing_notification_flag = models.BooleanField(default=True)
+    # subscription_notification_flag  will disable/enable:
+    #    TagSubscriptionNotification, CategorySubscriptionNotification
+    subscription_notification_flag = models.BooleanField(default=True)
 
     # TODO: on create, update, or delete, do the same for the related django_user
 
@@ -1360,6 +1364,7 @@ class Notification(models.Model):
     LISTING = 'listing'  # Listing Notifications
     PEER = 'peer'  # Peer to Peer Notifications
     PEER_BOOKMARK = 'peer_bookmark'  # PEER.BOOKMARK - Peer to Peer Bookmark Notifications
+    SUBSCRIPTION = 'subscription'  # SUBSCRIPTION - Tag/Category Subscriptions
 
     NOTIFICATION_TYPE_CHOICES = (
         (SYSTEM, 'system'),
@@ -1368,6 +1373,7 @@ class Notification(models.Model):
         (LISTING, 'listing'),
         (PEER, 'peer'),
         (PEER_BOOKMARK, 'peer_bookmark'),
+        (SUBSCRIPTION, 'subscription'),
     )
     notification_type = models.CharField(default=SYSTEM, max_length=24, choices=NOTIFICATION_TYPE_CHOICES)  # db_index=True)
 
