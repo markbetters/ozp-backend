@@ -98,6 +98,10 @@ permission_dict = {
         'add_peer_bookmark_notification',
         'change_peer_bookmark_notification',
         'delete_peer_bookmark_notification',
+
+        'add_subscription_notification',
+        'change_subscription_notification',
+        'delete_subscription_notification'
     ],
     'ORG_STEWARD': [
         'add_system_notification',
@@ -119,6 +123,10 @@ permission_dict = {
         'add_peer_bookmark_notification',
         'change_peer_bookmark_notification',
         'delete_peer_bookmark_notification',
+
+        'add_subscription_notification',
+        'change_subscription_notification',
+        'delete_subscription_notification'
     ],
     'USER': [
         'add_listing_notification',
@@ -132,6 +140,10 @@ permission_dict = {
         'add_peer_bookmark_notification',
         'change_peer_bookmark_notification',
         'delete_peer_bookmark_notification',
+
+        'add_subscription_notification',
+        'change_subscription_notification',
+        'delete_subscription_notification'
         ]
 }
 
