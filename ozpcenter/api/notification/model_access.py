@@ -397,7 +397,7 @@ class ListingReviewNotification(NotificationBase):  # Not Verified
 
         target_set = set()
 
-        for owner in current_listing.owners.all():
+        for owner in current_listing.owners.filter(listing_notification_flag=True).all():
             target_set.add(owner)
 
         current_listing_agency_id = current_listing.agency.id
