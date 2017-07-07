@@ -15,7 +15,7 @@ class ListingObserver(Observer):
     def events_to_listen(self):
         return ['listing_created',
                 'listing_enabled_status_changed',
-                'listing_approval_status_change',
+                'listing_approval_status_changed',
                 'listing_private_status_changed',
                 'listing_review_created',
                 'listing_review_changed',
@@ -24,12 +24,9 @@ class ListingObserver(Observer):
                 'listing_changed']
 
     def execute(self, event_type, **kwargs):
-        """
-        TODO: Finish
-        """
         print('message: event_type:{}, kwards:{}'.format(event_type, kwargs))
 
-    def listing_approval_status_change(self, listing=None, profile=None, old_approval_status=None, new_approval_status=None):
+    def listing_approval_status_changed(self, listing=None, profile=None, old_approval_status=None, new_approval_status=None):
         """
         Listing Approval Status Change
 
@@ -62,7 +59,9 @@ class ListingObserver(Observer):
 
         AMLNG-170 - As an Owner I want to receive notice of whether my deletion request has been approved or rejected
         AMLNG-173 - As an Admin I want notification if an owner has cancelled an app that was pending deletion
-        AMLNG-380 - As a user, I want to receive notification when a Listing is added to a subscribed category or tag
+
+        AMLNG-380 - As a user, I want to receive notification when a Listing is added to a subscribed category
+        AMLNG-392 - As a user, I want to receive notification when a Listing is added to a subscribed tag
 
         Args:
             listing: Listing instance
@@ -71,6 +70,13 @@ class ListingObserver(Observer):
         """
         username = profile.user.username
         now_plus_month = datetime.datetime.now(pytz.utc) + datetime.timedelta(days=30)
+
+        # AMLNG-380/AMLNG-392
+        # APPROVED_ORG --> APPROVED
+        if (old_approval_status == models.Listing.APPROVED_ORG and
+                new_approval_status == models.Listing.APPROVED):
+            self.listing_categories_changed(listing=listing, profile=profile, old_categories=[], new_categories=listing.categories.all())
+            self.listing_tags_changed(listing=listing, profile=profile, old_tags=[], new_tags=listing.tags.all())
 
         # AMLNG-376 - ListingSubmission
         if (old_approval_status == models.Listing.IN_PROGRESS and
@@ -140,25 +146,26 @@ class ListingObserver(Observer):
             old_categories: List of category instances
             new_categories: List of category instances
         """
-        username = profile.user.username
-        now_plus_month = datetime.datetime.now(pytz.utc) + datetime.timedelta(days=30)
+        if listing.approval_status == models.Listing.APPROVED:
+            username = profile.user.username
+            now_plus_month = datetime.datetime.now(pytz.utc) + datetime.timedelta(days=30)
 
-        old_categories_set = set(old_categories)
-        new_categories_set = set(new_categories)
-        new_categories_diff = set()
-        for new_category in new_categories_set:
-            if new_category not in old_categories_set:
-                new_categories_diff.add(new_category)
+            old_categories_set = set(old_categories)
+            new_categories_set = set(new_categories)
+            new_categories_diff = set()
+            for new_category in new_categories_set:
+                if new_category not in old_categories_set:
+                    new_categories_diff.add(new_category)
 
-        for current_category in new_categories_diff:
-            message = 'A new listing, <b>{}</b>, is available in the category <i>{}</i>'.format(listing.title, current_category)
+            for current_category in new_categories_diff:
+                message = 'A new listing, <b>{}</b>, is available in the category <i>{}</i>'.format(listing.title, current_category)
 
-            notification_model_access.create_notification(author_username=username,
-                                                          expires_date=now_plus_month,
-                                                          message=message,
-                                                          listing=listing,
-                                                          entities=[current_category.id],
-                                                          notification_type='CategorySubscriptionNotification')
+                notification_model_access.create_notification(author_username=username,
+                                                              expires_date=now_plus_month,
+                                                              message=message,
+                                                              listing=listing,
+                                                              entities=[current_category.id],
+                                                              notification_type='CategorySubscriptionNotification')
 
     def listing_tags_changed(self, listing=None, profile=None, old_tags=None, new_tags=None):
         """
@@ -170,25 +177,26 @@ class ListingObserver(Observer):
             old_tags: List of Tag instances
             new_tags: List of Tag instances
         """
-        username = profile.user.username
-        now_plus_month = datetime.datetime.now(pytz.utc) + datetime.timedelta(days=30)
+        if listing.approval_status == models.Listing.APPROVED:
+            username = profile.user.username
+            now_plus_month = datetime.datetime.now(pytz.utc) + datetime.timedelta(days=30)
 
-        old_tags_set = set(old_tags)
-        new_tags_set = set(new_tags)
-        new_tags_diff = set()
-        for new_tag in new_tags_set:
-            if new_tag not in old_tags_set:
-                new_tags_diff.add(new_tag)
+            old_tags_set = set(old_tags)
+            new_tags_set = set(new_tags)
+            new_tags_diff = set()
+            for new_tag in new_tags_set:
+                if new_tag not in old_tags_set:
+                    new_tags_diff.add(new_tag)
 
-        for current_tag in new_tags_diff:
-            message = 'A new listing, <b>{}</b>, is available in the tag <i>{}</i>'.format(listing.title, current_tag)
+            for current_tag in new_tags_diff:
+                message = 'A new listing, <b>{}</b>, is available in the tag <i>{}</i>'.format(listing.title, current_tag)
 
-            notification_model_access.create_notification(author_username=username,
-                                                          expires_date=now_plus_month,
-                                                          message=message,
-                                                          listing=listing,
-                                                          entities=[current_tag.id],
-                                                          notification_type='TagSubscriptionNotification')
+                notification_model_access.create_notification(author_username=username,
+                                                              expires_date=now_plus_month,
+                                                              message=message,
+                                                              listing=listing,
+                                                              entities=[current_tag.id],
+                                                              notification_type='TagSubscriptionNotification')
 
     def listing_created(self, listing=None, profile=None):
         """
