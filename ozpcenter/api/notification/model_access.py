@@ -41,7 +41,7 @@ Notification +------+--> Listing
                 |
                 +--> Peer
                 |
-                +--> PeerBookmark (PeerBookmark)
+                +--> PeerBookmark
                 |
                 +--> CategorySubscription
                 |
@@ -98,6 +98,10 @@ permission_dict = {
         'add_peer_bookmark_notification',
         'change_peer_bookmark_notification',
         'delete_peer_bookmark_notification',
+
+        'add_subscription_notification',
+        'change_subscription_notification',
+        'delete_subscription_notification'
     ],
     'ORG_STEWARD': [
         'add_system_notification',
@@ -119,6 +123,10 @@ permission_dict = {
         'add_peer_bookmark_notification',
         'change_peer_bookmark_notification',
         'delete_peer_bookmark_notification',
+
+        'add_subscription_notification',
+        'change_subscription_notification',
+        'delete_subscription_notification'
     ],
     'USER': [
         'add_listing_notification',
@@ -132,6 +140,10 @@ permission_dict = {
         'add_peer_bookmark_notification',
         'change_peer_bookmark_notification',
         'delete_peer_bookmark_notification',
+
+        'add_subscription_notification',
+        'change_subscription_notification',
+        'delete_subscription_notification'
         ]
 }
 
@@ -139,6 +151,13 @@ permission_dict = {
 def check_notification_permission(profile_instance, action, notification_type):
     """
     Check to see if user has permission
+
+    Args:
+        profile_instance(Profile): Profile Instance
+        action(string): add/change/delete
+        notification_type(string): notification type
+    Return:
+        True or PermissionDenied Exception
     """
     profile_role = profile_instance.highest_role()
     assert (profile_role in permission_dict), 'Profile group {} not found in permissions'.format(profile_role)
@@ -165,6 +184,13 @@ class NotificationBase(object):
     """
 
     def set_sender_and_entity(self, sender_profile_username, entity, metadata=None):
+        """
+        Set Sender Profile, entity object, metadata
+
+        Args:
+            sender_profile_username(string): Sender's Profile username (normally the request profile)
+            entity(object):
+        """
         assert (sender_profile_username is not None), 'Sender Profile Username is necessary'
 
         self.sender_profile_username = sender_profile_username
@@ -308,8 +334,7 @@ class AgencyWideBookmarkNotification(NotificationBase):
 
 class ListingNotification(NotificationBase):
     """
-    AMLNG-396 - Listing
-        Listing Notifications
+    AMLNG-396 - Listing Notifications
     Targets: All users that bookmarked listing
     Permission Constraint: Only APP_MALL_STEWARDs and ORG_STEWARDs or owners of listing can send notifications
     Invoked: Directly
@@ -365,6 +390,12 @@ class PeerBookmarkNotification(NotificationBase):
         As a user, I want to receive notification when someone shares a folder with me
     Targets: User Given Target
     Permission Constraint:  Must be owner of shared folder to send
+
+    Test Case:
+        Logged on as jones
+        Shared a folder with aaronson
+        Logged on as aaronson
+        RESULTS: aaronson has a new notification added to the notification count.Add folder button is present and adds the shared folder to HuD screen.
     """
 
     def get_notification_db_type(self):
@@ -384,6 +415,16 @@ class ListingReviewNotification(NotificationBase):  # Not Verified
         As an owner or CS, I want to receive notification of user rating and reviews
     Targets: Users that ___
     Invoked: In-directly
+
+    Test Case:
+        Description - Verify the CS and listing owner receives a notification when the review is added or modified.
+        *Pre-req*- Add aaronson as listing owner to Airmail.
+        Log on as syme (minipax)
+        Deleted, Added and Modified review on Airmail ( minitru)
+        Log on as wsmith (minitru-org steward)
+        EXPECTED RESULTS - At least two notifications should display for wsmith.
+        Log on as aaronson
+        EXPECTED RESULTS - At least two notifications should display for aaronson.
     """
 
     def get_notification_db_type(self):
@@ -416,6 +457,14 @@ class ListingPrivateStatusNotification(NotificationBase):
     Permission Constraint: Only APP_MALL_STEWARDs and ORG_STEWARDs or owners of listing can
     Targets: Users that bookmarked listing
     Invoked: In-directly
+
+    Test Case:
+        Bookmarked an app listing in my own org
+        Went to Bookmarked App Listing Quick View Modal | Send Notifications | Sent a notification
+        RESULTS - I received the notification
+        Bookmarked an app listing that did not belong to the org I was in
+        Went to Bookmarked App Listing  Quick View Modal | Send Notifications | Sent a notification
+        RESULTS - I received the notification
     """
 
     def get_notification_db_type(self):
@@ -453,6 +502,14 @@ class PendingDeletionRequestNotification(NotificationBase):  # Not Verified
 
         User undeleted the listing - Steward rejects deletion
             PENDING_DELETION --> PENDING
+
+    Test Case:
+        Logged on as jones
+        Set Test Notification Listing to Pend for Deletion state
+        Logged on as minitrue Org Content Steward- julia
+        Approved the deletion
+        Logged on as jones
+        RESULTS The notification launched = Test Notification Listing listing was approved for deletion by steward
     """
 
     def get_notification_db_type(self):
@@ -472,6 +529,13 @@ class PendingDeletionCancellationNotification(NotificationBase):  # Not Verified
     This event occurs when
         User undeleted the listing
             PENDING_DELETION --> PENDING
+
+    Test Case:
+        Set Test Notification Listing to Pend for Deletion Status
+        Logged on as jones ( owner of <Test Notification> Listing)
+        Undeleted the Test Notification Listing
+        Logged on as Org Content Steward - julia
+        RESULTS - Notificaiton launched = Listing Owner cancelled deletion of Test Notification Listing listing
     """
 
     def get_notification_db_type(self):
@@ -495,6 +559,12 @@ class ListingSubmissionNotification(NotificationBase):
             IN_PROGRESS --> PENDING
 
     a = Listing.objects.last(); a.approval_status = Listing.IN_PROGRESS; a.save()
+
+    Test Case:
+        Logged into Apps Mall as jones ( minitrue)
+        Submitted a new listing using org minitrue.
+        Logged into Apps mall as CS - julia (minitrue)
+        RESULTS - Notification displays = Test Notification Listing listing was submitted
     """
 
     def get_group_target(self):
@@ -535,8 +605,20 @@ class CategorySubscriptionNotification(NotificationBase):  # Not Verified
     """
     AMLNG-380 - CategorySubscription
         As a user, I want to receive notification when a Listing is added to a subscribed category
-    Targets: Users that ___
+    Targets: Users that are subscribed to category
     Invoked: In-directly
+        Should occur when a user submits a listing with a category and listing gets approved,
+            it should send out notifications for users that have that category subscribed and has the Subscription Preference Flag to True
+        Should occur when a published listing add new category,
+            it should send out notifications for users that have that category subscribed and has the Subscription Preference Flag to True
+
+    Test Case:
+        Logged on as jones
+        Subscribed to Finance
+        Logged on as big brother
+        Add any Listing to Finance
+        Logged on as jones
+        RESULTS- Notification "A new listing in category Finance"
     """
 
     def get_notification_db_type(self):

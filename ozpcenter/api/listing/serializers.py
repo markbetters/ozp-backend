@@ -769,7 +769,7 @@ class ListingSerializer(serializers.ModelSerializer):
                 # TODO: need to get the rejection text from somewhere
                 model_access.reject_listing(user, instance, 'TODO: rejection reason')
 
-            dispatcher.publish('listing_approval_status_change',
+            dispatcher.publish('listing_approval_status_changed',
                                listing=instance,
                                profile=user,
                                old_approval_status=old_approval_status,
@@ -864,12 +864,11 @@ class ListingSerializer(serializers.ModelSerializer):
                 for category in validated_data['categories']:
                     instance.categories.add(category)
 
-                if validated_data['approval_status'] == models.Listing.APPROVED:
-                    dispatcher.publish('listing_categories_changed',
-                                       listing=instance,
-                                       profile=user,
-                                       old_categories=old_category_instances,
-                                       new_categories=validated_data['categories'])
+                dispatcher.publish('listing_categories_changed',
+                                   listing=instance,
+                                   profile=user,
+                                   old_categories=old_category_instances,
+                                   new_categories=validated_data['categories'])
 
         if 'owners' in validated_data:
             old_owner_instances = instance.owners.all()
@@ -900,12 +899,11 @@ class ListingSerializer(serializers.ModelSerializer):
                     instance.tags.add(obj)
                     new_tags_instances.append(obj)
 
-                if validated_data['approval_status'] == models.Listing.APPROVED:
-                    dispatcher.publish('listing_tags_changed',
-                                       listing=instance,
-                                       profile=user,
-                                       old_tags=old_tag_instances,
-                                       new_tags=new_tags_instances)
+                dispatcher.publish('listing_tags_changed',
+                                   listing=instance,
+                                   profile=user,
+                                   old_tags=old_tag_instances,
+                                   new_tags=new_tags_instances)
 
         if 'intents' in validated_data:
             old_intent_instances = instance.intents.all()
