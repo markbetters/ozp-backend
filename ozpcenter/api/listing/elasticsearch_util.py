@@ -78,7 +78,13 @@ def get_mapping_setting_obj(number_of_shards=None, number_of_replicas=None):
             "title": {
               "type": "string",
               "analyzer": "autocomplete",
-              "search_analyzer": "autocomplete"
+              "search_analyzer": "autocomplete",
+              "fields": {
+                  "raw": {
+                      "type": "string",
+                      "index": "not_analyzed"
+                    }
+                }
             },
             "agency_id": {
               "type": "long"
@@ -586,10 +592,15 @@ def make_search_query_obj(filter_obj, exclude_agencies=None):
         sort_list = []
 
         for order_item in ordering:
+            order = 'asc'
             if order_item[0] == '-':
-                sort_list.append({order_item[1:]: {'order': 'desc'}})
-            else:
-                sort_list.append({order_item: {'order': 'asc'}})
+                order_item = order_item[1:]
+                order = 'desc'
+
+            # TODO: Figure out a way to get raw field dynamically
+            if order_item == 'title':
+                order_item = 'title.raw'
+            sort_list.append({order_item: {'order': order}})
 
         search_query['sort'] = sort_list
 
