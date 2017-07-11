@@ -336,6 +336,8 @@ def make_search_query_obj(filter_obj, exclude_agencies=None):
     """
     Function is used to make elasticsearch query for searching
 
+    Ordering Reference: https://www.elastic.co/guide/en/elasticsearch/reference/2.4/search-request-sort.html#_sort_order
+
     Args:
         filter_params(SearchParamParser): Object with search parameters
             search(str): Search Keyword
@@ -345,6 +347,8 @@ def make_search_query_obj(filter_obj, exclude_agencies=None):
             agencies([str,str,..]): List agencies Strings
             listing_types([str,str,..]): List listing types Strings
             minscore(float): Minscore Float
+            TODO: Add Ordering
+
 
     """
     user_string = filter_obj.search_string
@@ -360,7 +364,10 @@ def make_search_query_obj(filter_obj, exclude_agencies=None):
     categories = filter_obj.categories
     agencies = filter_obj.agencies
     listing_types = filter_obj.listing_types
+    # Ordering
+    ordering = filter_obj.ordering
 
+    # Boost
     boost_title = filter_obj.boost_title
     boost_description = filter_obj.boost_description
     boost_description_short = filter_obj.boost_description_short
@@ -575,9 +582,19 @@ def make_search_query_obj(filter_obj, exclude_agencies=None):
       }
     }
 
+    if ordering:
+        sort_list = []
+
+        for order_item in ordering:
+            if order_item[0] == '-':
+                sort_list.append({order_item[1:]: {'order': 'desc'}})
+            else:
+                sort_list.append({order_item: {'order': 'asc'}})
+
+        search_query['sort'] = sort_list
+
     if user_offset:
         search_query['from'] = user_offset
-
     return search_query
 
 

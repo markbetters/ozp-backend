@@ -1,5 +1,5 @@
 """
-Storefront and Metadata Serializers
+Storefront Serializers
 """
 import logging
 

@@ -57,6 +57,9 @@ class SearchParamParser(object):
         self.agencies = [str(record) for record in request.query_params.getlist('agency', [])]
         self.listing_types = [str(record) for record in request.query_params.getlist('type', [])]
 
+        # Ordering Example: api/listings/essearch/?search=&limit=24&offset=24&ordering=-title
+        self.ordering = [str(record) for record in request.query_params.getlist('ordering', [])]
+
         # Minscore
         try:
             self.min_score = float(request.query_params.get('minscore', constants.ES_MIN_SCORE))
@@ -348,8 +351,7 @@ def search(request_username, search_param_parser):
     user_exclude_orgs = get_user_exclude_orgs(request_username)
     search_query = elasticsearch_util.make_search_query_obj(search_param_parser, exclude_agencies=user_exclude_orgs)
 
-    # print(json.dumps(search_query, indent=4))
-
+    print(json.dumps(search_query, indent=4))
     res = es_client.search(index=settings.ES_INDEX_NAME, body=search_query)
 
     hits = res.get('hits', {})
@@ -397,8 +399,8 @@ def search(request_username, search_param_parser):
     final_count_with_excluded = final_count - excluded_count
 
     final_results = {
-        "count": final_count_with_excluded,
-        "results": hit_titles
+        'count': final_count_with_excluded,
+        'results': hit_titles
     }
 
     final_results['previous'] = None
@@ -413,8 +415,7 @@ def search(request_username, search_param_parser):
 
     final_results['next_offset_prediction'] = next_offset_prediction
 
-    # Previous URL
-    # previous_offset_prediction is less than zero, previous should be None
+    # Previous URL - previous_offset_prediction is less than zero, previous should be None
     if previous_offset_prediction >= 0:
         final_results['previous'] = generate_link(search_param_parser, previous_offset_prediction)
 

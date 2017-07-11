@@ -5,6 +5,9 @@ import datetime
 import pytz
 import re
 
+from django.template import Context
+from django.template import Template
+
 
 def make_keysafe(key):
     """
@@ -30,3 +33,16 @@ def get_now_utc():
     Format: YYYY-MM-DD HH:MM[:ss[.uuuuuu]][TZ]
     """
     return datetime.datetime.now(pytz.utc)
+
+
+def render_template_string(template_string, context_dict):
+    """
+    Render Django Template
+
+    Args:
+        template_string(str): Template String
+        context_dict(dict): Context Variable Dictionary
+    """
+    template_context = Context(context_dict)
+    template = Template(template_string)
+    return template.render(template_context)

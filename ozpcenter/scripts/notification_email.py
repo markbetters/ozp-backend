@@ -65,15 +65,13 @@ def run():
             subject_line_template = Template(settings.EMAIL_SUBJECT_FIELD_TEMPLATE)
             body_template = Template(settings.EMAIL_BODY_FIELD_TEMPLATE)
 
-            subject_line_template.render(template_context)
-
             current_email = mail.EmailMessage(
                 subject_line_template.render(template_context),
                 body_template.render(template_context),
                 settings.EMAIL_FROM_FIELD,
                 [current_profile_email],
             )
-            current_email.content_subtype = "html"  # Main content is now text/html
+            current_email.content_subtype = 'html'  # Main content is now text/html
 
             email_batch_list.append(current_email)
 
