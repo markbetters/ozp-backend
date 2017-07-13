@@ -99,6 +99,9 @@ def get_mapping_setting_obj(number_of_shards=None, number_of_replicas=None):
             "approval_status": {
               "type": "string"
             },
+            "approved_date": {
+              "type": "date",
+            },
             "launch_url": {
               "type": "string"
             },
@@ -675,7 +678,6 @@ def prepare_clean_listing_record(record):
                       'current_rejection',
                       'what_is_new',
                       'iframe_compatible',
-                      'approved_date',
                       'edited_date',
                       'version_name',
                       'requirements',
