@@ -64,6 +64,10 @@ def get_mapping_setting_obj(number_of_shards=None, number_of_replicas=None):
                 "lowercase",
                 "autocomplete_filter"
               ]
+            },
+            "case_insensitive_sort": {
+              "tokenizer": "keyword",
+              "filter": ["lowercase"]
             }
           }
         }
@@ -82,7 +86,7 @@ def get_mapping_setting_obj(number_of_shards=None, number_of_replicas=None):
               "fields": {
                   "raw": {
                       "type": "string",
-                      "index": "not_analyzed"
+                      "analyzer": "case_insensitive_sort"
                     }
                 }
             },
