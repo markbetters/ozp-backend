@@ -82,6 +82,14 @@ ROOT_URLCONF = 'ozp.urls'
 
 # CAS
 CAS_SERVER_URL = "http://localhost:9001/cas/"
+#The auto create setting is really important otherwise the CAS client will attempt to make a user in your app with no details,
+# this will cause a redirect loop on login for authenticated users
+CAS_AUTO_CREATE_USER = False
+
+CAS_RESPONSE_CALLBACKS ={
+   'ozp.module.cas_callback',
+}
+
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     'cas.backends.CASBackend'
@@ -144,6 +152,10 @@ LOGGING = {
             'level': 'DEBUG',
         },
         'ozp-iwc': {
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',
+        },
+        'ozp': {
             'handlers': ['console', 'file'],
             'level': 'DEBUG',
         }

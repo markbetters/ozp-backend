@@ -203,6 +203,12 @@ def run():
         short_name='Miniplen', icon=icon)
     miniplenty.save()
 
+    img = Image.open( TEST_IMG_PATH + 'dcgs.png' )
+    icon = models.Image.create_image( img, file_extension='png',
+                                      security_marking='UNCLASSIFIED', image_type='agency_icon' )
+    dcgsorg = models.Agency( title='dcgs', short_name='dcgs', icon=icon )
+    dcgsorg.save()
+
     ############################################################################
     #                               Tags
     ############################################################################
