@@ -328,6 +328,15 @@ def update_es_listing(current_listing_id, record, is_new):
 
 
 def encode_special_characters(user_string):
+    """
+    Encode Special Characters for user's search Strings
+
+    Args:
+        user_string(string): raw string to encode
+
+    Returns:
+        Encode string for elasticsearch
+    """
     if user_string is None:
         return ""
 
@@ -345,14 +354,14 @@ def encode_special_characters(user_string):
     return "".join(output_list)
 
 
-def make_search_query_obj(filter_obj, exclude_agencies=None):
+def make_search_query_obj(search_param_parser, exclude_agencies=None):
     """
     Function is used to make elasticsearch query for searching
 
     Ordering Reference: https://www.elastic.co/guide/en/elasticsearch/reference/2.4/search-request-sort.html#_sort_order
 
     Args:
-        filter_params(SearchParamParser): Object with search parameters
+        search_param_parser(SearchParamParser): Object with search parameters
             search(str): Search Keyword
             user_offset(int): Offset
             user_limit(int): Limit
@@ -360,33 +369,30 @@ def make_search_query_obj(filter_obj, exclude_agencies=None):
             agencies([str,str,..]): List agencies Strings
             listing_types([str,str,..]): List listing types Strings
             minscore(float): Minscore Float
-            TODO: Add Ordering
-
-
+            ordering([str,str,str]): List of fields to order
     """
-    user_string = filter_obj.search_string
-    user_string = encode_special_characters(user_string)
+    user_string = encode_special_characters(search_param_parser.search_string)
 
     # Pagination
-    user_offset = filter_obj.offset
-    user_limit = filter_obj.limit  # Size
+    user_offset = search_param_parser.offset
+    user_limit = search_param_parser.limit  # Size
     # user_limit_set = filter_params.get('limit_set', False)
 
     # Filtering
-    tags = filter_obj.tags
-    categories = filter_obj.categories
-    agencies = filter_obj.agencies
-    listing_types = filter_obj.listing_types
+    tags = search_param_parser.tags
+    categories = search_param_parser.categories
+    agencies = search_param_parser.agencies
+    listing_types = search_param_parser.listing_types
     # Ordering
-    ordering = filter_obj.ordering
+    ordering = search_param_parser.ordering
 
     # Boost
-    boost_title = filter_obj.boost_title
-    boost_description = filter_obj.boost_description
-    boost_description_short = filter_obj.boost_description_short
-    boost_tags = filter_obj.boost_tags
+    boost_title = search_param_parser.boost_title
+    boost_description = search_param_parser.boost_description
+    boost_description_short = search_param_parser.boost_description_short
+    boost_tags = search_param_parser.boost_tags
 
-    min_score = filter_obj.min_score
+    min_score = search_param_parser.min_score
 
     # Exclude_agencies
     exclude_agencies = exclude_agencies or []
@@ -616,7 +622,7 @@ def make_search_query_obj(filter_obj, exclude_agencies=None):
     return search_query
 
 
-def prepare_clean_listing_record(record):
+def prepare_clean_listing_record(listing_serializer_record):
     """
     Clean Record
 
@@ -689,8 +695,8 @@ def prepare_clean_listing_record(record):
 
     # Clean Record
     for key in keys_to_remove:
-        if key in record:
-            del record[key]
+        if key in listing_serializer_record:
+            del listing_serializer_record[key]
 
     image_keys_to_clean = ['large_icon',
                            'small_icon',
@@ -699,13 +705,13 @@ def prepare_clean_listing_record(record):
 
     # Clean Large_icon
     for image_key in image_keys_to_clean:
-        if record.get(image_key):
-            del record[image_key]['image_type']
-            del record[image_key]['uuid']
+        if listing_serializer_record.get(image_key):
+            del listing_serializer_record[image_key]['image_type']
+            del listing_serializer_record[image_key]['uuid']
 
-    del record['agency']['icon']
+    del listing_serializer_record['agency']['icon']
 
-    record_clean_obj = json.loads(json.dumps(record))
+    record_clean_obj = json.loads(json.dumps(listing_serializer_record))
 
     # title_suggest = {"input": [ record_clean_obj['title'] ] }
     # record_clean_obj['title_suggest'] =title_suggest

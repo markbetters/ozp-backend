@@ -24,7 +24,10 @@ es_client = elasticsearch_util.es_client
 
 
 class SearchParamParser(object):
-
+    """
+    SearchParamParser
+    Parser for Search Parameters
+    """
     def __init__(self, request):
         self.base_url = '{scheme}://{host}'.format(scheme=request.scheme, host=request.get_host())
 
@@ -92,7 +95,7 @@ class SearchParamParser(object):
 
     def __str__(self):
         """
-        Convert into string
+        Convert SearchParamParser Object into JSON String Representation
         """
         temp_dict = {'SearchParamParser': vars(self)}
         return json.dumps(temp_dict)
@@ -148,6 +151,9 @@ def check_elasticsearch():
 def bulk_reindex():
     """
     Reindexing
+        Removes the index
+        Creates the index mapping
+        Reindex data
 
     Users shall be able to search for listings'
      - title
@@ -223,7 +229,7 @@ def bulk_reindex():
     logger.info(" response: '%s'" % (res))
 
     # Bulk index the data
-    logger.info("Bulk indexing listings...")
+    logger.info('Bulk indexing listings...')
     res = es_client.bulk(index=settings.ES_INDEX_NAME, body=bulk_data, refresh=True)
     logger.info(" response: '%s'" % (res))
 
@@ -258,10 +264,15 @@ def get_user_exclude_orgs(username):
 def suggest(request_username, params_obj):
     """
     Suggest
+    Method is used for giving the user suggestions based on the search string
 
     It must respects restrictions
      - Private apps (apps only from user's agency)
      - User's max_classification_level
+
+    Args:
+        request_username(string)
+        params_obj(SearchParamParser): Parsed Request Search Object
 
     Returns:
         listing titles in a list
@@ -278,7 +289,8 @@ def suggest(request_username, params_obj):
         params_obj.limit = constants.ES_SUGGEST_LIMIT
 
     search_query = elasticsearch_util.make_search_query_obj(params_obj, exclude_agencies=user_exclude_orgs)
-    search_query['_source'] = ['title', 'security_marking', 'id']  # Only Retrieve these fields from Elasticsearch
+    # Only Retrieve ['title', 'security_marking', 'id'] fields from Elasticsearch for suggestions
+    search_query['_source'] = ['title', 'security_marking', 'id']
 
     # print(json.dumps(search_query, indent=4))  #  Print statement for debugging output
     res = es_client.search(index=settings.ES_INDEX_NAME, body=search_query)
@@ -308,7 +320,14 @@ def suggest(request_username, params_obj):
 
 def generate_link(search_param_parser, offset_prediction):
     """
-    Generate next/previous links
+    Generate next/previous URL links
+
+    Args:
+        params_obj(SearchParamParser): Parsed Request Search Object
+        offset_prediction
+
+    Returns:
+        URL for next/previous links (string)
     """
     query_temp = QueryDict(mutable=True)
     query_temp.update({'search': search_param_parser.search_string})
@@ -351,7 +370,7 @@ def search(request_username, search_param_parser):
     user_exclude_orgs = get_user_exclude_orgs(request_username)
     search_query = elasticsearch_util.make_search_query_obj(search_param_parser, exclude_agencies=user_exclude_orgs)
 
-    print(json.dumps(search_query, indent=4))
+    # print(json.dumps(search_query, indent=4))
     res = es_client.search(index=settings.ES_INDEX_NAME, body=search_query)
 
     hits = res.get('hits', {})
