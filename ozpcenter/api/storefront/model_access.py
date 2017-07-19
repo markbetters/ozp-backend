@@ -427,8 +427,6 @@ def get_storefront_new(username, request):
             'recent': [Listing],
             'most_popular': [Listing]
         }
-
-
     """
     extra_data = {}
     profile = models.Profile.objects.get(user__username=username)
@@ -486,11 +484,125 @@ def get_storefront_new(username, request):
     return data, extra_data
 
 
+def get_storefront_recommended(username, pre_fetch=True):
+    """
+    Get Recommended Listings for storefront
+    """
+    extra_data = {}
+
+    profile = models.Profile.objects.get(user__username=username)
+
+    if not profile.is_beta_user():
+        return [], extra_data
+
+    # Retrieve List of Recommended Apps for profile:
+    listing_ids_list, recommended_entry_data = get_recommendation_listing_ids(profile)
+    extra_data['recommended_entry_data'] = recommended_entry_data
+
+    # Retrieve Profile Bookmarks and remove bookmarked from recommendation list
+    bookmarked_apps_list = set([application_library_entry.listing.id for application_library_entry in models.ApplicationLibraryEntry.objects.for_user(username)])
+
+    listing_ids_list_temp = []
+
+    for current_listing_id in listing_ids_list:
+        if current_listing_id not in bookmarked_apps_list:
+            listing_ids_list_temp.append(current_listing_id)
+
+    listing_ids_list = listing_ids_list_temp
+
+    # Send new recommendation list minus bookmarked apps to User Interface
+    recommended_listings_queryset = models.Listing.objects.for_user_organization_minus_security_markings(username).filter(pk__in=listing_ids_list,
+                                                                                                                          approval_status=models.Listing.APPROVED,
+                                                                                                                          is_enabled=True,
+                                                                                                                          is_deleted=False).all()
+
+    if pre_fetch:
+        recommended_listings_queryset = listing_serializers.ListingSerializer.setup_eager_loading(recommended_listings_queryset)
+
+    # Fix Order of Recommendations
+    id_recommended_object_mapper = {}
+    for recommendation_entry in recommended_listings_queryset:
+        id_recommended_object_mapper[recommendation_entry.id] = recommendation_entry
+
+    # recommended_listings_raw = [id_recommended_object_mapper[listing_id] for listing_id in listing_ids_list]
+
+    recommended_listings_raw = []
+
+    for listing_id in listing_ids_list:
+        if listing_id in id_recommended_object_mapper:
+            recommended_listings_raw.append(id_recommended_object_mapper[listing_id])
+
+    # Post security_marking check - lazy loading
+    recommended_listings = pipeline.Pipeline(recommend_utils.ListIterator([recommendations_listing for recommendations_listing in recommended_listings_raw]),
+                                      [pipes.JitterPipe(),
+                                       pipes.ListingPostSecurityMarkingCheckPipe(username),
+                                       pipes.LimitPipe(10)]).to_list()
+
+    return recommended_listings, extra_data
+
+
+def get_storefront_featured(username, pre_fetch=True):
+    """
+    Get Featured Listings for storefront
+    """
+    # Get Featured Listings
+    featured_listings_raw = models.Listing.objects.for_user_organization_minus_security_markings(
+        username).filter(
+            is_featured=True,
+            approval_status=models.Listing.APPROVED,
+            is_enabled=True,
+            is_deleted=False)
+
+    if pre_fetch:
+        featured_listings_raw = listing_serializers.ListingSerializer.setup_eager_loading(featured_listings_raw)
+
+    featured_listings = pipeline.Pipeline(recommend_utils.ListIterator([listing for listing in featured_listings_raw]),
+                                      [pipes.ListingPostSecurityMarkingCheckPipe(username)]).to_list()
+    return featured_listings
+
+
+def get_storefront_recent(username, pre_fetch=True):
+    """
+    Get Recent Listings for storefront
+    """
+    # Get Recent Listings
+    recent_listings_raw = models.Listing.objects.for_user_organization_minus_security_markings(
+        username).order_by('-approved_date').filter(
+        approval_status=models.Listing.APPROVED,
+        is_enabled=True,
+        is_deleted=False)
+
+    if pre_fetch:
+        recent_listings_raw = listing_serializers.ListingSerializer.setup_eager_loading(recent_listings_raw)
+
+    recent_listings = pipeline.Pipeline(recommend_utils.ListIterator([listing for listing in recent_listings_raw]),
+                                      [pipes.ListingPostSecurityMarkingCheckPipe(username),
+                                       pipes.LimitPipe(24)]).to_list()
+    return recent_listings
+
+
+def get_storefront_most_popular(username, pre_fetch=True):
+    """
+    Get Most Popular Listings for storefront
+    """
+    # Get most popular listings via a weighted average
+    most_popular_listings_raw = models.Listing.objects.for_user_organization_minus_security_markings(
+        username).filter(
+            approval_status=models.Listing.APPROVED,
+            is_enabled=True,
+            is_deleted=False).order_by('-avg_rate', '-total_reviews')
+
+    if pre_fetch:
+        most_popular_listings_raw = listing_serializers.ListingSerializer.setup_eager_loading(most_popular_listings_raw)
+
+    most_popular_listings = pipeline.Pipeline(recommend_utils.ListIterator([listing for listing in most_popular_listings_raw]),
+                                      [pipes.ListingPostSecurityMarkingCheckPipe(username),
+                                       pipes.LimitPipe(36)]).to_list()
+    return most_popular_listings
+
+
 def get_storefront(username, pre_fetch=False):
     """
-    Note:
-        No longer used
-
     Returns data for /storefront api invocation including:
         * recommended listings (max=10)
         * featured listings (no limit)
@@ -510,102 +622,14 @@ def get_storefront(username, pre_fetch=False):
             'most_popular': [Listing]
         }
     """
-    extra_data = {}
-    profile = models.Profile.objects.get(user__username=username)
     try:
-        if profile.is_beta_user():
-            # Retrieve List of Recommended Apps for profile:
-            listing_ids_list, recommended_entry_data = get_recommendation_listing_ids(profile)
-            extra_data['recommended_entry_data'] = recommended_entry_data
-
-            # Retrieve Profile Bookmarks and remove bookmarked from recommendation list
-            bookmarked_apps_list = set([application_library_entry.listing.id for application_library_entry in models.ApplicationLibraryEntry.objects.for_user(username)])
-
-            listing_ids_list_temp = []
-
-            for current_listing_id in listing_ids_list:
-                if current_listing_id not in bookmarked_apps_list:
-                    listing_ids_list_temp.append(current_listing_id)
-
-            listing_ids_list = listing_ids_list_temp
-
-            # Send new recommendation list minus bookmarked apps to User Interface
-            recommended_listings_queryset = models.Listing.objects.for_user_organization_minus_security_markings(username).filter(pk__in=listing_ids_list,
-                                                                                                                                  approval_status=models.Listing.APPROVED,
-                                                                                                                                  is_enabled=True,
-                                                                                                                                  is_deleted=False).all()
-
-            if pre_fetch:
-                recommended_listings_queryset = listing_serializers.ListingSerializer.setup_eager_loading(recommended_listings_queryset)
-
-            # Fix Order of Recommendations
-            id_recommended_object_mapper = {}
-            for recommendation_entry in recommended_listings_queryset:
-                id_recommended_object_mapper[recommendation_entry.id] = recommendation_entry
-
-            # recommended_listings_raw = [id_recommended_object_mapper[listing_id] for listing_id in listing_ids_list]
-
-            recommended_listings_raw = []
-
-            for listing_id in listing_ids_list:
-                if listing_id in id_recommended_object_mapper:
-                    recommended_listings_raw.append(id_recommended_object_mapper[listing_id])
-
-            # Post security_marking check - lazy loading
-            recommended_listings = pipeline.Pipeline(recommend_utils.ListIterator([recommendations_listing for recommendations_listing in recommended_listings_raw]),
-                                              [pipes.JitterPipe(),
-                                               pipes.ListingPostSecurityMarkingCheckPipe(username),
-                                               pipes.LimitPipe(10)]).to_list()
-        else:
-            recommended_listings = []
-
-        # Get Featured Listings
-        featured_listings_raw = models.Listing.objects.for_user_organization_minus_security_markings(
-            username).filter(
-                is_featured=True,
-                approval_status=models.Listing.APPROVED,
-                is_enabled=True,
-                is_deleted=False)
-
-        if pre_fetch:
-            featured_listings_raw = listing_serializers.ListingSerializer.setup_eager_loading(featured_listings_raw)
-
-        featured_listings = pipeline.Pipeline(recommend_utils.ListIterator([listing for listing in featured_listings_raw]),
-                                          [pipes.ListingPostSecurityMarkingCheckPipe(username)]).to_list()
-
-        # Get Recent Listings
-        recent_listings_raw = models.Listing.objects.for_user_organization_minus_security_markings(
-            username).order_by('-approved_date').filter(
-            approval_status=models.Listing.APPROVED,
-            is_enabled=True,
-            is_deleted=False)
-
-        if pre_fetch:
-            recent_listings_raw = listing_serializers.ListingSerializer.setup_eager_loading(recent_listings_raw)
-
-        recent_listings = pipeline.Pipeline(recommend_utils.ListIterator([listing for listing in recent_listings_raw]),
-                                          [pipes.ListingPostSecurityMarkingCheckPipe(username),
-                                           pipes.LimitPipe(24)]).to_list()
-
-        # Get most popular listings via a weighted average
-        most_popular_listings_raw = models.Listing.objects.for_user_organization_minus_security_markings(
-            username).filter(
-                approval_status=models.Listing.APPROVED,
-                is_enabled=True,
-                is_deleted=False).order_by('-avg_rate', '-total_reviews')
-
-        if pre_fetch:
-            most_popular_listings_raw = listing_serializers.ListingSerializer.setup_eager_loading(most_popular_listings_raw)
-
-        most_popular_listings = pipeline.Pipeline(recommend_utils.ListIterator([listing for listing in most_popular_listings_raw]),
-                                          [pipes.ListingPostSecurityMarkingCheckPipe(username),
-                                           pipes.LimitPipe(36)]).to_list()
+        recommended_listings, extra_data = get_storefront_recommended(username, pre_fetch)
 
         data = {
             'recommended': recommended_listings,
-            'featured': featured_listings,
-            'recent': recent_listings,
-            'most_popular': most_popular_listings
+            'featured': get_storefront_featured(username, pre_fetch),
+            'recent': get_storefront_recent(username, pre_fetch),
+            'most_popular': get_storefront_most_popular(username, pre_fetch)
         }
     except Exception:
         # raise Exception({'error': True, 'msg': 'Error getting storefront: {0!s}'.format(str(e))})
@@ -650,8 +674,7 @@ def get_metadata(username):
             # i['icon'] = models.Image.objects.get(id=i['icon']).image_url()
             # i['icon'] = '/TODO'
             i['listing_count'] = models.Listing.objects.for_user(
-                username).filter(agency__title=i['title'],
-                approval_status=models.Listing.APPROVED, is_enabled=True).count()
+                username).filter(agency__title=i['title'], approval_status=models.Listing.APPROVED, is_enabled=True).count()
 
         for i in data['intents']:
             # i['icon'] = models.Image.objects.get(id=i['icon']).image_url()
