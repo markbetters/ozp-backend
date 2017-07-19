@@ -4,6 +4,7 @@ Agency Views
 import logging
 
 from rest_framework import viewsets
+from rest_framework import filters
 
 from ozpcenter import permissions
 import ozpcenter.api.agency.model_access as model_access
@@ -60,3 +61,6 @@ class AgencyViewSet(viewsets.ModelViewSet):
     queryset = model_access.get_all_agencies()
     serializer_class = serializers.AgencySerializer
     permission_classes = (permissions.IsAppsMallStewardOrReadOnly,)
+    filter_backends = (filters.OrderingFilter,)
+    ordering_fields = ('title',)
+    ordering = ('title',)
