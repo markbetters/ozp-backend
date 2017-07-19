@@ -142,7 +142,6 @@ def get_mapping_setting_obj(number_of_shards=None, number_of_replicas=None):
             "agency_short_name": {
               "type": "string",
               "analyzer": "keyword_lowercase_analyzer"
-
             },
             "approved_date": {
               "type": "date",
@@ -155,7 +154,6 @@ def get_mapping_setting_obj(number_of_shards=None, number_of_replicas=None):
               "type": "string",
               "index": "not_analyzed"
             },
-
             # tags used for searching
             # tags[].name used for searching
             # tags[].name_string used for filtering
@@ -176,7 +174,6 @@ def get_mapping_setting_obj(number_of_shards=None, number_of_replicas=None):
                 }
               }
             },
-
             # security_marking used to enforce security check for listing before showing to user
             "security_marking": {
               "type": "string",
@@ -199,7 +196,6 @@ def get_mapping_setting_obj(number_of_shards=None, number_of_replicas=None):
             "is_private": {
               "type": "boolean"
             },
-
             # listing_type_title is used for filtering , ex: ['Web Application', 'Web Services', 'Widget'..]
             "listing_type_title": {
               "type": "string",
@@ -223,7 +219,6 @@ def get_mapping_setting_obj(number_of_shards=None, number_of_replicas=None):
             "is_featured": {
               "type": "boolean"
             },
-
             "banner_icon": {
               "properties": {
                 "file_extension": {
@@ -615,6 +610,11 @@ def make_search_query_obj(search_param_parser, exclude_agencies=None):
             }
         })
 
+        # The reason fuzziness is needed using the sample_data is because if
+        # searching for 'ir', the results should bring up 'air mail' listings
+        # without it will not bring 'air mail' listings
+
+        # TODO: Investigate why search for 'a' does not bring 'air mail' to results
         temp_should.append({
            "multi_match": {
               "query": user_string,
@@ -630,7 +630,7 @@ def make_search_query_obj(search_param_parser, exclude_agencies=None):
 
     else:
         temp_should.append({"match_all": {}})
-        #  When querying with match_all the _score should 1
+        #  When querying with match_all the '_score' should 1
 
     search_query = {
       "size": user_limit,
@@ -643,10 +643,10 @@ def make_search_query_obj(search_param_parser, exclude_agencies=None):
       }
     }
 
-    # If user_string has one character, remove min_score
+    # If user_string has one character, lower the min_score
     #   this will make the closest results appear
     if len(user_string) == 1:
-        del search_query['min_score']
+        search_query['min_score'] = 0.05
 
     if ordering:
         sort_list = []
