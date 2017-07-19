@@ -2,6 +2,19 @@
 Elasticsearch Utils
 --------------------------
 Contains Elasticsearch common functions
+
+Code was developed to work with Elasticsearch 2.4.*
+
+Reference
+    number_of_shards
+    number_of_replicas
+        https://www.elastic.co/guide/en/elasticsearch/guide/current/_how_primary_and_replica_shards_interact.html
+    ordering
+        https://www.elastic.co/guide/en/elasticsearch/reference/2.4/search-request-sort.html#_sort_order
+    analyzer
+        https://www.elastic.co/guide/en/elasticsearch/reference/2.4/analyzer.html
+    completion
+        https://qbox.io/blog/quick-and-dirty-autocomplete-with-elasticsearch-completion-suggest
 """
 import json
 import logging
@@ -30,13 +43,12 @@ def get_mapping_setting_obj(number_of_shards=None, number_of_replicas=None):
     """
     This method creates the elasticsearch mapping object
 
-    https://www.elastic.co/guide/en/elasticsearch/guide/current/_how_primary_and_replica_shards_interact.html
     Args:
         number_of_shards(int): Number of shards that index should to have
         number_of_replicas(int): Number of replicas that index should have
 
     Returns:
-        mapping obj(dictionary): elasticsearch mapping object
+        Mapping Object(dictionary): Elasticsearch mapping object
     """
     if number_of_shards is None:
         number_of_shards = settings.ES_NUMBER_OF_SHARDS
@@ -65,7 +77,7 @@ def get_mapping_setting_obj(number_of_shards=None, number_of_replicas=None):
                 "autocomplete_filter"
               ]
             },
-            "case_insensitive_sort": {
+            "keyword_lowercase_analyzer": {
               "tokenizer": "keyword",
               "filter": ["lowercase"]
             }
@@ -74,44 +86,43 @@ def get_mapping_setting_obj(number_of_shards=None, number_of_replicas=None):
       },
       "mappings": {
         "listings": {
+          # dynamic option is strict to prevent any unknown field from automatically being index
           "dynamic": "strict",
           "properties": {
+            # id, unique_name  is metadata
             "id": {
               "type": "long"
             },
+            "unique_name": {
+              "type": "string"
+            },
+            # Title is used for searching
+            # Title.keyword_lowercase is used for ordering
             "title": {
               "type": "string",
               "analyzer": "autocomplete",
               "search_analyzer": "autocomplete",
               "fields": {
-                  "raw": {
+                  "keyword_lowercase": {
                       "type": "string",
-                      "analyzer": "case_insensitive_sort"
+                      "analyzer": "keyword_lowercase_analyzer"
                     }
                 }
             },
-            "agency_id": {
-              "type": "long"
-            },
-            "agency_short_name": {
+            # description is used for searching
+            "description": {
               "type": "string",
-              "index": "not_analyzed"
+              "analyzer": "autocomplete",
+              "search_analyzer": "autocomplete"
             },
-            "agency_title": {
-              "type": "string"
+            # description_short is used for searching
+            "description_short": {
+              "type": "string",
+              "analyzer": "autocomplete",
+              "search_analyzer": "autocomplete"
             },
-            "approval_status": {
-              "type": "string"
-            },
-            "approved_date": {
-              "type": "date",
-            },
-            "launch_url": {
-              "type": "string"
-            },
-            "avg_rate": {
-              "type": "double"
-            },
+
+            # categories is used for Filtering
             "categories": {
               "type": "nested",
               "properties": {
@@ -122,44 +133,32 @@ def get_mapping_setting_obj(number_of_shards=None, number_of_replicas=None):
                   "type": "long"
                 },
                 "title": {
-                  "type": "string"
+                  "type": "string",
+                  "analyzer": "keyword_lowercase_analyzer"
                 }
               }
             },
-            "description": {
+            # agency_short_name is used for Filtering (include/exclude)
+            "agency_short_name": {
               "type": "string",
-              "analyzer": "autocomplete",
-              "search_analyzer": "autocomplete"
+              "analyzer": "keyword_lowercase_analyzer"
+
             },
-            "description_short": {
-              "type": "string",
-              "analyzer": "autocomplete",
-              "search_analyzer": "autocomplete"
+            "approved_date": {
+              "type": "date",
             },
-            "is_deleted": {
-              "type": "boolean"
-            },
-            "is_enabled": {
-              "type": "boolean"
-            },
-            "is_featured": {
-              "type": "boolean"
-            },
-            "is_private": {
-              "type": "boolean"
-            },
-            "listing_type_description": {
-              "type": "string"
-            },
-            "listing_type_id": {
+            # agency_id, agency_title is metadata
+            "agency_id": {
               "type": "long"
             },
-            "listing_type_title": {
-              "type": "string"
+            "agency_title": {
+              "type": "string",
+              "index": "not_analyzed"
             },
-            "security_marking": {
-              "type": "string"
-            },
+
+            # tags used for searching
+            # tags[].name used for searching
+            # tags[].name_string used for filtering
             "tags": {
               "type": "nested",
               "properties": {
@@ -172,10 +171,59 @@ def get_mapping_setting_obj(number_of_shards=None, number_of_replicas=None):
                   "search_analyzer": "autocomplete"
                 },
                 "name_string": {
-                  "type": "string"
+                  "type": "string",
+                  "analyzer": "keyword_lowercase_analyzer"
                 }
               }
             },
+
+            # security_marking used to enforce security check for listing before showing to user
+            "security_marking": {
+              "type": "string",
+              "index": "not_analyzed"
+            },
+            # approval_status is used for filtering
+            "approval_status": {
+              "type": "string",
+              "analyzer": "keyword_lowercase_analyzer"
+            },
+            # is_deleted is used for filtering
+            "is_deleted": {
+              "type": "boolean"
+            },
+            # is_enabled is used for filtering
+            "is_enabled": {
+              "type": "boolean"
+            },
+            # is_private is used for filtering, used to filter out private apps for different organizations
+            "is_private": {
+              "type": "boolean"
+            },
+
+            # listing_type_title is used for filtering , ex: ['Web Application', 'Web Services', 'Widget'..]
+            "listing_type_title": {
+              "type": "string",
+              "analyzer": "keyword_lowercase_analyzer"
+            },
+            # listing_type_description, listing_type_id is metadata
+            "listing_type_description": {
+              "type": "string"
+            },
+            "listing_type_id": {
+              "type": "long"
+            },
+            # TODO: Description for each var
+            "launch_url": {
+              "type": "string"
+            },
+            "avg_rate": {
+              "type": "double"
+            },
+
+            "is_featured": {
+              "type": "boolean"
+            },
+
             "banner_icon": {
               "properties": {
                 "file_extension": {
@@ -248,9 +296,6 @@ def get_mapping_setting_obj(number_of_shards=None, number_of_replicas=None):
             },
             "total_votes": {
               "type": "long"
-            },
-            "unique_name": {
-              "type": "string"
             }
           }
         }
@@ -261,7 +306,11 @@ def get_mapping_setting_obj(number_of_shards=None, number_of_replicas=None):
 
 def update_es_listing(current_listing_id, record, is_new):
     """
+    Update Listing Record in Elasticsearch
+
     Args:
+        current_listing_id: Lisitng Id
+        record(dict): serialized listing
         is_new: backend is new
     """
     if settings.ES_ENABLED is False:
@@ -358,8 +407,6 @@ def make_search_query_obj(search_param_parser, exclude_agencies=None):
     """
     Function is used to make elasticsearch query for searching
 
-    Ordering Reference: https://www.elastic.co/guide/en/elasticsearch/reference/2.4/search-request-sort.html#_sort_order
-
     Args:
         search_param_parser(SearchParamParser): Object with search parameters
             search(str): Search Keyword
@@ -401,36 +448,30 @@ def make_search_query_obj(search_param_parser, exclude_agencies=None):
     # Filters out listing that are not deleted, enabled, and Approved
     filter_data = [
         {
-          "query": {
             "term": {
               "is_deleted": 0
             }
-          }
         },
         {
-          "query": {
             "term": {
               "is_enabled": 1
             }
-          }
         },
         {
-          "query": {
             "match": {
               "approval_status": "APPROVED"
             }
-          }
         }
     ]
 
-    # Agencies to filter
+    # Agencies (agency_short_name) to filter
     if agencies:
         agencies_temp = []
 
-        for agency_title in agencies:
+        for agency_short_name in agencies:
             current_agency_data = {
                 "match": {
-                    "agency_short_name": agency_title
+                    "agency_short_name": agency_short_name
                 }
             }
             agencies_temp.append(current_agency_data)
@@ -445,7 +486,7 @@ def make_search_query_obj(search_param_parser, exclude_agencies=None):
 
         filter_data.append(agencies_data)
 
-    # Agencies to exclude
+    # Agencies (agency_short_name ex, Minitrue) to exclude
     if exclude_agencies:
         exclude_agencies_temp = []
 
@@ -589,6 +630,7 @@ def make_search_query_obj(search_param_parser, exclude_agencies=None):
 
     else:
         temp_should.append({"match_all": {}})
+        #  When querying with match_all the _score should 1
 
     search_query = {
       "size": user_limit,
@@ -601,6 +643,11 @@ def make_search_query_obj(search_param_parser, exclude_agencies=None):
       }
     }
 
+    # If user_string has one character, remove min_score
+    #   this will make the closest results appear
+    if len(user_string) == 1:
+        del search_query['min_score']
+
     if ordering:
         sort_list = []
 
@@ -612,7 +659,7 @@ def make_search_query_obj(search_param_parser, exclude_agencies=None):
 
             # TODO: Figure out a way to get raw field dynamically
             if order_item == 'title':
-                order_item = 'title.raw'
+                order_item = 'title.keyword_lowercase'
             sort_list.append({order_item: {'order': order}})
 
         search_query['sort'] = sort_list
@@ -625,8 +672,7 @@ def make_search_query_obj(search_param_parser, exclude_agencies=None):
 def prepare_clean_listing_record(listing_serializer_record):
     """
     Clean Record
-
-    # Sample Record (record_json) after clean
+    Sample Record (record_json) after clean
 
     {
       "id": 316,
