@@ -661,7 +661,7 @@ def get_metadata(username):
             'title', 'description'))
 
         data['agencies'] = values_query_set_to_dict(models.Agency.objects.all().values(
-            'title', 'short_name', 'icon', 'id'))
+            'title', 'short_name', 'icon', 'id').order_by(Lower('short_name')))
 
         data['contact_types'] = values_query_set_to_dict(models.ContactType.objects.all().values(
             'name', 'required'))
