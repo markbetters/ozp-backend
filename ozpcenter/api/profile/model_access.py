@@ -52,35 +52,25 @@ def get_all_listings_for_profile_by_id(current_request_username, profile_id, lis
         profile_id
         listing_id
 
+    Raises:
+        models.Profile.DoesNotExist
+        models.Listing.DoesNotExist
+
+
     """
-    try:
-        if profile_id == 'self':
-            profile_instance = models.Profile.objects.get(user__username=current_request_username).user
-        else:
-            profile_instance = models.Profile.objects.get(id=profile_id).user
-    except models.Profile.DoesNotExist:
-        return None
+    if profile_id == 'self':
+        profile_instance = models.Profile.objects.get(user__username=current_request_username)
+    else:
+        profile_instance = models.Profile.objects.get(id=profile_id)
 
-    try:
-        listings = models.Listing.objects.filter(owners__id=profile_instance.id)
-        listings = listings.exclude(is_private=True)
-        # filter out listings by user's access level
-        titles_to_exclude = []
-        for i in listings:
-            if not i.security_marking:
-                logger.debug('Listing {0!s} has no security_marking'.format(i.title))
-            if not system_has_access_control(current_request_username, i.security_marking):
-                titles_to_exclude.append(i.title)
-        listings = listings.exclude(title__in=titles_to_exclude)  # TODO: Base it on ids
+    listings = models.Listing.objects.for_user(current_request_username).filter(owners__in=[profile_instance.id]).filter(is_deleted=False).order_by('approval_status')
 
-        if listing_id:
-            filtered_listing = listings.get(id=listing_id)
-        else:
-            filtered_listing = listings.all()
+    if listing_id:
+        listings = listings.get(id=listing_id)
+    else:
+        listings = listings.all()
 
-        return filtered_listing
-    except models.Listing.DoesNotExist:
-        return None
+    return listings
 
 
 def get_profiles_by_role(role):

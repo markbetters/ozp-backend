@@ -133,24 +133,14 @@ class ProfileListingViewSet(viewsets.ModelViewSet):
         Find a Profile Listing by ID
     Response:
         200 - Successful operation - ListingSerializer
-
-    PUT /api/profile/{pk}/listing/
-    Summary:
-        Update a Profile Listing by ID
-
-    PATCH /api/profile/{pk}/listing/
-    Summary:
-        Update (Partial) a Profile Listing by ID
-
-    DELETE /api/profile/{pk}/listing/
-    Summary:
-        Delete a Profile Listing by ID
     """
 
     permission_classes = (permissions.IsUser,)
     serializer_class = listing_serializers.ListingSerializer
 
-    def get_queryset(self, current_request_username, profile_pk=None, listing_pk=None):
+    def get_queryset(self, profile_pk=None, listing_pk=None):
+        current_request_username = self.request.user.username
+
         if listing_pk:
             queryset = model_access.get_all_listings_for_profile_by_id(current_request_username, profile_pk, listing_pk)
         else:
@@ -161,43 +151,42 @@ class ProfileListingViewSet(viewsets.ModelViewSet):
         """
         Retrieves all listings for a specific profile that they own
         """
-
         current_request_username = request.user.username
-        queryset = self.get_queryset(current_request_username, profile_pk)
-
         # Used to anonymize usernames
         anonymize_identifiable_data = system_anonymize_identifiable_data(current_request_username)
 
         if anonymize_identifiable_data:
             return Response([])
 
-        if queryset:
-            page = self.paginate_queryset(queryset)
+        queryset = self.get_queryset(profile_pk)
+        page = self.paginate_queryset(queryset)
 
-            if page is not None:
-                serializer = listing_serializers.ListingSerializer(page,
-                    context={'request': request}, many=True)
-                response = self.get_paginated_response(serializer.data)
-                return response
-
-            serializer = listing_serializers.ListingSerializer(queryset,
+        if page is not None:
+            serializer = listing_serializers.ListingSerializer(page,
                 context={'request': request}, many=True)
-            return Response(serializer.data)
-        else:
-            return Response({'detail': 'Not Found'}, status=status.HTTP_404_NOT_FOUND)
+            response = self.get_paginated_response(serializer.data)
+            return response
+
+        serializer = listing_serializers.ListingSerializer(queryset,
+            context={'request': request}, many=True)
+        return Response(serializer.data)
 
     def retrieve(self, request, pk, profile_pk=None):
         """
         Retrieves a specific listing for a specific profile that they own
         """
         current_request_username = request.user.username
-        queryset = self.get_queryset(current_request_username, profile_pk, pk)
-        if queryset:
-            serializer = listing_serializers.ListingSerializer(queryset,
-                context={'request': request})
-            return Response(serializer.data)
-        else:
-            return Response({'detail': 'Not Found'}, status=status.HTTP_404_NOT_FOUND)
+        # Used to anonymize usernames
+        anonymize_identifiable_data = system_anonymize_identifiable_data(current_request_username)
+
+        if anonymize_identifiable_data:
+            return Response({'detail': 'Permission Denied'}, status=status.HTTP_403_FORBIDDEN)
+
+        queryset = self.get_queryset(profile_pk, pk)
+
+        serializer = listing_serializers.ListingSerializer(queryset,
+            context={'request': request})
+        return Response(serializer.data)
 
     def create(self, request, profile_pk=None):
         """
