@@ -392,8 +392,6 @@ class ElasticsearchContentBaseRecommender(Recommender):
 
         # print("Listing: ", listings_only)
 
-        count = 0  # TODO: Debugging code and should be removed before review
-
         for listing in listings_only:
             print("LISTING: ", listing)
             print("listing title:", listing['_source']['title'])
@@ -539,6 +537,7 @@ class ElasticsearchContentBaseRecommender(Recommender):
                 index=settings.ES_INDEX_NAME,
                 body=query_compare
             )
+            print("RESULT: ", compare_result)
             exit()
         exit()
 
