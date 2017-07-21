@@ -24,6 +24,7 @@ from ozpcenter import models
 from ozpcenter.api.notification import model_access as notification_model_access
 from ozpcenter.recommend.recommend import RecommenderDirectory
 import ozpcenter.api.listing.model_access as listing_model_access
+import ozpcenter.api.listing.model_access_es as model_access_es
 
 
 TEST_IMG_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'test_images') + '/'
@@ -79,6 +80,10 @@ def run():
     Creates basic sample data
     """
     total_start_time = time_ms()
+
+    # Recreate Index Mapping
+    model_access_es.recreate_index_mapping()
+
     # Create Groups
     models.Profile.create_groups()
 
