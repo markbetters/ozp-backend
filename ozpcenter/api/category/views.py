@@ -78,7 +78,7 @@ class CategoryViewSet(viewsets.ModelViewSet):
         category_listing_count = Listing.objects.filter(categories__in=[category]).count()
 
         if category_listing_count >= 1:
-            raise RequestException('Can not delete category {}, {} listings use this category'.format(category.title, category_listing_count))
+            raise RequestException('Cannot delete category {}, {} listings use this category'.format(category.title, category_listing_count))
 
         category.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
