@@ -33,6 +33,7 @@ class SearchParamParser(object):
         * List of agencies (OR logic)
         * List of listing types (OR logic)
     """
+
     def __init__(self, request):
         self.base_url = '{scheme}://{host}'.format(scheme=request.scheme, host=request.get_host())
 
@@ -147,6 +148,29 @@ def check_elasticsearch():
     raise errors.ElasticsearchServiceUnavailable("Elasticsearch Check Error")
 
 
+def recreate_index_mapping():
+    """
+    Recreate Index Mapping
+    """
+    if settings.ES_ENABLED:
+        check_elasticsearch()
+
+        logger.info('Checking to see if Index [{}] exist'.format(settings.ES_INDEX_NAME))
+
+        if es_client.indices.exists(settings.ES_INDEX_NAME):
+            logger.info("deleting '%s' index..." % (settings.ES_INDEX_NAME))
+            res = es_client.indices.delete(index=settings.ES_INDEX_NAME)
+            logger.info(" response: '%s'" % (res))
+
+        request_body = elasticsearch_util.get_mapping_setting_obj()
+
+        logger.info("Creating '%s' index..." % (settings.ES_INDEX_NAME))
+        res = es_client.indices.create(index=settings.ES_INDEX_NAME, body=request_body)
+        logger.info(" response: '%s'" % (res))
+    else:
+        logger.debug('Elasticsearch is not enabled')
+
+
 def bulk_reindex():
     """
     Reindex Listing Data into an Elasticsearch Index
@@ -162,20 +186,7 @@ def bulk_reindex():
     """
     logger.info('Starting Indexing Process')
     check_elasticsearch()
-
-    logger.info('Checking to see if Index [{}] exist'.format(settings.ES_INDEX_NAME))
-
-    if es_client.indices.exists(settings.ES_INDEX_NAME):
-        logger.info("deleting '%s' index..." % (settings.ES_INDEX_NAME))
-        res = es_client.indices.delete(index=settings.ES_INDEX_NAME)
-        logger.info(" response: '%s'" % (res))
-
-    request_body = elasticsearch_util.get_mapping_setting_obj()
-
-    logger.info("Creating '%s' index..." % (settings.ES_INDEX_NAME))
-    res = es_client.indices.create(index=settings.ES_INDEX_NAME, body=request_body)
-    logger.info(" response: '%s'" % (res))
-
+    recreate_index_mapping()
     # Convert Listing Objects into Python Objects
     all_listings = models.Listing.objects.all()
     serializer = ReadOnlyListingSerializer(all_listings, many=True)

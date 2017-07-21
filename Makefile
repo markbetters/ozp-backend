@@ -77,6 +77,17 @@ dev: clean pre create_static
 	MAIN_DATABASE=sqlite python manage.py runscript sample_data_generator
 
 	MAIN_DATABASE=sqlite python manage.py runserver localhost:8001
+
+dev_es: clean pre create_static
+	MAIN_DATABASE=sqlite ES_ENABLED=TRUE python manage.py makemigrations ozpcenter
+	MAIN_DATABASE=sqlite ES_ENABLED=TRUE python manage.py makemigrations ozpiwc
+	MAIN_DATABASE=sqlite ES_ENABLED=TRUE DEV_MODE=True python manage.py migrate
+
+	echo 'Loading sample data...'
+	MAIN_DATABASE=sqlite ES_ENABLED=TRUE python manage.py runscript sample_data_generator
+
+	MAIN_DATABASE=sqlite ES_ENABLED=TRUE python manage.py runserver localhost:8001
+
 # sudo apt-get install postgresql postgresql-contrib
 # sudo -i -u postgres
 # createuser ozp_user
