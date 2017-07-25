@@ -278,7 +278,7 @@ class ElasticsearchContentBaseRecommender(Recommender):
     # The results will only be based on the profile text matches and should use all of the text in the code to make a successful match.
     '''
     friendly_name = 'Elasticsearch Content Filtering'
-    recommendation_weight = 25.0
+    recommendation_weight = 90.0
 
     def initiate(self):
         """
@@ -582,13 +582,23 @@ class ElasticsearchContentBaseRecommender(Recommender):
                     }
                 }
 
-            compare_result = es_client.search(
+            es_query_result = es_client.search(
                 index=settings.ES_INDEX_NAME,
                 body=query_compare
             )
-            print("RESULT: ", compare_result)
-        #     exit()
-        # exit()
+            # print("RESULT: ", es_query_result)
+            recommended_items = es_query_result['hits']['hits']
+            print("Recommended ITEMS: ", recommended_items)
+
+            profile_id = each_profile['_id']
+
+            # Add recommended items based on content to user profile list:
+            for indexitem in recommended_items:
+                score = indexitem['_score']
+                print("PROFILE_ID: ", profile_id)
+                print("ID: ", indexitem['_id'])
+                print("SCORE: ", score)
+                self.add_listing_to_user_profile(profile_id, indexitem['_id'], score, False)
 
 
 class ElasticsearchUserBaseRecommender(Recommender):
@@ -981,7 +991,6 @@ class ElasticsearchUserBaseRecommender(Recommender):
             # Retrieve Bookmark App Listings for user:
             bookmarked_apps = models.ApplicationLibraryEntry.objects.for_user(profile.user.username)
             bookmarked_list = []
-# <<<<<<< HEAD
             bookmarked_list_text = []
             for bkapp in bookmarked_apps:
                 bookmarked_list.append(bkapp.listing.id)
@@ -1009,13 +1018,6 @@ class ElasticsearchUserBaseRecommender(Recommender):
             user_information = model_access.get_profile_by_id(profile_id)
             username = user_information.user.username
 
-# =======
-            # for bkapp in bookmarked_apps:
-            #     bookmarked_list.append(bkapp.listing.id)
-
-            # print("Bookmarked Apps: ", bookmarked_list)
-
-# >>>>>>> master
             # Create ES profile to search records:
             es_profile_search = {
                 "query": {
