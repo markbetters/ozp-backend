@@ -298,6 +298,20 @@ EMAIL_PORT = 1025
 # EMAIL_USE_SSL False
 # EMAIL_USE_TLS False
 
+# https://docs.djangoproject.com/en/1.8/ref/templates/language/#templates
+# Template Vars
+# non_emailed_count = Number of Notifications
+EMAIL_FROM_FIELD = 'admin@app.com'
+EMAIL_SUBJECT_FIELD_TEMPLATE = '{{ non_emailed_count }} New Notifications'
+EMAIL_BODY_FIELD_TEMPLATE = '''Welcome to App Site
+
+You have {{ non_emailed_count }} new notifications
+
+You have received this email because you have subscribed to Notifications
+You can disabling these Notifications by logging into Center and disable Email Notifications in profile page
+'''
+
+
 # AWS settings
 AWS_STORAGE_BUCKET_NAME = 'ozp-static'
 AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID', 'MISSING AWS_ACCESS_KEY_ID')

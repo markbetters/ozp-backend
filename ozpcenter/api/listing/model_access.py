@@ -491,7 +491,7 @@ def reject_listing(steward, listing, rejection_description):
     listing.edited_date = utils.get_now_utc()
     listing.save()
 
-    dispatcher.publish('listing_approval_status_change',
+    dispatcher.publish('listing_approval_status_changed',
                        listing=listing,
                        profile=steward,
                        old_approval_status=old_approval_status,
@@ -701,7 +701,7 @@ def delete_listing(username, listing):
     listing.save()
     # listing.delete()
 
-    dispatcher.publish('listing_approval_status_change',
+    dispatcher.publish('listing_approval_status_changed',
                        listing=listing,
                        profile=profile,
                        old_approval_status=old_approval_status,

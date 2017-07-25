@@ -677,9 +677,6 @@ class Profile(models.Model):
     #                                      backref='owner')
     display_name = models.CharField(max_length=255)
     bio = models.CharField(max_length=1000, blank=True)
-    center_tour_flag = models.BooleanField(default=True)
-    hud_tour_flag = models.BooleanField(default=True)
-    webtop_tour_flag = models.BooleanField(default=True)
     # user's DN from PKI cert
     # ideally this wouldn't be here and in a system using PKI, the user's DN
     # would be the username. DNs can be longer than Django's User.username
@@ -707,14 +704,26 @@ class Profile(models.Model):
     # instead of overriding the builtin Django User model used
     # for authentication, we extend it
     # https://docs.djangoproject.com/en/1.8/topics/auth/customizing/#extending-the-existing-user-model
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, null=True,
-                                blank=True)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, null=True, blank=True)
 
-    # TODO
-    # iwc_data_objects = db.relationship('IwcDataObject', backref='profile')
+    # Preferences
+    # center_tour_flag: True = Show Tour for center
+    center_tour_flag = models.BooleanField(default=True)
+    # hud_tour_flag: True = Show Tour for Hud
+    hud_tour_flag = models.BooleanField(default=True)
+    # webtop_tour_flag: True = Show Tour for Webtop
+    webtop_tour_flag = models.BooleanField(default=True)
+    # email_notification_flag: True = Send Emails out for notification
+    email_notification_flag = models.BooleanField(default=True)
+    # listing_notification_flag will disable/enable:
+    #   ListingSubmissionNotification, PendingDeletionCancellationNotification, PendingDeletionRequestNotification,
+    #  ListingPrivateStatusNotification, ListingReviewNotification, ListingNotification, Listing Change
+    listing_notification_flag = models.BooleanField(default=True)
+    # subscription_notification_flag  will disable/enable:
+    #    TagSubscriptionNotification, CategorySubscriptionNotification
+    subscription_notification_flag = models.BooleanField(default=True)
 
-    # TODO: on create, update, or delete, do the same for the related
-    # django_user
+    # TODO: on create, update, or delete, do the same for the related django_user
 
     def __repr__(self):
         return 'Profile: {0!s}'.format(self.user.username)
@@ -789,7 +798,6 @@ class Profile(models.Model):
             groups (['group1_name', 'group2_name'])
             dn
             issuer_dn
-
         """
         # TODO: what to make default password?
         password = kwargs.get('password', 'password')
@@ -1356,6 +1364,7 @@ class Notification(models.Model):
     LISTING = 'listing'  # Listing Notifications
     PEER = 'peer'  # Peer to Peer Notifications
     PEER_BOOKMARK = 'peer_bookmark'  # PEER.BOOKMARK - Peer to Peer Bookmark Notifications
+    SUBSCRIPTION = 'subscription'  # SUBSCRIPTION - Tag/Category Subscriptions
 
     NOTIFICATION_TYPE_CHOICES = (
         (SYSTEM, 'system'),
@@ -1364,6 +1373,7 @@ class Notification(models.Model):
         (LISTING, 'listing'),
         (PEER, 'peer'),
         (PEER_BOOKMARK, 'peer_bookmark'),
+        (SUBSCRIPTION, 'subscription'),
     )
     notification_type = models.CharField(default=SYSTEM, max_length=24, choices=NOTIFICATION_TYPE_CHOICES)  # db_index=True)
 

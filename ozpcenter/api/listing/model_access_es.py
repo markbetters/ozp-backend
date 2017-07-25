@@ -1,5 +1,7 @@
 """
 Listing Model Access For Elasticsearch
+
+Code was developed to work with Elasticsearch 2.4.*
 """
 import json
 import logging
@@ -14,7 +16,6 @@ from ozpcenter import errors
 from ozpcenter import constants
 from plugins_util.plugin_manager import system_has_access_control
 from ozpcenter.api.listing import elasticsearch_util
-# import ozpcenter.model_access as generic_model_access
 
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center.' + str(__name__))
@@ -24,6 +25,14 @@ es_client = elasticsearch_util.es_client
 
 
 class SearchParamParser(object):
+    """
+    Parser for Search Parameters
+
+    Filter_params can contain - filter_params
+        * List of category names (OR logic)
+        * List of agencies (OR logic)
+        * List of listing types (OR logic)
+    """
 
     def __init__(self, request):
         self.base_url = '{scheme}://{host}'.format(scheme=request.scheme, host=request.get_host())
@@ -57,6 +66,9 @@ class SearchParamParser(object):
         self.agencies = [str(record) for record in request.query_params.getlist('agency', [])]
         self.listing_types = [str(record) for record in request.query_params.getlist('type', [])]
 
+        # Ordering Example: api/listings/essearch/?search=&limit=24&offset=24&ordering=-title
+        self.ordering = [str(record) for record in request.query_params.getlist('ordering', [])]
+
         # Minscore
         try:
             self.min_score = float(request.query_params.get('minscore', constants.ES_MIN_SCORE))
@@ -89,14 +101,16 @@ class SearchParamParser(object):
 
     def __str__(self):
         """
-        Convert into string
+        Convert SearchParamParser Object into JSON String Representation
         """
         temp_dict = {'SearchParamParser': vars(self)}
         return json.dumps(temp_dict)
 
 
 class ReadOnlyListingSerializer(serializers.ModelSerializer):
-
+    """
+    Serializer used to convert listing object into python friendly object
+    """
     class Meta:
         model = models.Listing
         depth = 2
@@ -104,87 +118,76 @@ class ReadOnlyListingSerializer(serializers.ModelSerializer):
 
 def check_elasticsearch():
     """
-    Used to check to see if elasticsearch is up
-    TODO: Replace es_client.ping() with es_client.info()
-    If successful:
-        {'name': 'Human Top', 'version': {'build_snapshot': False, 'number': '2.4.0', 'build_hash': 'ce9f0c7394dee074091dd1bc4e9469251181fc55',
-        'build_timestamp': '2016-08-29T09:14:17Z', 'lucene_version': '5.5.2'}, 'cluster_name': 'elasticsearch', 'tagline': 'You Know, for Search'}
-    If Exception: TransportError
-        Ngnix BasicAuth Fail:
-            TransportError(401, '<html>\r\n<head><title>401 Authorization Required</title></head>\r\n<body bgcolor="white">\r\n<center><h1>401 Authorization Required</h1></center>\r\n<hr><center>nginx/1.11.6</center>\r\n</body>\r\n</html>\r\n')
-        Nginx reverse proxy can't find elasticsearch but correct BasicAuth
-            TransportError(502, 'An error occurred.</h1>\n<p>Sorry, the page you are looking for is currently unavailable.<br/>\nPlease try again later.....
-    If Exception Type: Connection fails:
-        ConnectionError(<urllib3.connection.HTTPConnection object at 0x7f6343212c50>: Failed to establish a new connection: [Errno 111] Connection refused) ...
-    If Exception Type: SerializationError
-        Exception Value: Unknown mimetype, unable to deserialize: text/html
-
-    Ping does > self.transport.perform_request('HEAD', '/', params=params) > it would be helpful if function was more verbosed
+    Method used to check to see if elasticsearch is up
     """
     if settings.ES_ENABLED is False:
         raise errors.ElasticsearchServiceUnavailable("Elasticsearch is disabled in the settings")
-
     try:
         results = es_client.info()
+        # Results: {'name': 'Human Top', 'version': {'build_snapshot': False, 'number': '2.4.0', 'build_hash': 'ce9f0c7394dee074091dd1bc4e9469251181fc55',
+        # 'build_timestamp': '2016-08-29T09:14:17Z', 'lucene_version': '5.5.2'}, 'cluster_name': 'elasticsearch', 'tagline': 'You Know, for Search'}
         keys_to_check = ['name', 'version', 'cluster_name', 'tagline']
         for key in keys_to_check:
             if key not in results:
                 raise errors.ElasticsearchServiceUnavailable("Elasticsearch Results missing keys")
         return True
     except exceptions.SerializationError:
+        # Exception Value: Unknown mimetype, unable to deserialize: text/html
         raise errors.ElasticsearchServiceUnavailable("Elasticsearch Serialization Error")
     except exceptions.AuthenticationException:
+        # Ngnix BasicAuth Fail: TransportError(401, '<html>\r\n<head><title>401 Authorization
+        #   Required</title></head>\r\n<body bgcolor="white">\r\n<center><h1>401 Authorization Required</h1></center>\r\n<hr><center>nginx/1.11.6</center>\r\n</body>\r\n</html>\r\n')
         raise errors.ElasticsearchServiceUnavailable("Elasticsearch Authentication Exception")
     except exceptions.ConnectionError:
+        # ConnectionError(<urllib3.connection.HTTPConnection object at 0x7f6343212c50>: Failed to establish a new connection: [Errno 111] Connection refused) ...
         raise errors.ElasticsearchServiceUnavailable("Elasticsearch Connection Error")
     except exceptions.TransportError:
+        # Nginx reverse proxy can't find elasticsearch but correct BasicAuth
+        #    TransportError(502, 'An error occurred.</h1>\n<p>Sorry, the page you are looking for is currently unavailable.<br/>\nPlease try again later.....
         raise errors.ElasticsearchServiceUnavailable("Elasticsearch Transport Error")
     raise errors.ElasticsearchServiceUnavailable("Elasticsearch Check Error")
 
 
+def recreate_index_mapping():
+    """
+    Recreate Index Mapping
+    """
+    if settings.ES_ENABLED:
+        check_elasticsearch()
+
+        logger.info('Checking to see if Index [{}] exist'.format(settings.ES_INDEX_NAME))
+
+        if es_client.indices.exists(settings.ES_INDEX_NAME):
+            logger.info("deleting '%s' index..." % (settings.ES_INDEX_NAME))
+            res = es_client.indices.delete(index=settings.ES_INDEX_NAME)
+            logger.info(" response: '%s'" % (res))
+
+        request_body = elasticsearch_util.get_mapping_setting_obj()
+
+        logger.info("Creating '%s' index..." % (settings.ES_INDEX_NAME))
+        res = es_client.indices.create(index=settings.ES_INDEX_NAME, body=request_body)
+        logger.info(" response: '%s'" % (res))
+    else:
+        logger.debug('Elasticsearch is not enabled')
+
+
 def bulk_reindex():
     """
-    Reindexing
+    Reindex Listing Data into an Elasticsearch Index
 
-    Users shall be able to search for listings'
-     - title
-     - description
-     - description_short
-     - tags
-
-    Filter by
-     - category
-     - agency
-     - listing types
-
-    Users shall only see what they are authorized to see
-      "is_private": false,
-      "approval_status": "APPROVED",
-      "is_deleted": false,
-      "is_enabled": true,
-      "security_marking": "UNCLASSIFIED",
-
-    Sorted by Relevance
-      "avg_rate": 0,
-      "total_votes": 0,
-      "total_rate5": 0,
-      "total_rate4": 0,
-      "total_rate3": 0,
-      "total_rate2": 0,
-      "total_rate1": 0,
-      "total_reviews": 0,
-      "is_featured": true,
+    Steps:
+        Checks to see if elasticsearch connection is good
+        Removes the index if it already exist
+        Creates the index with mapping
+        Reindex data
 
     To check index in elasticsearch:
         http://127.0.0.1:9200/appsmall/_search?size=10000&pretty
-
-    Resources:
-    https://www.elastic.co/guide/en/elasticsearch/reference/2.4/analyzer.html
-    https://qbox.io/blog/quick-and-dirty-autocomplete-with-elasticsearch-completion-suggest
     """
     logger.info('Starting Indexing Process')
     check_elasticsearch()
-
+    recreate_index_mapping()
+    # Convert Listing Objects into Python Objects
     all_listings = models.Listing.objects.all()
     serializer = ReadOnlyListingSerializer(all_listings, many=True)
     serializer_results = serializer.data
@@ -206,21 +209,8 @@ def bulk_reindex():
         bulk_data.append(op_dict)
         bulk_data.append(record_clean_obj)
 
-    logger.info('Checking to see if Index [{}] exist'.format(settings.ES_INDEX_NAME))
-
-    if es_client.indices.exists(settings.ES_INDEX_NAME):
-        logger.info("deleting '%s' index..." % (settings.ES_INDEX_NAME))
-        res = es_client.indices.delete(index=settings.ES_INDEX_NAME)
-        logger.info(" response: '%s'" % (res))
-
-    request_body = elasticsearch_util.get_mapping_setting_obj()
-
-    logger.info("Creating '%s' index..." % (settings.ES_INDEX_NAME))
-    res = es_client.indices.create(index=settings.ES_INDEX_NAME, body=request_body)
-    logger.info(" response: '%s'" % (res))
-
     # Bulk index the data
-    logger.info("Bulk indexing listings...")
+    logger.info('Bulk indexing listings...')
     res = es_client.bulk(index=settings.ES_INDEX_NAME, body=bulk_data, refresh=True)
     logger.info(" response: '%s'" % (res))
 
@@ -252,30 +242,36 @@ def get_user_exclude_orgs(username):
     return exclude_orgs
 
 
-def suggest(request_username, params_obj):
+def suggest(request_username, search_param_parser):
     """
     Suggest
+
 
     It must respects restrictions
      - Private apps (apps only from user's agency)
      - User's max_classification_level
+
+    Args:
+        request_username(string)
+        search_param_parser(SearchParamParser): Parsed Request Search Object
 
     Returns:
         listing titles in a list
     """
     check_elasticsearch()
 
-    if params_obj.search_string is None:
+    if search_param_parser.search_string is None:
         return []
 
     user_exclude_orgs = get_user_exclude_orgs(request_username)
 
     # Override Limit - Only 15 results should come if limit was not set
-    if params_obj.limit_set is False:
-        params_obj.limit = constants.ES_SUGGEST_LIMIT
+    if search_param_parser.limit_set is False:
+        search_param_parser.limit = constants.ES_SUGGEST_LIMIT
 
-    search_query = elasticsearch_util.make_search_query_obj(params_obj, exclude_agencies=user_exclude_orgs)
-    search_query['_source'] = ['title', 'security_marking', 'id']  # Only Retrieve these fields from Elasticsearch
+    search_query = elasticsearch_util.make_search_query_obj(search_param_parser, exclude_agencies=user_exclude_orgs)
+    # Only Retrieve ['title', 'security_marking', 'id'] fields from Elasticsearch for suggestions
+    search_query['_source'] = ['title', 'security_marking', 'id']
 
     # print(json.dumps(search_query, indent=4))  #  Print statement for debugging output
     res = es_client.search(index=settings.ES_INDEX_NAME, body=search_query)
@@ -305,7 +301,14 @@ def suggest(request_username, params_obj):
 
 def generate_link(search_param_parser, offset_prediction):
     """
-    Generate next/previous links
+    Generate next/previous URL links
+
+    Args:
+        search_param_parser(SearchParamParser): Parsed Request Search Object
+        offset_prediction: offset prediction number
+
+    Returns:
+        URL for next/previous links (string)
     """
     query_temp = QueryDict(mutable=True)
     query_temp.update({'search': search_param_parser.search_string})
@@ -324,20 +327,38 @@ def search(request_username, search_param_parser):
     Filter Listings
     Too many variations to cache results
 
-    It must respects restrictions
-     - Private apps (apps only from user's agency)
-     - User's max_classification_level
-
-    Search Fields - user_search_input
+    Users shall be able to search for listings'
      - title
      - description
      - description_short
      - tags__name
 
-    Filter_params can contain - filter_params
-        * List of category names (OR logic)
-        * List of agencies (OR logic)
-        * List of listing types (OR logic)
+    Filter by
+     - category
+     - agency
+     - listing types
+
+    Users shall only see what they are authorized to see
+      "is_private": false,
+      "approval_status": "APPROVED",
+      "is_deleted": false,
+      "is_enabled": true,
+      "security_marking": "UNCLASSIFIED",
+
+    Sorted by Relevance
+      "avg_rate": 0,
+      "total_votes": 0,
+      "total_rate5": 0,
+      "total_rate4": 0,
+      "total_rate3": 0,
+      "total_rate2": 0,
+      "total_rate1": 0,
+      "total_reviews": 0,
+      "is_featured": true,
+
+    It must respects restrictions
+     - Private apps (apps only from user's agency)
+     - User's max_classification_level
 
     Args:
         username(str): username
@@ -349,7 +370,6 @@ def search(request_username, search_param_parser):
     search_query = elasticsearch_util.make_search_query_obj(search_param_parser, exclude_agencies=user_exclude_orgs)
 
     # print(json.dumps(search_query, indent=4))
-
     res = es_client.search(index=settings.ES_INDEX_NAME, body=search_query)
 
     hits = res.get('hits', {})
@@ -397,8 +417,8 @@ def search(request_username, search_param_parser):
     final_count_with_excluded = final_count - excluded_count
 
     final_results = {
-        "count": final_count_with_excluded,
-        "results": hit_titles
+        'count': final_count_with_excluded,
+        'results': hit_titles
     }
 
     final_results['previous'] = None
@@ -413,8 +433,7 @@ def search(request_username, search_param_parser):
 
     final_results['next_offset_prediction'] = next_offset_prediction
 
-    # Previous URL
-    # previous_offset_prediction is less than zero, previous should be None
+    # Previous URL - previous_offset_prediction is less than zero, previous should be None
     if previous_offset_prediction >= 0:
         final_results['previous'] = generate_link(search_param_parser, previous_offset_prediction)
 

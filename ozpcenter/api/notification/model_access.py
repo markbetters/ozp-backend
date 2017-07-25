@@ -5,17 +5,12 @@ https://github.com/aml-development/ozp-documentation/wiki/Notifications
 
 Notification Type
     SYSTEM = 'system'  # System-wide Notifications
-        Get all users
     AGENCY = 'agency'  # Agency-wide Notifications
-        Get all users from one or more agencies
     AGENCY_BOOKMARK = 'agency_bookmark'  # Agency-wide Bookmark Notifications # Not requirement (erivera 20160621)
-        Get all users from one or more agencies and add Bookmark Folder id
     LISTING = 'listing'  # Listing Notifications
-        Get all users that has Bookmark one or more listings
     PEER = 'peer'  # Peer to Peer Notifications
-        Get list of users
     PEER_BOOKMARK = 'peer_bookmark'  # Peer to Peer Bookmark Notifications
-        Get list of users
+    SUBSCRIPTION = 'subscription' # Category and Tag Subscription Notification
 
 Group Target
     ALL = 'all'  # All users
@@ -46,7 +41,7 @@ Notification +------+--> Listing
                 |
                 +--> Peer
                 |
-                +--> PeerBookmark (PeerBookmark)
+                +--> PeerBookmark
                 |
                 +--> CategorySubscription
                 |
@@ -103,6 +98,10 @@ permission_dict = {
         'add_peer_bookmark_notification',
         'change_peer_bookmark_notification',
         'delete_peer_bookmark_notification',
+
+        'add_subscription_notification',
+        'change_subscription_notification',
+        'delete_subscription_notification'
     ],
     'ORG_STEWARD': [
         'add_system_notification',
@@ -124,6 +123,10 @@ permission_dict = {
         'add_peer_bookmark_notification',
         'change_peer_bookmark_notification',
         'delete_peer_bookmark_notification',
+
+        'add_subscription_notification',
+        'change_subscription_notification',
+        'delete_subscription_notification'
     ],
     'USER': [
         'add_listing_notification',
@@ -137,6 +140,10 @@ permission_dict = {
         'add_peer_bookmark_notification',
         'change_peer_bookmark_notification',
         'delete_peer_bookmark_notification',
+
+        'add_subscription_notification',
+        'change_subscription_notification',
+        'delete_subscription_notification'
         ]
 }
 
@@ -144,6 +151,13 @@ permission_dict = {
 def check_notification_permission(profile_instance, action, notification_type):
     """
     Check to see if user has permission
+
+    Args:
+        profile_instance(Profile): Profile Instance
+        action(string): add/change/delete
+        notification_type(string): notification type
+    Return:
+        True or PermissionDenied Exception
     """
     profile_role = profile_instance.highest_role()
     assert (profile_role in permission_dict), 'Profile group {} not found in permissions'.format(profile_role)
@@ -170,6 +184,13 @@ class NotificationBase(object):
     """
 
     def set_sender_and_entity(self, sender_profile_username, entity, metadata=None):
+        """
+        Set Sender Profile, entity object, metadata
+
+        Args:
+            sender_profile_username(string): Sender's Profile username (normally the request profile)
+            entity(object):
+        """
         assert (sender_profile_username is not None), 'Sender Profile Username is necessary'
 
         self.sender_profile_username = sender_profile_username
@@ -313,8 +334,7 @@ class AgencyWideBookmarkNotification(NotificationBase):
 
 class ListingNotification(NotificationBase):
     """
-    AMLNG-396 - Listing
-        Listing Notifications
+    AMLNG-396 - Listing Notifications
     Targets: All users that bookmarked listing
     Permission Constraint: Only APP_MALL_STEWARDs and ORG_STEWARDs or owners of listing can send notifications
     Invoked: Directly
@@ -332,7 +352,7 @@ class ListingNotification(NotificationBase):
                                                                listing__is_enabled=True,
                                                                listing__approval_status=Listing.APPROVED,
                                                                listing__is_deleted=False).values_list('owner', flat=True).distinct()
-        return Profile.objects.filter(id__in=owner_id_list).all()
+        return Profile.objects.filter(id__in=owner_id_list, listing_notification_flag=True).all()
 
     def check_local_permission(self, entity):
         if self.sender_profile.highest_role() in ['APPS_MALL_STEWARD', 'ORG_STEWARD']:
@@ -370,6 +390,12 @@ class PeerBookmarkNotification(NotificationBase):
         As a user, I want to receive notification when someone shares a folder with me
     Targets: User Given Target
     Permission Constraint:  Must be owner of shared folder to send
+
+    Test Case:
+        Logged on as jones
+        Shared a folder with aaronson
+        Logged on as aaronson
+        RESULTS: aaronson has a new notification added to the notification count.Add folder button is present and adds the shared folder to HuD screen.
     """
 
     def get_notification_db_type(self):
@@ -389,6 +415,16 @@ class ListingReviewNotification(NotificationBase):  # Not Verified
         As an owner or CS, I want to receive notification of user rating and reviews
     Targets: Users that ___
     Invoked: In-directly
+
+    Test Case:
+        Description - Verify the CS and listing owner receives a notification when the review is added or modified.
+        *Pre-req*- Add aaronson as listing owner to Airmail.
+        Log on as syme (minipax)
+        Deleted, Added and Modified review on Airmail ( minitru)
+        Log on as wsmith (minitru-org steward)
+        EXPECTED RESULTS - At least two notifications should display for wsmith.
+        Log on as aaronson
+        EXPECTED RESULTS - At least two notifications should display for aaronson.
     """
 
     def get_notification_db_type(self):
@@ -402,12 +438,12 @@ class ListingReviewNotification(NotificationBase):  # Not Verified
 
         target_set = set()
 
-        for owner in current_listing.owners.all():
+        for owner in current_listing.owners.filter(listing_notification_flag=True).all():
             target_set.add(owner)
 
         current_listing_agency_id = current_listing.agency.id
 
-        for steward in Profile.objects.filter(stewarded_organizations__in=[current_listing_agency_id]).all():
+        for steward in Profile.objects.filter(stewarded_organizations__in=[current_listing_agency_id], listing_notification_flag=True).all():
             target_set.add(steward)
 
         return list(target_set)
@@ -421,6 +457,14 @@ class ListingPrivateStatusNotification(NotificationBase):
     Permission Constraint: Only APP_MALL_STEWARDs and ORG_STEWARDs or owners of listing can
     Targets: Users that bookmarked listing
     Invoked: In-directly
+
+    Test Case:
+        Bookmarked an app listing in my own org
+        Went to Bookmarked App Listing Quick View Modal | Send Notifications | Sent a notification
+        RESULTS - I received the notification
+        Bookmarked an app listing that did not belong to the org I was in
+        Went to Bookmarked App Listing  Quick View Modal | Send Notifications | Sent a notification
+        RESULTS - I received the notification
     """
 
     def get_notification_db_type(self):
@@ -432,7 +476,7 @@ class ListingPrivateStatusNotification(NotificationBase):
                                                                listing__approval_status=Listing.APPROVED,
                                                                listing__is_enabled=True,
                                                                listing__is_deleted=False).values_list('owner', flat=True).distinct()
-        return Profile.objects.filter(id__in=owner_id_list).all()
+        return Profile.objects.filter(id__in=owner_id_list, listing_notification_flag=True).all()
 
     def check_local_permission(self, entity):
         if self.sender_profile.highest_role() in ['APPS_MALL_STEWARD', 'ORG_STEWARD']:
@@ -458,6 +502,14 @@ class PendingDeletionRequestNotification(NotificationBase):  # Not Verified
 
         User undeleted the listing - Steward rejects deletion
             PENDING_DELETION --> PENDING
+
+    Test Case:
+        Logged on as jones
+        Set Test Notification Listing to Pend for Deletion state
+        Logged on as minitrue Org Content Steward- julia
+        Approved the deletion
+        Logged on as jones
+        RESULTS The notification launched = Test Notification Listing listing was approved for deletion by steward
     """
 
     def get_notification_db_type(self):
@@ -465,7 +517,7 @@ class PendingDeletionRequestNotification(NotificationBase):  # Not Verified
 
     def get_target_list(self):
         current_listing = self.entity
-        return current_listing.owners.all().distinct()
+        return current_listing.owners.filter(listing_notification_flag=True).all().distinct()
 
 
 class PendingDeletionCancellationNotification(NotificationBase):  # Not Verified
@@ -477,6 +529,13 @@ class PendingDeletionCancellationNotification(NotificationBase):  # Not Verified
     This event occurs when
         User undeleted the listing
             PENDING_DELETION --> PENDING
+
+    Test Case:
+        Set Test Notification Listing to Pend for Deletion Status
+        Logged on as jones ( owner of <Test Notification> Listing)
+        Undeleted the Test Notification Listing
+        Logged on as Org Content Steward - julia
+        RESULTS - Notificaiton launched = Listing Owner cancelled deletion of Test Notification Listing listing
     """
 
     def get_notification_db_type(self):
@@ -485,7 +544,7 @@ class PendingDeletionCancellationNotification(NotificationBase):  # Not Verified
     def get_target_list(self):
         current_listing = self.entity
         current_listing_agency_id = current_listing.agency.id
-        return Profile.objects.filter(stewarded_organizations__in=[current_listing_agency_id]).all().distinct()
+        return Profile.objects.filter(stewarded_organizations__in=[current_listing_agency_id], listing_notification_flag=True).all().distinct()
 
 
 class ListingSubmissionNotification(NotificationBase):
@@ -500,6 +559,12 @@ class ListingSubmissionNotification(NotificationBase):
             IN_PROGRESS --> PENDING
 
     a = Listing.objects.last(); a.approval_status = Listing.IN_PROGRESS; a.save()
+
+    Test Case:
+        Logged into Apps Mall as jones ( minitrue)
+        Submitted a new listing using org minitrue.
+        Logged into Apps mall as CS - julia (minitrue)
+        RESULTS - Notification displays = Test Notification Listing listing was submitted
     """
 
     def get_group_target(self):
@@ -511,7 +576,7 @@ class ListingSubmissionNotification(NotificationBase):
     def get_target_list(self):
         current_listing = self.entity
         current_listing_agency_id = current_listing.agency.id
-        return Profile.objects.filter(stewarded_organizations__in=[current_listing_agency_id]).all().distinct()
+        return Profile.objects.filter(stewarded_organizations__in=[current_listing_agency_id], listing_notification_flag=True).all().distinct()
 
 
 class TagSubscriptionNotification(NotificationBase):  # Not Verified
@@ -523,13 +588,15 @@ class TagSubscriptionNotification(NotificationBase):  # Not Verified
     """
 
     def get_notification_db_type(self):
-        return Notification.LISTING
+        return Notification.SUBSCRIPTION
 
     def get_target_list(self):
         subscription_entries = Subscription.objects.filter(entity_type='tag', entity_id__in=list(self.metadata))
         target_profiles = set()
         for subscription_entry in subscription_entries:
-            target_profiles.add(subscription_entry.target_profile)
+            target_profile = subscription_entry.target_profile
+            if target_profile.subscription_notification_flag:
+                target_profiles.add(target_profile)
 
         return list(target_profiles)
 
@@ -538,18 +605,32 @@ class CategorySubscriptionNotification(NotificationBase):  # Not Verified
     """
     AMLNG-380 - CategorySubscription
         As a user, I want to receive notification when a Listing is added to a subscribed category
-    Targets: Users that ___
+    Targets: Users that are subscribed to category
     Invoked: In-directly
+        Should occur when a user submits a listing with a category and listing gets approved,
+            it should send out notifications for users that have that category subscribed and has the Subscription Preference Flag to True
+        Should occur when a published listing add new category,
+            it should send out notifications for users that have that category subscribed and has the Subscription Preference Flag to True
+
+    Test Case:
+        Logged on as jones
+        Subscribed to Finance
+        Logged on as big brother
+        Add any Listing to Finance
+        Logged on as jones
+        RESULTS- Notification "A new listing in category Finance"
     """
 
     def get_notification_db_type(self):
-        return Notification.LISTING
+        return Notification.SUBSCRIPTION
 
     def get_target_list(self):
         subscription_entries = Subscription.objects.filter(entity_type='category', entity_id__in=list(self.metadata))
         target_profiles = set()
         for subscription_entry in subscription_entries:
-            target_profiles.add(subscription_entry.target_profile)
+            target_profile = subscription_entry.target_profile
+            if target_profile.subscription_notification_flag:
+                target_profiles.add(target_profile)
 
         return list(target_profiles)
 
@@ -604,12 +685,12 @@ def get_all_pending_notifications(for_user=False):
         django.db.models.query.QuerySet(Notification): List of system-wide pending notifications
     """
     unexpired_system_notifications = Notification.objects.filter(
-        expires_date__gt=datetime.datetime.now(pytz.utc))
+        expires_date__gt=datetime.datetime.now(pytz.utc)).order_by('-created_date')
 
     if for_user:
         unexpired_system_notifications = unexpired_system_notifications.filter(agency__isnull=True,
                                               listing__isnull=True,
-                                              _peer__isnull=True)
+                                              _peer__isnull=True).order_by('-created_date')
 
     return unexpired_system_notifications
 
@@ -629,7 +710,7 @@ def get_all_expired_notifications():
         django.db.models.query.QuerySet(Notification): List of system-wide pending notifications
     """
     expired_system_notifications = Notification.objects.filter(
-        expires_date__lt=datetime.datetime.now(pytz.utc))
+        expires_date__lt=datetime.datetime.now(pytz.utc)).order_by('-created_date')
     return expired_system_notifications
 
 
