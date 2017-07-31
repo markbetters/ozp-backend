@@ -278,7 +278,7 @@ class ElasticsearchContentBaseRecommender(Recommender):
     # The results will only be based on the profile text matches and should use all of the text in the code to make a successful match.
     '''
     friendly_name = 'Elasticsearch Content Filtering'
-    recommendation_weight = 90.0
+    recommendation_weight = 5.0
 
     def initiate(self):
         """
@@ -290,88 +290,15 @@ class ElasticsearchContentBaseRecommender(Recommender):
         -
         '''
         check_elasticsearch()
-        # TODO: Make sure the elasticsearch index is created here with the mappings
+        # Elasticsearch Content Based recommendation system uses the User Profiles and matches against the
+        # applicaiton listings to create content matches.
 
-        # Load Listings into Elasticsearch:
-        # Use existing Elasticsearch Table:
-        # listings_to_load = models.Listing.objects.all()
-        # listings_to_load_request = listings_to_load.values_list('title')
-        ###########
-        # Loading Review Data:
-        logger.debug('Elasticsearch Content Base Recommendation Engine: Loading data from Review model')
-        # TODO: May need below items if Elasticsearch tables are not used:
-        # reviews_listings = models.Review.objects.all()
-        # reviews_listing_uname = reviews_listings.values_list('id', 'listing_id', 'rate', 'author')
-        # End loading of Reviews Table data
-        ###########
-
-        number_of_shards = settings.ES_NUMBER_OF_SHARDS
-        number_of_replicas = settings.ES_NUMBER_OF_REPLICAS
-
-        '''
-        Use Ratings table for data
-        '''
-        # Initialize ratings table for Elasticsearch to perform Content Based Recommendations:
-        item_based_body = {
-            "settings": {
-                "number_of_shards": number_of_shards,
-                "number_of_replicas": number_of_replicas
-            },
-            "mappings": {
-                "recommend": {
-                    "properties": {
-                        "listing_id": {
-                            "type": "long"
-                        },
-                        "title": {
-                            "type": "string"
-                        },
-                        "description": {
-                            "type": "string"
-                        },
-                        "description_short": {
-                            "type": "string"
-                        },
-                        "agency_short_name": {
-                            "type": "string"
-                        },
-                        "users": {
-                            "type": "nested",
-                            "properties": {
-                                "author_id": {
-                                    "type": "long"
-                                },
-                                "author": {
-                                    "type": "string"
-                                },
-                                "rate": {
-                                    "type": "long"
-                                    # ,"boost": 1
-                                },
-                                "bookmark": {
-                                    "type": "boolean"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
         '''
         Initialize Tables:
         '''
-        # Initializing Recommended by Ratings ES Table by removing old Elasticsearch Table:
-        if es_client.indices.exists(settings.ES_RECOMMEND_CONTENT):
-            resdel = es_client.indices.delete(index=settings.ES_RECOMMEND_CONTENT)
-            logger.info("Deleting Existing ES Index Result: '{}'".format(resdel))
-
-        # Create ES Index since it has not been created or is deleted above:
-        connect_es_record_exist = es_client.indices.create(index=settings.ES_RECOMMEND_CONTENT, body=item_based_body)
-        logger.info("Creating ES Index after Deletion Result: '{}'".format(connect_es_record_exist))
-
-        # Recommendation Listings loaded at start:
-        # reviews_listings = models.Review.objects.all()
-        # reviews_listing_uname = reviews_listings.values_list('id', 'listing_id', 'rate', 'author_id')
+        # Content Based is based on User Based profiles and gets an updated one by adding the content to the user profiles.
+        # By adding the content to the user profiles, we can get content that matches what the user has bookmarked and
+        # reviewed.
 
         # 10,000 is the max query size if there are more than 10,000 listings
         # then need to split the queries.  Currently this might be too much
@@ -385,19 +312,10 @@ class ElasticsearchContentBaseRecommender(Recommender):
             body=query_size
         )
 
-        # print("LISTINGS TO LOAD: ", listings_to_load_request)
-        print("SIZE: ", len(listings_to_load_request))
-
         listings_only = listings_to_load_request['hits']['hits']
 
-        # print("Listing: ", listings_only)
-
         for listing in listings_only:
-            print("LISTING: ", listing)
-            print("listing title:", listing['_source']['title'])
-
             bookmark_list = [listing['_source']['id']]
-            print("BOOKMARK LIST: ", bookmark_list)
 
             user_search_term = {
                 "query": {
@@ -422,17 +340,13 @@ class ElasticsearchContentBaseRecommender(Recommender):
                     }
                 }
             }
-            print("USER SEARCH TERM: ", user_search_term)
 
             user_search_results = es_client.search(
                 index=settings.ES_RECOMMEND_USER,
                 body=user_search_term
             )
-            print("USER RESULTS for id: {} is {}".format(listing['_source']['id'], user_search_results))
 
             for usertoupdate in user_search_results['hits']['hits']:
-                print("USERUP: ", usertoupdate)
-                # print("ID:     ", usertoupdate['_id'])
                 current_titles = []
                 current_descriptions = []
                 current_descriptions_short = []
@@ -444,7 +358,6 @@ class ElasticsearchContentBaseRecommender(Recommender):
                     current_descriptions_short = usertoupdate['_source']['description_short']
                     current_tags = usertoupdate['_source']['tags']
                     current_categories = usertoupdate['_source']['categories_text']
-                    print("CURRENT TITLES BEFORE: ", current_titles)
                     if listing['_source']['title'] not in current_titles:
                         current_titles.append(listing['_source']['title'])
                         if 'description' in listing['_source']:
@@ -461,11 +374,9 @@ class ElasticsearchContentBaseRecommender(Recommender):
                             for catlist in listing['_source']['categories']:
                                 if catlist['title'] not in current_categories:
                                     current_categories.append(catlist['title'])
-                        print("CURRENT TITLES INTER : ", current_titles)
-                    else:
-                        print("ALREADY ADDED")
+                    # else: The else clause is not needed to do anything as it means the listing is already added.
+                    #     logger.debug("= Listing already added title: {} =".format(listing['_source']['title']))
                 else:
-                    # current_titles = [listing['_source']['title']]
                     current_titles.append(listing['_source']['title'])
                     current_descriptions.append(listing['_source']['description'])
                     current_descriptions_short.append(listing['_source']['description_short'])
@@ -491,9 +402,9 @@ class ElasticsearchContentBaseRecommender(Recommender):
                        "categories_text": current_categories
                        }
                    })
+                logger.info("= ES Content Based result size: {} =".format(len(user_update_query)))
 
-                print("CURRENT TITLES AFTER: ", current_titles)
-                print("USER UPDATE RESULTS: ", user_update_query)
+        logger.info("= ES Content Based Recommendation - Initialization Complete =")
 
     def recommendation_logic(self):
         """
@@ -502,8 +413,8 @@ class ElasticsearchContentBaseRecommender(Recommender):
         Template Code to make sure that Elasticsearch client is working
         This code should be replace by real algorthim
         """
-        logger.debug('Elasticsearch Content Base Recommendation Engine')
-        logger.debug('Elasticsearch Health : {}'.format(es_client.cluster.health()))
+        logger.info('Elasticsearch Content Base Recommendation Engine')
+        logger.info('Elasticsearch Health : {}'.format(es_client.cluster.health()))
 
         # 10,000 is the max query size if there are more than 10,000 listings
         # then need to split the queries.  Currently this might be too much
@@ -512,71 +423,65 @@ class ElasticsearchContentBaseRecommender(Recommender):
 
         # Get list of records from Listings table that fit the criteria needed to add information to the User
         # Profiles to create a match for content.
-        es_profile_search = es_client.search(
+        es_profile_result = es_client.search(
             index=settings.ES_RECOMMEND_USER,
             body=query_size
         )
 
-        profiles_only = es_profile_search['hits']['hits']
-
-        print("PROFILE SEARCH: ", profiles_only)
-        print("ONE PROFILE: ", profiles_only[0])
+        profiles_only = es_profile_result['hits']['hits']
 
         for each_profile in profiles_only:
+            # print("EACH PROFILE: ",each_profile)
             each_profile_source = each_profile['_source']
-            # print("PROFILE SOURCE: ", each_profile_source)
-            # print("PROFILE TITLE: ", each_profile_source['title'])
-            # print("PROFILE TITLE: ", each_profile_source['title'][0])
             title_item_list = []
-
-            # bookmark_ids_match = each_profile_source['bookmark_ids']
-
-            for items in each_profile_source['title']:
-                title_item_list.append(items)
+            if 'title' in each_profile_source:
+                for items in each_profile_source['title']:
+                    title_item_list.append(items)
 
             newcombinedstring = " ".join(title_item_list)
-            # print("STRING: ", newtitlestring)
-            # print("STR TYPE: ", type(newtitlestring))
 
             description_item_list = []
-            for items in each_profile_source['description']:
-                description_item_list.append(items)
-            newcombinedstring = " ".join(description_item_list)
+            if 'description' in each_profile_source:
+                for items in each_profile_source['description']:
+                    description_item_list.append(items)
+                newcombinedstring = " ".join(description_item_list)
 
             description_short_item_list = []
-            for items in each_profile_source['description']:
-                description_short_item_list.append(items)
-            newcombinedstring = " ".join(description_short_item_list)
+            if 'description_short' in each_profile_source:
+                for items in each_profile_source['description_short']:
+                    description_short_item_list.append(items)
+                newcombinedstring = " ".join(description_short_item_list)
 
             query_compare = {}
             if 'bookmark_ids' in each_profile_source:
                 query_compare = {
                     "size": 10000,
-                    "_source": ["id", "title", "description", "description_short", "agency_short_name"],
+                    "_source": ["id", "title", "description", "description_short", "agency_short_name", "categories"],
                     "query": {
                         "multi_match": {
                             "query": newcombinedstring,
                             "type": "best_fields",
-                            "fields": ["title", "description", "description_short"],
-                            "minimum_should_match": "30%"
+                            "fields": ["title.keyword_lowercase", "description", "description_short", "agency_short_name", "categories"],
+                            "minimum_should_match": "20%"
                         }
                     },
                     "filter": {
-                        "terms": {
-                            "id": each_profile_source['bookmark_ids']
+                        "not": {
+                            "terms": {
+                                "id": each_profile_source['bookmark_ids']
+                            }
                         }
                     }
                 }
-                print("QUERY WITH MUST_NOT: ", query_compare)
             else:
                 query_compare = {
                     "size": 10000,
-                    "_source": ["id", "title", "description", "description_short", "agency_short_name"],
+                    "_source": ["id", "title", "description", "description_short", "agency_short_name", "categories"],
                     "query": {
                         "multi_match": {
                             "query": newcombinedstring,
                             "type": "best_fields",
-                            "fields": ["title", "description", "description_short"],
+                            "fields": ["title.keyword_lowercase", "description", "description_short", "agency_short_name", "categories"],
                             "minimum_should_match": "20%"
                         }
                     }
@@ -586,19 +491,22 @@ class ElasticsearchContentBaseRecommender(Recommender):
                 index=settings.ES_INDEX_NAME,
                 body=query_compare
             )
-            # print("RESULT: ", es_query_result)
             recommended_items = es_query_result['hits']['hits']
-            print("Recommended ITEMS: ", recommended_items)
 
-            profile_id = each_profile['_id']
+            profile_id = each_profile['_source']['author_id']
 
             # Add recommended items based on content to user profile list:
             for indexitem in recommended_items:
                 score = indexitem['_score']
-                print("PROFILE_ID: ", profile_id)
-                print("ID: ", indexitem['_id'])
-                print("SCORE: ", score)
-                self.add_listing_to_user_profile(profile_id, indexitem['_id'], score, False)
+                itemtoadd = indexitem['_source']['id']
+                self.add_listing_to_user_profile(profile_id, itemtoadd, score, False)
+                # logger.info("Adding Listing: '{}'".format(indexitem)) # Removed for performance reasons
+            logger.info("= ES CONTENT RECOMMENDER Engine Completed Results for {} =".format(profile_id))
+
+        logger.info("= ES CONTENT RECOMMENDATION Results Completed =")
+        ############################
+        # END ES CONTENT BASED RECOMMENDATION
+        ############################
 
 
 class ElasticsearchUserBaseRecommender(Recommender):
@@ -608,7 +516,7 @@ class ElasticsearchUserBaseRecommender(Recommender):
        - Initialize Mappings for Reviews Table to import
        - Import Ratings Table
        - Perform aggregations on data to obtain recommendation list
-         - Need to ensure that user apps and bookmarked apps are not in list
+       - Need to ensure that user apps and bookmarked apps are not in list
        - Output with query and put into recommendation table:
        Format should be:
                  profile_id#1: {
@@ -620,14 +528,6 @@ class ElasticsearchUserBaseRecommender(Recommender):
                          weight: 1.0
                          ms_took: 5050
                      },
-    """
-# <<<<<<< HEAD
-#     friendly_name = 'Elasticsearch User Based Filtering'
-#     # The weights that are returned by Elasticsearch will be 0.X and hence the reason that we need to multiply
-#     # by factors of 10 to get reasonable values for ranking.
-#     recommendation_weight = 50.0
-# =======
-    '''
     # Algorithm detailed information
     # Structure to setup for storing Elasticsearch data:
         Mapping of data:
@@ -663,7 +563,7 @@ class ElasticsearchUserBaseRecommender(Recommender):
     # To explain simply, the more of a category items that are bookmarked and reviewed the chances are the items
     #   will be recommended.  Items that have no reviews or bookmarks will not be included in the recommended items.
     #   Recommendation depends on having items that have been reviewed and/or bookmarked to even appear in the list.
-    '''
+    """
 
     friendly_name = 'Elasticsearch User Based Filtering'
     # The weights that are returned by Elasticsearch will be 0.X and hence the reason that we need to multiply
@@ -673,7 +573,6 @@ class ElasticsearchUserBaseRecommender(Recommender):
     #            will mix well with other recommendations and not become too large at the same time.
     recommendation_weight = 25.0
     MIN_ES_RATING = 3.5  # Minimum rating to have results meet before being recommended for ES Recommender Systems
-# >>>>>>> master
 
     def initiate(self):
         """
@@ -707,7 +606,7 @@ class ElasticsearchUserBaseRecommender(Recommender):
         '''
         ###########
         # Loading Review Data:
-        logger.debug('Elasticsearch User Base Recommendation Engine: Loading data from Review model')
+        logger.info('Elasticsearch User Base Recommendation Engine: Loading data from Review model')
         reviews_listings = models.Review.objects.all()
         reviews_listing_uname = reviews_listings.values_list('id', 'listing_id', 'rate', 'author')
         # End loading of Reviews Table data
@@ -796,18 +695,11 @@ class ElasticsearchUserBaseRecommender(Recommender):
         connect_es_record_exist = es_client.indices.create(index=settings.ES_RECOMMEND_USER, body=rate_request_body)
         logger.info("Creating ES Index after Deletion Result: '{}'".format(connect_es_record_exist))
 
-        # Recommendation Listings loaded at start:
-        # reviews_listings = models.Review.objects.all()
-        # reviews_listing_uname = reviews_listings.values_list('id', 'listing_id', 'rate', 'author_id')
-        # count = 0
         for record in reviews_listing_uname:
-            result_es = {}
-
             # Get Username for profile:
             user_information = model_access.get_profile_by_id(record[3])
             username = user_information.user.username
 
-        for record in reviews_listing_uname:
             result_es = {}
             query_term = {
                 "query": {
@@ -817,22 +709,11 @@ class ElasticsearchUserBaseRecommender(Recommender):
                 }
             }
 
-            print("QUERY TERM: ", query_term)
             # Get current reviewed items for Person (author_id):
             es_search_result = es_client.search(
                 index=settings.ES_RECOMMEND_USER,
                 body=query_term
             )
-
-            print("ES SEARCH RESULT: ", es_search_result)
-            # "_source": ["listing_id", "title", "description", "description_short", "agency_short_name", "author_id"],
-            #         "bool": {
-            #             "should": [
-            #                 {"match": {"bookmark_ids": listing['_id']}},
-            #
-            #                                 "term": {
-            #                                     "listing_id": record[1]
-            #                                 }
 
             if es_search_result['hits']['total'] > 0:
                 listing_query = {
@@ -854,25 +735,20 @@ class ElasticsearchUserBaseRecommender(Recommender):
                 listings_data_to_load = None
 
             print("***************************************************************************")
+            print("Data is: ", es_search_result)
             print("Looking for: ", record[1])
             print("USERID: ", record[3])
             print("QUERY: ", listing_query)
             print("LISTING QUERY: ", listings_data_to_load)
             print("***************************************************************************")
 
-            # if count>3:
-            #     exit()
-            # else:
-            #     count = count + 1
-
             ratings_items = []
+
             ratings_items.append({"listing_id": record[1], "rate": record[2]})
 
             # Get Username for profile:
             user_information = model_access.get_profile_by_id(record[3])
             username = user_information.user.username
-
-            # if es_search_result['hits']['total'] == 0:
 
             # For each reviewed listing_id in ratings_items get the categories associated with the listing:
             es_cat_query_term = {
@@ -966,8 +842,8 @@ class ElasticsearchUserBaseRecommender(Recommender):
             - Run Query for each user and append recommended list to the user profile recommendations
         '''
 
-        logger.debug('Elasticsearch User Base Recommendation Engine')
-        logger.debug('Elasticsearch Health : {}'.format(es_client.cluster.health()))
+        logger.info('Elasticsearch User Base Recommendation Engine')
+        logger.info('Elasticsearch Health : {}'.format(es_client.cluster.health()))
 
         #########################
         # Information on Algorithms: (as per Elasticsearch: https://www.elastic.co/guide/en/elasticsearch/reference/2.4/search-aggregations-bucket-significantterms-aggregation.html)
@@ -1099,7 +975,7 @@ class ElasticsearchUserBaseRecommender(Recommender):
                                 "categories": list(set(current_categories + category_items))
                             }
                        })
-                    # print("Bookmarks Updated for profile: {} with result: {}".format(profile_id, result_es))
+                    logger.info("= Bookmarks Updated for profile: {} with result: {} =".format(profile_id, result_es))
 
                 if len(categories) > 0:
                     agg_query_term = {
