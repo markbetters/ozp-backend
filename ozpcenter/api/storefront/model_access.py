@@ -601,7 +601,7 @@ def get_storefront_most_popular(username, pre_fetch=True):
     return most_popular_listings
 
 
-def get_storefront(username, pre_fetch=False):
+def get_storefront(username, pre_fetch=False, section=None):
     """
     Returns data for /storefront api invocation including:
         * recommended listings (max=10)
@@ -613,6 +613,8 @@ def get_storefront(username, pre_fetch=False):
 
     Args:
         username
+        pre_fetch
+        section(str): recommended, featured, recent, most_popular, all
 
     Returns:
         {
@@ -623,14 +625,32 @@ def get_storefront(username, pre_fetch=False):
         }
     """
     try:
-        recommended_listings, extra_data = get_storefront_recommended(username, pre_fetch)
+        section = section or 'all'
 
-        data = {
-            'recommended': recommended_listings,
-            'featured': get_storefront_featured(username, pre_fetch),
-            'recent': get_storefront_recent(username, pre_fetch),
-            'most_popular': get_storefront_most_popular(username, pre_fetch)
-        }
+        data = {}
+        extra_data = {}
+
+        if section == 'all' or section == 'recommended':
+            recommended_listings, extra_data = get_storefront_recommended(username, pre_fetch)
+            data['recommended'] = recommended_listings
+        else:
+            data['recommended'] = []
+
+        if section == 'all' or section == 'featured':
+            data['featured'] = get_storefront_featured(username, pre_fetch)
+        else:
+            data['featured'] = []
+
+        if section == 'all' or section == 'recent':
+            data['recent'] = get_storefront_recent(username, pre_fetch)
+        else:
+            data['recent'] = []
+
+        if section == 'all' or section == 'most_popular':
+            data['most_popular'] = get_storefront_most_popular(username, pre_fetch)
+        else:
+            data['most_popular'] = []
+
     except Exception:
         # raise Exception({'error': True, 'msg': 'Error getting storefront: {0!s}'.format(str(e))})
         raise  # Should be catch in the django framwork
