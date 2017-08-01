@@ -35,7 +35,20 @@ def MetadataView(request):
 
 class StorefrontViewSet(viewsets.ViewSet):
     """
-    TODO: Simply Recommended sections
+    TODO: Simplify Recommended sections
+    Fields for Listins
+        id
+        title
+        agency__title
+        agency_short_name
+        avg_rate
+        total_reviews
+        is_private
+        is_bookmarked
+        description_short
+        security_marking
+        launch_url
+        large_banner_icon
 
     Access Control
     ===============
