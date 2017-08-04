@@ -278,7 +278,7 @@ class ElasticsearchContentBaseRecommender(Recommender):
     # The results will only be based on the profile text matches and should use all of the text in the code to make a successful match.
     '''
     friendly_name = 'Elasticsearch Content Filtering'
-    recommendation_weight = 5.0
+    recommendation_weight = 5.0  # Weighting is such since some of the values returned in the results may be greater than 1
 
     def initiate(self):
         """
@@ -317,6 +317,8 @@ class ElasticsearchContentBaseRecommender(Recommender):
         for listing in listings_only:
             bookmark_list = [listing['_source']['id']]
 
+            # Get all of the listings that have been bookmarked from the User profiles so that the contents can
+            # be updated wit text information.
             user_search_term = {
                 "query": {
                     "bool": {
@@ -346,12 +348,18 @@ class ElasticsearchContentBaseRecommender(Recommender):
                 body=user_search_term
             )
 
+            # Cycle through all of the users to update their user profiles with information that will have text for
+            # the application to be added to the profile.
             for usertoupdate in user_search_results['hits']['hits']:
                 current_titles = []
                 current_descriptions = []
                 current_descriptions_short = []
                 current_tags = []
                 current_categories = []
+                # Check if there is a title in the profile so that it can be appended to and
+                # all of the subsequent data will be added accordingly as well.
+                # NOTE: Duplicate items will not be added since there is a check to see if the string exists
+                # already and will not add if it does exist.
                 if 'title' in usertoupdate['_source']:
                     current_titles = usertoupdate['_source']['title']
                     current_descriptions = usertoupdate['_source']['description']
@@ -377,6 +385,8 @@ class ElasticsearchContentBaseRecommender(Recommender):
                     # else: The else clause is not needed to do anything as it means the listing is already added.
                     #     logger.debug("= Listing already added title: {} =".format(listing['_source']['title']))
                 else:
+                    # If a title is not present in the record, then that means that no text information
+                    # has been added to the record and we can start off fresh with the text to be added.
                     current_titles.append(listing['_source']['title'])
                     current_descriptions.append(listing['_source']['description'])
                     current_descriptions_short.append(listing['_source']['description_short'])
@@ -389,6 +399,8 @@ class ElasticsearchContentBaseRecommender(Recommender):
                             if catlist['title'] not in current_categories:
                                 current_categories.append(catlist['title'])
 
+                # Based on the information from the checks above we can now submit the changes that we are proposing
+                # to make to add the data to the User Profile so that it can be used in creating a content search.
                 user_update_query = es_client.update(
                    index=settings.ES_RECOMMEND_USER,
                    doc_type=settings.ES_RECOMMEND_TYPE,
@@ -428,80 +440,237 @@ class ElasticsearchContentBaseRecommender(Recommender):
             body=query_size
         )
 
+        # Filter the results to only the actual results:
         profiles_only = es_profile_result['hits']['hits']
 
+        # For each profile in the return list we will cycle through the items necessary below to
+        # add the necessary items to the search string to perform the comparison for matches:
+        # First: What happens is that the categories filter items will match the items in the current categories that
+        # the user has items bookmarked or reviewed.
+        # Second: The title, descrition and description_short are added to respective multi_match queries and each items
+        # in the list is added to a separate query.  The multi_match purpose is to search the same string across all of the fields
+        # that we have listed.  This is needed since accurate results were not being obtained when all of the strings were combined
+        # into one long string.  It also allows for an easier way to debug queries if there is ever a need.
         for each_profile in profiles_only:
-            # print("EACH PROFILE: ",each_profile)
             each_profile_source = each_profile['_source']
-            title_item_list = []
+            query_object = []
+
+            # Add categories to query to try and limit the results:
+            categories_to_query = {}
+            if 'categories' in each_profile_source:
+                categories_to_query = {
+                    "terms": {"categories.title": each_profile_source['categories']}
+                }
+                query_object.append(categories_to_query)
+
+            # Add title to the query:
             if 'title' in each_profile_source:
+                title_list = {}
                 for items in each_profile_source['title']:
-                    title_item_list.append(items)
-
-            newcombinedstring = " ".join(title_item_list)
-
-            description_item_list = []
-            if 'description' in each_profile_source:
-                for items in each_profile_source['description']:
-                    description_item_list.append(items)
-                newcombinedstring = " ".join(description_item_list)
-
-            description_short_item_list = []
-            if 'description_short' in each_profile_source:
-                for items in each_profile_source['description_short']:
-                    description_short_item_list.append(items)
-                newcombinedstring = " ".join(description_short_item_list)
-
-            query_compare = {}
-            if 'bookmark_ids' in each_profile_source:
-                query_compare = {
-                    "size": 10000,
-                    "_source": ["id", "title", "description", "description_short", "agency_short_name", "categories"],
-                    "query": {
+                    title_list = {
                         "multi_match": {
-                            "query": newcombinedstring,
-                            "type": "best_fields",
-                            "fields": ["title.keyword_lowercase", "description", "description_short", "agency_short_name", "categories"],
+                            "query": items,
+                            "type": "cross_fields",
+                            "fields": ["title", "description", "description_short"],
                             "minimum_should_match": "20%"
                         }
-                    },
-                    "filter": {
-                        "not": {
-                            "terms": {
-                                "id": each_profile_source['bookmark_ids']
-                            }
+                    }
+                    query_object.append(title_list)
+
+            # Add description to the query:
+            if 'description' in each_profile_source:
+                for items in each_profile_source['description']:
+                    description_list = {
+                        "multi_match": {
+                            "query": items,
+                            "type": "cross_fields",
+                            "fields": ["title", "description", "description_short"],
+                            "minimum_should_match": "20%"
+                        }
+                    }
+                    query_object.append(description_list)
+
+            # Add description_short to the query:
+            if 'description_short' in each_profile_source:
+                for items in each_profile_source['description_short']:
+                    description_short_list = {
+                        "multi_match": {
+                            "query": items,
+                            "type": "cross_fields",
+                            "fields": ["title", "description", "description_short"],
+                            "minimum_should_match": "20%"
+                        }
+                    }
+                    query_object.append(description_short_list)
+
+            query_compare = {}
+
+            # Add a restriction to remove bookmarked apps from the query if they are present in
+            # the profile.  This will eliminate unnecessary items to be queried:
+            # The reason that the size is so large is because we do not want to limit the results to just a few
+            # which then might be eleiminated when displayed to the user.  Hence the max result set is returned.
+            max_result_set = 10000
+            if 'bookmark_ids' in each_profile_source:
+                query_compare = {
+                    "size": max_result_set,
+                    "_source": ["id", "title", "description", "description_short", "agency_short_name", "categories"],
+                    "query": {
+                        "bool": {
+                            "must_not": {
+                                "terms": {"id": each_profile_source['bookmark_ids']}
+                            },
+                            "should": [
+                                query_object
+                            ]
                         }
                     }
                 }
             else:
+                # If no bookmarks then continue with getting the results:
                 query_compare = {
-                    "size": 10000,
+                    "size": max_result_set,
                     "_source": ["id", "title", "description", "description_short", "agency_short_name", "categories"],
                     "query": {
-                        "multi_match": {
-                            "query": newcombinedstring,
-                            "type": "best_fields",
-                            "fields": ["title.keyword_lowercase", "description", "description_short", "agency_short_name", "categories"],
-                            "minimum_should_match": "20%"
+                        "bool": {
+                            "should": [
+                                query_object
+                            ]
                         }
                     }
                 }
 
+            # Query the Elasticsearch application table listing and compare with query that has been developed:
             es_query_result = es_client.search(
                 index=settings.ES_INDEX_NAME,
                 body=query_compare
             )
+            # Get only the results necessary from the returned JSON object:
             recommended_items = es_query_result['hits']['hits']
 
+            # Get the author so that it can be used in later items:
             profile_id = each_profile['_source']['author_id']
+            # print("PROFITLE lookng up: ", profile_id)
 
-            # Add recommended items based on content to user profile list:
+            # Loop through all of the items and add them to the recommendation list for Content Based Filtering:
             for indexitem in recommended_items:
                 score = indexitem['_score']
                 itemtoadd = indexitem['_source']['id']
                 self.add_listing_to_user_profile(profile_id, itemtoadd, score, False)
-                # logger.info("Adding Listing: '{}'".format(indexitem)) # Removed for performance reasons
+
             logger.info("= ES CONTENT RECOMMENDER Engine Completed Results for {} =".format(profile_id))
+
+        # New User problem and using search terms to recommend items should be done dynamically.  Since we do
+        # not have dynamic support as of yet, the New User problem is being solved by going through and getting an aggregation of
+        # the top terms in the titles of users that have recommendations and building a proposed list based on a search from
+        # those results.  This is more of a hybrid approach for the new user problem, but should be corrected when on demand
+        # searching is completed.  so the TODO: After implemention of dynamic searching based on user input for content, this code
+        # might need to be modified or removed accordingly.  Hence the reason that it is separated out explicitly:
+
+        # *START NEW USER TEMPORARY WORKAROUND*:
+        logger.info("= ES CONTENT RECOMMENDER NEW USER RECOMMENDATION CREATION =")
+        # For users that do not have a recommendation profile need to create a new user recommendation:
+        all_profiles = models.Profile.objects.all()
+
+        # Setup parameters so that Elasticsearch results do not need to be performed multiple times when it is not needed:
+        performed_search_request = False
+        content_search_term = {}
+        title_to_search_list = []
+        new_user_return_list = []
+
+        # The New User or Person that has no recommendation profile problem is solved by aggregating the results of all of the titles
+        # that are present and then taking the top hits and searching for content based on those items.  This in turn creates content
+        # based on the most popular titles that have been bookmarked or
+        for profile in all_profiles:
+            # user_information = model_access.get_profile_by_id(profile.id)
+            search_query = {
+                "query": {
+                    "term": {
+                        "author_id": profile.id
+                        }
+                }
+            }
+            profile_id = profile.id
+            # print("Profile ID: ", profile_id)
+
+            # Create Search string to determine if profile exists in the Elasticsearch profile:
+            search_result = es_client.search(
+                index=settings.ES_RECOMMEND_USER,
+                body=search_query
+            )
+
+            # Check to see if the user has a profile already that exists
+            # in the Recommended Users.  If so then no need to perform another search
+            # and can skip the rest of this for the current user:
+            if search_result['hits']['total'] == 0:
+                # If the user has not had any bookmarked items or rated items then need to perform a search
+                # based on other user information, but only using aggregations of the titles in their profiles.
+                # Perform this only once since it will be the same for all of the users without a profile:
+                if not performed_search_request:
+                    # Create a search query to get a list of aggregations for users:
+                    content_search_term = {
+                        "size": 0,
+                        "aggs": {
+                            "most_common_titles": {
+                                "significant_terms": {
+                                    "field": "title"
+                                }
+                            }
+                        }
+                    }
+
+                    # Submit the query for results:
+                    es_content_init = es_client.search(
+                        index=settings.ES_RECOMMEND_USER,
+                        body=content_search_term
+                    )
+
+                    # For each item in the list of aggregations create a query for the titles that it should match in
+                    # in the applications list:
+                    for item_key in es_content_init['aggregations']['most_common_titles']['buckets']:
+                        title_to_search_list_item = {
+                            "multi_match": {
+                                "query": item_key['key'],
+                                "type": "cross_fields",
+                                "fields": ["title", "description", "description_short"],
+                                "minimum_should_match": "20%"
+                            }
+                        }
+                        # Append each title to the search paramter:
+                        title_to_search_list.append(title_to_search_list_item)
+
+                    # After creating the search paramter, create a query and limit it to the results to the first
+                    # max_result_set_new_user results since more than that are not necessary:
+                    max_result_set_new_user = 40
+                    query_compare = {
+                        "size": max_result_set_new_user,
+                        "_source": ["id", "title"],
+                        "query": {
+                            "bool": {
+                                "should": [
+                                    title_to_search_list
+                                ]
+                            }
+                        }
+                    }
+
+                    # Get the results from the query:
+                    es_query_result = es_client.search(
+                        index=settings.ES_INDEX_NAME,
+                        body=query_compare
+                    )
+                    # Store the results for the new users in the new_user_return_list:
+                    new_user_return_list = es_query_result['hits']['hits']
+                    # Set the search parameter to True so that subsequent searches will not be performed:
+                    performed_search_request = True
+
+                # Add recommended items based on content to user profile list:
+                for indexitem in new_user_return_list:
+                    score = indexitem['_score']
+                    itemtoadd = indexitem['_source']['id']
+                    self.add_listing_to_user_profile(profile_id, itemtoadd, score, False)
+
+                logger.info("= ES CONTENT RECOMMENDER Engine Completed Results for New User {} =".format(profile_id))
+        # *END NEW USER TEMPORARY WORKAROUND*:
 
         logger.info("= ES CONTENT RECOMMENDATION Results Completed =")
         ############################
@@ -571,7 +740,7 @@ class ElasticsearchUserBaseRecommender(Recommender):
     # Making weight of 25 so that results will correlate well with other recommendation engines when combined.
     # Reasoning: Results of scores are between 0 and 1 with results mainly around 0.0X, thus the recommendation weight
     #            will mix well with other recommendations and not become too large at the same time.
-    recommendation_weight = 25.0
+    recommendation_weight = 25.0  # Weight that the overall results are multiplied against.  The rating for user based is less than 1.
     MIN_ES_RATING = 3.5  # Minimum rating to have results meet before being recommended for ES Recommender Systems
 
     def initiate(self):
@@ -693,8 +862,14 @@ class ElasticsearchUserBaseRecommender(Recommender):
 
         # Create ES Index since it has not been created or is deleted above:
         connect_es_record_exist = es_client.indices.create(index=settings.ES_RECOMMEND_USER, body=rate_request_body)
+        # Need to wait 10 seconds for index to get created according to search results.  This could be caused because of
+        # time issues hitting a remote elasticsearch host:
+        import time
+        time.sleep(2)
+
         logger.info("Creating ES Index after Deletion Result: '{}'".format(connect_es_record_exist))
 
+        ratings_items = []
         for record in reviews_listing_uname:
             # Get Username for profile:
             user_information = model_access.get_profile_by_id(record[3])
@@ -734,17 +909,13 @@ class ElasticsearchUserBaseRecommender(Recommender):
                 listing_query = None
                 listings_data_to_load = None
 
-            print("***************************************************************************")
-            print("Data is: ", es_search_result)
-            print("Looking for: ", record[1])
-            print("USERID: ", record[3])
-            print("QUERY: ", listing_query)
-            print("LISTING QUERY: ", listings_data_to_load)
-            print("***************************************************************************")
+            if listings_data_to_load is not None:
+                if listing_query is not None:
+                    logger.info("Item that needs to be vetted TODO")
+                    # TODO: Implement adding text for Rated items if Live Search results are not used
 
-            ratings_items = []
-
-            ratings_items.append({"listing_id": record[1], "rate": record[2]})
+            item_to_append = {"listing_id": record[1], "rate": record[2]}
+            ratings_items.append(item_to_append)
 
             # Get Username for profile:
             user_information = model_access.get_profile_by_id(record[3])
@@ -777,9 +948,10 @@ class ElasticsearchUserBaseRecommender(Recommender):
                 else:
                     logger.debug("== MORE THAN ONE ID WAS FOUND ({}) ==".format(es_cat_search['hits']['total']))
 
-            ratings_items = []
             ratings_items.append({"listing_id": record[1], "rate": record[2], "listing_categories": category_items})
 
+            categories_to_look_up = category_items
+            record_to_update = None
             if es_search_result['hits']['total'] == 0:
                 # If record does not exist in Recommendation List, then create it:
                 result_es = es_client.create(
@@ -802,6 +974,7 @@ class ElasticsearchUserBaseRecommender(Recommender):
 
                 # Since exisiting recommendation lists have been deleted, no need to worry about
                 # adding duplicate data.
+                categories_to_look_up = list(set(current_categories + category_items))
 
                 result_es = es_client.update(
                    index=settings.ES_RECOMMEND_USER,
@@ -810,9 +983,33 @@ class ElasticsearchUserBaseRecommender(Recommender):
                    refresh=True,
                    body={"doc": {
                        "ratings": new_ratings,
-                       "categories": list(set(current_categories + category_items))
+                       "categories": categories_to_look_up
                        }
                    })
+
+            # category_combined_text = []
+
+            # for category_id_to_text in categories_to_look_up:
+            #     category_combined_text.append(str(category_model_access.get_category_by_id(category_id_to_text)))
+            #     print("Combined Categories: ", category_combined_text)
+            # if len(category_combined_text) > 0:
+            # if len(categories_to_look_up) > 0:
+                # Update record with category test information:
+                # category_update_body = {
+                #         "categories_text": category_combined_text
+                # }
+
+                # result_es = es_client.update(
+                #    index=settings.ES_RECOMMEND_USER,
+                #    doc_type=settings.ES_RECOMMEND_TYPE,
+                #    id=record_to_update,
+                #    refresh=True,
+                #    body={ "doc": {
+                #         "categories_text": category_combined_text
+                #         }
+                #     }
+                # )
+                # print("RESULT: ", result_es)
 
             logger.info("Creating/Updating Record Result: '{}'".format(result_es))
 
@@ -869,7 +1066,6 @@ class ElasticsearchUserBaseRecommender(Recommender):
             bookmarked_list = []
             bookmarked_list_text = []
             for bkapp in bookmarked_apps:
-                bookmarked_list.append(bkapp.listing.id)
                 listing_id_query = {
                     "query": {
                         "term": {
