@@ -172,8 +172,9 @@ class Image(models.Model):
         img.save()
 
         # write the image to the file system
-
-        file_name = str(img.id) + '_' + img.image_type.name + '.' + file_extension
+        # prefix_file_name = pil_img.fp.name.split('/')[-1].split('.')[0].replace('16','').replace('32','').replace('Featured','')  # Used for export script
+        prefix_file_name = str(img.id)
+        file_name = prefix_file_name + '_' + img.image_type.name + '.' + file_extension
         ext = os.path.splitext(file_name)[1].lower()
         try:
             current_format = PIL.Image.EXTENSION[ext]

@@ -4,6 +4,7 @@ __pycache__
 .vagrant
 *.pyc
 media/
+test_images_copy/
 static/
 old_api.txt
 wheelhouse
