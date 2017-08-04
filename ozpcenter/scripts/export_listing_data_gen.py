@@ -1,143 +1,141 @@
 """
 Purpose of this script: Export All Listings for sample data generator
 
-Format for each listing
-{
-    "listing_activity": [
-      {
-        "action": "CREATED",
-        "author": "wsmith",
-        "description": null
-      },
-      {
-        "action": "SUBMITTED",
-        "author": "wsmith",
-        "description": null
-      },
-      {
-        "action": "APPROVED_ORG",
-        "author": "wsmith",
-        "description": null
-      },
-      {
-        "action": "APPROVED",
-        "author": "wsmith",
-        "description": null
-      }
-    ],
-    "library_entries": [
-      {
-        "owner": "wsmith",
-        "position": 0,
-        "folder": null
-      },
-      {
-        "owner": "hodor",
-        "position": 0,
-        "folder": null
-      }
-    ],
-    "listing_review_batch": [
-      {
-        "text": "This app is great - well designed and easy to use",
-        "author": "charrington",
-        "rate": 5
-      },
-      {
-        "text": "Air mail is ok - does what it says and no more",
-        "author": "tparsons",
-        "rate": 3
-      },
-      {
-        "text": "Air mail crashes all the time - it doesn't even support IE 6!",
-        "author": "syme",
-        "rate": 1
-      }
-    ],
-    "listing": {
-      "large_icon": {
-        "security_marking": "UNCLASSIFIED",
-        "filename": "Air_Mail_large_icon.png"
-      },
-      "doc_urls": [
-        {
-          "url": "http://www.google.com/wiki",
-          "name": "wiki"
-        },
-        {
-          "url": "http://www.google.com/guide",
-          "name": "guide"
-        }agency
-      ],
-      "what_is_new": "Nothing really new here",
-      "description_short": "Sends airmail",
-      "categories": [
-        "Communication",
-        "Productivity"
-      ],
-      "description": "Sends mail via air",
-      "tags": [
-        "demo",
-        "example",
-        "tag_0"
-      ],
-      "launch_url": "https://localhost:8443/demo_apps/centerSampleListings/airMail/index.html",
-      "is_featured": true,
-      "is_deleted": false,
-      "is_private": false,
-      "screenshots": [
-        {
-          "large_image": {
-            "security_marking": "UNCLASSIFIED",
-            "filename": "AirMail_0_screenshot_large_icon.png"
-          },
-          "small_image": {
-            "security_marking": "UNCLASSIFIED",
-            "filename": "AirMail_0_screenshot_small_icon.png"
-          },
-          "description": null,
-          "order": 0
-        }
-      ],
-      "unique_name": "ozp.test.air_mail",
-      "iframe_compatible": false,
-      "title": "Air Mail",
-      "listing_type": "Web Application",
-      "requirements": "None",
-      "small_icon": {
-        "security_marking": "UNCLASSIFIED",
-        "filename": "Air_Mail_small_icon.png"
-      },
-      "owners": [
-        "wsmith"
-      ],
-      "version_name": "1.0.0",
-      "is_enabled": true,
-      "large_banner_icon": {
-        "security_marking": "UNCLASSIFIED",
-        "filename": "Air_Mail_large_banner_icon.png"
-      },
-      "banner_icon": {
-        "security_marking": "UNCLASSIFIED",
-        "filename": "Air_Mail_banner_icon.png"
-      },
-      "contacts": [
-        "osha@stark.com",
-        "brienne@stark.com"
-      ],
-      "security_marking": "UNCLASSIFIED",
-      "agency": "Minitrue"
-    }
-  }
 """
+# Format for each listing
+# {
+#     "listing_activity": [
+#       {
+#         "action": "CREATED",
+#         "author": "wsmith",
+#         "description": null
+#       },
+#       {
+#         "action": "SUBMITTED",
+#         "author": "wsmith",
+#         "description": null
+#       },
+#       {
+#         "action": "APPROVED_ORG",
+#         "author": "wsmith",
+#         "description": null
+#       },
+#       {
+#         "action": "APPROVED",
+#         "author": "wsmith",
+#         "description": null
+#       }
+#     ],
+#     "library_entries": [
+#       {
+#         "owner": "wsmith",
+#         "position": 0,
+#         "folder": null
+#       },
+#       {
+#         "owner": "hodor",
+#         "position": 0,
+#         "folder": null
+#       }
+#     ],
+#     "listing_review_batch": [
+#       {
+#         "text": "This app is great - well designed and easy to use",
+#         "author": "charrington",
+#         "rate": 5
+#       },
+#       {
+#         "text": "Air mail is ok - does what it says and no more",
+#         "author": "tparsons",
+#         "rate": 3
+#       },
+#       {
+#         "text": "Air mail crashes all the time - it doesn't even support IE 6!",
+#         "author": "syme",
+#         "rate": 1
+#       }
+#     ],
+#     "listing": {
+#       "large_icon": {
+#         "security_marking": "UNCLASSIFIED",
+#         "filename": "Air_Mail_large_icon.png"
+#       },
+#       "doc_urls": [
+#         {
+#           "url": "http://www.google.com/wiki",
+#           "name": "wiki"
+#         },
+#         {
+#           "url": "http://www.google.com/guide",
+#           "name": "guide"
+#         }agency
+#       ],
+#       "what_is_new": "Nothing really new here",
+#       "description_short": "Sends airmail",
+#       "categories": [
+#         "Communication",
+#         "Productivity"
+#       ],
+#       "description": "Sends mail via air",
+#       "tags": [
+#         "demo",
+#         "example",
+#         "tag_0"
+#       ],
+#       "launch_url": "https://localhost:8443/demo_apps/centerSampleListings/airMail/index.html",
+#       "is_featured": true,
+#       "is_deleted": false,
+#       "is_private": false,
+#       "screenshots": [
+#         {
+#           "large_image": {
+#             "security_marking": "UNCLASSIFIED",
+#             "filename": "AirMail_0_screenshot_large_icon.png"
+#           },
+#           "small_image": {
+#             "security_marking": "UNCLASSIFIED",
+#             "filename": "AirMail_0_screenshot_small_icon.png"
+#           },
+#           "description": null,
+#           "order": 0
+#         }
+#       ],
+#       "unique_name": "ozp.test.air_mail",
+#       "iframe_compatible": false,
+#       "title": "Air Mail",
+#       "listing_type": "Web Application",
+#       "requirements": "None",
+#       "small_icon": {
+#         "security_marking": "UNCLASSIFIED",
+#         "filename": "Air_Mail_small_icon.png"
+#       },
+#       "owners": [
+#         "wsmith"
+#       ],
+#       "version_name": "1.0.0",
+#       "is_enabled": true,
+#       "large_banner_icon": {
+#         "security_marking": "UNCLASSIFIED",
+#         "filename": "Air_Mail_large_banner_icon.png"
+#       },
+#       "banner_icon": {
+#         "security_marking": "UNCLASSIFIED",
+#         "filename": "Air_Mail_banner_icon.png"
+#       },
+#       "contacts": [
+#         "osha@stark.com",
+#         "brienne@stark.com"
+#       ],
+#       "security_marking": "UNCLASSIFIED",
+#       "agency": "Minitrue"
+#     }
+#   }
 
 import os
 import sys
 import json
 
 sys.path.insert(0, os.path.realpath(os.path.join(os.path.dirname(__file__), '../../')))
-
-from django.conf import settings
 
 from ozp.storage import media_storage
 from ozpcenter import models
@@ -195,7 +193,7 @@ def run():
                 current_image_path = str(current_image.id) + '_' + current_image.image_type.name + '.' + current_image.file_extension
 
                 with media_storage.open(current_image_path) as current_image_file:
-                    filename = str(current_listing.title.replace(' ', '')) + '_' + str(screenshot_entry_counter) + '_screenshot_' + current_image.image_type.name + '.' + current_image.file_extension
+                    filename = str(current_listing.title.replace(' ', '')) + '_' + str(screenshot_entry_counter) + '_' + current_image.image_type.name + '.' + current_image.file_extension
                     copy_to_path = COPY_IMG_PATH + filename
                     screenshot_entry_dict[current_image_type] = {'filename': filename, 'security_marking': current_image.security_marking}
                     print('Copying {} to {}'.format(current_image_file.name, copy_to_path))
@@ -211,7 +209,7 @@ def run():
             current_image_path = str(current_image.id) + '_' + current_image.image_type.name + '.' + current_image.file_extension
 
             with media_storage.open(current_image_path) as current_image_file:
-                filename = str(current_listing.title.replace(' ', '_')) + '_' + current_image.image_type.name + '.' + current_image.file_extension
+                filename = str(current_listing.title.replace(' ', '')) + '_' + current_image.image_type.name + '.' + current_image.file_extension
                 listing[current_image_type] = {'filename': filename, "security_marking": current_image.security_marking}
                 copy_to_path = COPY_IMG_PATH + filename
                 print('Copying {} to {}'.format(current_image_file.name, copy_to_path))

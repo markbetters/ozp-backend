@@ -534,7 +534,6 @@ def run():
                       "wsmith"
                     ],
                     "version_name": "1.0.0",
-                    "security_large_banner_iconmarking": "UNCLASSIFIED",
                     "contacts": [
                       "osha@stark.com",
                       "brienne@stark.com"
@@ -548,13 +547,25 @@ def run():
                           "security_marking": "UNCLASSIFIED",
                           "filename": "screenshot_small.png"
                         },
-                        "description": None,
+                        "description": 'airmail screenshot set 1',
                         "order": 0,
                         "large_image": {
                           "security_marking": "UNCLASSIFIED",
                           "filename": "screenshot_large.png"
                         }
-                      }
+                      },
+                        {
+                          "small_image": {
+                            "security_marking": "UNCLASSIFIED",
+                            "filename": "screenshot_small.png"
+                          },
+                          "description": 'airmail screenshot set 2',
+                          "order": 1,
+                          "large_image": {
+                            "security_marking": "UNCLASSIFIED",
+                            "filename": "screenshot_large.png"
+                          }
+                        }
                     ],
                     "unique_name": 'ozp.test.air_mail{0!s}'.format(postfix_dot),
                     "is_featured": True,
@@ -718,6 +729,20 @@ def run():
                    "security_marking": "UNCLASSIFIED",
                    "filename": "BreadBasketFeatured.png"
                  },
+                 "screenshots": [
+                   {
+                     "small_image": {
+                       "security_marking": "UNCLASSIFIED",
+                       "filename": "screenshot_small.png"
+                     },
+                     "description": None,
+                     "order": 0,
+                     "large_image": {
+                       "security_marking": "UNCLASSIFIED",
+                       "filename": "screenshot_large.png"
+                     }
+                   }
+                 ],
                  "what_is_new": "Nothing really new here",
                  "launch_url": "{0!s}/demo_apps/centerSampleListings/breadBasket/index.html".format(DEMO_APP_ROOT),
                  "doc_urls": [],
@@ -736,7 +761,6 @@ def run():
                  "unique_name": 'ozp.test.bread_basket{0!s}'.format(postfix_dot),
                  "description_short": "Carries bread",
                  "version_name": "1.0.0",
-                 "screenshots": [],
                  "title": 'Bread Basket{0!s}'.format(postfix_space),
                  "iframe_compatible": False,
                  "security_marking": "UNCLASSIFIED"
@@ -828,6 +852,20 @@ def run():
                  "security_marking": "UNCLASSIFIED",
                  "filename": "ChartCourse32.png"
                },
+               "screenshots": [
+                 {
+                   "small_image": {
+                     "security_marking": "UNCLASSIFIED",
+                     "filename": "screenshot_small.png"
+                   },
+                   "description": None,
+                   "order": 0,
+                   "large_image": {
+                     "security_marking": "UNCLASSIFIED",
+                     "filename": "screenshot_large.png"
+                   }
+                 }
+               ],
                "listing_type": "Web Application",
                "is_enabled": True,
                "owners": [
@@ -839,7 +877,7 @@ def run():
                "unique_name": 'ozp.test.chartcourse{0!s}'.format(postfix_dot),
                "description_short": "Chart your course",
                "version_name": "1.0.0",
-               "screenshots": [],
+
                "title": 'Chart Course{0!s}'.format(postfix_space),
                "iframe_compatible": False,
                "security_marking": "UNCLASSIFIED"
@@ -906,6 +944,20 @@ def run():
                  "security_marking": "UNCLASSIFIED",
                  "filename": "ChatterBoxFeatured.png"
                },
+               "screenshots": [
+                 {
+                   "small_image": {
+                     "security_marking": "UNCLASSIFIED",
+                     "filename": "screenshot_small.png"
+                   },
+                   "description": None,
+                   "order": 0,
+                   "large_image": {
+                     "security_marking": "UNCLASSIFIED",
+                     "filename": "screenshot_large.png"
+                   }
+                 }
+               ],
                "what_is_new": "Nothing really new here",
                "launch_url": "{0!s}/demo_apps/centerSampleListings/chatterBox/index.html".format(DEMO_APP_ROOT),
                "doc_urls": [],
@@ -924,7 +976,7 @@ def run():
                "unique_name": 'ozp.test.chatterbox{0!s}'.format(postfix_dot),
                "description_short": "Chat in a box",
                "version_name": "1.0.0",
-               "screenshots": [],
+
                "title": 'Chatter Box{0!s}'.format(postfix_space),
                "iframe_compatible": False,
                "security_marking": "UNCLASSIFIED"
@@ -992,6 +1044,20 @@ def run():
                  "security_marking": "UNCLASSIFIED",
                  "filename": "ClipboardFeatured.png"
                },
+               "screenshots": [
+                 {
+                   "small_image": {
+                     "security_marking": "UNCLASSIFIED",
+                     "filename": "screenshot_small.png"
+                   },
+                   "description": None,
+                   "order": 0,
+                   "large_image": {
+                     "security_marking": "UNCLASSIFIED",
+                     "filename": "screenshot_large.png"
+                   }
+                 }
+               ],
                "what_is_new": "Nothing really new here",
                "launch_url": "{0!s}/demo_apps/centerSampleListings/clipboard/index.html".format(DEMO_APP_ROOT),
                "doc_urls": [],
@@ -1010,7 +1076,7 @@ def run():
                "unique_name": 'ozp.test.clipboard{0!s}'.format(postfix_dot),
                "description_short": "Its a clipboard",
                "version_name": "1.0.0",
-               "screenshots": [],
+
                "title": 'Clipboard{0!s}'.format(postfix_space),
                "iframe_compatible": False,
                "security_marking": "UNCLASSIFIED"
@@ -1085,6 +1151,20 @@ def run():
                  "security_marking": "UNCLASSIFIED",
                  "filename": "FrameIt32.png"
                },
+               "screenshots": [
+                 {
+                   "small_image": {
+                     "security_marking": "UNCLASSIFIED",
+                     "filename": "screenshot_small.png"
+                   },
+                   "description": None,
+                   "order": 0,
+                   "large_image": {
+                     "security_marking": "UNCLASSIFIED",
+                     "filename": "screenshot_large.png"
+                   }
+                 }
+               ],
                "listing_type": "Web Application",
                "is_enabled": True,
                "owners": [
@@ -1096,7 +1176,7 @@ def run():
                "unique_name": 'ozp.test.frameit{0!s}'.format(postfix_dot),
                "description_short": "Its an iframe",
                "version_name": "1.0.0",
-               "screenshots": [],
+
                "title":'FrameIt{0!s}'.format(postfix_space),
                "iframe_compatible": False,
                "security_marking": "UNCLASSIFIED"
@@ -1172,6 +1252,20 @@ def run():
                  "security_marking": "UNCLASSIFIED",
                  "filename": "HatchLatch32.png"
                },
+               "screenshots": [
+                 {
+                   "small_image": {
+                     "security_marking": "UNCLASSIFIED",
+                     "filename": "screenshot_small.png"
+                   },
+                   "description": None,
+                   "order": 0,
+                   "large_image": {
+                     "security_marking": "UNCLASSIFIED",
+                     "filename": "screenshot_large.png"
+                   }
+                 }
+               ],
                "listing_type": "Web Application",
                "is_enabled": True,
                "owners": [
@@ -1183,7 +1277,7 @@ def run():
                "unique_name": 'ozp.test.hatchlatch{0!s}'.format(postfix_dot),
                "description_short": "Its a hatch latch",
                "version_name": "1.0.0",
-               "screenshots": [],
+
                "title": "Hatch Latch{0!s}".format(postfix_space),
                "iframe_compatible": False,
                "security_marking": "UNCLASSIFIED"
@@ -1256,6 +1350,20 @@ def run():
                  "security_marking": "UNCLASSIFIED",
                  "filename": "JotSpotFeatured.png"
                },
+               "screenshots": [
+                 {
+                   "small_image": {
+                     "security_marking": "UNCLASSIFIED",
+                     "filename": "screenshot_small.png"
+                   },
+                   "description": None,
+                   "order": 0,
+                   "large_image": {
+                     "security_marking": "UNCLASSIFIED",
+                     "filename": "screenshot_large.png"
+                   }
+                 }
+               ],
                "what_is_new": "Nothing really new here",
                "launch_url": "{0!s}/demo_apps/centerSampleListings/jotSpot/index.html".format(DEMO_APP_ROOT),
                "doc_urls": [],
@@ -1274,7 +1382,7 @@ def run():
                "unique_name": "ozp.test.jotspot{0!s}".format(postfix_dot),
                "description_short": "Jot stuff down",
                "version_name": "1.0.0",
-               "screenshots": [],
+
                "title": "JotSpot{0!s}".format(postfix_space),
                "iframe_compatible": False,
                "security_marking": "UNCLASSIFIED"
@@ -1348,6 +1456,20 @@ def run():
                  "security_marking": "UNCLASSIFIED",
                  "filename": "LocationListerFeatured.png"
                },
+               "screenshots": [
+                 {
+                   "small_image": {
+                     "security_marking": "UNCLASSIFIED",
+                     "filename": "screenshot_small.png"
+                   },
+                   "description": None,
+                   "order": 0,
+                   "large_image": {
+                     "security_marking": "UNCLASSIFIED",
+                     "filename": "screenshot_large.png"
+                   }
+                 }
+               ],
                "what_is_new": "Nothing really new here",
                "launch_url": "{0!s}/demo_apps/locationLister/index.html".format(DEMO_APP_ROOT),
                "doc_urls": [],
@@ -1366,7 +1488,7 @@ def run():
                "unique_name": "ozp.test.locationlister{0!s}".format(postfix_dot),
                "description_short": "List locations",
                "version_name": "1.0.0",
-               "screenshots": [],
+
                "title": "LocationLister{0!s}".format(postfix_space),
                "iframe_compatible": False,
                "security_marking": "UNCLASSIFIED"
@@ -1434,6 +1556,20 @@ def run():
                  "security_marking": "UNCLASSIFIED",
                  "filename": "LocationViewerFeatured.png"
                },
+               "screenshots": [
+                 {
+                   "small_image": {
+                     "security_marking": "UNCLASSIFIED",
+                     "filename": "screenshot_small.png"
+                   },
+                   "description": None,
+                   "order": 0,
+                   "large_image": {
+                     "security_marking": "UNCLASSIFIED",
+                     "filename": "screenshot_large.png"
+                   }
+                 }
+               ],
                "what_is_new": "Nothing really new here",
                "launch_url": "{0!s}/demo_apps/locationViewer/index.html".format(DEMO_APP_ROOT),
                "doc_urls": [],
@@ -1452,7 +1588,7 @@ def run():
                "unique_name": "ozp.test.locationviewer{0!s}".format(postfix_dot),
                "description_short": "View locations",
                "version_name": "1.0.0",
-               "screenshots": [],
+
                "title": "LocationViewer{0!s}".format(postfix_space),
                "iframe_compatible": False,
                "security_marking": "UNCLASSIFIED"
@@ -1527,6 +1663,20 @@ def run():
                  "security_marking": "UNCLASSIFIED",
                  "filename": "LocationAnalyzer32.png"
                },
+               "screenshots": [
+                 {
+                   "small_image": {
+                     "security_marking": "UNCLASSIFIED",
+                     "filename": "screenshot_small.png"
+                   },
+                   "description": None,
+                   "order": 0,
+                   "large_image": {
+                     "security_marking": "UNCLASSIFIED",
+                     "filename": "screenshot_large.png"
+                   }
+                 }
+               ],
                "listing_type": "Web Application",
                "is_enabled": True,
                "owners": [
@@ -1538,7 +1688,7 @@ def run():
                "unique_name": 'ozp.test.locationanalyzer{0!s}'.format(postfix_dot),
                "description_short": "Analyze locations",
                "version_name": "1.0.0",
-               "screenshots": [],
+
                "title": 'LocationAnalyzer{0!s}'.format(postfix_space),
                "iframe_compatible": False,
                "security_marking": "UNCLASSIFIED"
@@ -1613,6 +1763,20 @@ def run():
                  "security_marking": "UNCLASSIFIED",
                  "filename": "Skybox32.png"
                },
+               "screenshots": [
+                 {
+                   "small_image": {
+                     "security_marking": "UNCLASSIFIED",
+                     "filename": "screenshot_small.png"
+                   },
+                   "description": None,
+                   "order": 0,
+                   "large_image": {
+                     "security_marking": "UNCLASSIFIED",
+                     "filename": "screenshot_large.png"
+                   }
+                 }
+               ],
                "listing_type": "Web Application",
                "is_enabled": True,
                "owners": [
@@ -1625,7 +1789,7 @@ def run():
                "unique_name": 'ozp.test.skybox{0!s}'.format(postfix_dot),
                "description_short": "Sky Overlord",
                "version_name": "1.0.0",
-               "screenshots": [],
+
                "title": 'Skybox{0!s}'.format(postfix_space),
                "iframe_compatible": False,
                "security_marking": "UNCLASSIFIED"
