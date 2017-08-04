@@ -37,7 +37,7 @@ Format for each listing
         "folder": null
       }
     ],
-    "create_listing_review_batch": [
+    "listing_review_batch": [
       {
         "text": "This app is great - well designed and easy to use",
         "author": "charrington",
@@ -67,7 +67,7 @@ Format for each listing
         {
           "url": "http://www.google.com/guide",
           "name": "guide"
-        }
+        }agency
       ],
       "what_is_new": "Nothing really new here",
       "description_short": "Sends airmail",
@@ -87,11 +87,11 @@ Format for each listing
       "is_private": false,
       "screenshots": [
         {
-          "large_icon": {
+          "large_image": {
             "security_marking": "UNCLASSIFIED",
             "filename": "AirMail_0_screenshot_large_icon.png"
           },
-          "small_icon": {
+          "small_image": {
             "security_marking": "UNCLASSIFIED",
             "filename": "AirMail_0_screenshot_small_icon.png"
           },
@@ -185,13 +185,13 @@ def run():
         screenshot_entry_counter = 0
         screenshot_entry_list = []
         for screenshot_entry in current_listing.screenshots.iterator():
-            screenshot_image_types = ['small_icon', 'large_icon']
+            screenshot_image_types = ['small_image', 'large_image']
             screenshot_entry_dict = {}
             screenshot_entry_dict['order'] = screenshot_entry.order
             screenshot_entry_dict['description'] = screenshot_entry.description
 
             for current_image_type in screenshot_image_types:
-                current_image = getattr(current_listing, current_image_type)
+                current_image = getattr(screenshot_entry, current_image_type)
                 current_image_path = str(current_image.id) + '_' + current_image.image_type.name + '.' + current_image.file_extension
 
                 with media_storage.open(current_image_path) as current_image_file:
@@ -246,7 +246,7 @@ def run():
         # Combine Dictionaries into output_dict
         output_dict = {}
         output_dict['listing'] = listing
-        output_dict['create_listing_review_batch'] = review_list
+        output_dict['listing_review_batch'] = review_list
         output_dict['library_entries'] = library_entries_list
         output_dict['listing_activity'] = listing_activity_list
         output_list.append(output_dict)

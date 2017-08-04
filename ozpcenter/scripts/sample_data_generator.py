@@ -37,24 +37,27 @@ def time_ms():
     return time.time() * 1000.0
 
 
-def create_listing_review_batch(*input_list):
+def create_listing_review_batch(listing, review_list):
     """
     Create Listing
 
-    example:
-        [
-            listing,
-            [profile_ref['charrington'], 5, "This app is great - well designed and easy to use"],
-            [profile_ref['tparsons'], 3, "This app is great - well designed and easy to use"],
-            [profile_ref['syme'], 1, "This app is great - well designed and easy to use"]
-        ]
-    """
-    current_listing = input_list[0]
+    Args:
+        listing
+        review_list
+            [{
+              "text": "This app is great - well designed and easy to use",
+              "author": "charrington",
+              "rate": 5
+            },..
+            ]
 
-    for input_set in input_list[1:]:
-        profile_obj = input_set[0]
-        current_rating = input_set[1]
-        current_text = input_set[2]
+    """
+    current_listing = listing
+
+    for review_entry in review_list:
+        profile_obj = models.Profile.objects.get(user__username=review_entry['author'])
+        current_rating = review_entry['rate']
+        current_text = review_entry['text']
         listing_model_access.create_listing_review(profile_obj.user.username, current_listing, current_rating, text=current_text)
 
 
@@ -73,6 +76,142 @@ def create_library_entries(entries):
             listing=models.Listing.objects.get(unique_name=current_unique_name),
             folder=current_folder_name)
         library_entry.save()
+
+
+def create_listing(listing_builder_dict):
+    listing_data = listing_builder_dict['listing']
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    #                           Icons
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    small_icon = models.Image.create_image(
+        Image.open(TEST_IMG_PATH + listing_data['small_icon']['filename']),
+        file_extension=listing_data['small_icon']['filename'].split('.')[-1],
+        security_marking=listing_data['small_icon']['security_marking'],
+        image_type=models.ImageType.objects.get(name='small_icon').name)
+
+    large_icon = models.Image.create_image(
+        Image.open(TEST_IMG_PATH + listing_data['large_icon']['filename']),
+        file_extension=listing_data['large_icon']['filename'].split('.')[-1],
+        security_marking=listing_data['large_icon']['security_marking'],
+        image_type=models.ImageType.objects.get(name='large_icon').name)
+
+    banner_icon = models.Image.create_image(
+        Image.open(TEST_IMG_PATH + listing_data['banner_icon']['filename']),
+        file_extension=listing_data['banner_icon']['filename'].split('.')[-1],
+        security_marking=listing_data['banner_icon']['security_marking'],
+        image_type=models.ImageType.objects.get(name='banner_icon').name)
+
+
+    large_banner_icon = models.Image.create_image(
+        Image.open(TEST_IMG_PATH + listing_data['large_banner_icon']['filename']),
+        file_extension=listing_data['large_banner_icon']['filename'].split('.')[-1],
+        security_marking=listing_data['large_banner_icon']['security_marking'],
+        image_type=models.ImageType.objects.get(name='large_banner_icon').name)
+
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    #                           Listing
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    listing = models.Listing(
+        title=listing_data['title'],
+        agency=models.Agency.objects.get(short_name=listing_data['agency']),
+        listing_type=models.ListingType.objects.get(title=listing_data['listing_type']),
+        description=listing_data['description'],
+        launch_url=listing_data['launch_url'],
+        version_name=listing_data['version_name'],
+        unique_name=listing_data['unique_name'],
+        small_icon=small_icon,
+        large_icon=large_icon,
+        banner_icon=banner_icon,
+        large_banner_icon=large_banner_icon,
+        what_is_new=listing_data['what_is_new'],
+        description_short=listing_data['description_short'],
+        requirements=listing_data['requirements'],
+        is_enabled=listing_data['is_enabled'],
+        is_private=listing_data['is_private'],
+        is_featured=listing_data['is_featured'],
+        iframe_compatible=listing_data['iframe_compatible'],
+        security_marking=listing_data['security_marking']
+    )
+    listing.save()
+
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    #                           Contacts
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    for current_contact in listing_data['contacts']:
+        listing.contacts.add(models.Contact.objects.get(email=current_contact))
+
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    #                           Owners
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    for current_owner in listing_data['owners']:
+        listing.owners.add(models.Profile.objects.get(user__username=current_owner))
+
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    #                           Categories
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    for current_category in listing_data['categories']:
+        listing.categories.add(models.Category.objects.get(title=current_category))
+
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    #                           Tags
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    for current_tag in listing_data['tags']:
+        current_tag_obj, created = models.Tag.objects.get_or_create(name=current_tag)
+        listing.tags.add(current_tag_obj)
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    #                           Screenshots
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    for current_screenshot_entry in listing_data['screenshots']:
+        small_image = models.Image.create_image(
+            Image.open(TEST_IMG_PATH + current_screenshot_entry['small_image']['filename']),
+            file_extension=current_screenshot_entry['small_image']['filename'].split('.')[-1],
+            security_marking=current_screenshot_entry['small_image']['security_marking'],
+            image_type=models.ImageType.objects.get(name='small_screenshot').name)
+
+
+
+        large_image = models.Image.create_image(
+            Image.open(TEST_IMG_PATH + current_screenshot_entry['large_image']['filename']),
+            file_extension=current_screenshot_entry['large_image']['filename'].split('.')[-1],
+            security_marking=current_screenshot_entry['large_image']['security_marking'],
+            image_type=models.ImageType.objects.get(name='large_screenshot').name)
+
+
+        screenshot = models.Screenshot(small_image=small_image,
+                                        large_image=large_image,
+                                        listing=listing,
+                                        description=current_screenshot_entry['description'],
+                                        order=current_screenshot_entry['order'])
+        screenshot.save()
+
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    #                           Document URLs
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+    for current_doc_url_entry in listing_data['doc_urls']:
+        current_doc_url_obj = models.DocUrl(name=current_doc_url_entry['name'], url=current_doc_url_entry['url'],
+            listing=listing)
+        current_doc_url_obj.save()
+
+    # listing_activity
+    for listing_activity_entry in listing_builder_dict['listing_activity']:
+        listing_activity_action = listing_activity_entry['action']
+        listing_activity_author = models.Profile.objects.get(user__username=listing_activity_entry['author'])
+
+        if listing_activity_action == 'CREATED':
+            listing_model_access.create_listing(listing_activity_author, listing)
+        elif listing_activity_action == 'SUBMITTED':
+            listing_model_access.submit_listing(listing_activity_author, listing)
+        elif listing_activity_action == 'APPROVED_ORG':
+            listing_model_access.approve_listing_by_org_steward(listing_activity_author, listing)
+        elif listing_activity_action == 'APPROVED':
+            listing_model_access.approve_listing(listing_activity_author, listing)
+
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    #                           Reviews
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    # listing_review_batch
+    create_listing_review_batch(listing, listing_builder_dict['listing_review_batch'])
 
 
 def run():
@@ -343,7 +482,7 @@ def run():
                                                            'System will be functioning in a degredaded state between 2100Z-0430Z on F/G')
 
     # -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
-    ############################################################################
+    #########################large_banner_icon###################################################
     #                           Contacts
     ############################################################################
     with transaction.atomic():
@@ -377,109 +516,136 @@ def run():
         for i in range(0, 10):
             postfix_space = "" if (i == 0) else " " + str(i)
             postfix_dot = "" if (i == 0) else "." + str(i)
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            #                           Icons
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            img = Image.open(TEST_IMG_PATH + 'AirMail16.png')
-            small_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=small_icon_type.name)
-            img = Image.open(TEST_IMG_PATH + 'AirMail32.png')
-            large_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=large_icon_type.name)
-            img = Image.open(TEST_IMG_PATH + 'AirMail.png')
-            banner_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=banner_icon_type.name)
-            img = Image.open(TEST_IMG_PATH + 'AirMailFeatured.png')
-            large_banner_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=large_banner_icon_type.name)
 
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            #                           Listing
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            listing = models.Listing(
-                title='Air Mail{0!s}'.format(postfix_space),
-                agency=minitrue,
-                listing_type=web_app,
-                description='Sends mail via air',
-                launch_url='{0!s}/demo_apps/centerSampleListings/airMail/index.html'.format(DEMO_APP_ROOT),
-                version_name='1.0.0',
-                unique_name='ozp.test.air_mail{0!s}'.format(postfix_dot),
-                small_icon=small_icon,
-                large_icon=large_icon,
-                banner_icon=banner_icon,
-                large_banner_icon=large_banner_icon,
-                what_is_new='Nothing really new here',
-                description_short='Sends airmail',
-                requirements='None',
-                is_enabled=True,
-                is_featured=True,
-                iframe_compatible=False,
-                security_marking=unclass
-            )
-            listing.save()
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            #                           Contacts
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            listing.contacts.add(osha)
-            listing.contacts.add(brienne)
-
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            #                           Owners
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            listing.owners.add(profile_ref['wsmith'])
-
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            #                           Categories
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            listing.categories.add(categories_ref['communication'])
-            listing.categories.add(categories_ref['productivity'])
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            #                           Tags
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-            current_tag = models.Tag(name='tag_{0}'.format(i))
-            current_tag.save()
-
-            listing.tags.add(demo)
-            listing.tags.add(example)
-            listing.tags.add(current_tag)
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            #                           Screenshots
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            img = Image.open(TEST_IMG_PATH + 'screenshot_small.png')
-            small_img = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=small_screenshot_type.name)
-            img = Image.open(TEST_IMG_PATH + 'screenshot_large.png')
-            large_img = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=large_screenshot_type.name)
-            screenshot = models.Screenshot(small_image=small_img,
-                large_image=large_img,
-                listing=listing)
-            screenshot.save()
-
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            #                           Document URLs
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            wiki = models.DocUrl(name='wiki', url='http://www.google.com/wiki',
-                listing=listing)
-            wiki.save()
-            guide = models.DocUrl(name='guide', url='http://www.google.com/guide',
-                listing=listing)
-            guide.save()
-
-            listing_model_access.create_listing(profile_ref['wsmith'], listing)
-            listing_model_access.submit_listing(profile_ref['wsmith'], listing)
-            listing_model_access.approve_listing_by_org_steward(profile_ref['wsmith'], listing)
-            listing_model_access.approve_listing(profile_ref['wsmith'], listing)
-
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            #                           Reviews
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            create_listing_review_batch(listing,
-                [profile_ref['charrington'], 5, "This app is great - well designed and easy to use"],
-                [profile_ref['tparsons'], 3, "Air mail is ok - does what it says and no more"],
-                [profile_ref['syme'], 1, "Air mail crashes all the time - it doesn't even support IE 6!"]
-            )
+            current_listing_builder_dict = {
+                "listing": {
+                    "doc_urls": [
+                      {
+                        "name": "wiki",
+                        "url": "http://www.google.com/wiki"
+                      },
+                      {
+                        "name": "guide",
+                        "url": "http://www.google.com/guide"
+                      }
+                    ],
+                    "description_short": "Sends airmail",
+                    "owners": [
+                      "wsmith"
+                    ],
+                    "version_name": "1.0.0",
+                    "security_large_banner_iconmarking": "UNCLASSIFIED",
+                    "contacts": [
+                      "osha@stark.com",
+                      "brienne@stark.com"
+                    ],
+                    "iframe_compatible": False,
+                    "requirements": "None",
+                    "is_private": False,
+                    "screenshots": [
+                      {
+                        "small_image": {
+                          "security_marking": "UNCLASSIFIED",
+                          "filename": "screenshot_small.png"
+                        },
+                        "description": None,
+                        "order": 0,
+                        "large_image": {
+                          "security_marking": "UNCLASSIFIED",
+                          "filename": "screenshot_large.png"
+                        }
+                      }
+                    ],
+                    "unique_name": 'ozp.test.air_mail{0!s}'.format(postfix_dot),
+                    "is_featured": True,
+                    "launch_url": '{0!s}/demo_apps/centerSampleListings/airMail/index.html'.format(DEMO_APP_ROOT),
+                    "title": 'Air Mail{0!s}'.format(postfix_space),
+                    "categories": [
+                      "Communication",
+                      "Productivity"
+                    ],
+                    "tags": [
+                      "demo",
+                      "example",
+                      "tag_{}".format(i)
+                    ],
+                    "what_is_new": "Nothing really new here",
+                    "listing_type": "Web Application",
+                    "description": "Sends mail via air",
+                    "banner_icon": {
+                      "security_marking": "UNCLASSIFIED",
+                      "filename": "AirMail.png"
+                    },
+                    "large_banner_icon": {
+                      "security_marking": "UNCLASSIFIED",
+                      "filename": "AirMailFeatured.png"
+                    },
+                    "small_icon": {
+                      "security_marking": "UNCLASSIFIED",
+                      "filename": "AirMail16.png"
+                    },
+                    "large_icon": {
+                      "security_marking": "UNCLASSIFIED",
+                      "filename": "AirMail32.png"
+                    },
+                    "is_enabled": True,
+                    "is_deleted": False,
+                    "agency": "Minitrue",
+                    "security_marking": "UNCLASSIFIED"
+                  },
+                  "listing_activity": [
+                    {
+                      "author": "wsmith",
+                      "action": "CREATED",
+                      "description": None
+                    },
+                    {
+                      "author": "wsmith",
+                      "action": "SUBMITTED",
+                      "description": None
+                    },
+                    {
+                      "author": "wsmith",
+                      "action": "APPROVED_ORG",
+                      "description": None
+                    },
+                    {
+                      "author": "wsmith",
+                      "action": "APPROVED",
+                      "description": None
+                    }
+                  ],
+                  "library_entries": [
+                    {
+                      "owner": "wsmith",
+                      "position": 0,
+                      "folder": None
+                    },
+                    {
+                      "owner": "hodor",
+                      "position": 0,
+                      "folder": None
+                    }
+                  ],
+                  "listing_review_batch": [
+                    {
+                      "author": "charrington",
+                      "rate": 5,
+                      "text": "This app is great - well designed and easy to use"
+                    },
+                    {
+                      "author": "tparsons",
+                      "rate": 3,
+                      "text": "Air mail is ok - does what it says and no more"
+                    },
+                    {
+                      "author": "syme",
+                      "rate": 1,
+                      "text": "Air mail crashes all the time - it doesn't even support IE 6!"
+                    }
+                  ]
+                }
+            create_listing(current_listing_builder_dict)
 
     ############################################################################
     #                           Bread Basket
@@ -489,68 +655,101 @@ def run():
         for i in range(0, 10):
             postfix_space = "" if (i == 0) else " " + str(i)
             postfix_dot = "" if (i == 0) else "." + str(i)
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            #                           Icons
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            img = Image.open(TEST_IMG_PATH + 'BreadBasket16.png')
-            small_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=small_icon_type.name)
-            img = Image.open(TEST_IMG_PATH + 'BreadBasket32.png')
-            large_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=large_icon_type.name)
-            img = Image.open(TEST_IMG_PATH + 'BreadBasket.png')
-            banner_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=banner_icon_type.name)
-            img = Image.open(TEST_IMG_PATH + 'BreadBasketFeatured.png')
-            large_banner_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=large_banner_icon_type.name)
 
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            #                           Listing
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            listing = models.Listing(
-                title='Bread Basket{0!s}'.format(postfix_space),
-                agency=minitrue,
-                listing_type=web_app,
-                description='Carries delicious bread',
-                launch_url='{0!s}/demo_apps/centerSampleListings/breadBasket/index.html'.format(DEMO_APP_ROOT),
-                version_name='1.0.0',
-                unique_name='ozp.test.bread_basket{0!s}'.format(postfix_dot),
-                small_icon=small_icon,
-                large_icon=large_icon,
-                banner_icon=banner_icon,
-                large_banner_icon=large_banner_icon,
-                what_is_new='Nothing really new here',
-                description_short='Carries bread',
-                requirements='None',
-                is_enabled=True,
-                is_featured=True,
-                iframe_compatible=False,
-                is_private=True,
-                security_marking=unclass
-            )
-            listing.save()
-
-            listing.contacts.add(osha)
-            listing.owners.add(profile_ref['julia'])
-            listing.categories.add(categories_ref['health_fitness'])
-            listing.categories.add(categories_ref['shopping'])
-
-            listing.tags.add(demo)
-            listing.tags.add(example)
-
-            listing_model_access.create_listing(profile_ref['julia'], listing)
-            listing_model_access.submit_listing(profile_ref['julia'], listing)
-            listing_model_access.approve_listing_by_org_steward(profile_ref['wsmith'], listing)
-            listing_model_access.approve_listing(profile_ref['wsmith'], listing)
-
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            #                           Reviews
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            create_listing_review_batch(listing,
-                [profile_ref['jones'], 2, "This bread is stale!"],
-                [profile_ref['julia'], 5, "Yum!"]
-            )
+            current_listing_builder_dict = {
+               "listing_activity": [
+                 {
+                   "action": "CREATED",
+                   "description": None,
+                   "author": "julia"
+                 },
+                 {
+                   "action": "SUBMITTED",
+                   "description": None,
+                   "author": "julia"
+                 },
+                 {
+                   "action": "APPROVED_ORG",
+                   "description": None,
+                   "author": "wsmith"
+                 },
+                 {
+                   "action": "APPROVED",
+                   "description": None,
+                   "author": "wsmith"
+                 }
+               ],
+               "listing_review_batch": [
+                   {
+                     "author": "jones",
+                     "rate": 2,
+                     "text": "This bread is stale!"
+                   },
+                   {
+                     "author": "julia",
+                     "rate": 5,
+                     "text": "Yum!"
+                   },
+               ],
+               "listing": {
+                 "requirements": "None",
+                 "is_deleted": False,
+                 "categories": [
+                   "Health and Fitness",
+                   "Shopping"
+                 ],
+                 "small_icon": {
+                   "security_marking": "UNCLASSIFIED",
+                   "filename": "BreadBasket16.png"
+                 },
+                 "banner_icon": {
+                   "security_marking": "UNCLASSIFIED",
+                   "filename": "BreadBasket.png"
+                 },
+                 "is_private": True,
+                 "contacts": [
+                   "osha@stark.com"
+                 ],
+                 "tags": [
+                   "demo",
+                   "example"
+                 ],
+                 "large_banner_icon": {
+                   "security_marking": "UNCLASSIFIED",
+                   "filename": "BreadBasketFeatured.png"
+                 },
+                 "what_is_new": "Nothing really new here",
+                 "launch_url": "{0!s}/demo_apps/centerSampleListings/breadBasket/index.html".format(DEMO_APP_ROOT),
+                 "doc_urls": [],
+                 "large_icon": {
+                   "security_marking": "UNCLASSIFIED",
+                   "filename": "BreadBasket32.png"
+                 },
+                 "listing_type": "Web Application",
+                 "is_enabled": True,
+                 "owners": [
+                   "julia"
+                 ],
+                 "description": "Carries delicious bread",
+                 "is_featured": True,
+                 "agency": "Minitrue",
+                 "unique_name": 'ozp.test.bread_basket{0!s}'.format(postfix_dot),
+                 "description_short": "Carries bread",
+                 "version_name": "1.0.0",
+                 "screenshots": [],
+                 "title": 'Bread Basket{0!s}'.format(postfix_space),
+                 "iframe_compatible": False,
+                 "security_marking": "UNCLASSIFIED"
+               },
+               "library_entries": [
+                 {
+                   "folder": None,
+                   "owner": "wsmith",
+                   "position": 0
+                 }
+               ]
+            }
+            create_listing(current_listing_builder_dict)
 
     ############################################################################
     #                           Chart Course
@@ -560,72 +759,94 @@ def run():
         for i in range(0, 10):
             postfix_space = "" if (i == 0) else " " + str(i)
             postfix_dot = "" if (i == 0) else "." + str(i)
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            #                           Icons
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            # ChartCourse16
-            img = Image.open(TEST_IMG_PATH + 'ChartCourse16.png')
-            small_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=small_icon_type.name)
 
-            # ChartCourse32
-            img = Image.open(TEST_IMG_PATH + 'ChartCourse32.png')
-            large_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=large_icon_type.name)
-
-            # ChartCourse
-            img = Image.open(TEST_IMG_PATH + 'ChartCourse.png')
-            banner_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=banner_icon_type.name)
-
-            # ChartCourseFeatured
-            img = Image.open(TEST_IMG_PATH + 'ChartCourseFeatured.png')
-            large_banner_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=large_banner_icon_type.name)
-
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            #                           Listing
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            listing = models.Listing(
-                title='Chart Course{0!s}'.format(postfix_space),
-                agency=minitrue,
-                listing_type=web_app,
-                description='Chart your course',
-                launch_url='{0!s}/demo_apps/centerSampleListings/chartCourse/index.html'.format(DEMO_APP_ROOT),
-                version_name='1.0.0',
-                unique_name='ozp.test.chartcourse{0!s}'.format(postfix_dot),
-                small_icon=small_icon,
-                large_icon=large_icon,
-                banner_icon=banner_icon,
-                large_banner_icon=large_banner_icon,
-                what_is_new='Nothing really new here',
-                description_short='Chart your course',
-                requirements='None',
-                is_enabled=True,
-                is_featured=True,
-                iframe_compatible=False,
-                is_private=False,
-                security_marking=unclass
-            )
-            listing.save()
-            listing.contacts.add(rob_baratheon)
-            listing.owners.add(profile_ref['wsmith'])
-            listing.categories.add(categories_ref['tools'])
-            listing.categories.add(categories_ref['education'])
-            listing.tags.add(demo)
-
-            listing_model_access.create_listing(profile_ref['wsmith'], listing)
-            listing_model_access.submit_listing(profile_ref['wsmith'], listing)
-            listing_model_access.approve_listing_by_org_steward(profile_ref['wsmith'], listing)
-            listing_model_access.approve_listing(profile_ref['wsmith'], listing)
-
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            #                           Reviews
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            create_listing_review_batch(listing,
-                [profile_ref['wsmith'], 2, "This Chart is bad"],
-                [profile_ref['bigbrother'], 5, "Good Chart!"]
-            )
+            current_listing_builder_dict = {
+             "listing_activity": [
+               {
+                 "action": "CREATED",
+                 "description": None,
+                 "author": "wsmith"
+               },
+               {
+                 "action": "SUBMITTED",
+                 "description": None,
+                 "author": "wsmith"
+               },
+               {
+                 "action": "APPROVED_ORG",
+                 "description": None,
+                 "author": "wsmith"
+               },
+               {
+                 "action": "APPROVED",
+                 "description": None,
+                 "author": "wsmith"
+               }
+             ],
+             "listing_review_batch": [
+                {
+                    "author": "wsmith",
+                    "rate": 2,
+                    "text": "This Chart is bad!"
+                },
+                {
+                    "author": "bigbrother",
+                    "rate": 5,
+                    "text": "Good Chart!"
+                 },
+             ],
+             "listing": {
+               "requirements": "None",
+               "is_deleted": False,
+               "categories": [
+                 "Education",
+                 "Tools"
+               ],
+               "small_icon": {
+                 "security_marking": "UNCLASSIFIED",
+                 "filename": "ChartCourse16.png"
+               },
+               "banner_icon": {
+                 "security_marking": "UNCLASSIFIED",
+                 "filename": "ChartCourse.png"
+               },
+               "is_private": False,
+               "contacts": [
+                 "rbaratheon@baratheon.com"
+               ],
+               "tags": [
+                 "demo"
+               ],
+               "large_banner_icon": {
+                 "security_marking": "UNCLASSIFIED",
+                 "filename": "ChartCourseFeatured.png"
+               },
+               "what_is_new": "Nothing really new here",
+               "launch_url": "{0!s}/demo_apps/centerSampleListings/chartCourse/index.html".format(DEMO_APP_ROOT),
+               "doc_urls": [],
+               "large_icon": {
+                 "security_marking": "UNCLASSIFIED",
+                 "filename": "ChartCourse32.png"
+               },
+               "listing_type": "Web Application",
+               "is_enabled": True,
+               "owners": [
+                 "wsmith"
+               ],
+               "description": "Chart your course",
+               "is_featured": True,
+               "agency": "Minitrue",
+               "unique_name": 'ozp.test.chartcourse{0!s}'.format(postfix_dot),
+               "description_short": "Chart your course",
+               "version_name": "1.0.0",
+               "screenshots": [],
+               "title": 'Chart Course{0!s}'.format(postfix_space),
+               "iframe_compatible": False,
+               "security_marking": "UNCLASSIFIED"
+             },
+             "library_entries": []
+            }
+            create_listing(current_listing_builder_dict)
 
     ############################################################################
     #                           Chatter Box
@@ -635,56 +856,82 @@ def run():
         for i in range(0, 10):
             postfix_space = "" if (i == 0) else " " + str(i)
             postfix_dot = "" if (i == 0) else "." + str(i)
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            #                           Icons
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            img = Image.open(TEST_IMG_PATH + 'ChatterBox16.png')
-            small_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=small_icon_type.name)
-            img = Image.open(TEST_IMG_PATH + 'ChatterBox32.png')
-            large_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=large_icon_type.name)
-            img = Image.open(TEST_IMG_PATH + 'ChatterBox.png')
-            banner_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=banner_icon_type.name)
-            img = Image.open(TEST_IMG_PATH + 'ChatterBoxFeatured.png')
-            large_banner_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=large_banner_icon_type.name)
 
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            #                           Listing
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            listing = models.Listing(
-                title='Chatter Box{0!s}'.format(postfix_space),
-                agency=miniluv,
-                listing_type=web_app,
-                description='Chat with people',
-                launch_url='{0!s}/demo_apps/centerSampleListings/chatterBox/index.html'.format(DEMO_APP_ROOT),
-                version_name='1.0.0',
-                unique_name='ozp.test.chatterbox{0!s}'.format(postfix_dot),
-                small_icon=small_icon,
-                large_icon=large_icon,
-                banner_icon=banner_icon,
-                large_banner_icon=large_banner_icon,
-                what_is_new='Nothing really new here',
-                description_short='Chat in a box',
-                requirements='None',
-                is_enabled=True,
-                is_featured=True,
-                iframe_compatible=False,
-                is_private=False,
-                security_marking=unclass
-            )
-            listing.save()
-            listing.contacts.add(rob_baratheon)
-            listing.owners.add(profile_ref['julia'])
-            listing.categories.add(categories_ref['communication'])
-            listing.tags.add(demo)
-
-            listing_model_access.create_listing(profile_ref['julia'], listing)
-            listing_model_access.submit_listing(profile_ref['julia'], listing)
-            listing_model_access.approve_listing_by_org_steward(profile_ref['wsmith'], listing)
-            listing_model_access.approve_listing(profile_ref['wsmith'], listing)
+            current_listing_builder_dict = {
+             "listing_activity": [
+               {
+                 "action": "CREATED",
+                 "description": None,
+                 "author": "julia"
+               },
+               {
+                 "action": "SUBMITTED",
+                 "description": None,
+                 "author": "julia"
+               },
+               {
+                 "action": "APPROVED_ORG",
+                 "description": None,
+                 "author": "wsmith"
+               },
+               {
+                 "action": "APPROVED",
+                 "description": None,
+                 "author": "wsmith"
+               }
+             ],
+             "listing_review_batch": [],
+             "listing": {
+               "requirements": "None",
+               "is_deleted": False,
+               "categories": [
+                 "Communication"
+               ],
+               "small_icon": {
+                 "security_marking": "UNCLASSIFIED",
+                 "filename": "ChatterBox16.png"
+               },
+               "banner_icon": {
+                 "security_marking": "UNCLASSIFIED",
+                 "filename": "ChatterBox.png"
+               },
+               "is_private": False,
+               "contacts": [
+                 "rbaratheon@baratheon.com"
+               ],
+               "tags": [
+                 "demo"
+               ],
+               "large_banner_icon": {
+                 "security_marking": "UNCLASSIFIED",
+                 "filename": "ChatterBoxFeatured.png"
+               },
+               "what_is_new": "Nothing really new here",
+               "launch_url": "{0!s}/demo_apps/centerSampleListings/chatterBox/index.html".format(DEMO_APP_ROOT),
+               "doc_urls": [],
+               "large_icon": {
+                 "security_marking": "UNCLASSIFIED",
+                 "filename": "ChatterBox32.png"
+               },
+               "listing_type": "Web Application",
+               "is_enabled": True,
+               "owners": [
+                 "julia"
+               ],
+               "description": "Chat with people",
+               "is_featured": True,
+               "agency": "Miniluv",
+               "unique_name": 'ozp.test.chatterbox{0!s}'.format(postfix_dot),
+               "description_short": "Chat in a box",
+               "version_name": "1.0.0",
+               "screenshots": [],
+               "title": 'Chatter Box{0!s}'.format(postfix_space),
+               "iframe_compatible": False,
+               "security_marking": "UNCLASSIFIED"
+             },
+             "library_entries": []
+            }
+            create_listing(current_listing_builder_dict)
 
     ############################################################################
     #                           Clipboard
@@ -694,57 +941,83 @@ def run():
         for i in range(0, 10):
             postfix_space = "" if (i == 0) else " " + str(i)
             postfix_dot = "" if (i == 0) else "." + str(i)
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            #                           Icons
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            img = Image.open(TEST_IMG_PATH + 'Clipboard16.png')
-            small_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=small_icon_type.name)
-            img = Image.open(TEST_IMG_PATH + 'Clipboard32.png')
-            large_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=large_icon_type.name)
-            img = Image.open(TEST_IMG_PATH + 'Clipboard.png')
-            banner_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=banner_icon_type.name)
-            img = Image.open(TEST_IMG_PATH + 'ClipboardFeatured.png')
-            large_banner_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=large_banner_icon_type.name)
 
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            #                           Listing
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            listing = models.Listing(
-                title='Clipboard{0!s}'.format(postfix_space),
-                agency=minitrue,
-                listing_type=web_app,
-                description='Clip stuff on a board',
-                launch_url='{0!s}/demo_apps/centerSampleListings/clipboard/index.html'.format(DEMO_APP_ROOT),
-                version_name='1.0.0',
-                unique_name='ozp.test.clipboard{0!s}'.format(postfix_dot),
-                small_icon=small_icon,
-                large_icon=large_icon,
-                banner_icon=banner_icon,
-                large_banner_icon=large_banner_icon,
-                what_is_new='Nothing really new here',
-                description_short='Its a clipboard',
-                requirements='None',
-                is_enabled=True,
-                is_featured=True,
-                iframe_compatible=False,
-                is_private=False,
-                security_marking=unclass
-            )
-            listing.save()
-            listing.contacts.add(rob_baratheon)
-            listing.owners.add(profile_ref['wsmith'])
-            listing.categories.add(categories_ref['tools'])
-            listing.categories.add(categories_ref['education'])
-            listing.tags.add(demo)
-
-            listing_model_access.create_listing(profile_ref['wsmith'], listing)
-            listing_model_access.submit_listing(profile_ref['wsmith'], listing)
-            listing_model_access.approve_listing_by_org_steward(profile_ref['wsmith'], listing)
-            listing_model_access.approve_listing(profile_ref['wsmith'], listing)
+            current_listing_builder_dict = {
+             "listing_activity": [
+               {
+                 "action": "CREATED",
+                 "description": None,
+                 "author": "wsmith"
+               },
+               {
+                 "action": "SUBMITTED",
+                 "description": None,
+                 "author": "wsmith"
+               },
+               {
+                 "action": "APPROVED_ORG",
+                 "description": None,
+                 "author": "wsmith"
+               },
+               {
+                 "action": "APPROVED",
+                 "description": None,
+                 "author": "wsmith"
+               }
+             ],
+             "listing_review_batch": [],
+             "listing": {
+               "requirements": "None",
+               "is_deleted": False,
+               "categories": [
+                 "Education",
+                 "Tools"
+               ],
+               "small_icon": {
+                 "security_marking": "UNCLASSIFIED",
+                 "filename": "Clipboard16.png"
+               },
+               "banner_icon": {
+                 "security_marking": "UNCLASSIFIED",
+                 "filename": "Clipboard.png"
+               },
+               "is_private": False,
+               "contacts": [
+                 "rbaratheon@baratheon.com"
+               ],
+               "tags": [
+                 "demo"
+               ],
+               "large_banner_icon": {
+                 "security_marking": "UNCLASSIFIED",
+                 "filename": "ClipboardFeatured.png"
+               },
+               "what_is_new": "Nothing really new here",
+               "launch_url": "{0!s}/demo_apps/centerSampleListings/clipboard/index.html".format(DEMO_APP_ROOT),
+               "doc_urls": [],
+               "large_icon": {
+                 "security_marking": "UNCLASSIFIED",
+                 "filename": "Clipboard32.png"
+               },
+               "listing_type": "Web Application",
+               "is_enabled": True,
+               "owners": [
+                 "wsmith"
+               ],
+               "description": "Clip stuff on a board",
+               "is_featured": True,
+               "agency": "Minitrue",
+               "unique_name": 'ozp.test.clipboard{0!s}'.format(postfix_dot),
+               "description_short": "Its a clipboard",
+               "version_name": "1.0.0",
+               "screenshots": [],
+               "title": 'Clipboard{0!s}'.format(postfix_space),
+               "iframe_compatible": False,
+               "security_marking": "UNCLASSIFIED"
+             },
+             "library_entries": []
+            }
+            create_listing(current_listing_builder_dict)
 
     ############################################################################
     #                           FrameIt
@@ -754,57 +1027,83 @@ def run():
         for i in range(0, 10):
             postfix_space = "" if (i == 0) else " " + str(i)
             postfix_dot = "" if (i == 0) else "." + str(i)
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            #                           Icons
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            img = Image.open(TEST_IMG_PATH + 'FrameIt16.png')
-            small_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=small_icon_type.name)
-            img = Image.open(TEST_IMG_PATH + 'FrameIt32.png')
-            large_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=large_icon_type.name)
-            img = Image.open(TEST_IMG_PATH + 'FrameIt.png')
-            banner_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=banner_icon_type.name)
-            img = Image.open(TEST_IMG_PATH + 'FrameItFeatured.png')
-            large_banner_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=large_banner_icon_type.name)
 
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            #                           Listing
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            listing = models.Listing(
-                title='FrameIt{0!s}'.format(postfix_space),
-                agency=minitrue,
-                listing_type=web_app,
-                description='Show things in an iframe',
-                launch_url='{0!s}/demo_apps/frameit/index.html'.format(DEMO_APP_ROOT),
-                version_name='1.0.0',
-                unique_name='ozp.test.frameit{0!s}'.format(postfix_dot),
-                small_icon=small_icon,
-                large_icon=large_icon,
-                banner_icon=banner_icon,
-                large_banner_icon=large_banner_icon,
-                what_is_new='Nothing really new here',
-                description_short='Its an iframe',
-                requirements='None',
-                is_enabled=True,
-                is_featured=True,
-                iframe_compatible=False,
-                is_private=False,
-                security_marking=unclass
-            )
-            listing.save()
-            listing.contacts.add(rob_baratheon)
-            listing.owners.add(profile_ref['wsmith'])
-            listing.categories.add(categories_ref['tools'])
-            listing.categories.add(categories_ref['education'])
-            listing.tags.add(demo)
-
-            listing_model_access.create_listing(profile_ref['wsmith'], listing)
-            listing_model_access.submit_listing(profile_ref['wsmith'], listing)
-            listing_model_access.approve_listing_by_org_steward(profile_ref['wsmith'], listing)
-            listing_model_access.approve_listing(profile_ref['wsmith'], listing)
+            current_listing_builder_dict = {
+             "listing_activity": [
+               {
+                 "action": "CREATED",
+                 "description": None,
+                 "author": "wsmith"
+               },
+               {
+                 "action": "SUBMITTED",
+                 "description": None,
+                 "author": "wsmith"
+               },
+               {
+                 "action": "APPROVED_ORG",
+                 "description": None,
+                 "author": "wsmith"
+               },
+               {
+                 "action": "APPROVED",
+                 "description": None,
+                 "author": "wsmith"
+               }
+             ],
+             "listing_review_batch": [],
+             "listing": {
+               "requirements": "None",
+               "is_deleted": False,
+               "categories": [
+                 "Education",
+                 "Tools"
+               ],
+               "small_icon": {
+                 "security_marking": "UNCLASSIFIED",
+                 "filename": "FrameIt16.png"
+               },
+               "banner_icon": {
+                 "security_marking": "UNCLASSIFIED",
+                 "filename": "FrameIt.png"
+               },
+               "is_private": False,
+               "contacts": [
+                 "rbaratheon@baratheon.com"
+               ],
+               "tags": [
+                 "demo"
+               ],
+               "large_banner_icon": {
+                 "security_marking": "UNCLASSIFIED",
+                 "filename": "FrameItFeatured.png"
+               },
+               "what_is_new": "Nothing really new here",
+               "launch_url": "{0!s}/demo_apps/frameit/index.html".format(DEMO_APP_ROOT),
+               "doc_urls": [],
+               "large_icon": {
+                 "security_marking": "UNCLASSIFIED",
+                 "filename": "FrameIt32.png"
+               },
+               "listing_type": "Web Application",
+               "is_enabled": True,
+               "owners": [
+                 "wsmith"
+               ],
+               "description": "Show things in an iframe",
+               "is_featured": True,
+               "agency": "Minitrue",
+               "unique_name": 'ozp.test.frameit{0!s}'.format(postfix_dot),
+               "description_short": "Its an iframe",
+               "version_name": "1.0.0",
+               "screenshots": [],
+               "title":'FrameIt{0!s}'.format(postfix_space),
+               "iframe_compatible": False,
+               "security_marking": "UNCLASSIFIED"
+             },
+             "library_entries": []
+            }
+            create_listing(current_listing_builder_dict)
 
     ############################################################################
     #                           Hatch Latch
@@ -814,116 +1113,175 @@ def run():
         for i in range(0, 10):
             postfix_space = "" if (i == 0) else " " + str(i)
             postfix_dot = "" if (i == 0) else "." + str(i)
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            #                           Icons
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            img = Image.open(TEST_IMG_PATH + 'HatchLatch16.png')
-            small_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=small_icon_type.name)
-            img = Image.open(TEST_IMG_PATH + 'HatchLatch32.png')
-            large_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=large_icon_type.name)
-            img = Image.open(TEST_IMG_PATH + 'HatchLatch.png')
-            banner_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=banner_icon_type.name)
-            img = Image.open(TEST_IMG_PATH + 'HatchLatchFeatured.png')
-            large_banner_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=large_banner_icon_type.name)
 
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            #                           Listing
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            listing = models.Listing(
-                title='Hatch Latch{0!s}'.format(postfix_space),
-                agency=minitrue,
-                listing_type=web_app,
-                description='Hatch latches',
-                launch_url='{0!s}/demo_apps/centerSampleListings/hatchLatch/index.html'.format(DEMO_APP_ROOT),
-                version_name='1.0.0',
-                unique_name='ozp.test.hatchlatch{0!s}'.format(postfix_dot),
-                small_icon=small_icon,
-                large_icon=large_icon,
-                banner_icon=banner_icon,
-                large_banner_icon=large_banner_icon,
-                what_is_new='Nothing really new here',
-                description_short='Its a hatch latch',
-                requirements='None',
-                is_enabled=True,
-                is_featured=True,
-                iframe_compatible=False,
-                is_private=False,
-                security_marking=unclass
-            )
-            listing.save()
-            listing.contacts.add(rob_baratheon)
-            listing.owners.add(profile_ref['wsmith'])
-            listing.categories.add(categories_ref['tools'])
-            listing.categories.add(categories_ref['education'])
-            listing.categories.add(categories_ref['health_fitness'])
-            listing.tags.add(demo)
+            current_listing_builder_dict = {
+             "listing_activity": [
+               {
+                 "action": "CREATED",
+                 "description": None,
+                 "author": "wsmith"
+               },
+               {
+                 "action": "SUBMITTED",
+                 "description": None,
+                 "author": "wsmith"
+               },
+               {
+                 "action": "APPROVED_ORG",
+                 "description": None,
+                 "author": "wsmith"
+               },
+               {
+                 "action": "APPROVED",
+                 "description": None,
+                 "author": "wsmith"
+               }
+             ],
+             "listing_review_batch": [],
+             "listing": {
+               "requirements": "None",
+               "is_deleted": False,
+               "categories": [
+                 "Education",
+                 "Health and Fitness",
+                 "Tools"
+               ],
+               "small_icon": {
+                 "security_marking": "UNCLASSIFIED",
+                 "filename": "HatchLatch16.png"
+               },
+               "banner_icon": {
+                 "security_marking": "UNCLASSIFIED",
+                 "filename": "HatchLatch.png"
+               },
+               "is_private": False,
+               "contacts": [
+                 "rbaratheon@baratheon.com"
+               ],
+               "tags": [
+                 "demo"
+               ],
+               "large_banner_icon": {
+                 "security_marking": "UNCLASSIFIED",
+                 "filename": "HatchLatchFeatured.png"
+               },
+               "what_is_new": "Nothing really new here",
+               "launch_url": "{0!s}/demo_apps/centerSampleListings/hatchLatch/index.html".format(DEMO_APP_ROOT),
+               "doc_urls": [],
+               "large_icon": {
+                 "security_marking": "UNCLASSIFIED",
+                 "filename": "HatchLatch32.png"
+               },
+               "listing_type": "Web Application",
+               "is_enabled": True,
+               "owners": [
+                 "wsmith"
+               ],
+               "description": "Hatch latches",
+               "is_featured": True,
+               "agency": "Minitrue",
+               "unique_name": 'ozp.test.hatchlatch{0!s}'.format(postfix_dot),
+               "description_short": "Its a hatch latch",
+               "version_name": "1.0.0",
+               "screenshots": [],
+               "title": "Hatch Latch{0!s}".format(postfix_space),
+               "iframe_compatible": False,
+               "security_marking": "UNCLASSIFIED"
+             },
+             "library_entries": []
+            }
+            create_listing(current_listing_builder_dict)
 
-            listing_model_access.create_listing(profile_ref['wsmith'], listing)
-            listing_model_access.submit_listing(profile_ref['wsmith'], listing)
-            listing_model_access.approve_listing_by_org_steward(profile_ref['wsmith'], listing)
-            listing_model_access.approve_listing(profile_ref['wsmith'], listing)
-
+    print('== Creating Jot Spot Listings')
+    with transaction.atomic():
+        for i in range(0, 10):
+            postfix_space = "" if (i == 0) else " " + str(i)
+            postfix_dot = "" if (i == 0) else "." + str(i)
             ############################################################################
             #                           Jot Spot
             ############################################################################
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            #                           Icons
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            img = Image.open(TEST_IMG_PATH + 'JotSpot16.png')
-            small_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=small_icon_type.name)
-            img = Image.open(TEST_IMG_PATH + 'JotSpot32.png')
-            large_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=large_icon_type.name)
-            img = Image.open(TEST_IMG_PATH + 'JotSpot.png')
-            banner_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=banner_icon_type.name)
-            img = Image.open(TEST_IMG_PATH + 'JotSpotFeatured.png')
-            large_banner_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=large_banner_icon_type.name)
-
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            #                           Listing
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-            listing = models.Listing(
-                title='JotSpot{0!s}'.format(postfix_space),
-                agency=minitrue,
-                listing_type=web_app,
-                description='Jot things down',
-                launch_url='{0!s}/demo_apps/centerSampleListings/jotSpot/index.html'.format(DEMO_APP_ROOT),
-                version_name='1.0.0',
-                unique_name='ozp.test.jotspot{0!s}'.format(postfix_dot),
-                small_icon=small_icon,
-                large_icon=large_icon,
-                banner_icon=banner_icon,
-                large_banner_icon=large_banner_icon,
-                what_is_new='Nothing really new here',
-                description_short='Jot stuff down',
-                requirements='None',
-                is_enabled=True,
-                is_featured=True,
-                iframe_compatible=False,
-                is_private=False,
-                security_marking=unclass
-            )
-            listing.save()
-            listing.contacts.add(rob_baratheon)
-            listing.owners.add(profile_ref['wsmith'])
-            listing.categories.add(categories_ref['tools'])
-            listing.categories.add(categories_ref['education'])
-            listing.tags.add(demo)
-
-            listing_model_access.create_listing(profile_ref['wsmith'], listing)
-            listing_model_access.submit_listing(profile_ref['wsmith'], listing)
-            listing_model_access.approve_listing_by_org_steward(profile_ref['wsmith'], listing)
-            listing_model_access.approve_listing(profile_ref['wsmith'], listing)
-
-            listing_model_access.create_listing_review(profile_ref['charrington'].user.username, listing, 4, text="I really like it")
+            current_listing_builder_dict = {
+             "listing_activity": [
+               {
+                 "action": "CREATED",
+                 "description": None,
+                 "author": "wsmith"
+               },
+               {
+                 "action": "SUBMITTED",
+                 "description": None,
+                 "author": "wsmith"
+               },
+               {
+                 "action": "APPROVED_ORG",
+                 "description": None,
+                 "author": "wsmith"
+               },
+               {
+                 "action": "APPROVED",
+                 "description": None,
+                 "author": "wsmith"
+               }
+             ],
+             "listing_review_batch": [
+               {
+                 "author": "charrington",
+                 "rate": 4,
+                 "text": "I really like it"
+               }
+             ],
+             "listing": {
+               "requirements": "None",
+               "is_deleted": False,
+               "categories": [
+                 "Education",
+                 "Tools"
+               ],
+               "small_icon": {
+                 "security_marking": "UNCLASSIFIED",
+                 "filename": "JotSpot16.png"
+               },
+               "banner_icon": {
+                 "security_marking": "UNCLASSIFIED",
+                 "filename": "JotSpot.png"
+               },
+               "is_private": False,
+               "contacts": [
+                 "rbaratheon@baratheon.com"
+               ],
+               "tags": [
+                 "demo"
+               ],
+               "large_banner_icon": {
+                 "security_marking": "UNCLASSIFIED",
+                 "filename": "JotSpotFeatured.png"
+               },
+               "what_is_new": "Nothing really new here",
+               "launch_url": "{0!s}/demo_apps/centerSampleListings/jotSpot/index.html".format(DEMO_APP_ROOT),
+               "doc_urls": [],
+               "large_icon": {
+                 "security_marking": "UNCLASSIFIED",
+                 "filename": "JotSpot32.png"
+               },
+               "listing_type": "Web Application",
+               "is_enabled": True,
+               "owners": [
+                 "wsmith"
+               ],
+               "description": "Jot things down",
+               "is_featured": True,
+               "agency": "Minitrue",
+               "unique_name": "ozp.test.jotspot{0!s}".format(postfix_dot),
+               "description_short": "Jot stuff down",
+               "version_name": "1.0.0",
+               "screenshots": [],
+               "title": "JotSpot{0!s}".format(postfix_space),
+               "iframe_compatible": False,
+               "security_marking": "UNCLASSIFIED"
+             },
+             "library_entries": []
+            }
+            create_listing(current_listing_builder_dict)
 
     ############################################################################
     #                           Location Lister
@@ -933,60 +1291,89 @@ def run():
         for i in range(0, 10):
             postfix_space = "" if (i == 0) else " " + str(i)
             postfix_dot = "" if (i == 0) else "." + str(i)
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            #                           Icons
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            img = Image.open(TEST_IMG_PATH + 'LocationLister16.png')
-            small_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=small_icon_type.name)
-            img = Image.open(TEST_IMG_PATH + 'LocationLister32.png')
-            large_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=large_icon_type.name)
-            img = Image.open(TEST_IMG_PATH + 'LocationLister.png')
-            banner_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=banner_icon_type.name)
-            img = Image.open(TEST_IMG_PATH + 'LocationListerFeatured.png')
-            large_banner_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=large_banner_icon_type.name)
 
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            #                           Listing
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-            listing = models.Listing(
-                title='LocationLister{0!s}'.format(postfix_space),
-                agency=minitrue,
-                listing_type=web_app,
-                description='List locations',
-                launch_url='{0!s}/demo_apps/locationLister/index.html'.format(DEMO_APP_ROOT),
-                version_name='1.0.0',
-                unique_name='ozp.test.locationlister{0!s}'.format(postfix_dot),
-                small_icon=small_icon,
-                large_icon=large_icon,
-                banner_icon=banner_icon,
-                large_banner_icon=large_banner_icon,
-                what_is_new='Nothing really new here',
-                description_short='List locations',
-                requirements='None',
-                is_enabled=True,
-                is_featured=True,
-                iframe_compatible=False,
-                is_private=False,
-                security_marking=unclass
-            )
-            listing.save()
-            listing.contacts.add(rob_baratheon)
-            listing.owners.add(profile_ref['wsmith'])
-            listing.categories.add(categories_ref['tools'])
-            listing.categories.add(categories_ref['education'])
-            listing.tags.add(demo)
-
-            listing_model_access.create_listing(profile_ref['wsmith'], listing)
-            listing_model_access.submit_listing(profile_ref['wsmith'], listing)
-            listing_model_access.approve_listing_by_org_steward(profile_ref['wsmith'], listing)
-            listing_model_access.approve_listing(profile_ref['wsmith'], listing)
-
-            listing_model_access.create_listing_review(profile_ref['charrington'].user.username, listing, 4, text="I really like it")
+            current_listing_builder_dict = {
+             "listing_activity": [
+               {
+                 "action": "CREATED",
+                 "description": None,
+                 "author": "wsmith"
+               },
+               {
+                 "action": "SUBMITTED",
+                 "description": None,
+                 "author": "wsmith"
+               },
+               {
+                 "action": "APPROVED_ORG",
+                 "description": None,
+                 "author": "wsmith"
+               },
+               {
+                 "action": "APPROVED",
+                 "description": None,
+                 "author": "wsmith"
+               }
+             ],
+             "listing_review_batch": [
+               {
+                 "author": "charrington",
+                 "rate": 4,
+                 "text": "I really like it"
+               }
+             ],
+             "listing": {
+               "requirements": "None",
+               "is_deleted": False,
+               "categories": [
+                 "Education",
+                 "Tools"
+               ],
+               "small_icon": {
+                 "security_marking": "UNCLASSIFIED",
+                 "filename": "LocationLister16.png"
+               },
+               "banner_icon": {
+                 "security_marking": "UNCLASSIFIED",
+                 "filename": "LocationLister.png"
+               },
+               "is_private": False,
+               "contacts": [
+                 "rbaratheon@baratheon.com"
+               ],
+               "tags": [
+                 "demo"
+               ],
+               "large_banner_icon": {
+                 "security_marking": "UNCLASSIFIED",
+                 "filename": "LocationListerFeatured.png"
+               },
+               "what_is_new": "Nothing really new here",
+               "launch_url": "{0!s}/demo_apps/locationLister/index.html".format(DEMO_APP_ROOT),
+               "doc_urls": [],
+               "large_icon": {
+                 "security_marking": "UNCLASSIFIED",
+                 "filename": "LocationLister32.png"
+               },
+               "listing_type": "Web Application",
+               "is_enabled": True,
+               "owners": [
+                 "wsmith"
+               ],
+               "description": "List locations",
+               "is_featured": True,
+               "agency": "Minitrue",
+               "unique_name": "ozp.test.locationlister{0!s}".format(postfix_dot),
+               "description_short": "List locations",
+               "version_name": "1.0.0",
+               "screenshots": [],
+               "title": "LocationLister{0!s}".format(postfix_space),
+               "iframe_compatible": False,
+               "security_marking": "UNCLASSIFIED"
+             },
+             "library_entries": []
+            }
+            create_listing(current_listing_builder_dict)
 
     ############################################################################
     #                           Location Viewer
@@ -996,57 +1383,83 @@ def run():
         for i in range(0, 10):
             postfix_space = "" if (i == 0) else " " + str(i)
             postfix_dot = "" if (i == 0) else "." + str(i)
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            #                           Icons
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            img = Image.open(TEST_IMG_PATH + 'LocationViewer16.png')
-            small_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=small_icon_type.name)
-            img = Image.open(TEST_IMG_PATH + 'LocationViewer32.png')
-            large_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=large_icon_type.name)
-            img = Image.open(TEST_IMG_PATH + 'LocationViewer.png')
-            banner_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=banner_icon_type.name)
-            img = Image.open(TEST_IMG_PATH + 'LocationViewerFeatured.png')
-            large_banner_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=large_banner_icon_type.name)
 
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            #                           Listing
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            listing = models.Listing(
-                title='LocationViewer{0!s}'.format(postfix_space),
-                agency=minitrue,
-                listing_type=web_app,
-                description='View locations',
-                launch_url='{0!s}/demo_apps/locationViewer/index.html'.format(DEMO_APP_ROOT),
-                version_name='1.0.0',
-                unique_name='ozp.test.locationviewer{0!s}'.format(postfix_dot),
-                small_icon=small_icon,
-                large_icon=large_icon,
-                banner_icon=banner_icon,
-                large_banner_icon=large_banner_icon,
-                what_is_new='Nothing really new here',
-                description_short='View locations',
-                requirements='None',
-                is_enabled=True,
-                is_featured=True,
-                iframe_compatible=False,
-                is_private=False,
-                security_marking=unclass
-            )
-            listing.save()
-            listing.contacts.add(rob_baratheon)
-            listing.owners.add(profile_ref['wsmith'])
-            listing.categories.add(categories_ref['tools'])
-            listing.categories.add(categories_ref['education'])
-            listing.tags.add(demo)
-
-            listing_model_access.create_listing(profile_ref['wsmith'], listing)
-            listing_model_access.submit_listing(profile_ref['wsmith'], listing)
-            listing_model_access.approve_listing_by_org_steward(profile_ref['wsmith'], listing)
-            listing_model_access.approve_listing(profile_ref['wsmith'], listing)
+            current_listing_builder_dict = {
+             "listing_activity": [
+               {
+                 "action": "CREATED",
+                 "description": None,
+                 "author": "wsmith"
+               },
+               {
+                 "action": "SUBMITTED",
+                 "description": None,
+                 "author": "wsmith"
+               },
+               {
+                 "action": "APPROVED_ORG",
+                 "description": None,
+                 "author": "wsmith"
+               },
+               {
+                 "action": "APPROVED",
+                 "description": None,
+                 "author": "wsmith"
+               }
+             ],
+             "listing_review_batch": [],
+             "listing": {
+               "requirements": "None",
+               "is_deleted": False,
+               "categories": [
+                 "Education",
+                 "Tools"
+               ],
+               "small_icon": {
+                 "security_marking": "UNCLASSIFIED",
+                 "filename": "LocationViewer16.png"
+               },
+               "banner_icon": {
+                 "security_marking": "UNCLASSIFIED",
+                 "filename": "LocationViewer.png"
+               },
+               "is_private": False,
+               "contacts": [
+                 "rbaratheon@baratheon.com"
+               ],
+               "tags": [
+                 "demo"
+               ],
+               "large_banner_icon": {
+                 "security_marking": "UNCLASSIFIED",
+                 "filename": "LocationViewerFeatured.png"
+               },
+               "what_is_new": "Nothing really new here",
+               "launch_url": "{0!s}/demo_apps/locationViewer/index.html".format(DEMO_APP_ROOT),
+               "doc_urls": [],
+               "large_icon": {
+                 "security_marking": "UNCLASSIFIED",
+                 "filename": "LocationViewer32.png"
+               },
+               "listing_type": "Web Application",
+               "is_enabled": True,
+               "owners": [
+                 "wsmith"
+               ],
+               "description": "View locations",
+               "is_featured": True,
+               "agency": "Minitrue",
+               "unique_name": "ozp.test.locationviewer{0!s}".format(postfix_dot),
+               "description_short": "View locations",
+               "version_name": "1.0.0",
+               "screenshots": [],
+               "title": "LocationViewer{0!s}".format(postfix_space),
+               "iframe_compatible": False,
+               "security_marking": "UNCLASSIFIED"
+             },
+             "library_entries": []
+            }
+            create_listing(current_listing_builder_dict)
 
     ############################################################################
     #                           Location Analyzer
@@ -1056,122 +1469,170 @@ def run():
         for i in range(0, 10):
             postfix_space = "" if (i == 0) else " " + str(i)
             postfix_dot = "" if (i == 0) else "." + str(i)
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            #                           Icons
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            img = Image.open(TEST_IMG_PATH + 'LocationAnalyzer16.png')
-            small_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=small_icon_type.name)
-            img = Image.open(TEST_IMG_PATH + 'LocationAnalyzer32.png')
-            large_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=large_icon_type.name)
-            img = Image.open(TEST_IMG_PATH + 'LocationAnalyzer.png')
-            banner_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=banner_icon_type.name)
-            img = Image.open(TEST_IMG_PATH + 'LocationAnalyzerFeatured.png')
-            large_banner_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=large_banner_icon_type.name)
 
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            #                           Listing
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            listing = models.Listing(
-                title='LocationAnalyzer{0!s}'.format(postfix_space),
-                agency=minitrue,
-                listing_type=web_app,
-                description='Analyze locations',
-                launch_url='{0!s}/demo_apps/locationAnalyzer/index.html'.format(DEMO_APP_ROOT),
-                version_name='1.0.0',
-                unique_name='ozp.test.locationanalyzer{0!s}'.format(postfix_dot),
-                small_icon=small_icon,
-                large_icon=large_icon,
-                banner_icon=banner_icon,
-                large_banner_icon=large_banner_icon,
-                what_is_new='Nothing really new here',
-                description_short='Analyze locations',
-                requirements='None',
-                is_enabled=True,
-                is_featured=True,
-                iframe_compatible=False,
-                is_private=False,
-                security_marking=unclass
-            )
-            listing.save()
-            listing.contacts.add(rob_baratheon)
-            listing.owners.add(profile_ref['wsmith'])
-            listing.categories.add(categories_ref['tools'])
-            listing.categories.add(categories_ref['education'])
-            listing.tags.add(demo)
-
-            listing_model_access.create_listing(profile_ref['wsmith'], listing)
-            listing_model_access.submit_listing(profile_ref['wsmith'], listing)
-            listing_model_access.approve_listing_by_org_steward(profile_ref['wsmith'], listing)
-            listing_model_access.approve_listing(profile_ref['wsmith'], listing)
+            current_listing_builder_dict = {
+             "listing_activity": [
+               {
+                 "action": "CREATED",
+                 "description": None,
+                 "author": "wsmith"
+               },
+               {
+                 "action": "SUBMITTED",
+                 "description": None,
+                 "author": "wsmith"
+               },
+               {
+                 "action": "APPROVED_ORG",
+                 "description": None,
+                 "author": "wsmith"
+               },
+               {
+                 "action": "APPROVED",
+                 "description": None,
+                 "author": "wsmith"
+               }
+             ],
+             "listing_review_batch": [],
+             "listing": {
+               "requirements": "None",
+               "is_deleted": False,
+               "categories": [
+                 "Education",
+                 "Tools"
+               ],
+               "small_icon": {
+                 "security_marking": "UNCLASSIFIED",
+                 "filename": "LocationAnalyzer16.png"
+               },
+               "banner_icon": {
+                 "security_marking": "UNCLASSIFIED",
+                 "filename": "LocationAnalyzer.png"
+               },
+               "is_private": False,
+               "contacts": [
+                 "rbaratheon@baratheon.com"
+               ],
+               "tags": [
+                 "demo"
+               ],
+               "large_banner_icon": {
+                 "security_marking": "UNCLASSIFIED",
+                 "filename": "LocationAnalyzerFeatured.png"
+               },
+               "what_is_new": "Nothing really new here",
+               "launch_url": '{0!s}/demo_apps/locationAnalyzer/index.html'.format(DEMO_APP_ROOT),
+               "doc_urls": [],
+               "large_icon": {
+                 "security_marking": "UNCLASSIFIED",
+                 "filename": "LocationAnalyzer32.png"
+               },
+               "listing_type": "Web Application",
+               "is_enabled": True,
+               "owners": [
+                 "wsmith"
+               ],
+               "description": "Analyze locations",
+               "is_featured": True,
+               "agency": "Minitrue",
+               "unique_name": 'ozp.test.locationanalyzer{0!s}'.format(postfix_dot),
+               "description_short": "Analyze locations",
+               "version_name": "1.0.0",
+               "screenshots": [],
+               "title": 'LocationAnalyzer{0!s}'.format(postfix_space),
+               "iframe_compatible": False,
+               "security_marking": "UNCLASSIFIED"
+             },
+             "library_entries": []
+            }
+            create_listing(current_listing_builder_dict)
 
     ############################################################################
     #                           Skybox
     ############################################################################
-    #   Looping for more sample listings
     print('== Creating Skybox Listings')
     with transaction.atomic():
         for i in range(0, 10):
             postfix_space = "" if (i == 0) else " " + str(i)
             postfix_dot = "" if (i == 0) else "." + str(i)
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            #                           Icons
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            img = Image.open(TEST_IMG_PATH + 'Skybox16.png')
-            small_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=small_icon_type.name)
-            img = Image.open(TEST_IMG_PATH + 'Skybox32.png')
-            large_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=large_icon_type.name)
-            img = Image.open(TEST_IMG_PATH + 'Skybox.png')
-            banner_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=banner_icon_type.name)
-            img = Image.open(TEST_IMG_PATH + 'SkyboxFeatured.png')
-            large_banner_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=large_banner_icon_type.name)
 
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            #                           Listing
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            listing = models.Listing(
-                title='Skybox{0!s}'.format(postfix_space),
-                agency=miniluv,
-                listing_type=web_app,
-                description='Sky Overlord',
-                launch_url='{0!s}/demo_apps/Skybox/index.html'.format(DEMO_APP_ROOT),
-                version_name='1.0.0',
-                unique_name='ozp.test.skybox{0!s}'.format(postfix_dot),
-                small_icon=small_icon,
-                large_icon=large_icon,
-                banner_icon=banner_icon,
-                large_banner_icon=large_banner_icon,
-                what_is_new="It's a box in the sky",
-                description_short='Sky Overlord',
-                requirements='None',
-                is_enabled=True,
-                is_featured=True,
-                iframe_compatible=False,
-                is_private=False,
-                security_marking=unclass
-            )
-            listing.save()
-            listing.contacts.add(rob_baratheon)
-
-            listing.owners.add(profile_ref['pmurt'])
-            listing.owners.add(profile_ref['david'])
-
-            listing.categories.add(categories_ref['tools'])
-            listing.categories.add(categories_ref['education'])
-
-            listing.tags.add(demo)
-
-            listing_model_access.create_listing(profile_ref['wsmith'], listing)
-            listing_model_access.submit_listing(profile_ref['wsmith'], listing)
-            listing_model_access.approve_listing_by_org_steward(profile_ref['wsmith'], listing)
-            listing_model_access.approve_listing(profile_ref['wsmith'], listing)
+            current_listing_builder_dict = {
+             "listing_activity": [
+               {
+                 "action": "CREATED",
+                 "description": None,
+                 "author": "wsmith"
+               },
+               {
+                 "action": "SUBMITTED",
+                 "description": None,
+                 "author": "wsmith"
+               },
+               {
+                 "action": "APPROVED_ORG",
+                 "description": None,
+                 "author": "wsmith"
+               },
+               {
+                 "action": "APPROVED",
+                 "description": None,
+                 "author": "wsmith"
+               }
+             ],
+             "listing_review_batch": [],
+             "listing": {
+               "requirements": "None",
+               "is_deleted": False,
+               "categories": [
+                 "Education",
+                 "Tools"
+               ],
+               "small_icon": {
+                 "security_marking": "UNCLASSIFIED",
+                 "filename": "Skybox16.png"
+               },
+               "banner_icon": {
+                 "security_marking": "UNCLASSIFIED",
+                 "filename": "Skybox.png"
+               },
+               "is_private": False,
+               "contacts": [
+                 "rbaratheon@baratheon.com"
+               ],
+               "tags": [
+                 "demo"
+               ],
+               "large_banner_icon": {
+                 "security_marking": "UNCLASSIFIED",
+                 "filename": "SkyboxFeatured.png"
+               },
+               "what_is_new": "It's a box in the sky",
+               "launch_url": '{0!s}/demo_apps/Skybox/index.html'.format(DEMO_APP_ROOT),
+               "doc_urls": [],
+               "large_icon": {
+                 "security_marking": "UNCLASSIFIED",
+                 "filename": "Skybox32.png"
+               },
+               "listing_type": "Web Application",
+               "is_enabled": True,
+               "owners": [
+                 "david",
+                 "pmurt"
+               ],
+               "description": "Sky Overlord",
+               "is_featured": True,
+               "agency": "Miniluv",
+               "unique_name": 'ozp.test.skybox{0!s}'.format(postfix_dot),
+               "description_short": "Sky Overlord",
+               "version_name": "1.0.0",
+               "screenshots": [],
+               "title": 'Skybox{0!s}'.format(postfix_space),
+               "iframe_compatible": False,
+               "security_marking": "UNCLASSIFIED"
+             },
+             "library_entries": []
+            }
+            create_listing(current_listing_builder_dict)
 
     ############################################################################
     #                           Library

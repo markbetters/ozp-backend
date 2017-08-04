@@ -85,6 +85,7 @@ class NotificationApiTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         notification_list = ['{}-{}-{}'.format(entry['entity_id'], entry['notification_type'], ''.join(entry['message'].split())) for entry in response.data]
+
         expected_data = ['11-listing-BreadBasketupdatenextweek',
                          '112-listing-Skybox1updatenextweek',
                          '1-listing-AirMailupdatenextweek',
@@ -104,15 +105,15 @@ class NotificationApiTest(APITestCase):
                          '82-listing-Auserhasratedlisting<b>LocationLister1</b>4stars',
                          '81-listing-Auserhasratedlisting<b>LocationLister</b>4stars',
                          '80-listing-Auserhasratedlisting<b>JotSpot9</b>4stars',
-                         '78-listing-Auserhasratedlisting<b>JotSpot8</b>4stars',
-                         '76-listing-Auserhasratedlisting<b>JotSpot7</b>4stars',
-                         '74-listing-Auserhasratedlisting<b>JotSpot6</b>4stars',
-                         '72-listing-Auserhasratedlisting<b>JotSpot5</b>4stars',
-                         '70-listing-Auserhasratedlisting<b>JotSpot4</b>4stars',
-                         '68-listing-Auserhasratedlisting<b>JotSpot3</b>4stars',
-                         '66-listing-Auserhasratedlisting<b>JotSpot2</b>4stars',
-                         '64-listing-Auserhasratedlisting<b>JotSpot1</b>4stars',
-                         '62-listing-Auserhasratedlisting<b>JotSpot</b>4stars',
+                         '79-listing-Auserhasratedlisting<b>JotSpot8</b>4stars',
+                         '78-listing-Auserhasratedlisting<b>JotSpot7</b>4stars',
+                         '77-listing-Auserhasratedlisting<b>JotSpot6</b>4stars',
+                         '76-listing-Auserhasratedlisting<b>JotSpot5</b>4stars',
+                         '75-listing-Auserhasratedlisting<b>JotSpot4</b>4stars',
+                         '74-listing-Auserhasratedlisting<b>JotSpot3</b>4stars',
+                         '73-listing-Auserhasratedlisting<b>JotSpot2</b>4stars',
+                         '72-listing-Auserhasratedlisting<b>JotSpot1</b>4stars',
+                         '71-listing-Auserhasratedlisting<b>JotSpot</b>4stars',
                          '30-listing-Auserhasratedlisting<b>ChartCourse9</b>5stars',
                          '30-listing-Auserhasratedlisting<b>ChartCourse9</b>2stars',
                          '29-listing-Auserhasratedlisting<b>ChartCourse8</b>5stars',
@@ -186,7 +187,7 @@ class NotificationApiTest(APITestCase):
                          'None-system-Systemwillbefunctioninginadegredadedstatebetween1800Z-0400ZonA/B',
                          'None-system-Systemwillbegoingdownforapproximately30minutesonX/Yat1100Z']
 
-        self.assertEqual(notification_list, expected_data)
+        self.assertListEqual(notification_list, expected_data)
 
         # Get reversed order
         user = generic_model_access.get_profile('wsmith').user
