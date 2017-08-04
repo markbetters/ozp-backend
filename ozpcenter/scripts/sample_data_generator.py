@@ -585,19 +585,19 @@ def run():
                     "description": "Sends mail via air",
                     "banner_icon": {
                       "security_marking": "UNCLASSIFIED",
-                      "filename": "AirMail.png"
+                      "filename": "AirMail_banner_icon.png"
                     },
                     "large_banner_icon": {
                       "security_marking": "UNCLASSIFIED",
-                      "filename": "AirMailFeatured.png"
+                      "filename": "AirMail_large_banner_icon.png"
                     },
                     "small_icon": {
                       "security_marking": "UNCLASSIFIED",
-                      "filename": "AirMail16.png"
+                      "filename": "AirMail_small_icon.png"
                     },
                     "large_icon": {
                       "security_marking": "UNCLASSIFIED",
-                      "filename": "AirMail32.png"
+                      "filename": "AirMail_large_icon.png"
                     },
                     "is_enabled": True,
                     "is_deleted": False,
@@ -711,11 +711,11 @@ def run():
                  ],
                  "small_icon": {
                    "security_marking": "UNCLASSIFIED",
-                   "filename": "BreadBasket16.png"
+                   "filename": "BreadBasket_small_icon.png"
                  },
                  "banner_icon": {
                    "security_marking": "UNCLASSIFIED",
-                   "filename": "BreadBasket.png"
+                   "filename": "BreadBasket_banner_icon.png"
                  },
                  "is_private": True,
                  "contacts": [
@@ -727,7 +727,7 @@ def run():
                  ],
                  "large_banner_icon": {
                    "security_marking": "UNCLASSIFIED",
-                   "filename": "BreadBasketFeatured.png"
+                   "filename": "BreadBasket_large_banner_icon.png"
                  },
                  "screenshots": [
                    {
@@ -748,7 +748,7 @@ def run():
                  "doc_urls": [],
                  "large_icon": {
                    "security_marking": "UNCLASSIFIED",
-                   "filename": "BreadBasket32.png"
+                   "filename": "BreadBasket_large_icon.png"
                  },
                  "listing_type": "Web Application",
                  "is_enabled": True,
@@ -828,11 +828,11 @@ def run():
                ],
                "small_icon": {
                  "security_marking": "UNCLASSIFIED",
-                 "filename": "ChartCourse16.png"
+                 "filename": "ChartCourse_small_icon.png"
                },
                "banner_icon": {
                  "security_marking": "UNCLASSIFIED",
-                 "filename": "ChartCourse.png"
+                 "filename": "ChartCourse_banner_icon.png"
                },
                "is_private": False,
                "contacts": [
@@ -843,14 +843,14 @@ def run():
                ],
                "large_banner_icon": {
                  "security_marking": "UNCLASSIFIED",
-                 "filename": "ChartCourseFeatured.png"
+                 "filename": "ChartCourse_large_banner_icon.png"
                },
                "what_is_new": "Nothing really new here",
                "launch_url": "{0!s}/demo_apps/centerSampleListings/chartCourse/index.html".format(DEMO_APP_ROOT),
                "doc_urls": [],
                "large_icon": {
                  "security_marking": "UNCLASSIFIED",
-                 "filename": "ChartCourse32.png"
+                 "filename": "ChartCourse_large_icon.png"
                },
                "screenshots": [
                  {
@@ -927,11 +927,11 @@ def run():
                ],
                "small_icon": {
                  "security_marking": "UNCLASSIFIED",
-                 "filename": "ChatterBox16.png"
+                 "filename": "ChatterBox_small_icon.png"
                },
                "banner_icon": {
                  "security_marking": "UNCLASSIFIED",
-                 "filename": "ChatterBox.png"
+                 "filename": "ChatterBox_banner_icon.png"
                },
                "is_private": False,
                "contacts": [
@@ -942,7 +942,7 @@ def run():
                ],
                "large_banner_icon": {
                  "security_marking": "UNCLASSIFIED",
-                 "filename": "ChatterBoxFeatured.png"
+                 "filename": "ChatterBox_large_banner_icon.png"
                },
                "screenshots": [
                  {
@@ -963,7 +963,7 @@ def run():
                "doc_urls": [],
                "large_icon": {
                  "security_marking": "UNCLASSIFIED",
-                 "filename": "ChatterBox32.png"
+                 "filename": "ChatterBox_large_icon.png"
                },
                "listing_type": "Web Application",
                "is_enabled": True,
@@ -1027,11 +1027,11 @@ def run():
                ],
                "small_icon": {
                  "security_marking": "UNCLASSIFIED",
-                 "filename": "Clipboard16.png"
+                 "filename": "Clipboard_small_icon.png"
                },
                "banner_icon": {
                  "security_marking": "UNCLASSIFIED",
-                 "filename": "Clipboard.png"
+                 "filename": "Clipboard_banner_icon.png"
                },
                "is_private": False,
                "contacts": [
@@ -1042,7 +1042,7 @@ def run():
                ],
                "large_banner_icon": {
                  "security_marking": "UNCLASSIFIED",
-                 "filename": "ClipboardFeatured.png"
+                 "filename": "Clipboard_large_banner_icon.png"
                },
                "screenshots": [
                  {
@@ -1063,7 +1063,7 @@ def run():
                "doc_urls": [],
                "large_icon": {
                  "security_marking": "UNCLASSIFIED",
-                 "filename": "Clipboard32.png"
+                 "filename": "Clipboard_large_icon.png"
                },
                "listing_type": "Web Application",
                "is_enabled": True,
@@ -1127,11 +1127,11 @@ def run():
                ],
                "small_icon": {
                  "security_marking": "UNCLASSIFIED",
-                 "filename": "FrameIt16.png"
+                 "filename": "FrameIt_small_icon.png"
                },
                "banner_icon": {
                  "security_marking": "UNCLASSIFIED",
-                 "filename": "FrameIt.png"
+                 "filename": "FrameIt_banner_icon.png"
                },
                "is_private": False,
                "contacts": [
@@ -1142,14 +1142,14 @@ def run():
                ],
                "large_banner_icon": {
                  "security_marking": "UNCLASSIFIED",
-                 "filename": "FrameItFeatured.png"
+                 "filename": "FrameIt_large_banner_icon.png"
                },
                "what_is_new": "Nothing really new here",
                "launch_url": "{0!s}/demo_apps/frameit/index.html".format(DEMO_APP_ROOT),
                "doc_urls": [],
                "large_icon": {
                  "security_marking": "UNCLASSIFIED",
-                 "filename": "FrameIt32.png"
+                 "filename": "FrameIt_large_icon.png"
                },
                "screenshots": [
                  {
@@ -1228,11 +1228,11 @@ def run():
                ],
                "small_icon": {
                  "security_marking": "UNCLASSIFIED",
-                 "filename": "HatchLatch16.png"
+                 "filename": "HatchLatch_small_icon.png"
                },
                "banner_icon": {
                  "security_marking": "UNCLASSIFIED",
-                 "filename": "HatchLatch.png"
+                 "filename": "HatchLatch_banner_icon.png"
                },
                "is_private": False,
                "contacts": [
@@ -1243,14 +1243,14 @@ def run():
                ],
                "large_banner_icon": {
                  "security_marking": "UNCLASSIFIED",
-                 "filename": "HatchLatchFeatured.png"
+                 "filename": "HatchLatch_large_banner_icon.png"
                },
                "what_is_new": "Nothing really new here",
                "launch_url": "{0!s}/demo_apps/centerSampleListings/hatchLatch/index.html".format(DEMO_APP_ROOT),
                "doc_urls": [],
                "large_icon": {
                  "security_marking": "UNCLASSIFIED",
-                 "filename": "HatchLatch32.png"
+                 "filename": "HatchLatch_large_icon.png"
                },
                "screenshots": [
                  {
@@ -1333,11 +1333,11 @@ def run():
                ],
                "small_icon": {
                  "security_marking": "UNCLASSIFIED",
-                 "filename": "JotSpot16.png"
+                 "filename": "JotSpot_small_icon.png"
                },
                "banner_icon": {
                  "security_marking": "UNCLASSIFIED",
-                 "filename": "JotSpot.png"
+                 "filename": "JotSpot_banner_icon.png"
                },
                "is_private": False,
                "contacts": [
@@ -1348,7 +1348,7 @@ def run():
                ],
                "large_banner_icon": {
                  "security_marking": "UNCLASSIFIED",
-                 "filename": "JotSpotFeatured.png"
+                 "filename": "JotSpot_large_banner_icon.png"
                },
                "screenshots": [
                  {
@@ -1369,7 +1369,7 @@ def run():
                "doc_urls": [],
                "large_icon": {
                  "security_marking": "UNCLASSIFIED",
-                 "filename": "JotSpot32.png"
+                 "filename": "JotSpot_large_icon.png"
                },
                "listing_type": "Web Application",
                "is_enabled": True,
@@ -1439,11 +1439,11 @@ def run():
                ],
                "small_icon": {
                  "security_marking": "UNCLASSIFIED",
-                 "filename": "LocationLister16.png"
+                 "filename": "LocationLister_small_icon.png"
                },
                "banner_icon": {
                  "security_marking": "UNCLASSIFIED",
-                 "filename": "LocationLister.png"
+                 "filename": "LocationLister_banner_icon.png"
                },
                "is_private": False,
                "contacts": [
@@ -1454,7 +1454,7 @@ def run():
                ],
                "large_banner_icon": {
                  "security_marking": "UNCLASSIFIED",
-                 "filename": "LocationListerFeatured.png"
+                 "filename": "LocationLister_large_banner_icon.png"
                },
                "screenshots": [
                  {
@@ -1475,7 +1475,7 @@ def run():
                "doc_urls": [],
                "large_icon": {
                  "security_marking": "UNCLASSIFIED",
-                 "filename": "LocationLister32.png"
+                 "filename": "LocationLister_large_icon.png"
                },
                "listing_type": "Web Application",
                "is_enabled": True,
@@ -1539,11 +1539,11 @@ def run():
                ],
                "small_icon": {
                  "security_marking": "UNCLASSIFIED",
-                 "filename": "LocationViewer16.png"
+                 "filename": "LocationViewer_small_icon.png"
                },
                "banner_icon": {
                  "security_marking": "UNCLASSIFIED",
-                 "filename": "LocationViewer.png"
+                 "filename": "LocationViewer_banner_icon.png"
                },
                "is_private": False,
                "contacts": [
@@ -1554,7 +1554,7 @@ def run():
                ],
                "large_banner_icon": {
                  "security_marking": "UNCLASSIFIED",
-                 "filename": "LocationViewerFeatured.png"
+                 "filename": "LocationViewer_large_banner_icon.png"
                },
                "screenshots": [
                  {
@@ -1575,7 +1575,7 @@ def run():
                "doc_urls": [],
                "large_icon": {
                  "security_marking": "UNCLASSIFIED",
-                 "filename": "LocationViewer32.png"
+                 "filename": "LocationViewer_large_icon.png"
                },
                "listing_type": "Web Application",
                "is_enabled": True,
@@ -1639,11 +1639,11 @@ def run():
                ],
                "small_icon": {
                  "security_marking": "UNCLASSIFIED",
-                 "filename": "LocationAnalyzer16.png"
+                 "filename": "LocationAnalyzer_small_icon.png"
                },
                "banner_icon": {
                  "security_marking": "UNCLASSIFIED",
-                 "filename": "LocationAnalyzer.png"
+                 "filename": "LocationAnalyzer_banner_icon.png"
                },
                "is_private": False,
                "contacts": [
@@ -1654,14 +1654,14 @@ def run():
                ],
                "large_banner_icon": {
                  "security_marking": "UNCLASSIFIED",
-                 "filename": "LocationAnalyzerFeatured.png"
+                 "filename": "LocationAnalyzer_large_banner_icon.png"
                },
                "what_is_new": "Nothing really new here",
                "launch_url": '{0!s}/demo_apps/locationAnalyzer/index.html'.format(DEMO_APP_ROOT),
                "doc_urls": [],
                "large_icon": {
                  "security_marking": "UNCLASSIFIED",
-                 "filename": "LocationAnalyzer32.png"
+                 "filename": "LocationAnalyzer_large_icon.png"
                },
                "screenshots": [
                  {
@@ -1739,11 +1739,11 @@ def run():
                ],
                "small_icon": {
                  "security_marking": "UNCLASSIFIED",
-                 "filename": "Skybox16.png"
+                 "filename": "Skybox_small_icon.png"
                },
                "banner_icon": {
                  "security_marking": "UNCLASSIFIED",
-                 "filename": "Skybox.png"
+                 "filename": "Skybox_banner_icon.png"
                },
                "is_private": False,
                "contacts": [
@@ -1754,14 +1754,14 @@ def run():
                ],
                "large_banner_icon": {
                  "security_marking": "UNCLASSIFIED",
-                 "filename": "SkyboxFeatured.png"
+                 "filename": "Skybox_large_banner_icon.png"
                },
                "what_is_new": "It's a box in the sky",
                "launch_url": '{0!s}/demo_apps/Skybox/index.html'.format(DEMO_APP_ROOT),
                "doc_urls": [],
                "large_icon": {
                  "security_marking": "UNCLASSIFIED",
-                 "filename": "Skybox32.png"
+                 "filename": "Skybox_large_icon.png"
                },
                "screenshots": [
                  {
