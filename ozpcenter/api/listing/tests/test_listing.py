@@ -320,7 +320,7 @@ class ListingTest(TestCase):
 
         screenshots = models.Screenshot.objects.filter(listing__id=1)
         out = model_access.screenshots_to_string(screenshots, True)
-        self.assertEqual(out, "[(0, 15, 'UNCLASSIFIED', 16, 'UNCLASSIFIED', None)]")
+        self.assertEqual(out, "[(0, 15, 'UNCLASSIFIED', 16, 'UNCLASSIFIED', 'airmail screenshot set 1'), (1, 17, 'UNCLASSIFIED', 18, 'UNCLASSIFIED', 'airmail screenshot set 2')]")
 
     def test_image_to_string(self):
         image = {

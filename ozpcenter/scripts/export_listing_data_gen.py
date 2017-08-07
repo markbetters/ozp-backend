@@ -137,12 +137,14 @@ import json
 
 sys.path.insert(0, os.path.realpath(os.path.join(os.path.dirname(__file__), '../../')))
 
+from django.conf import settings
 from ozp.storage import media_storage
 from ozpcenter import models
 from shutil import copy2
 from shutil import rmtree
 
 COPY_IMG_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../', 'test_images_copy') + '/'
+DEMO_APP_ROOT = settings.OZP['DEMO_APP_ROOT']
 
 
 def run():
@@ -160,7 +162,7 @@ def run():
         listing['title'] = current_listing.title
         listing['listing_type'] = current_listing.listing_type.title
         listing['description'] = current_listing.description
-        listing['launch_url'] = current_listing.launch_url
+        listing['launch_url'] = current_listing.launch_url.replace(DEMO_APP_ROOT, '{DEMO_APP_ROOT}')
         listing['version_name'] = current_listing.version_name
         listing['unique_name'] = current_listing.unique_name
         listing['what_is_new'] = current_listing.what_is_new

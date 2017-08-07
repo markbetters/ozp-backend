@@ -569,7 +569,7 @@ def run():
                     ],
                     "unique_name": 'ozp.test.air_mail{0!s}'.format(postfix_dot),
                     "is_featured": True,
-                    "launch_url": '{0!s}/demo_apps/centerSampleListings/airMail/index.html'.format(DEMO_APP_ROOT),
+                    "launch_url": '{DEMO_APP_ROOT}/demo_apps/centerSampleListings/airMail/index.html'.format_map({'DEMO_APP_ROOT':DEMO_APP_ROOT}),
                     "title": 'Air Mail{0!s}'.format(postfix_space),
                     "categories": [
                       "Communication",
