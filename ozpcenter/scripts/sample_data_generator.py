@@ -7,7 +7,7 @@ run the unit tests (python manage.py test) after making any changes to this
 data!!
 ************************************WARNING************************************
 """
-from PIL import Image
+from PIL import Imagef
 import datetime
 import json
 import os
@@ -482,7 +482,7 @@ def run():
                                                            'System will be functioning in a degredaded state between 2100Z-0430Z on F/G')
 
     # -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
-    #########################large_banner_icon###################################################
+    ############################################################################
     #                           Contacts
     ############################################################################
     with transaction.atomic():
