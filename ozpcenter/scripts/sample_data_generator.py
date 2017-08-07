@@ -7,7 +7,7 @@ run the unit tests (python manage.py test) after making any changes to this
 data!!
 ************************************WARNING************************************
 """
-from PIL import Imagef
+from PIL import Image
 import datetime
 import json
 import os
