@@ -862,7 +862,7 @@ class ElasticsearchUserBaseRecommender(Recommender):
 
         # Create ES Index since it has not been created or is deleted above:
         connect_es_record_exist = es_client.indices.create(index=settings.ES_RECOMMEND_USER, body=rate_request_body)
-        # Need to wait 10 seconds for index to get created according to search results.  This could be caused because of
+        # Need to wait 2 seconds for index to get created according to search results.  This could be caused because of
         # time issues hitting a remote elasticsearch host:
         import time
         time.sleep(2)
@@ -889,33 +889,6 @@ class ElasticsearchUserBaseRecommender(Recommender):
                 index=settings.ES_RECOMMEND_USER,
                 body=query_term
             )
-
-            if es_search_result['hits']['total'] > 0:
-                listing_query = {
-                    "query": {
-                        "bool": {
-                            "must": [
-                                {"match": {"listing_id": record[1]}}
-                            ]
-                        }
-                    }
-                }
-
-                listings_data_to_load = es_client.search(
-                    index=settings.ES_INDEX_NAME,
-                    body=listing_query
-                )
-            else:
-                listing_query = None
-                listings_data_to_load = None
-
-            if listings_data_to_load is not None:
-                if listing_query is not None:
-                    logger.info("Item that needs to be vetted TODO")
-                    # TODO: Implement adding text for Rated items if Live Search results are not used
-
-            item_to_append = {"listing_id": record[1], "rate": record[2]}
-            ratings_items.append(item_to_append)
 
             # Get Username for profile:
             user_information = model_access.get_profile_by_id(record[3])
