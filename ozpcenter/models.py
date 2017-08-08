@@ -8,7 +8,7 @@ import os
 import uuid
 from io import BytesIO
 import PIL
-from PIL import Image as PilImage
+# from PIL import Image as PilImage
 
 from django.conf import settings
 from django.contrib import auth

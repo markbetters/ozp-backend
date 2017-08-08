@@ -118,7 +118,7 @@ def create_listing(listing_builder_dict):
         agency=models.Agency.objects.get(short_name=listing_data['agency']),
         listing_type=models.ListingType.objects.get(title=listing_data['listing_type']),
         description=listing_data['description'],
-        launch_url=listing_data['launch_url'],
+        launch_url=listing_data['launch_url'].format_map({'DEMO_APP_ROOT':DEMO_APP_ROOT}),
         version_name=listing_data['version_name'],
         unique_name=listing_data['unique_name'],
         small_icon=small_icon,

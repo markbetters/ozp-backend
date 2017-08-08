@@ -133,7 +133,7 @@ Purpose of this script: Export All Listings for sample data generator
 
 import os
 import sys
-import json
+# import json
 import yaml
 
 sys.path.insert(0, os.path.realpath(os.path.join(os.path.dirname(__file__), '../../')))
@@ -277,6 +277,6 @@ def run():
         output_list.append(output_dict)
 
     print('titles:{}'.format([record['listing']['title'] for record in output_list]))
-    #dump_data = json.dumps(output_list, indent=2)
+
     with open('listing.yaml', 'w') as file_stream:
         yaml.dump(output_list, file_stream, indent=2)
