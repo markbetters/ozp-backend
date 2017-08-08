@@ -83,30 +83,33 @@ def create_listing(listing_builder_dict):
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     #                           Icons
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    small_icon = models.Image.create_image(
-        Image.open(TEST_IMG_PATH + listing_data['small_icon']['filename']),
-        file_extension=listing_data['small_icon']['filename'].split('.')[-1],
-        security_marking=listing_data['small_icon']['security_marking'],
-        image_type=models.ImageType.objects.get(name='small_icon').name)
+    try:
+        small_icon = models.Image.create_image(
+            Image.open(TEST_IMG_PATH + listing_data['small_icon']['filename']),
+            file_extension=listing_data['small_icon']['filename'].split('.')[-1],
+            security_marking=listing_data['small_icon']['security_marking'],
+            image_type=models.ImageType.objects.get(name='small_icon').name)
 
-    large_icon = models.Image.create_image(
-        Image.open(TEST_IMG_PATH + listing_data['large_icon']['filename']),
-        file_extension=listing_data['large_icon']['filename'].split('.')[-1],
-        security_marking=listing_data['large_icon']['security_marking'],
-        image_type=models.ImageType.objects.get(name='large_icon').name)
+        large_icon = models.Image.create_image(
+            Image.open(TEST_IMG_PATH + listing_data['large_icon']['filename']),
+            file_extension=listing_data['large_icon']['filename'].split('.')[-1],
+            security_marking=listing_data['large_icon']['security_marking'],
+            image_type=models.ImageType.objects.get(name='large_icon').name)
 
-    banner_icon = models.Image.create_image(
-        Image.open(TEST_IMG_PATH + listing_data['banner_icon']['filename']),
-        file_extension=listing_data['banner_icon']['filename'].split('.')[-1],
-        security_marking=listing_data['banner_icon']['security_marking'],
-        image_type=models.ImageType.objects.get(name='banner_icon').name)
+        banner_icon = models.Image.create_image(
+            Image.open(TEST_IMG_PATH + listing_data['banner_icon']['filename']),
+            file_extension=listing_data['banner_icon']['filename'].split('.')[-1],
+            security_marking=listing_data['banner_icon']['security_marking'],
+            image_type=models.ImageType.objects.get(name='banner_icon').name)
 
-
-    large_banner_icon = models.Image.create_image(
-        Image.open(TEST_IMG_PATH + listing_data['large_banner_icon']['filename']),
-        file_extension=listing_data['large_banner_icon']['filename'].split('.')[-1],
-        security_marking=listing_data['large_banner_icon']['security_marking'],
-        image_type=models.ImageType.objects.get(name='large_banner_icon').name)
+        large_banner_icon = models.Image.create_image(
+            Image.open(TEST_IMG_PATH + listing_data['large_banner_icon']['filename']),
+            file_extension=listing_data['large_banner_icon']['filename'].split('.')[-1],
+            security_marking=listing_data['large_banner_icon']['security_marking'],
+            image_type=models.ImageType.objects.get(name='large_banner_icon').name)
+    except:
+        print(listing_data)
+        raise
 
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     #                           Listing
@@ -486,21 +489,94 @@ def run():
     #                           Contacts
     ############################################################################
     with transaction.atomic():
-        osha = models.Contact(name='Osha', organization='House Stark',
-            contact_type=models.ContactType.objects.get(name='Civilian'),
-            email='osha@stark.com', unsecure_phone='321-123-7894')
-        osha.save()
+        contacts = [
+              {
+                "organization": "House Stark",
+                "contact_type": "Civilian",
+                "email": "osha@stark.com",
+                "name": "Osha",
+                "unsecure_phone": "321-123-7894"
+              },
+              {
+                "organization": "House Baratheon",
+                "contact_type": "Government",
+                "email": "rbaratheon@baratheon.com",
+                "name": "Robert Baratheon",
+                "unsecure_phone": "123-456-7890"
+              },
+              {
+                "organization": "House Stark",
+                "contact_type": "Military",
+                "email": "brienne@stark.com",
+                "name": "Brienne Tarth",
+                "unsecure_phone": "222-324-3846"
+              },
+              {
+                "organization": None,
+                "contact_type": "Government",
+                "email": "chris@sound.com",
+                "name": "Chris",
+                "unsecure_phone": "123-456-7890"
+              },
+              {
+                "organization": None,
+                "contact_type": "Military",
+                "email": "chester@lp.com",
+                "name": "Chester",
+                "unsecure_phone": None
+              },
+              {
+                "organization": None,
+                "contact_type": "Civilian",
+                "email": "scott@stp.com",
+                "name": "Scott",
+                "unsecure_phone": None
+              },
+              {
+                "organization": None,
+                "contact_type": "Government",
+                "email": "scott@vr.com",
+                "name": "Scott",
+                "unsecure_phone": None
+              },
+              {
+                "organization": None,
+                "contact_type": "Civilian",
+                "email": "w@s.com",
+                "name": "W Smith",
+                "unsecure_phone": "555-555-5555"
+              },
+              {
+                "organization": "someplace",
+                "contact_type": "Civilian",
+                "email": "no@gmail.com",
+                "name": "someguy",
+                "unsecure_phone": None
+              },
+              {
+                "organization": None,
+                "contact_type": "Government",
+                "email": "t@t.com",
+                "name": "Tammy",
+                "unsecure_phone": "555-555-5555"
+              },
+              {
+                "organization": None,
+                "contact_type": "Military",
+                "email": "m@m.com",
+                "name": "M Smith",
+                "unsecure_phone": "555-555-5555"
+              }
+            ]
 
-        rob_baratheon = models.Contact(name='Robert Baratheon',
-            organization='House Baratheon',
-            contact_type=models.ContactType.objects.get(name='Government'),
-            email='rbaratheon@baratheon.com', unsecure_phone='123-456-7890')
-        rob_baratheon.save()
-
-        brienne = models.Contact(name='Brienne Tarth', organization='House Stark',
-            contact_type=models.ContactType.objects.get(name='Military'),
-            email='brienne@stark.com', unsecure_phone='222-324-3846')
-        brienne.save()
+        for current_contact in contacts:
+            current_contact_obj = models.Contact(name=current_contact['name'],
+                                                 organization=current_contact['organization'],
+                                                 contact_type=models.ContactType.objects.get(
+                                                    name=current_contact['contact_type']),
+                                                 email=current_contact['email'],
+                                                 unsecure_phone=current_contact['unsecure_phone'])
+            current_contact_obj.save()
 
     # -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
     # ===========================================================================
@@ -1797,6 +1873,20 @@ def run():
              "library_entries": []
             }
             create_listing(current_listing_builder_dict)
+
+    ############################################################################
+    #                           Listings from File
+    ############################################################################
+
+    listings_data = None
+    with open(os.path.join(TEST_DATA_PATH, 'listings.yaml'), 'r') as stream:
+        try:
+            listings_data = yaml.load(stream)
+        except yaml.YAMLError as exc:
+            print(exc)
+
+    for current_listing_data in listings_data:
+        create_listing(current_listing_data)
 
     ############################################################################
     #                           Library

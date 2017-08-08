@@ -134,6 +134,7 @@ Purpose of this script: Export All Listings for sample data generator
 import os
 import sys
 import json
+import yaml
 
 sys.path.insert(0, os.path.realpath(os.path.join(os.path.dirname(__file__), '../../')))
 
@@ -154,6 +155,18 @@ def run():
 
     if not os.path.exists(COPY_IMG_PATH):
         os.mkdir(COPY_IMG_PATH)
+
+    output_list = []
+    for current_contact in models.Contact.objects.iterator():
+        contact = {}
+        contact['name'] = current_contact.name
+        contact['organization'] = current_contact.organization
+        contact['contact_type'] = current_contact.contact_type.name
+        contact['email'] = current_contact.email
+        contact['unsecure_phone'] = current_contact.unsecure_phone
+        output_list.append(contact)
+
+    print(json.dumps(output_list, indent=2))
 
     output_list = []
     for current_listing in models.Listing.objects.iterator():
@@ -194,12 +207,16 @@ def run():
                 current_image = getattr(screenshot_entry, current_image_type)
                 current_image_path = str(current_image.id) + '_' + current_image.image_type.name + '.' + current_image.file_extension
 
-                with media_storage.open(current_image_path) as current_image_file:
-                    filename = str(current_listing.title.replace(' ', '')) + '_' + str(screenshot_entry_counter) + '_' + current_image.image_type.name + '.' + current_image.file_extension
-                    copy_to_path = COPY_IMG_PATH + filename
-                    screenshot_entry_dict[current_image_type] = {'filename': filename, 'security_marking': current_image.security_marking}
-                    print('Copying {} to {}'.format(current_image_file.name, copy_to_path))
-                    copy2(current_image_file.name, copy_to_path)
+                if current_image is None:
+                    screenshot_entry_dict[current_image_type] = {'filename': None, 'security_marking': None}
+                else:
+                    with media_storage.open(current_image_path) as current_image_file:
+                        filename = str(current_listing.title.replace(' ', '')) + '_' + str(screenshot_entry_counter) + '_' + current_image.image_type.name + '.' + current_image.file_extension
+                        copy_to_path = COPY_IMG_PATH + filename
+                        screenshot_entry_dict[current_image_type] = {'filename': filename, 'security_marking': current_image.security_marking}
+                        print('Copying {} to {}'.format(current_image_file.name, copy_to_path))
+                        copy2(current_image_file.name, copy_to_path)
+
             screenshot_entry_counter = screenshot_entry_counter + 1
             screenshot_entry_list.append(screenshot_entry_dict)
 
@@ -208,14 +225,18 @@ def run():
 
         for current_image_type in image_types:
             current_image = getattr(current_listing, current_image_type)
-            current_image_path = str(current_image.id) + '_' + current_image.image_type.name + '.' + current_image.file_extension
 
-            with media_storage.open(current_image_path) as current_image_file:
-                filename = str(current_listing.title.replace(' ', '')) + '_' + current_image.image_type.name + '.' + current_image.file_extension
-                listing[current_image_type] = {'filename': filename, "security_marking": current_image.security_marking}
-                copy_to_path = COPY_IMG_PATH + filename
-                print('Copying {} to {}'.format(current_image_file.name, copy_to_path))
-                copy2(current_image_file.name, copy_to_path)
+            if current_image is None:
+                listing[current_image_type] = {'filename': None, "security_marking": None}
+            else:
+                current_image_path = str(current_image.id) + '_' + current_image.image_type.name + '.' + current_image.file_extension
+
+                with media_storage.open(current_image_path) as current_image_file:
+                    filename = str(current_listing.title.replace(' ', '')) + '_' + current_image.image_type.name + '.' + current_image.file_extension
+                    listing[current_image_type] = {'filename': filename, "security_marking": current_image.security_marking}
+                    copy_to_path = COPY_IMG_PATH + filename
+                    print('Copying {} to {}'.format(current_image_file.name, copy_to_path))
+                    copy2(current_image_file.name, copy_to_path)
         # Reviews
         review_list = []
         for current_review in models.Review.objects.filter(listing=current_listing).order_by('edited_date').iterator():
@@ -250,4 +271,9 @@ def run():
         output_dict['library_entries'] = library_entries_list
         output_dict['listing_activity'] = listing_activity_list
         output_list.append(output_dict)
-    print(json.dumps(output_list, indent=2))
+
+    #dump_data = json.dumps(output_list, indent=2)
+    dump_data = yaml.dump(output_list, indent=2)
+
+    print('titles:{}'.format([record['listing']['title'] for record in output_list]))
+    print(dump_data)

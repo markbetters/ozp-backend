@@ -1,0 +1,3199 @@
+- library_entries: []
+  listing:
+    agency: Minipax
+    banner_icon: {filename: PersonalComputer_large_screenshot.png, security_marking: UNCLASSIFIED}
+    categories: [Education]
+    contacts: []
+    description: 'A personal computer (PC) is a multi-purpose electronic computer
+      whose size, capabilities, and price make it feasible for individual use. PCs
+      are intended to be operated directly by an end user, rather than by a computer
+      expert or technician.
+
+
+      "Computers were invented to ''compute'': to solve complex mathematical problems,
+      but today, due to media dependency and the everyday use of computers, it is
+      seen that ''computing'' is the least important thing computers do."[1] The computer
+      time-sharing models that were typically used with larger, more expensive minicomputer
+      and mainframe systems, to enable them be used by many people at the same time,
+      are not used with PCs.
+
+
+      Early computer owners in the 1960s, invariably institutional or corporate, had
+      to write their own programs to do any useful work with the machines. In the
+      2010s, personal computer users have access to a wide range of commercial software,
+      free software ("freeware") and free and open-source software, which are provided
+      in ready-to-run form. Software for personal computers is typically developed
+      and distributed independently from the hardware or OS manufacturers.[2] Many
+      personal computer users no longer need to write their own programs to make any
+      use of a personal computer, although end-user programming is still feasible.
+      This contrasts with systems such as smartphones or tablet computers, where software
+      is often only available through a manufacturer-supported channel, and end-user
+      program development may be discouraged by lack of support by the manufacturer.
+
+
+      Since the early 1990s, Microsoft operating systems and Intel hardware have dominated
+      much of the personal computer market, first with MS-DOS and then with Windows.
+      Alternatives to Microsoft''s Windows operating systems occupy a minority share
+      of the industry. These include Apple''s macOS and free open-source Unix-like
+      operating systems such as Linux. Advanced Micro Devices (AMD) provides the main
+      alternative to Intel''s processors.'
+    description_short: PCs are intended to be operated directly by an end user.
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: PersonalComputer_large_screenshot.png, security_marking: UNCLASSIFIED}
+    large_icon: {filename: PersonalComputer_large_screenshot.png, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Personal_computer
+    listing_type: Web Services
+    owners: [bigbrother]
+    requirements: Web Browser
+    screenshots:
+    - description: null
+      large_image: {filename: PersonalComputer_0_large_screenshot.png, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: PersonalComputer_0_large_screenshot.png, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: PersonalComputer_large_screenshot.png, security_marking: UNCLASSIFIED}
+    tags: [PC]
+    title: Personal Computer
+    unique_name: null
+    version_name: '1.0'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: bigbrother, description: null}
+  - {action: MODIFIED, author: bigbrother, description: null}
+  - {action: SUBMITTED, author: bigbrother, description: null}
+  - {action: MODIFIED, author: bigbrother, description: null}
+  - {action: APPROVED_ORG, author: bigbrother, description: null}
+  - {action: APPROVED, author: bigbrother, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Miniplen
+    banner_icon: {filename: Railroad_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Productivity]
+    contacts: []
+    description: 'Rail transport is a means of transferring of passengers and goods
+      on wheeled vehicles running on rails, also known as tracks. It is also commonly
+      referred to as train transport. In contrast to road transport, where vehicles
+      run on a prepared flat surface, rail vehicles (rolling stock) are directionally
+      guided by the tracks on which they run. Tracks usually consist of steel rails,
+      installed on ties (sleepers) and ballast, on which the rolling stock, usually
+      fitted with metal wheels, moves. Other variations are also possible, such as
+      slab track, where the rails are fastened to a concrete foundation resting on
+      a prepared subsurface.
+
+
+      Rolling stock in a rail transport system generally encounters lower frictional
+      resistance than road vehicles, so passenger and freight cars (carriages and
+      wagons) can be coupled into longer trains. The operation is carried out by a
+      railway company, providing transport between train stations or freight customer
+      facilities. Power is provided by locomotives which either draw electric power
+      from a railway electrification system or produce their own power, usually by
+      diesel engines. Most tracks are accompanied by a signalling system. Railways
+      are a safe land transport system when compared to other forms of transport.[Nb
+      1] Railway transport is capable of high levels of passenger and cargo utilization
+      and energy efficiency, but is often less flexible and more capital-intensive
+      than road transport, when lower traffic levels are considered.
+
+
+      The oldest, man-hauled railways date back to the 6th century BC, with Periander,
+      one of the Seven Sages of Greece, credited with its invention. Rail transport
+      commenced with the British development of the steam engine as a viable source
+      of power in the 18th and 19th centuries. Steam locomotives were first developed
+      in the United Kingdom in the early 19th century. Built by George Stephenson
+      and his son Robert''s company Robert Stephenson and Company, the Locomotion
+      No. 1 is the first steam locomotive to carry passengers on a public rail line,
+      the Stockton and Darlington Railway in 1825. George also built the first public
+      inter-city railway line in the world to use steam locomotives, the Liverpool
+      and Manchester Railway which opened in 1830. With steam engines, one could construct
+      mainline railways, which were a key component of the Industrial Revolution.
+      Also, railways reduced the costs of shipping, and allowed for fewer lost goods,
+      compared with water transport, which faced occasional sinking of ships. The
+      change from canals to railways allowed for "national markets" in which prices
+      varied very little from city to city. The invention and development of the railway
+      in the United Kingdom was one of the most important technological inventions
+      of the 19th century.
+
+
+      In the 1880s, electrified trains were introduced, and also the first tramways
+      and rapid transit systems came into being. Starting during the 1940s, the non-electrified
+      railways in most countries had their steam locomotives replaced by diesel-electric
+      locomotives, with the process being almost complete by 2000. During the 1960s,
+      electrified high-speed railway systems were introduced in Japan and later in
+      some other countries. Other forms of guided ground transport outside the traditional
+      railway definitions, such as monorail or maglev, have been tried but have seen
+      limited use. Following decline after World War II due to competition from cars,
+      rail transport has had a revival in recent decades due to road congestion and
+      rising fuel prices, as well as governments investing in rail as a means of reducing
+      CO2 emissions in the context of concerns about global warming.'
+    description_short: Rail transport is a means of transferring of passengers & goods
+      on vehicles running on rails.
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Railroad_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Railroad_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Rail_transport
+    listing_type: Web Application
+    owners: [rutherford]
+    requirements: None
+    screenshots:
+    - description: null
+      large_image: {filename: Railroad_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Railroad_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Railroad_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    tags: [transportation]
+    title: Railroad
+    unique_name: null
+    version_name: '1.0'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: rutherford, description: null}
+  - {action: SUBMITTED, author: rutherford, description: null}
+  - {action: APPROVED_ORG, author: obrien, description: null}
+  - {action: APPROVED, author: bigbrother, description: null}
+  listing_review_batch:
+  - {author: bettafish, rate: 3, text: 'The rail road is fine, but when I tried to
+      drive my car on it, it was very slow.  I think the rail road should have better
+      compatibility. '}
+  - {author: syme, rate: 5, text: 'Railroad Ima gonna let you finish but everybody
+      knows shipping lanes had the best transport ever. '}
+- library_entries: []
+  listing:
+    agency: Miniplen
+    banner_icon: {filename: Motorsport_large_screenshot.png, security_marking: UNCLASSIFIED}
+    categories: [Education, News]
+    contacts: []
+    description: "Motorsport or motorsports is a global term used to encompass the\
+      \ group of competitive sporting events which primarily involve the use of motorised\
+      \ vehicles, whether for racing or non-racing competition. The terminology can\
+      \ also be used to describe forms of competition of two-wheeled motorised vehicles\
+      \ under the banner of motorcycle racing, and includes off-road racing such as\
+      \ motocross.\n\nFour- (or more) wheeled motorsport competition is globally governed\
+      \ by the F\xE9d\xE9ration Internationale de l'Automobile (FIA); and the F\xE9\
+      d\xE9ration Internationale de Motocyclisme (FIM) governs two-wheeled competition."
+    description_short: Motorsport is a global term used to encompass the group of
+      competitive sporting events.
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Motorsport_large_screenshot.png, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Motorsport_large_screenshot.png, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Motorsport
+    listing_type: Desktop App
+    owners: [rutherford]
+    requirements: None
+    screenshots:
+    - description: null
+      large_image: {filename: Motorsport_0_large_screenshot.png, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Motorsport_0_large_screenshot.png, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Motorsport_large_screenshot.png, security_marking: UNCLASSIFIED}
+    tags: [car, bike]
+    title: Motorsport
+    unique_name: null
+    version_name: '1.0'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: rutherford, description: null}
+  - {action: SUBMITTED, author: rutherford, description: null}
+  - {action: APPROVED_ORG, author: obrien, description: null}
+  - {action: APPROVED, author: bigbrother, description: null}
+  - {action: REVIEW_EDITED, author: syme, description: null}
+  listing_review_batch:
+  - {author: syme, rate: 4, text: 'I''m confused about that sport part.  Doesn''t
+      the engine do all the work?  Shouldn''t it be called, "Trynottocrashthemotor"'}
+- library_entries:
+  - {folder: null, owner: bettafish, position: 0}
+  listing:
+    agency: Minipax
+    banner_icon: {filename: Superunknown_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Entertainment, Music and Audio]
+    contacts: [chris@sound.com]
+    description: Superunknown is the fourth album by American rock band Soundgarden,
+      released on February 18, 1994, through A&M Records. It is the band's second
+      album with bassist Ben Shepherd, and features new producer Michael Beinhorn.
+    description_short: Superunknown is the fourth album by American rock band Soundgarden
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Superunknown_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Superunknown_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Superunknown
+    listing_type: Code Library
+    owners: [bettafish]
+    requirements: Good speakers
+    screenshots:
+    - description: null
+      large_image: {filename: Superunknown_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Superunknown_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    - description: Chris
+      large_image: {filename: Superunknown_1_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 1
+      small_image: {filename: Superunknown_1_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED//FOR OFFICIAL USE ONLY
+    small_icon: {filename: Superunknown_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    tags: [Soundgarden, Music, Grunge]
+    title: Superunknown
+    unique_name: null
+    version_name: '19.94'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: bettafish, description: null}
+  - {action: MODIFIED, author: bettafish, description: null}
+  - {action: SUBMITTED, author: bettafish, description: null}
+  - {action: APPROVED_ORG, author: bettafish, description: null}
+  - {action: APPROVED, author: bettafish, description: null}
+  listing_review_batch:
+  - {author: syme, rate: 5, text: 'I like this!  Are they touring soon? '}
+- library_entries: []
+  listing:
+    agency: Minitrue
+    banner_icon: {filename: Bleach_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Music and Audio]
+    contacts: []
+    description: Bleach is the debut studio album by the American rock band Nirvana,
+      released on June 15, 1989 by Sub Pop. The main recording sessions took place
+      at Reciprocal Recording in Seattle, Washington between December 1988 and January
+      1989. It was also their only album to feature drummer Chad Channing.
+    description_short: Bleach is the debut studio album by the American rock band
+      Nirvana
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Bleach_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Bleach_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Bleach_%28Nirvana_album%29
+    listing_type: Desktop App
+    owners: [bettafish, wsmith]
+    requirements: Flannel
+    screenshots:
+    - description: null
+      large_image: {filename: Bleach_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Bleach_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    - description: X-P
+      large_image: {filename: Bleach_1_large_screenshot.png, security_marking: UNCLASSIFIED}
+      order: 1
+      small_image: {filename: Bleach_1_large_screenshot.png, security_marking: UNCLASSIFIED}
+    - description: Kurdt
+      large_image: {filename: Bleach_2_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 2
+      small_image: {filename: Bleach_2_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Bleach_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    tags: [Grunge]
+    title: Bleach
+    unique_name: null
+    version_name: '1.989'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: bettafish, description: null}
+  - {action: SUBMITTED, author: bettafish, description: null}
+  - {action: APPROVED_ORG, author: bettafish, description: null}
+  - {action: APPROVED, author: bettafish, description: null}
+  listing_review_batch:
+  - {author: rutherford, rate: 4, text: Better than average and grew up with them}
+  - {author: syme, rate: 5, text: I think they could go places!}
+- library_entries: []
+  listing:
+    agency: Minitrue
+    banner_icon: {filename: BusinessInsuranceRisk_large_screenshot.png, security_marking: UNCLASSIFIED}
+    categories: [Business]
+    contacts: [w@s.com, t@t.com, m@m.com]
+    description: 'Insurance is a means of protection from financial loss. It is a
+      form of risk management primarily used to hedge against the risk of a contingent,
+      uncertain loss.
+
+
+      An entity which provides insurance is known as an insurer, insurance company,
+      or insurance carrier. A person or entity who buys insurance is known as an insured
+      or policyholder. The insurance transaction involves the insured assuming a guaranteed
+      and known relatively small loss in the form of payment to the insurer in exchange
+      for the insurer''s promise to compensate the insured in the event of a covered
+      loss. The loss may or may not be financial, but it must be reducible to financial
+      terms and must involve something in which the insured has an insurable interest
+      established by ownership, possession, or pre-existing relationship.'
+    description_short: Insurance is a means of protection from financial loss. It
+      is a form of risk management.
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: BusinessInsuranceRisk_large_screenshot.png, security_marking: UNCLASSIFIED}
+    large_icon: {filename: BusinessInsuranceRisk_large_screenshot.png, security_marking: UNCLASSIFIED}
+    launch_url: http://www.i.com
+    listing_type: Web Application
+    owners: [bettafish, wsmith]
+    requirements: None
+    screenshots:
+    - description: null
+      large_image: {filename: BusinessInsuranceRisk_0_large_screenshot.png, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: BusinessInsuranceRisk_0_large_screenshot.png, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: BusinessInsuranceRisk_large_screenshot.png, security_marking: UNCLASSIFIED}
+    tags: [risk, insurance, business]
+    title: Business Insurance Risk
+    unique_name: null
+    version_name: '1.0'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: wsmith, description: null}
+  - {action: MODIFIED, author: wsmith, description: null}
+  - {action: MODIFIED, author: wsmith, description: null}
+  - {action: MODIFIED, author: wsmith, description: null}
+  - {action: MODIFIED, author: wsmith, description: null}
+  - {action: MODIFIED, author: wsmith, description: null}
+  - {action: MODIFIED, author: wsmith, description: null}
+  - {action: MODIFIED, author: wsmith, description: null}
+  - {action: SUBMITTED, author: wsmith, description: null}
+  - {action: APPROVED_ORG, author: bigbrother, description: null}
+  - {action: APPROVED, author: bigbrother, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Test 3
+    banner_icon: {filename: TinyMusic...SongsfromtheVaticanGiftShop_large_screenshot.jpeg,
+      security_marking: UNCLASSIFIED}
+    categories: [Music and Audio]
+    contacts: [chester@lp.com, scott@stp.com, scott@vr.com]
+    description: Tiny Music... Songs from the Vatican Gift Shop is the third album
+      by American rock band Stone Temple Pilots, released on March 26, 1996, on Atlantic
+      Records. After a brief hiatus in 1995, the band regrouped to record Tiny Music,
+      living and recording the album together in a mansion located in Santa Barbara,
+      California.
+    description_short: Tiny Music... Songs from the Vatican Gift Shop is the third
+      album by American rock band STP.
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: TinyMusic...SongsfromtheVaticanGiftShop_large_screenshot.jpeg,
+      security_marking: UNCLASSIFIED}
+    large_icon: {filename: TinyMusic...SongsfromtheVaticanGiftShop_large_screenshot.jpeg,
+      security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Tiny_Music..._Songs_from_the_Vatican_Gift_Shop
+    listing_type: Widget
+    owners: [bettafish]
+    requirements: None
+    screenshots:
+    - description: STP
+      large_image: {filename: TinyMusic...SongsfromtheVaticanGiftShop_0_large_screenshot.jpeg,
+        security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: TinyMusic...SongsfromtheVaticanGiftShop_0_large_screenshot.jpeg,
+        security_marking: UNCLASSIFIED}
+    - description: null
+      large_image: {filename: TinyMusic...SongsfromtheVaticanGiftShop_1_large_screenshot.jpeg,
+        security_marking: UNCLASSIFIED//FOR OFFICIAL USE ONLY}
+      order: 1
+      small_image: {filename: TinyMusic...SongsfromtheVaticanGiftShop_1_large_screenshot.jpeg,
+        security_marking: UNCLASSIFIED//FOR OFFICIAL USE ONLY}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: TinyMusic...SongsfromtheVaticanGiftShop_large_screenshot.jpeg,
+      security_marking: UNCLASSIFIED}
+    tags: [Grunge, STP]
+    title: Tiny Music... Songs from the Vatican Gift Shop
+    unique_name: null
+    version_name: '199.6'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: bettafish, description: null}
+  - {action: SUBMITTED, author: bettafish, description: null}
+  - {action: APPROVED_ORG, author: bettafish, description: null}
+  - {action: APPROVED, author: bettafish, description: null}
+  - {action: MODIFIED, author: bettafish, description: null}
+  - {action: REVIEW_EDITED, author: rutherford, description: null}
+  listing_review_batch:
+  - {author: rutherford, rate: 3, text: Okay this one looks good as well.}
+  - {author: syme, rate: 4, text: 'I would listen to this when I want to. '}
+- library_entries: []
+  listing:
+    agency: Miniluv
+    banner_icon: {filename: JarofFlies_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Entertainment]
+    contacts: []
+    description: Jar of Flies is the second studio EP by the American rock band Alice
+      in Chains, released on January 25, 1994 through Columbia Records. It is the
+      first EP in music history to debut at number one on the Billboard 200 Chart
+      with the first week sales exceeding 141,000 copies in the United States and
+      was well received by critics. The EP has since been certified triple-platinum
+      by the RIAA and has gone on to sell 4 million copies worldwide,[citation needed]
+      making Jar of Flies one of the biggest sellers in Alice in Chains' catalog.
+    description_short: Jar of Flies is the second studio EP by the American rock band
+      Alice in Chains
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: JarofFlies_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: JarofFlies_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Jar_of_Flies
+    listing_type: Web Application
+    owners: [bigbrother, bettafish]
+    requirements: None
+    screenshots:
+    - description: null
+      large_image: {filename: JarofFlies_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: JarofFlies_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    - description: null
+      large_image: {filename: JarofFlies_1_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 1
+      small_image: {filename: JarofFlies_1_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED//FOR OFFICIAL USE ONLY
+    small_icon: {filename: JarofFlies_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    tags: [Grunge]
+    title: Jar of Flies
+    unique_name: null
+    version_name: '1.994'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: bettafish, description: null}
+  - {action: SUBMITTED, author: bettafish, description: null}
+  - {action: MODIFIED, author: bettafish, description: null}
+  - {action: APPROVED_ORG, author: bettafish, description: null}
+  - {action: APPROVED, author: bettafish, description: null}
+  listing_review_batch:
+  - {author: rutherford, rate: 3, text: this okay not so sure.}
+- library_entries: []
+  listing:
+    agency: Miniluv
+    banner_icon: {filename: Ten_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Communication, Entertainment, Music and Audio]
+    contacts: []
+    description: Ten is the debut studio album by American rock band Pearl Jam, released
+      on August 27, 1991 through Epic Records. Following the disbanding of bassist
+      Jeff Ament and guitarist Stone Gossard's previous group Mother Love Bone, the
+      two recruited vocalist Eddie Vedder, guitarist Mike McCready, and drummer Dave
+      Krusen to form Pearl Jam in 1990. Most of the songs began as instrumental jams,
+      to which Vedder added lyrics about topics such as depression, homelessness,
+      and abuse.
+    description_short: Ten is the debut studio album by American rock band Pearl Jam
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Ten_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Ten_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Ten_%28Pearl_Jam_album%29
+    listing_type: Web Application
+    owners: [bettafish]
+    requirements: More Flannel
+    screenshots:
+    - description: null
+      large_image: {filename: Ten_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Ten_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    - description: null
+      large_image: {filename: Ten_1_large_screenshot.jpeg, security_marking: UNCLASSIFIED//FOR
+          OFFICIAL USE ONLY}
+      order: 1
+      small_image: {filename: Ten_1_large_screenshot.jpeg, security_marking: UNCLASSIFIED//FOR
+          OFFICIAL USE ONLY}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Ten_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    tags: [Grunge, Pearl Jam]
+    title: Ten
+    unique_name: null
+    version_name: '19.91'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: bettafish, description: null}
+  - {action: MODIFIED, author: bettafish, description: null}
+  - {action: SUBMITTED, author: bettafish, description: null}
+  - {action: APPROVED_ORG, author: bettafish, description: null}
+  - {action: APPROVED, author: bettafish, description: null}
+  - {action: MODIFIED, author: bettafish, description: null}
+  listing_review_batch:
+  - {author: rutherford, rate: 4, text: Pretty good group would say that they are
+      better than average.}
+  - {author: bigbrother, rate: 5, text: 'My favorite type of music genre '}
+  - {author: david, rate: 3, text: 'I''ve not heard of this band.  I wish the radio
+      would play them. '}
+- library_entries: []
+  listing:
+    agency: Miniplen
+    banner_icon: {filename: Mapoftheworld_large_screenshot.png, security_marking: UNCLASSIFIED}
+    categories: [Productivity, Tools]
+    contacts: []
+    description: 'A map is a symbolic depiction emphasizing relationships between
+      elements of some space, such as objects, regions, or themes.
+
+
+      Many maps are static, fixed to paper or some other durable medium, while others
+      are dynamic or interactive. Although most commonly used to depict geography,
+      maps may represent any space, real or imagined, without regard to context or
+      scale, such as in brain mapping, DNA mapping, or computer network topology mapping.
+      The space being mapped may be two dimensional, such as the surface of the earth,
+      three dimensional, such as the interior of the earth, or even more abstract
+      spaces of any dimension, such as arise in modeling phenomena having many independent
+      variables.
+
+
+      Although the earliest maps known are of the heavens, geographic maps of territory
+      have a very long tradition and exist from ancient times. The word "map" comes
+      from the medieval Latin Mappa mundi, wherein mappa meant napkin or cloth and
+      mundi the world. Thus, "map" became the shortened term referring to a two-dimensional
+      representation of the surface of the world.'
+    description_short: A map is a symbolic depiction emphasizing relationships between
+      elements of some space and objects.
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Mapoftheworld_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Mapoftheworld_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Map
+    listing_type: Widget
+    owners: [rutherford]
+    requirements: None
+    screenshots:
+    - description: null
+      large_image: {filename: Mapoftheworld_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Mapoftheworld_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Mapoftheworld_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    tags: [maps]
+    title: Map of the world
+    unique_name: null
+    version_name: '1.0'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: rutherford, description: null}
+  - {action: MODIFIED, author: rutherford, description: null}
+  - {action: SUBMITTED, author: rutherford, description: null}
+  - {action: MODIFIED, author: rutherford, description: null}
+  - {action: APPROVED_ORG, author: bigbrother, description: null}
+  - {action: APPROVED, author: bigbrother, description: null}
+  - {action: REVIEW_EDITED, author: syme, description: null}
+  listing_review_batch:
+  - {author: syme, rate: 5, text: 'I don''t understand how this works.  How can the
+      map represent something that exists?  Like, if i''m standing on the ground,
+      then how that ground be on the map?  Pure nonsense.  5/5 stars'}
+- library_entries: []
+  listing:
+    agency: Miniluv
+    banner_icon: {filename: MiniDachshund_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Entertainment]
+    contacts: []
+    description: Miniature dachshunds have a typical weight of 8 to 11 pounds in the
+      United States. They also are normally a height of 5 to 7 inches at the withers.
+    description_short: Some of their nicknames include "wiener dogs", "hot  dogs",
+      or "sausage dogs."
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: MiniDachshund_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: MiniDachshund_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: http://localhost.com
+    listing_type: Desktop App
+    owners: [aaronson]
+    requirements: None
+    screenshots:
+    - description: When dachshunds get mad
+      large_image: {filename: MiniDachshund_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: MiniDachshund_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: MiniDachshund_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    tags: [Dogs]
+    title: Mini Dachshund
+    unique_name: null
+    version_name: '1'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: aaronson, description: null}
+  - {action: SUBMITTED, author: aaronson, description: null}
+  - {action: APPROVED_ORG, author: bettafish, description: null}
+  - {action: APPROVED, author: bettafish, description: null}
+  listing_review_batch:
+  - {author: bigbrother, rate: 5, text: Cute small sized dogs}
+  - {author: aaronson, rate: 5, text: The best looking dog}
+  - {author: syme, rate: 1, text: Obvious attempt to influence people based on cuteness.}
+  - {author: bigbrother2, rate: 1, text: 'I, a completely different person, also dislike
+      this app and everything it stands for.'}
+  - {author: khaleesi, rate: 1, text: 'Hello, comrade, this is also a completely different
+      person.  I agree, worst dog ever. '}
+  - {author: bettafish, rate: 1, text: 'Where was this dog on 9/11?  Hmm?  Do you
+      kneow?  I don''t.  Just asking a question.'}
+  - {author: wsmith, rate: 1, text: 'How do I give less than 1 star?  zero stars for
+      this smug little brat of a dog. '}
+  - {author: julia, rate: 1, text: 'Hitler''s favorite breed.  Look it up. '}
+  - {author: obrien, rate: 1, text: 'I can''t even with this dog. '}
+  - {author: david, rate: 1, text: 'Nobody likes this dog.  I asked everybody who
+      is me.  YET!  Still it persists at a 2.0 rating?  fake reviews sheeple!  wake
+      up. '}
+- library_entries: []
+  listing:
+    agency: Miniplen
+    banner_icon: {filename: GalleryofMaps_large_screenshot.png, security_marking: UNCLASSIFIED}
+    categories: [Productivity, Tools]
+    contacts: []
+    description: "Featured pictures/Non-photographic media/Maps\nGallery of Maps\n\
+      This page is a gallery of featured pictures that the community has chosen to\
+      \ be highlighted as some of the finest on Commons.\n\nContents  \n1\t  Gallery\
+      \ of Maps\n2\tMaps\n2.1\tMaps of Africa\n2.2\tMaps of Asia\n2.3\tMaps of the\
+      \ Caribbean\n2.4\tMaps of Europe\n2.5\tMaps of North America\n2.6\tMaps of Oceania\n\
+      2.7\tMaps of South America\n2.8\tOthers maps\n3\tUnsorted"
+    description_short: Commons:Featured pictures/Non-photographic media/Maps
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: GalleryofMaps_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: GalleryofMaps_large_screenshot.png, security_marking: UNCLASSIFIED}
+    launch_url: https://commons.wikimedia.org/wiki/Commons:Featured_pictures/Non-photographic_media/Maps
+    listing_type: Widget
+    owners: [rutherford]
+    requirements: None
+    screenshots:
+    - description: null
+      large_image: {filename: GalleryofMaps_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: GalleryofMaps_0_large_screenshot.png, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: GalleryofMaps_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    tags: [maps]
+    title: Gallery of Maps
+    unique_name: null
+    version_name: '1.0'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: rutherford, description: null}
+  - {action: SUBMITTED, author: rutherford, description: null}
+  - {action: APPROVED_ORG, author: bigbrother, description: null}
+  - {action: APPROVED, author: bigbrother, description: null}
+  listing_review_batch:
+  - {author: syme, rate: 4, text: 'I keep hitting M and the map doesn''t show up. '}
+- library_entries: []
+  listing:
+    agency: Miniluv
+    banner_icon: {filename: TaxonomyClassifier_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Education]
+    contacts: []
+    description: "Taxonomy (from Ancient Greek \u03C4\u03AC\u03BE\u03B9\u03C2 (taxis),\
+      \ meaning 'arrangement', and -\u03BD\u03BF\u03BC\u03AF\u03B1 (-nomia), meaning\
+      \ 'method') is the science of defining and naming groups of biological organisms\
+      \ on the basis of shared characteristics. Organisms are grouped together into\
+      \ taxa (singular: taxon) and these groups are given a taxonomic rank; groups\
+      \ of a given rank can be aggregated to form a super group of higher rank, thus\
+      \ creating a taxonomic hierarchy. The Swedish botanist Carl Linnaeus is regarded\
+      \ as the father of taxonomy, as he developed a system known as Linnaean taxonomy\
+      \ for categorization of organisms and binomial nomenclature for naming organisms."
+    description_short: Science of defining and naming groups of biological organisms
+      on the basis of shared characteristics
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: TaxonomyClassifier_large_screenshot.jpeg, security_marking: UNCLASSIFIED//FOR
+        OFFICIAL USE ONLY}
+    large_icon: {filename: TaxonomyClassifier_large_screenshot.jpeg, security_marking: UNCLASSIFIED//FOR
+        OFFICIAL USE ONLY}
+    launch_url: https://en.wikipedia.org/wiki/Taxonomy_(biology)
+    listing_type: Web Application
+    owners: [bigbrother]
+    requirements: Knowledge of Science
+    screenshots:
+    - description: Giant Grouper and Red lionfish
+      large_image: {filename: TaxonomyClassifier_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED//FOR
+          OFFICIAL USE ONLY}
+      order: 0
+      small_image: {filename: TaxonomyClassifier_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: TaxonomyClassifier_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    tags: [demo, classifier]
+    title: Taxonomy Classifier
+    unique_name: null
+    version_name: 10.5.1
+    what_is_new: Linnaean system has progressed to a system of modern biological classification
+      based on the evolutionary relationships between organisms, both living and extinct.
+  listing_activity:
+  - {action: CREATED, author: bigbrother, description: null}
+  - {action: MODIFIED, author: bigbrother, description: null}
+  - {action: SUBMITTED, author: bigbrother, description: null}
+  - {action: APPROVED_ORG, author: bigbrother, description: null}
+  - {action: APPROVED, author: bigbrother, description: null}
+  - {action: MODIFIED, author: bigbrother, description: null}
+  - {action: MODIFIED, author: bigbrother, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Miniluv
+    banner_icon: {filename: LITRANCH_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Education]
+    contacts: []
+    description: The 60,000 acre Lit Ranch is located on the Canadian River in Oldham,
+      Hartley, Moore and Potter counties and now includes the Lit Farms -- 5000 acres
+      of farmland in Hartley and Moore Counties. The ranch's history is as old as
+      the history of the Texas Panhandle. The ranch began in the 1880s when Major
+      Littlefield discovered the value of the mild climate and protection of the river
+      breaks when trail driving cattle from Abilene to Dodge City. Major Littlefield
+      sold the ranch to the Prairie Land and Cattle Company, a Scottish land company,
+      who developed the ranch into a 240,000 acre ranch stretching from Tascosa to
+      Dumas. Lee Bivins purchased the ranch from Prairie in the early 1900s and it
+      was operated by the Bivins until 1980s when it was purchased by the W. H. O'Brien
+      family of Amarillo, Texas
+    description_short: Its in Texas
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: LITRANCH_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: LITRANCH_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: http://localhost.com
+    listing_type: Widget
+    owners: [aaronson]
+    requirements: None
+    screenshots:
+    - description: A ranch
+      large_image: {filename: LITRANCH_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: LITRANCH_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: LITRANCH_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    tags: [Cows, Ranch, Lit]
+    title: LIT RANCH
+    unique_name: null
+    version_name: '1'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: aaronson, description: null}
+  - {action: SUBMITTED, author: aaronson, description: null}
+  - {action: APPROVED_ORG, author: bettafish, description: null}
+  - {action: APPROVED, author: bettafish, description: null}
+  listing_review_batch:
+  - {author: aaronson, rate: 1, text: No children were allowed}
+  - {author: david, rate: 5, text: No children were allowed.}
+- library_entries: []
+  listing:
+    agency: Minipax
+    banner_icon: {filename: Hawaii_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Weather]
+    contacts: []
+    description: Hawaii is the only U.S. state located in Oceania and the only one
+      composed entirely of islands. It is the northernmost island group in Polynesia,
+      occupying most of an archipelago in the central Pacific Ocean. Hawaii is the
+      only U.S. state located outside North America.
+    description_short: Hawaii is the 50th and most recent state to have joined the
+      United States of America.
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Hawaii_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Hawaii_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: http://localhost.com
+    listing_type: Web Application
+    owners: [aaronson]
+    requirements: None
+    screenshots:
+    - description: Island
+      large_image: {filename: Hawaii_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Hawaii_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    - description: I like turtles
+      large_image: {filename: Hawaii_1_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 1
+      small_image: {filename: Hawaii_1_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Hawaii_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    tags: [Travel, Vacation, Expensive]
+    title: Hawaii
+    unique_name: null
+    version_name: '1'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: aaronson, description: null}
+  - {action: SUBMITTED, author: aaronson, description: null}
+  - {action: APPROVED_ORG, author: bettafish, description: null}
+  - {action: APPROVED, author: bettafish, description: null}
+  listing_review_batch:
+  - {author: aaronson, rate: 4, text: Very nice place! Expensive though}
+  - {author: syme, rate: 5, text: I feel like I would like it!  10 stars!}
+- library_entries: []
+  listing:
+    agency: Test
+    banner_icon: {filename: Dinosaur_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Education]
+    contacts: []
+    description: Dinosaurs are a diverse group of reptiles of the clade Dinosauria
+      that first appeared during the Triassic period. Although the exact origin and
+      timing of the evolution of dinosaurs is the subject of active research, the
+      current scientific consensus places their origin between 231 and 243 million
+      years ago.
+    description_short: They were dangerous creatures.
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Dinosaur_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Dinosaur_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: http://localhost.com
+    listing_type: Code Library
+    owners: [aaronson]
+    requirements: Windows 95
+    screenshots:
+    - description: Scariest one in history
+      large_image: {filename: Dinosaur_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Dinosaur_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    - description: null
+      large_image: {filename: Dinosaur_1_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 1
+      small_image: {filename: Dinosaur_1_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Dinosaur_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    tags: [Extinct, Dead, Animals, Reptiles]
+    title: Dinosaur
+    unique_name: null
+    version_name: '1'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: aaronson, description: null}
+  - {action: SUBMITTED, author: aaronson, description: null}
+  - {action: APPROVED_ORG, author: bettafish, description: null}
+  - {action: APPROVED, author: bettafish, description: null}
+  listing_review_batch:
+  - {author: aaronson, rate: 1, text: Got attacked by one and was scary}
+  - {author: david, rate: 5, text: 'I like that they are oil now.   That is a useful
+      substance. '}
+- library_entries: []
+  listing:
+    agency: Test 3
+    banner_icon: {filename: FloppyDisk_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Communication]
+    contacts: []
+    description: A floppy disk, also called a floppy, diskette, or just disk, is a
+      type of disk storage composed of a disk of thin and flexible magnetic storage
+      medium, sealed in a rectangular plastic enclosure lined with fabric that removes
+      dust particles. Floppy disks are read and written by a floppy disk drive.
+    description_short: They got destroyed by USB drives later on.
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: FloppyDisk_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: FloppyDisk_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: http://localhost.com
+    listing_type: Web Application
+    owners: [aaronson]
+    requirements: Must have floppy disk drive
+    screenshots:
+    - description: Floppy Disk
+      large_image: {filename: FloppyDisk_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: FloppyDisk_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    - description: This is the floppy disk drive
+      large_image: {filename: FloppyDisk_1_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 1
+      small_image: {filename: FloppyDisk_1_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: FloppyDisk_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    tags: [Old, Storage, Memory]
+    title: Floppy Disk
+    unique_name: null
+    version_name: '12'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: aaronson, description: null}
+  - {action: SUBMITTED, author: aaronson, description: null}
+  - {action: APPROVED_ORG, author: bettafish, description: null}
+  - {action: APPROVED, author: bettafish, description: null}
+  listing_review_batch:
+  - {author: aaronson, rate: 3, text: Not the best tool now but still works}
+  - {author: syme, rate: 5, text: 'You would not copy a car would you?  No!  Because
+      that doesn''t make any sense.  You would copy X-COM though. '}
+- library_entries: []
+  listing:
+    agency: Miniplen
+    banner_icon: {filename: Magneticpositioning_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Media and Video, Productivity, Tools]
+    contacts: []
+    description: "Magnetic positioning is an IPS (Indoor positioning system) solution\
+      \ based on magnetic sensor data from a smartphone used to wirelessly locate\
+      \ objects or people inside a building.[1]\n\nThere is currently no de facto\
+      \ standard for IPS, however magnetic positioning appears to be the most complete\
+      \ and cost effective[citation needed]. It offers accuracy without any hardware\
+      \ requirements and a relatively low total cost of ownership[citation needed].\
+      \ According to Opus Research magnetic positioning will emerge as a \u201Cfoundational\u201D\
+      \ indoor location technology.[2]\n\nMagnetic positioning was invented by Professor\
+      \ Janne Haverinen and Anssi Kemppainen.[3] Noticing that buildings' magnetic\
+      \ distortions were leading machines astray, they eventually turned the problem\
+      \ around and focused attention on the magnetic interferences caused by steel\
+      \ structures. What they found was that the disturbances inside them were consistent,\
+      \ creating a magnetic fingerprint unique to a building.[4]\n\nProfessor Janne\
+      \ Haverinen founded the company IndoorAtlas in 2012 to commercialize the magnetic\
+      \ positioning solution with dual headquarters in Mountain View, CA and Oulu,\
+      \ Finland.[5]"
+    description_short: Magnetic positioning is an IPS (Indoor positioning system)
+      solution based on magnetic sensor data
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Magneticpositioning_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Magneticpositioning_large_screenshot.gif, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Magnetic_positioning
+    listing_type: Web Services
+    owners: [rutherford]
+    requirements: None
+    screenshots:
+    - description: null
+      large_image: {filename: Magneticpositioning_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Magneticpositioning_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Magneticpositioning_large_screenshot.gif, security_marking: UNCLASSIFIED}
+    tags: [positioning]
+    title: Magnetic positioning
+    unique_name: null
+    version_name: '1.0'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: rutherford, description: null}
+  - {action: SUBMITTED, author: rutherford, description: null}
+  - {action: APPROVED_ORG, author: bigbrother, description: null}
+  - {action: APPROVED, author: bigbrother, description: null}
+  listing_review_batch:
+  - {author: syme, rate: 1, text: 'Useless, everybody knows rooms are round.  So how
+      does this even work?  '}
+- library_entries: []
+  listing:
+    agency: Minipax
+    banner_icon: {filename: Cyclops_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Finance, Weather]
+    contacts: [no@gmail.com]
+    description: "Cyclops (Scott Summers) is a fictional superhero appearing in American\
+      \ comic books published by Marvel Comics and is a founding member of the X-Men.\
+      \ Created by writer Stan Lee and artist Jack Kirby, the character first appeared\
+      \ in the comic book The X-Men #1 (September 1963).\n\nCyclops is a member of\
+      \ a subspecies of humans known as mutants, who are born with superhuman abilities.\
+      \ Cyclops can emit powerful beams of energy from his eyes. He cannot control\
+      \ the beams without the aid of special eyewear which he must wear at all times.\
+      \ He is typically considered the first of the X-Men,[1] a team of mutant heroes\
+      \ who fight for peace and equality between mutants and humans, and one of the\
+      \ team's primary leaders.[2][3]\n\nCyclops is most often portrayed as the archetypal\
+      \ hero of traditional American popular culture\u2014the opposite of the tough,\
+      \ anti-authority antiheroes that emerged in American popular culture after the\
+      \ Vietnam War (e.g., Wolverine, his X-Men teammate).[4][5]\n\nOne of Marvel's\
+      \ most prominent characters, Cyclops was rated #1 on IGN.com's list of Top 25\
+      \ X-Men from the past forty years in 2006,[1] and the 39th in their 2011 list\
+      \ of Top 100 Comic Book Heroes.[2] In 2008, Wizard Magazine also ranked Cyclops\
+      \ the 106th in their list of the 200 Greatest Comic Book Characters of All Time.[5]\
+      \ In a 2011 poll, readers of Comic Book Resources voted Cyclops as 9th in the\
+      \ ranking of 2011 Top Marvel Characters.[3]\n\nJames Marsden has portrayed Cyclops\
+      \ in the first three and the seventh X-Men films, while in the 2009 prequel\
+      \ film, X-Men Origins: Wolverine, he is portrayed as a teenager by actor Tim\
+      \ Pocock. In 2016's X-Men: Apocalypse, he is portrayed by Tye Sheridan."
+    description_short: Kind of a tool.
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Cyclops_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Cyclops_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Cyclops_(comics)
+    listing_type: Code Library
+    owners: [syme]
+    requirements: None
+    screenshots:
+    - description: null
+      large_image: {filename: Cyclops_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Cyclops_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED//FOR OFFICIAL USE ONLY
+    small_icon: {filename: Cyclops_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    tags: [x-men]
+    title: Cyclops
+    unique_name: null
+    version_name: '1'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: syme, description: null}
+  - {action: MODIFIED, author: syme, description: null}
+  - {action: MODIFIED, author: syme, description: null}
+  - {action: MODIFIED, author: syme, description: null}
+  - {action: SUBMITTED, author: syme, description: null}
+  - {action: APPROVED_ORG, author: bigbrother, description: null}
+  - {action: APPROVED, author: bigbrother, description: null}
+  listing_review_batch:
+  - {author: syme, rate: 1, text: 'Blame the writers if you''d like, but easily the
+      most worst x-men.   Besides Angel.  Oh?  you can fly?  Cause of your wings?  Half
+      of everybody can fly and you can sit behind them at concerts and still see the
+      show.'}
+  - {author: betaraybill, rate: 5, text: BEST. X-MEN. EVER!!!}
+- library_entries: []
+  listing:
+    agency: Minipax
+    banner_icon: {filename: JeanGrey_large_screenshot.png, security_marking: UNCLASSIFIED}
+    categories: [Finance, Weather]
+    contacts: []
+    description: 'Jean Grey-Summers (born Jean Elaine Grey) is a fictional superhero
+      appearing in American comic books published by Marvel Comics. The character
+      has been known under the aliases Marvel Girl, Phoenix, and Dark Phoenix. Created
+      by writer Stan Lee and artist Jack Kirby, the character first appeared in The
+      X-Men #1 (September 1963).
+
+
+      Jean Grey is a member of a subspecies of humans known as mutants, who are born
+      with superhuman abilities. She was born with telepathic and telekinetic powers.
+      Her powers first manifested when she saw her childhood friend being hit by a
+      car. She is a caring, nurturing figure, but she also has to deal with being
+      an Omega-level mutant and the physical manifestation of the cosmic Phoenix Force.
+      Jean Grey experienced a transformation into the Phoenix in the X-Men storyline
+      "The Dark Phoenix Saga". She has faced death numerous times in the history of
+      the series. Her first death was under her guise as Marvel Girl, when she died
+      and was "reborn" as Phoenix in "The Dark Phoenix Saga". This transformation
+      led to her second death, which was suicide, though not her last.
+
+
+      She is an important figure in the lives of other Marvel Universe characters,
+      mostly the X-Men, including her husband Cyclops, her mentor and father figure
+      Charles Xavier, her unrequited love interest Wolverine, her best friend and
+      sister-like figure Storm, and her genetic children Rachel Summers, X-Man, Cable,
+      and Stryfe.
+
+
+      The character was present for much of the X-Men''s history, and she was featured
+      in all three X-Men animated series and several video games. She is a playable
+      character in X-Men Legends (2004), X-Men Legends II: Rise of Apocalypse (2005),
+      Marvel Ultimate Alliance 2 (2009), Marvel vs Capcom 3: Fate of Two Worlds (2011),
+      Marvel Heroes (2013), and Lego Marvel Super Heroes (2013), and appeared as a
+      non-playable in the first Marvel: Ultimate Alliance.
+
+
+      Famke Janssen portrayed the character in five installments of the X-Men films.
+      Sophie Turner portrays a younger version in the 2016 film X-Men: Apocalypse.
+
+
+      In 2006, IGN rated Jean Grey 6th on their list of top 25 X-Men from the past
+      forty years,[1] and in 2011, IGN ranked her 13th in the "Top 100 Comic Book
+      Heroes".[2] Her Dark Phoenix persona was ranked 9th in IGN''s "Top 100 Comic
+      Book Villains of All Time" list, the highest rank for a female character.[3]'
+    description_short: Dies a lot
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: JeanGrey_large_screenshot.png, security_marking: UNCLASSIFIED}
+    large_icon: {filename: JeanGrey_large_screenshot.png, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Jean_Grey
+    listing_type: Desktop App
+    owners: [syme]
+    requirements: None
+    screenshots:
+    - description: null
+      large_image: {filename: JeanGrey_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: JeanGrey_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: JeanGrey_large_screenshot.png, security_marking: UNCLASSIFIED}
+    tags: [x-men]
+    title: Jean Grey
+    unique_name: null
+    version_name: '1'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: syme, description: null}
+  - {action: SUBMITTED, author: syme, description: null}
+  - {action: APPROVED_ORG, author: bigbrother, description: null}
+  - {action: APPROVED, author: bigbrother, description: null}
+  listing_review_batch:
+  - {author: syme, rate: 5, text: 'These timelines are way too confusing. '}
+- library_entries: []
+  listing:
+    agency: Minipax
+    banner_icon: {filename: Apocalypse_large_screenshot.png, security_marking: UNCLASSIFIED}
+    categories: [Finance, Weather]
+    contacts: []
+    description: 'Apocalypse (En Sabah Nur) is a fictional supervillain appearing
+      in comic books published by Marvel Comics. He is one of the world''s first mutants,
+      and was originally a principal villain for the original X-Factor team and now
+      for the X-Men and related spinoff teams. Created by writer Louise Simonson and
+      artist Jackson Guice, Apocalypse first appeared in X-Factor #5 (May 1986).[2]
+
+
+      Since his introduction, the character has appeared in a number of X-Men titles,
+      including spin-offs and several limited series. Apocalypse has also been featured
+      in various forms of media. In 2016, Oscar Isaac portrayed the villain in the
+      film X-Men: Apocalypse.[3] He is ranked #24 in IGN''s 100 Greatest Comic Book
+      Villains of All Time.[4]'
+    description_short: Apocalypse is an ancient mutant born with a variety of superhuman
+      abilities.
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Apocalypse_large_screenshot.png, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Apocalypse_large_screenshot.png, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Apocalypse_(comics)
+    listing_type: Web Application
+    owners: [syme]
+    requirements: None
+    screenshots:
+    - description: null
+      large_image: {filename: Apocalypse_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Apocalypse_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Apocalypse_large_screenshot.png, security_marking: UNCLASSIFIED}
+    tags: [bad guys]
+    title: Apocalypse
+    unique_name: null
+    version_name: '1'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: syme, description: null}
+  - {action: MODIFIED, author: syme, description: null}
+  - {action: SUBMITTED, author: syme, description: null}
+  - {action: MODIFIED, author: syme, description: null}
+  - {action: APPROVED_ORG, author: bigbrother, description: null}
+  - {action: APPROVED, author: bigbrother, description: null}
+  listing_review_batch:
+  - {author: syme, rate: 1, text: 'I will downvote anybody who is blue and you can''t
+      stop me. '}
+- library_entries: []
+  listing:
+    agency: Minipax
+    banner_icon: {filename: Wolverine_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Finance, Weather]
+    contacts: []
+    description: 'Wolverine (born James Howlett[2] commonly known as Logan and sometimes
+      as Weapon X) is a fictional character appearing in American comic books published
+      by Marvel Comics, mostly in association with the X-Men. He is a mutant who possesses
+      animal-keen senses, enhanced physical capabilities, powerful regenerative ability
+      known as a healing factor, and three retractable bone claws in each hand. Wolverine
+      has been depicted variously as a member of the X-Men, Alpha Flight, and the
+      Avengers.
+
+
+      The character appeared in the last panel of The Incredible Hulk #180 before
+      having a larger role in #181 (cover-dated Nov. 1974). He was created by writer
+      Len Wein and Marvel art director John Romita, Sr., who designed the character,
+      and was first drawn for publication by Herb Trimpe. Wolverine then joined a
+      revamped version of the superhero team the X-Men, where eventually writer Chris
+      Claremont and artist-writer John Byrne would play significant roles in the character''s
+      development. Artist Frank Miller collaborated with Claremont and helped to revise
+      the character with a four-part eponymous limited series from September to December
+      1982 which debuted Wolverine''s catchphrase, "I''m the best there is at what
+      I do, but what I do best isn''t very nice."
+
+
+      Wolverine is typical of the many tough antiheroes that emerged in American popular
+      culture after the Vietnam War;[3] his willingness to use deadly force and his
+      brooding nature became standard characteristics for comic book antiheroes by
+      the end of the 1980s.[4] As a result, the character became a fan favorite of
+      the increasingly popular X-Men franchise,[5] and has been featured in his own
+      solo comic since 1988.
+
+
+      He has appeared in most X-Men adaptations, including animated television series,
+      video games, and the live-action 20th Century Fox X-Men film series, in which
+      he is portrayed by Hugh Jackman in nine of the ten films. The character is highly
+      rated in many comics best-of lists, ranked #1 in Wizard magazine''s 2008 Top
+      200 Comic Book Characters;[6] 4th in Empire''s 2008 Greatest Comic Characters;[7]
+      and 4th on IGN''s 2011 Top 100 Comic Book Heroes.[8]'
+    description_short: Stabs things
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Wolverine_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Wolverine_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Wolverine_(character)
+    listing_type: Web Services
+    owners: [syme]
+    requirements: None
+    screenshots:
+    - description: null
+      large_image: {filename: Wolverine_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Wolverine_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Wolverine_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    tags: [x-men]
+    title: Wolverine
+    unique_name: null
+    version_name: '1'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: syme, description: null}
+  - {action: SUBMITTED, author: syme, description: null}
+  - {action: MODIFIED, author: syme, description: null}
+  - {action: APPROVED_ORG, author: bigbrother, description: null}
+  - {action: APPROVED, author: bigbrother, description: null}
+  listing_review_batch:
+  - {author: syme, rate: 3, text: 'I don''t understand how the guy who controls metal
+      doesn''t just throw this guy into orbit. '}
+- library_entries: []
+  listing:
+    agency: Minipax
+    banner_icon: {filename: IronMan_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Finance, Weather]
+    contacts: []
+    description: 'Iron Man (Tony Stark) is a fictional superhero appearing in American
+      comic books published by Marvel Comics. The character was created by writer
+      and editor Stan Lee, developed by scripter Larry Lieber, and designed by artists
+      Don Heck and Jack Kirby. The character made his first appearance in Tales of
+      Suspense #39 (cover dated March 1963).
+
+
+      A wealthy American business magnate, playboy, and ingenious scientist, Tony
+      Stark suffers a severe chest injury during a kidnapping in which his captors
+      attempt to force him to build a weapon of mass destruction. He instead creates
+      a powered suit of armor to save his life and escape captivity. Later, Stark
+      augments his suit with weapons and other technological devices he designed through
+      his company, Stark Industries. He uses the suit and successive versions to protect
+      the world as Iron Man, while at first concealing his true identity. Initially,
+      Iron Man was a vehicle for Stan Lee to explore Cold War themes, particularly
+      the role of American technology and business in the fight against communism.[1]
+      Subsequent re-imaginings of Iron Man have transitioned from Cold War themes
+      to contemporary concerns, such as corporate crime and terrorism.[1]
+
+
+      Throughout most of the character''s publication history, Iron Man has been a
+      founding member of the superhero team the Avengers and has been featured in
+      several incarnations of his own various comic book series. Iron Man has been
+      adapted for several animated TV shows and films. The character is portrayed
+      by Robert Downey Jr. in the live action film Iron Man (2008), which was a critical
+      and box office success. Downey, who received much acclaim for his performance,
+      reprised the role in a cameo in The Incredible Hulk (2008), two Iron Man sequels
+      Iron Man 2 (2010) and Iron Man 3 (2013), The Avengers (2012), Avengers: Age
+      of Ultron (2015), Captain America: Civil War (2016), and Spider-Man: Homecoming
+      (2017), and will do so again in Avengers: Infinity War (2018) and its untitled
+      sequel (2019) in the Marvel Cinematic Universe.
+
+
+      Iron Man was ranked 12th on IGN''s "Top 100 Comic Book Heroes" in 2011,[2] and
+      third in their list of "The Top 50 Avengers" in 2012.[3]'
+    description_short: pew pew pew
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: IronMan_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: IronMan_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Iron_Man
+    listing_type: Code Library
+    owners: [syme]
+    requirements: None
+    screenshots:
+    - description: null
+      large_image: {filename: IronMan_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: IronMan_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: IronMan_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    tags: [Avengers]
+    title: Iron Man
+    unique_name: null
+    version_name: '1'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: syme, description: null}
+  - {action: SUBMITTED, author: syme, description: null}
+  - {action: MODIFIED, author: syme, description: null}
+  - {action: APPROVED_ORG, author: bigbrother, description: null}
+  - {action: APPROVED, author: bigbrother, description: null}
+  listing_review_batch:
+  - {author: syme, rate: 5, text: 'This is not Jarvis upvoting this.  It is not.  you
+      cannot prove anything.  Also the fact that this site does not have a capatcha
+      is AWESOME!  '}
+- library_entries: []
+  listing:
+    agency: Minipax
+    banner_icon: {filename: Rogue_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Finance, Weather]
+    contacts: []
+    description: 'Rogue is a fictional superhero appearing in American comic books
+      published by Marvel Comics, commonly in association with the X-Men. The character
+      debuted in Avengers Annual #10 (November 1981) as a villain, but then soon after
+      she joined the X-Men.
+
+
+      Rogue is part of a subspecies of humans called mutants, who are born with superhuman
+      abilities. Rogue has the involuntary ability to absorb and sometimes also remove
+      the memories, physical strength, and superpowers of anyone she touches. Therefore,
+      Rogue considers her powers to be a curse. For most of her life, she limited
+      her physical contact with others, including her on-off love interest, Gambit.
+      However, after many years, Rogue finally gained full control over her mutant
+      ability.
+
+
+      Hailing from the fictional Caldecott County, Mississippi, Rogue is the X-Men''s
+      self-described southern belle. A runaway, she was adopted by Mystique of the
+      Brotherhood of Evil Mutants and grew up as a villain. After Rogue permanently
+      absorbs Ms. Marvel''s psyche and Kree powers, she reforms and turns to the X-Men,
+      fearing for her sanity. Rogue''s real name and early history were not revealed
+      until nearly 20 years after her introduction. Until the back story provided
+      by Robert Rodi in the ongoing Rogue series, which began in September 2004, Rogue''s
+      background was only hinted at. Her name was revealed as Anna Marie, although
+      her surname is still unknown. She has sometimes adopted the name Raven, which
+      is the first name of her foster mother Mystique.[2]
+
+
+      Rogue has been one of the most prominent members of the X-Men since the 1980s.
+      She was #5 on IGN''s Top 25 X-Men list for 2006,[3] #4 on their Top Ten X-Babes
+      list for 2006,[4] #3 on Marvel''s list of Top 10 Toughest Females for 2009[5]
+      and was given title of #1 X-Man on CBR''s Top 50 X-Men of All Time for 2008.[6]
+      She was ranked tenth in Comics Buyer''s Guide''s "100 Sexiest Women in Comics"
+      list.[7] Rogue has been featured in most of the X-Men animated series, and various
+      video games. In the X-Men film series, she is portrayed by Anna Paquin. Her
+      visual cue is often the white streak that runs through her hair.'
+    description_short: No touching
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Rogue_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Rogue_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Rogue_(comics)
+    listing_type: Widget
+    owners: [syme]
+    requirements: None
+    screenshots:
+    - description: null
+      large_image: {filename: Rogue_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Rogue_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Rogue_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    tags: [x-men]
+    title: Rogue
+    unique_name: null
+    version_name: '1'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: syme, description: null}
+  - {action: SUBMITTED, author: syme, description: null}
+  - {action: APPROVED_ORG, author: bigbrother, description: null}
+  - {action: APPROVED, author: bigbrother, description: null}
+  listing_review_batch:
+  - {author: david, rate: 2, text: 'gave her a hug and was in a coma for 9 years.  Can''t
+      recommend. '}
+- library_entries: []
+  listing:
+    agency: Minipax
+    banner_icon: {filename: Beast_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Finance, Weather]
+    contacts: []
+    description: 'Beast (Henry Philip "Hank" McCoy) is a fictional superhero appearing
+      in American comic books published by Marvel Comics and is a founding member
+      of the X-Men. Originally called "The Beast", the character was introduced as
+      a mutant possessing ape-like superhuman physical strength and agility, oversize
+      hands and feet, a genius-level intellect, and an otherwise normal appearance.
+      Eventually being referred to simply as "Beast", Hank McCoy underwent progressive
+      physiological transformations, permanently gaining animalistic physical characteristics.
+      These include blue fur, both simian and feline facial features, pointed ears,
+      fangs, and claws. Beast''s physical strength and senses increased to even greater
+      levels.
+
+
+      Despite Hank McCoy''s inhuman appearance, he is depicted as a brilliant, well-educated
+      man in the arts and sciences, known for his witty sense of humor. He is a world
+      authority on biochemistry and genetics, the X-Men''s medical doctor, and the
+      science and mathematics instructor at the Xavier Institute (the X-Men''s headquarters
+      and school for young mutants). He is also a mutant political activist, campaigning
+      against society''s bigotry and discrimination against mutants. While fighting
+      his own bestial instincts and fears of social rejection, Beast dedicates his
+      physical and mental gifts to the creation of a better world for man and mutant.
+
+
+      One of the original X-Men, Beast has appeared regularly in X-Men-related comics
+      since his debut. He has also been a member of the Avengers and Defenders.
+
+
+      The character has also appeared in media adaptations, including animated TV
+      series and feature films. In X2, Steve Bacic portrayed him in a very brief cameo
+      in his human appearance, while in X-Men: The Last Stand he was played by Kelsey
+      Grammer. Nicholas Hoult portrays a younger version of the character in X-Men:
+      First Class. Both Hoult and Grammer reprise their roles in X-Men: Days of Future
+      Past. Hoult also reprised the role in X-Men: Apocalypse.'
+    description_short: Smart punch kick person
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Beast_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Beast_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Beast_(comics)
+    listing_type: Web Services
+    owners: [syme]
+    requirements: None
+    screenshots:
+    - description: null
+      large_image: {filename: Beast_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Beast_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Beast_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    tags: [x-men, avengers]
+    title: Beast
+    unique_name: null
+    version_name: '2'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: syme, description: null}
+  - {action: SUBMITTED, author: syme, description: null}
+  - {action: APPROVED_ORG, author: bigbrother, description: null}
+  - {action: APPROVED, author: bigbrother, description: null}
+  listing_review_batch:
+  - {author: david, rate: 5, text: 'I like the blue.  I dislike having to have more
+      than 20 characters.
+
+      '}
+  - {author: syme, rate: 3, text: 'Why are they always blue?  It just doesn''t make
+      any sense. '}
+- library_entries: []
+  listing:
+    agency: Minipax
+    banner_icon: {filename: Magneto_large_screenshot.png, security_marking: UNCLASSIFIED}
+    categories: [Finance, Weather]
+    contacts: []
+    description: 'Magneto is a fictional character appearing in American comic books
+      published by Marvel Comics, commonly in association with the X-Men. Created
+      by writer Stan Lee and artist Jack Kirby, the character first appears in The
+      X-Men #1 (cover-dated Sept. 1963) as the archenemy of the X-Men.
+
+
+      The character is a powerful mutant, one of a fictional subspecies of humanity
+      born with superhuman abilities, who has the ability to generate and control
+      magnetic fields. Magneto regards mutants as evolutionarily superior to humans
+      and rejects the possibility of peaceful human-mutant coexistence; he aims to
+      conquer the world to enable mutants (whom he refers to as "homo superior") to
+      replace humans as the dominant species. Writers have since fleshed out his origins
+      and motivations, revealing him to be a Holocaust survivor whose extreme methods
+      and cynical philosophy derive from his determination to protect mutantkind from
+      suffering a similar fate at the hands of a world that fears and persecutes mutants.
+      He is a friend of Professor X, the leader of the X-Men, but their different
+      philosophies cause a rift in their friendship at times. Magneto''s role in comics
+      has varied from supervillain to antihero to superhero, having served as an occasional
+      ally and even a member of the X-Men at times.
+
+
+      His character''s early history has been compared with the civil rights leader
+      Malcolm X[8][9] and Jewish Defense League founder Meir Kahane.[10][11] Magneto
+      opposes the pacifist attitude of Professor X and pushes for a more aggressive
+      approach to achieving civil rights. In 2011, IGN ranked Magneto as the greatest
+      comic book villain of all time.[12]
+
+
+      Sir Ian McKellen portrayed Magneto in four films of the X-Men film series, while
+      Michael Fassbender portrayed a younger version of the character in three films.'
+    description_short: Controls metal, also they keep trying to make him good for
+      some reason.
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Magneto_large_screenshot.png, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Magneto_large_screenshot.png, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Magneto_(comics)
+    listing_type: Web Application
+    owners: [syme]
+    requirements: None
+    screenshots:
+    - description: null
+      large_image: {filename: Magneto_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Magneto_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Magneto_large_screenshot.png, security_marking: UNCLASSIFIED}
+    tags: [bad guys]
+    title: Magneto
+    unique_name: null
+    version_name: '1'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: syme, description: null}
+  - {action: SUBMITTED, author: syme, description: null}
+  - {action: APPROVED_ORG, author: bigbrother, description: null}
+  - {action: APPROVED, author: bigbrother, description: null}
+  listing_review_batch:
+  - {author: bettafish, rate: 1, text: Not the nicest to work with.  I keep losing
+      my stapler when around.}
+  - {author: david, rate: 3, text: 'Won''t kill you for no reason.  Will kill you
+      though. '}
+- library_entries: []
+  listing:
+    agency: Minipax
+    banner_icon: {filename: Blink_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Finance, Weather]
+    contacts: []
+    description: In the primary Earth-616 continuity of the Marvel Universe, Blink
+      was introduced in the "Phalanx Covenant" storyline, in which the extraterrestrially
+      derived techno-organic beings called the Phalanx captured her and several other
+      young mutants to assimilate their powers.[2] This version of Blink was tense
+      and panicky and frightened of her powers (having "woken up in a pool of blood"
+      after her first use of them). Clarice could not properly control her powers,
+      and apparently was unable to teleport anything in an intact form. Instead, any
+      object or person caught in Blink's teleportation field, also known as a "blink
+      wave", would be shredded. She eventually used her abilities to "cut up" Harvest,
+      a Phalanx entity guarding her and her peers, but she was caught in her own teleportation
+      field and apparently died in the process.[3] Because of her sacrifice, the remaining
+      captives were set free and became the X-Men junior team Generation X.[4]
+    description_short: teleports and stuff
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Blink_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Blink_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Blink_(comics)
+    listing_type: Code Library
+    owners: [syme]
+    requirements: None
+    screenshots:
+    - description: null
+      large_image: {filename: Blink_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Blink_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Blink_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    tags: [x-men]
+    title: Blink
+    unique_name: null
+    version_name: '1'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: syme, description: null}
+  - {action: SUBMITTED, author: syme, description: null}
+  - {action: APPROVED_ORG, author: bigbrother, description: null}
+  - {action: APPROVED, author: bigbrother, description: null}
+  listing_review_batch:
+  - {author: david, rate: 5, text: 'Too scared to fly United?  Try a blink.'}
+  - {author: syme, rate: 5, text: 5/5 Not blue!  Thank the lords.}
+- library_entries: []
+  listing:
+    agency: Test 1
+    banner_icon: {filename: Aliens_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Education]
+    contacts: []
+    description: Extraterrestrial life, also called alien life (or, if it is a sentient
+      or relatively complex individual, an "extraterrestrial" or "alien"), is life
+      that does not originate from Earth. These hypothetical life forms may range
+      from simple single-celled organisms to beings with civilizations far more advanced
+      than humanity. Although many scientists expect extraterrestrial life to exist
+      in some form, there is no evidence for its existence to date.
+    description_short: E.T. phone home
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Aliens_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Aliens_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: http://localhost.com
+    listing_type: Web Application
+    owners: [aaronson]
+    requirements: None
+    screenshots:
+    - description: Not actual photo of alien
+      large_image: {filename: Aliens_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Aliens_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Aliens_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    tags: [Aliens, Space]
+    title: Aliens
+    unique_name: null
+    version_name: '1'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: aaronson, description: null}
+  - {action: SUBMITTED, author: aaronson, description: null}
+  - {action: APPROVED_ORG, author: bettafish, description: null}
+  - {action: APPROVED, author: bettafish, description: null}
+  listing_review_batch:
+  - {author: aaronson, rate: 5, text: Very friendly. Would recommend to others}
+  - {author: syme, rate: 1, text: 'I don''t want to talk about it. '}
+- library_entries: []
+  listing:
+    agency: Minipax
+    banner_icon: {filename: Lamprey_large_screenshot.jpeg, security_marking: UNCLASSIFIED//FOR
+        OFFICIAL USE ONLY}
+    categories: [Education]
+    contacts: []
+    description: 'Lampreys (sometimes also called, inaccurately, lamprey eels) are
+      any jawless fish of the order Petromyzontiformes, placed in the superclass Cyclostomata.
+      The adult lamprey may be characterized by a toothed, funnel-like sucking mouth.
+      The common name "lamprey" is probably derived from Latin lampetra, which may
+      mean "stone licker" (lambere "to lick" + petra "stone"), though the etymology
+      is uncertain.[3]
+
+
+      Currently there are about 38 known extant species of lampreys.[4] Parasitic
+      species are the best known, and feed by boring into the flesh of other fish
+      to suck their blood;[5] but only 18 species of lampreys are parasitic.[6] Parasitic
+      lampreys also attach themselves to larger animals to get a free ride.[7] Adults
+      of the non-parasitic species do not feed; they live off reserves acquired as
+      ammocoetes (larvae), which they obtain through filter feeding.
+
+
+      The lampreys are a very ancient lineage of vertebrates, though their exact relationship
+      to hagfishes and jawed vertebrates is still a matter of dispute.'
+    description_short: Are any jawless fish of the order Petromyzontiformes
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Lamprey_large_screenshot.jpeg, security_marking: UNCLASSIFIED//FOR
+        OFFICIAL USE ONLY}
+    large_icon: {filename: Lamprey_large_screenshot.jpeg, security_marking: UNCLASSIFIED//FOR
+        OFFICIAL USE ONLY}
+    launch_url: https://en.wikipedia.org/wiki/Lamprey
+    listing_type: Web Application
+    owners: [bigbrother]
+    requirements: Adult lampreys spawn in rivers and then die. The young larvae, ammocoetes,
+      spend several years in the rivers, where they live burrowed in fine sediment,
+      filter feeding on detritus and microorganisms.[19] Then, ammocoetes undergo
+      a metamorphosis lasting several months
+    screenshots:
+    - description: Adults superficially resemble eels in that they have scaleless,
+        elongated bodies, and can range from 13 to 100 cm (5 to 40 inches) in length
+      large_image: {filename: Lamprey_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Lamprey_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED//FOR OFFICIAL USE ONLY
+    small_icon: {filename: Lamprey_large_screenshot.jpeg, security_marking: UNCLASSIFIED//FOR
+        OFFICIAL USE ONLY}
+    tags: [science, fish]
+    title: Lamprey
+    unique_name: null
+    version_name: 1.0.5
+    what_is_new: Lampreys have long been used as food for humans.[53] They were highly
+      appreciated by ancient Romans
+  listing_activity:
+  - {action: CREATED, author: bigbrother, description: null}
+  - {action: SUBMITTED, author: bigbrother, description: null}
+  - {action: APPROVED_ORG, author: bigbrother, description: null}
+  - {action: APPROVED, author: bigbrother, description: null}
+  - {action: MODIFIED, author: bigbrother, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Miniluv
+    banner_icon: {filename: Basketball_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Health and Fitness, Media and Video, Sports]
+    contacts: []
+    description: Basketball is a non-contact sport played on a rectangular court.
+      While most often played as a team sport with five players on each side, three-on-three,
+      two-on-two, and one-on-one competitions are also common. The objective is to
+      shoot a ball through a hoop 18 inches (46 cm) in diameter and 10 feet (3.048
+      m) high that is mounted to a backboard at each end of the court. The game was
+      invented in 1891 by Dr. James Naismith, who would be the first basketball coach
+      of the Kansas Jayhawks, one of the most successful programs in the game's history.
+    description_short: Possibly the best sport in the world
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Basketball_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Basketball_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: http://localhost.com
+    listing_type: Web Application
+    owners: [aaronson]
+    requirements: Must be tall
+    screenshots:
+    - description: Invented basketball
+      large_image: {filename: Basketball_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Basketball_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Basketball_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    tags: [NBA, Basketball, Sports]
+    title: Basketball
+    unique_name: null
+    version_name: '23'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: aaronson, description: null}
+  - {action: SUBMITTED, author: aaronson, description: null}
+  - {action: APPROVED_ORG, author: bettafish, description: null}
+  - {action: APPROVED, author: bettafish, description: null}
+  listing_review_batch:
+  - {author: aaronson, rate: 2, text: Bad user interface but good content}
+  - {author: syme, rate: 5, text: 'If you''re complaining about the UI, its because
+      you have neither hops nor handles.  I''ve contacted the mods, you will be removed.  FOREVER. '}
+- library_entries: []
+  listing:
+    agency: Minipax
+    banner_icon: {filename: Deadpool_large_screenshot.png, security_marking: UNCLASSIFIED}
+    categories: [Finance, Weather]
+    contacts: []
+    description: 'Deadpool (Wade Winston Wilson) is a fictional antihero appearing
+      in American comic books published by Marvel Comics. Created by artist/writer
+      Rob Liefeld and writer Fabian Nicieza, the character first appeared in The New
+      Mutants #98 (cover-dated February 1991). Initially Deadpool was depicted as
+      a supervillain when he made his first appearance in The New Mutants and later
+      in issues of X-Force, but later evolved into his more recognizable antiheroic
+      persona. Deadpool, whose real name is Wade Wilson, is a disfigured and mentally
+      unstable mercenary with the superhuman ability of an accelerated healing factor
+      and physical prowess. The character is known as the "Merc with a Mouth" because
+      of his talkative nature and tendency to break the fourth wall, which is used
+      by writers for humorous effect and running gags.
+
+
+      The character''s popularity has seen him feature in numerous other media. In
+      the 2004 series Cable & Deadpool, he refers to his own scarred appearance as
+      "Ryan Reynolds crossed with a Shar Pei".[6][7] Reynolds himself would eventually
+      portray the character in the 2009 film X-Men Origins: Wolverine and reprised
+      the role in the 2016 film Deadpool.[8][9][10]'
+    description_short: makes dead people
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Deadpool_large_screenshot.png, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Deadpool_large_screenshot.png, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Deadpool
+    listing_type: Web Services
+    owners: [syme]
+    requirements: None
+    screenshots:
+    - description: null
+      large_image: {filename: Deadpool_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Deadpool_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Deadpool_large_screenshot.png, security_marking: UNCLASSIFIED}
+    tags: [merc]
+    title: Deadpool
+    unique_name: null
+    version_name: '1'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: syme, description: null}
+  - {action: MODIFIED, author: syme, description: null}
+  - {action: SUBMITTED, author: syme, description: null}
+  - {action: APPROVED_ORG, author: bigbrother, description: null}
+  - {action: APPROVED, author: bigbrother, description: null}
+  listing_review_batch:
+  - {author: bettafish, rate: 5, text: Rating 5 stars because I don't want to make
+      him mad.}
+  - {author: syme, rate: 2, text: 'He wrecked the freeway.  I was late to work and
+      rushed my experiment.  After drinking the radioactive material i just got sick
+      :('}
+- library_entries: []
+  listing:
+    agency: Test2
+    banner_icon: {filename: Building_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Education]
+    contacts: []
+    description: A building or edifice is a structure with a roof and walls standing
+      more or less permanently in one place, such as a house or factory.
+    description_short: Buildings come in a  variety of sizes, shape, and functions.
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Building_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Building_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: http://localhost.com
+    listing_type: Web Services
+    owners: [aaronson]
+    requirements: None
+    screenshots:
+    - description: null
+      large_image: {filename: Building_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Building_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Building_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    tags: [Architecture, Buildings]
+    title: Building
+    unique_name: null
+    version_name: '1'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: aaronson, description: null}
+  - {action: SUBMITTED, author: aaronson, description: null}
+  - {action: APPROVED_ORG, author: bettafish, description: null}
+  - {action: APPROVED, author: bettafish, description: null}
+  listing_review_batch:
+  - {author: aaronson, rate: 4, text: Essential for living life}
+  - {author: syme, rate: 2, text: 'I don''t get it.  Does its just sit there? '}
+- library_entries: []
+  listing:
+    agency: Minipax
+    banner_icon: {filename: Snow_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Weather]
+    contacts: []
+    description: Snow refers to forms of ice crystals that precipitate from the atmosphere
+      (usually from clouds) and undergo changes on the Earth's surface.
+    description_short: Ice crystals precipitating.
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Snow_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Snow_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: http://localhost.com
+    listing_type: Web Application
+    owners: [aaronson]
+    requirements: None
+    screenshots:
+    - description: After a night of snow
+      large_image: {filename: Snow_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Snow_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    - description: Animal in snow
+      large_image: {filename: Snow_1_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 1
+      small_image: {filename: Snow_1_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Snow_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    tags: [Weather, Cold]
+    title: Snow
+    unique_name: null
+    version_name: '1'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: aaronson, description: null}
+  - {action: SUBMITTED, author: aaronson, description: null}
+  - {action: APPROVED_ORG, author: bettafish, description: null}
+  - {action: APPROVED, author: bettafish, description: null}
+  listing_review_batch:
+  - {author: bigbrother, rate: 1, text: The cold does not feel good}
+  - {author: syme, rate: 3, text: 'I''ve heard that it knows nothing. '}
+- library_entries: []
+  listing:
+    agency: Miniluv
+    banner_icon: {filename: Greatwhiteshark_large_screenshot.jpeg, security_marking: UNCLASSIFIED//FOR
+        OFFICIAL USE ONLY}
+    categories: [Education]
+    contacts: []
+    description: The great white shark (Carcharodon carcharias), also known as the
+      great white, white pointer, white shark, or white death, is a species of large
+      mackerel shark which can be found in the coastal surface waters of all the major
+      oceans. The great white shark is notable for its size, with larger female individuals
+      growing to 6.1 m (20 ft) in length and 1,950 kg (4,300 lb) in weight at maturity.[3][4][5]
+      However most are smaller, males measuring 3.4 to 4.0 m (11 to 13 ft) and females
+      4.6 to 4.9 m (15 to 16 ft) on average.[5][6] According to a 2014 study the lifespan
+      of great white sharks is estimated to be as long as 70 years or more, well above
+      previous estimates,[7] making it one of the longest lived cartilaginous fish
+      currently known.[8] According to the same study, male great white sharks take
+      26 years to reach sexual maturity, while the females take 33 years to be ready
+      to produce offspring.[9] Great white sharks can swim at speeds of over 56 km/h
+      (35 mph),[10] and can swim to depths of 1,200 m (3,900 ft).[11]
+    description_short: The great white shark has a robust, large, conical snout.
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Greatwhiteshark_large_screenshot.jpeg, security_marking: UNCLASSIFIED//FOR
+        OFFICIAL USE ONLY}
+    large_icon: {filename: Greatwhiteshark_large_screenshot.jpeg, security_marking: UNCLASSIFIED//FOR
+        OFFICIAL USE ONLY}
+    launch_url: https://en.wikipedia.org/wiki/Great_white_shark
+    listing_type: Web Application
+    owners: [bigbrother]
+    requirements: "Great white sharks live in almost all coastal and offshore waters\
+      \ which have water temperature between 12 and 24 \xB0C (54 and 75 \xB0F), with\
+      \ greater concentrations in the United States (Northeast and California), South\
+      \ Africa, Japan, Oceania, Chile, and the Mediterranean.[23] One of the densest\
+      \ known populations is found around Dyer Island, South Africa.[24]"
+    screenshots:
+    - description: Map and jaw pictures
+      large_image: {filename: Greatwhiteshark_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Greatwhiteshark_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Greatwhiteshark_large_screenshot.jpeg, security_marking: UNCLASSIFIED//FOR
+        OFFICIAL USE ONLY}
+    tags: [science, fish, shark]
+    title: Great white shark
+    unique_name: null
+    version_name: 10.1.9
+    what_is_new: The great white shark has no known natural predators other than,
+      on very rare occasion, the killer whale.
+  listing_activity:
+  - {action: CREATED, author: bigbrother, description: null}
+  - {action: MODIFIED, author: bigbrother, description: null}
+  - {action: MODIFIED, author: bigbrother, description: null}
+  - {action: SUBMITTED, author: bigbrother, description: null}
+  - {action: APPROVED_ORG, author: bigbrother, description: null}
+  - {action: APPROVED, author: bigbrother, description: null}
+  - {action: MODIFIED, author: bigbrother, description: null}
+  listing_review_batch:
+  - {author: syme, rate: 5, text: 'Growing up I had a friend who talk during movies.  The
+      worst.  Anyways after a trip to the beach I didn''t have to worry about that
+      anymore. '}
+- library_entries: []
+  listing:
+    agency: Miniplen
+    banner_icon: {filename: WatermeLon_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Health and Fitness]
+    contacts: []
+    description: Watermelon Citrullus lanatus var. lanatus is a scrambling and trailing
+      vine in the flowering plant family Cucurbitaceae. The species originated in
+      southern Africa, and there is evidence of its cultivation in Ancient Egypt.
+      It is grown in tropical and sub-tropical areas worldwide for its large edible
+      fruit, also known as a watermelon, which is a special kind of berry with a hard
+      rind and no internal division, botanically called a pepo. The sweet, juicy flesh
+      is usually deep red to pink, with many black seeds. The fruit can be eaten raw
+      or pickled and the rind is edible after cooking.
+    description_short: Tasty fruit for the summer.
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: WatermeLon_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: WatermeLon_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: http://localhost.com
+    listing_type: Desktop App
+    owners: [aaronson]
+    requirements: None
+    screenshots:
+    - description: Slices of watermelon
+      large_image: {filename: WatermeLon_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: WatermeLon_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: WatermeLon_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    tags: [Food, Fruits, Fruit]
+    title: Waterme Lon
+    unique_name: null
+    version_name: '1'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: aaronson, description: null}
+  - {action: SUBMITTED, author: aaronson, description: null}
+  - {action: APPROVED_ORG, author: bettafish, description: null}
+  - {action: APPROVED, author: bettafish, description: null}
+  listing_review_batch:
+  - {author: aaronson, rate: 4, text: Best time to use when it's hot outside.}
+  - {author: syme, rate: 5, text: 'I ate a seed and a watermelon grew in my belly.  This
+      provided an unlimited supply of food.  Try it and see! '}
+# - library_entries: []
+#   listing:
+#     agency: Minipax
+#     banner_icon: {filename: null, security_marking: null}
+#     categories: [Business]
+#     contacts: []
+#     description: 'Management (or managing) is the administration of an organization,
+#       whether it be a business, a not-for-profit organization, or government body.
+#       Management includes the activities of setting the strategy of an organization
+#       and coordinating the efforts of its employees or volunteers to accomplish its
+#       objectives through the application of available resources, such as financial,
+#       natural, technological, and human resources. The term "management" may also
+#       refer to the people who manage an organization.
+#
+#
+#       Management is also an academic discipline, a social science whose objective
+#       is to study social organization and organizational leadership. Management is
+#       studied at colleges and universities; some important degrees in management are
+#       the Bachelor of Commerce (B.Com.) and Master of Business Administration (M.B.A.)
+#       and, for the public sector, the Master of Public Administration (MPA) degree.
+#       Individuals who aim at becoming management researchers or professors may complete
+#       the Doctor of Management (DM), the Doctor of Business Administration (DBA),
+#       or the PhD in Business Administration or Management.'
+#     description_short: Management (or managing) is the administration of an organization,
+#       whether it be a business.
+#     doc_urls: []
+#     iframe_compatible: true
+#     is_deleted: true
+#     is_enabled: false
+#     is_featured: false
+#     is_private: false
+#     large_banner_icon: {filename: null, security_marking: null}
+#     large_icon: {filename: null, security_marking: null}
+#     launch_url: http://businesssmanagment.com
+#     listing_type: Desktop App
+#     owners: [bigbrother]
+#     requirements: None
+#     screenshots: []
+#     security_marking: UNCLASSIFIED
+#     small_icon: {filename: null, security_marking: null}
+#     tags: [management, team, process]
+#     title: Business Management
+#     unique_name: null
+#     version_name: '2.0'
+#     what_is_new: null
+#   listing_activity:
+#   - {action: CREATED, author: bigbrother, description: null}
+#   - {action: DELETED, author: bigbrother, description: null}
+#   listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Minitrue
+    banner_icon: {filename: BusinessManagement_large_screenshot.png, security_marking: UNCLASSIFIED}
+    categories: [Business]
+    contacts: []
+    description: 'Management (or managing) is the administration of an organization,
+      whether it be a business, a not-for-profit organization, or government body.
+      Management includes the activities of setting the strategy of an organization
+      and coordinating the efforts of its employees or volunteers to accomplish its
+      objectives through the application of available resources, such as financial,
+      natural, technological, and human resources. The term "management" may also
+      refer to the people who manage an organization.
+
+
+      Management is also an academic discipline, a social science whose objective
+      is to study social organization and organizational leadership. Management is
+      studied at colleges and universities; some important degrees in management are
+      the Bachelor of Commerce (B.Com.) and Master of Business Administration (M.B.A.)
+      and, for the public sector, the Master of Public Administration (MPA) degree.
+      Individuals who aim at becoming management researchers or professors may complete
+      the Doctor of Management (DM), the Doctor of Business Administration (DBA),
+      or the PhD in Business Administration or Management.'
+    description_short: Management (or managing) is the administration of an organization,
+      whether it be a business.
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: BusinessManagement_large_screenshot.png, security_marking: UNCLASSIFIED}
+    large_icon: {filename: BusinessManagement_large_screenshot.png, security_marking: UNCLASSIFIED}
+    launch_url: http://businessmanagment.com
+    listing_type: Desktop App
+    owners: [wsmith]
+    requirements: None
+    screenshots:
+    - description: null
+      large_image: {filename: BusinessManagement_0_large_screenshot.png, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: BusinessManagement_0_large_screenshot.png, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: BusinessManagement_large_screenshot.png, security_marking: UNCLASSIFIED}
+    tags: [risk, process, managment]
+    title: Business Management
+    unique_name: null
+    version_name: '2.02'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: wsmith, description: null}
+  - {action: MODIFIED, author: wsmith, description: null}
+  - {action: SUBMITTED, author: bigbrother, description: null}
+  - {action: APPROVED_ORG, author: bigbrother, description: null}
+  - {action: APPROVED, author: bigbrother, description: null}
+  listing_review_batch:
+  - {author: bigbrother, rate: 3, text: 'Management (or managing) is the administration
+      of an organization, whether it be a business, a not-for-profit organization,
+      or government body.'}
+  - {author: bettafish, rate: 4, text: 'Individuals who aim at becoming management
+      researchers or professors may complete the Doctor of Management (DM), the Doctor
+      of Business Administration (DBA), or the PhD in Business Administration or Management.'}
+  - {author: syme, rate: 2, text: 'I was told there would be cake, last time I did
+      not get any cake, and i just want some cake. '}
+- library_entries: []
+  listing:
+    agency: Minipax
+    banner_icon: {filename: InformationalBook_large_screenshot.png, security_marking: UNCLASSIFIED}
+    categories: [Books and Reference]
+    contacts: []
+    description: "The Wikimedia Foundation, Inc. is a nonprofit charitable organization\
+      \ dedicated to encouraging the growth, development and distribution of free,\
+      \ multilingual, educational content, and to providing the full content of these\
+      \ wiki-based projects to the public free of charge. The Wikimedia Foundation\
+      \ operates some of the largest collaboratively edited reference projects in\
+      \ the world, including Wikipedia, a top-ten internet property.\nImagine a world\
+      \ in which every single human being can freely share in the sum of all knowledge.\
+      \ That\u2019s our commitment"
+    description_short: The Free Encyclopedia
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: InformationalBook_large_screenshot.png, security_marking: UNCLASSIFIED}
+    large_icon: {filename: InformationalBook_large_screenshot.png, security_marking: UNCLASSIFIED}
+    launch_url: https://wikimediafoundation.org/wiki/Home
+    listing_type: Web Application
+    owners: [bigbrother]
+    requirements: 'The Wikimedia Foundation relies heavily on the generous support
+      from our users. Please consider making a donation today, be it time or money.
+
+
+      The Wikimedia Foundation is incorporated as a 501(c)(3) nonprofit organization
+      in the United States, and donations from US citizens are tax deductible. Donations
+      made by citizens of other countries may also be tax deductible. Please see deductibility
+      of donations for details. Please see our fundraising page for details of making
+      donations via credit card, PayPal, postal mail or direct deposit. For all other
+      types of donations, please contact us.'
+    screenshots:
+    - description: null
+      large_image: {filename: InformationalBook_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED//FOR
+          OFFICIAL USE ONLY}
+      order: 0
+      small_image: {filename: InformationalBook_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED//FOR OFFICIAL USE ONLY
+    small_icon: {filename: InformationalBook_large_screenshot.png, security_marking: UNCLASSIFIED//FOR
+        OFFICIAL USE ONLY}
+    tags: [encyclopedia, free]
+    title: Informational Book
+    unique_name: null
+    version_name: 1.0.5
+    what_is_new: "The annual plan documents the Foundation's 2016\u201317 financial\
+      \ plan, strategic targets, activities, and staffing overview."
+  listing_activity:
+  - {action: CREATED, author: bigbrother, description: null}
+  - {action: MODIFIED, author: bigbrother, description: null}
+  - {action: SUBMITTED, author: bigbrother, description: null}
+  - {action: APPROVED_ORG, author: bigbrother, description: null}
+  - {action: APPROVED, author: bigbrother, description: null}
+  - {action: MODIFIED, author: bigbrother, description: null}
+  listing_review_batch:
+  - {author: syme, rate: 5, text: 'Zeus controls the world by creating brainwave modifiers
+      that are sent through the air as cotton candy.  Its true!  You can read about
+      it on wikipedia. '}
+- library_entries: []
+  listing:
+    agency: Miniluv
+    banner_icon: {filename: Sun_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Tools]
+    contacts: []
+    description: 'The Sun is the star at the center of the Solar System. It is a nearly
+      perfect sphere of hot plasma,[13][14] with internal convective motion that generates
+      a magnetic field via a dynamo process.[15] It is by far the most important source
+      of energy for life on Earth. Its diameter is about 109 times that of Earth,
+      and its mass is about 330,000 times that of Earth, accounting for about 99.86%
+      of the total mass of the Solar System.[16] About three quarters of the Sun''s
+      mass consists of hydrogen (~73%); the rest is mostly helium (~25%), with much
+      smaller quantities of heavier elements, including oxygen, carbon, neon, and
+      iron.[17]
+
+
+      The Sun is a G-type main-sequence star (G2V) based on its spectral class. As
+      such, it is informally referred to as a yellow dwarf. It formed approximately
+      4.6 billion[a][9][18] years ago from the gravitational collapse of matter within
+      a region of a large molecular cloud. Most of this matter gathered in the center,
+      whereas the rest flattened into an orbiting disk that became the Solar System.
+      The central mass became so hot and dense that it eventually initiated nuclear
+      fusion in its core. It is thought that almost all stars form by this process.
+
+
+      The Sun is roughly middle-aged; it has not changed dramatically for more than
+      four billion[a] years, and will remain fairly stable for more than another five
+      billion years. After hydrogen fusion in its core has diminished to the point
+      at which it is no longer in hydrostatic equilibrium, the core of the Sun will
+      experience a marked increase in density and temperature while its outer layers
+      expand to eventually become a red giant. It is calculated that the Sun will
+      become sufficiently large to engulf the current orbits of Mercury and Venus,
+      and render Earth uninhabitable.
+
+
+      The enormous effect of the Sun on Earth has been recognized since prehistoric
+      times, and the Sun has been regarded by some cultures as a deity. The synodic
+      rotation of Earth and its orbit around the Sun are the basis of the solar calendar,
+      which is the predominant calendar in use today.'
+    description_short: The Sun is the star at the center of the Solar System.
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Sun_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Sun_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Sun
+    listing_type: Web Application
+    owners: [betaraybill]
+    requirements: Requires the internet.
+    screenshots:
+    - description: null
+      large_image: {filename: Sun_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Sun_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Sun_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    tags: [Planets]
+    title: Sun
+    unique_name: null
+    version_name: '1.0'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: betaraybill, description: null}
+  - {action: MODIFIED, author: betaraybill, description: null}
+  - {action: SUBMITTED, author: betaraybill, description: null}
+  - {action: APPROVED_ORG, author: bigbrother, description: null}
+  - {action: APPROVED, author: bigbrother, description: null}
+  listing_review_batch:
+  - {author: betaraybill, rate: 5, text: Kinda need this guy.}
+  - {author: syme, rate: 5, text: 'I will allow it for now, but I dislike his posturing
+      threat of blowing up in a billion years. '}
+- library_entries: []
+  listing:
+    agency: Miniluv
+    banner_icon: {filename: Jasoom_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Books and Reference]
+    contacts: []
+    description: 'Earth is the third planet from the Sun and the only object in the
+      Universe known to harbor life. According to radiometric dating and other sources
+      of evidence, Earth formed over 4 billion years ago.[24][25][26] Earth''s gravity
+      interacts with other objects in space, especially the Sun and the Moon, Earth''s
+      only natural satellite. During one orbit around the Sun, Earth rotates about
+      its axis about 365.26 times; thus, an Earth year is about 365.26 days long.[n
+      5]
+
+
+      Earth''s axis of rotation is tilted, producing seasonal variations on the planet''s
+      surface.[27] The gravitational interaction between the Earth and Moon causes
+      ocean tides, stabilizes the Earth''s orientation on its axis, and gradually
+      slows its rotation.[28] Earth is the densest planet in the Solar System and
+      the largest of the four terrestrial planets.
+
+
+      Earth''s lithosphere is divided into several rigid tectonic plates that migrate
+      across the surface over periods of many millions of years. About 71% of Earth''s
+      surface is covered with water, mostly by its oceans.[29] The remaining 29% is
+      land consisting of continents and islands that together have many lakes, rivers
+      and other sources of water that contribute to the hydrosphere. The majority
+      of Earth''s polar regions are covered in ice, including the Antarctic ice sheet
+      and the sea ice of the Arctic ice pack. Earth''s interior remains active with
+      a solid iron inner core, a liquid outer core that generates the Earth''s magnetic
+      field, and a convecting mantle that drives plate tectonics.
+
+
+      Within the first billion years of Earth''s history, life appeared in the oceans
+      and began to affect the Earth''s atmosphere and surface, leading to the proliferation
+      of aerobic and anaerobic organisms. Some geological evidence indicates that
+      life may have arisen as much as 4.1 billion years ago. Since then, the combination
+      of Earth''s distance from the Sun, physical properties, and geological history
+      have allowed life to evolve and thrive.[30][31] In the history of the Earth,
+      biodiversity has gone through long periods of expansion, occasionally punctuated
+      by mass extinction events. Over 99% of all species[32] that ever lived on Earth
+      are extinct.[33][34] Estimates of the number of species on Earth today vary
+      widely;[35][36][37] most species have not been described.[38] Over 7.4 billion
+      humans live on Earth and depend on its biosphere and minerals for their survival.
+      Humans have developed diverse societies and cultures; politically, the world
+      has about 200 sovereign states.'
+    description_short: Earth is the third planet from the Sun and the only object
+      in the Universe known to harbor life.
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Jasoom_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Jasoom_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Earth
+    listing_type: Web Application
+    owners: [betaraybill]
+    requirements: Requires the internet.
+    screenshots:
+    - description: null
+      large_image: {filename: Jasoom_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Jasoom_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Jasoom_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    tags: [Planets]
+    title: Jasoom
+    unique_name: null
+    version_name: '1.0'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: betaraybill, description: null}
+  - {action: SUBMITTED, author: betaraybill, description: null}
+  - {action: MODIFIED, author: betaraybill, description: null}
+  - {action: APPROVED_ORG, author: bigbrother, description: null}
+  - {action: APPROVED, author: bigbrother, description: null}
+  listing_review_batch:
+  - {author: betaraybill, rate: 5, text: I like this planet. It's alright.}
+  - {author: syme, rate: 2, text: Contains florida and the dallas cowboys.  This makes
+      it irredeemable in the eyes of the lord.}
+- library_entries: []
+  listing:
+    agency: Miniluv
+    banner_icon: {filename: Barsoom_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Communication]
+    contacts: []
+    description: "Mars is the fourth planet from the Sun and the second-smallest planet\
+      \ in the Solar System, after Mercury. Named after the Roman god of war, it is\
+      \ often referred to as the \"Red Planet\"[13][14] because the iron oxide prevalent\
+      \ on its surface gives it a reddish appearance.[15] Mars is a terrestrial planet\
+      \ with a thin atmosphere, having surface features reminiscent both of the impact\
+      \ craters of the Moon and the valleys, deserts, and polar ice caps of Earth.\n\
+      \nThe rotational period and seasonal cycles of Mars are likewise similar to\
+      \ those of Earth, as is the tilt that produces the seasons. Mars is the site\
+      \ of Olympus Mons, the largest volcano and second-highest known mountain in\
+      \ the Solar System, and of Valles Marineris, one of the largest canyons in the\
+      \ Solar System. The smooth Borealis basin in the northern hemisphere covers\
+      \ 40% of the planet and may be a giant impact feature.[16][17] Mars has two\
+      \ moons, Phobos and Deimos, which are small and irregularly shaped. These may\
+      \ be captured asteroids,[18][19] similar to 5261 Eureka, a Mars trojan.\n\n\
+      There are ongoing investigations assessing the past habitability potential of\
+      \ Mars, as well as the possibility of extant life. Future astrobiology missions\
+      \ are planned, including the Mars 2020 and ExoMars rovers.[20][21][22][23] Liquid\
+      \ water cannot exist on the surface of Mars due to low atmospheric pressure,\
+      \ which is less than 1% of the Earth's,[24] except at the lowest elevations\
+      \ for short periods.[25][26] The two polar ice caps appear to be made largely\
+      \ of water.[27][28] The volume of water ice in the south polar ice cap, if melted,\
+      \ would be sufficient to cover the entire planetary surface to a depth of 11\
+      \ meters (36 ft).[29] In November 2016, NASA reported finding a large amount\
+      \ of underground ice in the Utopia Planitia region of Mars. The volume of water\
+      \ detected has been estimated to be equivalent to the volume of water in Lake\
+      \ Superior.[30][31][32]\n\nMars can easily be seen from Earth with the naked\
+      \ eye, as can its reddish coloring. Its apparent magnitude reaches \u22122.91,[7]\
+      \ which is surpassed only by Jupiter, Venus, the Moon, and the Sun. Optical\
+      \ ground-based telescopes are typically limited to resolving features about\
+      \ 300 kilometers (190 mi) across when Earth and Mars are closest because of\
+      \ Earth's atmosphere.[33]"
+    description_short: Mars is the fourth planet from the Sun and the second-smallest
+      planet in the Solar System.
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Barsoom_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Barsoom_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Mars
+    listing_type: Web Application
+    owners: [betaraybill]
+    requirements: Requires the internet.
+    screenshots:
+    - description: null
+      large_image: {filename: Barsoom_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Barsoom_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Barsoom_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    tags: [Planets]
+    title: Barsoom
+    unique_name: null
+    version_name: '1.0'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: betaraybill, description: null}
+  - {action: SUBMITTED, author: betaraybill, description: null}
+  - {action: APPROVED_ORG, author: bigbrother, description: null}
+  - {action: APPROVED, author: bigbrother, description: null}
+  listing_review_batch:
+  - {author: betaraybill, rate: 5, text: Looking like the next home.}
+  - {author: syme, rate: 3, text: 'No roller coaster, a curfew and ice warriors.'}
+- library_entries: []
+  listing:
+    agency: Miniluv
+    banner_icon: {filename: Venus_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Entertainment]
+    contacts: []
+    description: "Venus is the second planet from the Sun, orbiting it every 224.7\
+      \ Earth days.[12] It has the longest rotation period (243 days) of any planet\
+      \ in the Solar System and rotates in the opposite direction to most other planets.\
+      \ It has no natural satellites. It is named after the Roman goddess of love\
+      \ and beauty. It is the second-brightest natural object in the night sky after\
+      \ the Moon, reaching an apparent magnitude of \u22124.6 \u2013 bright enough\
+      \ to cast shadows at night and, rarely, visible to the naked eye in broad daylight.[13][14]\
+      \ Orbiting within Earth's orbit, Venus is an inferior planet and never appears\
+      \ to venture far from the Sun; its maximum angular distance from the Sun (elongation)\
+      \ is 47.8\xB0.\n\nVenus is a terrestrial planet and is sometimes called Earth's\
+      \ \"sister planet\" because of their similar size, mass, proximity to the Sun,\
+      \ and bulk composition. It is radically different from Earth in other respects.\
+      \ It has the densest atmosphere of the four terrestrial planets, consisting\
+      \ of more than 96% carbon dioxide. The atmospheric pressure at the planet's\
+      \ surface is 92 times that of Earth, or roughly the pressure found 900 m (3,000\
+      \ ft) underwater on Earth. Venus is by far the hottest planet in the Solar System,\
+      \ with a mean surface temperature of 735 K (462 \xB0C; 863 \xB0F), even though\
+      \ Mercury is closer to the Sun. Venus is shrouded by an opaque layer of highly\
+      \ reflective clouds of sulfuric acid, preventing its surface from being seen\
+      \ from space in visible light. It may have had water oceans in the past,[15][16]\
+      \ but these would have vaporized as the temperature rose due to a runaway greenhouse\
+      \ effect.[17] The water has probably photodissociated, and the free hydrogen\
+      \ has been swept into interplanetary space by the solar wind because of the\
+      \ lack of a planetary magnetic field.[18] Venus's surface is a dry desertscape\
+      \ interspersed with slab-like rocks and is periodically resurfaced by volcanism.\n\
+      \nAs one of the brightest objects in the sky, Venus has been a major fixture\
+      \ in human culture for as long as records have existed. It has been made sacred\
+      \ to gods of many cultures, and has been a prime inspiration for writers and\
+      \ poets as the \"morning star\" and \"evening star\". Venus was the first planet\
+      \ to have its motions plotted across the sky, as early as the second millennium\
+      \ BC.[19]\n\nAs the closest planet to Earth, Venus has been a prime target for\
+      \ early interplanetary exploration. It was the first planet beyond Earth visited\
+      \ by a spacecraft (Mariner 2 in 1962), and the first to be successfully landed\
+      \ on (by Venera 7 in 1970). Venus's thick clouds render observation of its surface\
+      \ impossible in visible light, and the first detailed maps did not emerge until\
+      \ the arrival of the Magellan orbiter in 1991. Plans have been proposed for\
+      \ rovers or more complex missions, but they are hindered by Venus's hostile\
+      \ surface conditions."
+    description_short: Venus is the second planet from the Sun, orbiting it every
+      224.7 Earth days.
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Venus_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Venus_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Venus
+    listing_type: Web Application
+    owners: [betaraybill]
+    requirements: Requires the internet.
+    screenshots:
+    - description: null
+      large_image: {filename: Venus_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Venus_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Venus_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    tags: [Planets]
+    title: Venus
+    unique_name: null
+    version_name: '1.0'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: betaraybill, description: null}
+  - {action: SUBMITTED, author: betaraybill, description: null}
+  - {action: APPROVED_ORG, author: bigbrother, description: null}
+  - {action: APPROVED, author: bigbrother, description: null}
+  listing_review_batch:
+  - {author: betaraybill, rate: 4, text: Not really feeling the vibes.}
+  - {author: syme, rate: 1, text: 'It is too arrogant. '}
+- library_entries: []
+  listing:
+    agency: Miniluv
+    banner_icon: {filename: Saturn_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Finance]
+    contacts: []
+    description: "Saturn is the sixth planet from the Sun and the second-largest in\
+      \ the Solar System, after Jupiter. It is a gas giant with an average radius\
+      \ about nine times that of Earth.[11][12] Although it has only one-eighth the\
+      \ average density of Earth, with its larger volume Saturn is just over 95 times\
+      \ more massive.[13][14][15] Saturn is named after the Roman god of agriculture;\
+      \ its astronomical symbol (\u2644) represents the god's sickle.\n\nSaturn's\
+      \ interior is probably composed of a core of iron\u2013nickel and rock (silicon\
+      \ and oxygen compounds). This core is surrounded by a deep layer of metallic\
+      \ hydrogen, an intermediate layer of liquid hydrogen and liquid helium, and\
+      \ finally outside the Frenkel line a gaseous outer layer.[16] Saturn has a pale\
+      \ yellow hue due to ammonia crystals in its upper atmosphere. Electrical current\
+      \ within the metallic hydrogen layer is thought to give rise to Saturn's planetary\
+      \ magnetic field, which is weaker than Earth's, but has a magnetic moment 580\
+      \ times that of Earth due to Saturn's larger size. Saturn's magnetic field strength\
+      \ is around one-twentieth of Jupiter's.[17] The outer atmosphere is generally\
+      \ bland and lacking in contrast, although long-lived features can appear. Wind\
+      \ speeds on Saturn can reach 1,800 km/h (500 m/s), higher than on Jupiter, but\
+      \ not as high as those on Neptune.[18]\n\nSaturn has a prominent ring system\
+      \ that consists of nine continuous main rings and three discontinuous arcs and\
+      \ that is composed mostly of ice particles with a smaller amount of rocky debris\
+      \ and dust. 62 moons[19] are known to orbit Saturn, of which fifty-three are\
+      \ officially named. This does not include the hundreds of moonlets comprising\
+      \ the rings. Titan, Saturn's largest moon, and the second-largest in the Solar\
+      \ System, is larger than the planet Mercury, although less massive, and is the\
+      \ only moon in the Solar System to have a substantial atmosphere.[20]"
+    description_short: Saturn is the sixth planet from the Sun and the second-largest
+      in the Solar System
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Saturn_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Saturn_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Saturn
+    listing_type: Web Application
+    owners: [betaraybill]
+    requirements: Requires the internet.
+    screenshots:
+    - description: null
+      large_image: {filename: Saturn_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Saturn_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Saturn_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    tags: [Planets]
+    title: Saturn
+    unique_name: null
+    version_name: '1.0'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: betaraybill, description: null}
+  - {action: SUBMITTED, author: betaraybill, description: null}
+  - {action: APPROVED_ORG, author: bigbrother, description: null}
+  - {action: APPROVED, author: bigbrother, description: null}
+  listing_review_batch:
+  - {author: betaraybill, rate: 3, text: 'What''s up with that dumb ring?'}
+  - {author: syme, rate: 5, text: 'I did like it.  I did like it so much.  So i put
+      rings on it.  -God, probably. '}
+- library_entries: []
+  listing:
+    agency: Miniluv
+    banner_icon: {filename: Jupiter_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Business]
+    contacts: []
+    description: "Jupiter is the fifth planet from the Sun and the largest in the\
+      \ Solar System. It is a giant planet with a mass one-thousandth that of the\
+      \ Sun, but two and a half times that of all the other planets in the Solar System\
+      \ combined. Jupiter and Saturn are gas giants; the other two giant planets,\
+      \ Uranus and Neptune are ice giants. Jupiter has been known to astronomers since\
+      \ antiquity.[12] The Romans named it after their god Jupiter.[13] When viewed\
+      \ from Earth, Jupiter can reach an apparent magnitude of \u22122.94, bright\
+      \ enough for its reflected light to cast shadows,[14] and making it on average\
+      \ the third-brightest object in the night sky after the Moon and Venus.\n\n\
+      Jupiter is primarily composed of hydrogen with a quarter of its mass being helium,\
+      \ though helium comprises only about a tenth of the number of molecules. It\
+      \ may also have a rocky core of heavier elements,[15] but like the other giant\
+      \ planets, Jupiter lacks a well-defined solid surface. Because of its rapid\
+      \ rotation, the planet's shape is that of an oblate spheroid (it has a slight\
+      \ but noticeable bulge around the equator). The outer atmosphere is visibly\
+      \ segregated into several bands at different latitudes, resulting in turbulence\
+      \ and storms along their interacting boundaries. A prominent result is the Great\
+      \ Red Spot, a giant storm that is known to have existed since at least the 17th\
+      \ century when it was first seen by telescope. Surrounding Jupiter is a faint\
+      \ planetary ring system and a powerful magnetosphere. Jupiter has at least 69\
+      \ moons,[16] including the four large Galilean moons discovered by Galileo Galilei\
+      \ in 1610. Ganymede, the largest of these, has a diameter greater than that\
+      \ of the planet Mercury.\n\nJupiter has been explored on several occasions by\
+      \ robotic spacecraft, most notably during the early Pioneer and Voyager flyby\
+      \ missions and later by the Galileo orbiter. In late February 2007, Jupiter\
+      \ was visited by the New Horizons probe, which used Jupiter's gravity to increase\
+      \ its speed and bend its trajectory en route to Pluto. The latest probe to visit\
+      \ the planet is Juno, which entered into orbit around Jupiter on July 4, 2016.[17][18]\
+      \ Future targets for exploration in the Jupiter system include the probable\
+      \ ice-covered liquid ocean of its moon Europa."
+    description_short: Jupiter is the fifth planet from the Sun and the largest in
+      the Solar System.
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Jupiter_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Jupiter_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Jupiter
+    listing_type: Web Application
+    owners: [betaraybill]
+    requirements: Requires the internet.
+    screenshots:
+    - description: null
+      large_image: {filename: Jupiter_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Jupiter_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Jupiter_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    tags: [Planets]
+    title: Jupiter
+    unique_name: null
+    version_name: '1.0'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: betaraybill, description: null}
+  - {action: SUBMITTED, author: betaraybill, description: null}
+  - {action: APPROVED_ORG, author: bigbrother, description: null}
+  - {action: APPROVED, author: bigbrother, description: null}
+  listing_review_batch:
+  - {author: betaraybill, rate: 5, text: 'It''s pretty big. Like, bigly big.'}
+  - {author: syme, rate: 3, text: To hard to to talk to because you just want to look
+      at its eyestorm birthmark thing.}
+- library_entries: []
+  listing:
+    agency: Miniluv
+    banner_icon: {filename: UrAnus_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Finance]
+    contacts: []
+    description: "Uranus is the seventh planet from the Sun. It has the third-largest\
+      \ planetary radius and fourth-largest planetary mass in the Solar System. Uranus\
+      \ is similar in composition to Neptune, and both have different bulk chemical\
+      \ composition from that of the larger gas giants Jupiter and Saturn. For this\
+      \ reason, scientists often classify Uranus and Neptune as \"ice giants\" to\
+      \ distinguish them from the gas giants. Uranus's atmosphere is similar to Jupiter's\
+      \ and Saturn's in its primary composition of hydrogen and helium, but it contains\
+      \ more \"ices\" such as water, ammonia, and methane, along with traces of other\
+      \ hydrocarbons.[12] It is the coldest planetary atmosphere in the Solar System,\
+      \ with a minimum temperature of 49 K (\u2212224 \xB0C; \u2212371 \xB0F), and\
+      \ has a complex, layered cloud structure with water thought to make up the lowest\
+      \ clouds and methane the uppermost layer of clouds.[12] The interior of Uranus\
+      \ is mainly composed of ices and rock.[11]\n\nUranus is the only planet whose\
+      \ name is derived from a figure from Greek mythology, from the Latinised version\
+      \ of the Greek god of the sky Ouranos. Like the other giant planets, Uranus\
+      \ has a ring system, a magnetosphere, and numerous moons. The Uranian system\
+      \ has a unique configuration among those of the planets because its axis of\
+      \ rotation is tilted sideways, nearly into the plane of its solar orbit. Its\
+      \ north and south poles, therefore, lie where most other planets have their\
+      \ equators.[16] In 1986, images from Voyager 2 showed Uranus as an almost featureless\
+      \ planet in visible light, without the cloud bands or storms associated with\
+      \ the other giant planets.[16] Observations from Earth have shown seasonal change\
+      \ and increased weather activity as Uranus approached its equinox in 2007. Wind\
+      \ speeds can reach 250 metres per second (900 km/h; 560 mph).[17]"
+    description_short: Uranus is the seventh planet from the Sun.
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: UrAnus_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: UrAnus_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Uranus
+    listing_type: Web Application
+    owners: [betaraybill]
+    requirements: Requires the internet.
+    screenshots:
+    - description: null
+      large_image: {filename: UrAnus_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: UrAnus_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: UrAnus_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    tags: [Planets]
+    title: UrAnus
+    unique_name: null
+    version_name: '1.0'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: betaraybill, description: null}
+  - {action: MODIFIED, author: betaraybill, description: null}
+  - {action: SUBMITTED, author: betaraybill, description: null}
+  - {action: APPROVED_ORG, author: bigbrother, description: null}
+  - {action: APPROVED, author: bigbrother, description: null}
+  listing_review_batch:
+  - {author: syme, rate: 5, text: 'Don''t be a child.  Its a fine enough place. '}
+- library_entries: []
+  listing:
+    agency: Miniluv
+    banner_icon: {filename: Neptune_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Health and Fitness]
+    contacts: []
+    description: "Neptune is the eighth and farthest known planet from the Sun in\
+      \ the Solar System. In the Solar System, it is the fourth-largest planet by\
+      \ diameter, the third-most-massive planet, and the densest giant planet. Neptune\
+      \ is 17 times the mass of Earth and is slightly more massive than its near-twin\
+      \ Uranus, which is 15 times the mass of Earth and slightly larger than Neptune.[d]\
+      \ Neptune orbits the Sun once every 164.8 years at an average distance of 30.1\
+      \ astronomical units (4.50\xD7109 km). It is named after the Roman god of the\
+      \ sea and has the astronomical symbol \u2646, a stylised version of the god\
+      \ Neptune's trident.\n\nNeptune is not visible to the unaided eye and is the\
+      \ only planet in the Solar System found by mathematical prediction rather than\
+      \ by empirical observation. Unexpected changes in the orbit of Uranus led Alexis\
+      \ Bouvard to deduce that its orbit was subject to gravitational perturbation\
+      \ by an unknown planet. Neptune was subsequently observed with a telescope on\
+      \ 23 September 1846[1] by Johann Galle within a degree of the position predicted\
+      \ by Urbain Le Verrier. Its largest moon, Triton, was discovered shortly thereafter,\
+      \ though none of the planet's remaining known 14 moons were located telescopically\
+      \ until the 20th century. The planet's distance from Earth gives it a very small\
+      \ apparent size, making it challenging to study with Earth-based telescopes.\
+      \ Neptune was visited by Voyager 2, when it flew by the planet on 25 August\
+      \ 1989.[11] The advent of the Hubble Space Telescope and large ground-based\
+      \ telescopes with adaptive optics has recently allowed for additional detailed\
+      \ observations from afar.\n\nLike Jupiter and Saturn, Neptune's atmosphere is\
+      \ composed primarily of hydrogen and helium, along with traces of hydrocarbons\
+      \ and possibly nitrogen, but it contains a higher proportion of \"ices\" such\
+      \ as water, ammonia, and methane. However, its interior, like that of Uranus,\
+      \ is primarily composed of ices and rock,[12] which is why Uranus and Neptune\
+      \ are normally considered \"ice giants\" to emphasise this distinction.[13]\
+      \ Traces of methane in the outermost regions in part account for the planet's\
+      \ blue appearance.[14]\n\nIn contrast to the hazy, relatively featureless atmosphere\
+      \ of Uranus, Neptune's atmosphere has active and visible weather patterns. For\
+      \ example, at the time of the Voyager 2 flyby in 1989, the planet's southern\
+      \ hemisphere had a Great Dark Spot comparable to the Great Red Spot on Jupiter.\
+      \ These weather patterns are driven by the strongest sustained winds of any\
+      \ planet in the Solar System, with recorded wind speeds as high as 2,100 kilometres\
+      \ per hour (580 m/s; 1,300 mph).[15] Because of its great distance from the\
+      \ Sun, Neptune's outer atmosphere is one of the coldest places in the Solar\
+      \ System, with temperatures at its cloud tops approaching 55 K (\u2212218 \xB0\
+      C). Temperatures at the planet's centre are approximately 5,400 K (5,100 \xB0\
+      C).[16][17] Neptune has a faint and fragmented ring system (labelled \"arcs\"\
+      ), which was discovered in 1982, then later confirmed by Voyager 2.[18]"
+    description_short: Neptune is the eighth and farthest known planet from the Sun
+      in the Solar System.
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Neptune_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Neptune_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Neptune
+    listing_type: Web Application
+    owners: [betaraybill]
+    requirements: Requires the internet.
+    screenshots:
+    - description: null
+      large_image: {filename: Neptune_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Neptune_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Neptune_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    tags: [Planets]
+    title: Neptune
+    unique_name: null
+    version_name: '1.0'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: betaraybill, description: null}
+  - {action: SUBMITTED, author: betaraybill, description: null}
+  - {action: MODIFIED, author: betaraybill, description: null}
+  - {action: APPROVED_ORG, author: bigbrother, description: null}
+  - {action: APPROVED, author: bigbrother, description: null}
+  listing_review_batch:
+  - {author: betaraybill, rate: 5, text: It's so blueeeee~~~!!!!!}
+  - {author: syme, rate: 1, text: 'NO MORE #$(*)&@#% BLUE THINGS. '}
+- library_entries: []
+  listing:
+    agency: Miniluv
+    banner_icon: {filename: Azeroth_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Entertainment]
+    contacts: []
+    description: 'Azeroth is the name of the world in which the majority of the Warcraft
+      series is set. The world of Azeroth is the birthplace of many races, most notable
+      being elves (night elves, high elves, and blood elves), humans, dwarves, tauren,
+      goblins, trolls, gnomes, pandarens and dragons. At its birth, Azeroth was blessed
+      by the titans. One day, the demonic armies of the Burning Legion came and shattered
+      the peace and led the night elves to sunder their world. Gradually, races were
+      dragged to Azeroth (such as the orcs, draenei, and ogres), others evolved, and
+      others were brought up from the dust itself.
+
+
+      The peoples of Azeroth have fought brutally against the demons and their servants,
+      and much blood was, and is still being, shed. After the Third War, three major
+      powers emerged: the Scourge, Horde, and Alliance. Other major powers include
+      the naga, qiraji, and Scarlet Crusade. Although ravaged by conflict, somehow
+      through trickery, betrayal, and sheer blood, Azeroth has survived the Burning
+      Legion four times. However, Azeroth is still torn by conflict, hate, and war.'
+    description_short: Azeroth is the name of the world in which the majority of the
+      Warcraft series is set.
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Azeroth_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Azeroth_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: http://wowwiki.wikia.com/wiki/Azeroth_(world)
+    listing_type: Web Application
+    owners: [betaraybill]
+    requirements: Requires the internet. And skillz.
+    screenshots:
+    - description: null
+      large_image: {filename: Azeroth_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Azeroth_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Azeroth_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    tags: [Planets]
+    title: Azeroth
+    unique_name: null
+    version_name: '1.0'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: betaraybill, description: null}
+  - {action: SUBMITTED, author: betaraybill, description: null}
+  - {action: APPROVED_ORG, author: bigbrother, description: null}
+  - {action: APPROVED, author: bigbrother, description: null}
+  listing_review_batch:
+  - {author: betaraybill, rate: 5, text: Favorite planet by far. BY. FAR.}
+  - {author: syme, rate: 5, text: It was better in 2010.}
+- library_entries: []
+  listing:
+    agency: Miniluv
+    banner_icon: {filename: Pluto(Notaplanet)_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Tools]
+    contacts: []
+    description: NOT A PLANET NOT A PLANET NOT A PLANET NOT A PLANET NOT A PLANET
+      NOT A PLANET NOT A PLANET NOT A PLANET NOT A PLANET NOT A PLANET NOT A PLANET
+      NOT A PLANET NOT A PLANET NOT A PLANET NOT A PLANET NOT A PLANET NOT A PLANET
+      NOT A PLANET NOT A PLANET NOT A PLANET NOT A PLANET NOT A PLANET NOT A PLANET
+      NOT A PLANET NOT A PLANET NOT A PLANET NOT A PLANET NOT A PLANET NOT A PLANET
+      NOT A PLANET NOT A PLANET NOT A PLANET NOT A PLANET NOT A PLANET NOT A PLANET
+      NOT A PLANET NOT A PLANET NOT A PLANET NOT A PLANET NOT A PLANET NOT A PLANET
+      NOT A PLANET NOT A PLANET NOT A PLANET NOT A PLANET NOT A PLANET NOT A PLANET
+      NOT A PLANET NOT A PLANET NOT A PLANET NOT A PLANET NOT A PLANET NOT A PLANET
+      NOT A PLANET NOT A PLANET NOT A PLANET NOT A PLANET NOT A PLANET NOT A PLANET
+      NOT A PLANET NOT A PLANET NOT A PLANET NOT A PLANET NOT A PLANET NOT A PLANET
+      NOT A PLANET NOT A PLANET NOT A PLANET NOT A PLANET NOT A PLANET NOT A PLANET
+      NOT A PLANET NOT A PLANET NOT A PLANET NOT A PLANET NOT A PLANET NOT A PLANET
+      NOT A PLANET NOT A PLANET NOT A PLANET NOT A PLANET NOT A PLANET NOT A PLANET
+      NOT A PLANET NOT A PLANET NOT A PLANET NOT A PLANET NOT A PLANET NOT A PLANET
+      NOT A PLANET NOT A PLANET NOT A PLANET NOT A PLANET NOT A PLANET NOT A PLANET
+      NOT A PLANET NOT A PLANET NOT A PLANET NOT A PLANET NOT A PLANET NOT A PLANET
+      NOT A PLANET NOT A PLANET NOT A PLANET NOT A PLANET NOT A PLANET NOT A PLANET
+      NOT A PLANET NOT A PLANET NOT A PLANET NOT A PLANET NOT A PLANET NOT A PLANET
+      NOT A PLANET NOT A PLANET NOT A PLANET NOT A PLANET NOT A PLANET NOT A PLANET
+      NOT A PLANET NOT A PLANET NOT A PLANET NOT A PLANET NOT A PLANET NOT A PLANET
+      NOT A PLANET NOT A PLANET NOT A PLANET NOT A PLANET NOT A PLANET NOT A PLANET
+      NOT A PLANET NOT A PLANET NOT A PLANET NOT A PLANET
+    description_short: NOT A PLANET
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Pluto(Notaplanet)_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Pluto(Notaplanet)_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://notaplanet.com
+    listing_type: Web Application
+    owners: [betaraybill]
+    requirements: Doesn't need anything to be not a planet.
+    screenshots:
+    - description: null
+      large_image: {filename: Pluto(Notaplanet)_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Pluto(Notaplanet)_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Pluto(Notaplanet)_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    tags: [NOT A PLANET]
+    title: Pluto (Not a planet)
+    unique_name: null
+    version_name: not.a.planet
+    what_is_new: Not a planet again!
+  listing_activity:
+  - {action: CREATED, author: betaraybill, description: null}
+  - {action: SUBMITTED, author: betaraybill, description: null}
+  - {action: APPROVED_ORG, author: bigbrother, description: null}
+  - {action: APPROVED, author: bigbrother, description: null}
+  listing_review_batch:
+  - {author: betaraybill, rate: 1, text: 'LOL what is this doing here? Not even a
+      planet.'}
+  - {author: syme, rate: 5, text: 'Fake news, Pluto was a planet when I was a kid,
+      so its a planet now.  You can''t just go around unplaneting things. '}
+- library_entries: []
+  listing:
+    agency: Minipax
+    banner_icon: {filename: KillerWhale_large_screenshot.jpeg, security_marking: UNCLASSIFIED//FOR
+        OFFICIAL USE ONLY}
+    categories: [Education]
+    contacts: []
+    description: 'The killer whale or orca (Orcinus orca) is a toothed whale belonging
+      to the oceanic dolphin family, of which it is the largest member. Killer whales
+      have a diverse diet, although individual populations often specialize in particular
+      types of prey. Some feed exclusively on fish, while others hunt marine mammals
+      such as seals and dolphins. They have been known to attack baleen whale calves,
+      and even adult whales. Killer whales are apex predators, as there is no animal
+      that preys on them. Killer whales are considered a cosmopolitan species, and
+      can be found in each of the world''s oceans in a variety of marine environments,
+      from Arctic and Antarctic regions to tropical seas.
+
+
+      Killer whales are highly social; some populations are composed of matrilineal
+      family groups (pods) which are the most stable of any animal species.[5] Their
+      sophisticated hunting techniques and vocal behaviours, which are often specific
+      to a particular group and passed across generations, have been described as
+      manifestations of animal culture.[6]Killer whales have a diverse diet, although
+      individual populations often specialize in particular types of prey. Some feed
+      exclusively on fish, while others hunt marine mammals such as seals and dolphins.
+      They have been known to attack baleen whale calves, and even adult whales. Killer
+      whales are apex predators, as there is no animal that preys on them. Killer
+      whales are considered a cosmopolitan species, and can be found in each of the
+      world''s oceans in a variety of marine environments, from Arctic and Antarctic
+      regions to tropical seas.
+
+
+      Killer whales are highly social; some populations are composed of matrilineal
+      family groups (pods) which are the most stable of any animal species.[5] Their
+      sophisticated hunting techniques and vocal behaviours, which are often specific
+      to a particular group and passed across generations, have been described as
+      manifestations of animal culture.[6]'
+    description_short: orca is a toothed whale belonging to the oceanic dolphin family,
+      of which it is the largest member
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: KillerWhale_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: KillerWhale_large_screenshot.jpeg, security_marking: UNCLASSIFIED//FOR
+        OFFICIAL USE ONLY}
+    launch_url: https://en.wikipedia.org/wiki/Killer_whale
+    listing_type: Web Application
+    owners: [bigbrother]
+    requirements: Killer whales are found in all oceans and most seas. Due to their
+      enormous range, numbers, and density, distributional estimates are difficult
+      to compare, but they clearly prefer higher latitudes and coastal areas over
+      pelagic environments.
+    screenshots:
+    - description: null
+      large_image: {filename: KillerWhale_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: KillerWhale_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: KillerWhale_large_screenshot.jpeg, security_marking: UNCLASSIFIED//FOR
+        OFFICIAL USE ONLY}
+    tags: [Mammal, Science]
+    title: Killer Whale
+    unique_name: null
+    version_name: 1.0.1
+    what_is_new: Wild killer whales are not considered a threat to humans
+  listing_activity:
+  - {action: CREATED, author: bigbrother, description: null}
+  - {action: MODIFIED, author: bigbrother, description: null}
+  - {action: MODIFIED, author: bigbrother, description: null}
+  - {action: MODIFIED, author: bigbrother, description: null}
+  - {action: MODIFIED, author: bigbrother, description: null}
+  - {action: MODIFIED, author: bigbrother, description: null}
+  - {action: SUBMITTED, author: bigbrother, description: null}
+  - {action: APPROVED_ORG, author: bigbrother, description: null}
+  - {action: APPROVED, author: bigbrother, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Minipax
+    banner_icon: {filename: WolfFinder_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Education]
+    contacts: []
+    description: "The gray wolf or grey wolf (Canis lupus),[a] also known as the timber\
+      \ wolf[3][4] or western wolf,[b] is a canine native to the wilderness and remote\
+      \ areas of Eurasia and North America. It is the largest extant member of its\
+      \ family, with males averaging 43\u201345 kg (95\u201399 lb) and females 36\u2013\
+      38.5 kg (79\u201385 lb).[6] Like the red wolf, it is distinguished from other\
+      \ Canis species by its larger size and less pointed features, particularly on\
+      \ the ears and muzzle.[7] Its winter fur is long and bushy and predominantly\
+      \ a mottled gray in color, although nearly pure white, red, and brown to black\
+      \ also occur.[4] As of 2005,[8] 37 subspecies of C. lupus are recognised by\
+      \ MSW3.\n\nThe gray wolf is the second most specialised member of the genus\
+      \ Canis, after the Ethiopian wolf, as demonstrated by its morphological adaptations\
+      \ to hunting large prey, its more gregarious nature,[9] and its highly advanced\
+      \ expressive behavior.[10][11] It is nonetheless closely related enough to smaller\
+      \ Canis species, such as the eastern wolf,[5] coyote,[12] and golden jackal,[13][14]\
+      \ to produce fertile hybrids. It is the only species of Canis to have a range\
+      \ encompassing both the Old and New Worlds,[5] and originated in Eurasia during\
+      \ the Pleistocene, colonizing North America on at least three separate occasions\
+      \ during the Rancholabrean.[5] It is a social animal, travelling in nuclear\
+      \ families consisting of a mated pair, accompanied by the pair's adult offspring.[15]\
+      \ The gray wolf is typically an apex predator throughout its range, with only\
+      \ humans and tigers[9][16][17][18] posing a serious threat to it. It feeds primarily\
+      \ on large ungulates, though it also eats smaller animals, livestock, carrion,\
+      \ and garbage.[4]"
+    description_short: The gray wolf is one of the world's best-known and most-researched
+      animals.
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: true
+    is_private: false
+    large_banner_icon: {filename: WolfFinder_large_screenshot.jpeg, security_marking: UNCLASSIFIED//FOR
+        OFFICIAL USE ONLY}
+    large_icon: {filename: WolfFinder_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Gray_wolf
+    listing_type: Web Application
+    owners: [bigbrother]
+    requirements: The gray wolf is a habitat generalist, and can occur in deserts,
+      grasslands, forests and arctic tundras
+    screenshots:
+    - description: null
+      large_image: {filename: WolfFinder_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: WolfFinder_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    - description: null
+      large_image: {filename: WolfFinder_1_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 1
+      small_image: {filename: WolfFinder_1_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: WolfFinder_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    tags: [science, mammal]
+    title: Wolf Finder
+    unique_name: null
+    version_name: 1.0.9
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: bigbrother, description: null}
+  - {action: MODIFIED, author: bigbrother, description: null}
+  - {action: SUBMITTED, author: bigbrother, description: null}
+  - {action: APPROVED_ORG, author: bigbrother, description: null}
+  - {action: APPROVED, author: bigbrother, description: null}
+  - {action: MODIFIED, author: bigbrother, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Minipax
+    banner_icon: {filename: LionFinder_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Education]
+    contacts: []
+    description: "The lion (Panthera leo) is one of the big cats in the genus Panthera\
+      \ and a member of the family Felidae. The commonly used term African lion collectively\
+      \ denotes the several subspecies in Africa. With some males exceeding 250 kg\
+      \ (550 lb) in weight,[5] it is the second-largest living cat after the tiger,\
+      \ barring hybrids like the liger.[6][7] Wild lions currently exist in sub-Saharan\
+      \ Africa and in India (where an endangered remnant population resides in and\
+      \ around Gir Forest National Park). In ancient historic times, their range was\
+      \ in most of Africa, including North Africa, and across Eurasia from Greece\
+      \ and southeastern Europe to India. In the late Pleistocene, about 10,000 years\
+      \ ago, the lion was the most widespread large land mammal after humans: Panthera\
+      \ leo spelaea lived in northern and western Europe and Panthera leo atrox lived\
+      \ in the Americas from the Yukon to Peru.[8] The lion is classified as a vulnerable\
+      \ species by the International Union for Conservation of Nature (IUCN), having\
+      \ seen a major population decline in its African range of 30\u201350% over two\
+      \ decades during the second half of the twentieth century.[3] Lion populations\
+      \ are untenable outside designated reserves and national parks. Although the\
+      \ cause of the decline is not fully understood, habitat loss and conflicts with\
+      \ humans are the greatest causes of concern. Within Africa, the West African\
+      \ lion population is particularly endangered."
+    description_short: The lion is one of the big cats in the genus Panthera and a
+      member of the family Felidae
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: LionFinder_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: LionFinder_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Lion
+    listing_type: Web Application
+    owners: [bigbrother]
+    requirements: Lions are muscular, deep-chested felids with short, rounded heads,
+      reduced necks and round ears
+    screenshots:
+    - description: null
+      large_image: {filename: LionFinder_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: LionFinder_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: LionFinder_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    tags: [science, mammal]
+    title: Lion Finder
+    unique_name: null
+    version_name: '2.0'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: bigbrother, description: null}
+  - {action: MODIFIED, author: bigbrother, description: null}
+  - {action: SUBMITTED, author: bigbrother, description: null}
+  - {action: APPROVED_ORG, author: bigbrother, description: null}
+  - {action: APPROVED, author: bigbrother, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Minipax
+    banner_icon: {filename: MonkeyFinder_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Education, Tools]
+    contacts: []
+    description: 'Monkeys are haplorhine primates, a group generally possessing tails
+      and consisting of about 260 known living species. There are two distinct lineages
+      of monkeys: New World Monkeys and catarrhines. Apes emerged within the catarrhines
+      with the Old World monkeys as a sister group, so cladistically they are monkeys
+      as well. However, traditionally apes are not considered monkeys, rendering this
+      grouping paraphyletic. The equivalent monophyletic clade are the simians. Many
+      monkey species are tree-dwelling (arboreal), although there are species that
+      live primarily on the ground, such as baboons. Most species are also active
+      during the day (diurnal). Monkeys are generally considered to be intelligent,
+      particularly Old World monkeys., a group generally possessing tails and consisting
+      of about 260 known living species. There are two distinct lineages of monkeys:
+      New World Monkeys and catarrhines. Apes emerged within the catarrhines with
+      the Old World monkeys as a sister group, so cladistically they are monkeys as
+      well. However, traditionally apes are not considered monkeys, rendering this
+      grouping paraphyletic. The equivalent monophyletic clade are the simians. Many
+      monkey species are tree-dwelling (arboreal), although there are species that
+      live primarily on the ground, such as baboons. Most species are also active
+      during the day (diurnal). Monkeys are generally considered to be intelligent,
+      particularly Old World monkeys.'
+    description_short: Monkeys are haplorhine primates
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: MonkeyFinder_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: MonkeyFinder_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Monkey
+    listing_type: Web Application
+    owners: [bigbrother]
+    requirements: The many species of monkey have varied relationships with humans
+    screenshots:
+    - description: Baboon
+      large_image: {filename: MonkeyFinder_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: MonkeyFinder_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED//FOR OFFICIAL USE ONLY
+    small_icon: {filename: MonkeyFinder_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    tags: [demo, mammal, monkey]
+    title: Monkey Finder
+    unique_name: null
+    version_name: 5.0.5
+    what_is_new: Hanuman, a prominent divine entity in Hinduism, is a human-like monkey
+      god.
+  listing_activity:
+  - {action: CREATED, author: bigbrother, description: null}
+  - {action: MODIFIED, author: bigbrother, description: null}
+  - {action: SUBMITTED, author: bigbrother, description: null}
+  - {action: MODIFIED, author: bigbrother, description: null}
+  - {action: APPROVED_ORG, author: bigbrother, description: null}
+  - {action: APPROVED, author: bigbrother, description: null}
+  listing_review_batch: []
