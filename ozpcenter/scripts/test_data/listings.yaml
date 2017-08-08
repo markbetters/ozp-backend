@@ -1,7 +1,487 @@
+- library_entries:
+  - {folder: null, owner: wsmith, position: 0}
+  - {folder: null, owner: hodor, position: 0}
+  listing:
+    agency: Minitrue
+    banner_icon: {filename: AirMail_banner_icon.png, security_marking: UNCLASSIFIED}
+    categories: [Communication, Productivity]
+    contacts: [osha@stark.com, brienne@stark.com]
+    description: Sends mail via air
+    description_short: Sends airmail
+    doc_urls:
+    - {name: wiki, url: 'http://www.google.com/wiki'}
+    - {name: guide, url: 'http://www.google.com/guide'}
+    iframe_compatible: false
+    is_deleted: false
+    is_enabled: true
+    is_featured: true
+    is_private: false
+    large_banner_icon: {filename: AirMail_large_banner_icon.png, security_marking: UNCLASSIFIED}
+    large_icon: {filename: AirMail_large_icon.png, security_marking: UNCLASSIFIED}
+    launch_url: '{DEMO_APP_ROOT}/demo_apps/centerSampleListings/airMail/index.html'
+    listing_type: Web Application
+    owners: [wsmith]
+    requirements: None
+    screenshots:
+    - description: airmail screenshot set 1
+      large_image: {filename: AirMail_0_large_screenshot.png, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: AirMail_0_small_screenshot.png, security_marking: UNCLASSIFIED}
+    - description: airmail screenshot set 2
+      large_image: {filename: AirMail_1_large_screenshot.png, security_marking: UNCLASSIFIED}
+      order: 1
+      small_image: {filename: AirMail_1_small_screenshot.png, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: AirMail_small_icon.png, security_marking: UNCLASSIFIED}
+    tags: [demo, example, tag_0]
+    title: Air Mail
+    unique_name: ozp.test.air_mail
+    version_name: 1.0.0
+    what_is_new: Nothing really new here
+  listing_activity:
+  - {action: CREATED, author: wsmith, description: null}
+  - {action: SUBMITTED, author: wsmith, description: null}
+  - {action: APPROVED_ORG, author: wsmith, description: null}
+  - {action: APPROVED, author: wsmith, description: null}
+  listing_review_batch:
+  - {author: charrington, rate: 5, text: This app is great - well designed and easy
+      to use}
+  - {author: tparsons, rate: 3, text: Air mail is ok - does what it says and no more}
+  - {author: syme, rate: 1, text: Air mail crashes all the time - it doesn't even
+      support IE 6!}
+- library_entries:
+  - {folder: null, owner: wsmith, position: 0}
+  - {folder: null, owner: bigbrother, position: 0}
+  listing:
+    agency: Minitrue
+    banner_icon: {filename: BreadBasket_banner_icon.png, security_marking: UNCLASSIFIED}
+    categories: [Health and Fitness, Shopping]
+    contacts: [osha@stark.com]
+    description: Carries delicious bread
+    description_short: Carries bread
+    doc_urls: []
+    iframe_compatible: false
+    is_deleted: false
+    is_enabled: true
+    is_featured: true
+    is_private: true
+    large_banner_icon: {filename: BreadBasket_large_banner_icon.png, security_marking: UNCLASSIFIED}
+    large_icon: {filename: BreadBasket_large_icon.png, security_marking: UNCLASSIFIED}
+    launch_url: '{DEMO_APP_ROOT}/demo_apps/centerSampleListings/breadBasket/index.html'
+    listing_type: Web Application
+    owners: [julia]
+    requirements: None
+    screenshots:
+    - description: null
+      large_image: {filename: BreadBasket_0_large_screenshot.png, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: BreadBasket_0_small_screenshot.png, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: BreadBasket_small_icon.png, security_marking: UNCLASSIFIED}
+    tags: [demo, example]
+    title: Bread Basket
+    unique_name: ozp.test.bread_basket
+    version_name: 1.0.0
+    what_is_new: Nothing really new here
+  listing_activity:
+  - {action: CREATED, author: julia, description: null}
+  - {action: SUBMITTED, author: julia, description: null}
+  - {action: APPROVED_ORG, author: wsmith, description: null}
+  - {action: APPROVED, author: wsmith, description: null}
+  listing_review_batch:
+  - {author: jones, rate: 2, text: This bread is stale!}
+  - {author: julia, rate: 5, text: Yum!}
+- library_entries:
+  - {folder: null, owner: hodor, position: 0}
+  listing:
+    agency: Minitrue
+    banner_icon: {filename: ChartCourse_banner_icon.png, security_marking: UNCLASSIFIED}
+    categories: [Education, Tools]
+    contacts: [rbaratheon@baratheon.com]
+    description: Chart your course
+    description_short: Chart your course
+    doc_urls: []
+    iframe_compatible: false
+    is_deleted: false
+    is_enabled: true
+    is_featured: true
+    is_private: false
+    large_banner_icon: {filename: ChartCourse_large_banner_icon.png, security_marking: UNCLASSIFIED}
+    large_icon: {filename: ChartCourse_large_icon.png, security_marking: UNCLASSIFIED}
+    launch_url: '{DEMO_APP_ROOT}/demo_apps/centerSampleListings/chartCourse/index.html'
+    listing_type: Web Application
+    owners: [wsmith]
+    requirements: None
+    screenshots:
+    - description: null
+      large_image: {filename: ChartCourse_0_large_screenshot.png, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: ChartCourse_0_small_screenshot.png, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: ChartCourse_small_icon.png, security_marking: UNCLASSIFIED}
+    tags: [demo]
+    title: Chart Course
+    unique_name: ozp.test.chartcourse
+    version_name: 1.0.0
+    what_is_new: Nothing really new here
+  listing_activity:
+  - {action: CREATED, author: wsmith, description: null}
+  - {action: SUBMITTED, author: wsmith, description: null}
+  - {action: APPROVED_ORG, author: wsmith, description: null}
+  - {action: APPROVED, author: wsmith, description: null}
+  listing_review_batch:
+  - {author: wsmith, rate: 2, text: This Chart is bad!}
+  - {author: bigbrother, rate: 5, text: Good Chart!}
+- library_entries: []
+  listing:
+    agency: Miniluv
+    banner_icon: {filename: ChatterBox_banner_icon.png, security_marking: UNCLASSIFIED}
+    categories: [Communication]
+    contacts: [rbaratheon@baratheon.com]
+    description: Chat with people
+    description_short: Chat in a box
+    doc_urls: []
+    iframe_compatible: false
+    is_deleted: false
+    is_enabled: true
+    is_featured: true
+    is_private: false
+    large_banner_icon: {filename: ChatterBox_large_banner_icon.png, security_marking: UNCLASSIFIED}
+    large_icon: {filename: ChatterBox_large_icon.png, security_marking: UNCLASSIFIED}
+    launch_url: '{DEMO_APP_ROOT}/demo_apps/centerSampleListings/chatterBox/index.html'
+    listing_type: Web Application
+    owners: [julia]
+    requirements: None
+    screenshots:
+    - description: null
+      large_image: {filename: ChatterBox_0_large_screenshot.png, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: ChatterBox_0_small_screenshot.png, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: ChatterBox_small_icon.png, security_marking: UNCLASSIFIED}
+    tags: [demo]
+    title: Chatter Box
+    unique_name: ozp.test.chatterbox
+    version_name: 1.0.0
+    what_is_new: Nothing really new here
+  listing_activity:
+  - {action: CREATED, author: julia, description: null}
+  - {action: SUBMITTED, author: julia, description: null}
+  - {action: APPROVED_ORG, author: wsmith, description: null}
+  - {action: APPROVED, author: wsmith, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Minitrue
+    banner_icon: {filename: Clipboard_banner_icon.png, security_marking: UNCLASSIFIED}
+    categories: [Education, Tools]
+    contacts: [rbaratheon@baratheon.com]
+    description: Clip stuff on a board
+    description_short: Its a clipboard
+    doc_urls: []
+    iframe_compatible: false
+    is_deleted: false
+    is_enabled: true
+    is_featured: true
+    is_private: false
+    large_banner_icon: {filename: Clipboard_large_banner_icon.png, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Clipboard_large_icon.png, security_marking: UNCLASSIFIED}
+    launch_url: '{DEMO_APP_ROOT}/demo_apps/centerSampleListings/clipboard/index.html'
+    listing_type: Web Application
+    owners: [wsmith]
+    requirements: None
+    screenshots:
+    - description: null
+      large_image: {filename: Clipboard_0_large_screenshot.png, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Clipboard_0_small_screenshot.png, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Clipboard_small_icon.png, security_marking: UNCLASSIFIED}
+    tags: [demo]
+    title: Clipboard
+    unique_name: ozp.test.clipboard
+    version_name: 1.0.0
+    what_is_new: Nothing really new here
+  listing_activity:
+  - {action: CREATED, author: wsmith, description: null}
+  - {action: SUBMITTED, author: wsmith, description: null}
+  - {action: APPROVED_ORG, author: wsmith, description: null}
+  - {action: APPROVED, author: wsmith, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Minitrue
+    banner_icon: {filename: FrameIt_banner_icon.png, security_marking: UNCLASSIFIED}
+    categories: [Education, Tools]
+    contacts: [rbaratheon@baratheon.com]
+    description: Show things in an iframe
+    description_short: Its an iframe
+    doc_urls: []
+    iframe_compatible: false
+    is_deleted: false
+    is_enabled: true
+    is_featured: true
+    is_private: false
+    large_banner_icon: {filename: FrameIt_large_banner_icon.png, security_marking: UNCLASSIFIED}
+    large_icon: {filename: FrameIt_large_icon.png, security_marking: UNCLASSIFIED}
+    launch_url: '{DEMO_APP_ROOT}/demo_apps/frameit/index.html'
+    listing_type: Web Application
+    owners: [wsmith]
+    requirements: None
+    screenshots:
+    - description: null
+      large_image: {filename: FrameIt_0_large_screenshot.png, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: FrameIt_0_small_screenshot.png, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: FrameIt_small_icon.png, security_marking: UNCLASSIFIED}
+    tags: [demo]
+    title: FrameIt
+    unique_name: ozp.test.frameit
+    version_name: 1.0.0
+    what_is_new: Nothing really new here
+  listing_activity:
+  - {action: CREATED, author: wsmith, description: null}
+  - {action: SUBMITTED, author: wsmith, description: null}
+  - {action: APPROVED_ORG, author: wsmith, description: null}
+  - {action: APPROVED, author: wsmith, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Minitrue
+    banner_icon: {filename: HatchLatch_banner_icon.png, security_marking: UNCLASSIFIED}
+    categories: [Education, Health and Fitness, Tools]
+    contacts: [rbaratheon@baratheon.com]
+    description: Hatch latches
+    description_short: Its a hatch latch
+    doc_urls: []
+    iframe_compatible: false
+    is_deleted: false
+    is_enabled: true
+    is_featured: true
+    is_private: false
+    large_banner_icon: {filename: HatchLatch_large_banner_icon.png, security_marking: UNCLASSIFIED}
+    large_icon: {filename: HatchLatch_large_icon.png, security_marking: UNCLASSIFIED}
+    launch_url: '{DEMO_APP_ROOT}/demo_apps/centerSampleListings/hatchLatch/index.html'
+    listing_type: Web Application
+    owners: [wsmith]
+    requirements: None
+    screenshots:
+    - description: null
+      large_image: {filename: HatchLatch_0_large_screenshot.png, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: HatchLatch_0_small_screenshot.png, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: HatchLatch_small_icon.png, security_marking: UNCLASSIFIED}
+    tags: [demo]
+    title: Hatch Latch
+    unique_name: ozp.test.hatchlatch
+    version_name: 1.0.0
+    what_is_new: Nothing really new here
+  listing_activity:
+  - {action: CREATED, author: wsmith, description: null}
+  - {action: SUBMITTED, author: wsmith, description: null}
+  - {action: APPROVED_ORG, author: wsmith, description: null}
+  - {action: APPROVED, author: wsmith, description: null}
+  listing_review_batch: []
+- library_entries:
+  - {folder: null, owner: hodor, position: 0}
+  listing:
+    agency: Minitrue
+    banner_icon: {filename: JotSpot_banner_icon.png, security_marking: UNCLASSIFIED}
+    categories: [Education, Tools]
+    contacts: [rbaratheon@baratheon.com]
+    description: Jot things down
+    description_short: Jot stuff down
+    doc_urls: []
+    iframe_compatible: false
+    is_deleted: false
+    is_enabled: true
+    is_featured: true
+    is_private: false
+    large_banner_icon: {filename: JotSpot_large_banner_icon.png, security_marking: UNCLASSIFIED}
+    large_icon: {filename: JotSpot_large_icon.png, security_marking: UNCLASSIFIED}
+    launch_url: '{DEMO_APP_ROOT}/demo_apps/centerSampleListings/jotSpot/index.html'
+    listing_type: Web Application
+    owners: [wsmith]
+    requirements: None
+    screenshots:
+    - description: null
+      large_image: {filename: JotSpot_0_large_screenshot.png, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: JotSpot_0_small_screenshot.png, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: JotSpot_small_icon.png, security_marking: UNCLASSIFIED}
+    tags: [demo]
+    title: JotSpot
+    unique_name: ozp.test.jotspot
+    version_name: 1.0.0
+    what_is_new: Nothing really new here
+  listing_activity:
+  - {action: CREATED, author: wsmith, description: null}
+  - {action: SUBMITTED, author: wsmith, description: null}
+  - {action: APPROVED_ORG, author: wsmith, description: null}
+  - {action: APPROVED, author: wsmith, description: null}
+  listing_review_batch:
+  - {author: charrington, rate: 4, text: I really like it}
+- library_entries:
+  - {folder: null, owner: hodor, position: 0}
+  listing:
+    agency: Minitrue
+    banner_icon: {filename: LocationLister_banner_icon.png, security_marking: UNCLASSIFIED}
+    categories: [Education, Tools]
+    contacts: [rbaratheon@baratheon.com]
+    description: List locations
+    description_short: List locations
+    doc_urls: []
+    iframe_compatible: false
+    is_deleted: false
+    is_enabled: true
+    is_featured: true
+    is_private: false
+    large_banner_icon: {filename: LocationLister_large_banner_icon.png, security_marking: UNCLASSIFIED}
+    large_icon: {filename: LocationLister_large_icon.png, security_marking: UNCLASSIFIED}
+    launch_url: '{DEMO_APP_ROOT}/demo_apps/locationLister/index.html'
+    listing_type: Web Application
+    owners: [wsmith]
+    requirements: None
+    screenshots:
+    - description: null
+      large_image: {filename: LocationLister_0_large_screenshot.png, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: LocationLister_0_small_screenshot.png, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: LocationLister_small_icon.png, security_marking: UNCLASSIFIED}
+    tags: [demo]
+    title: LocationLister
+    unique_name: ozp.test.locationlister
+    version_name: 1.0.0
+    what_is_new: Nothing really new here
+  listing_activity:
+  - {action: CREATED, author: wsmith, description: null}
+  - {action: SUBMITTED, author: wsmith, description: null}
+  - {action: APPROVED_ORG, author: wsmith, description: null}
+  - {action: APPROVED, author: wsmith, description: null}
+  listing_review_batch:
+  - {author: charrington, rate: 4, text: I really like it}
+- library_entries: []
+  listing:
+    agency: Minitrue
+    banner_icon: {filename: LocationViewer_banner_icon.png, security_marking: UNCLASSIFIED}
+    categories: [Education, Tools]
+    contacts: [rbaratheon@baratheon.com]
+    description: View locations
+    description_short: View locations
+    doc_urls: []
+    iframe_compatible: false
+    is_deleted: false
+    is_enabled: true
+    is_featured: true
+    is_private: false
+    large_banner_icon: {filename: LocationViewer_large_banner_icon.png, security_marking: UNCLASSIFIED}
+    large_icon: {filename: LocationViewer_large_icon.png, security_marking: UNCLASSIFIED}
+    launch_url: '{DEMO_APP_ROOT}/demo_apps/locationViewer/index.html'
+    listing_type: Web Application
+    owners: [wsmith]
+    requirements: None
+    screenshots:
+    - description: null
+      large_image: {filename: LocationViewer_0_large_screenshot.png, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: LocationViewer_0_small_screenshot.png, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: LocationViewer_small_icon.png, security_marking: UNCLASSIFIED}
+    tags: [demo]
+    title: LocationViewer
+    unique_name: ozp.test.locationviewer
+    version_name: 1.0.0
+    what_is_new: Nothing really new here
+  listing_activity:
+  - {action: CREATED, author: wsmith, description: null}
+  - {action: SUBMITTED, author: wsmith, description: null}
+  - {action: APPROVED_ORG, author: wsmith, description: null}
+  - {action: APPROVED, author: wsmith, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Minitrue
+    banner_icon: {filename: LocationAnalyzer_banner_icon.png, security_marking: UNCLASSIFIED}
+    categories: [Education, Tools]
+    contacts: [rbaratheon@baratheon.com]
+    description: Analyze locations
+    description_short: Analyze locations
+    doc_urls: []
+    iframe_compatible: false
+    is_deleted: false
+    is_enabled: true
+    is_featured: true
+    is_private: false
+    large_banner_icon: {filename: LocationAnalyzer_large_banner_icon.png, security_marking: UNCLASSIFIED}
+    large_icon: {filename: LocationAnalyzer_large_icon.png, security_marking: UNCLASSIFIED}
+    launch_url: '{DEMO_APP_ROOT}/demo_apps/locationAnalyzer/index.html'
+    listing_type: Web Application
+    owners: [wsmith]
+    requirements: None
+    screenshots:
+    - description: null
+      large_image: {filename: LocationAnalyzer_0_large_screenshot.png, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: LocationAnalyzer_0_small_screenshot.png, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: LocationAnalyzer_small_icon.png, security_marking: UNCLASSIFIED}
+    tags: [demo]
+    title: LocationAnalyzer
+    unique_name: ozp.test.locationanalyzer
+    version_name: 1.0.0
+    what_is_new: Nothing really new here
+  listing_activity:
+  - {action: CREATED, author: wsmith, description: null}
+  - {action: SUBMITTED, author: wsmith, description: null}
+  - {action: APPROVED_ORG, author: wsmith, description: null}
+  - {action: APPROVED, author: wsmith, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Miniluv
+    banner_icon: {filename: Skybox_banner_icon.png, security_marking: UNCLASSIFIED}
+    categories: [Education, Tools]
+    contacts: [rbaratheon@baratheon.com]
+    description: Sky Overlord
+    description_short: Sky Overlord
+    doc_urls: []
+    iframe_compatible: false
+    is_deleted: false
+    is_enabled: true
+    is_featured: true
+    is_private: false
+    large_banner_icon: {filename: Skybox_large_banner_icon.png, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Skybox_large_icon.png, security_marking: UNCLASSIFIED}
+    launch_url: '{DEMO_APP_ROOT}/demo_apps/Skybox/index.html'
+    listing_type: Web Application
+    owners: [david, pmurt]
+    requirements: None
+    screenshots:
+    - description: null
+      large_image: {filename: Skybox_0_large_screenshot.png, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Skybox_0_small_screenshot.png, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Skybox_small_icon.png, security_marking: UNCLASSIFIED}
+    tags: [demo]
+    title: Skybox
+    unique_name: ozp.test.skybox
+    version_name: 1.0.0
+    what_is_new: It's a box in the sky
+  listing_activity:
+  - {action: CREATED, author: wsmith, description: null}
+  - {action: SUBMITTED, author: wsmith, description: null}
+  - {action: APPROVED_ORG, author: wsmith, description: null}
+  - {action: APPROVED, author: wsmith, description: null}
+  listing_review_batch: []
 - library_entries: []
   listing:
     agency: Minipax
-    banner_icon: {filename: PersonalComputer_large_screenshot.png, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: PersonalComputer_banner_icon.png, security_marking: UNCLASSIFIED}
     categories: [Education]
     contacts: []
     description: 'A personal computer (PC) is a multi-purpose electronic computer
@@ -44,8 +524,8 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: PersonalComputer_large_screenshot.png, security_marking: UNCLASSIFIED}
-    large_icon: {filename: PersonalComputer_large_screenshot.png, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: PersonalComputer_large_banner_icon.png, security_marking: UNCLASSIFIED}
+    large_icon: {filename: PersonalComputer_large_icon.png, security_marking: UNCLASSIFIED}
     launch_url: https://en.wikipedia.org/wiki/Personal_computer
     listing_type: Web Services
     owners: [bigbrother]
@@ -54,9 +534,9 @@
     - description: null
       large_image: {filename: PersonalComputer_0_large_screenshot.png, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: PersonalComputer_0_large_screenshot.png, security_marking: UNCLASSIFIED}
+      small_image: {filename: PersonalComputer_0_small_screenshot.png, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: PersonalComputer_large_screenshot.png, security_marking: UNCLASSIFIED}
+    small_icon: {filename: PersonalComputer_small_icon.png, security_marking: UNCLASSIFIED}
     tags: [PC]
     title: Personal Computer
     unique_name: null
@@ -64,16 +544,14 @@
     what_is_new: null
   listing_activity:
   - {action: CREATED, author: bigbrother, description: null}
-  - {action: MODIFIED, author: bigbrother, description: null}
   - {action: SUBMITTED, author: bigbrother, description: null}
-  - {action: MODIFIED, author: bigbrother, description: null}
   - {action: APPROVED_ORG, author: bigbrother, description: null}
   - {action: APPROVED, author: bigbrother, description: null}
   listing_review_batch: []
 - library_entries: []
   listing:
     agency: Miniplen
-    banner_icon: {filename: Railroad_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: Railroad_banner_icon.jpeg, security_marking: UNCLASSIFIED}
     categories: [Productivity]
     contacts: []
     description: 'Rail transport is a means of transferring of passengers and goods
@@ -138,8 +616,8 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: Railroad_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
-    large_icon: {filename: Railroad_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: Railroad_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Railroad_large_icon.jpeg, security_marking: UNCLASSIFIED}
     launch_url: https://en.wikipedia.org/wiki/Rail_transport
     listing_type: Web Application
     owners: [rutherford]
@@ -148,9 +626,9 @@
     - description: null
       large_image: {filename: Railroad_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: Railroad_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: Railroad_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: Railroad_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    small_icon: {filename: Railroad_small_icon.jpeg, security_marking: UNCLASSIFIED}
     tags: [transportation]
     title: Railroad
     unique_name: null
@@ -167,10 +645,11 @@
       compatibility. '}
   - {author: syme, rate: 5, text: 'Railroad Ima gonna let you finish but everybody
       knows shipping lanes had the best transport ever. '}
+  - {author: rutherford, rate: 4, text: Great app must try it today.}
 - library_entries: []
   listing:
     agency: Miniplen
-    banner_icon: {filename: Motorsport_large_screenshot.png, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: Motorsport_banner_icon.png, security_marking: UNCLASSIFIED}
     categories: [Education, News]
     contacts: []
     description: "Motorsport or motorsports is a global term used to encompass the\
@@ -189,8 +668,8 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: Motorsport_large_screenshot.png, security_marking: UNCLASSIFIED}
-    large_icon: {filename: Motorsport_large_screenshot.png, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: Motorsport_large_banner_icon.png, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Motorsport_large_icon.png, security_marking: UNCLASSIFIED}
     launch_url: https://en.wikipedia.org/wiki/Motorsport
     listing_type: Desktop App
     owners: [rutherford]
@@ -199,9 +678,9 @@
     - description: null
       large_image: {filename: Motorsport_0_large_screenshot.png, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: Motorsport_0_large_screenshot.png, security_marking: UNCLASSIFIED}
+      small_image: {filename: Motorsport_0_small_screenshot.png, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: Motorsport_large_screenshot.png, security_marking: UNCLASSIFIED}
+    small_icon: {filename: Motorsport_small_icon.png, security_marking: UNCLASSIFIED}
     tags: [car, bike]
     title: Motorsport
     unique_name: null
@@ -212,15 +691,15 @@
   - {action: SUBMITTED, author: rutherford, description: null}
   - {action: APPROVED_ORG, author: obrien, description: null}
   - {action: APPROVED, author: bigbrother, description: null}
-  - {action: REVIEW_EDITED, author: syme, description: null}
   listing_review_batch:
   - {author: syme, rate: 4, text: 'I''m confused about that sport part.  Doesn''t
       the engine do all the work?  Shouldn''t it be called, "Trynottocrashthemotor"'}
-- library_entries:
-  - {folder: null, owner: bettafish, position: 0}
+  - {author: rutherford, rate: 3, text: Okay so it does not make sense from the images
+      but the app is still great.}
+- library_entries: []
   listing:
     agency: Minipax
-    banner_icon: {filename: Superunknown_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: Superunknown_banner_icon.jpeg, security_marking: UNCLASSIFIED}
     categories: [Entertainment, Music and Audio]
     contacts: [chris@sound.com]
     description: Superunknown is the fourth album by American rock band Soundgarden,
@@ -233,8 +712,8 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: Superunknown_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
-    large_icon: {filename: Superunknown_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: Superunknown_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Superunknown_large_icon.jpeg, security_marking: UNCLASSIFIED}
     launch_url: https://en.wikipedia.org/wiki/Superunknown
     listing_type: Code Library
     owners: [bettafish]
@@ -243,13 +722,13 @@
     - description: null
       large_image: {filename: Superunknown_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: Superunknown_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: Superunknown_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     - description: Chris
       large_image: {filename: Superunknown_1_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 1
-      small_image: {filename: Superunknown_1_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: Superunknown_1_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED//FOR OFFICIAL USE ONLY
-    small_icon: {filename: Superunknown_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    small_icon: {filename: Superunknown_small_icon.jpeg, security_marking: UNCLASSIFIED}
     tags: [Soundgarden, Music, Grunge]
     title: Superunknown
     unique_name: null
@@ -257,16 +736,16 @@
     what_is_new: null
   listing_activity:
   - {action: CREATED, author: bettafish, description: null}
-  - {action: MODIFIED, author: bettafish, description: null}
   - {action: SUBMITTED, author: bettafish, description: null}
   - {action: APPROVED_ORG, author: bettafish, description: null}
   - {action: APPROVED, author: bettafish, description: null}
   listing_review_batch:
   - {author: syme, rate: 5, text: 'I like this!  Are they touring soon? '}
+  - {author: rutherford, rate: 3, text: Not sure about this one.}
 - library_entries: []
   listing:
     agency: Minitrue
-    banner_icon: {filename: Bleach_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: Bleach_banner_icon.jpeg, security_marking: UNCLASSIFIED}
     categories: [Music and Audio]
     contacts: []
     description: Bleach is the debut studio album by the American rock band Nirvana,
@@ -281,8 +760,8 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: Bleach_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
-    large_icon: {filename: Bleach_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: Bleach_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Bleach_large_icon.jpeg, security_marking: UNCLASSIFIED}
     launch_url: https://en.wikipedia.org/wiki/Bleach_%28Nirvana_album%29
     listing_type: Desktop App
     owners: [bettafish, wsmith]
@@ -291,17 +770,17 @@
     - description: null
       large_image: {filename: Bleach_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: Bleach_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: Bleach_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     - description: X-P
       large_image: {filename: Bleach_1_large_screenshot.png, security_marking: UNCLASSIFIED}
       order: 1
-      small_image: {filename: Bleach_1_large_screenshot.png, security_marking: UNCLASSIFIED}
+      small_image: {filename: Bleach_1_small_screenshot.png, security_marking: UNCLASSIFIED}
     - description: Kurdt
       large_image: {filename: Bleach_2_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 2
-      small_image: {filename: Bleach_2_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: Bleach_2_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: Bleach_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    small_icon: {filename: Bleach_small_icon.jpeg, security_marking: UNCLASSIFIED}
     tags: [Grunge]
     title: Bleach
     unique_name: null
@@ -318,7 +797,7 @@
 - library_entries: []
   listing:
     agency: Minitrue
-    banner_icon: {filename: BusinessInsuranceRisk_large_screenshot.png, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: BusinessInsuranceRisk_banner_icon.png, security_marking: UNCLASSIFIED}
     categories: [Business]
     contacts: [w@s.com, t@t.com, m@m.com]
     description: 'Insurance is a means of protection from financial loss. It is a
@@ -342,8 +821,8 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: BusinessInsuranceRisk_large_screenshot.png, security_marking: UNCLASSIFIED}
-    large_icon: {filename: BusinessInsuranceRisk_large_screenshot.png, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: BusinessInsuranceRisk_large_banner_icon.png, security_marking: UNCLASSIFIED}
+    large_icon: {filename: BusinessInsuranceRisk_large_icon.png, security_marking: UNCLASSIFIED}
     launch_url: http://www.i.com
     listing_type: Web Application
     owners: [bettafish, wsmith]
@@ -352,9 +831,9 @@
     - description: null
       large_image: {filename: BusinessInsuranceRisk_0_large_screenshot.png, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: BusinessInsuranceRisk_0_large_screenshot.png, security_marking: UNCLASSIFIED}
+      small_image: {filename: BusinessInsuranceRisk_0_small_screenshot.png, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: BusinessInsuranceRisk_large_screenshot.png, security_marking: UNCLASSIFIED}
+    small_icon: {filename: BusinessInsuranceRisk_small_icon.png, security_marking: UNCLASSIFIED}
     tags: [risk, insurance, business]
     title: Business Insurance Risk
     unique_name: null
@@ -362,13 +841,6 @@
     what_is_new: null
   listing_activity:
   - {action: CREATED, author: wsmith, description: null}
-  - {action: MODIFIED, author: wsmith, description: null}
-  - {action: MODIFIED, author: wsmith, description: null}
-  - {action: MODIFIED, author: wsmith, description: null}
-  - {action: MODIFIED, author: wsmith, description: null}
-  - {action: MODIFIED, author: wsmith, description: null}
-  - {action: MODIFIED, author: wsmith, description: null}
-  - {action: MODIFIED, author: wsmith, description: null}
   - {action: SUBMITTED, author: wsmith, description: null}
   - {action: APPROVED_ORG, author: bigbrother, description: null}
   - {action: APPROVED, author: bigbrother, description: null}
@@ -376,7 +848,7 @@
 - library_entries: []
   listing:
     agency: Test 3
-    banner_icon: {filename: TinyMusic...SongsfromtheVaticanGiftShop_large_screenshot.jpeg,
+    banner_icon: {filename: TinyMusic...SongsfromtheVaticanGiftShop_banner_icon.jpeg,
       security_marking: UNCLASSIFIED}
     categories: [Music and Audio]
     contacts: [chester@lp.com, scott@stp.com, scott@vr.com]
@@ -393,9 +865,9 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: TinyMusic...SongsfromtheVaticanGiftShop_large_screenshot.jpeg,
+    large_banner_icon: {filename: TinyMusic...SongsfromtheVaticanGiftShop_large_banner_icon.jpeg,
       security_marking: UNCLASSIFIED}
-    large_icon: {filename: TinyMusic...SongsfromtheVaticanGiftShop_large_screenshot.jpeg,
+    large_icon: {filename: TinyMusic...SongsfromtheVaticanGiftShop_large_icon.jpeg,
       security_marking: UNCLASSIFIED}
     launch_url: https://en.wikipedia.org/wiki/Tiny_Music..._Songs_from_the_Vatican_Gift_Shop
     listing_type: Widget
@@ -406,16 +878,16 @@
       large_image: {filename: TinyMusic...SongsfromtheVaticanGiftShop_0_large_screenshot.jpeg,
         security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: TinyMusic...SongsfromtheVaticanGiftShop_0_large_screenshot.jpeg,
+      small_image: {filename: TinyMusic...SongsfromtheVaticanGiftShop_0_small_screenshot.jpeg,
         security_marking: UNCLASSIFIED}
     - description: null
       large_image: {filename: TinyMusic...SongsfromtheVaticanGiftShop_1_large_screenshot.jpeg,
         security_marking: UNCLASSIFIED//FOR OFFICIAL USE ONLY}
       order: 1
-      small_image: {filename: TinyMusic...SongsfromtheVaticanGiftShop_1_large_screenshot.jpeg,
+      small_image: {filename: TinyMusic...SongsfromtheVaticanGiftShop_1_small_screenshot.jpeg,
         security_marking: UNCLASSIFIED//FOR OFFICIAL USE ONLY}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: TinyMusic...SongsfromtheVaticanGiftShop_large_screenshot.jpeg,
+    small_icon: {filename: TinyMusic...SongsfromtheVaticanGiftShop_small_icon.jpeg,
       security_marking: UNCLASSIFIED}
     tags: [Grunge, STP]
     title: Tiny Music... Songs from the Vatican Gift Shop
@@ -427,15 +899,13 @@
   - {action: SUBMITTED, author: bettafish, description: null}
   - {action: APPROVED_ORG, author: bettafish, description: null}
   - {action: APPROVED, author: bettafish, description: null}
-  - {action: MODIFIED, author: bettafish, description: null}
-  - {action: REVIEW_EDITED, author: rutherford, description: null}
   listing_review_batch:
   - {author: rutherford, rate: 3, text: Okay this one looks good as well.}
   - {author: syme, rate: 4, text: 'I would listen to this when I want to. '}
 - library_entries: []
   listing:
     agency: Miniluv
-    banner_icon: {filename: JarofFlies_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: JarofFlies_banner_icon.jpeg, security_marking: UNCLASSIFIED}
     categories: [Entertainment]
     contacts: []
     description: Jar of Flies is the second studio EP by the American rock band Alice
@@ -453,8 +923,8 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: JarofFlies_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
-    large_icon: {filename: JarofFlies_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: JarofFlies_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: JarofFlies_large_icon.jpeg, security_marking: UNCLASSIFIED}
     launch_url: https://en.wikipedia.org/wiki/Jar_of_Flies
     listing_type: Web Application
     owners: [bigbrother, bettafish]
@@ -463,13 +933,13 @@
     - description: null
       large_image: {filename: JarofFlies_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: JarofFlies_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: JarofFlies_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     - description: null
       large_image: {filename: JarofFlies_1_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 1
-      small_image: {filename: JarofFlies_1_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: JarofFlies_1_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED//FOR OFFICIAL USE ONLY
-    small_icon: {filename: JarofFlies_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    small_icon: {filename: JarofFlies_small_icon.jpeg, security_marking: UNCLASSIFIED}
     tags: [Grunge]
     title: Jar of Flies
     unique_name: null
@@ -478,7 +948,6 @@
   listing_activity:
   - {action: CREATED, author: bettafish, description: null}
   - {action: SUBMITTED, author: bettafish, description: null}
-  - {action: MODIFIED, author: bettafish, description: null}
   - {action: APPROVED_ORG, author: bettafish, description: null}
   - {action: APPROVED, author: bettafish, description: null}
   listing_review_batch:
@@ -486,7 +955,7 @@
 - library_entries: []
   listing:
     agency: Miniluv
-    banner_icon: {filename: Ten_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: Ten_banner_icon.jpeg, security_marking: UNCLASSIFIED}
     categories: [Communication, Entertainment, Music and Audio]
     contacts: []
     description: Ten is the debut studio album by American rock band Pearl Jam, released
@@ -503,8 +972,8 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: Ten_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
-    large_icon: {filename: Ten_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: Ten_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Ten_large_icon.jpeg, security_marking: UNCLASSIFIED}
     launch_url: https://en.wikipedia.org/wiki/Ten_%28Pearl_Jam_album%29
     listing_type: Web Application
     owners: [bettafish]
@@ -513,15 +982,15 @@
     - description: null
       large_image: {filename: Ten_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: Ten_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: Ten_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     - description: null
       large_image: {filename: Ten_1_large_screenshot.jpeg, security_marking: UNCLASSIFIED//FOR
           OFFICIAL USE ONLY}
       order: 1
-      small_image: {filename: Ten_1_large_screenshot.jpeg, security_marking: UNCLASSIFIED//FOR
+      small_image: {filename: Ten_1_small_screenshot.jpeg, security_marking: UNCLASSIFIED//FOR
           OFFICIAL USE ONLY}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: Ten_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    small_icon: {filename: Ten_small_icon.jpeg, security_marking: UNCLASSIFIED}
     tags: [Grunge, Pearl Jam]
     title: Ten
     unique_name: null
@@ -529,11 +998,9 @@
     what_is_new: null
   listing_activity:
   - {action: CREATED, author: bettafish, description: null}
-  - {action: MODIFIED, author: bettafish, description: null}
   - {action: SUBMITTED, author: bettafish, description: null}
   - {action: APPROVED_ORG, author: bettafish, description: null}
   - {action: APPROVED, author: bettafish, description: null}
-  - {action: MODIFIED, author: bettafish, description: null}
   listing_review_batch:
   - {author: rutherford, rate: 4, text: Pretty good group would say that they are
       better than average.}
@@ -543,7 +1010,7 @@
 - library_entries: []
   listing:
     agency: Miniplen
-    banner_icon: {filename: Mapoftheworld_large_screenshot.png, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: Mapoftheworld_banner_icon.png, security_marking: UNCLASSIFIED}
     categories: [Productivity, Tools]
     contacts: []
     description: 'A map is a symbolic depiction emphasizing relationships between
@@ -573,8 +1040,8 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: Mapoftheworld_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
-    large_icon: {filename: Mapoftheworld_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: Mapoftheworld_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Mapoftheworld_large_icon.jpeg, security_marking: UNCLASSIFIED}
     launch_url: https://en.wikipedia.org/wiki/Map
     listing_type: Widget
     owners: [rutherford]
@@ -583,9 +1050,9 @@
     - description: null
       large_image: {filename: Mapoftheworld_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: Mapoftheworld_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: Mapoftheworld_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: Mapoftheworld_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    small_icon: {filename: Mapoftheworld_small_icon.jpeg, security_marking: UNCLASSIFIED}
     tags: [maps]
     title: Map of the world
     unique_name: null
@@ -593,20 +1060,18 @@
     what_is_new: null
   listing_activity:
   - {action: CREATED, author: rutherford, description: null}
-  - {action: MODIFIED, author: rutherford, description: null}
   - {action: SUBMITTED, author: rutherford, description: null}
-  - {action: MODIFIED, author: rutherford, description: null}
   - {action: APPROVED_ORG, author: bigbrother, description: null}
   - {action: APPROVED, author: bigbrother, description: null}
-  - {action: REVIEW_EDITED, author: syme, description: null}
   listing_review_batch:
   - {author: syme, rate: 5, text: 'I don''t understand how this works.  How can the
       map represent something that exists?  Like, if i''m standing on the ground,
       then how that ground be on the map?  Pure nonsense.  5/5 stars'}
+  - {author: rutherford, rate: 5, text: Great app must try it today.}
 - library_entries: []
   listing:
     agency: Miniluv
-    banner_icon: {filename: MiniDachshund_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: MiniDachshund_banner_icon.jpeg, security_marking: UNCLASSIFIED}
     categories: [Entertainment]
     contacts: []
     description: Miniature dachshunds have a typical weight of 8 to 11 pounds in the
@@ -619,8 +1084,8 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: MiniDachshund_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
-    large_icon: {filename: MiniDachshund_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: MiniDachshund_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: MiniDachshund_large_icon.jpeg, security_marking: UNCLASSIFIED}
     launch_url: http://localhost.com
     listing_type: Desktop App
     owners: [aaronson]
@@ -629,9 +1094,9 @@
     - description: When dachshunds get mad
       large_image: {filename: MiniDachshund_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: MiniDachshund_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: MiniDachshund_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: MiniDachshund_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    small_icon: {filename: MiniDachshund_small_icon.jpeg, security_marking: UNCLASSIFIED}
     tags: [Dogs]
     title: Mini Dachshund
     unique_name: null
@@ -662,7 +1127,7 @@
 - library_entries: []
   listing:
     agency: Miniplen
-    banner_icon: {filename: GalleryofMaps_large_screenshot.png, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: GalleryofMaps_banner_icon.png, security_marking: UNCLASSIFIED}
     categories: [Productivity, Tools]
     contacts: []
     description: "Featured pictures/Non-photographic media/Maps\nGallery of Maps\n\
@@ -678,8 +1143,8 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: GalleryofMaps_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
-    large_icon: {filename: GalleryofMaps_large_screenshot.png, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: GalleryofMaps_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: GalleryofMaps_large_icon.jpeg, security_marking: UNCLASSIFIED}
     launch_url: https://commons.wikimedia.org/wiki/Commons:Featured_pictures/Non-photographic_media/Maps
     listing_type: Widget
     owners: [rutherford]
@@ -688,9 +1153,9 @@
     - description: null
       large_image: {filename: GalleryofMaps_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: GalleryofMaps_0_large_screenshot.png, security_marking: UNCLASSIFIED}
+      small_image: {filename: GalleryofMaps_0_small_screenshot.png, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: GalleryofMaps_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    small_icon: {filename: GalleryofMaps_small_icon.jpeg, security_marking: UNCLASSIFIED}
     tags: [maps]
     title: Gallery of Maps
     unique_name: null
@@ -703,10 +1168,11 @@
   - {action: APPROVED, author: bigbrother, description: null}
   listing_review_batch:
   - {author: syme, rate: 4, text: 'I keep hitting M and the map doesn''t show up. '}
+  - {author: rutherford, rate: 3, text: Okay app must try it today.}
 - library_entries: []
   listing:
     agency: Miniluv
-    banner_icon: {filename: TaxonomyClassifier_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: TaxonomyClassifier_banner_icon.jpeg, security_marking: UNCLASSIFIED}
     categories: [Education]
     contacts: []
     description: "Taxonomy (from Ancient Greek \u03C4\u03AC\u03BE\u03B9\u03C2 (taxis),\
@@ -726,10 +1192,9 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: TaxonomyClassifier_large_screenshot.jpeg, security_marking: UNCLASSIFIED//FOR
+    large_banner_icon: {filename: TaxonomyClassifier_large_banner_icon.jpeg, security_marking: UNCLASSIFIED//FOR
         OFFICIAL USE ONLY}
-    large_icon: {filename: TaxonomyClassifier_large_screenshot.jpeg, security_marking: UNCLASSIFIED//FOR
-        OFFICIAL USE ONLY}
+    large_icon: {filename: TaxonomyClassifier_large_icon.jpeg, security_marking: UNCLASSIFIED}
     launch_url: https://en.wikipedia.org/wiki/Taxonomy_(biology)
     listing_type: Web Application
     owners: [bigbrother]
@@ -739,9 +1204,9 @@
       large_image: {filename: TaxonomyClassifier_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED//FOR
           OFFICIAL USE ONLY}
       order: 0
-      small_image: {filename: TaxonomyClassifier_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: TaxonomyClassifier_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: TaxonomyClassifier_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    small_icon: {filename: TaxonomyClassifier_small_icon.jpeg, security_marking: UNCLASSIFIED}
     tags: [demo, classifier]
     title: Taxonomy Classifier
     unique_name: null
@@ -750,17 +1215,14 @@
       based on the evolutionary relationships between organisms, both living and extinct.
   listing_activity:
   - {action: CREATED, author: bigbrother, description: null}
-  - {action: MODIFIED, author: bigbrother, description: null}
   - {action: SUBMITTED, author: bigbrother, description: null}
   - {action: APPROVED_ORG, author: bigbrother, description: null}
   - {action: APPROVED, author: bigbrother, description: null}
-  - {action: MODIFIED, author: bigbrother, description: null}
-  - {action: MODIFIED, author: bigbrother, description: null}
   listing_review_batch: []
 - library_entries: []
   listing:
     agency: Miniluv
-    banner_icon: {filename: LITRANCH_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: LITRANCH_banner_icon.jpeg, security_marking: UNCLASSIFIED}
     categories: [Education]
     contacts: []
     description: The 60,000 acre Lit Ranch is located on the Canadian River in Oldham,
@@ -781,8 +1243,8 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: LITRANCH_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
-    large_icon: {filename: LITRANCH_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: LITRANCH_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: LITRANCH_large_icon.jpeg, security_marking: UNCLASSIFIED}
     launch_url: http://localhost.com
     listing_type: Widget
     owners: [aaronson]
@@ -791,9 +1253,9 @@
     - description: A ranch
       large_image: {filename: LITRANCH_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: LITRANCH_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: LITRANCH_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: LITRANCH_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    small_icon: {filename: LITRANCH_small_icon.jpeg, security_marking: UNCLASSIFIED}
     tags: [Cows, Ranch, Lit]
     title: LIT RANCH
     unique_name: null
@@ -810,7 +1272,7 @@
 - library_entries: []
   listing:
     agency: Minipax
-    banner_icon: {filename: Hawaii_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: Hawaii_banner_icon.jpeg, security_marking: UNCLASSIFIED}
     categories: [Weather]
     contacts: []
     description: Hawaii is the only U.S. state located in Oceania and the only one
@@ -825,8 +1287,8 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: Hawaii_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
-    large_icon: {filename: Hawaii_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: Hawaii_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Hawaii_large_icon.jpeg, security_marking: UNCLASSIFIED}
     launch_url: http://localhost.com
     listing_type: Web Application
     owners: [aaronson]
@@ -835,13 +1297,13 @@
     - description: Island
       large_image: {filename: Hawaii_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: Hawaii_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: Hawaii_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     - description: I like turtles
       large_image: {filename: Hawaii_1_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 1
-      small_image: {filename: Hawaii_1_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: Hawaii_1_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: Hawaii_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    small_icon: {filename: Hawaii_small_icon.jpeg, security_marking: UNCLASSIFIED}
     tags: [Travel, Vacation, Expensive]
     title: Hawaii
     unique_name: null
@@ -858,7 +1320,7 @@
 - library_entries: []
   listing:
     agency: Test
-    banner_icon: {filename: Dinosaur_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: Dinosaur_banner_icon.jpeg, security_marking: UNCLASSIFIED}
     categories: [Education]
     contacts: []
     description: Dinosaurs are a diverse group of reptiles of the clade Dinosauria
@@ -873,8 +1335,8 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: Dinosaur_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
-    large_icon: {filename: Dinosaur_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: Dinosaur_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Dinosaur_large_icon.jpeg, security_marking: UNCLASSIFIED}
     launch_url: http://localhost.com
     listing_type: Code Library
     owners: [aaronson]
@@ -883,13 +1345,13 @@
     - description: Scariest one in history
       large_image: {filename: Dinosaur_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: Dinosaur_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: Dinosaur_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     - description: null
       large_image: {filename: Dinosaur_1_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 1
-      small_image: {filename: Dinosaur_1_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: Dinosaur_1_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: Dinosaur_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    small_icon: {filename: Dinosaur_small_icon.jpeg, security_marking: UNCLASSIFIED}
     tags: [Extinct, Dead, Animals, Reptiles]
     title: Dinosaur
     unique_name: null
@@ -907,7 +1369,7 @@
 - library_entries: []
   listing:
     agency: Test 3
-    banner_icon: {filename: FloppyDisk_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: FloppyDisk_banner_icon.jpeg, security_marking: UNCLASSIFIED}
     categories: [Communication]
     contacts: []
     description: A floppy disk, also called a floppy, diskette, or just disk, is a
@@ -921,8 +1383,8 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: FloppyDisk_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
-    large_icon: {filename: FloppyDisk_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: FloppyDisk_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: FloppyDisk_large_icon.jpeg, security_marking: UNCLASSIFIED}
     launch_url: http://localhost.com
     listing_type: Web Application
     owners: [aaronson]
@@ -931,13 +1393,13 @@
     - description: Floppy Disk
       large_image: {filename: FloppyDisk_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: FloppyDisk_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: FloppyDisk_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     - description: This is the floppy disk drive
       large_image: {filename: FloppyDisk_1_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 1
-      small_image: {filename: FloppyDisk_1_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: FloppyDisk_1_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: FloppyDisk_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    small_icon: {filename: FloppyDisk_small_icon.jpeg, security_marking: UNCLASSIFIED}
     tags: [Old, Storage, Memory]
     title: Floppy Disk
     unique_name: null
@@ -952,10 +1414,12 @@
   - {author: aaronson, rate: 3, text: Not the best tool now but still works}
   - {author: syme, rate: 5, text: 'You would not copy a car would you?  No!  Because
       that doesn''t make any sense.  You would copy X-COM though. '}
+  - {author: bettafish, rate: 3, text: Won't even hold an MP3.  Write time is very
+      slow.  Somewhat noisy too.}
 - library_entries: []
   listing:
     agency: Miniplen
-    banner_icon: {filename: Magneticpositioning_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: Magneticpositioning_banner_icon.jpeg, security_marking: UNCLASSIFIED}
     categories: [Media and Video, Productivity, Tools]
     contacts: []
     description: "Magnetic positioning is an IPS (Indoor positioning system) solution\
@@ -982,8 +1446,8 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: Magneticpositioning_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
-    large_icon: {filename: Magneticpositioning_large_screenshot.gif, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: Magneticpositioning_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Magneticpositioning_large_icon.jpeg, security_marking: UNCLASSIFIED}
     launch_url: https://en.wikipedia.org/wiki/Magnetic_positioning
     listing_type: Web Services
     owners: [rutherford]
@@ -992,9 +1456,9 @@
     - description: null
       large_image: {filename: Magneticpositioning_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: Magneticpositioning_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: Magneticpositioning_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: Magneticpositioning_large_screenshot.gif, security_marking: UNCLASSIFIED}
+    small_icon: {filename: Magneticpositioning_small_icon.jpeg, security_marking: UNCLASSIFIED}
     tags: [positioning]
     title: Magnetic positioning
     unique_name: null
@@ -1008,12 +1472,13 @@
   listing_review_batch:
   - {author: syme, rate: 1, text: 'Useless, everybody knows rooms are round.  So how
       does this even work?  '}
+  - {author: rutherford, rate: 5, text: Great app must try it today.}
 - library_entries: []
   listing:
     agency: Minipax
-    banner_icon: {filename: Cyclops_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: Cyclops_banner_icon.jpeg, security_marking: UNCLASSIFIED}
     categories: [Finance, Weather]
-    contacts: [no@gmail.com]
+    contacts: []
     description: "Cyclops (Scott Summers) is a fictional superhero appearing in American\
       \ comic books published by Marvel Comics and is a founding member of the X-Men.\
       \ Created by writer Stan Lee and artist Jack Kirby, the character first appeared\
@@ -1043,8 +1508,8 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: Cyclops_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
-    large_icon: {filename: Cyclops_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: Cyclops_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Cyclops_large_icon.jpeg, security_marking: UNCLASSIFIED}
     launch_url: https://en.wikipedia.org/wiki/Cyclops_(comics)
     listing_type: Code Library
     owners: [syme]
@@ -1053,9 +1518,9 @@
     - description: null
       large_image: {filename: Cyclops_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: Cyclops_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: Cyclops_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED//FOR OFFICIAL USE ONLY
-    small_icon: {filename: Cyclops_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    small_icon: {filename: Cyclops_small_icon.jpeg, security_marking: UNCLASSIFIED}
     tags: [x-men]
     title: Cyclops
     unique_name: null
@@ -1063,9 +1528,6 @@
     what_is_new: null
   listing_activity:
   - {action: CREATED, author: syme, description: null}
-  - {action: MODIFIED, author: syme, description: null}
-  - {action: MODIFIED, author: syme, description: null}
-  - {action: MODIFIED, author: syme, description: null}
   - {action: SUBMITTED, author: syme, description: null}
   - {action: APPROVED_ORG, author: bigbrother, description: null}
   - {action: APPROVED, author: bigbrother, description: null}
@@ -1078,7 +1540,7 @@
 - library_entries: []
   listing:
     agency: Minipax
-    banner_icon: {filename: JeanGrey_large_screenshot.png, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: JeanGrey_banner_icon.png, security_marking: UNCLASSIFIED}
     categories: [Finance, Weather]
     contacts: []
     description: 'Jean Grey-Summers (born Jean Elaine Grey) is a fictional superhero
@@ -1130,8 +1592,8 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: JeanGrey_large_screenshot.png, security_marking: UNCLASSIFIED}
-    large_icon: {filename: JeanGrey_large_screenshot.png, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: JeanGrey_large_banner_icon.png, security_marking: UNCLASSIFIED}
+    large_icon: {filename: JeanGrey_large_icon.png, security_marking: UNCLASSIFIED}
     launch_url: https://en.wikipedia.org/wiki/Jean_Grey
     listing_type: Desktop App
     owners: [syme]
@@ -1140,9 +1602,9 @@
     - description: null
       large_image: {filename: JeanGrey_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: JeanGrey_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: JeanGrey_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: JeanGrey_large_screenshot.png, security_marking: UNCLASSIFIED}
+    small_icon: {filename: JeanGrey_small_icon.png, security_marking: UNCLASSIFIED}
     tags: [x-men]
     title: Jean Grey
     unique_name: null
@@ -1155,10 +1617,11 @@
   - {action: APPROVED, author: bigbrother, description: null}
   listing_review_batch:
   - {author: syme, rate: 5, text: 'These timelines are way too confusing. '}
+  - {author: rutherford, rate: 5, text: Yes a definite winner.}
 - library_entries: []
   listing:
     agency: Minipax
-    banner_icon: {filename: Apocalypse_large_screenshot.png, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: Apocalypse_banner_icon.png, security_marking: UNCLASSIFIED}
     categories: [Finance, Weather]
     contacts: []
     description: 'Apocalypse (En Sabah Nur) is a fictional supervillain appearing
@@ -1181,8 +1644,8 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: Apocalypse_large_screenshot.png, security_marking: UNCLASSIFIED}
-    large_icon: {filename: Apocalypse_large_screenshot.png, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: Apocalypse_large_banner_icon.png, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Apocalypse_large_icon.png, security_marking: UNCLASSIFIED}
     launch_url: https://en.wikipedia.org/wiki/Apocalypse_(comics)
     listing_type: Web Application
     owners: [syme]
@@ -1191,9 +1654,9 @@
     - description: null
       large_image: {filename: Apocalypse_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: Apocalypse_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: Apocalypse_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: Apocalypse_large_screenshot.png, security_marking: UNCLASSIFIED}
+    small_icon: {filename: Apocalypse_small_icon.png, security_marking: UNCLASSIFIED}
     tags: [bad guys]
     title: Apocalypse
     unique_name: null
@@ -1201,9 +1664,7 @@
     what_is_new: null
   listing_activity:
   - {action: CREATED, author: syme, description: null}
-  - {action: MODIFIED, author: syme, description: null}
   - {action: SUBMITTED, author: syme, description: null}
-  - {action: MODIFIED, author: syme, description: null}
   - {action: APPROVED_ORG, author: bigbrother, description: null}
   - {action: APPROVED, author: bigbrother, description: null}
   listing_review_batch:
@@ -1212,7 +1673,7 @@
 - library_entries: []
   listing:
     agency: Minipax
-    banner_icon: {filename: Wolverine_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: Wolverine_banner_icon.jpeg, security_marking: UNCLASSIFIED}
     categories: [Finance, Weather]
     contacts: []
     description: 'Wolverine (born James Howlett[2] commonly known as Logan and sometimes
@@ -1257,8 +1718,8 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: Wolverine_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
-    large_icon: {filename: Wolverine_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: Wolverine_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Wolverine_large_icon.jpeg, security_marking: UNCLASSIFIED}
     launch_url: https://en.wikipedia.org/wiki/Wolverine_(character)
     listing_type: Web Services
     owners: [syme]
@@ -1267,9 +1728,9 @@
     - description: null
       large_image: {filename: Wolverine_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: Wolverine_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: Wolverine_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: Wolverine_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    small_icon: {filename: Wolverine_small_icon.jpeg, security_marking: UNCLASSIFIED}
     tags: [x-men]
     title: Wolverine
     unique_name: null
@@ -1278,7 +1739,6 @@
   listing_activity:
   - {action: CREATED, author: syme, description: null}
   - {action: SUBMITTED, author: syme, description: null}
-  - {action: MODIFIED, author: syme, description: null}
   - {action: APPROVED_ORG, author: bigbrother, description: null}
   - {action: APPROVED, author: bigbrother, description: null}
   listing_review_batch:
@@ -1287,7 +1747,7 @@
 - library_entries: []
   listing:
     agency: Minipax
-    banner_icon: {filename: IronMan_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: IronMan_banner_icon.jpeg, security_marking: UNCLASSIFIED}
     categories: [Finance, Weather]
     contacts: []
     description: 'Iron Man (Tony Stark) is a fictional superhero appearing in American
@@ -1332,8 +1792,8 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: IronMan_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
-    large_icon: {filename: IronMan_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: IronMan_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: IronMan_large_icon.jpeg, security_marking: UNCLASSIFIED}
     launch_url: https://en.wikipedia.org/wiki/Iron_Man
     listing_type: Code Library
     owners: [syme]
@@ -1342,9 +1802,9 @@
     - description: null
       large_image: {filename: IronMan_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: IronMan_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: IronMan_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: IronMan_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    small_icon: {filename: IronMan_small_icon.jpeg, security_marking: UNCLASSIFIED}
     tags: [Avengers]
     title: Iron Man
     unique_name: null
@@ -1353,17 +1813,17 @@
   listing_activity:
   - {action: CREATED, author: syme, description: null}
   - {action: SUBMITTED, author: syme, description: null}
-  - {action: MODIFIED, author: syme, description: null}
   - {action: APPROVED_ORG, author: bigbrother, description: null}
   - {action: APPROVED, author: bigbrother, description: null}
   listing_review_batch:
   - {author: syme, rate: 5, text: 'This is not Jarvis upvoting this.  It is not.  you
       cannot prove anything.  Also the fact that this site does not have a capatcha
       is AWESOME!  '}
+  - {author: rutherford, rate: 3, text: Ironman is okay not 100% sure it is good.}
 - library_entries: []
   listing:
     agency: Minipax
-    banner_icon: {filename: Rogue_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: Rogue_banner_icon.jpeg, security_marking: UNCLASSIFIED}
     categories: [Finance, Weather]
     contacts: []
     description: 'Rogue is a fictional superhero appearing in American comic books
@@ -1408,8 +1868,8 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: Rogue_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
-    large_icon: {filename: Rogue_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: Rogue_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Rogue_large_icon.jpeg, security_marking: UNCLASSIFIED}
     launch_url: https://en.wikipedia.org/wiki/Rogue_(comics)
     listing_type: Widget
     owners: [syme]
@@ -1418,9 +1878,9 @@
     - description: null
       large_image: {filename: Rogue_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: Rogue_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: Rogue_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: Rogue_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    small_icon: {filename: Rogue_small_icon.jpeg, security_marking: UNCLASSIFIED}
     tags: [x-men]
     title: Rogue
     unique_name: null
@@ -1437,7 +1897,7 @@
 - library_entries: []
   listing:
     agency: Minipax
-    banner_icon: {filename: Beast_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: Beast_banner_icon.jpeg, security_marking: UNCLASSIFIED}
     categories: [Finance, Weather]
     contacts: []
     description: 'Beast (Henry Philip "Hank" McCoy) is a fictional superhero appearing
@@ -1479,8 +1939,8 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: Beast_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
-    large_icon: {filename: Beast_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: Beast_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Beast_large_icon.jpeg, security_marking: UNCLASSIFIED}
     launch_url: https://en.wikipedia.org/wiki/Beast_(comics)
     listing_type: Web Services
     owners: [syme]
@@ -1489,9 +1949,9 @@
     - description: null
       large_image: {filename: Beast_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: Beast_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: Beast_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: Beast_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    small_icon: {filename: Beast_small_icon.jpeg, security_marking: UNCLASSIFIED}
     tags: [x-men, avengers]
     title: Beast
     unique_name: null
@@ -1512,7 +1972,7 @@
 - library_entries: []
   listing:
     agency: Minipax
-    banner_icon: {filename: Magneto_large_screenshot.png, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: Magneto_banner_icon.png, security_marking: UNCLASSIFIED}
     categories: [Finance, Weather]
     contacts: []
     description: 'Magneto is a fictional character appearing in American comic books
@@ -1553,8 +2013,8 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: Magneto_large_screenshot.png, security_marking: UNCLASSIFIED}
-    large_icon: {filename: Magneto_large_screenshot.png, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: Magneto_large_banner_icon.png, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Magneto_large_icon.png, security_marking: UNCLASSIFIED}
     launch_url: https://en.wikipedia.org/wiki/Magneto_(comics)
     listing_type: Web Application
     owners: [syme]
@@ -1563,9 +2023,9 @@
     - description: null
       large_image: {filename: Magneto_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: Magneto_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: Magneto_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: Magneto_large_screenshot.png, security_marking: UNCLASSIFIED}
+    small_icon: {filename: Magneto_small_icon.png, security_marking: UNCLASSIFIED}
     tags: [bad guys]
     title: Magneto
     unique_name: null
@@ -1584,7 +2044,7 @@
 - library_entries: []
   listing:
     agency: Minipax
-    banner_icon: {filename: Blink_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: Blink_banner_icon.jpeg, security_marking: UNCLASSIFIED}
     categories: [Finance, Weather]
     contacts: []
     description: In the primary Earth-616 continuity of the Marvel Universe, Blink
@@ -1606,8 +2066,8 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: Blink_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
-    large_icon: {filename: Blink_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: Blink_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Blink_large_icon.jpeg, security_marking: UNCLASSIFIED}
     launch_url: https://en.wikipedia.org/wiki/Blink_(comics)
     listing_type: Code Library
     owners: [syme]
@@ -1616,9 +2076,9 @@
     - description: null
       large_image: {filename: Blink_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: Blink_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: Blink_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: Blink_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    small_icon: {filename: Blink_small_icon.jpeg, security_marking: UNCLASSIFIED}
     tags: [x-men]
     title: Blink
     unique_name: null
@@ -1635,7 +2095,7 @@
 - library_entries: []
   listing:
     agency: Test 1
-    banner_icon: {filename: Aliens_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: Aliens_banner_icon.jpeg, security_marking: UNCLASSIFIED}
     categories: [Education]
     contacts: []
     description: Extraterrestrial life, also called alien life (or, if it is a sentient
@@ -1651,8 +2111,8 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: Aliens_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
-    large_icon: {filename: Aliens_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: Aliens_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Aliens_large_icon.jpeg, security_marking: UNCLASSIFIED}
     launch_url: http://localhost.com
     listing_type: Web Application
     owners: [aaronson]
@@ -1661,9 +2121,9 @@
     - description: Not actual photo of alien
       large_image: {filename: Aliens_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: Aliens_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: Aliens_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: Aliens_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    small_icon: {filename: Aliens_small_icon.jpeg, security_marking: UNCLASSIFIED}
     tags: [Aliens, Space]
     title: Aliens
     unique_name: null
@@ -1680,7 +2140,7 @@
 - library_entries: []
   listing:
     agency: Minipax
-    banner_icon: {filename: Lamprey_large_screenshot.jpeg, security_marking: UNCLASSIFIED//FOR
+    banner_icon: {filename: Lamprey_banner_icon.jpeg, security_marking: UNCLASSIFIED//FOR
         OFFICIAL USE ONLY}
     categories: [Education]
     contacts: []
@@ -1709,10 +2169,9 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: Lamprey_large_screenshot.jpeg, security_marking: UNCLASSIFIED//FOR
+    large_banner_icon: {filename: Lamprey_large_banner_icon.jpeg, security_marking: UNCLASSIFIED//FOR
         OFFICIAL USE ONLY}
-    large_icon: {filename: Lamprey_large_screenshot.jpeg, security_marking: UNCLASSIFIED//FOR
-        OFFICIAL USE ONLY}
+    large_icon: {filename: Lamprey_large_icon.jpeg, security_marking: UNCLASSIFIED}
     launch_url: https://en.wikipedia.org/wiki/Lamprey
     listing_type: Web Application
     owners: [bigbrother]
@@ -1725,10 +2184,9 @@
         elongated bodies, and can range from 13 to 100 cm (5 to 40 inches) in length
       large_image: {filename: Lamprey_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: Lamprey_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: Lamprey_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED//FOR OFFICIAL USE ONLY
-    small_icon: {filename: Lamprey_large_screenshot.jpeg, security_marking: UNCLASSIFIED//FOR
-        OFFICIAL USE ONLY}
+    small_icon: {filename: Lamprey_small_icon.jpeg, security_marking: UNCLASSIFIED}
     tags: [science, fish]
     title: Lamprey
     unique_name: null
@@ -1740,12 +2198,11 @@
   - {action: SUBMITTED, author: bigbrother, description: null}
   - {action: APPROVED_ORG, author: bigbrother, description: null}
   - {action: APPROVED, author: bigbrother, description: null}
-  - {action: MODIFIED, author: bigbrother, description: null}
   listing_review_batch: []
 - library_entries: []
   listing:
     agency: Miniluv
-    banner_icon: {filename: Basketball_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: Basketball_banner_icon.jpeg, security_marking: UNCLASSIFIED}
     categories: [Health and Fitness, Media and Video, Sports]
     contacts: []
     description: Basketball is a non-contact sport played on a rectangular court.
@@ -1762,8 +2219,8 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: Basketball_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
-    large_icon: {filename: Basketball_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: Basketball_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Basketball_large_icon.jpeg, security_marking: UNCLASSIFIED}
     launch_url: http://localhost.com
     listing_type: Web Application
     owners: [aaronson]
@@ -1772,9 +2229,9 @@
     - description: Invented basketball
       large_image: {filename: Basketball_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: Basketball_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: Basketball_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: Basketball_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    small_icon: {filename: Basketball_small_icon.jpeg, security_marking: UNCLASSIFIED}
     tags: [NBA, Basketball, Sports]
     title: Basketball
     unique_name: null
@@ -1792,7 +2249,7 @@
 - library_entries: []
   listing:
     agency: Minipax
-    banner_icon: {filename: Deadpool_large_screenshot.png, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: Deadpool_banner_icon.png, security_marking: UNCLASSIFIED}
     categories: [Finance, Weather]
     contacts: []
     description: 'Deadpool (Wade Winston Wilson) is a fictional antihero appearing
@@ -1820,8 +2277,8 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: Deadpool_large_screenshot.png, security_marking: UNCLASSIFIED}
-    large_icon: {filename: Deadpool_large_screenshot.png, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: Deadpool_large_banner_icon.png, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Deadpool_large_icon.png, security_marking: UNCLASSIFIED}
     launch_url: https://en.wikipedia.org/wiki/Deadpool
     listing_type: Web Services
     owners: [syme]
@@ -1830,9 +2287,9 @@
     - description: null
       large_image: {filename: Deadpool_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: Deadpool_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: Deadpool_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: Deadpool_large_screenshot.png, security_marking: UNCLASSIFIED}
+    small_icon: {filename: Deadpool_small_icon.png, security_marking: UNCLASSIFIED}
     tags: [merc]
     title: Deadpool
     unique_name: null
@@ -1840,7 +2297,6 @@
     what_is_new: null
   listing_activity:
   - {action: CREATED, author: syme, description: null}
-  - {action: MODIFIED, author: syme, description: null}
   - {action: SUBMITTED, author: syme, description: null}
   - {action: APPROVED_ORG, author: bigbrother, description: null}
   - {action: APPROVED, author: bigbrother, description: null}
@@ -1853,7 +2309,7 @@
 - library_entries: []
   listing:
     agency: Test2
-    banner_icon: {filename: Building_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: Building_banner_icon.jpeg, security_marking: UNCLASSIFIED}
     categories: [Education]
     contacts: []
     description: A building or edifice is a structure with a roof and walls standing
@@ -1865,8 +2321,8 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: Building_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
-    large_icon: {filename: Building_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: Building_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Building_large_icon.jpeg, security_marking: UNCLASSIFIED}
     launch_url: http://localhost.com
     listing_type: Web Services
     owners: [aaronson]
@@ -1875,9 +2331,9 @@
     - description: null
       large_image: {filename: Building_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: Building_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: Building_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: Building_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    small_icon: {filename: Building_small_icon.jpeg, security_marking: UNCLASSIFIED}
     tags: [Architecture, Buildings]
     title: Building
     unique_name: null
@@ -1894,7 +2350,7 @@
 - library_entries: []
   listing:
     agency: Minipax
-    banner_icon: {filename: Snow_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: Snow_banner_icon.jpeg, security_marking: UNCLASSIFIED}
     categories: [Weather]
     contacts: []
     description: Snow refers to forms of ice crystals that precipitate from the atmosphere
@@ -1906,8 +2362,8 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: Snow_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
-    large_icon: {filename: Snow_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: Snow_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Snow_large_icon.jpeg, security_marking: UNCLASSIFIED}
     launch_url: http://localhost.com
     listing_type: Web Application
     owners: [aaronson]
@@ -1916,13 +2372,13 @@
     - description: After a night of snow
       large_image: {filename: Snow_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: Snow_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: Snow_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     - description: Animal in snow
       large_image: {filename: Snow_1_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 1
-      small_image: {filename: Snow_1_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: Snow_1_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: Snow_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    small_icon: {filename: Snow_small_icon.jpeg, security_marking: UNCLASSIFIED}
     tags: [Weather, Cold]
     title: Snow
     unique_name: null
@@ -1939,7 +2395,7 @@
 - library_entries: []
   listing:
     agency: Miniluv
-    banner_icon: {filename: Greatwhiteshark_large_screenshot.jpeg, security_marking: UNCLASSIFIED//FOR
+    banner_icon: {filename: Greatwhiteshark_banner_icon.jpeg, security_marking: UNCLASSIFIED//FOR
         OFFICIAL USE ONLY}
     categories: [Education]
     contacts: []
@@ -1963,10 +2419,9 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: Greatwhiteshark_large_screenshot.jpeg, security_marking: UNCLASSIFIED//FOR
+    large_banner_icon: {filename: Greatwhiteshark_large_banner_icon.jpeg, security_marking: UNCLASSIFIED//FOR
         OFFICIAL USE ONLY}
-    large_icon: {filename: Greatwhiteshark_large_screenshot.jpeg, security_marking: UNCLASSIFIED//FOR
-        OFFICIAL USE ONLY}
+    large_icon: {filename: Greatwhiteshark_large_icon.jpeg, security_marking: UNCLASSIFIED}
     launch_url: https://en.wikipedia.org/wiki/Great_white_shark
     listing_type: Web Application
     owners: [bigbrother]
@@ -1979,10 +2434,9 @@
     - description: Map and jaw pictures
       large_image: {filename: Greatwhiteshark_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: Greatwhiteshark_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: Greatwhiteshark_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: Greatwhiteshark_large_screenshot.jpeg, security_marking: UNCLASSIFIED//FOR
-        OFFICIAL USE ONLY}
+    small_icon: {filename: Greatwhiteshark_small_icon.jpeg, security_marking: UNCLASSIFIED}
     tags: [science, fish, shark]
     title: Great white shark
     unique_name: null
@@ -1991,20 +2445,18 @@
       on very rare occasion, the killer whale.
   listing_activity:
   - {action: CREATED, author: bigbrother, description: null}
-  - {action: MODIFIED, author: bigbrother, description: null}
-  - {action: MODIFIED, author: bigbrother, description: null}
   - {action: SUBMITTED, author: bigbrother, description: null}
   - {action: APPROVED_ORG, author: bigbrother, description: null}
   - {action: APPROVED, author: bigbrother, description: null}
-  - {action: MODIFIED, author: bigbrother, description: null}
   listing_review_batch:
   - {author: syme, rate: 5, text: 'Growing up I had a friend who talk during movies.  The
       worst.  Anyways after a trip to the beach I didn''t have to worry about that
       anymore. '}
+  - {author: rutherford, rate: 3, text: Okay this might be a good one.}
 - library_entries: []
   listing:
     agency: Miniplen
-    banner_icon: {filename: WatermeLon_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: WatermeLon_banner_icon.jpeg, security_marking: UNCLASSIFIED}
     categories: [Health and Fitness]
     contacts: []
     description: Watermelon Citrullus lanatus var. lanatus is a scrambling and trailing
@@ -2022,8 +2474,8 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: WatermeLon_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
-    large_icon: {filename: WatermeLon_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: WatermeLon_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: WatermeLon_large_icon.jpeg, security_marking: UNCLASSIFIED}
     launch_url: http://localhost.com
     listing_type: Desktop App
     owners: [aaronson]
@@ -2032,9 +2484,9 @@
     - description: Slices of watermelon
       large_image: {filename: WatermeLon_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: WatermeLon_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: WatermeLon_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: WatermeLon_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    small_icon: {filename: WatermeLon_small_icon.jpeg, security_marking: UNCLASSIFIED}
     tags: [Food, Fruits, Fruit]
     title: Waterme Lon
     unique_name: null
@@ -2049,59 +2501,10 @@
   - {author: aaronson, rate: 4, text: Best time to use when it's hot outside.}
   - {author: syme, rate: 5, text: 'I ate a seed and a watermelon grew in my belly.  This
       provided an unlimited supply of food.  Try it and see! '}
-# - library_entries: []
-#   listing:
-#     agency: Minipax
-#     banner_icon: {filename: null, security_marking: null}
-#     categories: [Business]
-#     contacts: []
-#     description: 'Management (or managing) is the administration of an organization,
-#       whether it be a business, a not-for-profit organization, or government body.
-#       Management includes the activities of setting the strategy of an organization
-#       and coordinating the efforts of its employees or volunteers to accomplish its
-#       objectives through the application of available resources, such as financial,
-#       natural, technological, and human resources. The term "management" may also
-#       refer to the people who manage an organization.
-#
-#
-#       Management is also an academic discipline, a social science whose objective
-#       is to study social organization and organizational leadership. Management is
-#       studied at colleges and universities; some important degrees in management are
-#       the Bachelor of Commerce (B.Com.) and Master of Business Administration (M.B.A.)
-#       and, for the public sector, the Master of Public Administration (MPA) degree.
-#       Individuals who aim at becoming management researchers or professors may complete
-#       the Doctor of Management (DM), the Doctor of Business Administration (DBA),
-#       or the PhD in Business Administration or Management.'
-#     description_short: Management (or managing) is the administration of an organization,
-#       whether it be a business.
-#     doc_urls: []
-#     iframe_compatible: true
-#     is_deleted: true
-#     is_enabled: false
-#     is_featured: false
-#     is_private: false
-#     large_banner_icon: {filename: null, security_marking: null}
-#     large_icon: {filename: null, security_marking: null}
-#     launch_url: http://businesssmanagment.com
-#     listing_type: Desktop App
-#     owners: [bigbrother]
-#     requirements: None
-#     screenshots: []
-#     security_marking: UNCLASSIFIED
-#     small_icon: {filename: null, security_marking: null}
-#     tags: [management, team, process]
-#     title: Business Management
-#     unique_name: null
-#     version_name: '2.0'
-#     what_is_new: null
-#   listing_activity:
-#   - {action: CREATED, author: bigbrother, description: null}
-#   - {action: DELETED, author: bigbrother, description: null}
-#   listing_review_batch: []
 - library_entries: []
   listing:
     agency: Minitrue
-    banner_icon: {filename: BusinessManagement_large_screenshot.png, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: BusinessManagementSystem_banner_icon.png, security_marking: UNCLASSIFIED}
     categories: [Business]
     contacts: []
     description: 'Management (or managing) is the administration of an organization,
@@ -2129,27 +2532,27 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: BusinessManagement_large_screenshot.png, security_marking: UNCLASSIFIED}
-    large_icon: {filename: BusinessManagement_large_screenshot.png, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: BusinessManagementSystem_large_banner_icon.png,
+      security_marking: UNCLASSIFIED}
+    large_icon: {filename: BusinessManagementSystem_large_icon.png, security_marking: UNCLASSIFIED}
     launch_url: http://businessmanagment.com
     listing_type: Desktop App
     owners: [wsmith]
     requirements: None
     screenshots:
     - description: null
-      large_image: {filename: BusinessManagement_0_large_screenshot.png, security_marking: UNCLASSIFIED}
+      large_image: {filename: BusinessManagementSystem_0_large_screenshot.png, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: BusinessManagement_0_large_screenshot.png, security_marking: UNCLASSIFIED}
+      small_image: {filename: BusinessManagementSystem_0_small_screenshot.png, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: BusinessManagement_large_screenshot.png, security_marking: UNCLASSIFIED}
+    small_icon: {filename: BusinessManagementSystem_small_icon.png, security_marking: UNCLASSIFIED}
     tags: [risk, process, managment]
-    title: Business Management
+    title: Business Management System
     unique_name: null
     version_name: '2.02'
     what_is_new: null
   listing_activity:
   - {action: CREATED, author: wsmith, description: null}
-  - {action: MODIFIED, author: wsmith, description: null}
   - {action: SUBMITTED, author: bigbrother, description: null}
   - {action: APPROVED_ORG, author: bigbrother, description: null}
   - {action: APPROVED, author: bigbrother, description: null}
@@ -2165,7 +2568,7 @@
 - library_entries: []
   listing:
     agency: Minipax
-    banner_icon: {filename: InformationalBook_large_screenshot.png, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: InformationalBook_banner_icon.png, security_marking: UNCLASSIFIED}
     categories: [Books and Reference]
     contacts: []
     description: "The Wikimedia Foundation, Inc. is a nonprofit charitable organization\
@@ -2183,8 +2586,8 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: InformationalBook_large_screenshot.png, security_marking: UNCLASSIFIED}
-    large_icon: {filename: InformationalBook_large_screenshot.png, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: InformationalBook_large_banner_icon.png, security_marking: UNCLASSIFIED}
+    large_icon: {filename: InformationalBook_large_icon.png, security_marking: UNCLASSIFIED}
     launch_url: https://wikimediafoundation.org/wiki/Home
     listing_type: Web Application
     owners: [bigbrother]
@@ -2203,10 +2606,9 @@
       large_image: {filename: InformationalBook_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED//FOR
           OFFICIAL USE ONLY}
       order: 0
-      small_image: {filename: InformationalBook_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: InformationalBook_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED//FOR OFFICIAL USE ONLY
-    small_icon: {filename: InformationalBook_large_screenshot.png, security_marking: UNCLASSIFIED//FOR
-        OFFICIAL USE ONLY}
+    small_icon: {filename: InformationalBook_small_icon.png, security_marking: UNCLASSIFIED}
     tags: [encyclopedia, free]
     title: Informational Book
     unique_name: null
@@ -2215,11 +2617,9 @@
       \ plan, strategic targets, activities, and staffing overview."
   listing_activity:
   - {action: CREATED, author: bigbrother, description: null}
-  - {action: MODIFIED, author: bigbrother, description: null}
   - {action: SUBMITTED, author: bigbrother, description: null}
   - {action: APPROVED_ORG, author: bigbrother, description: null}
   - {action: APPROVED, author: bigbrother, description: null}
-  - {action: MODIFIED, author: bigbrother, description: null}
   listing_review_batch:
   - {author: syme, rate: 5, text: 'Zeus controls the world by creating brainwave modifiers
       that are sent through the air as cotton candy.  Its true!  You can read about
@@ -2227,7 +2627,7 @@
 - library_entries: []
   listing:
     agency: Miniluv
-    banner_icon: {filename: Sun_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: Sun_banner_icon.jpeg, security_marking: UNCLASSIFIED}
     categories: [Tools]
     contacts: []
     description: 'The Sun is the star at the center of the Solar System. It is a nearly
@@ -2271,8 +2671,8 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: Sun_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
-    large_icon: {filename: Sun_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: Sun_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Sun_large_icon.jpeg, security_marking: UNCLASSIFIED}
     launch_url: https://en.wikipedia.org/wiki/Sun
     listing_type: Web Application
     owners: [betaraybill]
@@ -2281,9 +2681,9 @@
     - description: null
       large_image: {filename: Sun_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: Sun_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: Sun_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: Sun_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    small_icon: {filename: Sun_small_icon.jpeg, security_marking: UNCLASSIFIED}
     tags: [Planets]
     title: Sun
     unique_name: null
@@ -2291,7 +2691,6 @@
     what_is_new: null
   listing_activity:
   - {action: CREATED, author: betaraybill, description: null}
-  - {action: MODIFIED, author: betaraybill, description: null}
   - {action: SUBMITTED, author: betaraybill, description: null}
   - {action: APPROVED_ORG, author: bigbrother, description: null}
   - {action: APPROVED, author: bigbrother, description: null}
@@ -2302,7 +2701,7 @@
 - library_entries: []
   listing:
     agency: Miniluv
-    banner_icon: {filename: Jasoom_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: Jasoom_banner_icon.jpeg, security_marking: UNCLASSIFIED}
     categories: [Books and Reference]
     contacts: []
     description: 'Earth is the third planet from the Sun and the only object in the
@@ -2353,8 +2752,8 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: Jasoom_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
-    large_icon: {filename: Jasoom_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: Jasoom_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Jasoom_large_icon.jpeg, security_marking: UNCLASSIFIED}
     launch_url: https://en.wikipedia.org/wiki/Earth
     listing_type: Web Application
     owners: [betaraybill]
@@ -2363,9 +2762,9 @@
     - description: null
       large_image: {filename: Jasoom_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: Jasoom_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: Jasoom_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: Jasoom_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    small_icon: {filename: Jasoom_small_icon.jpeg, security_marking: UNCLASSIFIED}
     tags: [Planets]
     title: Jasoom
     unique_name: null
@@ -2374,7 +2773,6 @@
   listing_activity:
   - {action: CREATED, author: betaraybill, description: null}
   - {action: SUBMITTED, author: betaraybill, description: null}
-  - {action: MODIFIED, author: betaraybill, description: null}
   - {action: APPROVED_ORG, author: bigbrother, description: null}
   - {action: APPROVED, author: bigbrother, description: null}
   listing_review_batch:
@@ -2384,7 +2782,7 @@
 - library_entries: []
   listing:
     agency: Miniluv
-    banner_icon: {filename: Barsoom_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: Barsoom_banner_icon.jpeg, security_marking: UNCLASSIFIED}
     categories: [Communication]
     contacts: []
     description: "Mars is the fourth planet from the Sun and the second-smallest planet\
@@ -2426,8 +2824,8 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: Barsoom_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
-    large_icon: {filename: Barsoom_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: Barsoom_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Barsoom_large_icon.jpeg, security_marking: UNCLASSIFIED}
     launch_url: https://en.wikipedia.org/wiki/Mars
     listing_type: Web Application
     owners: [betaraybill]
@@ -2436,9 +2834,9 @@
     - description: null
       large_image: {filename: Barsoom_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: Barsoom_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: Barsoom_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: Barsoom_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    small_icon: {filename: Barsoom_small_icon.jpeg, security_marking: UNCLASSIFIED}
     tags: [Planets]
     title: Barsoom
     unique_name: null
@@ -2452,10 +2850,12 @@
   listing_review_batch:
   - {author: betaraybill, rate: 5, text: Looking like the next home.}
   - {author: syme, rate: 3, text: 'No roller coaster, a curfew and ice warriors.'}
+  - {author: bettafish, rate: 5, text: Found this in the Marketplace.  Much better
+      than expected.}
 - library_entries: []
   listing:
     agency: Miniluv
-    banner_icon: {filename: Venus_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: Venus_banner_icon.jpeg, security_marking: UNCLASSIFIED}
     categories: [Entertainment]
     contacts: []
     description: "Venus is the second planet from the Sun, orbiting it every 224.7\
@@ -2504,8 +2904,8 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: Venus_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
-    large_icon: {filename: Venus_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: Venus_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Venus_large_icon.jpeg, security_marking: UNCLASSIFIED}
     launch_url: https://en.wikipedia.org/wiki/Venus
     listing_type: Web Application
     owners: [betaraybill]
@@ -2514,9 +2914,9 @@
     - description: null
       large_image: {filename: Venus_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: Venus_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: Venus_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: Venus_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    small_icon: {filename: Venus_small_icon.jpeg, security_marking: UNCLASSIFIED}
     tags: [Planets]
     title: Venus
     unique_name: null
@@ -2533,7 +2933,7 @@
 - library_entries: []
   listing:
     agency: Miniluv
-    banner_icon: {filename: Saturn_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: Saturn_banner_icon.jpeg, security_marking: UNCLASSIFIED}
     categories: [Finance]
     contacts: []
     description: "Saturn is the sixth planet from the Sun and the second-largest in\
@@ -2569,8 +2969,8 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: Saturn_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
-    large_icon: {filename: Saturn_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: Saturn_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Saturn_large_icon.jpeg, security_marking: UNCLASSIFIED}
     launch_url: https://en.wikipedia.org/wiki/Saturn
     listing_type: Web Application
     owners: [betaraybill]
@@ -2579,9 +2979,9 @@
     - description: null
       large_image: {filename: Saturn_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: Saturn_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: Saturn_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: Saturn_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    small_icon: {filename: Saturn_small_icon.jpeg, security_marking: UNCLASSIFIED}
     tags: [Planets]
     title: Saturn
     unique_name: null
@@ -2599,7 +2999,7 @@
 - library_entries: []
   listing:
     agency: Miniluv
-    banner_icon: {filename: Jupiter_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: Jupiter_banner_icon.jpeg, security_marking: UNCLASSIFIED}
     categories: [Business]
     contacts: []
     description: "Jupiter is the fifth planet from the Sun and the largest in the\
@@ -2640,8 +3040,8 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: Jupiter_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
-    large_icon: {filename: Jupiter_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: Jupiter_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Jupiter_large_icon.jpeg, security_marking: UNCLASSIFIED}
     launch_url: https://en.wikipedia.org/wiki/Jupiter
     listing_type: Web Application
     owners: [betaraybill]
@@ -2650,9 +3050,9 @@
     - description: null
       large_image: {filename: Jupiter_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: Jupiter_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: Jupiter_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: Jupiter_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    small_icon: {filename: Jupiter_small_icon.jpeg, security_marking: UNCLASSIFIED}
     tags: [Planets]
     title: Jupiter
     unique_name: null
@@ -2670,7 +3070,7 @@
 - library_entries: []
   listing:
     agency: Miniluv
-    banner_icon: {filename: UrAnus_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: Uranus_banner_icon.jpeg, security_marking: UNCLASSIFIED}
     categories: [Finance]
     contacts: []
     description: "Uranus is the seventh planet from the Sun. It has the third-largest\
@@ -2704,27 +3104,26 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: UrAnus_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
-    large_icon: {filename: UrAnus_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: Uranus_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Uranus_large_icon.jpeg, security_marking: UNCLASSIFIED}
     launch_url: https://en.wikipedia.org/wiki/Uranus
     listing_type: Web Application
     owners: [betaraybill]
     requirements: Requires the internet.
     screenshots:
     - description: null
-      large_image: {filename: UrAnus_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      large_image: {filename: Uranus_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: UrAnus_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: Uranus_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: UrAnus_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    small_icon: {filename: Uranus_small_icon.jpeg, security_marking: UNCLASSIFIED}
     tags: [Planets]
-    title: UrAnus
+    title: Uranus
     unique_name: null
     version_name: '1.0'
     what_is_new: null
   listing_activity:
   - {action: CREATED, author: betaraybill, description: null}
-  - {action: MODIFIED, author: betaraybill, description: null}
   - {action: SUBMITTED, author: betaraybill, description: null}
   - {action: APPROVED_ORG, author: bigbrother, description: null}
   - {action: APPROVED, author: bigbrother, description: null}
@@ -2733,7 +3132,7 @@
 - library_entries: []
   listing:
     agency: Miniluv
-    banner_icon: {filename: Neptune_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: Neptune_banner_icon.jpeg, security_marking: UNCLASSIFIED}
     categories: [Health and Fitness]
     contacts: []
     description: "Neptune is the eighth and farthest known planet from the Sun in\
@@ -2784,8 +3183,8 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: Neptune_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
-    large_icon: {filename: Neptune_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: Neptune_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Neptune_large_icon.jpeg, security_marking: UNCLASSIFIED}
     launch_url: https://en.wikipedia.org/wiki/Neptune
     listing_type: Web Application
     owners: [betaraybill]
@@ -2794,9 +3193,9 @@
     - description: null
       large_image: {filename: Neptune_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: Neptune_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: Neptune_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: Neptune_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    small_icon: {filename: Neptune_small_icon.jpeg, security_marking: UNCLASSIFIED}
     tags: [Planets]
     title: Neptune
     unique_name: null
@@ -2805,7 +3204,6 @@
   listing_activity:
   - {action: CREATED, author: betaraybill, description: null}
   - {action: SUBMITTED, author: betaraybill, description: null}
-  - {action: MODIFIED, author: betaraybill, description: null}
   - {action: APPROVED_ORG, author: bigbrother, description: null}
   - {action: APPROVED, author: bigbrother, description: null}
   listing_review_batch:
@@ -2814,7 +3212,7 @@
 - library_entries: []
   listing:
     agency: Miniluv
-    banner_icon: {filename: Azeroth_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: Azeroth_banner_icon.jpeg, security_marking: UNCLASSIFIED}
     categories: [Entertainment]
     contacts: []
     description: 'Azeroth is the name of the world in which the majority of the Warcraft
@@ -2841,8 +3239,8 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: Azeroth_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
-    large_icon: {filename: Azeroth_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: Azeroth_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Azeroth_large_icon.jpeg, security_marking: UNCLASSIFIED}
     launch_url: http://wowwiki.wikia.com/wiki/Azeroth_(world)
     listing_type: Web Application
     owners: [betaraybill]
@@ -2851,9 +3249,9 @@
     - description: null
       large_image: {filename: Azeroth_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: Azeroth_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: Azeroth_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: Azeroth_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    small_icon: {filename: Azeroth_small_icon.jpeg, security_marking: UNCLASSIFIED}
     tags: [Planets]
     title: Azeroth
     unique_name: null
@@ -2870,7 +3268,7 @@
 - library_entries: []
   listing:
     agency: Miniluv
-    banner_icon: {filename: Pluto(Notaplanet)_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: Pluto(Notaplanet)_banner_icon.jpeg, security_marking: UNCLASSIFIED}
     categories: [Tools]
     contacts: []
     description: NOT A PLANET NOT A PLANET NOT A PLANET NOT A PLANET NOT A PLANET
@@ -2903,8 +3301,8 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: Pluto(Notaplanet)_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
-    large_icon: {filename: Pluto(Notaplanet)_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: Pluto(Notaplanet)_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Pluto(Notaplanet)_large_icon.jpeg, security_marking: UNCLASSIFIED}
     launch_url: https://notaplanet.com
     listing_type: Web Application
     owners: [betaraybill]
@@ -2913,9 +3311,9 @@
     - description: null
       large_image: {filename: Pluto(Notaplanet)_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: Pluto(Notaplanet)_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: Pluto(Notaplanet)_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: Pluto(Notaplanet)_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    small_icon: {filename: Pluto(Notaplanet)_small_icon.jpeg, security_marking: UNCLASSIFIED}
     tags: [NOT A PLANET]
     title: Pluto (Not a planet)
     unique_name: null
@@ -2934,7 +3332,7 @@
 - library_entries: []
   listing:
     agency: Minipax
-    banner_icon: {filename: KillerWhale_large_screenshot.jpeg, security_marking: UNCLASSIFIED//FOR
+    banner_icon: {filename: KillerWhale_banner_icon.jpeg, security_marking: UNCLASSIFIED//FOR
         OFFICIAL USE ONLY}
     categories: [Education]
     contacts: []
@@ -2976,9 +3374,8 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: KillerWhale_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
-    large_icon: {filename: KillerWhale_large_screenshot.jpeg, security_marking: UNCLASSIFIED//FOR
-        OFFICIAL USE ONLY}
+    large_banner_icon: {filename: KillerWhale_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: KillerWhale_large_icon.jpeg, security_marking: UNCLASSIFIED}
     launch_url: https://en.wikipedia.org/wiki/Killer_whale
     listing_type: Web Application
     owners: [bigbrother]
@@ -2990,10 +3387,9 @@
     - description: null
       large_image: {filename: KillerWhale_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: KillerWhale_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: KillerWhale_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: KillerWhale_large_screenshot.jpeg, security_marking: UNCLASSIFIED//FOR
-        OFFICIAL USE ONLY}
+    small_icon: {filename: KillerWhale_small_icon.jpeg, security_marking: UNCLASSIFIED}
     tags: [Mammal, Science]
     title: Killer Whale
     unique_name: null
@@ -3001,11 +3397,6 @@
     what_is_new: Wild killer whales are not considered a threat to humans
   listing_activity:
   - {action: CREATED, author: bigbrother, description: null}
-  - {action: MODIFIED, author: bigbrother, description: null}
-  - {action: MODIFIED, author: bigbrother, description: null}
-  - {action: MODIFIED, author: bigbrother, description: null}
-  - {action: MODIFIED, author: bigbrother, description: null}
-  - {action: MODIFIED, author: bigbrother, description: null}
   - {action: SUBMITTED, author: bigbrother, description: null}
   - {action: APPROVED_ORG, author: bigbrother, description: null}
   - {action: APPROVED, author: bigbrother, description: null}
@@ -3013,7 +3404,7 @@
 - library_entries: []
   listing:
     agency: Minipax
-    banner_icon: {filename: WolfFinder_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: WolfFinder_banner_icon.jpeg, security_marking: UNCLASSIFIED}
     categories: [Education]
     contacts: []
     description: "The gray wolf or grey wolf (Canis lupus),[a] also known as the timber\
@@ -3045,11 +3436,11 @@
     iframe_compatible: true
     is_deleted: false
     is_enabled: true
-    is_featured: true
+    is_featured: false
     is_private: false
-    large_banner_icon: {filename: WolfFinder_large_screenshot.jpeg, security_marking: UNCLASSIFIED//FOR
+    large_banner_icon: {filename: WolfFinder_large_banner_icon.jpeg, security_marking: UNCLASSIFIED//FOR
         OFFICIAL USE ONLY}
-    large_icon: {filename: WolfFinder_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: WolfFinder_large_icon.jpeg, security_marking: UNCLASSIFIED}
     launch_url: https://en.wikipedia.org/wiki/Gray_wolf
     listing_type: Web Application
     owners: [bigbrother]
@@ -3059,13 +3450,13 @@
     - description: null
       large_image: {filename: WolfFinder_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: WolfFinder_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: WolfFinder_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     - description: null
       large_image: {filename: WolfFinder_1_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 1
-      small_image: {filename: WolfFinder_1_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: WolfFinder_1_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: WolfFinder_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    small_icon: {filename: WolfFinder_small_icon.jpeg, security_marking: UNCLASSIFIED}
     tags: [science, mammal]
     title: Wolf Finder
     unique_name: null
@@ -3073,16 +3464,15 @@
     what_is_new: null
   listing_activity:
   - {action: CREATED, author: bigbrother, description: null}
-  - {action: MODIFIED, author: bigbrother, description: null}
   - {action: SUBMITTED, author: bigbrother, description: null}
   - {action: APPROVED_ORG, author: bigbrother, description: null}
   - {action: APPROVED, author: bigbrother, description: null}
-  - {action: MODIFIED, author: bigbrother, description: null}
-  listing_review_batch: []
+  listing_review_batch:
+  - {author: rutherford, rate: 5, text: Need this for my neighbourhood.}
 - library_entries: []
   listing:
     agency: Minipax
-    banner_icon: {filename: LionFinder_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: LionFinder_banner_icon.jpeg, security_marking: UNCLASSIFIED}
     categories: [Education]
     contacts: []
     description: "The lion (Panthera leo) is one of the big cats in the genus Panthera\
@@ -3112,8 +3502,8 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: LionFinder_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
-    large_icon: {filename: LionFinder_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: LionFinder_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: LionFinder_large_icon.jpeg, security_marking: UNCLASSIFIED}
     launch_url: https://en.wikipedia.org/wiki/Lion
     listing_type: Web Application
     owners: [bigbrother]
@@ -3123,9 +3513,9 @@
     - description: null
       large_image: {filename: LionFinder_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: LionFinder_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: LionFinder_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: LionFinder_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    small_icon: {filename: LionFinder_small_icon.jpeg, security_marking: UNCLASSIFIED}
     tags: [science, mammal]
     title: Lion Finder
     unique_name: null
@@ -3133,7 +3523,6 @@
     what_is_new: null
   listing_activity:
   - {action: CREATED, author: bigbrother, description: null}
-  - {action: MODIFIED, author: bigbrother, description: null}
   - {action: SUBMITTED, author: bigbrother, description: null}
   - {action: APPROVED_ORG, author: bigbrother, description: null}
   - {action: APPROVED, author: bigbrother, description: null}
@@ -3141,7 +3530,7 @@
 - library_entries: []
   listing:
     agency: Minipax
-    banner_icon: {filename: MonkeyFinder_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: MonkeyFinder_banner_icon.jpeg, security_marking: UNCLASSIFIED}
     categories: [Education, Tools]
     contacts: []
     description: 'Monkeys are haplorhine primates, a group generally possessing tails
@@ -3170,8 +3559,8 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: MonkeyFinder_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
-    large_icon: {filename: MonkeyFinder_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: MonkeyFinder_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: MonkeyFinder_large_icon.jpeg, security_marking: UNCLASSIFIED}
     launch_url: https://en.wikipedia.org/wiki/Monkey
     listing_type: Web Application
     owners: [bigbrother]
@@ -3180,9 +3569,9 @@
     - description: Baboon
       large_image: {filename: MonkeyFinder_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: MonkeyFinder_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: MonkeyFinder_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED//FOR OFFICIAL USE ONLY
-    small_icon: {filename: MonkeyFinder_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    small_icon: {filename: MonkeyFinder_small_icon.jpeg, security_marking: UNCLASSIFIED}
     tags: [demo, mammal, monkey]
     title: Monkey Finder
     unique_name: null
@@ -3191,9 +3580,933 @@
       god.
   listing_activity:
   - {action: CREATED, author: bigbrother, description: null}
-  - {action: MODIFIED, author: bigbrother, description: null}
   - {action: SUBMITTED, author: bigbrother, description: null}
-  - {action: MODIFIED, author: bigbrother, description: null}
   - {action: APPROVED_ORG, author: bigbrother, description: null}
   - {action: APPROVED, author: bigbrother, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Minitrue
+    banner_icon: {filename: HouseStark_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Media and Video]
+    contacts: [johnsnow@gmail.com, sansa@gmail.com, arya@gmail.com]
+    description: Full Description of House Stark and members
+    description_short: Short Description of House Stark and members
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: HouseStark_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: HouseStark_large_icon.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: http://www.google.com
+    listing_type: Web Application
+    owners: [bigbrother]
+    requirements: none
+    screenshots:
+    - description: John Snow 1
+      large_image: {filename: HouseStark_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: HouseStark_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    - description: Bran Stark
+      large_image: {filename: HouseStark_1_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 1
+      small_image: {filename: HouseStark_1_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    - description: Sansa 3
+      large_image: {filename: HouseStark_2_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 2
+      small_image: {filename: HouseStark_2_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    - description: Arya 4
+      large_image: {filename: HouseStark_3_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 3
+      small_image: {filename: HouseStark_3_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: HouseStark_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    tags: [Starks]
+    title: House Stark
+    unique_name: null
+    version_name: v6.0
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: bigbrother, description: null}
+  - {action: SUBMITTED, author: bigbrother, description: null}
+  - {action: APPROVED_ORG, author: bigbrother, description: null}
+  - {action: APPROVED, author: bigbrother, description: null}
+  listing_review_batch:
+  - {author: betaraybill, rate: 1, text: Guy's not even a full stark.}
+- library_entries: []
+  listing:
+    agency: Minipax
+    banner_icon: {filename: HouseLannister_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Media and Video]
+    contacts: [cersei@gmail.com, tyrion@gmail.com, jamie@gmail.com]
+    description: This is a full description of House Lannister
+    description_short: This is a short description of House Lannister
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: HouseLannister_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: HouseLannister_large_icon.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: http://www.google.com
+    listing_type: Web Application
+    owners: [bigbrother]
+    requirements: none
+    screenshots:
+    - description: Cersei
+      large_image: {filename: HouseLannister_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: HouseLannister_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    - description: Tyrion Lannister
+      large_image: {filename: HouseLannister_1_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 1
+      small_image: {filename: HouseLannister_1_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    - description: Jamie Lannister
+      large_image: {filename: HouseLannister_2_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 2
+      small_image: {filename: HouseLannister_2_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: HouseLannister_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    tags: [House Lannister]
+    title: House Lannister
+    unique_name: null
+    version_name: v5.0
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: bigbrother, description: null}
+  - {action: SUBMITTED, author: bigbrother, description: null}
+  - {action: APPROVED_ORG, author: bigbrother, description: null}
+  - {action: APPROVED, author: bigbrother, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Miniplen
+    banner_icon: {filename: NavigationusingMaps_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Communication, Productivity, Tools]
+    contacts: []
+    description: "From Wikipedia:\nGoogle Maps is a web mapping service developed\
+      \ by Google. It offers satellite imagery, street maps, 360\xB0 panoramic views\
+      \ of streets (Street View), real-time traffic conditions (Google Traffic), and\
+      \ route planning for traveling by foot, car, bicycle (in beta), or public transportation.\n\
+      \nGoogle Maps began as a C++ desktop program designed by Lars and Jens Eilstrup\
+      \ Rasmussen at Where 2 Technologies. In October 2004, the company was acquired\
+      \ by Google, which converted it into a web application. After additional acquisitions\
+      \ of a geospatial data visualization company and a realtime traffic analyzer,\
+      \ Google Maps was launched in February 2005.[1] The service's front end utilizes\
+      \ JavaScript, XML, and Ajax. Google Maps offers an API that allows maps to be\
+      \ embedded on third-party websites,[2] and offers a locator for urban businesses\
+      \ and other organizations in numerous countries around the world. Google Map\
+      \ Maker allowed users to collaboratively expand and update the service's mapping\
+      \ worldwide but was discontinued from March, 2017. However crowdsourced contributions\
+      \ to Google Maps are not ending as the company announced those features will\
+      \ be transferred to Google's Local Guides programme.[3]\n\nGoogle Maps' satellite\
+      \ view is a \"top-down\" or \"birds eye\" view; most of the high-resolution\
+      \ imagery of cities is aerial photography taken from aircraft flying at 800\
+      \ to 1,500 feet (240 to 460 m), while most other imagery is from satellites.[4]\
+      \ Much of the available satellite imagery is no more than three years old and\
+      \ is updated on a regular basis.[5] Google Maps uses a close variant of the\
+      \ Mercator projection, and therefore cannot accurately show areas around the\
+      \ poles.\n\nThe current redesigned version of the desktop application was made\
+      \ available in 2013, alongside the \"classic\" (pre-2013) version. Google Maps\
+      \ for mobile was released in September 2008 and features GPS turn-by-turn navigation.\
+      \ In August 2013, it was determined to be the world's most popular app for smartphones,\
+      \ with over 54% of global smartphone owners using it at least once.[6]\n\nIn\
+      \ 2012, Google reported having over 7,100 employees and contractors directly\
+      \ working in mapping.[7]"
+    description_short: Description of Google Maps is a web mapping service developed
+      by Google
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: NavigationusingMaps_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: NavigationusingMaps_large_icon.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Google_Maps#External_links
+    listing_type: Desktop App
+    owners: [rutherford]
+    requirements: None
+    screenshots:
+    - description: null
+      large_image: {filename: NavigationusingMaps_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: NavigationusingMaps_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: NavigationusingMaps_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    tags: [maps, navigation]
+    title: Navigation using Maps
+    unique_name: null
+    version_name: '1.0'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: rutherford, description: null}
+  - {action: SUBMITTED, author: rutherford, description: null}
+  - {action: APPROVED_ORG, author: bigbrother, description: null}
+  - {action: APPROVED, author: bigbrother, description: null}
+  listing_review_batch:
+  - {author: bigbrother, rate: 4, text: Pretty good to use for navigation.}
+  - {author: rutherford, rate: 3, text: Okay app must try it today.}
+- library_entries: []
+  listing:
+    agency: Miniplen
+    banner_icon: {filename: Navigation_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Productivity, Tools]
+    contacts: []
+    description: 'From Wikipedia, the free encyclopedia
+
+      This article is about determination of position and direction on or above the
+      surface of the earth. For other uses, see Navigation (disambiguation).
+
+
+      Table of geography, hydrography, and navigation, from the 1728 Cyclopaedia
+
+      Navigation is a field of study that focuses on the process of monitoring and
+      controlling the movement of a craft or vehicle from one place to another.[1]
+      The field of navigation includes four general categories: land navigation, marine
+      navigation, aeronautic navigation, and space navigation.[2]
+
+
+      It is also the term of art used for the specialized knowledge used by navigators
+      to perform navigation tasks. All navigational techniques involve locating the
+      navigator''s position compared to known locations or patterns.
+
+
+      Navigation, in a broader sense, can refer to any skill or study that involves
+      the determination of position and direction.[2] In this sense, navigation includes
+      orienteering and pedestrian navigation.[2] For information about different navigation
+      strategies that people use, visit human navigation.'
+    description_short: Navigation is a field of study that focuses on the movement
+      of a craft or vehicle
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Navigation_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Navigation_large_icon.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Navigation
+    listing_type: Web Application
+    owners: [rutherford]
+    requirements: None
+    screenshots:
+    - description: null
+      large_image: {filename: Navigation_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Navigation_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Navigation_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    tags: [maps, navigation]
+    title: Navigation
+    unique_name: null
+    version_name: '1.0'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: rutherford, description: null}
+  - {action: SUBMITTED, author: rutherford, description: null}
+  - {action: APPROVED_ORG, author: bigbrother, description: null}
+  - {action: APPROVED, author: bigbrother, description: null}
+  listing_review_batch:
+  - {author: bigbrother, rate: 5, text: Very good to use for navigation.}
+  - {author: rutherford, rate: 4, text: Great app must try it today.}
+- library_entries: []
+  listing:
+    agency: Miniplen
+    banner_icon: {filename: Satellitenavigation_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Communication, Productivity, Tools]
+    contacts: []
+    description: "From Wikipedia, the free encyclopedia\nFor satellite navigation\
+      \ in automobile navigation systems, see Automotive navigation system.\nA satellite\
+      \ navigation or satnav system is a system that uses satellites to provide autonomous\
+      \ geo-spatial positioning. It allows small electronic receivers to determine\
+      \ their location (longitude, latitude, and altitude/elevation) to high precision\
+      \ (within a few metres) using time signals transmitted along a line of sight\
+      \ by radio from satellites. The system can be used for providing position, navigation\
+      \ or for tracking the position of something fitted with a receiver (satellite\
+      \ tracking). The signals also allow the electronic receiver to calculate the\
+      \ current local time to high precision, which allows time synchronisation. Satnav\
+      \ systems operate independently of any telephonic or internet reception, though\
+      \ these technologies can enhance the usefulness of the positioning information\
+      \ generated.\n\nA satellite navigation system with global coverage may be termed\
+      \ a global navigation satellite system (GNSS). As of December 2016 only the\
+      \ United States NAVSTAR Global Positioning System (GPS), the Russian GLONASS\
+      \ and the European Union's Galileo are global operational GNSSs. The European\
+      \ Union's Galileo GNSS is scheduled to be fully operational by 2020.[1] China\
+      \ is in the process of expanding its regional BeiDou Navigation Satellite System\
+      \ into the global BeiDou-2 GNSS by 2020.[2] France, India and Japan are in the\
+      \ process of developing regional navigation and augmentation systems as well.\n\
+      \nGlobal coverage for each system is generally achieved by a satellite constellation\
+      \ of 18\u201330 medium Earth orbit (MEO) satellites spread between several orbital\
+      \ planes. The actual systems vary, but use orbital inclinations of >50\xB0 and\
+      \ orbital periods of roughly twelve hours (at an altitude of about 20,000 kilometres\
+      \ or 12,000 miles)."
+    description_short: A satellite navigation or satnav system is a system that uses
+      satellites to provide geo positioning
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Satellitenavigation_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Satellitenavigation_large_icon.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Satellite_navigation
+    listing_type: Web Services
+    owners: [rutherford]
+    requirements: None
+    screenshots:
+    - description: null
+      large_image: {filename: Satellitenavigation_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Satellitenavigation_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Satellitenavigation_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    tags: [maps, navigation, satellite]
+    title: Satellite navigation
+    unique_name: null
+    version_name: '1.0'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: rutherford, description: null}
+  - {action: SUBMITTED, author: rutherford, description: null}
+  - {action: APPROVED_ORG, author: bigbrother, description: null}
+  - {action: APPROVED, author: bigbrother, description: null}
+  listing_review_batch:
+  - {author: bigbrother, rate: 3, text: 'Okay to use for navigation, not the best.'}
+  - {author: rutherford, rate: 5, text: Great app must try it today.}
+- library_entries: []
+  listing:
+    agency: Miniplen
+    banner_icon: {filename: BeiDouNavigationSatelliteSystem_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Business, Productivity, Tools]
+    contacts: []
+    description: "From Wikipedia, the free encyclopedia\n\"BeiDou\" redirects here.\
+      \ For other uses, see Beidou (disambiguation).\nBeiDo\xFC Navigation Satellite\
+      \ System\nBeidou logo.png\nThe BeiDou system's logo\nCountry/ies of origin\t\
+      China\nOperator(s)\tCNSA\nType\tMilitary, commercial\nStatus\tOperational (regionally)\n\
+      Coverage\tGlobal\nAccuracy\t10 m (public)\n0.1 m (encrypted)[1]\nConstellation\
+      \ size\nTotal satellites\t35\nSatellites in orbit\t21\nFirst launch\t30 October\
+      \ 2000\nLast launch\t12 June 2016\nTotal launches\t27\nOrbital characteristics\n\
+      Regime(s)\tGEO, IGSO, MEO\nGeodesy\nAzimutalprojektion-schief kl-cropped.png\n\
+      Fundamentals\nGeodesy Geodynamics Geomatics Cartography History\nConcepts\n\
+      Geographical distance Geoid Figure of the Earth Geodetic datum Geodesic Geographic\
+      \ coordinate system Horizontal position representation Latitude / Longitude\
+      \ Map projection Reference ellipsoid Satellite geodesy Spatial reference system\n\
+      Technologies\nGlobal Navigation Satellite System (GNSS)\nGlobal Positioning\
+      \ System (GPS)\nGLONASS (Russian)\nBeiDou (BDS) (Chinese)\nGalileo (European)\n\
+      Indian Regional Navigation\nSatellite System (IRNSS) (India)\nQuasi-Zenith Satellite\
+      \ System (QZSS) (Japan)\nLegenda (satellite system)\nStandards (History)\nNGVD29\t\
+      Sea Level Datum 1929\nOSGB36\tOrdnance Survey Great Britain 1936\nSK-42\tSystema\
+      \ Koordinat 1942 goda\nED50\tEuropean Datum 1950\nSAD69\tSouth American Datum\
+      \ 1969\nGRS 80\tGeodetic Reference System 1980\nNAD83\tNorth American Datum\
+      \ 1983\nWGS84\tWorld Geodetic System 1984\nNAVD88\tN. American Vertical Datum\
+      \ 1988\nETRS89\tEuropean Terrestrial Reference\nSystem 1989\nGCJ-02\tChinese\
+      \ encrypted datum 2002\nInternational Terrestrial Reference System\nSpatial\
+      \ Reference System Identifier (SRID)\nUniversal Transverse Mercator (UTM)\n\
+      v t e\nThe BeiDo\xFC Navigation Satellite System (BDS, simplified Chinese: \u5317\
+      \u6597\u536B\u661F\u5BFC\u822A\u7CFB\u7EDF; traditional Chinese: \u5317\u6597\
+      \u885B\u661F\u5C0E\u822A\u7CFB\u7D71; pinyin: B\u011Bid\u01D2u w\xE8ix\u012B\
+      ng d\u01CEoh\xE1ng x\xECt\u01D2ng) is a Chinese satellite navigation system.\
+      \ It consists of two separate satellite constellations \u2013 a limited test\
+      \ system that has been operating since 2000, and a full-scale global navigation\
+      \ system that is currently under construction.\n\nThe first BeiDou system, officially\
+      \ called the BeiDou Satellite Navigation Experimental System (simplified Chinese:\
+      \ \u5317\u6597\u536B\u661F\u5BFC\u822A\u8BD5\u9A8C\u7CFB\u7EDF; traditional\
+      \ Chinese: \u5317\u6597\u885B\u661F\u5C0E\u822A\u8A66\u9A57\u7CFB\u7D71; pinyin:\
+      \ B\u011Bid\u01D2u w\xE8ix\u012Bng d\u01CEoh\xE1ng sh\xECy\xE0n x\xECt\u01D2\
+      ng) and also known as BeiDou-1, consists of three satellites and offers limited\
+      \ coverage and applications. It has been offering navigation services, mainly\
+      \ for customers in China and neighboring regions, since 2000.\n\nThe second\
+      \ generation of the system, officially called the BeiDou Navigation Satellite\
+      \ System (BDS) and also known as COMPASS or BeiDou-2, will be a global satellite\
+      \ navigation system consisting of 35 satellites, and is under construction as\
+      \ of January 2015. It became operational in China in December 2011, with 10\
+      \ satellites in use,[2] and began offering services to customers in the Asia-Pacific\
+      \ region in December 2012.[3] It is planned to begin serving global customers\
+      \ upon its completion in 2020.\n\nIn-mid 2015, China started the build-up of\
+      \ the third generation BeiDou system (BDS-3) in the global coverage constellation.\
+      \ The first BDS-3 satellite was launched 30 September 2015.[4] As of March 2016,\
+      \ four BDS-3 in-orbit validation satellites have been launched.[5]\n\nAccording\
+      \ to China Daily, fifteen years after the satellite system was launched, it\
+      \ is now generating a turnover of $31.5 billion per annum for major companies\
+      \ such as China Aerospace Science and Industry Corp, AutoNavi Holdings Ltd,\
+      \ and China North Industries Group Corp.[6]\n\nBeidou has been described as\
+      \ a potential navigation satellite system to overtake GPS in global usage, and\
+      \ is expected to be more accurate than the GPS once it is fully completed.[7][8][9]"
+    description_short: "The BeiDo\xFC Navigation Satellite System is a Chinese satellite\
+      \ navigation system"
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: BeiDouNavigationSatelliteSystem_large_banner_icon.jpeg,
+      security_marking: UNCLASSIFIED}
+    large_icon: {filename: BeiDouNavigationSatelliteSystem_large_icon.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/BeiDou_Navigation_Satellite_System
+    listing_type: Web Services
+    owners: [rutherford]
+    requirements: None
+    screenshots:
+    - description: null
+      large_image: {filename: BeiDouNavigationSatelliteSystem_0_large_screenshot.jpeg,
+        security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: BeiDouNavigationSatelliteSystem_0_small_screenshot.jpeg,
+        security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: BeiDouNavigationSatelliteSystem_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    tags: [maps, navigation]
+    title: BeiDou Navigation Satellite System
+    unique_name: null
+    version_name: '1.0'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: rutherford, description: null}
+  - {action: SUBMITTED, author: rutherford, description: null}
+  - {action: APPROVED_ORG, author: bigbrother, description: null}
+  - {action: APPROVED, author: bigbrother, description: null}
+  listing_review_batch:
+  - {author: bigbrother, rate: 4, text: Should consider this one.  It might be worth
+      it.}
+  - {author: rutherford, rate: 3, text: Okay app must try it today.}
+- library_entries: []
+  listing:
+    agency: Miniluv
+    banner_icon: {filename: Clerks_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Media and Video]
+    contacts: []
+    description: Clerks is a 1994 American independent black comedy film written,
+      directed, and co-produced by Kevin Smith. Starring Brian O'Halloran as Dante
+      Hicks and Jeff Anderson as Randal Graves, it presents a day in the lives of
+      two store clerks and their acquaintances. Shot entirely in black-and-white,
+      Clerks is the first of Smith's View Askewniverse films, and introduces several
+      recurring characters, notably Jay and Silent Bob, the latter played by Smith
+      himself. The structure of the movie contains nine scene breaks, signifying the
+      nine rings of hell as in Dante Alighieri's Divine Comedy, from which the main
+      character, Dante, gets his name.
+    description_short: Clerks is a 1994 American independent black comedy film.
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Clerks_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Clerks_large_icon.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Clerks
+    listing_type: Desktop App
+    owners: [bettafish]
+    requirements: None
+    screenshots:
+    - description: null
+      large_image: {filename: Clerks_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Clerks_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Clerks_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    tags: [Kevin Smith, Movie, Comedy]
+    title: Clerks
+    unique_name: null
+    version_name: '1'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: bettafish, description: null}
+  - {action: SUBMITTED, author: bettafish, description: null}
+  - {action: APPROVED_ORG, author: bettafish, description: null}
+  - {action: APPROVED, author: bettafish, description: null}
+  listing_review_batch:
+  - {author: rutherford, rate: 3, text: 'I really don''t care for this one, but it
+      might be good for others.'}
+- library_entries: []
+  listing:
+    agency: Miniplen
+    banner_icon: {filename: GlobalNavigationGridCode_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Productivity, Tools]
+    contacts: []
+    description: 'From Wikipedia, the free encyclopedia The Global Navigation Grid
+      Code (GNGC) is a Chinese-developed point reference system designed for global
+      navigation. It is similar in design to national grid reference systems used
+      throughout the world. GNGC was based upon the work of the GeoSOT team, headquartered
+      in the Institute of Remote Sensing and GIS, Peking University. The concept for
+      this system was proposed in 2015 in Bin Li''s dissertation: Navigation Computing
+      Model of Global Navigation Grid Code.[1] GNGC allows easy calculation of space
+      and spatial indexes and can be extended to the provide navigation mesh coding.
+      Along with the Beidou navigation system, GNGC provides independent intellectual
+      property rights, globally applicable standards and global navigation trellis
+      code.[2]'
+    description_short: The Global Navigation Grid Code (GNGC) is a reference system
+      designed for global navigation
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: GlobalNavigationGridCode_large_banner_icon.jpeg,
+      security_marking: UNCLASSIFIED}
+    large_icon: {filename: GlobalNavigationGridCode_large_icon.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Global_Navigation_Grid_Code
+    listing_type: Web Services
+    owners: [rutherford]
+    requirements: None
+    screenshots:
+    - description: null
+      large_image: {filename: GlobalNavigationGridCode_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: GlobalNavigationGridCode_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: GlobalNavigationGridCode_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    tags: [maps, navigation]
+    title: Global Navigation Grid Code
+    unique_name: null
+    version_name: '1.0'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: rutherford, description: null}
+  - {action: SUBMITTED, author: rutherford, description: null}
+  - {action: APPROVED_ORG, author: bigbrother, description: null}
+  - {action: APPROVED, author: bigbrother, description: null}
+  listing_review_batch:
+  - {author: bigbrother, rate: 5, text: One of the better ones that I have seen.}
+  - {author: rutherford, rate: 5, text: Great app must try it today.}
+- library_entries: []
+  listing:
+    agency: Miniluv
+    banner_icon: {filename: ClerksII_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Entertainment, Media and Video]
+    contacts: [silentbob@clerks.com]
+    description: 'Clerks II is a 2006 American comedy film written and directed by
+      Kevin Smith, the sequel to his 1994 film Clerks, and his sixth feature film
+      to be set in the View Askewniverse. The film stars Brian O''Halloran, Jeff Anderson,
+      Rosario Dawson, Trevor Fehrman, Jennifer Schwalbach Smith, Jason Mewes, and
+      Smith, and picks up with the original characters from Clerks: Dante Hicks, Randal
+      Graves and Jay and Silent Bob ten years after the events of the first film.
+      Unlike the first film, which was shot in black-and-white, this film was shot
+      in color.'
+    description_short: Clerks II is a 2006 American comedy film written and directed
+      by Kevin Smith.
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: ClerksII_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: ClerksII_large_icon.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Clerks_II
+    listing_type: Desktop App
+    owners: [bettafish]
+    requirements: Color TV
+    screenshots:
+    - description: null
+      large_image: {filename: ClerksII_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: ClerksII_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: ClerksII_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    tags: [Kevin Smith, Movie]
+    title: Clerks II
+    unique_name: null
+    version_name: '2'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: bettafish, description: null}
+  - {action: SUBMITTED, author: bettafish, description: null}
+  - {action: APPROVED_ORG, author: bettafish, description: null}
+  - {action: APPROVED, author: bettafish, description: null}
+  listing_review_batch:
+  - {author: rutherford, rate: 3, text: This is an okay image and app.}
+- library_entries: []
+  listing:
+    agency: Minipax
+    banner_icon: {filename: Mallrats_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Media and Video]
+    contacts: []
+    description: 'Mallrats is a 1995 American comedy film written and directed by
+      Kevin Smith. It is the second film in the View Askewniverse after 1994''s Clerks.
+
+
+      As in the other View Askewniverse films, the characters Jay and Silent Bob feature
+      prominently, and characters and events from other films are discussed. Several
+      cast members, including Jason Lee, Ben Affleck, and Joey Lauren Adams, have
+      gone on to work in several other Smith films. Comic book icon Stan Lee appeared,
+      as did Brian O''Halloran, the star of Smith''s breakout feature Clerks.
+
+
+      Plans for a sequel, MallBrats, were announced in March 2015. In June 2016, Smith
+      announced that the sequel would instead be a 10-episode TV series; in February
+      2017, Smith announced that he had not been able to sell the TV series to any
+      network, and the sequel was shelved indefinitely.'
+    description_short: Mallrats is a 1995 American comedy film written and directed
+      by Kevin Smith.
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Mallrats_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Mallrats_large_icon.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Mallrats
+    listing_type: Web Services
+    owners: [bettafish]
+    requirements: None
+    screenshots:
+    - description: null
+      large_image: {filename: Mallrats_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Mallrats_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Mallrats_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    tags: [Kevin Smith]
+    title: Mallrats
+    unique_name: null
+    version_name: '1995'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: bettafish, description: null}
+  - {action: SUBMITTED, author: bettafish, description: null}
+  - {action: APPROVED_ORG, author: bettafish, description: null}
+  - {action: APPROVED, author: bettafish, description: null}
+  listing_review_batch:
+  - {author: rutherford, rate: 4, text: Interesting this might be something to look
+      at.}
+- library_entries: []
+  listing:
+    agency: Test
+    banner_icon: {filename: ChasingAmy_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Media and Video]
+    contacts: []
+    description: 'Chasing Amy is a 1997 American romantic comedy-drama film written
+      and directed by Kevin Smith. The film is about a male comic artist who falls
+      in love with a lesbian woman, to the displeasure of his best friend. It is the
+      third film in Smith''s View Askewniverse series.
+
+
+      The film was originally inspired by a brief scene from an early movie by a friend
+      of Smith''s. In Guinevere Turner''s Go Fish, one of the lesbian characters imagines
+      her friends passing judgment on her for "selling out" by sleeping with a man.
+      Kevin Smith was dating star Joey Lauren Adams at the time he was writing the
+      script, which was also partly inspired by her.[3]
+
+
+      The film won two awards at the 1998 Independent Spirit Awards (Best Screenplay
+      for Smith and Best Supporting Actor for Jason Lee).'
+    description_short: Chasing Amy is a 1997 American romantic comedy-drama film written
+      and directed by Kevin Smith.
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: ChasingAmy_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: ChasingAmy_large_icon.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Chasing_Amy
+    listing_type: Code Library
+    owners: [bettafish]
+    requirements: None
+    screenshots:
+    - description: null
+      large_image: {filename: ChasingAmy_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: ChasingAmy_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: ChasingAmy_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    tags: [Kevin Smith]
+    title: Chasing Amy
+    unique_name: null
+    version_name: '1997'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: bettafish, description: null}
+  - {action: SUBMITTED, author: bettafish, description: null}
+  - {action: APPROVED_ORG, author: bettafish, description: null}
+  - {action: APPROVED, author: bettafish, description: null}
+  listing_review_batch:
+  - {author: rutherford, rate: 4, text: Might be pretty good to look at.}
+- library_entries: []
+  listing:
+    agency: Test 4
+    banner_icon: {filename: JayandSilentBobStrikeBack_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Media and Video]
+    contacts: []
+    description: 'Jay and Silent Bob Strike Back is a 2001 American comedy film written
+      and directed by Kevin Smith, the fifth to be set in his View Askewniverse, a
+      growing collection of characters and settings that developed out of his cult
+      favorite Clerks. It focuses on the two eponymous characters, played respectively
+      by Jason Mewes and Smith. The film features a large number of cameo appearances
+      by famous actors and directors, and its title and logo for Jay and Silent Bob
+      Strike Back are direct references to The Empire Strikes Back.
+
+
+      Originally intended to be the last film set in the Askewniverse, or to feature
+      Jay and Silent Bob, Strike Back features many characters from the previous Askew
+      films, some in dual roles and reprising roles from the previous entries. The
+      film was a minor commercial success, grossing $33.8 million worldwide from a
+      $22 million budget, and received mixed reviews from critics.
+
+
+      Five years later and following the commercial failure of Jersey Girl, Smith
+      reconsidered and decided to continue the series with Clerks II, resurrecting
+      Jay and Silent Bob in supporting roles. Smith announced in February 2017 that
+      he was writing a sequel called Jay and Silent Bob Reboot and hoped to start
+      filming in summer 2017.'
+    description_short: Jay and Silent Bob Strike Back is a 2001 American comedy film
+      written and directed by Kevin Smith.
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: JayandSilentBobStrikeBack_large_banner_icon.jpeg,
+      security_marking: UNCLASSIFIED}
+    large_icon: {filename: JayandSilentBobStrikeBack_large_icon.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Jay_and_Silent_Bob_Strike_Back
+    listing_type: Widget
+    owners: [bettafish]
+    requirements: Pop culture knowledge
+    screenshots:
+    - description: null
+      large_image: {filename: JayandSilentBobStrikeBack_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: JayandSilentBobStrikeBack_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED//FOR OFFICIAL USE ONLY
+    small_icon: {filename: JayandSilentBobStrikeBack_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    tags: [Kevin Smith]
+    title: Jay and Silent Bob Strike Back
+    unique_name: null
+    version_name: '20.01'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: bettafish, description: null}
+  - {action: SUBMITTED, author: bettafish, description: null}
+  - {action: APPROVED_ORG, author: bettafish, description: null}
+  - {action: APPROVED, author: bettafish, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Minitrue
+    banner_icon: {filename: Parrotlet_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Education, Entertainment, News]
+    contacts: []
+    description: The blue-winged parrotlet (Forpus xanthopterygius) is a small parrot
+      found in much of South America. The blue-winged parrotlet is mainly found in
+      lowlands, but locally up to 1200m in south-eastern Brazil. It occurs in woodland,
+      scrub, savanna, and pastures. Flocks are usually around 20 birds but can grow
+      to over 50 around fruiting trees or seeding grasses. It is generally common
+      and widespread, though more localized in the Amazon Basin.
+    description_short: Parrotlets are a group of the smallest New World parrot species.
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Parrotlet_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Parrotlet_large_icon.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Blue-winged_parrotlet
+    listing_type: Web Application
+    owners: [jones]
+    requirements: none
+    screenshots:
+    - description: birds...
+      large_image: {filename: Parrotlet_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Parrotlet_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Parrotlet_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    tags: [parrot, small, smallest, parrotlet, pacific]
+    title: Parrotlet
+    unique_name: null
+    version_name: '1'
+    what_is_new: The blue-winged parrotlet is a small parrot found in much of South
+      America.
+  listing_activity:
+  - {action: CREATED, author: jones, description: null}
+  - {action: SUBMITTED, author: jones, description: null}
+  - {action: APPROVED_ORG, author: bettafish, description: null}
+  - {action: APPROVED, author: bettafish, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Miniplen
+    banner_icon: {filename: Getinmybelly_banner_icon.png, security_marking: UNCLASSIFIED}
+    categories: [Education, Entertainment, Media and Video]
+    contacts: []
+    description: 'Brisket can be cooked many ways, including baking, boiling and roasting.
+      Basting of the meat is often done during the cooking process. This normally
+      tough cut of meat, due to the collagen fibers that make up the significant connective
+      tissue in the cut, is tenderized when the collagen gelatinizes, resulting in
+      more tender brisket. The fat cap, which is often left attached to the brisket,
+      helps to keep the meat from drying during the prolonged cooking necessary to
+      break down the connective tissue in the meat. Water is necessary for the conversion
+      of collagen to gelatin, which is the hydrolysis product of collagen.
+
+
+      Popular methods in the United States include rubbing with a spice rub or marinating
+      the meat, then cooking slowly over indirect heat from charcoal or wood. This
+      is a form of smoking the meat. A hardwood, such as oak, pecan, hickory, or mesquite,
+      is sometimes added, alone or in combination with other hardwoods, to the main
+      heat source. Sometimes, they make up all of the heat source, with chefs often
+      prizing characteristics of certain woods. The smoke from these woods and from
+      burnt dripping juices further enhances the flavor. The finished meat is a variety
+      of barbecue. Smoked brisket done this way is popular in Texas barbecue. Once
+      finished, pieces of brisket can be returned to the smoker to make burnt ends.
+      Burnt ends are most popular in Kansas City-style barbecue, where they are traditionally
+      served open-faced on white bread. The traditional New England boiled dinner
+      features brisket as a main course option. Brisket is also cooked in a slow cooker
+      as this also tenderizes the meat due to the slow cooking method, which is usually
+      8 hours for a 3lb brisket.'
+    description_short: The king of smoked meats.
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Getinmybelly_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Getinmybelly_large_icon.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Brisket#Other_variations
+    listing_type: Web Services
+    owners: [jones]
+    requirements: none
+    screenshots:
+    - description: There's the meat; get in my belly!!!
+      large_image: {filename: Getinmybelly_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Getinmybelly_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Getinmybelly_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    tags: [meat, steak, brisket, smoked, bbq, USDA]
+    title: Get in my belly
+    unique_name: null
+    version_name: '1'
+    what_is_new: Brisket is a cut of meat from the breast or lower chest of beef or
+      veal. The beef brisket is one of the nine beef primal cuts, though the precise
+      definition of the cut differs internationally.
+  listing_activity:
+  - {action: CREATED, author: jones, description: null}
+  - {action: SUBMITTED, author: jones, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Minitrue
+    banner_icon: {filename: ProjectManagement_banner_icon.png, security_marking: UNCLASSIFIED}
+    categories: [Business, Productivity]
+    contacts: []
+    description: "Project management is the discipline of initiating, planning, executing,\
+      \ controlling, and closing the work of a team to achieve specific goals and\
+      \ meet specific success criteria. A project is a temporary endeavor designed\
+      \ to produce a unique product, service or result with a defined beginning and\
+      \ end (usually time-constrained, and often constrained by funding or deliverable)\
+      \ undertaken to meet unique goals and objectives, typically to bring about beneficial\
+      \ change or added value.[1][2] The temporary nature of projects stands in contrast\
+      \ with business as usual (or operations),[3] which are repetitive, permanent,\
+      \ or semi-permanent functional activities to produce products or services. In\
+      \ practice, the management of such distinct production approaches requires the\
+      \ development of distinct technical skills and management strategies.[4]\n\n\
+      The primary challenge of project management is to achieve all of the project\
+      \ goals within the given constraints.[5] This information is usually described\
+      \ in project documentation, created at the beginning of the development process.\
+      \ The primary constraints are scope, time, quality and budget.[6] The secondary\
+      \ \u2014 and more ambitious \u2014 challenge is to optimize the allocation of\
+      \ necessary inputs and apply them to meet pre-defined objectives."
+    description_short: Project management is the discipline of initiating, planning,
+      executing, controlling, and closing.
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: ProjectManagement_large_banner_icon.png, security_marking: UNCLASSIFIED}
+    large_icon: {filename: ProjectManagement_large_icon.png, security_marking: UNCLASSIFIED}
+    launch_url: '{DEMO_APP_ROOT}/default/index.html'
+    listing_type: Desktop App
+    owners: [bigbrother2, wsmith]
+    requirements: null
+    screenshots:
+    - description: null
+      large_image: {filename: ProjectManagement_0_large_screenshot.png, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: ProjectManagement_0_small_screenshot.png, security_marking: UNCLASSIFIED}
+    - description: null
+      large_image: {filename: ProjectManagement_1_large_screenshot.png, security_marking: UNCLASSIFIED}
+      order: 1
+      small_image: {filename: ProjectManagement_1_small_screenshot.png, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: ProjectManagement_small_icon.png, security_marking: UNCLASSIFIED}
+    tags: [pm, pmo, agile, scrum]
+    title: Project Management
+    unique_name: null
+    version_name: null
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: wsmith, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Minitrue
+    banner_icon: {filename: ScreaminEagleCVO_banner_icon.png, security_marking: UNCLASSIFIED}
+    categories: [Business, Entertainment]
+    contacts: []
+    description: 'Harley-Davidson CVO (for Custom Vehicle Operations) motorcycles
+      are a family of models created by Harley-Davidson for the factory custom market.
+      For every model year since the program''s inception in 1999, Harley-Davidson
+      has chosen a small selection of its mass-produced motorcycle models and created
+      limited-edition customizations of those platforms with larger-displacement engines,
+      costlier paint designs, and additional accessories not found on the mainstream
+      models.[1] Special features for the CVO lineup have included performance upgrades
+      from Harley''s "Screamin'' Eagle" branded parts, hand-painted pinstripes, ostrich
+      leather on seats and trunks, gold leaf incorporated in the paint, and electronic
+      accessories like GPS navigation systems and iPod music players.
+
+
+      CVO models are produced in Harley-Davidson''s York, Pennsylvania plant, where
+      touring and Softail models are also manufactured. In each model year, CVO models
+      feature larger-displacement engines than the mainstream models, and these larger-displacement
+      engines make their way into the normal "big twin" line within a few years when
+      CVO models are again upgraded. Accessories created for these customized units
+      are sometimes offered in the Harley-Davidson accessory catalog for all models
+      in later years, but badging and paint are kept exclusively for CVO model owners,
+      and cannot be replaced without providing proof of ownership to the ordering
+      dealer.'
+    description_short: CVO is the the program targets what Harley-Davidson calls its
+      "Alpha Customer"; ride fast and hard.
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: ScreaminEagleCVO_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: ScreaminEagleCVO_large_icon.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Harley-Davidson_CVO#Critical_reception
+    listing_type: Web Application
+    owners: [jones]
+    requirements: none
+    screenshots:
+    - description: "2016\n\n    CVO Pro Street Breakout (FXSE)\n    CVO Street Glide\
+        \ (FLHXSE)\n    CVO Road Glide Ultra (FLTRUSE)\n    CVO Ultra Limited (FLHTKSE)"
+      large_image: {filename: ScreaminEagleCVO_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: ScreaminEagleCVO_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: ScreaminEagleCVO_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    tags: [bike, CVO, Harley, motorcycle, Screamin Eagle]
+    title: Screamin Eagle CVO
+    unique_name: null
+    version_name: '1'
+    what_is_new: none
+  listing_activity:
+  - {action: CREATED, author: jones, description: null}
+  - {action: SUBMITTED, author: jones, description: null}
   listing_review_batch: []

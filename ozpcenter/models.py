@@ -8,6 +8,7 @@ import os
 import uuid
 from io import BytesIO
 import PIL
+from PIL import Image as PilImage
 
 from django.conf import settings
 from django.contrib import auth
@@ -182,6 +183,16 @@ class Image(models.Model):
             raise ValueError('unknown file extension: {}'.format(ext))
 
         # logger.debug('saving image %s' % file_name)
+        # if img.image_type.name == 'small_icon':
+        #     pil_img = pil_img.resize((16, 16), PilImage.ANTIALIAS)
+        # elif img.image_type.name == 'large_icon':
+        #     pil_img = pil_img.resize((32, 32), PilImage.ANTIALIAS)
+        # elif img.image_type.name == 'banner_icon':
+        #     pil_img = pil_img.resize((220, 137), PilImage.ANTIALIAS)
+        # elif img.image_type.name == 'large_banner_icon':
+        #     print(img.image_type.name)
+
+        # logger.debug('saving image %s' % file_name)
         image_binary = BytesIO()
         pil_img.save(image_binary, format=current_format)
 
@@ -194,6 +205,7 @@ class Image(models.Model):
         if size_bytes > (image_type.max_size_bytes * 2):
             logger.error('Image size is {0:d} bytes, which is larger than the max \
                 allowed {1:d} bytes'.format(size_bytes, 2 * image_type.max_size_bytes))
+            # raise
             # TODO raise exception and remove file
             return
         # TODO: check width and height

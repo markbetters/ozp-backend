@@ -1,0 +1,113 @@
+contact_types:
+- Civilian
+- Government
+- Military
+contacts:
+- contact_type: Civilian
+  email: osha@stark.com
+  name: Osha
+  organization: House Stark
+  secure_phone: 784-1548
+  unsecure_phone: 321-123-7894
+- contact_type: Government
+  email: rbaratheon@baratheon.com
+  name: Robert Baratheon
+  organization: House Baratheon
+  secure_phone: 784-1548
+  unsecure_phone: 123-456-7890
+- contact_type: Military
+  email: brienne@stark.com
+  name: Brienne Tarth
+  organization: House Stark
+  secure_phone: 784-1548
+  unsecure_phone: 222-324-3846
+- contact_type: Government
+  email: chris@sound.com
+  name: Chris
+  organization: Default
+  secure_phone: 784-1548
+  unsecure_phone: 123-456-7890
+- contact_type: Military
+  email: chester@lp.com
+  name: Chester
+  organization: Default
+  secure_phone: 784-1548
+  unsecure_phone: 784-1548
+- contact_type: Civilian
+  email: scott@stp.com
+  name: Scott
+  organization: Default
+  secure_phone: 784-1548
+  unsecure_phone: 784-1548
+- contact_type: Government
+  email: scott@vr.com
+  name: Scott
+  organization: Default
+  secure_phone: 784-1548
+  unsecure_phone: 784-1548
+- contact_type: Civilian
+  email: w@s.com
+  name: W Smith
+  organization: Default
+  secure_phone: 784-1548
+  unsecure_phone: 555-555-5555
+- contact_type: Civilian
+  email: no@gmail.com
+  name: someguy
+  organization: someplace
+  secure_phone: 784-1548
+  unsecure_phone: 784-1548
+- contact_type: Government
+  email: t@t.com
+  name: Tammy
+  organization: Default
+  secure_phone: 784-1548
+  unsecure_phone: 555-555-5555
+- contact_type: Military
+  email: m@m.com
+  name: M Smith
+  organization: Default
+  secure_phone: 784-1548
+  unsecure_phone: 555-555-5555
+- contact_type: Civilian
+  email: johnsnow@gmail.com
+  name: John Snow
+  organization: Default
+  secure_phone: 784-1548
+  unsecure_phone: 854-8569
+- contact_type: Government
+  email: sansa@gmail.com
+  name: Sansa
+  organization: Default
+  secure_phone: 784-1548
+  unsecure_phone: 652-5236
+- contact_type: Military
+  email: arya@gmail.com
+  name: Arya
+  organization: Default
+  secure_phone: 784-1548
+  unsecure_phone: 856-9632
+- contact_type: Civilian
+  email: cersei@gmail.com
+  name: Cersei
+  organization: Default
+  secure_phone: 784-1548
+  unsecure_phone: 965-8569
+- contact_type: Government
+  email: tyrion@gmail.com
+  name: Tyrion Lannister
+  organization: Default
+  secure_phone: 784-1548
+  unsecure_phone: 632-5236
+- contact_type: Military
+  email: jamie@gmail.com
+  name: Jamie Lannister
+  organization: Default
+  secure_phone: 784-1548
+  unsecure_phone: 523-5547
+- contact_type: Civilian
+  email: silentbob@clerks.com
+  name: Kevin Smith
+  organization: Default
+  secure_phone: 784-1548
+  unsecure_phone: 784-1548
