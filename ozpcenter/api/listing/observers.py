@@ -14,6 +14,7 @@ class ListingObserver(Observer):
 
     def events_to_listen(self):
         return ['listing_created',
+                'listing_deleted',
                 'listing_enabled_status_changed',
                 'listing_approval_status_changed',
                 'listing_private_status_changed',
@@ -82,6 +83,7 @@ class ListingObserver(Observer):
         if (old_approval_status == models.Listing.IN_PROGRESS and
                 new_approval_status == models.Listing.PENDING):
             message = 'The <b>{}</b> listing was submitted'.format(listing.title)
+
             notification_model_access.create_notification(author_username=username,
                                                           expires_date=now_plus_month,
                                                           message=message,
@@ -89,11 +91,25 @@ class ListingObserver(Observer):
                                                           group_target=Notification.ORG_STEWARD,
                                                           notification_type='ListingSubmissionNotification')
 
+        if (old_approval_status == models.Listing.PENDING_DELETION and
+                new_approval_status == models.Listing.DELETED):
+                print("first leem")
+                message = 'The <b>{}</b> listing has been deleted'.format(listing.title)
+
+                notification_model_access.create_notification(author_username=username,
+                                                              expires_date=now_plus_month,
+                                                              message=message,
+                                                              listing=listing,
+                                                              entities=listing.categories.all(),
+                                                              group_target=Notification.USER,
+                                                              notification_type='DeleteNotification')
+
         # AMLNG-173 - PendingDeletionCancellation
         if profile in listing.owners.all():  # Check to see if current profile is owner of listing
             if (old_approval_status == models.Listing.PENDING_DELETION and
                     new_approval_status == models.Listing.PENDING):
                 message = 'A Listing Owner cancelled the deletion of the <b>{}</b> listing'.format(listing.title)
+
                 notification_model_access.create_notification(author_username=username,
                                                               expires_date=now_plus_month,
                                                               message=message,
@@ -105,6 +121,7 @@ class ListingObserver(Observer):
         elif profile.highest_role() in ['APPS_MALL_STEWARD', 'ORG_STEWARD']:
             if (old_approval_status == models.Listing.PENDING_DELETION and
                     new_approval_status == models.Listing.DELETED):
+                print("This is leem")
                 message = 'The <b>{}</b> listing was approved for deletion by an Organization Steward'.format(listing.title)
 
                 notification_model_access.create_notification(author_username=username,

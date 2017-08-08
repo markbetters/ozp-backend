@@ -547,6 +547,19 @@ class PendingDeletionCancellationNotification(NotificationBase):  # Not Verified
         return Profile.objects.filter(stewarded_organizations__in=[current_listing_agency_id], listing_notification_flag=True).all().distinct()
 
 
+class DeleteNotification(NotificationBase):
+    def get_group_target(self):
+        return Notification.USER
+
+    def get_notification_db_type(self):
+        return Notification.LISTING
+
+    def get_target_list(self):
+        current_listing = self.entity
+        current_listing_agency_id = current_listing.agency.id
+        return Profile.objects.filter(listing_notification_flag=True).all().distinct()
+
+
 class ListingSubmissionNotification(NotificationBase):
     """
     AMLNG-376 - ListingSubmission
@@ -799,6 +812,10 @@ def create_notification(author_username=None,
     elif notification_type == 'PendingDeletionRequestNotification':
         notification_instance = PendingDeletionRequestNotification()
         notification_instance.set_sender_and_entity(author_username, listing)
+
+    elif notification_type == 'DeleteNotification':
+        notification_instance = DeleteNotification()
+        notification_instance.set_sender_and_entity(author_username, listing, entities)
 
     elif notification_type == 'PendingDeletionCancellationNotification':
         notification_instance = PendingDeletionCancellationNotification()

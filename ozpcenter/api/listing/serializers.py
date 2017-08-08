@@ -694,7 +694,7 @@ class ListingSerializer(serializers.ModelSerializer):
         return listing
 
     def update(self, instance, validated_data):
-        # logger.debug('inside ListingSerializer.update', extra={'request':self.context.get('request')})
+        logger.debug('inside ListingSerializer.update', extra={'request':self.context.get('request')})
         user = generic_model_access.get_profile(self.context['request'].user.username)
 
         if user.highest_role() not in ['APPS_MALL_STEWARD', 'ORG_STEWARD']:
