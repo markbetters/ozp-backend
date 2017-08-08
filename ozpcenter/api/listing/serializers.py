@@ -185,6 +185,27 @@ class ShortListingSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('unique_name', 'title', 'id', 'agency', 'small_icon', 'is_deleted')
 
 
+class StorefrontListingSerializer(serializers.HyperlinkedModelSerializer):
+    agency = AgencySerializer(required=False)
+    large_banner_icon = ImageSerializer(required=False, allow_null=True)
+    banner_icon = ImageSerializer(required=False, allow_null=True)
+
+    class Meta:
+        model = models.Listing
+        fields = ('id',
+                  'title',
+                  'agency',
+                  'avg_rate',
+                  'total_reviews',
+                  'is_private',
+                  'is_bookmarked',
+                  'description_short',
+                  'security_marking',
+                  'launch_url',
+                  'large_banner_icon',
+                  'banner_icon')
+
+
 class ListingActivitySerializer(serializers.ModelSerializer):
     author = profile_serializers.ShortProfileSerializer()
     listing = ShortListingSerializer()

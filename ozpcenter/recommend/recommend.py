@@ -836,7 +836,7 @@ class ElasticsearchUserBaseRecommender(Recommender):
                                 },
                                 "rate": {
                                     "type": "long",
-                                    "boost": 10
+                                    "boost": 2
                                 },
                                 "listing_categories": {
                                     "type": "long"
