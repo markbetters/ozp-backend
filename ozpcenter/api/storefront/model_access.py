@@ -381,16 +381,20 @@ def get_recommendation_listing_ids(profile_instance):
     recommended_entry_data = {}
     if target_profile_recommended_entry:
         recommendation_data = target_profile_recommended_entry.recommendation_data
+        print("Recommendation Data initially found: ", recommendation_data)
         if recommendation_data:
             recommended_entry_data = msgpack.unpackb(recommendation_data, encoding='utf-8')
 
     recommendation_combined_dict = {'profile': {}}
 
+    print("Recommended Entry Data: ", recommended_entry_data)
     for recommender_friendly_name in recommended_entry_data:
         recommender_name_data = recommended_entry_data[recommender_friendly_name]
         # print(recommender_name_data)
         recommender_name_weight = recommender_name_data['weight']
         recommender_name_recommendations = recommender_name_data['recommendations']
+        print("Recommender Friendly Name: ", recommender_friendly_name)
+        print("Recommender Data: ", recommender_name_data)
 
         for recommendation_tuple in recommender_name_recommendations:
             current_listing_id = recommendation_tuple[0]
@@ -402,10 +406,12 @@ def get_recommendation_listing_ids(profile_instance):
                 recommendation_combined_dict['profile'][current_listing_id] = current_listing_score * recommender_name_weight
 
     sorted_recommendations_combined_dict = recommend_utils.get_top_n_score(recommendation_combined_dict, 40)
+    print("Sorted Recommendation List: ", sorted_recommendations_combined_dict)
     # sorted_recommendations_combined_dict = {'profile': [[11, 8.5], [112, 8.0], [85, 7.0], [86, 7.0], [87, 7.0],
     #    [88, 7.0], [89, 7.0], [90, 7.0], [81, 6.0], [62, 6.0],
     #    [21, 5.5], [1, 5.0], [113, 5.0], [111, 5.0], [114, 5.0], [64, 4.0], [66, 4.0], [68, 4.0], [70, 4.0], [72, 4.0]]}
     listing_ids_list = [entry[0] for entry in sorted_recommendations_combined_dict['profile']]
+    print("listing_ids_list: ", listing_ids_list)
     return listing_ids_list, recommended_entry_data
 
 

@@ -97,14 +97,20 @@ class Recommender(object):
         if profile_id in self.recommender_result_set:
             if self.recommender_result_set[profile_id].get(listing_id):
                 if cumulative:
+                    # print statements to verify that running the code multiple times will not cause the values to accumulate upon previous runs:
+                    print("Score Cummulative    : {} added for listing_id {} original value {}".format(float(score), listing_id, self.recommender_result_set[profile_id][listing_id]))
                     self.recommender_result_set[profile_id][listing_id] = self.recommender_result_set[profile_id][listing_id] + float(score)
+                    print("NEW Score Cummulative: {} added for listing_id {} original value {}".format(float(score), listing_id, self.recommender_result_set[profile_id][listing_id]))
                 else:
                     self.recommender_result_set[profile_id][listing_id] = float(score)
+                    print("1. Score added: {} added for listing_id {}".format(float(score), listing_id))
             else:
                 self.recommender_result_set[profile_id][listing_id] = float(score)
+                print("2. Score added: {} added for listing_id {}".format(float(score), listing_id))
         else:
             self.recommender_result_set[profile_id] = {}
             self.recommender_result_set[profile_id][listing_id] = float(score)
+            print("3. Score added: {} added for listing_id {}".format(float(score), listing_id))
 
     def recommend(self):
         """
@@ -114,7 +120,7 @@ class Recommender(object):
         self.recommendation_logic()
         recommendation_ms = time.time() * 1000.0
         print('--------')  # Print statement for debugging output
-        logger.info(self.recommender_result_set)
+        logger.info("RESULT: ", self.recommender_result_set)
         print('--------')  # Print statement for debugging output
         logger.info('Recommendation Logic took: {} ms'.format(recommendation_ms - start_ms))
         return self.recommender_result_set
@@ -278,7 +284,7 @@ class ElasticsearchContentBaseRecommender(Recommender):
     # The results will only be based on the profile text matches and should use all of the text in the code to make a successful match.
     '''
     friendly_name = 'Elasticsearch Content Filtering'
-    recommendation_weight = 5.0  # Weighting is such since some of the values returned in the results may be greater than 1
+    recommendation_weight = 6.0  # Weighting is such since some of the values returned in the results may be greater than 1
 
     def initiate(self):
         """
@@ -303,7 +309,9 @@ class ElasticsearchContentBaseRecommender(Recommender):
         # 10,000 is the max query size if there are more than 10,000 listings
         # then need to split the queries.  Currently this might be too much
         # overhead and hence the reason for not implementing in this implementation.
-        query_size = {"size": 10000}
+        # Since only 100 entries are max held in the table, reducing the size to 100 possiblities.
+        # This will also improve performance on the index creation.
+        query_size = {"size": 100}
 
         # Get list of records from Listings table that fit the criteria needed to add information to the User
         # Profiles to create a match for content.
@@ -414,9 +422,9 @@ class ElasticsearchContentBaseRecommender(Recommender):
                        "categories_text": current_categories
                        }
                    })
-                logger.info("= ES Content Based result size: {} =".format(len(user_update_query)))
+                # logger.info("= ES Content Based result size: {} =".format(len(user_update_query)))
 
-        logger.info("= ES Content Based Recommendation - Initialization Complete =")
+        # logger.info("= ES Content Based Recommendation - Initialization Complete =")
 
     def recommendation_logic(self):
         """
@@ -431,7 +439,7 @@ class ElasticsearchContentBaseRecommender(Recommender):
         # 10,000 is the max query size if there are more than 10,000 listings
         # then need to split the queries.  Currently this might be too much
         # overhead and hence the reason for not implementing in this implementation.
-        query_size = {"size": 10000}
+        query_size = {"size": 100}
 
         # Get list of records from Listings table that fit the criteria needed to add information to the User
         # Profiles to create a match for content.
@@ -509,7 +517,7 @@ class ElasticsearchContentBaseRecommender(Recommender):
             # the profile.  This will eliminate unnecessary items to be queried:
             # The reason that the size is so large is because we do not want to limit the results to just a few
             # which then might be eleiminated when displayed to the user.  Hence the max result set is returned.
-            max_result_set = 10000
+            max_result_set = 100
             if 'bookmark_ids' in each_profile_source:
                 query_compare = {
                     "size": max_result_set,
@@ -669,7 +677,7 @@ class ElasticsearchContentBaseRecommender(Recommender):
                     itemtoadd = indexitem['_source']['id']
                     self.add_listing_to_user_profile(profile_id, itemtoadd, score, False)
 
-                logger.info("= ES CONTENT RECOMMENDER Engine Completed Results for New User {} =".format(profile_id))
+                # logger.info("= ES CONTENT RECOMMENDER Engine Completed Results for New User {} =".format(profile_id))
         # *END NEW USER TEMPORARY WORKAROUND*:
 
         logger.info("= ES CONTENT RECOMMENDATION Results Completed =")
@@ -740,7 +748,9 @@ class ElasticsearchUserBaseRecommender(Recommender):
     # Making weight of 25 so that results will correlate well with other recommendation engines when combined.
     # Reasoning: Results of scores are between 0 and 1 with results mainly around 0.0X, thus the recommendation weight
     #            will mix well with other recommendations and not become too large at the same time.
-    recommendation_weight = 25.0  # Weight that the overall results are multiplied against.  The rating for user based is less than 1.
+    recommendation_weight = 2.0  # Weight that the overall results are multiplied against.  The rating for user based is less than 1.
+    # Results are between 0 and 1 and then converted to between 1 and 2 and then are multiplied by 5 to be possibly as much as 10 which is what
+    # the other values are.
     MIN_ES_RATING = 3.5  # Minimum rating to have results meet before being recommended for ES Recommender Systems
 
     def initiate(self):
@@ -775,7 +785,7 @@ class ElasticsearchUserBaseRecommender(Recommender):
         '''
         ###########
         # Loading Review Data:
-        logger.info('Elasticsearch User Base Recommendation Engine: Loading data from Review model')
+        # logger.info('Elasticsearch User Base Recommendation Engine: Loading data from Review model')
         reviews_listings = models.Review.objects.all()
         reviews_listing_uname = reviews_listings.values_list('id', 'listing_id', 'rate', 'author')
         # End loading of Reviews Table data
@@ -864,10 +874,9 @@ class ElasticsearchUserBaseRecommender(Recommender):
         connect_es_record_exist = es_client.indices.create(index=settings.ES_RECOMMEND_USER, body=rate_request_body)
         # Need to wait 2 seconds for index to get created according to search results.  This could be caused because of
         # time issues hitting a remote elasticsearch host:
-        import time
-        time.sleep(2)
+        #time.sleep(2)
 
-        logger.info("Creating ES Index after Deletion Result: '{}'".format(connect_es_record_exist))
+        # logger.info("Creating ES Index after Deletion Result: '{}'".format(connect_es_record_exist))
 
         ratings_items = []
         for record in reviews_listing_uname:
@@ -960,31 +969,7 @@ class ElasticsearchUserBaseRecommender(Recommender):
                        }
                    })
 
-            # category_combined_text = []
-
-            # for category_id_to_text in categories_to_look_up:
-            #     category_combined_text.append(str(category_model_access.get_category_by_id(category_id_to_text)))
-            #     print("Combined Categories: ", category_combined_text)
-            # if len(category_combined_text) > 0:
-            # if len(categories_to_look_up) > 0:
-                # Update record with category test information:
-                # category_update_body = {
-                #         "categories_text": category_combined_text
-                # }
-
-                # result_es = es_client.update(
-                #    index=settings.ES_RECOMMEND_USER,
-                #    doc_type=settings.ES_RECOMMEND_TYPE,
-                #    id=record_to_update,
-                #    refresh=True,
-                #    body={ "doc": {
-                #         "categories_text": category_combined_text
-                #         }
-                #     }
-                # )
-                # print("RESULT: ", result_es)
-
-            logger.info("Creating/Updating Record Result: '{}'".format(result_es))
+            # logger.info("Creating/Updating Record Result: '{}'".format(result_es))
 
     def recommendation_logic(self):
         """
@@ -1013,7 +998,7 @@ class ElasticsearchUserBaseRecommender(Recommender):
         '''
 
         logger.info('Elasticsearch User Base Recommendation Engine')
-        logger.info('Elasticsearch Health : {}'.format(es_client.cluster.health()))
+        # logger.info('Elasticsearch Health : {}'.format(es_client.cluster.health()))
 
         #########################
         # Information on Algorithms: (as per Elasticsearch: https://www.elastic.co/guide/en/elasticsearch/reference/2.4/search-aggregations-bucket-significantterms-aggregation.html)
@@ -1126,7 +1111,7 @@ class ElasticsearchUserBaseRecommender(Recommender):
                             "bookmark_ids": bookmarked_list,
                             "categories": category_items
                         })
-                    logger.info("Bookmarks Created for profile: {} with result: {}".format(profile_id, result_es))
+                    # logger.info("Bookmarks Created for profile: {} with result: {}".format(profile_id, result_es))
                 else:
                     record_to_update = es_search_result['hits']['hits'][0]['_id']
 
@@ -1144,7 +1129,7 @@ class ElasticsearchUserBaseRecommender(Recommender):
                                 "categories": list(set(current_categories + category_items))
                             }
                        })
-                    logger.info("= Bookmarks Updated for profile: {} with result: {} =".format(profile_id, result_es))
+                    # logger.info("= Bookmarks Updated for profile: {} with result: {} =".format(profile_id, result_es))
 
                 if len(categories) > 0:
                     agg_query_term = {
@@ -1255,13 +1240,13 @@ class ElasticsearchUserBaseRecommender(Recommender):
             # print("Length of Array: ", len(recommended_items))
             # Add items to recommended list for the profile:
             for indexitem in recommended_items:
-                score = indexitem['score']
+                score = recommend_utils.map_numbers(indexitem['score'], 0, 1, 5, 10)
                 # print("INDEX ITEM: ", indexitem)
                 # print('Key {}, Score {}'.format(indexitem['key'], score))
                 self.add_listing_to_user_profile(profile_id, indexitem['key'], score, False)
 
-            logger.info("= ES USER RECOMMENDER Engine Completed Results for {} =".format(profile_id))
-            logger.info("Creating/Updating Record Result: '{}'".format(es_query_result))
+            # logger.info("= ES USER RECOMMENDER Engine Completed Results for {} =".format(profile_id))
+            # logger.info("Creating/Updating Record Result: '{}'".format(es_query_result))
         logger.info("= ES USER RECOMMENDATION Results Completed =")
         ############################
         # END
@@ -1413,10 +1398,10 @@ class RecommenderDirectory(object):
                 }
             recommendations_time: Recommender time
         """
-        # print('recommender_friendly_name: {}'.format(recommender_friendly_name))
-        # print('recommendation_weight: {}'.format(recommendation_weight))
-        # print('recommendations_results: {}'.format(recommendations_results))
-        # print('recommendations_time: {}'.format(recommendations_time))
+        print('recommender_friendly_name: {}'.format(recommender_friendly_name))
+        print('recommendation_weight: {}'.format(recommendation_weight))
+        print('recommendations_results: {}'.format(recommendations_results))
+        print('recommendations_time: {}'.format(recommendations_time))
         sorted_recommendations = recommend_utils.get_top_n_score(recommendations_results, 20)
 
         if recommendations_results is None:
@@ -1443,7 +1428,9 @@ class RecommenderDirectory(object):
             recommender_string: Comma Delimited list of Recommender Engine to execute
         """
         recommender_list = [self.get_recommender_class_obj(current_recommender.strip()) for current_recommender in recommender_string.split(',')]
-
+        print("RECOMMENDER LIST: ", recommender_list)
+        import time
+        time.sleep(5)
         start_ms = time.time() * 1000.0
 
         for current_recommender_obj in recommender_list:
@@ -1484,7 +1471,7 @@ class RecommenderDirectory(object):
         batch_list = []
 
         for profile_id in self.recommender_result_set:
-            # print('*-*-*-*-'); import json; print(json.dumps(self.recommender_result_set[profile_id])); print('*-*-*-*-')
+            print('*-*-*-*-'); import json; print("PROFILE ID: ", profile_id); print(json.dumps(self.recommender_result_set[profile_id])); print('*-*-*-*-')
             profile = None
             try:
                 profile = models.Profile.objects.get(pk=profile_id)
