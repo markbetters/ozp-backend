@@ -203,7 +203,9 @@ class StorefrontListingSerializer(serializers.HyperlinkedModelSerializer):
                   'security_marking',
                   'launch_url',
                   'large_banner_icon',
-                  'banner_icon')
+                  'banner_icon',
+                  'unique_name',
+                  'is_enabled')
 
 
 class ListingActivitySerializer(serializers.ModelSerializer):
