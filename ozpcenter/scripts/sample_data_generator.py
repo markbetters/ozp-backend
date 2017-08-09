@@ -65,23 +65,27 @@ def create_library_entries(library_entries):
     """
     Create Bookmarks for users
 
-    # library_entries = [{'folder': None, 'listing_unique_name': 'ozp.test.air_mail', 'owner': 'wsmith', 'position': 0},
-    #    {'folder': None, 'listing_unique_name': 'ozp.test.air_mail', 'owner': 'hodor', 'position': 0},...]
+    # library_entries = [{'folder': None, 'listing_id': 8, 'owner': 'wsmith', 'position': 0},
+    #    {'folder': None, 'listing_id': 5, 'owner': 'hodor', 'position': 0},...]
     """
     print('Creating Library Entries...')
     for current_entry in library_entries:
         current_profile = models.Profile.objects.filter(user__username=current_entry['owner']).first()
-
+        current_listing = models.Listing.objects.get(id=current_entry['listing_id'])
         library_entry = models.ApplicationLibraryEntry(
             owner=current_profile,
-            listing=models.Listing.objects.get(unique_name=current_entry['listing_unique_name']),
+            listing=current_listing,
             folder=current_entry['folder'],
             position=current_entry['position'])
         library_entry.save()
+        print('--[{}] creating bookmark for listing [{}]'.format(current_profile.user.username, current_listing.title))
     print('Finished Library Entries...')
 
 
 def create_listing(listing_builder_dict):
+    """
+    Create Listing Helper Function
+    """
     listing_data = listing_builder_dict['listing']
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     #                           Icons
@@ -118,7 +122,7 @@ def create_listing(listing_builder_dict):
         agency=models.Agency.objects.get(short_name=listing_data['agency']),
         listing_type=models.ListingType.objects.get(title=listing_data['listing_type']),
         description=listing_data['description'],
-        launch_url=listing_data['launch_url'].format_map({'DEMO_APP_ROOT':DEMO_APP_ROOT}),
+        launch_url=listing_data['launch_url'].format_map({'DEMO_APP_ROOT': DEMO_APP_ROOT}),
         version_name=listing_data['version_name'],
         unique_name=listing_data['unique_name'],
         small_icon=small_icon,
@@ -141,7 +145,6 @@ def create_listing(listing_builder_dict):
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     for current_contact in listing_data['contacts']:
         listing.contacts.add(models.Contact.objects.get(email=current_contact))
-
 
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     #                           Owners
@@ -177,16 +180,15 @@ def create_listing(listing_builder_dict):
             image_type=models.ImageType.objects.get(name='large_screenshot').name)
 
         screenshot = models.Screenshot(small_image=small_image,
-                                        large_image=large_image,
-                                        listing=listing,
-                                        description=current_screenshot_entry['description'],
-                                        order=current_screenshot_entry['order'])
+                                       large_image=large_image,
+                                       listing=listing,
+                                       description=current_screenshot_entry['description'],
+                                       order=current_screenshot_entry['order'])
         screenshot.save()
 
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     #                           Document URLs
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
     for current_doc_url_entry in listing_data['doc_urls']:
         current_doc_url_obj = models.DocUrl(name=current_doc_url_entry['name'], url=current_doc_url_entry['url'],
             listing=listing)
@@ -211,6 +213,7 @@ def create_listing(listing_builder_dict):
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     # listing_review_batch
     create_listing_review_batch(listing, listing_builder_dict['listing_review_batch'])
+    return listing
 
 
 def run():
@@ -264,11 +267,6 @@ def run():
         models.Category(title="Weather", description="Get the temperature")
         ])
 
-    categories_ref = {}
-
-    for category in categories_bulk:
-        categories_ref[category.title.lower().replace(' and ', ' ').replace(' ', '_')] = models.Category.objects.get(title=category.title)
-
     category_end_time = time_ms()
 
     ############################################################################
@@ -291,9 +289,9 @@ def run():
                 current_contact_obj = models.Contact(name=current_contact['name'],
                                                      organization=current_contact['organization'],
                                                      contact_type=models.ContactType.objects.get(
-                                                        name=current_contact['contact_type']),
-                                                     email=current_contact['email'],
-                                                     unsecure_phone=current_contact['unsecure_phone'])
+                    name=current_contact['contact_type']),
+                    email=current_contact['email'],
+                    unsecure_phone=current_contact['unsecure_phone'])
                 current_contact_obj.save()
 
     ############################################################################
@@ -507,16 +505,16 @@ def run():
 
         library_entries = []
         for current_listing_data in listings_data:
-            listing_unique_name = current_listing_data['listing']['unique_name']
+            listing_obj = create_listing(current_listing_data)
+
+            listing_id = listing_obj.id
             listing_library_entries = current_listing_data['library_entries']
 
             if listing_library_entries:
 
                 for listing_library_entry in listing_library_entries:
-                    listing_library_entry['listing_unique_name'] = listing_unique_name
+                    listing_library_entry['listing_id'] = listing_id
                     library_entries.append(listing_library_entry)
-
-            create_listing(current_listing_data)
 
     ############################################################################
     #                           Library (bookmark listings)
@@ -524,14 +522,16 @@ def run():
     with transaction.atomic():
         create_library_entries(library_entries)
 
-    for current_unique_name in [entry['listing_unique_name'] for entry in library_entries]:
-        print('======={}======'.format(current_unique_name))
-        current_listing = models.Listing.objects.get(unique_name=current_unique_name)
-        current_listing_owner = current_listing.owners.first()
-        listing_notification = notification_model_access.create_notification(current_listing_owner,  # noqa: F841
-                                                                      next_week,
-                                                                      '{} update next week'.format(current_listing.title),
-                                                                      listing=current_listing)
+        for current_id in [entry['listing_id'] for entry in library_entries]:
+            current_listing = models.Listing.objects.get(id=current_id)
+            current_listing_owner = current_listing.owners.first()
+
+            print('={} Creating Notification for {}='.format(current_listing_owner.user.username, current_listing.title))
+
+            listing_notification = notification_model_access.create_notification(current_listing_owner,  # noqa: F841
+                                                                          next_week,
+                                                                          '{} update next week'.format(current_listing.title),
+                                                                          listing=current_listing)
 
     ############################################################################
     #                           Subscription

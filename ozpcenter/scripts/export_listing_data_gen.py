@@ -148,14 +148,10 @@ COPY_IMG_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../
 DEMO_APP_ROOT = settings.OZP['DEMO_APP_ROOT']
 
 
-def run():
-    if os.path.exists(COPY_IMG_PATH):
-        # TODO: Verify that rmtree works
-        rmtree(COPY_IMG_PATH)
-
-    if not os.path.exists(COPY_IMG_PATH):
-        os.mkdir(COPY_IMG_PATH)
-
+def extract_contacts():
+    """
+    Function used to extract contact types and contacts into a yaml file
+    """
     contacts_list = []
     for current_contact in models.Contact.objects.iterator():
         contact = {}
@@ -173,6 +169,27 @@ def run():
     with open('contacts.yaml', 'w') as file_stream:
         yaml.dump(output_dict, file_stream, indent=2, default_flow_style=False)
 
+
+def extract_categories():
+    """
+    Function used to extract categories into a yaml file
+    """
+    categories_list = []
+    for current_category in models.Category.objects.iterator():
+        category = {}
+        category['title'] = current_category.title
+        category['description'] = current_category.description
+        categories_list.append(category)
+    output_dict = {'categories': categories_list}
+
+    with open('categories.yaml', 'w') as file_stream:
+        yaml.dump(output_dict, file_stream, indent=2, default_flow_style=False)
+
+
+def extract_listings():
+    """
+    Function used to extract listings into a yaml file
+    """
     output_list = []
     for current_listing in models.Listing.objects.iterator():
         listing = {}
@@ -187,7 +204,12 @@ def run():
             listing['launch_url'] = '{DEMO_APP_ROOT}/default/index.html'
 
         listing['version_name'] = current_listing.version_name
-        listing['unique_name'] = current_listing.unique_name
+
+        if current_listing.unique_name:
+            listing['unique_name'] = current_listing.unique_name
+        else:
+            listing['unique_name'] = current_listing.title.lower().replace(' ', '_')
+
         listing['what_is_new'] = current_listing.what_is_new
         listing['description_short'] = current_listing.description_short
         listing['requirements'] = current_listing.requirements
@@ -280,3 +302,16 @@ def run():
 
     with open('listing.yaml', 'w') as file_stream:
         yaml.dump(output_list, file_stream, indent=2)
+
+
+def run():
+    if os.path.exists(COPY_IMG_PATH):
+        # TODO: Verify that rmtree works
+        rmtree(COPY_IMG_PATH)
+
+    if not os.path.exists(COPY_IMG_PATH):
+        os.mkdir(COPY_IMG_PATH)
+
+    extract_categories()
+    extract_contacts()
+    extract_listings()

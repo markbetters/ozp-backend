@@ -8,7 +8,7 @@ import os
 import uuid
 from io import BytesIO
 import PIL
-# from PIL import Image as PilImage
+from PIL import Image as PilImage
 
 from django.conf import settings
 from django.contrib import auth
@@ -112,9 +112,7 @@ class AccessControlImageManager(models.Manager):
 class Image(models.Model):
     """
     Image
-
-    (Uploaded) images are stored in a flat directory on the server using a
-    filename like <id>_<image_type>.png
+    Uploaded images are stored using media_storage (MediaFileStorage/MediaS3Storage)
 
     When creating a new image, use the Image.create_image method, do not
     use the Image.save() directly
@@ -135,10 +133,10 @@ class Image(models.Model):
     objects = AccessControlImageManager()
 
     def __repr__(self):
-        return str(self.id)
+        return 'Image({})'.format(self.id)
 
     def __str__(self):
-        return str(self.id)
+        return 'Image({})'.format(self.id)
 
     @staticmethod
     def create_image(pil_img, **kwargs):
@@ -183,12 +181,12 @@ class Image(models.Model):
             raise ValueError('unknown file extension: {}'.format(ext))
 
         # logger.debug('saving image %s' % file_name)
-        # if img.image_type.name == 'small_icon':
-        #     pil_img = pil_img.resize((16, 16), PilImage.ANTIALIAS)
-        # elif img.image_type.name == 'large_icon':
-        #     pil_img = pil_img.resize((32, 32), PilImage.ANTIALIAS)
-        # elif img.image_type.name == 'banner_icon':
-        #     pil_img = pil_img.resize((220, 137), PilImage.ANTIALIAS)
+        if img.image_type.name == 'small_icon':
+            pil_img = pil_img.resize((16, 16), PilImage.ANTIALIAS)
+        elif img.image_type.name == 'large_icon':
+            pil_img = pil_img.resize((32, 32), PilImage.ANTIALIAS)
+        elif img.image_type.name == 'banner_icon':
+            pil_img = pil_img.resize((220, 137), PilImage.ANTIALIAS)
         # elif img.image_type.name == 'large_banner_icon':
         #     print(img.image_type.name)
 
@@ -209,12 +207,9 @@ class Image(models.Model):
             # TODO raise exception and remove file
             return
         # TODO: check width and height
-
         # image_binary.seek(0)
-
         # if not media_storage.exists(file_name):  # If
         media_storage.save(file_name, image_binary)
-
         return img
 
 
@@ -264,9 +259,7 @@ class Agency(models.Model):
         * steward_profiles
     """
     title = models.CharField(max_length=255, unique=True)
-    icon = models.ForeignKey(Image, related_name='agency', null=True,
-                             blank=True)
-
+    icon = models.ForeignKey(Image, related_name='agency', null=True, blank=True)
     short_name = models.CharField(max_length=32, unique=True)
 
     def __repr__(self):
@@ -319,9 +312,7 @@ class AccessControlApplicationLibraryEntryManager(models.Manager):
         objects = objects.filter(owner__user__username=username)
         objects = objects.filter(listing__is_enabled=True)
         objects = objects.filter(listing__is_deleted=False)
-
-        objects = objects.exclude(listing__is_private=True,
-                                  listing__agency__in=exclude_orgs)
+        objects = objects.exclude(listing__is_private=True, listing__agency__in=exclude_orgs)
 
         # Filter out listings by user's access level
         ids_to_exclude = []
@@ -367,21 +358,16 @@ class ApplicationLibraryEntry(models.Model):
     """
     A Listing that a user (Profile) has in their 'application library'/bookmarks
 
-    TODO: Auditing for create, update, delete
-
     Additional db.relationships:
         * owner
 
+    TODO: Auditing for create, update, delete
     TODO: folder seems HUD-specific
-
-    TODO: should we allow multiple bookmarks of the same listing (perhaps
-        in different folders)?
+    TODO: should we allow multiple bookmarks of the same listing (perhaps in different folders)?
     """
     folder = models.CharField(max_length=255, blank=True, null=True)
-    owner = models.ForeignKey(
-        'Profile', related_name='application_library_entries')
-    listing = models.ForeignKey(
-        'Listing', related_name='application_library_entries')
+    owner = models.ForeignKey('Profile', related_name='application_library_entries')
+    listing = models.ForeignKey('Listing', related_name='application_library_entries')
     position = models.PositiveIntegerField(default=0)
 
     # use a custom Manager class to limit returned Listings
@@ -461,10 +447,10 @@ class Contact(models.Model):
     """
     A contact for a Listing
 
-    TODO: Auditing for create, update, delete
-
     Additional db.relationships:
         * listings
+
+    TODO: Auditing for create, update, delete
     """
     secure_phone = models.CharField(
         max_length=50,
@@ -550,7 +536,7 @@ class DocUrl(models.Model):
     Additional db.relationships:
         * listing
 
-    # TODO: unique_together constraint on name and url
+    TODO: unique_together constraint on name and url
     """
     name = models.CharField(max_length=255)
     url = models.CharField(
@@ -686,8 +672,6 @@ class Profile(models.Model):
     TODO: Auditing for create, update, delete
         https://github.com/ozone-development/ozp-backend/issues/61
     """
-    # application_library = db.relationship('ApplicationLibraryEntry',
-    #                                      backref='owner')
     display_name = models.CharField(max_length=255)
     bio = models.CharField(max_length=1000, blank=True)
     # user's DN from PKI cert
@@ -814,9 +798,7 @@ class Profile(models.Model):
         """
         # TODO: what to make default password?
         password = kwargs.get('password', 'password')
-
         email = kwargs.get('email', '')
-
         # create User object
         # if this user is an ORG_STEWARD or APPS_MALL_STEWARD, give them
         # access to the admin site
@@ -899,8 +881,7 @@ class AccessControlListingManager(models.Manager):
             user_orgs = [i.title for i in user_orgs]
             exclude_orgs = Agency.objects.exclude(title__in=user_orgs)
 
-        objects = objects.exclude(is_private=True,
-                                  agency__in=exclude_orgs)
+        objects = objects.exclude(is_private=True, agency__in=exclude_orgs)
 
         # Filter out listings by user's access level
         ids_to_exclude = []
@@ -928,8 +909,7 @@ class AccessControlListingManager(models.Manager):
             user_orgs = [i.title for i in user_orgs]
             exclude_orgs = Agency.objects.exclude(title__in=user_orgs)
 
-        objects = objects.exclude(is_private=True,
-                                  agency__in=exclude_orgs)
+        objects = objects.exclude(is_private=True, agency__in=exclude_orgs)
         return objects
 
 
@@ -981,6 +961,7 @@ class Listing(models.Model):
     )
     version_name = models.CharField(max_length=255, null=True, blank=True)
     # NOTE: replacing uuid with this - will need to add to the form
+    # unique_name is None when creating a new listing via ozp-center
     unique_name = models.CharField(max_length=255, unique=True, null=True,
                                    blank=True)
     small_icon = models.ForeignKey(Image, related_name='listing_small_icon',
@@ -1049,8 +1030,7 @@ class Listing(models.Model):
         db_table='intent_listing'
     )
 
-    security_marking = models.CharField(max_length=1024,
-                                        null=True, blank=True)
+    security_marking = models.CharField(max_length=1024, null=True, blank=True)
 
     # private listings can only be viewed by members of the same agency
     is_private = models.BooleanField(default=False)
@@ -1062,10 +1042,24 @@ class Listing(models.Model):
         return ApplicationLibraryEntry.objects.filter(listing=self).count() >= 1
 
     def __repr__(self):
-        return '({0!s}-{1!s})'.format(self.unique_name, [owner.user.username for owner in self.owners.all()])
+        listing_name = None
+
+        if self.unique_name:
+            listing_name = self.unique_name
+        elif self.title:
+            listing_name = self.title.lower().replace(' ', '_')
+
+        return '({0!s}-{1!s})'.format(listing_name, [owner.user.username for owner in self.owners.all()])
 
     def __str__(self):
-        return '({0!s}-{1!s})'.format(self.unique_name, [owner.user.username for owner in self.owners.all()])
+        listing_name = None
+
+        if self.unique_name:
+            listing_name = self.unique_name
+        elif self.title:
+            listing_name = self.title.lower().replace(' ', '_')
+
+        return '({0!s}-{1!s})'.format(listing_name, [owner.user.username for owner in self.owners.all()])
 
     def save(self, *args, **kwargs):
         is_new = self.pk
@@ -1166,15 +1160,13 @@ class AccessControlRecommendationsEntryManager(models.Manager):
                     listing__approval_status=Listing.APPROVED,
                     listing__is_deleted=False)
 
-        objects = objects.exclude(listing__is_private=True,
-                                  listing__agency__in=exclude_orgs)
+        objects = objects.exclude(listing__is_private=True, listing__agency__in=exclude_orgs)
         return objects
 
 
 class RecommendationsEntry(models.Model):
     """
     Recommendations Entry
-
     """
     target_profile = models.ForeignKey('Profile', related_name='recommendations_profile')
     recommendation_data = models.BinaryField(default=None)
@@ -1264,8 +1256,7 @@ class ListingActivity(models.Model):
     # TODO: change this back after the migration
     # activity_date = models.DateTimeField(auto_now=True)
     activity_date = models.DateTimeField(default=utils.get_now_utc)
-    # an optional description of the activity (required if the action is
-    #   REJECTED)
+    # an optional description of the activity (required if the action is REJECTED)
     description = models.CharField(max_length=2000, blank=True, null=True)
     author = models.ForeignKey('Profile', related_name='listing_activities')
     listing = models.ForeignKey('Listing', related_name='listing_activities')
@@ -1468,7 +1459,6 @@ class NotificationMailBox(models.Model):
     # Mailbox Profile ID
     target_profile = models.ForeignKey(Profile, related_name='mailbox_profiles')
     notification = models.ForeignKey(Notification, related_name='mailbox_notifications')
-
     # If it has been emailed. then make value true
     emailed_status = models.BooleanField(default=False)
     # Read Flag
