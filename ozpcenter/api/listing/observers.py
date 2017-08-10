@@ -215,25 +215,36 @@ class ListingObserver(Observer):
             user(Profile Instance): The user that created listing
         """
         username = profile.user.username
+        ignoreFields = ['doc_urls',
+                        'banner_icon',
+                        'large_banner_icon',
+                        'small_icon',
+                        'large_icon',
+                        'screenshots',
+                        'security_marking',
+                        'is_featured',
+                        'contacts']
 
         changes = []
         for change_detail in change_details:
-            changes.append(change_detail['field_name'].title().replace('_', ' '))
+            if not (change_detail['field_name'] in ignoreFields):
+                changes.append(change_detail['field_name'].title().replace('_', ' '))
 
         # Notifications with html markup will display with the change in
         # ActiveNotification.jsx using dangerouslySetInnerHTML.
-        message = 'The <b>{}</b> listing was updated. The following field{} changed: {}'.format(
-            listing.title,
-            's have' if len(change_details) != 1 else ' has',
-            ', '.join(changes)
-            )
+        if changes:
+            message = 'The <b>{}</b> listing was updated. The following field{} changed: {}'.format(
+                listing.title,
+                's have' if len(change_details) != 1 else ' has',
+                ', '.join(changes)
+                )
 
-        now_plus_month = datetime.datetime.now(pytz.utc) + datetime.timedelta(days=30)
-        notification_model_access.create_notification(author_username=username,
-                                                      expires_date=now_plus_month,
-                                                      message=message,
-                                                      listing=listing,
-                                                      group_target=Notification.USER)
+            now_plus_month = datetime.datetime.now(pytz.utc) + datetime.timedelta(days=30)
+            notification_model_access.create_notification(author_username=username,
+                                                          expires_date=now_plus_month,
+                                                          message=message,
+                                                          listing=listing,
+                                                          group_target=Notification.USER)
 
     def listing_review_created(self, listing=None, profile=None, rating=None, text=None):
         """
@@ -314,4 +325,18 @@ class ListingObserver(Observer):
             profile(Profile Instance): Profile that triggered a change
             is_enabled: boolean value
         """
-        pass
+        username = profile.user.username
+
+        message = None
+
+        if is_enabled:
+            message = '<b>{}</b> was changed to be enabled '.format(listing.title)
+        else:
+            message = '<b>{}</b> was changed to be disabled '.format(listing.title)
+
+        now_plus_month = datetime.datetime.now(pytz.utc) + datetime.timedelta(days=30)
+        notification_model_access.create_notification(author_username=username,
+                                                      expires_date=now_plus_month,
+                                                      message=message,
+                                                      listing=listing,
+                                                      group_target=Notification.USER)

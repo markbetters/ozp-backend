@@ -349,7 +349,6 @@ class ListingNotification(NotificationBase):
         """
         owner_id_list = ApplicationLibraryEntry.objects.filter(listing__in=[self.entity],
                                                                listing__isnull=False,
-                                                               listing__is_enabled=True,
                                                                listing__approval_status=Listing.APPROVED,
                                                                listing__is_deleted=False).values_list('owner', flat=True).distinct()
         return Profile.objects.filter(id__in=owner_id_list, listing_notification_flag=True).all()
