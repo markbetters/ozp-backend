@@ -114,7 +114,7 @@ class Recommender(object):
         self.recommendation_logic()
         recommendation_ms = time.time() * 1000.0
         print('--------')  # Print statement for debugging output
-        logger.info("RESULT: ", self.recommender_result_set)
+        logger.info(self.recommender_result_set)
         print('--------')  # Print statement for debugging output
         logger.info('Recommendation Logic took: {} ms'.format(recommendation_ms - start_ms))
         return self.recommender_result_set
@@ -281,10 +281,15 @@ class ElasticsearchContentBaseRecommender(Recommender):
     # The results will only be based on the profile text matches and should use all of the text in the code to make a successful match.
     '''
     friendly_name = 'Elasticsearch Content Filtering'
+    # The weights that are returned by Elasticsearch will range between 0 and a any possible maximum because of query results.  Hence the reason
+    # that we need to normalize the data.  Normailization is accomplished by moving the scale to be comprable with other engines using map_numbers function.
+    # Reasoning: Results being possibly any range need to the results scaled up or down to be comporable with other engine results.
+    # The weight being used is toning down the results so that they do not overwhelm other results solely based on content.
     recommendation_weight = 0.9  # Weighting is based on rebasing the results
     RESULT_SIZE = 50  # Get only the top 50 results
     min_new_score = 4  # Min value to set for rebasing of results
     max_new_score = 9  # Max value to rebase results to so that values
+    content_norm_factor = 0.05  # Amount to increase the max value found so that saturation does not occur.
 
     def initiate(self):
         """
@@ -309,7 +314,7 @@ class ElasticsearchContentBaseRecommender(Recommender):
         # 10,000 is the max query size if there are more than 10,000 listings
         # then need to split the queries.  Currently this might be too much
         # overhead and hence the reason for not implementing in this implementation.
-        # Since only 100 entries are max held in the table, reducing the size to 100 possiblities.
+        # Since only 100 entries are max held in the table, reducing the size to RESULT_SIZE possiblities.
         # This will also improve performance on the index creation.
         query_size = {"size": self.RESULT_SIZE}
 
@@ -568,7 +573,7 @@ class ElasticsearchContentBaseRecommender(Recommender):
             # Skip if no results are returned as a precaution
             # Max score for Elasticsearch Content Based Recommendation to nomalize the data:
             if recommended_items:
-                max_score_es_content = es_query_result['hits']['max_score']
+                max_score_es_content = es_query_result['hits']['max_score'] + self.content_norm_factor * es_query_result['hits']['max_score']
 
             # Get the author so that it can be used in later items:
             profile_id = each_profile['_source']['author_id']
@@ -600,7 +605,7 @@ class ElasticsearchContentBaseRecommender(Recommender):
 
         # The New User or Person that has no recommendation profile problem is solved by aggregating the results of all of the titles
         # that are present and then taking the top hits and searching for content based on those items.  This in turn creates content
-        # based on the most popular titles that have been bookmarked or reviewed and are in the recommendations tables already.
+        # based on the most popular titles that have been bookmarked and are in the recommendations tables already.
         for profile in all_profiles:
             # user_information = model_access.get_profile_by_id(profile.id)
             search_query = {
@@ -681,7 +686,7 @@ class ElasticsearchContentBaseRecommender(Recommender):
                     )
 
                     # Max score for Elasticsearch Content Based Recommendation for new user to orient list against:
-                    max_score_es_content = es_query_result['hits']['max_score']
+                    max_score_es_content = es_query_result['hits']['max_score'] + self.content_norm_factor * es_query_result['hits']['max_score']
 
                     # Store the results for the new users in the new_user_return_list:
                     new_user_return_list = es_query_result['hits']['hits']
@@ -760,14 +765,12 @@ class ElasticsearchUserBaseRecommender(Recommender):
     """
 
     friendly_name = 'Elasticsearch User Based Filtering'
-    # The weights that are returned by Elasticsearch will be 0.X and hence the reason that we need to multiply
-    # by factors of 10 to get reasonable values for ranking.
-    # Making weight of 25 so that results will correlate well with other recommendation engines when combined.
-    # Reasoning: Results of scores are between 0 and 1 with results mainly around 0.0X, thus the recommendation weight
-    #            will mix well with other recommendations and not become too large at the same time.
+    # The weights that are returned by Elasticsearch will be 0.X and hence the reason that we need to normalize the data.
+    # Normailization is accomplished by moving the scale to be comprable with other engines using map_numbers function.
+    # Reasoning: Results of scores are between 0 and 1 with results mainly around 0.0X, thus the normalization is necessary.
     recommendation_weight = 1.0  # Weight that the overall results are multiplied against.  The rating for user based is less than 1.
-    # Results are between 0 and 1 and then converted to between min_new_score and max_new_score and then are multiplied by 2.5 to be slightly better than
-    # other recommendation systems.
+    # Results are between 0 and 1 and then converted to between min_new_score and max_new_score and then are multiplied by the weight
+    # to be slightly better than the baseline recommendation systems if necessary.
     MIN_ES_RATING = 3.5  # Minimum rating to have results meet before being recommended for ES Recommender Systems
     min_new_score = 5  # Min value to set for rebasing of results
     max_new_score = 10  # Max value to rebase results to so that values
@@ -1455,7 +1458,6 @@ class RecommenderDirectory(object):
             recommender_string: Comma Delimited list of Recommender Engine to execute
         """
         recommender_list = [self.get_recommender_class_obj(current_recommender.strip()) for current_recommender in recommender_string.split(',')]
-        print("RECOMMENDER LIST: ", recommender_list)
         start_ms = time.time() * 1000.0
 
         for current_recommender_obj in recommender_list:
@@ -1496,7 +1498,7 @@ class RecommenderDirectory(object):
         batch_list = []
 
         for profile_id in self.recommender_result_set:
-            # print('*-*-*-*-'); import json; print("PROFILE ID: ", profile_id); print(json.dumps(self.recommender_result_set[profile_id])); print('*-*-*-*-')
+            # print('*-*-*-*-'); import json; print(json.dumps(self.recommender_result_set[profile_id])); print('*-*-*-*-')
             profile = None
             try:
                 profile = models.Profile.objects.get(pk=profile_id)
