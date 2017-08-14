@@ -1,5 +1,19 @@
 """
 Listing Model Access
+
+TODO: Add Validation to below method
+    listing_model_access.create_listing(listing_activity_author, listing)
+    listing_model_access.submit_listing(listing_activity_author, listing)
+    listing_model_access.approve_listing_by_org_steward(listing_activity_author, listing)
+    listing_model_access.approve_listing(listing_activity_author, listing)
+
+Check for the listings that has been approved more than once
+    {action: CREATED, author: khaleesi, description: null}
+   - {action: SUBMITTED, author: khaleesi, description: null}
+   - {action: APPROVED_ORG, author: khaleesi, description: null}
+   - {action: APPROVED_ORG, author: khaleesi, description: null}
+   - {action: APPROVED, author: khaleesi, description: null}
+
 """
 import logging
 
@@ -368,6 +382,8 @@ def create_listing(author, listing):
     """
     Create a listing
 
+    TODO: Validation - If a listing is already [IN_PROGRESS] does it make sense to _add_listing_activity [ListingActivity.CREATED] again
+
     Args:
         author
         listing
@@ -398,6 +414,8 @@ def log_listing_modification(author, listing, change_details):
 def submit_listing(author, listing):
     """
     Submit a listing for approval
+
+    TODO: Validation - If a listing is already [PENDING] does it make sense to _add_listing_activity [ListingActivity.SUBMITTED] again
 
     Args:
         author
@@ -437,6 +455,8 @@ def approve_listing_by_org_steward(org_steward, listing):
     """
     Give Org Steward approval to a listing
 
+    TODO: Validation - If a listing is already [APPROVED_ORG] does it make sense to _add_listing_activity [ListingActivity.APPROVED_ORG] again
+
     Args:
         org_steward
         listing
@@ -444,8 +464,7 @@ def approve_listing_by_org_steward(org_steward, listing):
     Return:
         listing
     """
-    listing = _add_listing_activity(org_steward, listing,
-        models.ListingActivity.APPROVED_ORG)
+    listing = _add_listing_activity(org_steward, listing, models.ListingActivity.APPROVED_ORG)
     listing.approval_status = models.Listing.APPROVED_ORG
     listing.edited_date = utils.get_now_utc()
     listing.save()
@@ -456,6 +475,8 @@ def approve_listing(steward, listing):
     """
     Give final approval to a listing
 
+    TODO: Validation - If a listing is already [APPROVED] does it make sense to _add_listing_activity [ListingActivity.APPROVED] again
+
     Args:
         org_steward
         listing
@@ -463,8 +484,7 @@ def approve_listing(steward, listing):
     Return:
         listing
     """
-    listing = _add_listing_activity(steward, listing,
-        models.ListingActivity.APPROVED)
+    listing = _add_listing_activity(steward, listing, models.ListingActivity.APPROVED)
     listing.approval_status = models.Listing.APPROVED
     listing.approved_date = utils.get_now_utc()
     listing.edited_date = utils.get_now_utc()
@@ -485,8 +505,7 @@ def reject_listing(steward, listing, rejection_description):
         Listing
     """
     old_approval_status = listing.approval_status
-    listing = _add_listing_activity(steward, listing,
-        models.ListingActivity.REJECTED, description=rejection_description)
+    listing = _add_listing_activity(steward, listing, models.ListingActivity.REJECTED, description=rejection_description)
     listing.approval_status = models.Listing.REJECTED
     listing.edited_date = utils.get_now_utc()
     listing.save()

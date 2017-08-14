@@ -300,7 +300,7 @@ def extract_listings():
 
     print('titles:{}'.format([record['listing']['title'] for record in output_list]))
 
-    with open('listing.yaml', 'w') as file_stream:
+    with open('listings.yaml', 'w') as file_stream:
         yaml.dump(output_list, file_stream, indent=2)
 
 

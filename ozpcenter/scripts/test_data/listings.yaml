@@ -3282,6 +3282,7 @@
   - {author: wsmith, rate: 3, text: not everything can be 5 stars.}
   - {author: khaleesi, rate: 3, text: Lots of great dragons but the humanoids sure
       like trying to kill them for loot. Not sure it's worth the effort to visit.}
+  - {author: bettafish, rate: 5, text: Everything should be 5 stars}
 - library_entries: []
   listing:
     agency: Miniluv
@@ -3850,6 +3851,8 @@
   - {author: rutherford, rate: 4, text: Great app must try it today.}
   - {author: wsmith, rate: 2, text: not everything can be 5 stars.}
   - {author: khaleesi, rate: 5, text: Aided us safely in our journey to Westeros.}
+  - {author: bettafish, rate: 5, text: Everything can be 5 stars if you put your mind
+      to it.}
 - library_entries: []
   listing:
     agency: Miniplen
@@ -4436,9 +4439,6 @@
   - {action: SUBMITTED, author: jones, description: null}
   - {action: APPROVED_ORG, author: bigbrother, description: null}
   - {action: APPROVED, author: bigbrother, description: null}
-  - {action: SUBMITTED, author: jones, description: null}
-  - {action: APPROVED_ORG, author: bettafish, description: null}
-  - {action: APPROVED, author: bettafish, description: null}
   listing_review_batch: []
 - library_entries: []
   listing:
@@ -4501,6 +4501,8 @@
   listing_review_batch:
   - {author: khaleesi, rate: 2, text: This is what I have a hand to assist me with.
       This does not meet my use cases at all.}
+  - {author: bettafish, rate: 1, text: Not very interesting.  Hard to follow.  Does
+      not seem to work.}
 - library_entries: []
   listing:
     agency: Minitrue
@@ -4561,10 +4563,6 @@
   - {action: SUBMITTED, author: jones, description: null}
   - {action: APPROVED_ORG, author: bigbrother, description: null}
   - {action: APPROVED, author: bigbrother, description: null}
-  - {action: APPROVED_ORG, author: bigbrother, description: null}
-  - {action: SUBMITTED, author: jones, description: null}
-  - {action: APPROVED_ORG, author: bettafish, description: null}
-  - {action: APPROVED, author: bigbrother, description: null}
   listing_review_batch: []
 - library_entries: []
   listing:
@@ -4624,9 +4622,11 @@
   - {action: SUBMITTED, author: jones, description: null}
   - {action: APPROVED_ORG, author: bettafish, description: null}
   - {action: SUBMITTED, author: bettafish, description: null}
-  - {action: APPROVED_ORG, author: bigbrother, description: null}
-  - {action: APPROVED, author: bigbrother, description: null}
-  listing_review_batch: []
+  - {action: APPROVED_ORG, author: bettafish, description: null}
+  - {action: APPROVED, author: bettafish, description: null}
+  listing_review_batch:
+  - {author: wsmith, rate: 3, text: 'All new four-valve engine and suspension. Doubling
+      down on valves, staying pat on styling.'}
 - library_entries: []
   listing:
     agency: Minitrue
@@ -5226,7 +5226,8 @@
   listing:
     agency: Minitrue
     banner_icon: {filename: DesktopVirtualization_banner_icon.png, security_marking: UNCLASSIFIED}
-    categories: [Business, Productivity, Tools]
+    categories: [Books and Reference, Business, Health and Fitness, Productivity,
+      Sports, Tools, Weather]
     contacts: [r@s.com]
     description: 'Desktop virtualization is software technology that separates the
       desktop environment and associated application software from the physical client
@@ -5255,7 +5256,7 @@
     is_private: false
     large_banner_icon: {filename: DesktopVirtualization_large_banner_icon.png, security_marking: UNCLASSIFIED}
     large_icon: {filename: DesktopVirtualization_large_icon.png, security_marking: UNCLASSIFIED}
-    launch_url: http://desktopvirtualization.com
+    launch_url: https://ci-latest.amlng.di2e.net/center/#/home/?%2F%3F%2F%3F=/center/#/home/?%2F%3F%2F%3F=
     listing_type: Desktop App
     owners: [wsmith]
     requirements: None
@@ -5457,8 +5458,2782 @@
   - {action: CREATED, author: khaleesi, description: null}
   - {action: SUBMITTED, author: khaleesi, description: null}
   - {action: APPROVED_ORG, author: khaleesi, description: null}
-  - {action: APPROVED_ORG, author: khaleesi, description: null}
   - {action: APPROVED, author: khaleesi, description: null}
   listing_review_batch:
   - {author: khaleesi, rate: 5, text: Dragons are the best! I want to mother them
       all <3}
+- library_entries: []
+  listing:
+    agency: Miniluv
+    banner_icon: {filename: EnglishBitter_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Entertainment]
+    contacts: []
+    description: Bitter is a British style of pale ale that varies in colour from
+      gold to dark amber, and in strength from 3% to 7% alcohol by volume.
+    description_short: Bitter is a British style of pale ale that varies in colour
+      from gold to dark amber.
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: EnglishBitter_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: EnglishBitter_large_icon.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Bitter_%28beer%29
+    listing_type: Widget
+    owners: [bettafish]
+    requirements: None
+    screenshots:
+    - description: null
+      large_image: {filename: EnglishBitter_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: EnglishBitter_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: EnglishBitter_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    tags: [beer]
+    title: English Bitter
+    unique_name: english_bitter
+    version_name: '3'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: bettafish, description: null}
+  - {action: SUBMITTED, author: bigbrother, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Minipax
+    banner_icon: {filename: Weissbier_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Entertainment, Health and Fitness]
+    contacts: []
+    description: "Weizenbier or Hefeweizen, in the southern parts of Bavaria usually\
+      \ called Wei\xDFbier (literally \"white beer\", but the name probably derives\
+      \ from Weizenbier, \"wheat beer\"), is a beer, traditionally from Bavaria, in\
+      \ which a significant proportion of malted barley is replaced with malted wheat.\
+      \ By German law, Wei\xDFbiers brewed in Germany must be top-fermented.[7] Specialized\
+      \ strains of yeast are used which produce overtones of banana and clove as by-products\
+      \ of fermentation.[7] Wei\xDFbier is so called because it was, at the time of\
+      \ its inception, paler in color than Munich's traditional brown beer. It is\
+      \ well known throughout Germany, though better known as Weizen (\"Wheat\") outside\
+      \ Bavaria. The terms Hefeweizen (\"yeast wheat\") or Hefewei\xDFbier refer to\
+      \ wheat beer in its traditional, unfiltered form. The term Kristallweizen (crystal\
+      \ wheat), or kristall Wei\xDF (crystal white beer), refers to a wheat beer that\
+      \ is filtered to remove the yeast and wheat proteins which contribute to its\
+      \ cloudy appearance."
+    description_short: "Weizenbier or Hefeweizen, in the southern parts of Bavaria\
+      \ usually called Wei\xDFbier."
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Weissbier_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Weissbier_large_icon.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Wheat_beer#Weissbier
+    listing_type: Widget
+    owners: [bettafish]
+    requirements: None
+    screenshots:
+    - description: null
+      large_image: {filename: Weissbier_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Weissbier_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED//FOR OFFICIAL USE ONLY
+    small_icon: {filename: Weissbier_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    tags: [beer]
+    title: Weissbier
+    unique_name: weissbier
+    version_name: 15ibu
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: bettafish, description: null}
+  - {action: SUBMITTED, author: bettafish, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Miniplen
+    banner_icon: {filename: NES_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Education, Entertainment]
+    contacts: []
+    description: "The Nintendo Entertainment System (commonly abbreviated as NES)\
+      \ is an 8-bit home video game console that was developed and manufactured by\
+      \ Nintendo. It was initially released in Japan as the Family Computer (Japanese:\
+      \ \u30D5\u30A1\u30DF\u30EA\u30FC\u30B3\u30F3\u30D4\u30E5\u30FC\u30BF Hepburn:\
+      \ Famir\u012B Konpy\u016Bta) (also known by the portmanteau abbreviation Famicom\
+      \ (\u30D5\u30A1\u30DF\u30B3\u30F3 Famikon) and abbreviated as FC) on July 15,\
+      \ 1983, and was later released in North America during 1985, in Europe during\
+      \ 1986, and Australia in 1987. In South Korea, it was known as the Hyundai Comboy\
+      \ (\uD604\uB300 \uCEF4\uBCF4\uC774 Hyeondae Keomboi) and was distributed by\
+      \ SK Hynix which then was known as Hyundai Electronics. The best-selling gaming\
+      \ console of its time,[10]e[\u203A] the NES helped revitalize the US video game\
+      \ industry following the video game crash of 1983.[11] With the NES, Nintendo\
+      \ introduced a now-standard business model of licensing third-party developers,\
+      \ authorizing them to produce and distribute titles for Nintendo's platform.[12]\
+      \ It was succeeded by the Super Nintendo Entertainment System."
+    description_short: The Nintendo Entertainment System (commonly abbreviated as
+      NES) is an 8-bit home video game console.
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: NES_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: NES_large_icon.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Nintendo_Entertainment_System
+    listing_type: Desktop App
+    owners: [bettafish]
+    requirements: A TV
+    screenshots:
+    - description: null
+      large_image: {filename: NES_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED//FOR
+          OFFICIAL USE ONLY}
+      order: 0
+      small_image: {filename: NES_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED//FOR
+          OFFICIAL USE ONLY}
+    - description: null
+      large_image: {filename: NES_1_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 1
+      small_image: {filename: NES_1_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: NES_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    tags: [video games]
+    title: NES
+    unique_name: nes
+    version_name: 8bit
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: bettafish, description: null}
+  - {action: SUBMITTED, author: bettafish, description: null}
+  - {action: APPROVED_ORG, author: bettafish, description: null}
+  - {action: APPROVED, author: bettafish, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Miniplen
+    banner_icon: {filename: SNES_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Entertainment]
+    contacts: [mario@plumbersinc.com]
+    description: "The Super Nintendo Entertainment System (officially abbreviated\
+      \ the Super NES[b] or SNES[c], and commonly shortened to Super Nintendo[d])\
+      \ is a 16-bit home video game console developed by Nintendo that was released\
+      \ in 1990 in Japan and South Korea, 1991 in North America, 1992 in Europe and\
+      \ Australasia (Oceania), and 1993 in South America. In Japan, the system is\
+      \ called the Super Famicom (Japanese: \u30B9\u30FC\u30D1\u30FC\u30D5\u30A1\u30DF\
+      \u30B3\u30F3 Hepburn: S\u016Bp\u0101 Famikon, officially adopting the abbreviated\
+      \ name of its predecessor, the Famicom), or SFC for short. In South Korea, it\
+      \ is known as the Super Comboy (\uC288\uD37C \uCEF4\uBCF4\uC774 Syupeo Keomboi)\
+      \ and was distributed by Hyundai Electronics. Although each version is essentially\
+      \ the same, several forms of regional lockout prevent the different versions\
+      \ from being compatible with one another. It was released in Brazil on September\
+      \ 2, 1992, by Playtronic."
+    description_short: The Super Nintendo Entertainment System (officially abbreviated
+      the Super NES[b] or SNES[c].
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: SNES_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: SNES_large_icon.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Super_Nintendo_Entertainment_System
+    listing_type: Desktop App
+    owners: [bettafish]
+    requirements: A TV
+    screenshots:
+    - description: null
+      large_image: {filename: SNES_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: SNES_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    - description: null
+      large_image: {filename: SNES_1_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 1
+      small_image: {filename: SNES_1_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: SNES_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    tags: [Video Games]
+    title: SNES
+    unique_name: snes
+    version_name: 16bit
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: bettafish, description: null}
+  - {action: SUBMITTED, author: bettafish, description: null}
+  - {action: APPROVED_ORG, author: bettafish, description: null}
+  - {action: APPROVED, author: bettafish, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Minitrue
+    banner_icon: {filename: N64_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Entertainment]
+    contacts: []
+    description: "The Nintendo 64 (Japanese: \u30CB\u30F3\u30C6\u30F3\u30C9\u30A6\
+      64 Hepburn: Nintend\u014D Rokuj\u016Byon), stylized as the NINTENDO64 and abbreviated\
+      \ to N64, is Nintendo's third home video game console for the international\
+      \ market. Named for its 64-bit central processing unit, it was released in June\
+      \ 1996 in Japan, September 1996 in North America, March 1997 in Europe and Australia,\
+      \ September 1997 in France and December 1997 in Brazil. It was the last major\
+      \ home console to use the cartridge as its primary storage format until Nintendo's\
+      \ seventh console, the Nintendo Switch, released in 2017.[6] While the Nintendo\
+      \ 64 was succeeded by Nintendo's MiniDVD-based GameCube in September 2001, the\
+      \ consoles remained available until the system was retired in late 2003."
+    description_short: The Nintendo 64, stylized as the NINTENDO64 and abbreviated
+      to N64.
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: N64_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: N64_large_icon.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Nintendo_64
+    listing_type: Desktop App
+    owners: [bettafish]
+    requirements: A TV
+    screenshots:
+    - description: null
+      large_image: {filename: N64_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: N64_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: N64_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    tags: [Video games]
+    title: N64
+    unique_name: n64
+    version_name: 64bit
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: bettafish, description: null}
+  - {action: SUBMITTED, author: bettafish, description: null}
+  - {action: APPROVED_ORG, author: bettafish, description: null}
+  - {action: APPROVED, author: bettafish, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Miniplen
+    banner_icon: {filename: VirtualBoy_banner_icon.png, security_marking: UNCLASSIFIED}
+    categories: [Entertainment]
+    contacts: []
+    description: The Virtual Boy[a] is a 32-bit table-top video game console developed
+      and manufactured by Nintendo. Released in 1995, it was marketed as the first
+      console capable of displaying stereoscopic 3D graphics. The player uses the
+      console in a manner similar to a head-mounted display, placing their head against
+      the eyepiece to see a red monochrome display. The games use a parallax effect
+      to create the illusion of depth. Sales failed to meet targets, and by early
+      1996, Nintendo ceased distribution and game development, only ever releasing
+      22 games for the system.
+    description_short: The Virtual Boy[a] is a 32-bit table-top video game console
+      developed and manufactured by Nintendo.
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: false
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: VirtualBoy_large_banner_icon.png, security_marking: UNCLASSIFIED}
+    large_icon: {filename: VirtualBoy_large_icon.png, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Virtual_Boy
+    listing_type: Desktop App
+    owners: [bettafish]
+    requirements: Pain meds for headaches and poor posture.  Ability to see red and
+      black.
+    screenshots:
+    - description: null
+      large_image: {filename: VirtualBoy_0_large_screenshot.png, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: VirtualBoy_0_small_screenshot.png, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: VirtualBoy_small_icon.png, security_marking: UNCLASSIFIED}
+    tags: [video games]
+    title: Virtual Boy
+    unique_name: virtual_boy
+    version_name: 32bit
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: bettafish, description: null}
+  - {action: SUBMITTED, author: bettafish, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Minitrue
+    banner_icon: {filename: Wii_banner_icon.png, security_marking: UNCLASSIFIED}
+    categories: [Entertainment, Health and Fitness]
+    contacts: []
+    description: "The Wii (/\u02C8wi\u02D0/ WEE) is a home video game console released\
+      \ by Nintendo on November 19, 2006. As a seventh-generation console, the Wii\
+      \ competed with Microsoft's Xbox 360 and Sony's PlayStation 3. Nintendo states\
+      \ that its console targets a broader demographic than that of the two others.[21]\
+      \ As of the first quarter of 2012, the Wii leads its generation over PlayStation\
+      \ 3 and Xbox 360 in worldwide sales,[22] with more than 101 million units sold;\
+      \ in December 2009, the console broke the sales record for a single month in\
+      \ the United States."
+    description_short: "The Wii (/\u02C8wi\u02D0/ WEE) is a home video game console\
+      \ released by Nintendo on November 19, 2006."
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Wii_large_banner_icon.png, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Wii_large_icon.png, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Wii
+    listing_type: Desktop App
+    owners: [bettafish]
+    requirements: A TV
+    screenshots:
+    - description: null
+      large_image: {filename: Wii_0_large_screenshot.png, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Wii_0_small_screenshot.png, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Wii_small_icon.png, security_marking: UNCLASSIFIED}
+    tags: [video games]
+    title: Wii
+    unique_name: wii
+    version_name: '249.99'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: bettafish, description: null}
+  - {action: SUBMITTED, author: bettafish, description: null}
+  - {action: APPROVED_ORG, author: bettafish, description: null}
+  - {action: APPROVED, author: bettafish, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Miniplen
+    banner_icon: {filename: WiiU_banner_icon.png, security_marking: UNCLASSIFIED}
+    categories: [Entertainment]
+    contacts: []
+    description: "The Wii U (/\u02CCwi\u02D0 \u02C8ju\u02D0/ WEE YOO) is a home video\
+      \ game console developed by Nintendo, and the successor to the Wii.[6] The console\
+      \ was released in November 2012[7][8] and was the first eighth-generation video\
+      \ game console,[9][10] as it competes with Sony's PlayStation 4 and Microsoft's\
+      \ Xbox One.\n\nThe Wii U is the first Nintendo console to support HD graphics.\
+      \ The system's primary controller is the Wii U GamePad, which features an embedded\
+      \ touchscreen, and combines directional buttons, analog sticks, and action buttons.\
+      \ The screen can be used either as a supplement to the main display (either\
+      \ providing an alternate, asymmetric gameplay experience, or a means of local\
+      \ multiplayer without resorting to a split screen), or in supported games, to\
+      \ play the game directly on the GamePad independently of the television. The\
+      \ Wii U is backward compatible with all Wii software and accessories \u2013\
+      \ games can support any combination of the GamePad, Wii Remote, Nunchuk, Balance\
+      \ Board, or Nintendo's more traditionally designed Classic Controller or Wii\
+      \ U Pro Controller for input. Online functionality centers around the Nintendo\
+      \ Network platform and Miiverse, an integrated social networking service which\
+      \ allows users to share content in game-specific communities."
+    description_short: The Wii U is the first Nintendo console to support HD graphics.
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: false
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: WiiU_large_banner_icon.png, security_marking: UNCLASSIFIED}
+    large_icon: {filename: WiiU_large_icon.png, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Wii_U
+    listing_type: Desktop App
+    owners: [bettafish]
+    requirements: A TV, or not.
+    screenshots:
+    - description: null
+      large_image: {filename: WiiU_0_large_screenshot.png, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: WiiU_0_small_screenshot.png, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED//FOR OFFICIAL USE ONLY
+    small_icon: {filename: WiiU_small_icon.png, security_marking: UNCLASSIFIED}
+    tags: [video Games]
+    title: Wii U
+    unique_name: wii_u
+    version_name: U
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: bettafish, description: null}
+  - {action: SUBMITTED, author: bettafish, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Miniplen
+    banner_icon: {filename: Mario_banner_icon.png, security_marking: UNCLASSIFIED}
+    categories: [Entertainment]
+    contacts: []
+    description: "Mario (Japanese: \u30DE\u30EA\u30AA Hepburn: Mario, [ma.\u027E\u02B2\
+      i.o]) (English: /\u02C8m\u0251\u02D0rio\u028A/; Italian: [\u02C8ma\u02D0rjo])\
+      \ is a fictional character in the Mario video game franchise, owned by Nintendo\
+      \ and created by Japanese video game designer Shigeru Miyamoto. Serving as the\
+      \ company's mascot and the eponymous protagonist of the series, Mario has appeared\
+      \ in over 200 video games since his creation. Depicted as a short, pudgy, Italian\
+      \ plumber who resides in the Mushroom Kingdom, his adventures generally center\
+      \ upon rescuing Princess Peach from the Koopa villain Bowser. His younger brother\
+      \ and sidekick is Luigi."
+    description_short: Mario is a fictional character in the Mario video game franchise.
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Mario_large_banner_icon.gif, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Mario_large_icon.png, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Mario
+    listing_type: Widget
+    owners: [bettafish]
+    requirements: Mushrooms
+    screenshots:
+    - description: null
+      large_image: {filename: Mario_0_large_screenshot.png, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Mario_0_small_screenshot.png, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Mario_small_icon.png, security_marking: UNCLASSIFIED}
+    tags: [character]
+    title: Mario
+    unique_name: mario
+    version_name: '1'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: bettafish, description: null}
+  - {action: SUBMITTED, author: bettafish, description: null}
+  - {action: APPROVED_ORG, author: bettafish, description: null}
+  - {action: APPROVED, author: bettafish, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Minipax
+    banner_icon: {filename: Luigi_banner_icon.png, security_marking: UNCLASSIFIED}
+    categories: [Entertainment]
+    contacts: []
+    description: "Luigi (Japanese: \u30EB\u30A4\u30FC\u30B8 Hepburn: Ru\u012Bji, [\u027E\
+      \u026F.i\u02D0.d\u0291i\u0325]) (English: /lu\u02C8i\u02D0d\u0292i/; Italian:\
+      \ [lu\u02C8i\u02D0d\u0292i]) is a fictional character featured in video games\
+      \ and related media released by Nintendo. Created by prominent game designer\
+      \ Shigeru Miyamoto, Luigi is portrayed as the slightly younger but taller fraternal\
+      \ twin brother of Nintendo's mascot Mario, and appears in many games throughout\
+      \ the Mario franchise, often as a sidekick to his brother."
+    description_short: Luigi is a fictional character featured in video games and
+      related media released by Nintendo.
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Luigi_large_banner_icon.png, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Luigi_large_icon.png, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Luigi
+    listing_type: Code Library
+    owners: [bettafish]
+    requirements: None
+    screenshots:
+    - description: null
+      large_image: {filename: Luigi_0_large_screenshot.png, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Luigi_0_small_screenshot.png, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Luigi_small_icon.png, security_marking: UNCLASSIFIED}
+    tags: [character]
+    title: Luigi
+    unique_name: luigi
+    version_name: '1'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: bettafish, description: null}
+  - {action: SUBMITTED, author: bettafish, description: null}
+  - {action: APPROVED_ORG, author: bettafish, description: null}
+  - {action: APPROVED, author: bettafish, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Miniplen
+    banner_icon: {filename: PrincessPeach_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Education]
+    contacts: [bowsers@castle.com]
+    description: "Princess Peach (Japanese: \u30D4\u30FC\u30C1\u59EB Hepburn: P\u012B\
+      chi-hime, [pi\u02D0.t\u0255i\u0325 \xE7i\u0325.me]) is a character in Nintendo's\
+      \ Mario franchise. Originally created by Shigeru Miyamoto, Peach is the princess\
+      \ of the fictional Mushroom Kingdom, which is constantly under attack by Bowser.\
+      \ She often plays the damsel in distress role within the series and is the lead\
+      \ female. She is often portrayed as Mario's love interest and has appeared in\
+      \ Super Princess Peach, where she is the main playable character."
+    description_short: Princess Peach is a character in Nintendo's Mario franchise.
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: PrincessPeach_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: PrincessPeach_large_icon.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Princess_Peach
+    listing_type: Web Services
+    owners: [bettafish]
+    requirements: None
+    screenshots:
+    - description: null
+      large_image: {filename: PrincessPeach_0_large_screenshot.png, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: PrincessPeach_0_small_screenshot.png, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: PrincessPeach_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    tags: [character]
+    title: Princess Peach
+    unique_name: princess_peach
+    version_name: '1'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: bettafish, description: null}
+  - {action: SUBMITTED, author: bettafish, description: null}
+  - {action: APPROVED_ORG, author: bettafish, description: null}
+  - {action: APPROVED, author: bettafish, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Minitrue
+    banner_icon: {filename: Bowser_banner_icon.png, security_marking: UNCLASSIFIED}
+    categories: [Tools]
+    contacts: [bowsers@castle.com]
+    description: "Bowser (\u30AF\u30C3\u30D1 Kuppa, \"Koopa\")[1] or King Koopa is\
+      \ a fictional character and the main antagonist of Nintendo's Mario franchise.\
+      \ In Japan, the character bears the title of Daima\u014D (\u5927\u9B54\u738B\
+      \ Great Demon King, lit.).[2] In the United States, the character was first\
+      \ referred to as \"Bowser, King of the Koopa\" and \"The sorcerer king\" in\
+      \ the instruction manual.[3] Bowser is the leader and likely the most powerful\
+      \ of the turtle-like Koopa race, and has been the archenemy of Mario ever since\
+      \ his first appearance, in the game Super Mario Bros."
+    description_short: Bowser or King Koopa is a fictional character and the main
+      antagonist of Nintendo's Mario franchise.
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Bowser_large_banner_icon.png, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Bowser_large_icon.png, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Bowser_%28character%29
+    listing_type: Widget
+    owners: [bettafish]
+    requirements: Fireballs
+    screenshots:
+    - description: null
+      large_image: {filename: Bowser_0_large_screenshot.png, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Bowser_0_small_screenshot.png, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Bowser_small_icon.png, security_marking: UNCLASSIFIED}
+    tags: [character]
+    title: Bowser
+    unique_name: bowser
+    version_name: '1'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: bettafish, description: null}
+  - {action: SUBMITTED, author: bettafish, description: null}
+  - {action: APPROVED_ORG, author: bettafish, description: null}
+  - {action: APPROVED, author: bettafish, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Miniplen
+    banner_icon: {filename: Polynesiannavigation_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Business, Health and Fitness, News]
+    contacts: []
+    description: 'From Wikipedia, the free encyclopedia
+
+
+      Traditional Polynesian navigation was used for thousands of years to make long
+      voyages across thousands of miles of the open Pacific Ocean. Navigators travelled
+      to small inhabited islands using wayfinding techniques and knowledge passed
+      by oral tradition from master to apprentice, often in the form of song. Generally
+      each island maintained a guild of navigators who had very high status; in times
+      of famine or difficulty they could trade for aid or evacuate people to neighboring
+      islands. As of 2014, these traditional navigation methods are still taught in
+      the Polynesian outlier of Taumako Island in the Solomons.
+
+
+      Polynesian navigation used some navigational instruments, which predate and
+      are distinct from the machined metal tools used by European navigators (such
+      as the sextant, first produced 1730, sea astrolabe, ~late 15th century, and
+      marine chronometer, invented 1761). However, they also relied heavily on close
+      observation of sea sign and a large body of knowledge from oral tradition.[1]
+
+
+      Both wayfinding techniques and outrigger canoe construction methods have been
+      kept as guild secrets, but in the modern revival of these skills, they are being
+      recorded and published.'
+    description_short: used for thousands of years to make long voyages
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Polynesiannavigation_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Polynesiannavigation_large_icon.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Polynesian_navigation
+    listing_type: Desktop App
+    owners: [rutherford]
+    requirements: None
+    screenshots:
+    - description: null
+      large_image: {filename: Polynesiannavigation_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Polynesiannavigation_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Polynesiannavigation_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    tags: [maps, navigation]
+    title: Polynesian navigation
+    unique_name: polynesian_navigation
+    version_name: '1.0'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: rutherford, description: null}
+  - {action: SUBMITTED, author: rutherford, description: null}
+  - {action: APPROVED_ORG, author: bigbrother, description: null}
+  - {action: SUBMITTED, author: rutherford, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Miniplen
+    banner_icon: {filename: AlinganoMaisu_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Education, Media and Video, Tools]
+    contacts: []
+    description: "From Wikipedia, the free encyclopedia\nAlingano Maisu, also known\
+      \ simply as Maisu /\u02C8ma\u026A\u0283u\u02D0/, is a double-hulled voyaging\
+      \ canoe built in Kawaihae, Hawaii by members of Na Kalai Wa\u02BBa Moku o Hawai\u02BB\
+      i and \u02BBOhana Wa'a members from throughout the Pacific and abroad as a gift\
+      \ and tribute to Satawalese navigator Mau Piailug, who navigated the voyaging\
+      \ canoe H\u014Dk\u016Ble\u02BBa on her maiden voyage to Tahiti in 1976 and has\
+      \ since trained numerous native Hawaiians in the ancient art of wayfinding.\
+      \ The word maisu in the name of the canoe comes from the Satawalese word for\
+      \ breadfruit. In particular, the word refers to breadfruit that has been knocked\
+      \ down by storm winds and is therefore available for anyone to take. The name\
+      \ is said to symbolize the knowledge of navigation that is made freely available.[1]\n\
+      \nThe concept for Alingano Maisu came about in 2001 when two Hawaiian voyaging\
+      \ groups, the Polynesian Voyaging Society and Na Kalai Wa\u02BBa Moku o Hawai\u02BB\
+      i, met with Piailug. The two hulls of the 56-foot (17 m) vessel were fabricated\
+      \ by the Friends of H\u014Dk\u016Ble\u02BBa and Hawai\u02BBiloa on O\u02BBahu\
+      \ and shipped to the Island of Hawai\u02BBi where Na Kalai Wa\u02BBa completed\
+      \ construction of the canoe. The Polynesian Voyaging Society provided much of\
+      \ the funding for the voyaging aspect of the project as well as an escort boat\
+      \ to help sail the canoe to Satawal.[2]\n\nThe canoe is home-ported on the island\
+      \ of Yap under the command of Piailug's son, Sesario Sewralur.[3]"
+    description_short: Alingano Maisu, also known simply as Maisu, is a double-hulled
+      voyaging canoe built in Hawaii
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: AlinganoMaisu_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: AlinganoMaisu_large_icon.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Alingano_Maisu
+    listing_type: Web Services
+    owners: [rutherford]
+    requirements: None
+    screenshots:
+    - description: null
+      large_image: {filename: AlinganoMaisu_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: AlinganoMaisu_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: AlinganoMaisu_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    tags: [maps, navigation, history]
+    title: Alingano Maisu
+    unique_name: alingano_maisu
+    version_name: '1.0'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: rutherford, description: null}
+  - {action: SUBMITTED, author: rutherford, description: null}
+  - {action: APPROVED_ORG, author: bigbrother, description: null}
+  - {action: APPROVED, author: bigbrother, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Miniplen
+    banner_icon: {filename: KartaGPS_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Communication, Productivity]
+    contacts: []
+    description: 'Karta GPS is a mobile application developed by Karta Software Technologies
+      Lda a daughter company of NDrive for the Android and iOS operating systems.
+      It is distributed for free and pairs open-source map data from OpenStreetMap
+      alongside curated content from Yelp and Foursquare.[1]
+
+
+      The application does not require connection to Internet data (e.g. 3G, 4G, WiFi,
+      etc.) and uses a GPS satellite connection to determine its location. Routes
+      are calculated and plotted based on real-time traffic information provided by
+      Inrix.[1]'
+    description_short: Karta GPS is a mobile app developed by Karta Software Technologies
+      Lda a daughter company of NDrive
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: KartaGPS_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: KartaGPS_large_icon.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Karta_GPS
+    listing_type: Code Library
+    owners: [rutherford]
+    requirements: None
+    screenshots:
+    - description: null
+      large_image: {filename: KartaGPS_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: KartaGPS_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: KartaGPS_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    tags: [maps, navigation, tool]
+    title: Karta GPS
+    unique_name: karta_gps
+    version_name: '1.0'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: rutherford, description: null}
+  - {action: SUBMITTED, author: rutherford, description: null}
+  - {action: APPROVED_ORG, author: bigbrother, description: null}
+  - {action: APPROVED, author: bigbrother, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Miniplen
+    banner_icon: {filename: RutebokforNorge_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Communication, Music and Audio, Productivity]
+    contacts: []
+    description: "From Wikipedia, the free encyclopedia\nRutebok for Norge is an overview\
+      \ of the entire Norwegian public transport network containing timetables, prices,\
+      \ maps and other essential information. It also contains a list of Norwegian\
+      \ accommodation.\n\nRutebok for Norge was first published in 1869 under the\
+      \ name \"Norges Kommunikasjoner\" or \"Reiseblad\". It got its current name\
+      \ in 1918 when it was merged with the state railways equivalent. The Rutebok\
+      \ was issued weekly 1880\u20131932, later every 14 days. It has been published\
+      \ since 1991 by Norsk Reiseinformasjon AS with 4 issues per year. Since 1994\
+      \ an electronic version is also published, in the form of a CD-ROM containing\
+      \ the same information as the paper version; since 2003 it has also been available\
+      \ online at http://www.rutebok.no."
+    description_short: Rutebok for Norge is an overview of the entire Norwegian public
+      transport network
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: RutebokforNorge_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: RutebokforNorge_large_icon.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Rutebok_for_Norge
+    listing_type: Web Application
+    owners: [rutherford]
+    requirements: None
+    screenshots:
+    - description: null
+      large_image: {filename: RutebokforNorge_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: RutebokforNorge_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: RutebokforNorge_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    tags: [maps, navigation, software]
+    title: Rutebok for Norge
+    unique_name: rutebok_for_norge
+    version_name: '1.0'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: rutherford, description: null}
+  - {action: SUBMITTED, author: rutherford, description: null}
+  - {action: APPROVED_ORG, author: bigbrother, description: null}
+  - {action: APPROVED, author: bigbrother, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Miniplen
+    banner_icon: {filename: TransportDirectPortal_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Communication, Media and Video, Tools]
+    contacts: []
+    description: 'From Wikipedia, the free encyclopedia
+
+
+      The Transport Direct Portal was a distributed Internet-based multi-modal journey
+      planner providing information for travel in England, Wales and Scotland. It
+      was managed by Transport Direct, a division of the Department for Transport.
+      It was launched in 2004 and was operated by a consortium led by Atos and later
+      enhanced to include a cycle journey planning function. The closure of the portal
+      was announced in September 2014 "Closure of the Transport Direct website" (PDF).
+      and the portal closed on 30 September 2014.[1]'
+    description_short: Transport Direct Portal was a distributed Internet-based multi-modal
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: TransportDirectPortal_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: TransportDirectPortal_large_icon.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Transport_Direct_Portal
+    listing_type: Web Services
+    owners: [rutherford]
+    requirements: None
+    screenshots:
+    - description: null
+      large_image: {filename: TransportDirectPortal_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: TransportDirectPortal_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: TransportDirectPortal_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    tags: [maps, navigation, software]
+    title: Transport Direct Portal
+    unique_name: transport_direct_portal
+    version_name: '1.0'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: rutherford, description: null}
+  - {action: SUBMITTED, author: rutherford, description: null}
+  - {action: APPROVED_ORG, author: bigbrother, description: null}
+  - {action: APPROVED, author: bigbrother, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Miniplen
+    banner_icon: {filename: Chainboatnavigation_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Communication, Productivity]
+    contacts: []
+    description: "Chain-boat navigation[1] or chain-ship navigation[2] is a little-known\
+      \ chapter in the history of shipping on European rivers. From around the middle\
+      \ of the 19th century, vessels called chain boats were used to haul strings\
+      \ of barges upstream by using a fixed chain lying on the bed of a river. The\
+      \ chain was raised from the riverbed to pass over the deck of the steamer, being\
+      \ hauled by a heavy winch powered by a steam engine. A variety of companies\
+      \ operated chain boat services on rivers such as the Elbe, Rhine, Neckar, Main,\
+      \ Saale, Havel, Spree and Sa\xF4ne as well as other rivers in Belgium and the\
+      \ Netherlands. Chain boats were also used in the United States.\n\nThe practice\
+      \ fell out of favour in the early 20th century when steamships with powerful\
+      \ engines and high boiler pressures \u2013 able to overcome the force of the\
+      \ river current \u2013 became commonplace"
+    description_short: Chain-boat navigation or chain-ship navigation is a little-known
+      chapter in the history
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Chainboatnavigation_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Chainboatnavigation_large_icon.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Chain_boat_navigation
+    listing_type: Widget
+    owners: [rutherford]
+    requirements: None
+    screenshots:
+    - description: null
+      large_image: {filename: Chainboatnavigation_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Chainboatnavigation_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Chainboatnavigation_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    tags: [navigation]
+    title: Chain boat navigation
+    unique_name: chain_boat_navigation
+    version_name: '1.0'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: rutherford, description: null}
+  - {action: SUBMITTED, author: rutherford, description: null}
+  - {action: APPROVED_ORG, author: bigbrother, description: null}
+  - {action: APPROVED, author: bigbrother, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Miniplen
+    banner_icon: {filename: Cableferry_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Communication, News, Tools]
+    contacts: []
+    description: 'From Wikipedia, the free encyclopedia
+
+      This article is about boats using a cable or chain to cross rivers. For boats
+      using a chain to travel along a river, see Chain boat.
+
+      A cable ferry (including the terms chain ferry, swing ferry, floating bridge,
+      or punt) is a ferry that is guided (and in many cases propelled) across a river
+      or large body of water by cables connected to both shores. Early cable ferries
+      often used either rope or steel chains, with the latter resulting in the alternate
+      name of chain ferry. Both of these were largely replaced by wire cable by the
+      late 19th century.'
+    description_short: A cable ferry is a ferry that is guided
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Cableferry_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Cableferry_large_icon.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Cable_ferry
+    listing_type: Desktop App
+    owners: [rutherford]
+    requirements: None
+    screenshots:
+    - description: null
+      large_image: {filename: Cableferry_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Cableferry_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Cableferry_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    tags: [transport]
+    title: Cable ferry
+    unique_name: cable_ferry
+    version_name: '1.1'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: rutherford, description: null}
+  - {action: SUBMITTED, author: rutherford, description: null}
+  - {action: APPROVED_ORG, author: bigbrother, description: null}
+  - {action: APPROVED, author: bigbrother, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Miniplen
+    banner_icon: {filename: Intelligenttransportationsystem_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Communication, Productivity]
+    contacts: []
+    description: 'From Wikipedia, the free encyclopedia
+
+      An intelligent transportation system (ITS) is an advanced application which,
+      without embodying intelligence as such, aims to provide innovative services
+      relating to different modes of transport and traffic management and enable various
+      users to be better informed and make safer, more coordinated, and ''smarter''
+      use of transport networks.
+
+
+      Although ITS may refer to all modes of transport, the directive of the European
+      Union 2010/40/EU, made on the 7 July, 2010, defined ITS as systems in which
+      information and communication technologies are applied in the field of road
+      transport, including infrastructure, vehicles and users, and in traffic management
+      and mobility management, as well as for interfaces with other modes of transport.[1]'
+    description_short: An intelligent transportation system (ITS) is an advanced application
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Intelligenttransportationsystem_large_banner_icon.jpeg,
+      security_marking: UNCLASSIFIED}
+    large_icon: {filename: Intelligenttransportationsystem_large_icon.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Intelligent_transportation_system
+    listing_type: Web Application
+    owners: [rutherford]
+    requirements: None
+    screenshots:
+    - description: null
+      large_image: {filename: Intelligenttransportationsystem_0_large_screenshot.jpeg,
+        security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Intelligenttransportationsystem_0_small_screenshot.jpeg,
+        security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Intelligenttransportationsystem_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    tags: [transport, intelligent]
+    title: Intelligent transportation system
+    unique_name: intelligent_transportation_system
+    version_name: '1.5'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: rutherford, description: null}
+  - {action: SUBMITTED, author: rutherford, description: null}
+  - {action: APPROVED_ORG, author: bigbrother, description: null}
+  - {action: APPROVED, author: bigbrother, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Miniplen
+    banner_icon: {filename: BombardierTransportation_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Productivity, Tools]
+    contacts: []
+    description: 'From Wikipedia, the free encyclopedia
+
+      Bombardier Transportation is the rail equipment division of the Canadian firm
+      Bombardier Inc. Bombardier Transportation is one of the world''s largest companies
+      in the rail vehicle and equipment manufacturing and servicing industry. The
+      division is headquartered in Berlin, Germany, and has regional offices and major
+      development facilities in Canada (Montreal and Toronto) and the United States
+      (Plattsburgh, New York).[3] Bombardier Transportation has many minor production
+      and development facilities worldwide.
+
+
+      Bombardier Transportation produces a wide range of products including passenger
+      rail vehicles, locomotives, bogies, propulsion and controls.
+
+
+      Laurent Troger is the president and chief operating officer of Bombardier Transportation.[4]
+      In January 2011, the company had 34,900 employees, 25,400 of them in Europe,
+      and 60 manufacturing locations around the world.[5]'
+    description_short: Bombardier Transportation is the rail equipment division of
+      the Canadian firm Bombardier Inc.
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: BombardierTransportation_large_banner_icon.jpeg,
+      security_marking: UNCLASSIFIED}
+    large_icon: {filename: BombardierTransportation_large_icon.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Bombardier_Transportation
+    listing_type: Web Services
+    owners: [rutherford]
+    requirements: None
+    screenshots:
+    - description: null
+      large_image: {filename: BombardierTransportation_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: BombardierTransportation_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: BombardierTransportation_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    tags: [transport, rail]
+    title: Bombardier Transportation
+    unique_name: bombardier_transportation
+    version_name: '2.4'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: rutherford, description: null}
+  - {action: SUBMITTED, author: rutherford, description: null}
+  - {action: APPROVED_ORG, author: bigbrother, description: null}
+  - {action: APPROVED, author: bigbrother, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Miniplen
+    banner_icon: {filename: SiemensMobility_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Books and Reference, Communication, Tools]
+    contacts: []
+    description: 'From Wikipedia, the free encyclopedia
+
+      Not to be confused with Siemens Mobile.
+
+
+      Siemens Mobility is a division of the German conglomerate Siemens. Prior to
+      the corporate restructuring of Siemens AG (effective from 1 January 2008) Siemens
+      Transportation Systems was the operational division most closely related to
+      Siemens Mobility; products produced included automation and power systems, rolling
+      stock for mass-transit, railway signalling and control systems, and railway
+      electrification.
+
+
+      The group also incorporates the former railway rolling stock and locomotive
+      division Siemens Schienenfahrzeugtechnik (Siemens Railway Technology).'
+    description_short: Siemens Mobility is a division of the German conglomerate Siemens
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: SiemensMobility_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: SiemensMobility_large_icon.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Siemens_Mobility
+    listing_type: Web Services
+    owners: [rutherford]
+    requirements: None
+    screenshots:
+    - description: null
+      large_image: {filename: SiemensMobility_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: SiemensMobility_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: SiemensMobility_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    tags: [transport, rail, electric]
+    title: Siemens Mobility
+    unique_name: siemens_mobility
+    version_name: '1.9'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: rutherford, description: null}
+  - {action: SUBMITTED, author: rutherford, description: null}
+  - {action: APPROVED_ORG, author: bigbrother, description: null}
+  - {action: APPROVED, author: bigbrother, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Minipax
+    banner_icon: {filename: Sheetmusic_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Music and Audio]
+    contacts: []
+    description: "Sheet music is a handwritten or printed form of music notation that\
+      \ uses modern musical symbols to indicate the pitches (melodies), rhythms and/or\
+      \ chords of a song or instrumental musical piece. Like its analogs \u2013 printed\
+      \ books or pamphlets in English, Arabic or other languages \u2013 the medium\
+      \ of sheet music typically is paper (or, in earlier centuries, papyrus or parchment),\
+      \ although the access to musical notation since the 1980s has included the presentation\
+      \ of musical notation on computer screens and the development of scorewriter\
+      \ computer programs that can notate a song or piece electronically, and, in\
+      \ some cases, \"play back\" the notated music using a synthesizer or virtual\
+      \ instruments."
+    description_short: Sheet music is a handwritten or printed form of music notation
+      that uses modern musical symbols
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Sheetmusic_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Sheetmusic_large_icon.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Sheet_music
+    listing_type: Desktop App
+    owners: [bigbrother]
+    requirements: Knowledge to understand notes on music sheet
+    screenshots:
+    - description: Music Sheet
+      large_image: {filename: Sheetmusic_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Sheetmusic_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Sheetmusic_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    tags: [book, close-up, music, note, notes, paper]
+    title: Sheet music
+    unique_name: sheet_music
+    version_name: '1.09'
+    what_is_new: Use of the term "sheet" is intended to differentiate written or printed
+      forms of music from sound recordings
+  listing_activity:
+  - {action: CREATED, author: bigbrother, description: null}
+  - {action: SUBMITTED, author: bigbrother, description: null}
+  - {action: APPROVED_ORG, author: bigbrother, description: null}
+  - {action: APPROVED, author: bigbrother, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Minipax
+    banner_icon: {filename: AcousticGuitar_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Music and Audio]
+    contacts: []
+    description: A guitar that produces sound acoustically by transmitting the vibration
+      of the strings to the air as opposed to relying on electronic amplification.
+      The sound waves from the strings of an acoustic guitar resonate through the
+      guitar's body, creating sound.
+    description_short: A guitar that produces sound acoustically by transmitting the
+      vibration of the strings.
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: AcousticGuitar_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: AcousticGuitar_large_icon.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Acoustic_guitar
+    listing_type: Web Application
+    owners: [bigbrother]
+    requirements: Knowledge of acoustic properties of guitar
+    screenshots:
+    - description: Black and White picture of Two Guitars
+      large_image: {filename: AcousticGuitar_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: AcousticGuitar_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: AcousticGuitar_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    tags: [acoustic, classical, concert, guitar, instrument, spanish, string, strings,
+      wooded]
+    title: Acoustic Guitar
+    unique_name: acoustic_guitar
+    version_name: '10.0'
+    what_is_new: Introduction of Steel strings and increased the area of the guitar
+      top
+  listing_activity:
+  - {action: CREATED, author: bigbrother, description: null}
+  - {action: SUBMITTED, author: bigbrother, description: null}
+  - {action: APPROVED_ORG, author: bigbrother, description: null}
+  - {action: APPROVED, author: bigbrother, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Minipax
+    banner_icon: {filename: ElectricGuitar_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Music and Audio]
+    contacts: []
+    description: Is a fretted stringed instrument with a neck and body that uses a
+      pickup to convert the vibration of its strings into electrical signals. The
+      vibration occurs when a guitarist strums, plucks or fingerpicks the strings
+    description_short: Guitar that uses a pickup to convert the vibration of its strings
+      into electrical signals
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: ElectricGuitar_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: ElectricGuitar_large_icon.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Electric_guitar
+    listing_type: Web Application
+    owners: [bigbrother]
+    requirements: Magnetic pickup that uses the principle of direct electromagnetic
+      induction
+    screenshots:
+    - description: null
+      large_image: {filename: ElectricGuitar_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: ElectricGuitar_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: ElectricGuitar_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    tags: [music, guitar, instrument, strings, wood, wooden, sound]
+    title: Electric Guitar
+    unique_name: electric_guitar
+    version_name: '1.05'
+    what_is_new: Construction vary greatly in the shape of the body and the configuration
+      of the neck, bridge, and pickup
+  listing_activity:
+  - {action: CREATED, author: bigbrother, description: null}
+  - {action: SUBMITTED, author: bigbrother, description: null}
+  - {action: APPROVED_ORG, author: bigbrother, description: null}
+  - {action: APPROVED, author: bigbrother, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Minipax
+    banner_icon: {filename: SoundMixer_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Music and Audio]
+    contacts: []
+    description: is an electronic device for combining (also called "mixing"), routing,
+      and changing the volume level, timbre (tone color) and/or dynamics of many different
+      audio signals, such as microphones being used by singers, mics picking up acoustic
+      instruments such as drums or saxophones, signals from electric or electronic
+      instruments such as the electric bass or synthesizer, or recorded music playing
+      on a CD player. In the 2010s, a mixer is able to control analog or digital signals,
+      depending on the type of mixer
+    description_short: Electronic device for combining routing, and changing the volume
+      level, different audio signals
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: SoundMixer_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: SoundMixer_large_icon.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Mixing_console
+    listing_type: Web Application
+    owners: [bigbrother]
+    requirements: Mixing consoles are used in many applications
+    screenshots:
+    - description: null
+      large_image: {filename: SoundMixer_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: SoundMixer_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: SoundMixer_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    tags: [music, sound, audio, equalizer, fader, mixer, studio, mixing, panel]
+    title: Sound Mixer
+    unique_name: sound_mixer
+    version_name: 1.0.15
+    what_is_new: Input jacks, Microphone preamplifiers, equalization
+  listing_activity:
+  - {action: CREATED, author: bigbrother, description: null}
+  - {action: SUBMITTED, author: bigbrother, description: null}
+  - {action: APPROVED_ORG, author: bigbrother, description: null}
+  - {action: APPROVED, author: bigbrother, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Minipax
+    banner_icon: {filename: ElectricPiano_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Music and Audio]
+    contacts: []
+    description: Electric musical instrument which produces sounds when a performer
+      presses the keys of the piano-style musical keyboard. Pressing keys causes mechanical
+      hammers to strike metal strings, metal reeds or wire tines, leading to vibrations
+      which are converted into electrical signals by magnetic pickups, which are then
+      connected to an instrument amplifier and loudspeaker to make a sound loud enough
+      for the performer and audience to hear. Unlike a synthesizer, the electric piano
+      is not an electronic instrument
+    description_short: Electric musical instrument which produces sounds when a performer
+      presses the keys of the keyboard
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: ElectricPiano_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: ElectricPiano_large_icon.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Electric_piano
+    listing_type: Web Application
+    owners: [bigbrother]
+    requirements: Electricity and motivation to play piano
+    screenshots:
+    - description: Keyboard
+      large_image: {filename: ElectricPiano_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: ElectricPiano_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: ElectricPiano_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    tags: [music, instrument, keyboard, piano, recording, synthesizer]
+    title: Electric Piano
+    unique_name: electric_piano
+    version_name: 8.0.9
+    what_is_new: Digital electronic stage pianos that provide an emulated electric
+      piano sound
+  listing_activity:
+  - {action: CREATED, author: bigbrother, description: null}
+  - {action: SUBMITTED, author: bigbrother, description: null}
+  - {action: APPROVED_ORG, author: bigbrother, description: null}
+  - {action: APPROVED, author: bigbrother, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Miniluv
+    banner_icon: {filename: CheeseandCrackers_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Health and Fitness]
+    contacts: []
+    description: Cheese and crackers is a common dish consisting of crackers paired
+      with various or multiple cheeses. The dish was consumed by sailors before refrigeration
+      existed, has been described as one of the first fast foods in the United States,
+      and increased in popularity circa the 1850s in the U.S. It is prepared using
+      various types of cheeses, and is often paired with wine. Mass-produced cheese
+      and crackers brands include Handi-Snacks, Ritz, Jatz and Lunchables.
+    description_short: Cheese and crackers is a common dish consisting of crackers
+      paired with various or multiple cheeses.
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: CheeseandCrackers_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: CheeseandCrackers_large_icon.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Cheese_and_crackers
+    listing_type: Web Application
+    owners: [bettafish]
+    requirements: None
+    screenshots:
+    - description: null
+      large_image: {filename: CheeseandCrackers_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: CheeseandCrackers_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    - description: null
+      large_image: {filename: CheeseandCrackers_1_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 1
+      small_image: {filename: CheeseandCrackers_1_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: CheeseandCrackers_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    tags: [food]
+    title: Cheese and Crackers
+    unique_name: cheese_and_crackers
+    version_name: '1'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: bettafish, description: null}
+  - {action: SUBMITTED, author: bettafish, description: null}
+  - {action: APPROVED_ORG, author: bettafish, description: null}
+  - {action: APPROVED, author: bettafish, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Miniplen
+    banner_icon: {filename: Tennis_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Sports]
+    contacts: []
+    description: Tennis is a racket sport that can be played individually against
+      a single opponent (singles) or between two teams of two players each (doubles).
+      Each player uses a tennis racket that is strung with cord to strike a hollow
+      rubber ball covered with felt over or around a net and into the opponent's court.
+      The object of the game is to play the ball in such a way that the opponent is
+      not able to play a valid return. The player who is unable to return the ball
+      will not gain a point, while the opposite player will.
+    description_short: Tennis is a racket sport.
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Tennis_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Tennis_large_icon.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Tennis
+    listing_type: Widget
+    owners: [bettafish]
+    requirements: Rackets & Balls
+    screenshots:
+    - description: null
+      large_image: {filename: Tennis_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Tennis_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Tennis_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    tags: [sport]
+    title: Tennis
+    unique_name: tennis
+    version_name: 2-4
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: bettafish, description: null}
+  - {action: SUBMITTED, author: bettafish, description: null}
+  - {action: APPROVED_ORG, author: bettafish, description: null}
+  - {action: APPROVED, author: bettafish, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Test
+    banner_icon: {filename: SirBaboonMcGood_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Tools]
+    contacts: []
+    description: Sir Baboon McGoon was an American Boeing B-17 Flying Fortress, a
+      Douglas-Long Beach built B-17F-75-DL, ASN 42-3506, last assigned to the 324th
+      Bombardment Squadron, 91st Bomb Group, 8th Air Force, operating out of RAF Bassingbourn
+      (AAF Station 121), Cambridgeshire, England. Its nose art and name were based
+      on the male character Baboon McGoon from Al Capp's comic strip, Li'l Abner.
+    description_short: Sir Baboon McGoon was an American Boeing B-17 Flying Fortress.
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: SirBaboonMcGood_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: SirBaboonMcGood_large_icon.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Sir_Baboon_McGoon
+    listing_type: Desktop App
+    owners: [bettafish]
+    requirements: gas
+    screenshots:
+    - description: null
+      large_image: {filename: SirBaboonMcGood_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: SirBaboonMcGood_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: SirBaboonMcGood_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    tags: [plane]
+    title: Sir Baboon McGood
+    unique_name: sir_baboon_mcgood
+    version_name: B-17
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: bettafish, description: null}
+  - {action: SUBMITTED, author: bettafish, description: null}
+  - {action: APPROVED_ORG, author: bettafish, description: null}
+  - {action: APPROVED, author: bettafish, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Miniluv
+    banner_icon: {filename: White-tailedolallarat_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Communication]
+    contacts: []
+    description: The white-tailed olalla rat (Olallamys albicauda) is a species of
+      rodent in the family Echimyidae. It is endemic to Colombia. Its natural habitat
+      is subtropical or tropical moist lowland forests. It is threatened by habitat
+      loss.
+    description_short: The white-tailed olalla rat (Olallamys albicauda) is a species
+      of rodent in the family Echimyidae.
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: White-tailedolallarat_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: White-tailedolallarat_large_icon.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/White-tailed_olalla_rat
+    listing_type: Widget
+    owners: [bettafish]
+    requirements: None
+    screenshots:
+    - description: null
+      large_image: {filename: White-tailedolallarat_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: White-tailedolallarat_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED//FOR OFFICIAL USE ONLY
+    small_icon: {filename: White-tailedolallarat_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    tags: [animal]
+    title: White-tailed olalla rat
+    unique_name: white-tailed_olalla_rat
+    version_name: '1'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: bettafish, description: null}
+  - {action: SUBMITTED, author: bettafish, description: null}
+  - {action: APPROVED_ORG, author: bettafish, description: null}
+  - {action: APPROVED, author: bettafish, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Miniluv
+    banner_icon: {filename: Udeawashingtonalis_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Education]
+    contacts: []
+    description: 'Udea washingtonalis is a moth in the Crambidae family. It was described
+      by Grote in 1882.[1] It is found in North America, where it has been recorded
+      from Alaska, British Columbia, California, Montana and Washington.[2][3]
+
+
+      The wingspan is about 21 mm. The forewings are white with a dark brown band
+      from the middle of the costa half-way to the inner margin. The antemedial and
+      postmedial lines are broken and indistinct and there are black spots along the
+      outer margin and the distal half of the costa. There is also pale yellowish
+      shading in the median area. The hindwings are white with a diffuse yellowish
+      terminal band and black dots along the outer margin. Adults are on wing from
+      May to August.[4]'
+    description_short: Udea washingtonalis is a moth in the Crambidae family.
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: false
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Udeawashingtonalis_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Udeawashingtonalis_large_icon.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Udea_washingtonalis
+    listing_type: Widget
+    owners: [bettafish]
+    requirements: None
+    screenshots:
+    - description: null
+      large_image: {filename: Udeawashingtonalis_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Udeawashingtonalis_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Udeawashingtonalis_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    tags: [animal, bug]
+    title: Udea washingtonalis
+    unique_name: udea_washingtonalis
+    version_name: '1'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: bettafish, description: null}
+  - {action: SUBMITTED, author: bettafish, description: null}
+  - {action: APPROVED_ORG, author: bettafish, description: null}
+  - {action: APPROVED, author: bettafish, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Test 1
+    banner_icon: {filename: PostageStamp_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Education]
+    contacts: []
+    description: A postage stamp is a small piece of paper that is purchased and displayed
+      on an item of mail as evidence of payment of postage. Typically, stamps are
+      printed on special custom-made paper, show a national designation and a denomination
+      (value) on the front, and have an adhesive gum on the back or are self-adhesive.
+      Postage stamps are purchased from a postal administration (post office) or other
+      authorized vendor, and are used to pay for the costs involved in moving mail,
+      as well as other business necessities such as insurance and registration. They
+      are sometimes a source of net profit to the issuing agency, especially when
+      sold to collectors who will not actually use them for postage.
+    description_short: A postage stamp is a small piece of paper that is displayed
+      on an item of mail as payment of postage
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: PostageStamp_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: PostageStamp_large_icon.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Postage_stamp
+    listing_type: Code Library
+    owners: [bettafish]
+    requirements: Saliva
+    screenshots:
+    - description: null
+      large_image: {filename: PostageStamp_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: PostageStamp_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: PostageStamp_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    tags: [mail]
+    title: Postage Stamp
+    unique_name: postage_stamp
+    version_name: 1c
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: bettafish, description: null}
+  - {action: SUBMITTED, author: bettafish, description: null}
+  - {action: APPROVED_ORG, author: bettafish, description: null}
+  - {action: APPROVED, author: bettafish, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Miniluv
+    banner_icon: {filename: Gerris_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Communication, Productivity]
+    contacts: []
+    description: Gerris is computer software in the field of computational fluid dynamics
+      (CFD). Gerris was released as free and open-source software, subject to the
+      requirements of the GNU General Public License (GPL), version 2 or any later.
+    description_short: Gerris is computer software in the field of computational fluid
+      dynamics (CFD).
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Gerris_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Gerris_large_icon.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Gerris_%28software%29
+    listing_type: Code Library
+    owners: [bettafish]
+    requirements: None
+    screenshots:
+    - description: null
+      large_image: {filename: Gerris_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Gerris_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Gerris_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    tags: [software]
+    title: Gerris
+    unique_name: gerris
+    version_name: 3d
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: bettafish, description: null}
+  - {action: SUBMITTED, author: bettafish, description: null}
+  - {action: APPROVED_ORG, author: bettafish, description: null}
+  - {action: APPROVED, author: bettafish, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Miniluv
+    banner_icon: {filename: Internetmeme_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Entertainment]
+    contacts: []
+    description: "An Internet meme (/mi\u02D0m/ MEEM[1]) [2] is an activity, concept,\
+      \ catchphrase or piece of media which spreads, often as mimicry or for humorous\
+      \ purposes, from person to person via the Internet.[3] An Internet meme may\
+      \ also take the form of an image (typically an image macro), hyperlink, video,\
+      \ website, or hashtag. It may be just a word or phrase, sometimes including\
+      \ an intentional misspelling. These small movements tend to spread from person\
+      \ to person via social networks, blogs, direct email, or news sources. They\
+      \ may relate to various existing Internet cultures or subcultures, often created\
+      \ or spread on various websites, or by Usenet boards and other such early-internet\
+      \ communications facilities. Fads and sensations tend to grow rapidly on the\
+      \ Internet, because the instant communication facilitates word-of-mouth transmission.\
+      \ Some examples include posting a photo of people lying down in public places\
+      \ (called \"planking\") and uploading a short video of people dancing to the\
+      \ Harlem Shake.[4]"
+    description_short: An Internet meme is a piece of media which spreads, often as
+      mimicry or for humorous purposes
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Internetmeme_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Internetmeme_large_icon.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Internet_meme
+    listing_type: Web Application
+    owners: [bettafish]
+    requirements: A funny bone
+    screenshots:
+    - description: null
+      large_image: {filename: Internetmeme_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Internetmeme_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    - description: null
+      large_image: {filename: Internetmeme_1_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 1
+      small_image: {filename: Internetmeme_1_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    - description: null
+      large_image: {filename: Internetmeme_2_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 2
+      small_image: {filename: Internetmeme_2_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Internetmeme_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    tags: [funny, pictures, meme]
+    title: Internet meme
+    unique_name: internet_meme
+    version_name: '1'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: bettafish, description: null}
+  - {action: SUBMITTED, author: bettafish, description: null}
+  - {action: APPROVED_ORG, author: bettafish, description: null}
+  - {action: APPROVED, author: bettafish, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Miniluv
+    banner_icon: {filename: SImpleText_banner_icon.png, security_marking: UNCLASSIFIED}
+    categories: [Tools]
+    contacts: []
+    description: 'SimpleText is the native text editor for the Apple classic Mac OS.[1]
+      SimpleText allows editing including text formatting (underline, italic, bold,
+      etc.), fonts, and sizes. It was developed to integrate the features included
+      in the different versions of TeachText that were created by various software
+      development groups within Apple.[2]
+
+
+      It can be considered similar to Windows'' WordPad application. In later versions
+      it also gained additional read only display capabilities for PICT files, as
+      well as other Mac OS built-in formats like Quickdraw GX and QTIF, 3DMF and even
+      QuickTime movies.[2] SimpleText can even record short sound samples and, using
+      Apple''s PlainTalk speech system, read out text in English. Users who wanted
+      to add sounds longer than 24 seconds, however, needed to use a separate program
+      to create the sound and then paste the desired sound into the document using
+      ResEdit.[2]'
+    description_short: SimpleText is the native text editor for the Apple classic
+      Mac OS.
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: SImpleText_large_banner_icon.png, security_marking: UNCLASSIFIED}
+    large_icon: {filename: SImpleText_large_icon.png, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/SimpleText
+    listing_type: Desktop App
+    owners: [bettafish]
+    requirements: Mac OS
+    screenshots:
+    - description: null
+      large_image: {filename: SImpleText_0_large_screenshot.png, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: SImpleText_0_small_screenshot.png, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: SImpleText_small_icon.png, security_marking: UNCLASSIFIED}
+    tags: [text editor]
+    title: SImple Text
+    unique_name: simple_text
+    version_name: '1.4'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: bettafish, description: null}
+  - {action: SUBMITTED, author: bettafish, description: null}
+  - {action: APPROVED_ORG, author: bettafish, description: null}
+  - {action: APPROVED, author: bettafish, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Test 4
+    banner_icon: {filename: HuexotzincoCodex_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Education, Tools]
+    contacts: []
+    description: "The Huexotzinco Codex or Huejotzingo Codex is a colonial-era Nahua\
+      \ pictorial manuscript, collectively known as Aztec codices. The Huexotzinco\
+      \ Codex eight-sheet document[1] on amatl, a pre-European paper made in Mesoamerica.\
+      \ It is part of the testimony in a legal case against members of the First Audiencia\
+      \ (high court) in Mexico, particularly its president, Nu\xF1o de Guzm\xE1n,\
+      \ ten years after the Spanish conquest in 1521. Huexotzinco, (Way-hoat-ZINC-o)\
+      \ is a town southeast of Mexico City, in the state of Puebla. In 1521, the Nahua\
+      \ Indian people of the town were the allies of the Spanish conqueror Hern\xE1\
+      n Cort\xE9s, and together they confronted their enemies to overcome Moctezuma,\
+      \ leader of the Aztec Empire. Cort\xE9s's indigenous allies from Tlaxcala were\
+      \ more successful than those Huejotzinco in translating that alliance into privileges\
+      \ in the colonial era and the Huejotzincan's petitioned the crown for such privileges.\
+      \ A 1560 petition to the crown in Nahuatl outlines their participation.[2]"
+    description_short: The Huexotzinco Codex or Huejotzingo Codex is a colonial-era
+      Nahua pictorial manuscript.
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: HuexotzincoCodex_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: HuexotzincoCodex_large_icon.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Huexotzinco_Codex
+    listing_type: Code Library
+    owners: [bettafish]
+    requirements: None
+    screenshots:
+    - description: null
+      large_image: {filename: HuexotzincoCodex_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: HuexotzincoCodex_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED//FOR OFFICIAL USE ONLY
+    small_icon: {filename: HuexotzincoCodex_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    tags: [codex]
+    title: Huexotzinco Codex
+    unique_name: huexotzinco_codex
+    version_name: '1'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: bettafish, description: null}
+  - {action: SUBMITTED, author: bettafish, description: null}
+  - {action: APPROVED_ORG, author: bettafish, description: null}
+  - {action: APPROVED, author: bettafish, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Test 1
+    banner_icon: {filename: Fiat525_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Entertainment]
+    contacts: []
+    description: 'The Fiat 525 is a passenger car produced by Italian automobile manufacturer
+      Fiat between 1928 and 1931. The 525 was a larger successor to the Fiat 512.
+      The 525 was modified a year after it began production and renamed the 525N.
+      A sport variant, the 525SS, had a more powerful engine and a shorter chassis.
+
+
+      Fiat produced 4,400 525''s.'
+    description_short: The Fiat 525 is a passenger car produced by Italian automobile
+      manufacturer Fiat.
+    doc_urls:
+    - {name: Wiki, url: 'https://en.wikipedia.org/wiki/Fiat_525'}
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: true
+    large_banner_icon: {filename: Fiat525_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Fiat525_large_icon.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Fiat_525
+    listing_type: Desktop App
+    owners: [bettafish]
+    requirements: None
+    screenshots:
+    - description: null
+      large_image: {filename: Fiat525_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Fiat525_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Fiat525_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    tags: [car, auto, automobile]
+    title: Fiat 525
+    unique_name: fiat_525
+    version_name: '525'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: bettafish, description: null}
+  - {action: SUBMITTED, author: bettafish, description: null}
+  - {action: APPROVED_ORG, author: bettafish, description: null}
+  - {action: APPROVED, author: bettafish, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Miniluv
+    banner_icon: {filename: SudovianBook_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Books and Reference]
+    contacts: []
+    description: "The so-called Sudovian Book[nb 1] (German: Sudauer B\xFCchlein,\
+      \ Lithuanian: S\u016Bduvi\u0173 knygel\u0117) was an anonymous work about the\
+      \ customs, religion, and daily life of the Old Prussians from Sambia.[1] The\
+      \ manuscript was written in German in the 16th century. The original did not\
+      \ survive and the book is known from later copies, transcriptions and publications.\
+      \ Modern scholars disagree on the origin and value of the book. Despite doubts\
+      \ about its reliability, the book became popular and was frequently quoted in\
+      \ other history books. Much of the Prussian mythology is reconstructed based\
+      \ on this work or its derivatives.[1]"
+    description_short: The so-called Sudovian Bookwas an anonymous work about the
+      customs of the Old Prussians.
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: SudovianBook_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: SudovianBook_large_icon.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Sudovian_Book
+    listing_type: Web Application
+    owners: [bettafish]
+    requirements: None
+    screenshots:
+    - description: null
+      large_image: {filename: SudovianBook_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: SudovianBook_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: SudovianBook_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    tags: [book]
+    title: Sudovian Book
+    unique_name: sudovian_book
+    version_name: '1545'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: bettafish, description: null}
+  - {action: SUBMITTED, author: bettafish, description: null}
+  - {action: APPROVED_ORG, author: bettafish, description: null}
+  - {action: APPROVED, author: bettafish, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Test 1
+    banner_icon: {filename: Soterosanthus_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Weather]
+    contacts: []
+    description: Soterosanthus shepheardii is a species of orchid found in Ecuador
+      and Colombia,[1] and the only species of the monotypic genus Soterosanthus.
+      This species segregated from Sievekingia because of its upright inflorescence.
+      Flowers are somewhat similar to Sievekingia as is the plant stature, being on
+      the small side, around 6" tall. Plants are semi-deciduous and warmth tolerant.
+      Grow in small pots of medium grade bark mix under same conditions as for Gongora;
+      shaded light, even moisture, drier in winter. It is a rarely seen relative of
+      Stanhopea.[2][3][4]
+    description_short: Soterosanthus shepheardii is a species of orchid
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Soterosanthus_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Soterosanthus_large_icon.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Soterosanthus
+    listing_type: Desktop App
+    owners: [bettafish]
+    requirements: None
+    screenshots:
+    - description: null
+      large_image: {filename: Soterosanthus_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Soterosanthus_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Soterosanthus_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    tags: [flower]
+    title: Soterosanthus
+    unique_name: soterosanthus
+    version_name: '1'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: bettafish, description: null}
+  - {action: SUBMITTED, author: bettafish, description: null}
+  - {action: APPROVED_ORG, author: bettafish, description: null}
+  - {action: APPROVED, author: bettafish, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Miniluv
+    banner_icon: {filename: DoubleHeroides_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Books and Reference]
+    contacts: []
+    description: 'The Double Heroides are a set of six epistolary poems allegedly
+      composed by Ovid in Latin elegiac couplets, following the fifteen poems of his
+      Heroides, and numbered 16 to 21 in modern scholarly editions. These six poems
+      present three separate exchanges of paired epistles: one each from a heroic
+      lover from Greek or Roman mythology to his absent beloved, and one from the
+      heroine in return. Ovid''s authorship is uncertain.'
+    description_short: The Double Heroides are a set of six epistolary poems
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: DoubleHeroides_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: DoubleHeroides_large_icon.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Double_Heroides
+    listing_type: Web Application
+    owners: [bettafish]
+    requirements: None
+    screenshots:
+    - description: null
+      large_image: {filename: DoubleHeroides_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: DoubleHeroides_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: DoubleHeroides_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    tags: [book]
+    title: Double Heroides
+    unique_name: double_heroides
+    version_name: '6'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: bettafish, description: null}
+  - {action: SUBMITTED, author: bettafish, description: null}
+  - {action: APPROVED_ORG, author: bettafish, description: null}
+  - {action: APPROVED, author: bettafish, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Miniluv
+    banner_icon: {filename: SanBernardinoStrait_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    categories: [News]
+    contacts: []
+    description: 'The San Bernardino Strait (Filipino: Kipot ng San Bernardino) is
+      a strait in the Philippines, connecting the Samar Sea with the Philippine Sea.
+      It separates the Bicol Peninsula of Luzon island from the island of Samar in
+      the south.[1]'
+    description_short: 'The San Bernardino Strait (Filipino: Kipot ng San Bernardino)
+      is a strait in the Philippines'
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: SanBernardinoStrait_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: SanBernardinoStrait_large_icon.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/San_Bernardino_Strait
+    listing_type: Web Application
+    owners: [bettafish]
+    requirements: None
+    screenshots:
+    - description: null
+      large_image: {filename: SanBernardinoStrait_0_large_screenshot.png, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: SanBernardinoStrait_0_small_screenshot.png, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: SanBernardinoStrait_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    tags: [water]
+    title: San Bernardino Strait
+    unique_name: san_bernardino_strait
+    version_name: '1'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: bettafish, description: null}
+  - {action: SUBMITTED, author: bettafish, description: null}
+  - {action: APPROVED_ORG, author: bettafish, description: null}
+  - {action: SUBMITTED, author: bettafish, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Miniluv
+    banner_icon: {filename: AlbatronTechnology_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Communication]
+    contacts: []
+    description: Albatron Technology Co. Ltd. is a Taiwan-based company, whose current
+      CEO is Jack Ko. The company is primarily known for having been a major manufacture
+      of graphics cards and motherboards based on NVIDIA chipsets in the 2000s which
+      were marketed under the brand Albatron.[1]
+    description_short: Albatron Technology Co. Ltd. is a Taiwan-based company, whose
+      current CEO is Jack Ko.
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: AlbatronTechnology_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: AlbatronTechnology_large_icon.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Albatron_Technology
+    listing_type: Desktop App
+    owners: [bettafish]
+    requirements: None
+    screenshots:
+    - description: null
+      large_image: {filename: AlbatronTechnology_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: AlbatronTechnology_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: AlbatronTechnology_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    tags: [hardware]
+    title: Albatron Technology
+    unique_name: albatron_technology
+    version_name: '1'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: bettafish, description: null}
+  - {action: SUBMITTED, author: bettafish, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Miniluv
+    banner_icon: {filename: Minesweeper_banner_icon.png, security_marking: UNCLASSIFIED}
+    categories: [Entertainment]
+    contacts: []
+    description: Minesweeper is a single-player puzzle video game. The objective of
+      the game is to clear a rectangular board containing hidden "mines" or bombs
+      without detonating any of them, with help from clues about the number of neighboring
+      mines in each field. The game originates from the 1960s, and has been written
+      for many computing platforms in use today. It has many variations and offshoots.
+    description_short: Minesweeper is a single-player puzzle video game.
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Minesweeper_large_banner_icon.png, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Minesweeper_large_icon.png, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Minesweeper_%28video_game%29
+    listing_type: Desktop App
+    owners: [bettafish]
+    requirements: None
+    screenshots:
+    - description: null
+      large_image: {filename: Minesweeper_0_large_screenshot.png, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Minesweeper_0_small_screenshot.png, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Minesweeper_small_icon.png, security_marking: UNCLASSIFIED}
+    tags: [game]
+    title: Minesweeper
+    unique_name: minesweeper
+    version_name: '1'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: bettafish, description: null}
+  - {action: SUBMITTED, author: bettafish, description: null}
+  - {action: APPROVED_ORG, author: bettafish, description: null}
+  - {action: APPROVED, author: bettafish, description: null}
+  listing_review_batch:
+  - {author: bigbrother, rate: 5, text: A very very very very fun game}
+- library_entries: []
+  listing:
+    agency: Miniluv
+    banner_icon: {filename: Stopsign_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Tools]
+    contacts: []
+    description: A stop sign is a traffic sign to notify drivers that they must make
+      sure no cars are coming and stop before proceeding.
+    description_short: A stop sign is a traffic sign to notify drivers that they must
+      stop before proceeding.
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Stopsign_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Stopsign_large_icon.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Stop_sign
+    listing_type: Desktop App
+    owners: [bettafish]
+    requirements: Brake Pedal
+    screenshots:
+    - description: Stop
+      large_image: {filename: Stopsign_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Stopsign_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Stopsign_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    tags: [stop]
+    title: Stop sign
+    unique_name: stop_sign
+    version_name: '8'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: bettafish, description: null}
+  - {action: SUBMITTED, author: bettafish, description: null}
+  - {action: APPROVED_ORG, author: bettafish, description: null}
+  - {action: APPROVED, author: bettafish, description: null}
+  listing_review_batch:
+  - {author: bigbrother, rate: 5, text: 'This stop sign saved me from a accident!!! '}
+- library_entries: []
+  listing:
+    agency: Miniplen
+    banner_icon: {filename: Clippy_banner_icon.png, security_marking: UNCLASSIFIED}
+    categories: [Tools]
+    contacts: []
+    description: 'The Office Assistant was an intelligent user interface for Microsoft
+      Office that assisted users by way of an interactive animated character, which
+      interfaced with the Office help content. It was included in Microsoft Office
+      for Windows (versions 97 to 2003), in Microsoft Publisher (versions 98 to 2003),
+      and Microsoft Office for Mac (versions 98 to 2004).
+
+
+      The default assistant in the English Windows version was named Clippit (commonly
+      nicknamed Clippy), after a paperclip.[1][2] The character was designed by Kevan
+      J. Atteberry.[2] Clippit was the default and by far the most notable Assistant
+      (partly because in many cases the setup CD was required to install the other
+      assistants), which also led to it being called simply the Microsoft Paperclip.[3]
+      The original Clippit in Office 97 was given a new look in Office 2000.'
+    description_short: The Office Assistant was an intelligent user interface for
+      Microsoft Office
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Clippy_large_banner_icon.png, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Clippy_large_icon.png, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Office_Assistant
+    listing_type: Widget
+    owners: [bettafish]
+    requirements: Office
+    screenshots:
+    - description: null
+      large_image: {filename: Clippy_0_large_screenshot.png, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Clippy_0_small_screenshot.png, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Clippy_small_icon.png, security_marking: UNCLASSIFIED}
+    tags: [paperclip, m$, microsoft]
+    title: Clippy
+    unique_name: clippy
+    version_name: '1'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: bettafish, description: null}
+  - {action: SUBMITTED, author: bettafish, description: null}
+  - {action: APPROVED_ORG, author: bettafish, description: null}
+  - {action: APPROVED, author: bettafish, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Minipax
+    banner_icon: {filename: MisterMxyzptlk_banner_icon.png, security_marking: UNCLASSIFIED}
+    categories: [Productivity]
+    contacts: []
+    description: "Mister Mxyzptlk (/m\u026Aks\u02C8j\u025Bzp\u026Atl\u026Ak/ miks-YEZ-pit-lik,\
+      \ /\u02C8m\u026Aks\u026Alpl\u026Ak/ or /m\u026Aks\u02C8j\u025Bzp\u026At\u0259\
+      l\u026Ak/), sometimes called Mxy, is a fictional impish character who appears\
+      \ in DC Comics' Superman comic books, sometimes as a supervillain and other\
+      \ times as an antihero.\n\nMr. Mxyzptlk was created to appear in Superman #30\
+      \ (Sept. 1944), in the story \"The Mysterious Mr. Mxyzptlk\", by writer Jerry\
+      \ Siegel and artist Ira Yarborough. But due to publishing lag time, the character\
+      \ saw print first in the Superman daily comic strip by writer Whitney Ellsworth\
+      \ and artist Wayne Boring.[1]"
+    description_short: "Mister Mxyzptlk (/m\u026Aks\u02C8j\u025Bzp\u026Atl\u026Ak/\
+      \ miks-YEZ-pit-lik, /\u02C8m\u026Aks\u026Alpl\u026Ak/ or /m\u026Aks\u02C8j\u025B\
+      zp\u026At\u0259l\u026Ak/)"
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: MisterMxyzptlk_large_banner_icon.png, security_marking: UNCLASSIFIED}
+    large_icon: {filename: MisterMxyzptlk_large_icon.png, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Mister_Mxyzptlk
+    listing_type: Widget
+    owners: [bettafish]
+    requirements: None
+    screenshots:
+    - description: null
+      large_image: {filename: MisterMxyzptlk_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: MisterMxyzptlk_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    - description: null
+      large_image: {filename: MisterMxyzptlk_1_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 1
+      small_image: {filename: MisterMxyzptlk_1_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: MisterMxyzptlk_small_icon.png, security_marking: UNCLASSIFIED}
+    tags: [comics]
+    title: Mister Mxyzptlk
+    unique_name: mister_mxyzptlk
+    version_name: '1'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: bettafish, description: null}
+  - {action: SUBMITTED, author: bettafish, description: null}
+  - {action: APPROVED_ORG, author: bettafish, description: null}
+  - {action: APPROVED, author: bettafish, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Minipax
+    banner_icon: {filename: Piano_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Music and Audio]
+    contacts: []
+    description: piano is an acoustic, stringed musical instrument invented around
+      the year 1700 (the exact year is uncertain), in which the strings are struck
+      by hammers
+    description_short: Acoustic, Stringed Musical Instrument
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Piano_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Piano_large_icon.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Piano
+    listing_type: Web Application
+    owners: [bigbrother]
+    requirements: 52 white keys for the notes of the C major scale (C, D, E, F, G,
+      A and B) and 36 shorter black keys
+    screenshots:
+    - description: null
+      large_image: {filename: Piano_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Piano_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Piano_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    tags: [music, instrument, wood, wooden, piano, antique, grand, musical, black-and-white]
+    title: Piano
+    unique_name: piano
+    version_name: '10.8'
+    what_is_new: Most modern pianos have a row of 88 black and white keys
+  listing_activity:
+  - {action: CREATED, author: bigbrother, description: null}
+  - {action: SUBMITTED, author: bigbrother, description: null}
+  - {action: APPROVED_ORG, author: bigbrother, description: null}
+  - {action: APPROVED, author: bigbrother, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Minipax
+    banner_icon: {filename: Violin_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Music and Audio]
+    contacts: []
+    description: Violin is a wooden string instrument in the violin family. It is
+      the smallest and highest-pitched instrument in the family in regular use. Smaller
+      violin-type instruments are known, including the violino piccolo and the kit
+      violin, but these are virtually unused in the 2010s
+    description_short: Wooden string instrument in the violin family
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Violin_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Violin_large_icon.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Violin
+    listing_type: Web Application
+    owners: [bigbrother]
+    requirements: The body of violin and bow
+    screenshots:
+    - description: Modern Violin
+      large_image: {filename: Violin_0_large_screenshot.png, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Violin_0_small_screenshot.png, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Violin_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    tags: [music, classical, instrument, strings, wood, wooden, sound, classic, violin,
+      bow]
+    title: Violin
+    unique_name: violin
+    version_name: 0.5.1
+    what_is_new: earliest stringed instruments were mostly plucked
+  listing_activity:
+  - {action: CREATED, author: bigbrother, description: null}
+  - {action: SUBMITTED, author: bigbrother, description: null}
+  - {action: APPROVED_ORG, author: bigbrother, description: null}
+  - {action: APPROVED, author: bigbrother, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Minipax
+    banner_icon: {filename: Parrot_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Education]
+    contacts: []
+    description: Birds of the roughly 393 species in 92 genera that make up the order
+      Psittaciformes, found in most tropical and subtropical regions.  Characteristic
+      features of parrots include a strong, curved bill, an upright stance, strong
+      legs, and clawed zygodactyl feet
+    description_short: Birds of the roughly 393 species in 92 genera found in most
+      tropical and subtropical regions
+    doc_urls:
+    - {name: Wiki, url: 'https://en.wikipedia.org/wiki/Buff-faced_pygmy_parrot'}
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Parrot_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Parrot_large_icon.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Parrot
+    listing_type: Web Application
+    owners: [bigbrother]
+    requirements: Parrots are found on all tropical and subtropical continents and
+      regions including Australia and Oceania, South Asia, Southeast Asia, Central
+      America, South America, and Africa
+    screenshots:
+    - description: Green Parrot
+      large_image: {filename: Parrot_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Parrot_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    - description: Red Parrot
+      large_image: {filename: Parrot_1_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 1
+      small_image: {filename: Parrot_1_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Parrot_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    tags: [parrot, animal, bird, feathers, avian, zygodactyl]
+    title: Parrot
+    unique_name: parrot
+    version_name: 0.4.8
+    what_is_new: Psittaciform diversity in South America and Australasia suggests
+      that the order may have evolved in Gondwana
+  listing_activity:
+  - {action: CREATED, author: bigbrother, description: null}
+  - {action: SUBMITTED, author: bigbrother, description: null}
+  - {action: APPROVED_ORG, author: bigbrother, description: null}
+  - {action: APPROVED, author: bigbrother, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Test2
+    banner_icon: {filename: KSnapshot_banner_icon.png, security_marking: UNCLASSIFIED}
+    categories: [Entertainment, Tools]
+    contacts: []
+    description: 'KSnapshot is a screenshot application for the KDE desktop environment
+      developed by Richard J. Moore, Matthias Ettrich and Aaron J. Seigo.[1] The screenshots
+      taken by KSnapshot are also called snapshots, which explains its name. It is
+      written in Qt and C++. KSnapshot allows users to use hotkeys[2] to take a screenshot.
+
+
+      In December 2015, KSnapshot has been replaced by Spectacle.[3]'
+    description_short: KSnapshot is a screenshot application
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: KSnapshot_large_banner_icon.png, security_marking: UNCLASSIFIED}
+    large_icon: {filename: KSnapshot_large_icon.png, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/KSnapshot
+    listing_type: Desktop App
+    owners: [bettafish]
+    requirements: KDE
+    screenshots:
+    - description: null
+      large_image: {filename: KSnapshot_0_large_screenshot.png, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: KSnapshot_0_small_screenshot.png, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: KSnapshot_small_icon.png, security_marking: UNCLASSIFIED}
+    tags: [pictures, images]
+    title: KSnapshot
+    unique_name: ksnapshot
+    version_name: 0.8.1
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: bettafish, description: null}
+  - {action: SUBMITTED, author: bettafish, description: null}
+  - {action: APPROVED_ORG, author: bettafish, description: null}
+  - {action: APPROVED, author: bettafish, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Minipax
+    banner_icon: {filename: Tornado_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Weather]
+    contacts: []
+    description: Tornado is a rapidly rotating column of air that is in contact with
+      both the surface of the Earth and a cumulonimbus cloud or, in rare cases, the
+      base of a cumulus cloud. They are often referred to as twisters, whirlwinds
+      or cyclones,[1] although the word cyclone is used in meteorology to name a weather
+      system with a low-pressure area in the center around which winds blow counterclockwise
+      in the Northern Hemisphere and clockwise in the Southern
+    description_short: Rotating column of air that is in contact with both the surface
+      of the Earth and a cloud
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: true
+    is_private: false
+    large_banner_icon: {filename: Tornado_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Tornado_large_icon.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Tornado
+    listing_type: Web Application
+    owners: [bigbrother]
+    requirements: Weather system with a low-pressure area in the center around which
+      winds blow counterclockwise
+    screenshots:
+    - description: Tornado Destruction
+      large_image: {filename: Tornado_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Tornado_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Tornado_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    tags: [weather, tornado, force, disaster, nature, powerful, wind, natural]
+    title: Tornado
+    unique_name: tornado
+    version_name: '1.85'
+    what_is_new: Most tornadoes have wind speeds less than 110 miles per hour
+  listing_activity:
+  - {action: CREATED, author: bigbrother, description: null}
+  - {action: SUBMITTED, author: bigbrother, description: null}
+  - {action: APPROVED_ORG, author: bigbrother, description: null}
+  - {action: APPROVED, author: bigbrother, description: null}
+  listing_review_batch:
+  - {author: bigbrother, rate: 1, text: Tornado are too powerful}
+  - {author: bettafish, rate: 1, text: Not a fan.  Scary and destructive.}
+- library_entries: []
+  listing:
+    agency: Miniluv
+    banner_icon: {filename: Excitebike_banner_icon.png, security_marking: UNCLASSIFIED}
+    categories: [Sports]
+    contacts: []
+    description: "Excitebike (\u30A8\u30AD\u30B5\u30A4\u30C8\u30D0\u30A4\u30AF Ekisaitobaiku)\
+      \ is a motocross racing video game franchise made by Nintendo. It debuted as\
+      \ a game for the Famicom in Japan in 1984 and as a launch title for the NES\
+      \ in 1985. It is the first game of the Excite series, succeeded by its direct\
+      \ sequel Excitebike 64, its spiritual successors Excite Truck and Excitebots:\
+      \ Trick Racing, and the WiiWare title Excitebike: World Rally. 3D Classics:\
+      \ Excitebike, a 3D remake of the original game, was free for a limited time\
+      \ to promote the launch of the Nintendo eShop in June 2011."
+    description_short: "Excitebike (\u30A8\u30AD\u30B5\u30A4\u30C8\u30D0\u30A4\u30AF\
+      \ Ekisaitobaiku) is a motocross racing video game."
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Excitebike_large_banner_icon.png, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Excitebike_large_icon.png, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Excitebike
+    listing_type: Desktop App
+    owners: [bettafish]
+    requirements: NES
+    screenshots:
+    - description: null
+      large_image: {filename: Excitebike_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Excitebike_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Excitebike_small_icon.png, security_marking: UNCLASSIFIED}
+    tags: [bikes, games, nes]
+    title: Excitebike
+    unique_name: excitebike
+    version_name: '1'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: bettafish, description: null}
+  - {action: SUBMITTED, author: bettafish, description: null}
+  - {action: APPROVED_ORG, author: bettafish, description: null}
+  - {action: APPROVED, author: bettafish, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Test
+    banner_icon: {filename: Phentolamine_banner_icon.png, security_marking: UNCLASSIFIED}
+    categories: [Education]
+    contacts: []
+    description: "Phentolamine (Regitine) is a reversible[1] nonselective \u03B1-adrenergic\
+      \ antagonist"
+    description_short: "Phentolamine (Regitine) is a reversible[1] nonselective \u03B1\
+      -adrenergic antagonist"
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Phentolamine_large_banner_icon.png, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Phentolamine_large_icon.png, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Phentolamine
+    listing_type: Code Library
+    owners: [bettafish]
+    requirements: None
+    screenshots:
+    - description: null
+      large_image: {filename: Phentolamine_0_large_screenshot.png, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Phentolamine_0_small_screenshot.png, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Phentolamine_small_icon.png, security_marking: UNCLASSIFIED}
+    tags: [Phentolamine]
+    title: Phentolamine
+    unique_name: phentolamine
+    version_name: '1'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: bettafish, description: null}
+  - {action: SUBMITTED, author: bettafish, description: null}
+  - {action: APPROVED_ORG, author: bettafish, description: null}
+  - {action: APPROVED, author: bettafish, description: null}
+  listing_review_batch:
+  - {author: bigbrother, rate: 5, text: It prevented and controlled my high blood
+      pressure during surgery}
+- library_entries: []
+  listing:
+    agency: Minipax
+    banner_icon: {filename: Lightning_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Weather]
+    contacts: []
+    description: Lightning is a sudden electrostatic discharge that occurs during
+      a thunderstorm. This discharge occurs between electrically charged regions of
+      a cloud (called intra-cloud lightning or IC), between two clouds (CC lightning),
+      or between a cloud and the ground (CG lightning).
+    description_short: Dudden electrostatic discharge that occurs during a thunderstorm
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Lightning_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Lightning_large_icon.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Lightning
+    listing_type: Web Application
+    owners: [bigbrother]
+    requirements: Charged regions in the atmosphere temporarily equalize themselves
+      through this discharge
+    screenshots:
+    - description: White Lightning
+      large_image: {filename: Lightning_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Lightning_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Lightning_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    tags: [weather, lightning, sky, thunder, zeus, thunderstorm, storm, electrostatic,
+      discharge]
+    title: Lightning
+    unique_name: lightning
+    version_name: 8.0.9
+    what_is_new: Lightning creates light in the form of black body radiation from
+      the very hot plasma created by the electron flow
+  listing_activity:
+  - {action: CREATED, author: bigbrother, description: null}
+  - {action: SUBMITTED, author: bigbrother, description: null}
+  - {action: APPROVED_ORG, author: bigbrother, description: null}
+  - {action: APPROVED, author: bigbrother, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Minitrue
+    banner_icon: {filename: Phylo_banner_icon.png, security_marking: UNCLASSIFIED}
+    categories: [Entertainment]
+    contacts: []
+    description: 'Phylo is an experimental video game about multiple sequence alignment
+      optimisation.[1] Developed by the McGill Centre for Bioinformatics, it was originally
+      released as a free Flash game in November 2010. Designed as a game with a purpose,
+      players solve pattern-matching puzzles that represent nucleotide sequences of
+      different phylogenetic taxa to optimize alignments over a computer algorithm.
+      By aligning together each nucleotide sequence, represented as differently coloured
+      blocks, players attempt to create the highest point value score for each set
+      of sequences by matching as many colours as possible and minimizing gaps.
+
+
+      The nucleotide sequences generated by Phylo are obtained from actual sequence
+      data from the UCSC Genome Browser. High-scoring player alignments are collected
+      as data and sent back to the McGill Centre for Bioinformatics to be further
+      evaluated with a stronger scoring algorithm. Those player alignments that score
+      higher than the current computer-generated score will be re-introduced into
+      the global alignment as an optimization.'
+    description_short: Phylo is an experimental video game about multiple sequence
+      alignment optimisation
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Phylo_large_banner_icon.png, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Phylo_large_icon.png, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Phylo_%28video_game%29
+    listing_type: Desktop App
+    owners: [bigbrother, bettafish, rutherford]
+    requirements: None
+    screenshots:
+    - description: null
+      large_image: {filename: Phylo_0_large_screenshot.png, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Phylo_0_small_screenshot.png, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Phylo_small_icon.png, security_marking: UNCLASSIFIED}
+    tags: [game, video game]
+    title: Phylo
+    unique_name: phylo
+    version_name: '1'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: bettafish, description: null}
+  - {action: SUBMITTED, author: bettafish, description: null}
+  - {action: APPROVED_ORG, author: bettafish, description: null}
+  - {action: APPROVED, author: bettafish, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Miniluv
+    banner_icon: {filename: FightClub_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Health and Fitness]
+    contacts: [Tyler@fc.com]
+    description: 'Fight Club is a 1999 American film based on the 1996 novel of the
+      same name by Chuck Palahniuk. The film was directed by David Fincher, and stars
+      Brad Pitt, Edward Norton and Helena Bonham Carter. Norton plays the unnamed
+      protagonist, referred to as the narrator, who is discontented with his white-collar
+      job. He forms a "fight club" with soap maker Tyler Durden, played by Pitt, and
+      they are joined by men who also want to fight recreationally. The narrator becomes
+      embroiled in a relationship with Durden and a dissolute woman, Marla Singer,
+      played by Bonham Carter.
+
+
+      Palahniuk''s novel was optioned by 20th Century Fox producer Laura Ziskin, who
+      hired Jim Uhls to write the film adaptation. Fincher was one of four directors
+      the producers considered, and was selected because of his enthusiasm for the
+      film. Fincher developed the script with Uhls and sought screenwriting advice
+      from the cast and others in the film industry. The director and the cast compared
+      the film to Rebel Without a Cause (1955) and The Graduate (1967). They said
+      its theme was the conflict between a generation of young people and the value
+      system of advertising.[4][5] The director copied the homoerotic overtones from
+      Palahniuk''s novel to make audiences uncomfortable and keep them from anticipating
+      the twist ending.[6]'
+    description_short: Fight Club is a 1999 American film based on the 1996 novel
+      of the same name by Chuck Palahniuk.
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: FightClub_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: FightClub_large_icon.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Fight_Club
+    listing_type: Desktop App
+    owners: [bettafish]
+    requirements: The first rule of fight club is you do not talk about fight club
+    screenshots:
+    - description: null
+      large_image: {filename: FightClub_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: FightClub_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: FightClub_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    tags: [don't, talk, about, it]
+    title: Fight Club
+    unique_name: fight_club
+    version_name: '1'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: bettafish, description: null}
+  - {action: SUBMITTED, author: bettafish, description: null}
+  - {action: APPROVED_ORG, author: bettafish, description: null}
+  - {action: APPROVED, author: bettafish, description: null}
+  listing_review_batch:
+  - {author: bettafish, rate: 3, text: 'Who broke the first rule?!?!'}
+- library_entries: []
+  listing:
+    agency: Test
+    banner_icon: {filename: Gramophonerecord_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Entertainment]
+    contacts: []
+    description: "A gramophone record (phonograph record in the US), commonly known\
+      \ as a vinyl record or simply vinyl or record, is an analog sound storage medium\
+      \ in the form of a flat polyvinyl chloride (previously shellac) disc with an\
+      \ inscribed, modulated spiral groove. The groove usually starts near the periphery\
+      \ and ends near the center of the disc.\n\nThe phonograph disc record was the\
+      \ primary medium used for music reproduction until late in the 20th century.\
+      \ It had co-existed with the phonograph cylinder from the late 1880s and replaced\
+      \ it by the late 1920s. Records retained the largest market share even when\
+      \ new formats such as compact cassette were mass-marketed. By the late 1980s,\
+      \ digital media, in the form of the compact disc, had gained a larger market\
+      \ share, and the vinyl record left the mainstream in 1991.[1] From the 1990s\
+      \ to the 2010s, records continued to be manufactured and sold on a much smaller\
+      \ scale, and were especially used by disc jockeys (DJs), released by artists\
+      \ in some genres, and listened to by a niche market of audiophiles. The phonograph\
+      \ record has made a niche resurgence in the early 21st century \u2013 9.2 million\
+      \ records were sold in the U.S. in 2014, a 260% increase since 2009.[2] Likewise,\
+      \ in the UK sales have increased five-fold from 2009 to 2014."
+    description_short: A gramophone record (phonograph record in the US), commonly
+      known as a vinyl record.
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Gramophonerecord_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Gramophonerecord_large_icon.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Gramophone_record
+    listing_type: Widget
+    owners: [bettafish]
+    requirements: Record player
+    screenshots:
+    - description: null
+      large_image: {filename: Gramophonerecord_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Gramophonerecord_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Gramophonerecord_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    tags: [music, record, vinyl]
+    title: Gramophone record
+    unique_name: gramophone_record
+    version_name: '45'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: bettafish, description: null}
+  - {action: SUBMITTED, author: bettafish, description: null}
+  - {action: APPROVED_ORG, author: bettafish, description: null}
+  - {action: APPROVED, author: bettafish, description: null}
+  listing_review_batch: []

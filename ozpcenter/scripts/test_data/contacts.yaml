@@ -171,3 +171,21 @@ contacts:
   organization: null
   secure_phone: null
   unsecure_phone: 555-555-5555
+- contact_type: Military
+  email: mario@plumbersinc.com
+  name: Mario
+  organization: null
+  secure_phone: null
+  unsecure_phone: null
+- contact_type: Military
+  email: bowsers@castle.com
+  name: Bowser
+  organization: null
+  secure_phone: null
+  unsecure_phone: null
+- contact_type: Civilian
+  email: Tyler@fc.com
+  name: Tyler
+  organization: null
+  secure_phone: null
+  unsecure_phone: null
