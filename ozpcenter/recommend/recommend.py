@@ -234,6 +234,9 @@ class BaselineRecommender(Recommender):
             library_entries_group_by_count = library_entries.values('listing_id').annotate(count=Count('listing_id')).order_by('-count')
             # [{'listing_id': 1, 'count': 1}, {'listing_id': 2, 'count': 1}]
 
+            # Calculation of Min and Max new scores dynamically.  This will increase the values that are lower
+            # to a range within 2 and 5, but will not cause values higher than new_min and new_max to become even
+            # larger.
             old_min = 1
             old_max = 1
             new_min = 2
@@ -278,7 +281,15 @@ class ElasticsearchContentBaseRecommender(Recommender):
     # The results will only be based on the profile text matches and should use all of the text in the code to make a successful match.
     '''
     friendly_name = 'Elasticsearch Content Filtering'
-    recommendation_weight = 5.0  # Weighting is such since some of the values returned in the results may be greater than 1
+    # The weights that are returned by Elasticsearch will range between 0 and a any possible maximum because of query results.  Hence the reason
+    # that we need to normalize the data.  Normailization is accomplished by moving the scale to be comprable with other engines using map_numbers function.
+    # Reasoning: Results being possibly any range need to the results scaled up or down to be comporable with other engine results.
+    # The weight being used is toning down the results so that they do not overwhelm other results solely based on content.
+    recommendation_weight = 0.9  # Weighting is based on rebasing the results
+    RESULT_SIZE = 50  # Get only the top 50 results
+    min_new_score = 4  # Min value to set for rebasing of results
+    max_new_score = 9  # Max value to rebase results to so that values
+    content_norm_factor = 0.05  # Amount to increase the max value found so that saturation does not occur.
 
     def initiate(self):
         """
@@ -303,7 +314,9 @@ class ElasticsearchContentBaseRecommender(Recommender):
         # 10,000 is the max query size if there are more than 10,000 listings
         # then need to split the queries.  Currently this might be too much
         # overhead and hence the reason for not implementing in this implementation.
-        query_size = {"size": 10000}
+        # Since only 100 entries are max held in the table, reducing the size to RESULT_SIZE possiblities.
+        # This will also improve performance on the index creation.
+        query_size = {"size": self.RESULT_SIZE}
 
         # Get list of records from Listings table that fit the criteria needed to add information to the User
         # Profiles to create a match for content.
@@ -414,9 +427,11 @@ class ElasticsearchContentBaseRecommender(Recommender):
                        "categories_text": current_categories
                        }
                    })
-                logger.info("= ES Content Based result size: {} =".format(len(user_update_query)))
+                # Log a message when the update fails:
+                if user_update_query['_shards']['failed'] > 0:
+                    logger.info("= ES Content Based failed to update: {} =".format(user_update_query))
 
-        logger.info("= ES Content Based Recommendation - Initialization Complete =")
+        # logger.info("= ES Content Based Recommendation - Initialization Complete =")
 
     def recommendation_logic(self):
         """
@@ -431,7 +446,7 @@ class ElasticsearchContentBaseRecommender(Recommender):
         # 10,000 is the max query size if there are more than 10,000 listings
         # then need to split the queries.  Currently this might be too much
         # overhead and hence the reason for not implementing in this implementation.
-        query_size = {"size": 10000}
+        query_size = {"size": self.RESULT_SIZE}
 
         # Get list of records from Listings table that fit the criteria needed to add information to the User
         # Profiles to create a match for content.
@@ -459,7 +474,16 @@ class ElasticsearchContentBaseRecommender(Recommender):
             categories_to_query = {}
             if 'categories' in each_profile_source:
                 categories_to_query = {
-                    "terms": {"categories.title": each_profile_source['categories']}
+                    "nested": {
+                        "path": "categories",
+                        "query": {
+                            "bool": {
+                                "should": [
+                                    {"terms": {"categories.id": each_profile_source['categories']}}
+                                ]
+                            }
+                        }
+                    }
                 }
                 query_object.append(categories_to_query)
 
@@ -509,10 +533,9 @@ class ElasticsearchContentBaseRecommender(Recommender):
             # the profile.  This will eliminate unnecessary items to be queried:
             # The reason that the size is so large is because we do not want to limit the results to just a few
             # which then might be eleiminated when displayed to the user.  Hence the max result set is returned.
-            max_result_set = 10000
             if 'bookmark_ids' in each_profile_source:
                 query_compare = {
-                    "size": max_result_set,
+                    "size": self.RESULT_SIZE,
                     "_source": ["id", "title", "description", "description_short", "agency_short_name", "categories"],
                     "query": {
                         "bool": {
@@ -528,7 +551,7 @@ class ElasticsearchContentBaseRecommender(Recommender):
             else:
                 # If no bookmarks then continue with getting the results:
                 query_compare = {
-                    "size": max_result_set,
+                    "size": self.RESULT_SIZE,
                     "_source": ["id", "title", "description", "description_short", "agency_short_name", "categories"],
                     "query": {
                         "bool": {
@@ -547,17 +570,20 @@ class ElasticsearchContentBaseRecommender(Recommender):
             # Get only the results necessary from the returned JSON object:
             recommended_items = es_query_result['hits']['hits']
 
+            # Skip if no results are returned as a precaution
+            # Max score for Elasticsearch Content Based Recommendation to nomalize the data:
+            if recommended_items:
+                max_score_es_content = es_query_result['hits']['max_score'] + self.content_norm_factor * es_query_result['hits']['max_score']
+
             # Get the author so that it can be used in later items:
             profile_id = each_profile['_source']['author_id']
             # print("PROFITLE lookng up: ", profile_id)
 
             # Loop through all of the items and add them to the recommendation list for Content Based Filtering:
             for indexitem in recommended_items:
-                score = indexitem['_score']
+                score = recommend_utils.map_numbers(indexitem['_score'], 0, max_score_es_content, self.min_new_score, self.max_new_score)
                 itemtoadd = indexitem['_source']['id']
                 self.add_listing_to_user_profile(profile_id, itemtoadd, score, False)
-
-            logger.info("= ES CONTENT RECOMMENDER Engine Completed Results for {} =".format(profile_id))
 
         # New User problem and using search terms to recommend items should be done dynamically.  Since we do
         # not have dynamic support as of yet, the New User problem is being solved by going through and getting an aggregation of
@@ -566,7 +592,7 @@ class ElasticsearchContentBaseRecommender(Recommender):
         # searching is completed.  so the TODO: After implemention of dynamic searching based on user input for content, this code
         # might need to be modified or removed accordingly.  Hence the reason that it is separated out explicitly:
 
-        # *START NEW USER TEMPORARY WORKAROUND*:
+        # *START NEW USER TEMPORARY WORKAROUND* until dynamic engine is implemented:
         logger.info("= ES CONTENT RECOMMENDER NEW USER RECOMMENDATION CREATION =")
         # For users that do not have a recommendation profile need to create a new user recommendation:
         all_profiles = models.Profile.objects.all()
@@ -579,7 +605,7 @@ class ElasticsearchContentBaseRecommender(Recommender):
 
         # The New User or Person that has no recommendation profile problem is solved by aggregating the results of all of the titles
         # that are present and then taking the top hits and searching for content based on those items.  This in turn creates content
-        # based on the most popular titles that have been bookmarked or
+        # based on the most popular titles that have been bookmarked and are in the recommendations tables already.
         for profile in all_profiles:
             # user_information = model_access.get_profile_by_id(profile.id)
             search_query = {
@@ -640,7 +666,7 @@ class ElasticsearchContentBaseRecommender(Recommender):
 
                     # After creating the search paramter, create a query and limit it to the results to the first
                     # max_result_set_new_user results since more than that are not necessary:
-                    max_result_set_new_user = 40
+                    max_result_set_new_user = 25
                     query_compare = {
                         "size": max_result_set_new_user,
                         "_source": ["id", "title"],
@@ -658,6 +684,10 @@ class ElasticsearchContentBaseRecommender(Recommender):
                         index=settings.ES_INDEX_NAME,
                         body=query_compare
                     )
+
+                    # Max score for Elasticsearch Content Based Recommendation for new user to orient list against:
+                    max_score_es_content = es_query_result['hits']['max_score'] + self.content_norm_factor * es_query_result['hits']['max_score']
+
                     # Store the results for the new users in the new_user_return_list:
                     new_user_return_list = es_query_result['hits']['hits']
                     # Set the search parameter to True so that subsequent searches will not be performed:
@@ -665,11 +695,11 @@ class ElasticsearchContentBaseRecommender(Recommender):
 
                 # Add recommended items based on content to user profile list:
                 for indexitem in new_user_return_list:
-                    score = indexitem['_score']
+                    score = recommend_utils.map_numbers(indexitem['_score'], 0, max_score_es_content, self.min_new_score, self.max_new_score)
                     itemtoadd = indexitem['_source']['id']
                     self.add_listing_to_user_profile(profile_id, itemtoadd, score, False)
 
-                logger.info("= ES CONTENT RECOMMENDER Engine Completed Results for New User {} =".format(profile_id))
+                # logger.info("= ES CONTENT RECOMMENDER Engine Completed Results for New User {} =".format(profile_id))
         # *END NEW USER TEMPORARY WORKAROUND*:
 
         logger.info("= ES CONTENT RECOMMENDATION Results Completed =")
@@ -735,13 +765,15 @@ class ElasticsearchUserBaseRecommender(Recommender):
     """
 
     friendly_name = 'Elasticsearch User Based Filtering'
-    # The weights that are returned by Elasticsearch will be 0.X and hence the reason that we need to multiply
-    # by factors of 10 to get reasonable values for ranking.
-    # Making weight of 25 so that results will correlate well with other recommendation engines when combined.
-    # Reasoning: Results of scores are between 0 and 1 with results mainly around 0.0X, thus the recommendation weight
-    #            will mix well with other recommendations and not become too large at the same time.
-    recommendation_weight = 25.0  # Weight that the overall results are multiplied against.  The rating for user based is less than 1.
+    # The weights that are returned by Elasticsearch will be 0.X and hence the reason that we need to normalize the data.
+    # Normailization is accomplished by moving the scale to be comprable with other engines using map_numbers function.
+    # Reasoning: Results of scores are between 0 and 1 with results mainly around 0.0X, thus the normalization is necessary.
+    recommendation_weight = 1.0  # Weight that the overall results are multiplied against.  The rating for user based is less than 1.
+    # Results are between 0 and 1 and then converted to between min_new_score and max_new_score and then are multiplied by the weight
+    # to be slightly better than the baseline recommendation systems if necessary.
     MIN_ES_RATING = 3.5  # Minimum rating to have results meet before being recommended for ES Recommender Systems
+    min_new_score = 5  # Min value to set for rebasing of results
+    max_new_score = 10  # Max value to rebase results to so that values
 
     def initiate(self):
         """
@@ -775,7 +807,7 @@ class ElasticsearchUserBaseRecommender(Recommender):
         '''
         ###########
         # Loading Review Data:
-        logger.info('Elasticsearch User Base Recommendation Engine: Loading data from Review model')
+        # logger.info('Elasticsearch User Base Recommendation Engine: Loading data from Review model')
         reviews_listings = models.Review.objects.all()
         reviews_listing_uname = reviews_listings.values_list('id', 'listing_id', 'rate', 'author')
         # End loading of Reviews Table data
@@ -836,7 +868,7 @@ class ElasticsearchUserBaseRecommender(Recommender):
                                 },
                                 "rate": {
                                     "type": "long",
-                                    "boost": 2
+                                    "boost": 1
                                 },
                                 "listing_categories": {
                                     "type": "long"
@@ -862,12 +894,13 @@ class ElasticsearchUserBaseRecommender(Recommender):
 
         # Create ES Index since it has not been created or is deleted above:
         connect_es_record_exist = es_client.indices.create(index=settings.ES_RECOMMEND_USER, body=rate_request_body)
-        # Need to wait 2 seconds for index to get created according to search results.  This could be caused because of
+        # Need to wait 1 second for index to get created according to search results.  This could be caused because of
         # time issues hitting a remote elasticsearch host:
-        import time
-        time.sleep(2)
+        time.sleep(1)
 
-        logger.info("Creating ES Index after Deletion Result: '{}'".format(connect_es_record_exist))
+        # Log a message if the update fails for creating a Elasticsearch index:
+        if connect_es_record_exist['acknowledged'] is False:
+            logger.info("Creating ES Index after Deletion Result: '{}'".format(connect_es_record_exist))
 
         ratings_items = []
         for record in reviews_listing_uname:
@@ -960,31 +993,8 @@ class ElasticsearchUserBaseRecommender(Recommender):
                        }
                    })
 
-            # category_combined_text = []
-
-            # for category_id_to_text in categories_to_look_up:
-            #     category_combined_text.append(str(category_model_access.get_category_by_id(category_id_to_text)))
-            #     print("Combined Categories: ", category_combined_text)
-            # if len(category_combined_text) > 0:
-            # if len(categories_to_look_up) > 0:
-                # Update record with category test information:
-                # category_update_body = {
-                #         "categories_text": category_combined_text
-                # }
-
-                # result_es = es_client.update(
-                #    index=settings.ES_RECOMMEND_USER,
-                #    doc_type=settings.ES_RECOMMEND_TYPE,
-                #    id=record_to_update,
-                #    refresh=True,
-                #    body={ "doc": {
-                #         "categories_text": category_combined_text
-                #         }
-                #     }
-                # )
-                # print("RESULT: ", result_es)
-
-            logger.info("Creating/Updating Record Result: '{}'".format(result_es))
+            if result_es['_shards']['failed'] > 0:
+                logger.info("Creating/Updating Record Failed: '{}'".format(result_es))
 
     def recommendation_logic(self):
         """
@@ -1012,8 +1022,8 @@ class ElasticsearchUserBaseRecommender(Recommender):
             - Run Query for each user and append recommended list to the user profile recommendations
         '''
 
-        logger.info('Elasticsearch User Base Recommendation Engine')
-        logger.info('Elasticsearch Health : {}'.format(es_client.cluster.health()))
+        logger.info('= Elasticsearch User Base Recommendation Engine =')
+        # logger.info('Elasticsearch Health : {}'.format(es_client.cluster.health()))
 
         #########################
         # Information on Algorithms: (as per Elasticsearch: https://www.elastic.co/guide/en/elasticsearch/reference/2.4/search-aggregations-bucket-significantterms-aggregation.html)
@@ -1126,7 +1136,7 @@ class ElasticsearchUserBaseRecommender(Recommender):
                             "bookmark_ids": bookmarked_list,
                             "categories": category_items
                         })
-                    logger.info("Bookmarks Created for profile: {} with result: {}".format(profile_id, result_es))
+                    # logger.info("Bookmarks Created for profile: {} with result: {}".format(profile_id, result_es))
                 else:
                     record_to_update = es_search_result['hits']['hits'][0]['_id']
 
@@ -1144,7 +1154,8 @@ class ElasticsearchUserBaseRecommender(Recommender):
                                 "categories": list(set(current_categories + category_items))
                             }
                        })
-                    logger.info("= Bookmarks Updated for profile: {} with result: {} =".format(profile_id, result_es))
+                    if result_es['_shards']['failed'] > 0:
+                        logger.info("= ES User Based Bookmark and Category Update failed: {} =".format(result_es))
 
                 if len(categories) > 0:
                     agg_query_term = {
@@ -1249,19 +1260,22 @@ class ElasticsearchUserBaseRecommender(Recommender):
                 index=settings.ES_RECOMMEND_USER,
                 body=agg_search_query
             )
-            # print("RESULT FOR ONE SET: ", es_query_result)
 
             recommended_items = es_query_result['aggregations']['the_listing']['aggs']['buckets']
-            # print("Length of Array: ", len(recommended_items))
+
+            # Need to skip users that do not return any results as there will be no recommended_items to go through:
+            if recommended_items:
+                max_score_es_user = recommended_items[0]['score']
+
             # Add items to recommended list for the profile:
             for indexitem in recommended_items:
-                score = indexitem['score']
+                score = recommend_utils.map_numbers(indexitem['score'], 0, max_score_es_user, self.min_new_score, self.max_new_score)
                 # print("INDEX ITEM: ", indexitem)
                 # print('Key {}, Score {}'.format(indexitem['key'], score))
                 self.add_listing_to_user_profile(profile_id, indexitem['key'], score, False)
 
-            logger.info("= ES USER RECOMMENDER Engine Completed Results for {} =".format(profile_id))
-            logger.info("Creating/Updating Record Result: '{}'".format(es_query_result))
+            # logger.info("= ES USER RECOMMENDER Engine Completed Results for {} =".format(profile_id))
+            # logger.info("Creating/Updating Record Result: '{}'".format(es_query_result))
         logger.info("= ES USER RECOMMENDATION Results Completed =")
         ############################
         # END
@@ -1304,6 +1318,7 @@ class GraphCollaborativeFilteringBaseRecommender(Recommender):
                 listing_id = int(listing_raw.split('-')[1])
                 score = current_tuple[1]
 
+                # No need to rebase since results are within the range of others based on testing:
                 self.add_listing_to_user_profile(profile_id, listing_id, score)
 
 
@@ -1443,7 +1458,6 @@ class RecommenderDirectory(object):
             recommender_string: Comma Delimited list of Recommender Engine to execute
         """
         recommender_list = [self.get_recommender_class_obj(current_recommender.strip()) for current_recommender in recommender_string.split(',')]
-
         start_ms = time.time() * 1000.0
 
         for current_recommender_obj in recommender_list:
