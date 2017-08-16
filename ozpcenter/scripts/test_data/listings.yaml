@@ -661,8 +661,8 @@
       \ also be used to describe forms of competition of two-wheeled motorised vehicles\
       \ under the banner of motorcycle racing, and includes off-road racing such as\
       \ motocross.\n\nFour- (or more) wheeled motorsport competition is globally governed\
-      \ by the F\xE9d\xE9ration Internationale de l'Automobile (FIA); and the F\xE9\
-      d\xE9ration Internationale de Motocyclisme (FIM) governs two-wheeled competition."
+      \ by the Federation Internationale de l'Automobile (FIA); and the Fe\
+      deration Internationale de Motocyclisme (FIM) governs two-wheeled competition."
     description_short: Motorsport is a global term used to encompass the group of
       competitive sporting events.
     doc_urls: []
@@ -4519,7 +4519,6 @@
   - {action: SUBMITTED, author: wsmith, description: null}
   - {action: APPROVED_ORG, author: bigbrother, description: null}
   - {action: APPROVED, author: bigbrother, description: null}
-  - {action: MODIFIED, author: wsmith, description: null}
   listing_review_batch:
   - {author: khaleesi, rate: 2, text: This is what I have a hand to assist me with.
       This does not meet my use cases at all.}
@@ -4917,7 +4916,6 @@
   - {action: SUBMITTED, author: wsmith, description: null}
   - {action: APPROVED_ORG, author: bigbrother, description: null}
   - {action: APPROVED, author: bigbrother, description: null}
-  - {action: MODIFIED, author: wsmith, description: null}
   listing_review_batch: []
 - library_entries: []
   listing:
@@ -5309,7 +5307,6 @@
   - {action: SUBMITTED, author: wsmith, description: null}
   - {action: APPROVED_ORG, author: bigbrother, description: null}
   - {action: APPROVED, author: bigbrother, description: null}
-  - {action: MODIFIED, author: wsmith, description: null}
   listing_review_batch: []
 - library_entries: []
   listing:
@@ -5375,9 +5372,6 @@
   - {action: SUBMITTED, author: khaleesi, description: null}
   - {action: APPROVED_ORG, author: khaleesi, description: null}
   - {action: APPROVED, author: khaleesi, description: null}
-  - {action: DISABLED, author: khaleesi, description: null}
-  - {action: PENDING_DELETION, author: khaleesi, description: null}
-  - {action: REJECTED, author: khaleesi, description: a good app}
   - {action: SUBMITTED, author: khaleesi, description: null}
   - {action: APPROVED_ORG, author: khaleesi, description: null}
   - {action: APPROVED, author: khaleesi, description: null}
@@ -5793,7 +5787,6 @@
   - {action: CREATED, author: bettafish, description: null}
   - {action: SUBMITTED, author: bettafish, description: null}
   - {action: APPROVED_ORG, author: bettafish, description: null}
-  - {action: REJECTED, author: bettafish, description: Something here}
   listing_review_batch: []
 - library_entries: []
   listing:
@@ -7273,8 +7266,8 @@
       \ ten years after the Spanish conquest in 1521. Huexotzinco, (Way-hoat-ZINC-o)\
       \ is a town southeast of Mexico City, in the state of Puebla. In 1521, the Nahua\
       \ Indian people of the town were the allies of the Spanish conqueror Hern\xE1\
-      n Cort\xE9s, and together they confronted their enemies to overcome Moctezuma,\
-      \ leader of the Aztec Empire. Cort\xE9s's indigenous allies from Tlaxcala were\
+      n Cortes, and together they confronted their enemies to overcome Moctezuma,\
+      \ leader of the Aztec Empire. Cortes's indigenous allies from Tlaxcala were\
       \ more successful than those Huejotzinco in translating that alliance into privileges\
       \ in the colonial era and the Huejotzincan's petitioned the crown for such privileges.\
       \ A 1560 petition to the crown in Nahuatl outlines their participation.[2]"
@@ -8298,7 +8291,7 @@
 - library_entries: []
   listing:
     agency: Miniplen
-    banner_icon: {filename: RubyMiner_large_screenshot.png, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: RubyMiner_banner_icon.png, security_marking: UNCLASSIFIED}
     categories: [Productivity, Tools]
     contacts: []
     description: A discovery app for Ruby on Rails gems.
@@ -8309,8 +8302,8 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: RubyMiner_large_screenshot.png, security_marking: UNCLASSIFIED}
-    large_icon: {filename: RubyMiner_large_screenshot.png, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: RubyMiner_large_banner_icon.png, security_marking: UNCLASSIFIED}
+    large_icon: {filename: RubyMiner_large_icon.png, security_marking: UNCLASSIFIED}
     launch_url: http://guides.rubyonrails.org/active_record_migrations.html
     listing_type: Desktop App
     owners: [wsmith]
@@ -8319,9 +8312,9 @@
     - description: Ruby miner fancy logo
       large_image: {filename: RubyMiner_0_large_screenshot.png, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: RubyMiner_0_large_screenshot.png, security_marking: UNCLASSIFIED}
+      small_image: {filename: RubyMiner_0_small_screenshot.png, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: RubyMiner_large_screenshot.png, security_marking: UNCLASSIFIED}
+    small_icon: {filename: RubyMiner_small_icon.png, security_marking: UNCLASSIFIED}
     tags: [ruby, rails, ror, programming]
     title: Ruby Miner
     unique_name: ruby_miner
@@ -8336,7 +8329,7 @@
 - library_entries: []
   listing:
     agency: Miniplen
-    banner_icon: {filename: RubyonRails_large_screenshot.png, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: RubyonRails_banner_icon.png, security_marking: UNCLASSIFIED}
     categories: [Tools]
     contacts: []
     description: "Ruby on Rails, or simply Rails, is a server-side web application\
@@ -8356,8 +8349,8 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: RubyonRails_large_screenshot.png, security_marking: UNCLASSIFIED}
-    large_icon: {filename: RubyonRails_large_screenshot.png, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: RubyonRails_large_banner_icon.png, security_marking: UNCLASSIFIED}
+    large_icon: {filename: RubyonRails_large_icon.png, security_marking: UNCLASSIFIED}
     launch_url: https://en.wikipedia.org/wiki/Ruby_on_Rails
     listing_type: Code Library
     owners: [charrington]
@@ -8366,9 +8359,9 @@
     - description: Screenshot of rails development
       large_image: {filename: RubyonRails_0_large_screenshot.png, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: RubyonRails_0_large_screenshot.png, security_marking: UNCLASSIFIED}
+      small_image: {filename: RubyonRails_0_small_screenshot.png, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: RubyonRails_large_screenshot.png, security_marking: UNCLASSIFIED}
+    small_icon: {filename: RubyonRails_small_icon.png, security_marking: UNCLASSIFIED}
     tags: [software, ruby, rails, ror, programming, framework, development, developer]
     title: Ruby on Rails
     unique_name: ruby_on_rails
@@ -8383,18 +8376,18 @@
 - library_entries: []
   listing:
     agency: Miniluv
-    banner_icon: {filename: "Pok\xE9monRubyandSapphire_large_screenshot.jpeg", security_marking: UNCLASSIFIED}
+    banner_icon: {filename: "PokemonRubyandSapphire_banner_icon.jpeg", security_marking: UNCLASSIFIED}
     categories: [Entertainment]
     contacts: []
-    description: "Pok\xE9mon Ruby Version and Sapphire Version (\u30DD\u30B1\u30C3\
+    description: "Pokemon Ruby Version and Sapphire Version (\u30DD\u30B1\u30C3\
       \u30C8\u30E2\u30F3\u30B9\u30BF\u30FC\u30EB\u30D3\u30FC\u30FB\u30B5\u30D5\u30A1\
       \u30A4\u30A2 Poketto Monsut\u0101 Rub\u012B & Safaia, \"Pocket Monsters: Ruby\
-      \ & Sapphire\") are the third installments of the Pok\xE9mon series of role-playing\
+      \ & Sapphire\") are the third installments of the Pokemon series of role-playing\
       \ video games, developed by Game Freak and published by Nintendo for the Game\
       \ Boy Advance. The games were first released in Japan in late 2002 and internationally\
-      \ in 2003. Pok\xE9mon Emerald, a special edition version, was released two years\
-      \ later in each region. These three games (Pok\xE9mon Ruby, Sapphire, and Emerald)\
-      \ are part of the third generation of the Pok\xE9mon video game series, also\
+      \ in 2003. Pokemon Emerald, a special edition version, was released two years\
+      \ later in each region. These three games (Pokemon Ruby, Sapphire, and Emerald)\
+      \ are part of the third generation of the Pokemon video game series, also\
       \ known as the \"advanced generation\". Remakes of the two games, titled Omega\
       \ Ruby and Alpha Sapphire, were released for the Nintendo 3DS worldwide on November\
       \ 21, 2014, exactly twelve years to the date of the original Ruby and Sapphire\
@@ -8402,25 +8395,25 @@
       \ 28, 2014.[2]\n\nThe gameplay is mostly unchanged from the previous games;\
       \ the player controls the main character from an overhead perspective, and the\
       \ controls are largely the same as those of previous games. As with previous\
-      \ games, the main objectives are to catch all of the Pok\xE9mon in the games\
-      \ and defeat the Elite Four (a group of Pok\xE9mon trainers); also like their\
+      \ games, the main objectives are to catch all of the Pokemon in the games\
+      \ and defeat the Elite Four (a group of Pokemon trainers); also like their\
       \ predecessors, the games' main subplot involves the main character defeating\
       \ a criminal organization that attempts to take over the region. New features,\
-      \ such as double battles and Pok\xE9mon abilities along with 135 new Pok\xE9\
+      \ such as double battles and Pokemon abilities along with 135 new Poke\
       mon, have been added. As the Game Boy Advance is more powerful than its predecessors,\
       \ four players may be connected at a time instead of the previous limit of two.\
       \ Additionally, the games can be connected to an e-Reader or other advanced\
-      \ generation Pok\xE9mon games."
-    description_short: "Third installments of the Pok\xE9mon series of video games"
+      \ generation Pokemon games."
+    description_short: "Third installments of the Pokemon series of video games"
     doc_urls: []
     iframe_compatible: true
     is_deleted: false
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: "Pok\xE9monRubyandSapphire_large_screenshot.jpeg",
+    large_banner_icon: {filename: "PokemonRubyandSapphire_large_banner_icon.jpeg",
       security_marking: UNCLASSIFIED}
-    large_icon: {filename: "Pok\xE9monRubyandSapphire_large_screenshot.png", security_marking: UNCLASSIFIED}
+    large_icon: {filename: "PokemonRubyandSapphire_large_icon.png", security_marking: UNCLASSIFIED}
     launch_url: https://en.wikipedia.org/wiki/Pok%C3%A9mon_Ruby_and_Sapphire
     listing_type: Desktop App
     owners: [khaleesi]
@@ -8428,45 +8421,43 @@
     screenshots:
     - description: The boxes for the original Gameboy Advance versionsof Pokemon Ruby
         and Sapphire
-      large_image: {filename: "Pok\xE9monRubyandSapphire_0_large_screenshot.jpeg",
+      large_image: {filename: "PokemonRubyandSapphire_0_large_screenshot.jpeg",
         security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: "Pok\xE9monRubyandSapphire_0_large_screenshot.jpeg",
+      small_image: {filename: "PokemonRubyandSapphire_0_small_screenshot.jpeg",
         security_marking: UNCLASSIFIED}
     - description: The cases for the new 3DS versions Pokemon Omega Ruby and Alpha
         Sapphire
-      large_image: {filename: "Pok\xE9monRubyandSapphire_1_large_screenshot.jpeg",
+      large_image: {filename: "PokemonRubyandSapphire_1_large_screenshot.jpeg",
         security_marking: UNCLASSIFIED}
       order: 1
-      small_image: {filename: "Pok\xE9monRubyandSapphire_1_large_screenshot.jpeg",
+      small_image: {filename: "PokemonRubyandSapphire_1_small_screenshot.jpeg",
         security_marking: UNCLASSIFIED}
     - description: Animated gif of the gameplay near one of the locations you can
         fish as well as find and plant berries
-      large_image: {filename: "Pok\xE9monRubyandSapphire_2_large_screenshot.gif",
+      large_image: {filename: "PokemonRubyandSapphire_2_large_screenshot.gif",
         security_marking: UNCLASSIFIED}
       order: 2
-      small_image: {filename: "Pok\xE9monRubyandSapphire_2_large_screenshot.gif",
+      small_image: {filename: "PokemonRubyandSapphire_2_small_screenshot.gif",
         security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: "Pok\xE9monRubyandSapphire_large_screenshot.png", security_marking: UNCLASSIFIED}
+    small_icon: {filename: "PokemonRubyandSapphire_small_icon.png", security_marking: UNCLASSIFIED}
     tags: [video game, pokemon, pocket monsters, nintendo, game freak, gotta catch
         'em all]
-    title: "Pok\xE9mon Ruby and Sapphire"
-    unique_name: "pok\xE9mon_ruby_and_sapphire"
+    title: "Pokemon Ruby and Sapphire"
+    unique_name: "pokemon_ruby_and_sapphire"
     version_name: '3'
     what_is_new: Now has versions for the Nintendo 3DS!
   listing_activity:
   - {action: CREATED, author: khaleesi, description: null}
   - {action: SUBMITTED, author: khaleesi, description: null}
-  - {action: MODIFIED, author: khaleesi, description: null}
-  - {action: MODIFIED, author: khaleesi, description: null}
   - {action: APPROVED_ORG, author: khaleesi, description: null}
   - {action: APPROVED, author: khaleesi, description: null}
   listing_review_batch: []
 - library_entries: []
   listing:
     agency: Minitrue
-    banner_icon: {filename: Salmon_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: Salmon_banner_icon.jpeg, security_marking: UNCLASSIFIED}
     categories: [Education]
     contacts: []
     description: "Salmon /\u02C8s\xE6m\u0259n/ is the common name for several species\
@@ -8493,8 +8484,8 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: Salmon_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
-    large_icon: {filename: Salmon_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: Salmon_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Salmon_large_icon.jpeg, security_marking: UNCLASSIFIED}
     launch_url: https://en.wikipedia.org/wiki/Salmon
     listing_type: Desktop App
     owners: [bigbrother, jones]
@@ -8503,13 +8494,13 @@
     - description: null
       large_image: {filename: Salmon_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: Salmon_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: Salmon_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     - description: null
       large_image: {filename: Salmon_1_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 1
-      small_image: {filename: Salmon_1_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: Salmon_1_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: Salmon_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    small_icon: {filename: Salmon_small_icon.jpeg, security_marking: UNCLASSIFIED}
     tags: [fish, yummy]
     title: Salmon
     unique_name: salmon
@@ -8517,17 +8508,15 @@
     what_is_new: null
   listing_activity:
   - {action: CREATED, author: jones, description: null}
-  - {action: MODIFIED, author: jones, description: null}
   - {action: SUBMITTED, author: jones, description: null}
   - {action: APPROVED_ORG, author: bettafish, description: null}
   - {action: APPROVED, author: bettafish, description: null}
-  - {action: MODIFIED, author: bigbrother, description: null}
   listing_review_batch: []
 - library_entries:
   - {folder: null, owner: jones, position: 0}
   listing:
     agency: Minitrue
-    banner_icon: {filename: BassFishing_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: BassFishing_banner_icon.jpeg, security_marking: UNCLASSIFIED}
     categories: [Communication]
     contacts: []
     description: 'Bass fishing is the activity of angling for the North American gamefish
@@ -8551,8 +8540,8 @@
     is_enabled: true
     is_featured: true
     is_private: false
-    large_banner_icon: {filename: BassFishing_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
-    large_icon: {filename: BassFishing_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: BassFishing_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: BassFishing_large_icon.jpeg, security_marking: UNCLASSIFIED}
     launch_url: https://en.wikipedia.org/wiki/Bass_fishing
     listing_type: Web Application
     owners: [bettafish, jones]
@@ -8561,9 +8550,9 @@
     - description: Now that's a fish.
       large_image: {filename: BassFishing_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: BassFishing_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: BassFishing_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: BassFishing_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    small_icon: {filename: BassFishing_small_icon.jpeg, security_marking: UNCLASSIFIED}
     tags: [fish, bass, mike]
     title: Bass Fishing
     unique_name: bass_fishing
@@ -8573,17 +8562,14 @@
   listing_activity:
   - {action: CREATED, author: jones, description: null}
   - {action: SUBMITTED, author: jones, description: null}
-  - {action: MODIFIED, author: jones, description: null}
   - {action: APPROVED_ORG, author: bettafish, description: null}
   - {action: APPROVED, author: bettafish, description: null}
-  - {action: MODIFIED, author: bettafish, description: null}
-  - {action: REVIEW_EDITED, author: jones, description: null}
   listing_review_batch:
   - {author: jones, rate: 4, text: So easy a kid can do it.}
 - library_entries: []
   listing:
     agency: Minitrue
-    banner_icon: {filename: BassLures_large_screenshot.png, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: BassLures_banner_icon.png, security_marking: UNCLASSIFIED}
     categories: [Education]
     contacts: []
     description: "There are many types of fishing lures. In most cases they are manufactured\
@@ -8632,8 +8618,8 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: BassLures_large_screenshot.png, security_marking: UNCLASSIFIED}
-    large_icon: {filename: BassLures_large_screenshot.png, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: BassLures_large_banner_icon.png, security_marking: UNCLASSIFIED}
+    large_icon: {filename: BassLures_large_icon.png, security_marking: UNCLASSIFIED}
     launch_url: https://en.wikipedia.org/wiki/Fishing_lure
     listing_type: Web Application
     owners: [jones]
@@ -8651,9 +8637,9 @@
     - description: Can he land a bass?
       large_image: {filename: BassLures_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: BassLures_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: BassLures_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: BassLures_large_screenshot.png, security_marking: UNCLASSIFIED}
+    small_icon: {filename: BassLures_small_icon.png, security_marking: UNCLASSIFIED}
     tags: [fish, learning, bass, xlure, work]
     title: Bass Lures
     unique_name: bass_lures
@@ -8662,7 +8648,6 @@
       run without hooks.
   listing_activity:
   - {action: CREATED, author: jones, description: null}
-  - {action: MODIFIED, author: jones, description: null}
   - {action: SUBMITTED, author: jones, description: null}
   - {action: APPROVED_ORG, author: bettafish, description: null}
   - {action: APPROVED, author: bettafish, description: null}
@@ -8670,7 +8655,7 @@
 - library_entries: []
   listing:
     agency: Miniluv
-    banner_icon: {filename: MorseCode_large_screenshot.png, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: MorseCode_banner_icon.png, security_marking: UNCLASSIFIED}
     categories: [Education]
     contacts: []
     description: Morse code is a method of transmitting text information as a series
@@ -8690,8 +8675,8 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: MorseCode_large_screenshot.png, security_marking: UNCLASSIFIED}
-    large_icon: {filename: MorseCode_large_screenshot.png, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: MorseCode_large_banner_icon.png, security_marking: UNCLASSIFIED}
+    large_icon: {filename: MorseCode_large_icon.png, security_marking: UNCLASSIFIED}
     launch_url: https://en.wikipedia.org/wiki/Morse_code
     listing_type: Code Library
     owners: [bettafish]
@@ -8700,9 +8685,9 @@
     - description: null
       large_image: {filename: MorseCode_0_large_screenshot.png, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: MorseCode_0_large_screenshot.png, security_marking: UNCLASSIFIED}
+      small_image: {filename: MorseCode_0_small_screenshot.png, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: MorseCode_large_screenshot.png, security_marking: UNCLASSIFIED}
+    small_icon: {filename: MorseCode_small_icon.png, security_marking: UNCLASSIFIED}
     tags: [sos, morse code, language]
     title: Morse Code
     unique_name: morse_code
@@ -8719,7 +8704,7 @@
   - {folder: null, owner: wsmith, position: 4}
   listing:
     agency: Miniluv
-    banner_icon: {filename: BaltimoreRavens_large_screenshot.png, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: BaltimoreRavens_banner_icon.png, security_marking: UNCLASSIFIED}
     categories: [Sports]
     contacts: []
     description: 'The Baltimore Ravens are a professional American football team based
@@ -8744,8 +8729,8 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: BaltimoreRavens_large_screenshot.png, security_marking: UNCLASSIFIED}
-    large_icon: {filename: BaltimoreRavens_large_screenshot.png, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: BaltimoreRavens_large_banner_icon.png, security_marking: UNCLASSIFIED}
+    large_icon: {filename: BaltimoreRavens_large_icon.png, security_marking: UNCLASSIFIED}
     launch_url: https://en.wikipedia.org/wiki/Baltimore_Ravens
     listing_type: Desktop App
     owners: [bettafish]
@@ -8754,13 +8739,13 @@
     - description: null
       large_image: {filename: BaltimoreRavens_0_large_screenshot.png, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: BaltimoreRavens_0_large_screenshot.png, security_marking: UNCLASSIFIED}
+      small_image: {filename: BaltimoreRavens_0_small_screenshot.png, security_marking: UNCLASSIFIED}
     - description: null
       large_image: {filename: BaltimoreRavens_1_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 1
-      small_image: {filename: BaltimoreRavens_1_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: BaltimoreRavens_1_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: BaltimoreRavens_large_screenshot.png, security_marking: UNCLASSIFIED}
+    small_icon: {filename: BaltimoreRavens_small_icon.png, security_marking: UNCLASSIFIED}
     tags: [baltimore, maryland, ravens, football]
     title: Baltimore Ravens
     unique_name: baltimore_ravens
@@ -8776,7 +8761,7 @@
 - library_entries: []
   listing:
     agency: Miniluv
-    banner_icon: {filename: KIAA0319_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: KIAA0319_banner_icon.jpeg, security_marking: UNCLASSIFIED}
     categories: [Education, Health and Fitness]
     contacts: []
     description: 'KIAA0319 is a protein which in humans is encoded by the KIAA0319
@@ -8804,8 +8789,8 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: KIAA0319_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
-    large_icon: {filename: KIAA0319_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: KIAA0319_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: KIAA0319_large_icon.jpeg, security_marking: UNCLASSIFIED}
     launch_url: https://en.wikipedia.org/wiki/KIAA0319
     listing_type: Widget
     owners: [bettafish]
@@ -8814,9 +8799,9 @@
     - description: null
       large_image: {filename: KIAA0319_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: KIAA0319_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: KIAA0319_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: KIAA0319_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    small_icon: {filename: KIAA0319_small_icon.jpeg, security_marking: UNCLASSIFIED}
     tags: [protein]
     title: KIAA0319
     unique_name: kiaa0319
@@ -8831,7 +8816,7 @@
 - library_entries: []
   listing:
     agency: Miniluv
-    banner_icon: {filename: E-ZPass_large_screenshot.png, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: E-ZPass_banner_icon.png, security_marking: UNCLASSIFIED}
     categories: [Tools]
     contacts: []
     description: "E\u2011ZPass is an electronic toll collection system used on most\
@@ -8850,8 +8835,8 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: E-ZPass_large_screenshot.png, security_marking: UNCLASSIFIED}
-    large_icon: {filename: E-ZPass_large_screenshot.png, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: E-ZPass_large_banner_icon.png, security_marking: UNCLASSIFIED}
+    large_icon: {filename: E-ZPass_large_icon.png, security_marking: UNCLASSIFIED}
     launch_url: https://en.wikipedia.org/wiki/E-ZPass
     listing_type: Desktop App
     owners: [bettafish]
@@ -8860,9 +8845,9 @@
     - description: null
       large_image: {filename: E-ZPass_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: E-ZPass_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: E-ZPass_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: E-ZPass_large_screenshot.png, security_marking: UNCLASSIFIED}
+    small_icon: {filename: E-ZPass_small_icon.png, security_marking: UNCLASSIFIED}
     tags: [car, driving, toll]
     title: E-ZPass
     unique_name: e-zpass
@@ -8877,7 +8862,7 @@
 - library_entries: []
   listing:
     agency: Miniplen
-    banner_icon: {filename: AppliedEthicsInc._large_screenshot.png, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: AppliedEthicsInc._banner_icon.png, security_marking: UNCLASSIFIED}
     categories: [Business, Finance]
     contacts: []
     description: Applied ethics is the branch of ethics concerned with the analysis
@@ -8899,8 +8884,8 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: AppliedEthicsInc._large_screenshot.png, security_marking: UNCLASSIFIED}
-    large_icon: {filename: AppliedEthicsInc._large_screenshot.png, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: AppliedEthicsInc._large_banner_icon.png, security_marking: UNCLASSIFIED}
+    large_icon: {filename: AppliedEthicsInc._large_icon.png, security_marking: UNCLASSIFIED}
     launch_url: http://appliedethicsinc.com
     listing_type: Web Application
     owners: [wsmith, jones]
@@ -8909,9 +8894,9 @@
     - description: null
       large_image: {filename: AppliedEthicsInc._0_large_screenshot.png, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: AppliedEthicsInc._0_large_screenshot.png, security_marking: UNCLASSIFIED}
+      small_image: {filename: AppliedEthicsInc._0_small_screenshot.png, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: AppliedEthicsInc._large_screenshot.png, security_marking: UNCLASSIFIED}
+    small_icon: {filename: AppliedEthicsInc._small_icon.png, security_marking: UNCLASSIFIED}
     tags: [ethics, organizational, social]
     title: Applied Ethics Inc.
     unique_name: applied_ethics_inc.
@@ -8922,12 +8907,11 @@
   - {action: SUBMITTED, author: wsmith, description: null}
   - {action: APPROVED_ORG, author: bigbrother, description: null}
   - {action: APPROVED, author: bigbrother, description: null}
-  - {action: MODIFIED, author: wsmith, description: null}
   listing_review_batch: []
 - library_entries: []
   listing:
     agency: Miniluv
-    banner_icon: {filename: MovieProjector_large_screenshot.gif, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: MovieProjector_banner_icon.gif, security_marking: UNCLASSIFIED}
     categories: [Entertainment]
     contacts: []
     description: A movie projector is an opto-mechanical device for displaying motion
@@ -8942,8 +8926,8 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: MovieProjector_large_screenshot.gif, security_marking: UNCLASSIFIED}
-    large_icon: {filename: MovieProjector_large_screenshot.gif, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: MovieProjector_large_banner_icon.gif, security_marking: UNCLASSIFIED}
+    large_icon: {filename: MovieProjector_large_icon.gif, security_marking: UNCLASSIFIED}
     launch_url: https://en.wikipedia.org/wiki/Movie_projector
     listing_type: Desktop App
     owners: [bettafish]
@@ -8952,9 +8936,9 @@
     - description: null
       large_image: {filename: MovieProjector_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: MovieProjector_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: MovieProjector_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: MovieProjector_large_screenshot.gif, security_marking: UNCLASSIFIED}
+    small_icon: {filename: MovieProjector_small_icon.gif, security_marking: UNCLASSIFIED}
     tags: [movie, tv]
     title: Movie Projector
     unique_name: movie_projector
@@ -8969,7 +8953,7 @@
 - library_entries: []
   listing:
     agency: Miniluv
-    banner_icon: {filename: T-slotnut_large_screenshot.png, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: T-slotnut_banner_icon.png, security_marking: UNCLASSIFIED}
     categories: [Tools]
     contacts: []
     description: "A T-slot nut is used with a threaded clamp to position and secure\
@@ -8992,8 +8976,8 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: T-slotnut_large_screenshot.png, security_marking: UNCLASSIFIED}
-    large_icon: {filename: T-slotnut_large_screenshot.png, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: T-slotnut_large_banner_icon.png, security_marking: UNCLASSIFIED}
+    large_icon: {filename: T-slotnut_large_icon.png, security_marking: UNCLASSIFIED}
     launch_url: https://en.wikipedia.org/wiki/T-slot_nut
     listing_type: Widget
     owners: [bettafish]
@@ -9002,9 +8986,9 @@
     - description: null
       large_image: {filename: T-slotnut_0_large_screenshot.png, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: T-slotnut_0_large_screenshot.png, security_marking: UNCLASSIFIED}
+      small_image: {filename: T-slotnut_0_small_screenshot.png, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: T-slotnut_large_screenshot.png, security_marking: UNCLASSIFIED}
+    small_icon: {filename: T-slotnut_small_icon.png, security_marking: UNCLASSIFIED}
     tags: [clamp, nut]
     title: T-slot nut
     unique_name: t-slot_nut
@@ -9019,7 +9003,7 @@
 - library_entries: []
   listing:
     agency: Miniluv
-    banner_icon: {filename: Toyota_large_screenshot.png, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: Toyota_banner_icon.png, security_marking: UNCLASSIFIED}
     categories: [Productivity, Shopping]
     contacts: []
     description: "Toyota Motor Corporation (Japanese: \u30C8\u30E8\u30BF\u81EA\u52D5\
@@ -9042,8 +9026,8 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: Toyota_large_screenshot.png, security_marking: UNCLASSIFIED}
-    large_icon: {filename: Toyota_large_screenshot.png, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: Toyota_large_banner_icon.png, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Toyota_large_icon.png, security_marking: UNCLASSIFIED}
     launch_url: https://en.wikipedia.org/wiki/Toyota
     listing_type: Web Services
     owners: [bettafish]
@@ -9052,13 +9036,13 @@
     - description: null
       large_image: {filename: Toyota_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: Toyota_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: Toyota_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     - description: null
       large_image: {filename: Toyota_1_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 1
-      small_image: {filename: Toyota_1_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: Toyota_1_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: Toyota_large_screenshot.png, security_marking: UNCLASSIFIED}
+    small_icon: {filename: Toyota_small_icon.png, security_marking: UNCLASSIFIED}
     tags: [car]
     title: Toyota
     unique_name: toyota
@@ -9069,21 +9053,14 @@
   - {action: SUBMITTED, author: bettafish, description: null}
   - {action: APPROVED_ORG, author: bettafish, description: null}
   - {action: APPROVED, author: bettafish, description: null}
-  - {action: MODIFIED, author: bettafish, description: null}
-  - {action: MODIFIED, author: bettafish, description: null}
-  - {action: DISABLED, author: khaleesi, description: null}
-  - {action: PENDING_DELETION, author: khaleesi, description: null}
-  - {action: REJECTED, author: khaleesi, description: none}
   - {action: SUBMITTED, author: bettafish, description: null}
   - {action: APPROVED_ORG, author: bettafish, description: null}
   - {action: APPROVED, author: bettafish, description: null}
-  - {action: ENABLED, author: bettafish, description: null}
-  - {action: MODIFIED, author: bigbrother, description: null}
   listing_review_batch: []
 - library_entries: []
   listing:
     agency: Minitrue
-    banner_icon: {filename: Compoundbow_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: Compoundbow_banner_icon.jpeg, security_marking: UNCLASSIFIED}
     categories: [Business]
     contacts: []
     description: 'In modern archery, a compound bow is a bow that uses a levering
@@ -9121,8 +9098,8 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: Compoundbow_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
-    large_icon: {filename: Compoundbow_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: Compoundbow_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Compoundbow_large_icon.jpeg, security_marking: UNCLASSIFIED}
     launch_url: https://en.wikipedia.org/wiki/Compound_bow
     listing_type: Widget
     owners: [bettafish, jones]
@@ -9131,9 +9108,9 @@
     - description: null
       large_image: {filename: Compoundbow_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: Compoundbow_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: Compoundbow_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: Compoundbow_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    small_icon: {filename: Compoundbow_small_icon.jpeg, security_marking: UNCLASSIFIED}
     tags: [sport, bow, hunting, arrow]
     title: Compound bow
     unique_name: compound_bow
@@ -9151,7 +9128,7 @@
   - {folder: null, owner: wsmith, position: 3}
   listing:
     agency: Minitrue
-    banner_icon: {filename: Grandfatherclock_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: Grandfatherclock_banner_icon.jpeg, security_marking: UNCLASSIFIED}
     categories: [Business]
     contacts: []
     description: "A longcase clock, also tall-case clock, floor clock, or grandfather\
@@ -9174,8 +9151,8 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: Grandfatherclock_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
-    large_icon: {filename: Grandfatherclock_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: Grandfatherclock_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Grandfatherclock_large_icon.jpeg, security_marking: UNCLASSIFIED}
     launch_url: https://en.wikipedia.org/wiki/Longcase_clock
     listing_type: Desktop App
     owners: [bettafish, jones]
@@ -9184,9 +9161,9 @@
     - description: null
       large_image: {filename: Grandfatherclock_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: Grandfatherclock_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: Grandfatherclock_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: Grandfatherclock_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    small_icon: {filename: Grandfatherclock_small_icon.jpeg, security_marking: UNCLASSIFIED}
     tags: [clock, time]
     title: Grandfather clock
     unique_name: grandfather_clock
@@ -9197,7 +9174,6 @@
       had to be wound every day.'
   listing_activity:
   - {action: CREATED, author: jones, description: null}
-  - {action: MODIFIED, author: jones, description: null}
   - {action: SUBMITTED, author: jones, description: null}
   - {action: APPROVED_ORG, author: bettafish, description: null}
   - {action: APPROVED, author: bettafish, description: null}
@@ -9205,7 +9181,7 @@
 - library_entries: []
   listing:
     agency: Miniluv
-    banner_icon: {filename: Pencil_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: Pencil_banner_icon.jpeg, security_marking: UNCLASSIFIED}
     categories: [Tools]
     contacts: []
     description: "A pencil is a writing implement or art medium constructed of a narrow,\
@@ -9222,8 +9198,8 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: Pencil_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
-    large_icon: {filename: Pencil_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: Pencil_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Pencil_large_icon.jpeg, security_marking: UNCLASSIFIED}
     launch_url: https://en.wikipedia.org/wiki/Pencil
     listing_type: Desktop App
     owners: [bettafish]
@@ -9232,9 +9208,9 @@
     - description: null
       large_image: {filename: Pencil_0_large_screenshot.png, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: Pencil_0_large_screenshot.png, security_marking: UNCLASSIFIED}
+      small_image: {filename: Pencil_0_small_screenshot.png, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: Pencil_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    small_icon: {filename: Pencil_small_icon.jpeg, security_marking: UNCLASSIFIED}
     tags: [pencil]
     title: Pencil
     unique_name: pencil
@@ -9249,7 +9225,7 @@
 - library_entries: []
   listing:
     agency: Miniluv
-    banner_icon: {filename: Eraser_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: Eraser_banner_icon.jpeg, security_marking: UNCLASSIFIED}
     categories: [Tools]
     contacts: []
     description: 'An eraser, (also called a rubber outside America,[1] from the material
@@ -9271,8 +9247,8 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: Eraser_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
-    large_icon: {filename: Eraser_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: Eraser_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Eraser_large_icon.jpeg, security_marking: UNCLASSIFIED}
     launch_url: https://en.wikipedia.org/wiki/Eraser
     listing_type: Widget
     owners: [bettafish]
@@ -9281,9 +9257,9 @@
     - description: null
       large_image: {filename: Eraser_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: Eraser_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: Eraser_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: Eraser_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    small_icon: {filename: Eraser_small_icon.jpeg, security_marking: UNCLASSIFIED}
     tags: [pencil]
     title: Eraser
     unique_name: eraser
@@ -9298,7 +9274,7 @@
 - library_entries: []
   listing:
     agency: Minitrue
-    banner_icon: {filename: Wikipedia_large_screenshot.png, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: Wikipedia_banner_icon.png, security_marking: UNCLASSIFIED}
     categories: [Education, Entertainment]
     contacts: []
     description: "Wikipedia (/\u02CCw\u026Ak\u026A\u02C8pi\u02D0di\u0259/ (About this\
@@ -9331,8 +9307,8 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: Wikipedia_large_screenshot.png, security_marking: UNCLASSIFIED}
-    large_icon: {filename: Wikipedia_large_screenshot.png, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: Wikipedia_large_banner_icon.png, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Wikipedia_large_icon.png, security_marking: UNCLASSIFIED}
     launch_url: https://en.wikipedia.org/wiki/Wikipedia
     listing_type: Widget
     owners: [wsmith, jones]
@@ -9341,9 +9317,9 @@
     - description: null
       large_image: {filename: Wikipedia_0_large_screenshot.png, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: Wikipedia_0_large_screenshot.png, security_marking: UNCLASSIFIED}
+      small_image: {filename: Wikipedia_0_small_screenshot.png, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: Wikipedia_large_screenshot.png, security_marking: UNCLASSIFIED}
+    small_icon: {filename: Wikipedia_small_icon.png, security_marking: UNCLASSIFIED}
     tags: [test, info, data, research]
     title: Wikipedia
     unique_name: wikipedia
@@ -9356,7 +9332,7 @@
 - library_entries: []
   listing:
     agency: Minitrue
-    banner_icon: {filename: Cheesecake_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: Cheesecake_banner_icon.jpeg, security_marking: UNCLASSIFIED}
     categories: [Education]
     contacts: []
     description: Cheesecake is a sweet dessert consisting of one or more layers. The
@@ -9376,8 +9352,8 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: Cheesecake_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
-    large_icon: {filename: Cheesecake_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: Cheesecake_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Cheesecake_large_icon.jpeg, security_marking: UNCLASSIFIED}
     launch_url: https://en.wikipedia.org/wiki/Cheesecake
     listing_type: Widget
     owners: [bettafish, jones]
@@ -9386,17 +9362,17 @@
     - description: null
       large_image: {filename: Cheesecake_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: Cheesecake_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: Cheesecake_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     - description: null
       large_image: {filename: Cheesecake_1_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 1
-      small_image: {filename: Cheesecake_1_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: Cheesecake_1_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     - description: null
       large_image: {filename: Cheesecake_2_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 2
-      small_image: {filename: Cheesecake_2_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: Cheesecake_2_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: Cheesecake_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    small_icon: {filename: Cheesecake_small_icon.jpeg, security_marking: UNCLASSIFIED}
     tags: [fish, good, yum, cake]
     title: Cheesecake
     unique_name: cheesecake
@@ -9404,7 +9380,6 @@
     what_is_new: Good eats.
   listing_activity:
   - {action: CREATED, author: jones, description: null}
-  - {action: MODIFIED, author: jones, description: null}
   - {action: SUBMITTED, author: jones, description: null}
   - {action: APPROVED_ORG, author: bettafish, description: null}
   - {action: APPROVED, author: bettafish, description: null}
@@ -9412,7 +9387,7 @@
 - library_entries: []
   listing:
     agency: Minitrue
-    banner_icon: {filename: Steak_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: Steak_banner_icon.jpeg, security_marking: UNCLASSIFIED}
     categories: [Education]
     contacts: []
     description: "A steak (/\u02C8ste\u026Ak/) is a meat generally sliced across the\
@@ -9444,8 +9419,8 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: Steak_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
-    large_icon: {filename: Steak_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: Steak_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Steak_large_icon.jpeg, security_marking: UNCLASSIFIED}
     launch_url: https://en.wikipedia.org/wiki/Steak
     listing_type: Code Library
     owners: [bettafish, jones]
@@ -9454,13 +9429,13 @@
     - description: null
       large_image: {filename: Steak_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: Steak_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: Steak_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     - description: null
       large_image: {filename: Steak_1_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 1
-      small_image: {filename: Steak_1_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: Steak_1_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: Steak_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    small_icon: {filename: Steak_small_icon.jpeg, security_marking: UNCLASSIFIED}
     tags: [steak]
     title: Steak
     unique_name: steak
@@ -9473,7 +9448,7 @@
 - library_entries: []
   listing:
     agency: Minitrue
-    banner_icon: {filename: WitchDoctor_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: WitchDoctor_banner_icon.jpeg, security_marking: UNCLASSIFIED}
     categories: [Communication]
     contacts: []
     description: "A witch doctor was originally a type of healer who treated ailments\
@@ -9489,8 +9464,8 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: WitchDoctor_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
-    large_icon: {filename: WitchDoctor_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: WitchDoctor_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: WitchDoctor_large_icon.jpeg, security_marking: UNCLASSIFIED}
     launch_url: https://en.wikipedia.org/wiki/Witch_doctor
     listing_type: Widget
     owners: [bettafish, jones]
@@ -9499,13 +9474,13 @@
     - description: null
       large_image: {filename: WitchDoctor_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: WitchDoctor_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: WitchDoctor_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     - description: null
       large_image: {filename: WitchDoctor_1_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 1
-      small_image: {filename: WitchDoctor_1_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: WitchDoctor_1_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: WitchDoctor_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    small_icon: {filename: WitchDoctor_small_icon.jpeg, security_marking: UNCLASSIFIED}
     tags: [doc, doctor, medicine]
     title: Witch Doctor
     unique_name: witch_doctor
@@ -9514,12 +9489,11 @@
   listing_activity:
   - {action: CREATED, author: jones, description: null}
   - {action: SUBMITTED, author: jones, description: null}
-  - {action: MODIFIED, author: bettafish, description: null}
   listing_review_batch: []
 - library_entries: []
   listing:
     agency: Minitrue
-    banner_icon: {filename: Voodoo_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: Voodoo_banner_icon.jpeg, security_marking: UNCLASSIFIED}
     categories: [Education]
     contacts: []
     description: "Louisiana Voodoo, also known as New Orleans Voodoo, describes a\
@@ -9545,8 +9519,8 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: Voodoo_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
-    large_icon: {filename: Voodoo_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: Voodoo_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Voodoo_large_icon.jpeg, security_marking: UNCLASSIFIED}
     launch_url: https://en.wikipedia.org/wiki/Louisiana_Voodoo
     listing_type: Widget
     owners: [bettafish, jones]
@@ -9555,9 +9529,9 @@
     - description: null
       large_image: {filename: Voodoo_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: Voodoo_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: Voodoo_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: Voodoo_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    small_icon: {filename: Voodoo_small_icon.jpeg, security_marking: UNCLASSIFIED}
     tags: [magic]
     title: Voodoo
     unique_name: voodoo
@@ -9565,13 +9539,12 @@
     what_is_new: None.
   listing_activity:
   - {action: CREATED, author: jones, description: null}
-  - {action: MODIFIED, author: jones, description: null}
   - {action: SUBMITTED, author: jones, description: null}
   listing_review_batch: []
 - library_entries: []
   listing:
     agency: Minitrue
-    banner_icon: {filename: Ruby_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: Ruby_banner_icon.jpeg, security_marking: UNCLASSIFIED}
     categories: [Finance]
     contacts: []
     description: 'A ruby is a pink to blood-red colored gemstone, a variety of the
@@ -9597,8 +9570,8 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: Ruby_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
-    large_icon: {filename: Ruby_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: Ruby_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Ruby_large_icon.jpeg, security_marking: UNCLASSIFIED}
     launch_url: https://en.wikipedia.org/wiki/Ruby
     listing_type: Widget
     owners: [wsmith]
@@ -9607,9 +9580,9 @@
     - description: example of a ruby
       large_image: {filename: Ruby_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: Ruby_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: Ruby_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: Ruby_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    small_icon: {filename: Ruby_small_icon.jpeg, security_marking: UNCLASSIFIED}
     tags: [ruby, gem, gemstone, stone, red, jewelry]
     title: Ruby
     unique_name: ruby
@@ -9626,7 +9599,7 @@
   - {folder: null, owner: wsmith, position: 2}
   listing:
     agency: Miniplen
-    banner_icon: {filename: Diamond_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: Diamond_banner_icon.jpeg, security_marking: UNCLASSIFIED}
     categories: [Finance]
     contacts: []
     description: "Diamond ( /\u02C8da\u026A\u0259m\u0259nd/ or /\u02C8da\u026Am\u0259\
@@ -9668,8 +9641,8 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: Diamond_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
-    large_icon: {filename: Diamond_large_screenshot.png, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: Diamond_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Diamond_large_icon.png, security_marking: UNCLASSIFIED}
     launch_url: https://en.wikipedia.org/wiki/Diamond
     listing_type: Widget
     owners: [wsmith]
@@ -9678,21 +9651,21 @@
     - description: Loose diamonds on a white background
       large_image: {filename: Diamond_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: Diamond_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: Diamond_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     - description: Diamond necklace
       large_image: {filename: Diamond_1_large_screenshot.png, security_marking: UNCLASSIFIED}
       order: 1
-      small_image: {filename: Diamond_1_large_screenshot.png, security_marking: UNCLASSIFIED}
+      small_image: {filename: Diamond_1_small_screenshot.png, security_marking: UNCLASSIFIED}
     - description: A pendant with diamond and other gem stones
       large_image: {filename: Diamond_2_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 2
-      small_image: {filename: Diamond_2_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: Diamond_2_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     - description: a diamond on a black background
       large_image: {filename: Diamond_3_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 3
-      small_image: {filename: Diamond_3_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: Diamond_3_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: Diamond_large_screenshot.png, security_marking: UNCLASSIFIED}
+    small_icon: {filename: Diamond_small_icon.png, security_marking: UNCLASSIFIED}
     tags: [white, gem, gemstone, jewelry, diamond, chocolate, carbon]
     title: Diamond
     unique_name: diamond
@@ -9707,7 +9680,7 @@
 - library_entries: []
   listing:
     agency: Miniplen
-    banner_icon: {filename: Sapphire_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: Sapphire_banner_icon.jpeg, security_marking: UNCLASSIFIED}
     categories: [Finance]
     contacts: []
     description: "Sapphire is a gemstone, a variety of the mineral corundum, an aluminium\
@@ -9734,8 +9707,8 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: Sapphire_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
-    large_icon: {filename: Sapphire_large_screenshot.png, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: Sapphire_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Sapphire_large_icon.png, security_marking: UNCLASSIFIED}
     launch_url: https://en.wikipedia.org/wiki/Sapphire
     listing_type: Widget
     owners: [wsmith]
@@ -9744,9 +9717,9 @@
     - description: A sapphire and diamond ring
       large_image: {filename: Sapphire_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: Sapphire_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: Sapphire_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: Sapphire_large_screenshot.png, security_marking: UNCLASSIFIED}
+    small_icon: {filename: Sapphire_small_icon.png, security_marking: UNCLASSIFIED}
     tags: [gem, gemstone, stone, jewelry, blue]
     title: Sapphire
     unique_name: sapphire
@@ -9754,7 +9727,6 @@
     what_is_new: null
   listing_activity:
   - {action: CREATED, author: khaleesi, description: null}
-  - {action: MODIFIED, author: khaleesi, description: null}
   - {action: SUBMITTED, author: khaleesi, description: null}
   - {action: APPROVED_ORG, author: khaleesi, description: null}
   - {action: APPROVED, author: khaleesi, description: null}
@@ -9762,7 +9734,7 @@
 - library_entries: []
   listing:
     agency: Miniluv
-    banner_icon: {filename: MotorcycleHelmet_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: MotorcycleHelmet_banner_icon.jpeg, security_marking: UNCLASSIFIED}
     categories: [Health and Fitness]
     contacts: []
     description: 'A motorcycle helmet is a type of helmet used by motorcycle riders.
@@ -9788,8 +9760,8 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: MotorcycleHelmet_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
-    large_icon: {filename: MotorcycleHelmet_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: MotorcycleHelmet_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: MotorcycleHelmet_large_icon.jpeg, security_marking: UNCLASSIFIED}
     launch_url: https://en.wikipedia.org/wiki/Motorcycle_helmet
     listing_type: Desktop App
     owners: [bettafish]
@@ -9800,9 +9772,9 @@
     - description: null
       large_image: {filename: MotorcycleHelmet_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: MotorcycleHelmet_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: MotorcycleHelmet_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: MotorcycleHelmet_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    small_icon: {filename: MotorcycleHelmet_small_icon.jpeg, security_marking: UNCLASSIFIED}
     tags: [bike, motorcycle, vehicle]
     title: Motorcycle Helmet
     unique_name: motorcycle_helmet
@@ -9818,7 +9790,7 @@
 - library_entries: []
   listing:
     agency: Minitrue
-    banner_icon: {filename: KomodoDragon_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: KomodoDragon_banner_icon.jpeg, security_marking: UNCLASSIFIED}
     categories: [Entertainment]
     contacts: []
     description: 'The Komodo dragon[4] (Varanus komodoensis), also known as the Komodo
@@ -9873,8 +9845,8 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: KomodoDragon_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
-    large_icon: {filename: KomodoDragon_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: KomodoDragon_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: KomodoDragon_large_icon.jpeg, security_marking: UNCLASSIFIED}
     launch_url: https://en.wikipedia.org/wiki/Komodo_dragon
     listing_type: Desktop App
     owners: [khaleesi]
@@ -9883,9 +9855,9 @@
     - description: Komodo Dragon on a rock
       large_image: {filename: KomodoDragon_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: KomodoDragon_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: KomodoDragon_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: KomodoDragon_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    small_icon: {filename: KomodoDragon_small_icon.jpeg, security_marking: UNCLASSIFIED}
     tags: [Lizard, Monitor, Reptile]
     title: Komodo Dragon
     unique_name: komodo_dragon
@@ -9896,15 +9868,13 @@
   - {action: SUBMITTED, author: khaleesi, description: null}
   - {action: APPROVED_ORG, author: khaleesi, description: null}
   - {action: APPROVED, author: khaleesi, description: null}
-  - {action: DISABLED, author: khaleesi, description: null}
-  - {action: ENABLED, author: khaleesi, description: null}
   listing_review_batch:
   - {author: bigbrother, rate: 1, text: 'I don''t think that cold blooded animals
       are very efficient '}
 - library_entries: []
   listing:
     agency: Test 3
-    banner_icon: {filename: Astrologysoftware_large_screenshot.png, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: Astrologysoftware_banner_icon.png, security_marking: UNCLASSIFIED}
     categories: [Education, Weather]
     contacts: [a@b.com]
     description: 'Astrology software is a type of computer programs designed to calculate
@@ -9938,8 +9908,8 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: Astrologysoftware_large_screenshot.png, security_marking: UNCLASSIFIED}
-    large_icon: {filename: Astrologysoftware_large_screenshot.png, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: Astrologysoftware_large_banner_icon.png, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Astrologysoftware_large_icon.png, security_marking: UNCLASSIFIED}
     launch_url: https://en.wikipedia.org/wiki/Astrology_software
     listing_type: Desktop App
     owners: [bettafish]
@@ -9948,9 +9918,9 @@
     - description: null
       large_image: {filename: Astrologysoftware_0_large_screenshot.png, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: Astrologysoftware_0_large_screenshot.png, security_marking: UNCLASSIFIED}
+      small_image: {filename: Astrologysoftware_0_small_screenshot.png, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: Astrologysoftware_large_screenshot.png, security_marking: UNCLASSIFIED}
+    small_icon: {filename: Astrologysoftware_small_icon.png, security_marking: UNCLASSIFIED}
     tags: [horoscope, hocus pocus]
     title: Astrology software
     unique_name: astrology_software
@@ -9967,7 +9937,7 @@
 - library_entries: []
   listing:
     agency: Miniluv
-    banner_icon: {filename: ChickenandWaffles_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: ChickenandWaffles_banner_icon.jpeg, security_marking: UNCLASSIFIED}
     categories: [Health and Fitness]
     contacts: []
     description: "Chicken and waffles refers to either of two American dishes \u2013\
@@ -9981,8 +9951,8 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: ChickenandWaffles_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
-    large_icon: {filename: ChickenandWaffles_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: ChickenandWaffles_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: ChickenandWaffles_large_icon.jpeg, security_marking: UNCLASSIFIED}
     launch_url: https://en.wikipedia.org/wiki/Chicken_and_waffles
     listing_type: Widget
     owners: [bettafish]
@@ -9991,13 +9961,13 @@
     - description: null
       large_image: {filename: ChickenandWaffles_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: ChickenandWaffles_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: ChickenandWaffles_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     - description: null
       large_image: {filename: ChickenandWaffles_1_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 1
-      small_image: {filename: ChickenandWaffles_1_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: ChickenandWaffles_1_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: ChickenandWaffles_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    small_icon: {filename: ChickenandWaffles_small_icon.jpeg, security_marking: UNCLASSIFIED}
     tags: [food, chicken, waffles]
     title: Chicken and Waffles
     unique_name: chicken_and_waffles
@@ -10012,7 +9982,7 @@
 - library_entries: []
   listing:
     agency: Miniluv
-    banner_icon: {filename: MixingConsole_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: MixingConsole_banner_icon.jpeg, security_marking: UNCLASSIFIED}
     categories: [Entertainment]
     contacts: []
     description: 'In audio, a mixing console is an electronic device for combining
@@ -10049,8 +10019,8 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: MixingConsole_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
-    large_icon: {filename: MixingConsole_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: MixingConsole_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: MixingConsole_large_icon.jpeg, security_marking: UNCLASSIFIED}
     launch_url: https://en.wikipedia.org/wiki/Mixing_console
     listing_type: Desktop App
     owners: [bettafish]
@@ -10059,13 +10029,13 @@
     - description: null
       large_image: {filename: MixingConsole_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: MixingConsole_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: MixingConsole_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     - description: null
       large_image: {filename: MixingConsole_1_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 1
-      small_image: {filename: MixingConsole_1_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: MixingConsole_1_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: MixingConsole_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    small_icon: {filename: MixingConsole_small_icon.jpeg, security_marking: UNCLASSIFIED}
     tags: [music]
     title: Mixing Console
     unique_name: mixing_console
@@ -10082,7 +10052,7 @@
 - library_entries: []
   listing:
     agency: Minipax
-    banner_icon: {filename: NetworkSwitch_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: NetworkSwitch_banner_icon.jpeg, security_marking: UNCLASSIFIED}
     categories: [Communication]
     contacts: []
     description: A computer networking device that connects devices together on a
@@ -10102,8 +10072,8 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: NetworkSwitch_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
-    large_icon: {filename: NetworkSwitch_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: NetworkSwitch_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: NetworkSwitch_large_icon.jpeg, security_marking: UNCLASSIFIED}
     launch_url: https://en.wikipedia.org/wiki/Network_switch
     listing_type: Web Application
     owners: [bigbrother]
@@ -10124,9 +10094,9 @@
     - description: null
       large_image: {filename: NetworkSwitch_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: NetworkSwitch_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: NetworkSwitch_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: NetworkSwitch_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    small_icon: {filename: NetworkSwitch_small_icon.jpeg, security_marking: UNCLASSIFIED}
     tags: [computer, connection, electronic, equipment, internet, rack, wire, person]
     title: Network Switch
     unique_name: network_switch
@@ -10143,7 +10113,7 @@
 - library_entries: []
   listing:
     agency: Minipax
-    banner_icon: {filename: SmartPhone_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: SmartPhone_banner_icon.jpeg, security_marking: UNCLASSIFIED}
     categories: [Business, Communication, Sports]
     contacts: []
     description: A mobile personal computer with a mobile operating system with features
@@ -10159,8 +10129,8 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: SmartPhone_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
-    large_icon: {filename: SmartPhone_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: SmartPhone_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: SmartPhone_large_icon.jpeg, security_marking: UNCLASSIFIED}
     launch_url: https://en.wikipedia.org/wiki/Smartphone
     listing_type: Web Application
     owners: [bigbrother]
@@ -10170,9 +10140,9 @@
     - description: Smart Phone
       large_image: {filename: SmartPhone_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: SmartPhone_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: SmartPhone_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: SmartPhone_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    small_icon: {filename: SmartPhone_small_icon.jpeg, security_marking: UNCLASSIFIED}
     tags: [business, connection, communication, contacts, device, display, smartphone,
       phone, wireless, modern, cellphone, cellular]
     title: Smart Phone
@@ -10181,7 +10151,6 @@
     what_is_new: 5G Connection will be faster than 4G
   listing_activity:
   - {action: CREATED, author: bigbrother, description: null}
-  - {action: MODIFIED, author: bigbrother, description: null}
   - {action: SUBMITTED, author: bigbrother, description: null}
   - {action: APPROVED_ORG, author: bigbrother, description: null}
   - {action: APPROVED, author: bigbrother, description: null}
@@ -10189,7 +10158,7 @@
 - library_entries: []
   listing:
     agency: Minipax
-    banner_icon: {filename: Writing_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: Writing_banner_icon.jpeg, security_marking: UNCLASSIFIED}
     categories: [Communication]
     contacts: []
     description: Writing is a medium of human communication that represents language
@@ -10210,8 +10179,8 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: Writing_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
-    large_icon: {filename: Writing_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: Writing_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Writing_large_icon.jpeg, security_marking: UNCLASSIFIED}
     launch_url: https://en.wikipedia.org/wiki/Writing
     listing_type: Web Application
     owners: [bigbrother]
@@ -10220,9 +10189,9 @@
     - description: Writing down on a piece of paper
       large_image: {filename: Writing_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: Writing_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: Writing_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED//FOR OFFICIAL USE ONLY
-    small_icon: {filename: Writing_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    small_icon: {filename: Writing_small_icon.jpeg, security_marking: UNCLASSIFIED}
     tags: [paper, notebook, pen, writing]
     title: Writing
     unique_name: writing
@@ -10237,7 +10206,7 @@
 - library_entries: []
   listing:
     agency: Minipax
-    banner_icon: {filename: Formula_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: Formula_banner_icon.jpeg, security_marking: UNCLASSIFIED}
     categories: [Books and Reference, Education]
     contacts: []
     description: A formula is a concise way of expressing information symbolically,
@@ -10251,8 +10220,8 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: Formula_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
-    large_icon: {filename: Formula_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: Formula_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Formula_large_icon.jpeg, security_marking: UNCLASSIFIED}
     launch_url: https://en.wikipedia.org/wiki/Formula
     listing_type: Desktop App
     owners: [bigbrother]
@@ -10263,9 +10232,9 @@
     - description: Math Formula
       large_image: {filename: Formula_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: Formula_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: Formula_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: Formula_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    small_icon: {filename: Formula_small_icon.jpeg, security_marking: UNCLASSIFIED}
     tags: [science, learning, writing, chalk, conceptual, text, handwritten, math,
       physics]
     title: Formula
@@ -10280,12 +10249,11 @@
   - {action: SUBMITTED, author: bigbrother, description: null}
   - {action: APPROVED_ORG, author: bigbrother, description: null}
   - {action: APPROVED, author: bigbrother, description: null}
-  - {action: MODIFIED, author: bigbrother, description: null}
   listing_review_batch: []
 - library_entries: []
   listing:
     agency: Minipax
-    banner_icon: {filename: Newspaper_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    banner_icon: {filename: Newspaper_banner_icon.jpeg, security_marking: UNCLASSIFIED}
     categories: [Communication, News]
     contacts: []
     description: A serial publication containing news about current events, other
@@ -10301,8 +10269,8 @@
     is_enabled: true
     is_featured: false
     is_private: false
-    large_banner_icon: {filename: Newspaper_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
-    large_icon: {filename: Newspaper_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_banner_icon: {filename: Newspaper_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Newspaper_large_icon.jpeg, security_marking: UNCLASSIFIED}
     launch_url: https://en.wikipedia.org/wiki/Newspaper
     listing_type: Web Services
     owners: [bigbrother]
@@ -10315,9 +10283,9 @@
     - description: Newspaper
       large_image: {filename: Newspaper_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
       order: 0
-      small_image: {filename: Newspaper_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      small_image: {filename: Newspaper_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
-    small_icon: {filename: Newspaper_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    small_icon: {filename: Newspaper_small_icon.jpeg, security_marking: UNCLASSIFIED}
     tags: [business, paper, facts, information, journal, journalist, journalism, news,
       newspaper, press, office]
     title: Newspaper
@@ -10332,5 +10300,4 @@
   - {action: SUBMITTED, author: bigbrother, description: null}
   - {action: APPROVED_ORG, author: bigbrother, description: null}
   - {action: APPROVED, author: bigbrother, description: null}
-  - {action: MODIFIED, author: bigbrother, description: null}
   listing_review_batch: []

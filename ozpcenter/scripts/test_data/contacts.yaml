@@ -199,5 +199,5 @@ contacts:
   email: a@b.com
   name: A B
   organization: null
-  secure_phone: 123-3211
+  secure_phone: null
   unsecure_phone: null
