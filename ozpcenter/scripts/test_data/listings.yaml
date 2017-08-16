@@ -1,5 +1,5 @@
 - library_entries:
-  - {folder: null, owner: wsmith, position: 0}
+  - {folder: old, owner: wsmith, position: 0}
   - {folder: null, owner: hodor, position: 0}
   listing:
     agency: Minitrue
@@ -52,8 +52,8 @@
   - {author: khaleesi, rate: 4, text: 'On par with sending ravens across Westeros,
       though less likely to be eaten along the way. '}
 - library_entries:
-  - {folder: null, owner: wsmith, position: 0}
-  - {folder: null, owner: bigbrother, position: 0}
+  - {folder: old, owner: wsmith, position: 1}
+  - {folder: null, owner: bigbrother, position: 15}
   listing:
     agency: Minitrue
     banner_icon: {filename: BreadBasket_banner_icon.png, security_marking: UNCLASSIFIED}
@@ -95,6 +95,7 @@
   - {author: julia, rate: 5, text: Yum!}
 - library_entries:
   - {folder: null, owner: hodor, position: 0}
+  - {folder: null, owner: bigbrother, position: 20}
   listing:
     agency: Minitrue
     banner_icon: {filename: ChartCourse_banner_icon.png, security_marking: UNCLASSIFIED}
@@ -744,7 +745,8 @@
   listing_review_batch:
   - {author: syme, rate: 5, text: 'I like this!  Are they touring soon? '}
   - {author: rutherford, rate: 3, text: Not sure about this one.}
-- library_entries: []
+- library_entries:
+  - {folder: null, owner: bettafish, position: 1}
   listing:
     agency: Minitrue
     banner_icon: {filename: Bleach_banner_icon.jpeg, security_marking: UNCLASSIFIED}
@@ -1126,7 +1128,8 @@
   - {author: david, rate: 1, text: 'Nobody likes this dog.  I asked everybody who
       is me.  YET!  Still it persists at a 2.0 rating?  fake reviews sheeple!  wake
       up. '}
-- library_entries: []
+- library_entries:
+  - {folder: null, owner: bigbrother, position: 19}
   listing:
     agency: Miniplen
     banner_icon: {filename: GalleryofMaps_banner_icon.png, security_marking: UNCLASSIFIED}
@@ -1320,6 +1323,8 @@
   listing_review_batch:
   - {author: aaronson, rate: 4, text: Very nice place! Expensive though}
   - {author: syme, rate: 5, text: I feel like I would like it!  10 stars!}
+  - {author: rutherford, rate: 3, text: 'I know that I should not worry, but it is
+      the volcanoes that I am worried about.  Otherwise a good place to visit.'}
 - library_entries: []
   listing:
     agency: Test
@@ -1543,7 +1548,8 @@
       of everybody can fly and you can sit behind them at concerts and still see the
       show.'}
   - {author: betaraybill, rate: 5, text: BEST. X-MEN. EVER!!!}
-- library_entries: []
+- library_entries:
+  - {folder: heros, owner: wsmith, position: 6}
   listing:
     agency: Minipax
     banner_icon: {filename: JeanGrey_banner_icon.png, security_marking: UNCLASSIFIED}
@@ -1753,7 +1759,8 @@
   listing_review_batch:
   - {author: syme, rate: 3, text: 'I don''t understand how the guy who controls metal
       doesn''t just throw this guy into orbit. '}
-- library_entries: []
+- library_entries:
+  - {folder: heros, owner: wsmith, position: 5}
   listing:
     agency: Minipax
     banner_icon: {filename: IronMan_banner_icon.jpeg, security_marking: UNCLASSIFIED}
@@ -2155,7 +2162,7 @@
     banner_icon: {filename: Lamprey_banner_icon.jpeg, security_marking: UNCLASSIFIED//FOR
         OFFICIAL USE ONLY}
     categories: [Education]
-    contacts: []
+    contacts: [gsmith@science.com]
     description: 'Lampreys (sometimes also called, inaccurately, lamprey eels) are
       any jawless fish of the order Petromyzontiformes, placed in the superclass Cyclostomata.
       The adult lamprey may be characterized by a toothed, funnel-like sucking mouth.
@@ -2359,7 +2366,8 @@
   listing_review_batch:
   - {author: aaronson, rate: 4, text: Essential for living life}
   - {author: syme, rate: 2, text: 'I don''t get it.  Does its just sit there? '}
-- library_entries: []
+- library_entries:
+  - {folder: Weather, owner: bigbrother, position: 2}
   listing:
     agency: Minipax
     banner_icon: {filename: Snow_banner_icon.jpeg, security_marking: UNCLASSIFIED}
@@ -2404,6 +2412,7 @@
   listing_review_batch:
   - {author: bigbrother, rate: 1, text: The cold does not feel good}
   - {author: syme, rate: 3, text: 'I''ve heard that it knows nothing. '}
+  - {author: khaleesi, rate: 2, text: Snows refuse to bend the knee in my experience.}
 - library_entries: []
   listing:
     agency: Miniluv
@@ -2578,7 +2587,8 @@
       of Business Administration (DBA), or the PhD in Business Administration or Management.'}
   - {author: syme, rate: 2, text: 'I was told there would be cake, last time I did
       not get any cake, and i just want some cake. '}
-- library_entries: []
+- library_entries:
+  - {folder: null, owner: bigbrother, position: 16}
   listing:
     agency: Minipax
     banner_icon: {filename: InformationalBook_banner_icon.png, security_marking: UNCLASSIFIED}
@@ -2943,7 +2953,8 @@
   listing_review_batch:
   - {author: betaraybill, rate: 4, text: Not really feeling the vibes.}
   - {author: syme, rate: 1, text: 'It is too arrogant. '}
-- library_entries: []
+- library_entries:
+  - {folder: planets, owner: wsmith, position: 9}
   listing:
     agency: Miniluv
     banner_icon: {filename: Saturn_banner_icon.jpeg, security_marking: UNCLASSIFIED}
@@ -3223,7 +3234,9 @@
   listing_review_batch:
   - {author: betaraybill, rate: 5, text: It's so blueeeee~~~!!!!!}
   - {author: syme, rate: 1, text: 'NO MORE #$(*)&@#% BLUE THINGS. '}
-- library_entries: []
+- library_entries:
+  - {folder: null, owner: rutherford, position: 0}
+  - {folder: planets, owner: wsmith, position: 8}
   listing:
     agency: Miniluv
     banner_icon: {filename: Azeroth_banner_icon.jpeg, security_marking: UNCLASSIFIED}
@@ -3349,12 +3362,13 @@
       so its a planet now.  You can''t just go around unplaneting things. '}
 - library_entries:
   - {folder: null, owner: jones, position: 0}
+  - {folder: Animals, owner: bigbrother, position: 4}
   listing:
     agency: Minipax
     banner_icon: {filename: KillerWhale_banner_icon.jpeg, security_marking: UNCLASSIFIED//FOR
         OFFICIAL USE ONLY}
     categories: [Education]
-    contacts: []
+    contacts: [gsmith@science.com]
     description: 'The killer whale or orca (Orcinus orca) is a toothed whale belonging
       to the oceanic dolphin family, of which it is the largest member. Killer whales
       have a diverse diet, although individual populations often specialize in particular
@@ -3421,13 +3435,15 @@
   - {action: APPROVED, author: bigbrother, description: null}
   listing_review_batch:
   - {author: jones, rate: 4, text: Samoo was fun to watch at Sea World.}
+  - {author: rutherford, rate: 3, text: They are nice but not a big fan.}
 - library_entries:
   - {folder: null, owner: khaleesi, position: 0}
+  - {folder: Animals, owner: bigbrother, position: 3}
   listing:
     agency: Minipax
     banner_icon: {filename: WolfFinder_banner_icon.jpeg, security_marking: UNCLASSIFIED}
     categories: [Education]
-    contacts: []
+    contacts: [gsmith@science.com]
     description: "The gray wolf or grey wolf (Canis lupus),[a] also known as the timber\
       \ wolf[3][4] or western wolf,[b] is a canine native to the wilderness and remote\
       \ areas of Eurasia and North America. It is the largest extant member of its\
@@ -3492,7 +3508,8 @@
   - {author: rutherford, rate: 5, text: Need this for my neighbourhood.}
   - {author: khaleesi, rate: 4, text: So easy to use that a wolf came to me! It's
       knee wasn't very bendy though so -1 star.}
-- library_entries: []
+- library_entries:
+  - {folder: Animals, owner: bigbrother, position: 5}
   listing:
     agency: Minipax
     banner_icon: {filename: LionFinder_banner_icon.jpeg, security_marking: UNCLASSIFIED}
@@ -3552,12 +3569,13 @@
   listing_review_batch:
   - {author: khaleesi, rate: 1, text: Lions (and Lanisters) are the worst! The only
       reason you should want to find them is to feed them to your dragons.}
-- library_entries: []
+- library_entries:
+  - {folder: Animals, owner: bigbrother, position: 6}
   listing:
     agency: Minipax
     banner_icon: {filename: MonkeyFinder_banner_icon.jpeg, security_marking: UNCLASSIFIED}
     categories: [Education, Tools]
-    contacts: []
+    contacts: [gsmith@science.com]
     description: 'Monkeys are haplorhine primates, a group generally possessing tails
       and consisting of about 260 known living species. There are two distinct lineages
       of monkeys: New World Monkeys and catarrhines. Apes emerged within the catarrhines
@@ -4162,7 +4180,9 @@
   - {action: APPROVED, author: bettafish, description: null}
   listing_review_batch:
   - {author: rutherford, rate: 3, text: This is an okay image and app.}
-- library_entries: []
+- library_entries:
+  - {folder: Funny, owner: bettafish, position: 2}
+  - {folder: heros, owner: wsmith, position: 7}
   listing:
     agency: Minipax
     banner_icon: {filename: Mallrats_banner_icon.jpeg, security_marking: UNCLASSIFIED}
@@ -4333,12 +4353,13 @@
   listing_review_batch:
   - {author: betaraybill, rate: 1, text: One of the main characters doesn't even speak.
       SAD!}
-- library_entries: []
+- library_entries:
+  - {folder: Animals, owner: bigbrother, position: 7}
   listing:
     agency: Minitrue
     banner_icon: {filename: Parrotlet_banner_icon.jpeg, security_marking: UNCLASSIFIED}
     categories: [Education, Entertainment, News]
-    contacts: []
+    contacts: [gsmith@science.com]
     description: The blue-winged parrotlet (Forpus xanthopterygius) is a small parrot
       found in much of South America. The blue-winged parrotlet is mainly found in
       lowlands, but locally up to 1200m in south-eastern Brazil. It occurs in woodland,
@@ -4475,7 +4496,7 @@
     large_icon: {filename: ProjectManagement_large_icon.png, security_marking: UNCLASSIFIED}
     launch_url: '{DEMO_APP_ROOT}/default/index.html'
     listing_type: Desktop App
-    owners: [bigbrother2, wsmith]
+    owners: [bigbrother2, wsmith, jones]
     requirements: None
     screenshots:
     - description: null
@@ -4498,12 +4519,14 @@
   - {action: SUBMITTED, author: wsmith, description: null}
   - {action: APPROVED_ORG, author: bigbrother, description: null}
   - {action: APPROVED, author: bigbrother, description: null}
+  - {action: MODIFIED, author: wsmith, description: null}
   listing_review_batch:
   - {author: khaleesi, rate: 2, text: This is what I have a hand to assist me with.
       This does not meet my use cases at all.}
   - {author: bettafish, rate: 1, text: Not very interesting.  Hard to follow.  Does
       not seem to work.}
-- library_entries: []
+- library_entries:
+  - {folder: null, owner: bettafish, position: 4}
   listing:
     agency: Minitrue
     banner_icon: {filename: ScreaminEagleCVO_banner_icon.png, security_marking: UNCLASSIFIED}
@@ -4627,7 +4650,8 @@
   listing_review_batch:
   - {author: wsmith, rate: 3, text: 'All new four-valve engine and suspension. Doubling
       down on valves, staying pat on styling.'}
-- library_entries: []
+- library_entries:
+  - {folder: Beverages, owner: bettafish, position: 6}
   listing:
     agency: Minitrue
     banner_icon: {filename: IndiaPaleAle_banner_icon.jpeg, security_marking: UNCLASSIFIED}
@@ -4677,12 +4701,13 @@
   - {action: APPROVED_ORG, author: bigbrother, description: null}
   - {action: APPROVED, author: bigbrother, description: null}
   listing_review_batch: []
-- library_entries: []
+- library_entries:
+  - {folder: Animals, owner: bigbrother, position: 8}
   listing:
     agency: Minipax
     banner_icon: {filename: WhiteHorse_banner_icon.jpeg, security_marking: UNCLASSIFIED}
     categories: [Education]
-    contacts: []
+    contacts: [gsmith@science.com]
     description: is one of two extant subspecies of Equus ferus. It is an odd-toed
       ungulate mammal belonging to the taxonomic family Equidae. The horse has evolved
       over the past 45 to 55 million years from a small multi-toed creature, Eohippus,
@@ -4861,7 +4886,7 @@
     large_icon: {filename: IntelligenceUnleashed_large_icon.png, security_marking: UNCLASSIFIED}
     launch_url: http://bi.com
     listing_type: Desktop App
-    owners: [wsmith]
+    owners: [bettafish, wsmith]
     requirements: None
     screenshots:
     - description: null
@@ -4892,6 +4917,7 @@
   - {action: SUBMITTED, author: wsmith, description: null}
   - {action: APPROVED_ORG, author: bigbrother, description: null}
   - {action: APPROVED, author: bigbrother, description: null}
+  - {action: MODIFIED, author: wsmith, description: null}
   listing_review_batch: []
 - library_entries: []
   listing:
@@ -4949,7 +4975,8 @@
   listing_review_batch:
   - {author: wsmith, rate: 5, text: 'It takes bold brewers to brew bold beers. Brewers
       prepared to go to lengths that others wouldn''t to perfect their craft. '}
-- library_entries: []
+- library_entries:
+  - {folder: Beverages, owner: bettafish, position: 5}
   listing:
     agency: Minitrue
     banner_icon: {filename: Bourbon_banner_icon.jpeg, security_marking: UNCLASSIFIED}
@@ -5057,6 +5084,7 @@
   listing_review_batch:
   - {author: khaleesi, rate: 5, text: An essential component of dragon fire. Helps
       burn citadels down. A+}
+  - {author: rutherford, rate: 2, text: I am not a big fan of moonshine.}
 - library_entries: []
   listing:
     agency: Minitrue
@@ -5256,7 +5284,7 @@
     is_private: false
     large_banner_icon: {filename: DesktopVirtualization_large_banner_icon.png, security_marking: UNCLASSIFIED}
     large_icon: {filename: DesktopVirtualization_large_icon.png, security_marking: UNCLASSIFIED}
-    launch_url: https://ci-latest.amlng.di2e.net/center/#/home/?%2F%3F%2F%3F=/center/#/home/?%2F%3F%2F%3F=
+    launch_url: http://dv.com
     listing_type: Desktop App
     owners: [wsmith]
     requirements: None
@@ -5281,6 +5309,7 @@
   - {action: SUBMITTED, author: wsmith, description: null}
   - {action: APPROVED_ORG, author: bigbrother, description: null}
   - {action: APPROVED, author: bigbrother, description: null}
+  - {action: MODIFIED, author: wsmith, description: null}
   listing_review_batch: []
 - library_entries: []
   listing:
@@ -5308,7 +5337,7 @@
     doc_urls: []
     iframe_compatible: true
     is_deleted: false
-    is_enabled: true
+    is_enabled: false
     is_featured: false
     is_private: false
     large_banner_icon: {filename: LearningCurves_large_banner_icon.png, security_marking: UNCLASSIFIED}
@@ -5343,6 +5372,12 @@
     what_is_new: How to help yourself help with your learning curves
   listing_activity:
   - {action: CREATED, author: khaleesi, description: null}
+  - {action: SUBMITTED, author: khaleesi, description: null}
+  - {action: APPROVED_ORG, author: khaleesi, description: null}
+  - {action: APPROVED, author: khaleesi, description: null}
+  - {action: DISABLED, author: khaleesi, description: null}
+  - {action: PENDING_DELETION, author: khaleesi, description: null}
+  - {action: REJECTED, author: khaleesi, description: a good app}
   - {action: SUBMITTED, author: khaleesi, description: null}
   - {action: APPROVED_ORG, author: khaleesi, description: null}
   - {action: APPROVED, author: khaleesi, description: null}
@@ -5408,7 +5443,7 @@
     agency: Miniplen
     banner_icon: {filename: Dragons_banner_icon.jpeg, security_marking: UNCLASSIFIED}
     categories: [Entertainment]
-    contacts: []
+    contacts: [gsmith@science.com]
     description: "A dragon is a legendary creature, typically scaled or fire-spewing\
       \ and with serpentine, reptilian or avian traits, that features in the myths\
       \ of many cultures around world. The two most well-known cultural traditions\
@@ -5550,7 +5585,8 @@
   - {action: CREATED, author: bettafish, description: null}
   - {action: SUBMITTED, author: bettafish, description: null}
   listing_review_batch: []
-- library_entries: []
+- library_entries:
+  - {folder: Games, owner: bettafish, position: 7}
   listing:
     agency: Miniplen
     banner_icon: {filename: NES_banner_icon.jpeg, security_marking: UNCLASSIFIED}
@@ -5756,6 +5792,8 @@
   listing_activity:
   - {action: CREATED, author: bettafish, description: null}
   - {action: SUBMITTED, author: bettafish, description: null}
+  - {action: APPROVED_ORG, author: bettafish, description: null}
+  - {action: REJECTED, author: bettafish, description: Something here}
   listing_review_batch: []
 - library_entries: []
   listing:
@@ -5855,7 +5893,8 @@
   - {action: CREATED, author: bettafish, description: null}
   - {action: SUBMITTED, author: bettafish, description: null}
   listing_review_batch: []
-- library_entries: []
+- library_entries:
+  - {folder: Games, owner: bettafish, position: 8}
   listing:
     agency: Miniplen
     banner_icon: {filename: Mario_banner_icon.png, security_marking: UNCLASSIFIED}
@@ -5989,7 +6028,9 @@
   - {action: SUBMITTED, author: bettafish, description: null}
   - {action: APPROVED_ORG, author: bettafish, description: null}
   - {action: APPROVED, author: bettafish, description: null}
-  listing_review_batch: []
+  listing_review_batch:
+  - {author: khaleesi, rate: 3, text: Strong female rulers! As long as she doesn't
+      invade Westeros she's cool}
 - library_entries: []
   listing:
     agency: Minitrue
@@ -6298,7 +6339,8 @@
   - {action: APPROVED_ORG, author: bigbrother, description: null}
   - {action: APPROVED, author: bigbrother, description: null}
   listing_review_batch: []
-- library_entries: []
+- library_entries:
+  - {folder: null, owner: bigbrother, position: 18}
   listing:
     agency: Miniplen
     banner_icon: {filename: Chainboatnavigation_banner_icon.jpeg, security_marking: UNCLASSIFIED}
@@ -6608,7 +6650,8 @@
   - {action: APPROVED_ORG, author: bigbrother, description: null}
   - {action: APPROVED, author: bigbrother, description: null}
   listing_review_batch: []
-- library_entries: []
+- library_entries:
+  - {folder: Instruments, owner: bigbrother, position: 10}
   listing:
     agency: Minipax
     banner_icon: {filename: AcousticGuitar_banner_icon.jpeg, security_marking: UNCLASSIFIED}
@@ -6652,7 +6695,8 @@
   - {action: APPROVED_ORG, author: bigbrother, description: null}
   - {action: APPROVED, author: bigbrother, description: null}
   listing_review_batch: []
-- library_entries: []
+- library_entries:
+  - {folder: Instruments, owner: bigbrother, position: 9}
   listing:
     agency: Minipax
     banner_icon: {filename: ElectricGuitar_banner_icon.jpeg, security_marking: UNCLASSIFIED}
@@ -6695,7 +6739,8 @@
   - {action: APPROVED_ORG, author: bigbrother, description: null}
   - {action: APPROVED, author: bigbrother, description: null}
   listing_review_batch: []
-- library_entries: []
+- library_entries:
+  - {folder: Instruments, owner: bigbrother, position: 11}
   listing:
     agency: Minipax
     banner_icon: {filename: SoundMixer_banner_icon.jpeg, security_marking: UNCLASSIFIED}
@@ -6740,7 +6785,8 @@
   - {action: APPROVED_ORG, author: bigbrother, description: null}
   - {action: APPROVED, author: bigbrother, description: null}
   listing_review_batch: []
-- library_entries: []
+- library_entries:
+  - {folder: Instruments, owner: bigbrother, position: 12}
   listing:
     agency: Minipax
     banner_icon: {filename: ElectricPiano_banner_icon.jpeg, security_marking: UNCLASSIFIED}
@@ -6925,7 +6971,7 @@
     agency: Miniluv
     banner_icon: {filename: White-tailedolallarat_banner_icon.jpeg, security_marking: UNCLASSIFIED}
     categories: [Communication]
-    contacts: []
+    contacts: [gsmith@science.com]
     description: The white-tailed olalla rat (Olallamys albicauda) is a species of
       rodent in the family Echimyidae. It is endemic to Colombia. Its natural habitat
       is subtropical or tropical moist lowland forests. It is threatened by habitat
@@ -6967,7 +7013,7 @@
     agency: Miniluv
     banner_icon: {filename: Udeawashingtonalis_banner_icon.jpeg, security_marking: UNCLASSIFIED}
     categories: [Education]
-    contacts: []
+    contacts: [gsmith@science.com]
     description: 'Udea washingtonalis is a moth in the Crambidae family. It was described
       by Grote in 1882.[1] It is found in North America, where it has been recorded
       from Alaska, British Columbia, California, Montana and Washington.[2][3]
@@ -7099,7 +7145,8 @@
   - {action: APPROVED_ORG, author: bettafish, description: null}
   - {action: APPROVED, author: bettafish, description: null}
   listing_review_batch: []
-- library_entries: []
+- library_entries:
+  - {folder: Funny, owner: bettafish, position: 3}
   listing:
     agency: Miniluv
     banner_icon: {filename: Internetmeme_banner_icon.jpeg, security_marking: UNCLASSIFIED}
@@ -7569,7 +7616,10 @@
   - {action: APPROVED, author: bettafish, description: null}
   listing_review_batch:
   - {author: bigbrother, rate: 5, text: A very very very very fun game}
-- library_entries: []
+  - {author: rutherford, rate: 2, text: I am not a very big fan of minesweeper.  But
+      it would be good to pass the time.}
+- library_entries:
+  - {folder: null, owner: bigbrother, position: 17}
   listing:
     agency: Miniluv
     banner_icon: {filename: Stopsign_banner_icon.jpeg, security_marking: UNCLASSIFIED}
@@ -7610,6 +7660,8 @@
   - {action: APPROVED, author: bettafish, description: null}
   listing_review_batch:
   - {author: bigbrother, rate: 5, text: 'This stop sign saved me from a accident!!! '}
+  - {author: rutherford, rate: 5, text: I think that this is very necessary item to
+      have on the roads.}
 - library_entries: []
   listing:
     agency: Miniplen
@@ -7713,7 +7765,8 @@
   - {action: APPROVED_ORG, author: bettafish, description: null}
   - {action: APPROVED, author: bettafish, description: null}
   listing_review_batch: []
-- library_entries: []
+- library_entries:
+  - {folder: Instruments, owner: bigbrother, position: 13}
   listing:
     agency: Minipax
     banner_icon: {filename: Piano_banner_icon.jpeg, security_marking: UNCLASSIFIED}
@@ -7754,7 +7807,8 @@
   - {action: APPROVED_ORG, author: bigbrother, description: null}
   - {action: APPROVED, author: bigbrother, description: null}
   listing_review_batch: []
-- library_entries: []
+- library_entries:
+  - {folder: Instruments, owner: bigbrother, position: 14}
   listing:
     agency: Minipax
     banner_icon: {filename: Violin_banner_icon.jpeg, security_marking: UNCLASSIFIED}
@@ -7801,7 +7855,7 @@
     agency: Minipax
     banner_icon: {filename: Parrot_banner_icon.jpeg, security_marking: UNCLASSIFIED}
     categories: [Education]
-    contacts: []
+    contacts: [gsmith@science.com]
     description: Birds of the roughly 393 species in 92 genera that make up the order
       Psittaciformes, found in most tropical and subtropical regions.  Characteristic
       features of parrots include a strong, curved bill, an upright stance, strong
@@ -7890,7 +7944,8 @@
   - {action: APPROVED_ORG, author: bettafish, description: null}
   - {action: APPROVED, author: bettafish, description: null}
   listing_review_batch: []
-- library_entries: []
+- library_entries:
+  - {folder: Weather, owner: bigbrother, position: 0}
   listing:
     agency: Minipax
     banner_icon: {filename: Tornado_banner_icon.jpeg, security_marking: UNCLASSIFIED}
@@ -7937,6 +7992,8 @@
   listing_review_batch:
   - {author: bigbrother, rate: 1, text: Tornado are too powerful}
   - {author: bettafish, rate: 1, text: Not a fan.  Scary and destructive.}
+  - {author: khaleesi, rate: 1, text: Kicks up a lot of dust and makes the dothraki
+      less effective}
 - library_entries: []
   listing:
     agency: Miniluv
@@ -8025,7 +8082,8 @@
   listing_review_batch:
   - {author: bigbrother, rate: 5, text: It prevented and controlled my high blood
       pressure during surgery}
-- library_entries: []
+- library_entries:
+  - {folder: Weather, owner: bigbrother, position: 1}
   listing:
     agency: Minipax
     banner_icon: {filename: Lightning_banner_icon.jpeg, security_marking: UNCLASSIFIED}
@@ -8236,4 +8294,2043 @@
   - {action: SUBMITTED, author: bettafish, description: null}
   - {action: APPROVED_ORG, author: bettafish, description: null}
   - {action: APPROVED, author: bettafish, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Miniplen
+    banner_icon: {filename: RubyMiner_large_screenshot.png, security_marking: UNCLASSIFIED}
+    categories: [Productivity, Tools]
+    contacts: []
+    description: A discovery app for Ruby on Rails gems.
+    description_short: A discovery app for Ruby on Rails gems
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: RubyMiner_large_screenshot.png, security_marking: UNCLASSIFIED}
+    large_icon: {filename: RubyMiner_large_screenshot.png, security_marking: UNCLASSIFIED}
+    launch_url: http://guides.rubyonrails.org/active_record_migrations.html
+    listing_type: Desktop App
+    owners: [wsmith]
+    requirements: Linux, windows or mac compatible.
+    screenshots:
+    - description: Ruby miner fancy logo
+      large_image: {filename: RubyMiner_0_large_screenshot.png, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: RubyMiner_0_large_screenshot.png, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: RubyMiner_large_screenshot.png, security_marking: UNCLASSIFIED}
+    tags: [ruby, rails, ror, programming]
+    title: Ruby Miner
+    unique_name: ruby_miner
+    version_name: '1'
+    what_is_new: New gems!
+  listing_activity:
+  - {action: CREATED, author: khaleesi, description: null}
+  - {action: SUBMITTED, author: khaleesi, description: null}
+  - {action: APPROVED_ORG, author: khaleesi, description: null}
+  - {action: APPROVED, author: khaleesi, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Miniplen
+    banner_icon: {filename: RubyonRails_large_screenshot.png, security_marking: UNCLASSIFIED}
+    categories: [Tools]
+    contacts: []
+    description: "Ruby on Rails, or simply Rails, is a server-side web application\
+      \ framework written in Ruby under the MIT License. Rails is a model\u2013view\u2013\
+      controller (MVC) framework, providing default structures for a database, a web\
+      \ service, and web pages. It encourages and facilitates the use of web standards\
+      \ such as JSON or XML for data transfer, and HTML, CSS and JavaScript for display\
+      \ and user interfacing. In addition to MVC, Rails emphasizes the use of other\
+      \ well-known software engineering patterns and paradigms, including convention\
+      \ over configuration (CoC), don't repeat yourself (DRY), and the active record\
+      \ pattern.[4]"
+    description_short: Ruby on Rails, or simply Rails, is a server-side web application
+      framework written in Ruby
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: RubyonRails_large_screenshot.png, security_marking: UNCLASSIFIED}
+    large_icon: {filename: RubyonRails_large_screenshot.png, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Ruby_on_Rails
+    listing_type: Code Library
+    owners: [charrington]
+    requirements: Installers are available for all modern operating system
+    screenshots:
+    - description: Screenshot of rails development
+      large_image: {filename: RubyonRails_0_large_screenshot.png, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: RubyonRails_0_large_screenshot.png, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: RubyonRails_large_screenshot.png, security_marking: UNCLASSIFIED}
+    tags: [software, ruby, rails, ror, programming, framework, development, developer]
+    title: Ruby on Rails
+    unique_name: ruby_on_rails
+    version_name: '5'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: khaleesi, description: null}
+  - {action: SUBMITTED, author: khaleesi, description: null}
+  - {action: APPROVED_ORG, author: khaleesi, description: null}
+  - {action: APPROVED, author: khaleesi, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Miniluv
+    banner_icon: {filename: "Pok\xE9monRubyandSapphire_large_screenshot.jpeg", security_marking: UNCLASSIFIED}
+    categories: [Entertainment]
+    contacts: []
+    description: "Pok\xE9mon Ruby Version and Sapphire Version (\u30DD\u30B1\u30C3\
+      \u30C8\u30E2\u30F3\u30B9\u30BF\u30FC\u30EB\u30D3\u30FC\u30FB\u30B5\u30D5\u30A1\
+      \u30A4\u30A2 Poketto Monsut\u0101 Rub\u012B & Safaia, \"Pocket Monsters: Ruby\
+      \ & Sapphire\") are the third installments of the Pok\xE9mon series of role-playing\
+      \ video games, developed by Game Freak and published by Nintendo for the Game\
+      \ Boy Advance. The games were first released in Japan in late 2002 and internationally\
+      \ in 2003. Pok\xE9mon Emerald, a special edition version, was released two years\
+      \ later in each region. These three games (Pok\xE9mon Ruby, Sapphire, and Emerald)\
+      \ are part of the third generation of the Pok\xE9mon video game series, also\
+      \ known as the \"advanced generation\". Remakes of the two games, titled Omega\
+      \ Ruby and Alpha Sapphire, were released for the Nintendo 3DS worldwide on November\
+      \ 21, 2014, exactly twelve years to the date of the original Ruby and Sapphire\
+      \ release date, with the exception of Europe, where it was released on November\
+      \ 28, 2014.[2]\n\nThe gameplay is mostly unchanged from the previous games;\
+      \ the player controls the main character from an overhead perspective, and the\
+      \ controls are largely the same as those of previous games. As with previous\
+      \ games, the main objectives are to catch all of the Pok\xE9mon in the games\
+      \ and defeat the Elite Four (a group of Pok\xE9mon trainers); also like their\
+      \ predecessors, the games' main subplot involves the main character defeating\
+      \ a criminal organization that attempts to take over the region. New features,\
+      \ such as double battles and Pok\xE9mon abilities along with 135 new Pok\xE9\
+      mon, have been added. As the Game Boy Advance is more powerful than its predecessors,\
+      \ four players may be connected at a time instead of the previous limit of two.\
+      \ Additionally, the games can be connected to an e-Reader or other advanced\
+      \ generation Pok\xE9mon games."
+    description_short: "Third installments of the Pok\xE9mon series of video games"
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: "Pok\xE9monRubyandSapphire_large_screenshot.jpeg",
+      security_marking: UNCLASSIFIED}
+    large_icon: {filename: "Pok\xE9monRubyandSapphire_large_screenshot.png", security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Pok%C3%A9mon_Ruby_and_Sapphire
+    listing_type: Desktop App
+    owners: [khaleesi]
+    requirements: Must have the nintendo gaming system for the version of the game
+    screenshots:
+    - description: The boxes for the original Gameboy Advance versionsof Pokemon Ruby
+        and Sapphire
+      large_image: {filename: "Pok\xE9monRubyandSapphire_0_large_screenshot.jpeg",
+        security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: "Pok\xE9monRubyandSapphire_0_large_screenshot.jpeg",
+        security_marking: UNCLASSIFIED}
+    - description: The cases for the new 3DS versions Pokemon Omega Ruby and Alpha
+        Sapphire
+      large_image: {filename: "Pok\xE9monRubyandSapphire_1_large_screenshot.jpeg",
+        security_marking: UNCLASSIFIED}
+      order: 1
+      small_image: {filename: "Pok\xE9monRubyandSapphire_1_large_screenshot.jpeg",
+        security_marking: UNCLASSIFIED}
+    - description: Animated gif of the gameplay near one of the locations you can
+        fish as well as find and plant berries
+      large_image: {filename: "Pok\xE9monRubyandSapphire_2_large_screenshot.gif",
+        security_marking: UNCLASSIFIED}
+      order: 2
+      small_image: {filename: "Pok\xE9monRubyandSapphire_2_large_screenshot.gif",
+        security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: "Pok\xE9monRubyandSapphire_large_screenshot.png", security_marking: UNCLASSIFIED}
+    tags: [video game, pokemon, pocket monsters, nintendo, game freak, gotta catch
+        'em all]
+    title: "Pok\xE9mon Ruby and Sapphire"
+    unique_name: "pok\xE9mon_ruby_and_sapphire"
+    version_name: '3'
+    what_is_new: Now has versions for the Nintendo 3DS!
+  listing_activity:
+  - {action: CREATED, author: khaleesi, description: null}
+  - {action: SUBMITTED, author: khaleesi, description: null}
+  - {action: MODIFIED, author: khaleesi, description: null}
+  - {action: MODIFIED, author: khaleesi, description: null}
+  - {action: APPROVED_ORG, author: khaleesi, description: null}
+  - {action: APPROVED, author: khaleesi, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Minitrue
+    banner_icon: {filename: Salmon_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Education]
+    contacts: []
+    description: "Salmon /\u02C8s\xE6m\u0259n/ is the common name for several species\
+      \ of ray-finned fish in the family Salmonidae. Other fish in the same family\
+      \ include trout, char, grayling and whitefish. Salmon are native to tributaries\
+      \ of the North Atlantic (genus Salmo) and Pacific Ocean (genus Oncorhynchus).\
+      \ Many species of salmon have been introduced into non-native environments such\
+      \ as the Great Lakes of North America and Patagonia in South America. Salmon\
+      \ are intensively farmed in many parts of the world.\n\nTypically, salmon are\
+      \ anadromous: they are born in fresh water, migrate to the ocean, then return\
+      \ to fresh water to reproduce. However, populations of several species are restricted\
+      \ to fresh water through their lives. Various species of salmon display anadromous\
+      \ life strategies while others display freshwater resident life strategies.\
+      \ Folklore has it that the fish return to the exact spot where they were born\
+      \ to spawn; tracking studies have shown this to be mostly true. A portion of\
+      \ a returning salmon run may stray and spawn in different freshwater systems.\
+      \ The percent of straying depends on the species of salmon.[2] Homing behavior\
+      \ has been shown to depend on olfactory memory"
+    description_short: Atlantic salmon (Salmo salar) reproduce in northern rivers
+      on both coasts of the Atlantic Ocean.
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Salmon_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Salmon_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Salmon
+    listing_type: Desktop App
+    owners: [bigbrother, jones]
+    requirements: none
+    screenshots:
+    - description: null
+      large_image: {filename: Salmon_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Salmon_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    - description: null
+      large_image: {filename: Salmon_1_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 1
+      small_image: {filename: Salmon_1_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Salmon_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    tags: [fish, yummy]
+    title: Salmon
+    unique_name: salmon
+    version_name: '1'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: jones, description: null}
+  - {action: MODIFIED, author: jones, description: null}
+  - {action: SUBMITTED, author: jones, description: null}
+  - {action: APPROVED_ORG, author: bettafish, description: null}
+  - {action: APPROVED, author: bettafish, description: null}
+  - {action: MODIFIED, author: bigbrother, description: null}
+  listing_review_batch: []
+- library_entries:
+  - {folder: null, owner: jones, position: 0}
+  listing:
+    agency: Minitrue
+    banner_icon: {filename: BassFishing_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Communication]
+    contacts: []
+    description: 'Bass fishing is the activity of angling for the North American gamefish
+      known colloquially as the black bass.[1] There are numerous black bass species
+      considered as gamefish in North America, including largemouth bass (Micropterus
+      salmoides), smallmouth bass (Micropterus dolomieui), spotted bass or Kentucky
+      bass (Micropterus punctulatus), and Guadalupe bass (order Perciformes).[2]
+
+
+      Modern bass fishing has evolved into a multibillion-dollar industry.[3] The
+      sport has changed drastically since its beginnings in the late 19th century.
+      From humble beginnings, the black bass has become the most specifically sought-after
+      game fish in the United States.[4] The sport has driven the development of all
+      manner of fishing gear, including rods, reels, lines, lures, electronic depth
+      and fish-finding instruments, drift boats, float tubes, also boats specified
+      for bass fishing.'
+    description_short: The one that got away.
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: true
+    is_private: false
+    large_banner_icon: {filename: BassFishing_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: BassFishing_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Bass_fishing
+    listing_type: Web Application
+    owners: [bettafish, jones]
+    requirements: none
+    screenshots:
+    - description: Now that's a fish.
+      large_image: {filename: BassFishing_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: BassFishing_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: BassFishing_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    tags: [fish, bass, mike]
+    title: Bass Fishing
+    unique_name: bass_fishing
+    version_name: '1'
+    what_is_new: The increasing popularity of the sport combined with "catch and release"
+      practices have in some cases led to an overpopulation of bass.
+  listing_activity:
+  - {action: CREATED, author: jones, description: null}
+  - {action: SUBMITTED, author: jones, description: null}
+  - {action: MODIFIED, author: jones, description: null}
+  - {action: APPROVED_ORG, author: bettafish, description: null}
+  - {action: APPROVED, author: bettafish, description: null}
+  - {action: MODIFIED, author: bettafish, description: null}
+  - {action: REVIEW_EDITED, author: jones, description: null}
+  listing_review_batch:
+  - {author: jones, rate: 4, text: So easy a kid can do it.}
+- library_entries: []
+  listing:
+    agency: Minitrue
+    banner_icon: {filename: BassLures_large_screenshot.png, security_marking: UNCLASSIFIED}
+    categories: [Education]
+    contacts: []
+    description: "There are many types of fishing lures. In most cases they are manufactured\
+      \ to resemble prey for the fish, but they are sometimes engineered to appeal\
+      \ to a fishes' sense of territory, curiosity or aggression. Most lures are made\
+      \ to look like dying, injured, or fast moving fish. They include the following\
+      \ types:\n\n    A jig is a weighted hook with a lead head opposite the sharp\
+      \ tip. They usually have a minnow or crawfish or even a plastic worm on it to\
+      \ get the fish's attention. Deep water jigs used in saltwater fishing consist\
+      \ of a large metallic weight, which gives the impression of the body of the\
+      \ bait fish, which has a hook attached via a short length of kevlar usually\
+      \ to the top of the jig. Some jigs can be fished in water depths down to 300\
+      \ metres.\n    Surface lures are also known as top water lures, poppers and\
+      \ stickbaits. They float and look like fish prey that is on top of the water.\
+      \ They can make a popping, burbling, or even a buzzing sound. It takes a long\
+      \ time to learn how to use this lure effectively\n    Spoon lures usually look\
+      \ like a spoon, with a wide rounded end and a narrower pointed end, similar\
+      \ n shape to a concave spearhead. They flash in the light while wobbling and\
+      \ darting due to their shape, which attracts fish.\n    LED lures have a built\
+      \ in led and battery to attract fish. They use a flashing or sometimes strobing\
+      \ pattern, using a combination of colors and leds.[2]\n    Plugs are also known\
+      \ as crankbaits or minnows. These lures look like fish and they are run through\
+      \ the water where they can move in different ways because of instability due\
+      \ to the bib at the front under the head.\n    Artificial flies are designed\
+      \ to resemble all manner of fish prey and are used with a fly rod and reel in\
+      \ fly fishing.[3]\n    Soft plastic baits are lures made of plastic or rubber\
+      \ designed to look like fish, crabs, squid, worms, lizards, frogs, leeches and\
+      \ other creatures.\n    Spinnerbait are pieces of wire that are bent at about\
+      \ a 60 degree angle with a hook at the bottom and a flashy spinner at the top.\n\
+      \    Swimbait is a soft plastic bait/lure that resembles an actual bait fish.\
+      \ Some of these have a tail that makes the lure/bait look like it is swimming\
+      \ when drawn through the water.\n    Fish decoy is a type of lure that traditionally\
+      \ was carved to resemble a fish, frog, small rodent, or an insect that lures\
+      \ in fish so they can be speared. They are often used through the ice by fishermen\
+      \ and also by the Inuit people as part of their diet. The Mitchell Museum of\
+      \ the American Indian collection includes Native American fish decoys. William\
+      \ Jesse Ramey is considered a vintage master carver of fish decoys, and his\
+      \ work has been featured in museums.[4]\n    Combined lures combine properties\
+      \ of several different types of lures."
+    description_short: The fishing lure is either tied with a knot, or connected with
+      a "swivel" onto the fishing line.
+    doc_urls:
+    - {name: 'https://en.wikipedia.org/wiki/Worm_charming', url: 'https://en.wikipedia.org/wiki/Soft_plastic_bait'}
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: BassLures_large_screenshot.png, security_marking: UNCLASSIFIED}
+    large_icon: {filename: BassLures_large_screenshot.png, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Fishing_lure
+    listing_type: Web Application
+    owners: [jones]
+    requirements: A fishing lure is a type of artificial fishing bait which is designed
+      to attract a fish's attention. The lure uses movement, vibration, flash and
+      color to bait fish. Many lures are equipped with one or more hooks that are
+      used to catch fish when they strike the lure. Some lures are placed to attract
+      fish so a spear can be impaled into the fish or so the fish can be captured
+      by hand. Most lures are attached to the end of a fishing line and have various
+      styles of hooks attached to the body and are designed to elicit a strike resulting
+      in a hookset. Many lures are commercially made but some are hand made such as
+      fishing flies. Hand tying fly lures to match the hatch is considered a challenge
+      by many amateur entomologists.
+    screenshots:
+    - description: Can he land a bass?
+      large_image: {filename: BassLures_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: BassLures_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: BassLures_large_screenshot.png, security_marking: UNCLASSIFIED}
+    tags: [fish, learning, bass, xlure, work]
+    title: Bass Lures
+    unique_name: bass_lures
+    version_name: '1'
+    what_is_new: A daisy chain is a teaser consisting of a "chain" of plastic lures
+      run without hooks.
+  listing_activity:
+  - {action: CREATED, author: jones, description: null}
+  - {action: MODIFIED, author: jones, description: null}
+  - {action: SUBMITTED, author: jones, description: null}
+  - {action: APPROVED_ORG, author: bettafish, description: null}
+  - {action: APPROVED, author: bettafish, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Miniluv
+    banner_icon: {filename: MorseCode_large_screenshot.png, security_marking: UNCLASSIFIED}
+    categories: [Education]
+    contacts: []
+    description: Morse code is a method of transmitting text information as a series
+      of on-off tones, lights, or clicks that can be directly understood by a skilled
+      listener or observer without special equipment. It is named for Samuel F. B.
+      Morse, an inventor of the telegraph. The International Morse Code[1] encodes
+      the ISO basic Latin alphabet, some extra Latin letters, the Arabic numerals
+      and a small set of punctuation and procedural signals (prosigns) as standardized
+      sequences of short and long signals called "dots" and "dashes",[1] or "dits"
+      and "dahs", as in amateur radio practice. Because many non-English natural languages
+      use more than the 26 Roman letters, extensions to the Morse alphabet exist for
+      those languages.
+    description_short: It is named for Samuel F. B. Morse, an inventor of the telegraph.
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: MorseCode_large_screenshot.png, security_marking: UNCLASSIFIED}
+    large_icon: {filename: MorseCode_large_screenshot.png, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Morse_code
+    listing_type: Code Library
+    owners: [bettafish]
+    requirements: -. --- -. .
+    screenshots:
+    - description: null
+      large_image: {filename: MorseCode_0_large_screenshot.png, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: MorseCode_0_large_screenshot.png, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: MorseCode_large_screenshot.png, security_marking: UNCLASSIFIED}
+    tags: [sos, morse code, language]
+    title: Morse Code
+    unique_name: morse_code
+    version_name: '1'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: bettafish, description: null}
+  - {action: SUBMITTED, author: bettafish, description: null}
+  - {action: APPROVED_ORG, author: bettafish, description: null}
+  - {action: APPROVED, author: bettafish, description: null}
+  listing_review_batch: []
+- library_entries:
+  - {folder: null, owner: bettafish, position: 0}
+  - {folder: null, owner: wsmith, position: 4}
+  listing:
+    agency: Miniluv
+    banner_icon: {filename: BaltimoreRavens_large_screenshot.png, security_marking: UNCLASSIFIED}
+    categories: [Sports]
+    contacts: []
+    description: 'The Baltimore Ravens are a professional American football team based
+      in Baltimore, Maryland. The Ravens compete in the National Football League (NFL)
+      as a member club of the American Football Conference (AFC) North division. The
+      team plays its home games at M&T Bank Stadium and is headquartered in Owings
+      Mills and is the best team in the NFL.
+
+
+      The Ravens were established in 1996, when Art Modell, who was then the owner
+      of the Cleveland Browns, announced plans to relocate the franchise from Cleveland
+      to Baltimore.[6] As part of a settlement between the league and the city of
+      Cleveland, Modell was required to leave the Browns'' history and records in
+      Cleveland for a replacement team and replacement personnel that would take control
+      in 1999. In return, he was allowed to take his own personnel and team to Baltimore,
+      where such personnel would then form an expansion team.'
+    description_short: The Baltimore Ravens are a professional American football team
+      based in Baltimore, Maryland
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: BaltimoreRavens_large_screenshot.png, security_marking: UNCLASSIFIED}
+    large_icon: {filename: BaltimoreRavens_large_screenshot.png, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Baltimore_Ravens
+    listing_type: Desktop App
+    owners: [bettafish]
+    requirements: FOOTBALL
+    screenshots:
+    - description: null
+      large_image: {filename: BaltimoreRavens_0_large_screenshot.png, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: BaltimoreRavens_0_large_screenshot.png, security_marking: UNCLASSIFIED}
+    - description: null
+      large_image: {filename: BaltimoreRavens_1_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 1
+      small_image: {filename: BaltimoreRavens_1_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: BaltimoreRavens_large_screenshot.png, security_marking: UNCLASSIFIED}
+    tags: [baltimore, maryland, ravens, football]
+    title: Baltimore Ravens
+    unique_name: baltimore_ravens
+    version_name: '2000'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: bettafish, description: null}
+  - {action: SUBMITTED, author: bettafish, description: null}
+  - {action: APPROVED_ORG, author: bettafish, description: null}
+  - {action: APPROVED, author: bettafish, description: null}
+  listing_review_batch:
+  - {author: bettafish, rate: 5, text: BEST FOOTBALL TEAM EVER.}
+- library_entries: []
+  listing:
+    agency: Miniluv
+    banner_icon: {filename: KIAA0319_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Education, Health and Fitness]
+    contacts: []
+    description: 'KIAA0319 is a protein which in humans is encoded by the KIAA0319
+      gene.
+
+
+      Variants of the KIAA0319 gene have been associated with developmental dyslexia.[5]
+
+
+      Reading disability, or dyslexia, is a major social, educational, and mental
+      health problem. In spite of average intelligence and adequate educational opportunities,
+      5 to 10% of school children have substantial reading deficits. Twin and family
+      studies have shown a substantial genetic component to this disorder, with heritable
+      variation estimated at 50 to 70%.[3]
+
+
+      An NIDCD-supported investigator recently has identified a mutation in a gene
+      on chromosome 6, called the KIAA0319 gene, that appears to play a key role in
+      Specific Language Impairment.'
+    description_short: KIAA0319 is a protein which in humans is encoded by the KIAA0319
+      gene
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: KIAA0319_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: KIAA0319_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/KIAA0319
+    listing_type: Widget
+    owners: [bettafish]
+    requirements: None
+    screenshots:
+    - description: null
+      large_image: {filename: KIAA0319_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: KIAA0319_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: KIAA0319_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    tags: [protein]
+    title: KIAA0319
+    unique_name: kiaa0319
+    version_name: KIAA0319
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: bettafish, description: null}
+  - {action: SUBMITTED, author: bettafish, description: null}
+  - {action: APPROVED_ORG, author: bettafish, description: null}
+  - {action: APPROVED, author: bettafish, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Miniluv
+    banner_icon: {filename: E-ZPass_large_screenshot.png, security_marking: UNCLASSIFIED}
+    categories: [Tools]
+    contacts: []
+    description: "E\u2011ZPass is an electronic toll collection system used on most\
+      \ tolled roads, bridges, and tunnels in the midwestern and northeastern United\
+      \ States, as far south as North Carolina and as far west as Illinois. The E-ZPass\
+      \ Interagency Group (IAG) consists of 38 member agencies in operation within\
+      \ 16 states, which use the same technology and allow travelers to use the same\
+      \ transponder on toll roads throughout the network. Since its creation in 1987,\
+      \ various independent systems that use the same technology have been folded\
+      \ into the E-ZPass system, including the I-Pass in Illinois and the NC Quick\
+      \ Pass in North Carolina."
+    description_short: "E\u2011ZPass is an electronic toll collection system."
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: E-ZPass_large_screenshot.png, security_marking: UNCLASSIFIED}
+    large_icon: {filename: E-ZPass_large_screenshot.png, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/E-ZPass
+    listing_type: Desktop App
+    owners: [bettafish]
+    requirements: None
+    screenshots:
+    - description: null
+      large_image: {filename: E-ZPass_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: E-ZPass_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: E-ZPass_large_screenshot.png, security_marking: UNCLASSIFIED}
+    tags: [car, driving, toll]
+    title: E-ZPass
+    unique_name: e-zpass
+    version_name: '1987'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: bettafish, description: null}
+  - {action: SUBMITTED, author: bettafish, description: null}
+  - {action: APPROVED_ORG, author: bettafish, description: null}
+  - {action: APPROVED, author: bettafish, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Miniplen
+    banner_icon: {filename: AppliedEthicsInc._large_screenshot.png, security_marking: UNCLASSIFIED}
+    categories: [Business, Finance]
+    contacts: []
+    description: Applied ethics is the branch of ethics concerned with the analysis
+      of particular moral issues in private and public life.[1] For example, the bioethics
+      community is concerned with identifying the correct approach to moral issues
+      in the life sciences, such as euthanasia, the allocation of scarce health resources,
+      or the use of human embryos in research.[2][3][4] Environmental ethics is concerned
+      with ecological issues such as the responsibility of government and corporations
+      to clean up pollution.[5] Business ethics includes questions regarding the duties
+      or duty of 'whistleblowers' to the general public or to their loyalty to their
+      employers.[6] Applied ethics is distinguished from normative ethics, which concerns
+      standards for right and wrong behavior, and from meta-ethics, which concerns
+      the nature of ethical properties, statements, attitudes, and judgments.[7]
+    description_short: Applied ethics is the branch of ethics concerned with the analysis
+      of particular moral issues.
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: AppliedEthicsInc._large_screenshot.png, security_marking: UNCLASSIFIED}
+    large_icon: {filename: AppliedEthicsInc._large_screenshot.png, security_marking: UNCLASSIFIED}
+    launch_url: http://appliedethicsinc.com
+    listing_type: Web Application
+    owners: [wsmith, jones]
+    requirements: None
+    screenshots:
+    - description: null
+      large_image: {filename: AppliedEthicsInc._0_large_screenshot.png, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: AppliedEthicsInc._0_large_screenshot.png, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: AppliedEthicsInc._large_screenshot.png, security_marking: UNCLASSIFIED}
+    tags: [ethics, organizational, social]
+    title: Applied Ethics Inc.
+    unique_name: applied_ethics_inc.
+    version_name: '2.5'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: wsmith, description: null}
+  - {action: SUBMITTED, author: wsmith, description: null}
+  - {action: APPROVED_ORG, author: bigbrother, description: null}
+  - {action: APPROVED, author: bigbrother, description: null}
+  - {action: MODIFIED, author: wsmith, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Miniluv
+    banner_icon: {filename: MovieProjector_large_screenshot.gif, security_marking: UNCLASSIFIED}
+    categories: [Entertainment]
+    contacts: []
+    description: A movie projector is an opto-mechanical device for displaying motion
+      picture film by projecting it onto a screen. Most of the optical and mechanical
+      elements, except for the illumination and sound devices, are present in movie
+      cameras.
+    description_short: A movie projector is an opto-mechanical device for displaying
+      motion pictures.
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: MovieProjector_large_screenshot.gif, security_marking: UNCLASSIFIED}
+    large_icon: {filename: MovieProjector_large_screenshot.gif, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Movie_projector
+    listing_type: Desktop App
+    owners: [bettafish]
+    requirements: A Wall
+    screenshots:
+    - description: null
+      large_image: {filename: MovieProjector_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: MovieProjector_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: MovieProjector_large_screenshot.gif, security_marking: UNCLASSIFIED}
+    tags: [movie, tv]
+    title: Movie Projector
+    unique_name: movie_projector
+    version_name: '1'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: bettafish, description: null}
+  - {action: SUBMITTED, author: bettafish, description: null}
+  - {action: APPROVED_ORG, author: bettafish, description: null}
+  - {action: APPROVED, author: bettafish, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Miniluv
+    banner_icon: {filename: T-slotnut_large_screenshot.png, security_marking: UNCLASSIFIED}
+    categories: [Tools]
+    contacts: []
+    description: "A T-slot nut is used with a threaded clamp to position and secure\
+      \ pieces being worked on in a workshop. The T-slot nut slides along a T-slot\
+      \ track, which is set in workbench or table for a router, drill press, or bandsaw.\
+      \ T-slot nuts are also used with extruded aluminum framing, such as 80/20, to\
+      \ build a variety of industrial structures and machines.\n\nA T-slot bolt is\
+      \ generally stronger than a T-slot nut and hex-head cap screw.[1]\n\nA heavy-duty\
+      \ T-slot nut with a M12 bolt is rated to support 10000 N (about 1 imperial ton).[2]\n\
+      \nProfile 40\xD740 (40 mm by 40 mm, with 8 mm grooves) extruded aluminum profile[clarify]\
+      \ and the T-slot nuts to fit into them comprised the first modular system developed\
+      \ for use in mechanical engineering in 1980 by item Industrietechnik.[3] The\
+      \ item aluminum framing system has since been expanded to include a variety\
+      \ of t-slot nuts that have been designed for specific applications.\n\nThe item\
+      \ system is very similar to the \"channel-and-groove design\" used in some toys."
+    description_short: A T-slot nut is used with a threaded clamp.
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: T-slotnut_large_screenshot.png, security_marking: UNCLASSIFIED}
+    large_icon: {filename: T-slotnut_large_screenshot.png, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/T-slot_nut
+    listing_type: Widget
+    owners: [bettafish]
+    requirements: None
+    screenshots:
+    - description: null
+      large_image: {filename: T-slotnut_0_large_screenshot.png, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: T-slotnut_0_large_screenshot.png, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: T-slotnut_large_screenshot.png, security_marking: UNCLASSIFIED}
+    tags: [clamp, nut]
+    title: T-slot nut
+    unique_name: t-slot_nut
+    version_name: '1'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: bettafish, description: null}
+  - {action: SUBMITTED, author: bettafish, description: null}
+  - {action: APPROVED_ORG, author: bettafish, description: null}
+  - {action: APPROVED, author: bettafish, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Miniluv
+    banner_icon: {filename: Toyota_large_screenshot.png, security_marking: UNCLASSIFIED}
+    categories: [Productivity, Shopping]
+    contacts: []
+    description: "Toyota Motor Corporation (Japanese: \u30C8\u30E8\u30BF\u81EA\u52D5\
+      \u8ECA\u682A\u5F0F\u4F1A\u793E Hepburn: Toyota Jid\u014Dsha KK, IPA: [to\uA71C\
+      jota], English: /t\u0254\u026A\u02C8o\u028At\u0259/) is a Japanese multinational\
+      \ automotive manufacturer headquartered in Toyota, Aichi, Japan. In March 2014,\
+      \ Toyota's corporate structure consisted of 338,875 employees worldwide[4] and,\
+      \ as of October 2016, was the ninth-largest company in the world by revenue.\
+      \ As of 2016, Toyota is the world's largest automotive manufacturer. Toyota\
+      \ was the world's first automobile manufacturer to produce more than 10 million\
+      \ vehicles per year which it has done since 2012, when it also reported the\
+      \ production of its 200-millionth vehicle.[6] As of July 2014, Toyota was the\
+      \ largest listed company in Japan by market capitalization (worth more than\
+      \ twice as much as #2-ranked SoftBank)[7] and by revenue.[8][9]"
+    description_short: Toyota Motor Corporation is a Japanese multinational automotive
+      manufacturer.
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Toyota_large_screenshot.png, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Toyota_large_screenshot.png, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Toyota
+    listing_type: Web Services
+    owners: [bettafish]
+    requirements: None
+    screenshots:
+    - description: null
+      large_image: {filename: Toyota_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Toyota_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    - description: null
+      large_image: {filename: Toyota_1_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 1
+      small_image: {filename: Toyota_1_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Toyota_large_screenshot.png, security_marking: UNCLASSIFIED}
+    tags: [car]
+    title: Toyota
+    unique_name: toyota
+    version_name: '1'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: bettafish, description: null}
+  - {action: SUBMITTED, author: bettafish, description: null}
+  - {action: APPROVED_ORG, author: bettafish, description: null}
+  - {action: APPROVED, author: bettafish, description: null}
+  - {action: MODIFIED, author: bettafish, description: null}
+  - {action: MODIFIED, author: bettafish, description: null}
+  - {action: DISABLED, author: khaleesi, description: null}
+  - {action: PENDING_DELETION, author: khaleesi, description: null}
+  - {action: REJECTED, author: khaleesi, description: none}
+  - {action: SUBMITTED, author: bettafish, description: null}
+  - {action: APPROVED_ORG, author: bettafish, description: null}
+  - {action: APPROVED, author: bettafish, description: null}
+  - {action: ENABLED, author: bettafish, description: null}
+  - {action: MODIFIED, author: bigbrother, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Minitrue
+    banner_icon: {filename: Compoundbow_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Business]
+    contacts: []
+    description: 'In modern archery, a compound bow is a bow that uses a levering
+      system, usually of cables and pulleys, to bend the limbs.[1]
+
+
+      The pulley/cam system grants the user a mechanical advantage, and so the limbs
+      of a compound bow are much stiffer than those of a recurve bow or longbow. This
+      rigidity makes the compound bow more energy-efficient than other bows, as less
+      energy is dissipated in limb movement. The higher-rigidity, higher-technology
+      construction also improves accuracy by reducing the bow''s sensitivity to changes
+      in temperature and humidity.
+
+
+      The pulley/cam system also confers a benefit called "let-off". As the string
+      is drawn back, the pulleys rotate. The pulleys are eccentric rather than round,
+      and so their effective radius changes as they rotate. The pulleys feature two
+      cam tracks. An inner cam track which connects mechanically to the limbs or opposite
+      cam and an outer cam track which the bowstring runs through. As the bow is drawn
+      the ratio of bowstring pay-out and bowstring take-up relative to limb-weight
+      and leverage of the cams changes. By manipulation of the shapes of these cam
+      tracks, different draw-stroke profiles can be created. A compound bow can be
+      soft-drawing with a slow build-up to peak weight and a gradual let-off with
+      a long "valley" at the end. It can also be hard-drawing with a very fast build-up
+      to peak draw-weight, a long plateau where weight is maintained, and a quick
+      let-off with a short valley. The let-off itself is the result of the cam profiles
+      having passed center and approaching a condition very similar to a cam-lock.
+      In fact some compound bows, if the draw-stops or draw-length modules are removed,
+      will self-lock at full draw and require professional equipment to unlock safely.'
+    description_short: The compound bow was first developed in 1966; the compound
+      bow is the dominant form of bow.
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Compoundbow_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Compoundbow_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Compound_bow
+    listing_type: Widget
+    owners: [bettafish, jones]
+    requirements: none
+    screenshots:
+    - description: null
+      large_image: {filename: Compoundbow_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Compoundbow_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Compoundbow_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    tags: [sport, bow, hunting, arrow]
+    title: Compound bow
+    unique_name: compound_bow
+    version_name: '1'
+    what_is_new: The function of the cam systems (known as the 'eccentrics') is to
+      maximize the energy storage throughout the draw cycle and provide let-off at
+      the end of the cycle (less holding weight at full draw).
+  listing_activity:
+  - {action: CREATED, author: jones, description: null}
+  - {action: SUBMITTED, author: jones, description: null}
+  - {action: APPROVED_ORG, author: bettafish, description: null}
+  - {action: APPROVED, author: bettafish, description: null}
+  listing_review_batch: []
+- library_entries:
+  - {folder: null, owner: wsmith, position: 3}
+  listing:
+    agency: Minitrue
+    banner_icon: {filename: Grandfatherclock_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Business]
+    contacts: []
+    description: "A longcase clock, also tall-case clock, floor clock, or grandfather\
+      \ clock, is a tall, freestanding, weight-driven pendulum clock with the pendulum\
+      \ held inside the tower or waist of the case. Clocks of this style are commonly\
+      \ 1.8\u20132.4 metres (6\u20138 feet) tall. The case often features elaborately\
+      \ carved ornamentation on the hood (or bonnet), which surrounds and frames the\
+      \ dial, or clock face. The English clockmaker William Clement is credited with\
+      \ the development of this form in 1670. Until the early 20th century, pendulum\
+      \ clocks were the world's most accurate timekeeping technology, and longcase\
+      \ clocks, due to their superior accuracy, served as time standards for households\
+      \ and businesses. Today they are kept mainly for their decorative and antique\
+      \ value."
+    description_short: A longcase clock, also tall-case clock, floor clock, or grandfather
+      clock.
+    doc_urls:
+    - {name: 'https://en.wikipedia.org/wiki/Finnish_Museum_of_Horology', url: 'https://en.wikipedia.org/wiki/Striking_clock'}
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Grandfatherclock_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Grandfatherclock_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Longcase_clock
+    listing_type: Desktop App
+    owners: [bettafish, jones]
+    requirements: none
+    screenshots:
+    - description: null
+      large_image: {filename: Grandfatherclock_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Grandfatherclock_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Grandfatherclock_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    tags: [clock, time]
+    title: Grandfather clock
+    unique_name: grandfather_clock
+    version_name: '1'
+    what_is_new: 'Traditionally, longcase clocks were made with two types of movement:
+      eight-day and one-day (30-hour) movements. A clock with an eight-day movement
+      required winding only once a week, while generally less expensive 30-hour clocks
+      had to be wound every day.'
+  listing_activity:
+  - {action: CREATED, author: jones, description: null}
+  - {action: MODIFIED, author: jones, description: null}
+  - {action: SUBMITTED, author: jones, description: null}
+  - {action: APPROVED_ORG, author: bettafish, description: null}
+  - {action: APPROVED, author: bettafish, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Miniluv
+    banner_icon: {filename: Pencil_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Tools]
+    contacts: []
+    description: "A pencil is a writing implement or art medium constructed of a narrow,\
+      \ solid pigment core inside a protective casing which prevents the core from\
+      \ being broken and/or from leaving marks on the user\u2019s hand during use.\n\
+      \nPencils create marks by physical abrasion, leaving behind a trail of solid\
+      \ core material that adheres to a sheet of paper or other surface. They are\
+      \ distinct from pens, which instead disperse a trail of liquid or gel ink that\
+      \ stains the light colour of the paper."
+    description_short: A pencil is a writing implement
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Pencil_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Pencil_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Pencil
+    listing_type: Desktop App
+    owners: [bettafish]
+    requirements: Paper
+    screenshots:
+    - description: null
+      large_image: {filename: Pencil_0_large_screenshot.png, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Pencil_0_large_screenshot.png, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Pencil_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    tags: [pencil]
+    title: Pencil
+    unique_name: pencil
+    version_name: '1'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: bettafish, description: null}
+  - {action: SUBMITTED, author: bettafish, description: null}
+  - {action: APPROVED_ORG, author: bettafish, description: null}
+  - {action: APPROVED, author: bettafish, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Miniluv
+    banner_icon: {filename: Eraser_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Tools]
+    contacts: []
+    description: 'An eraser, (also called a rubber outside America,[1] from the material
+      first used) is an article of stationery that is used for removing writing from
+      paper. Erasers have a rubbery consistency and come in a variety of shapes, sizes
+      and colours. Some pencils have an eraser on one end. Less expensive erasers
+      are made from synthetic rubber and synthetic soy-based gum, but more expensive
+      or specialized erasers are vinyl, plastic, or gum-like materials.
+
+
+      Erasers were initially made for pencil markings, but more abrasive ink erasers
+      were later introduced. The term is also used for things that remove writing
+      from chalkboards and whiteboards.'
+    description_short: An eraser is an article of stationery that is used for removing
+      writing from paper.
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Eraser_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Eraser_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Eraser
+    listing_type: Widget
+    owners: [bettafish]
+    requirements: Pencil
+    screenshots:
+    - description: null
+      large_image: {filename: Eraser_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Eraser_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Eraser_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    tags: [pencil]
+    title: Eraser
+    unique_name: eraser
+    version_name: '1'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: bettafish, description: null}
+  - {action: SUBMITTED, author: bettafish, description: null}
+  - {action: APPROVED_ORG, author: bettafish, description: null}
+  - {action: APPROVED, author: bettafish, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Minitrue
+    banner_icon: {filename: Wikipedia_large_screenshot.png, security_marking: UNCLASSIFIED}
+    categories: [Education, Entertainment]
+    contacts: []
+    description: "Wikipedia (/\u02CCw\u026Ak\u026A\u02C8pi\u02D0di\u0259/ (About this\
+      \ sound listen) WIK-i-PEE-dee-\u0259 or /\u02CCw\u026Aki\u02C8pi\u02D0di\u0259\
+      / (About this sound listen) WIK-ee-PEE-dee-\u0259) is a free online encyclopedia\
+      \ with the aim to allow anyone to edit articles.[3] Wikipedia is the largest\
+      \ and most popular general reference work on the Internet[4][5][6] and is ranked\
+      \ among the ten most popular websites.[7] Wikipedia is owned by the nonprofit\
+      \ Wikimedia Foundation.[8][9][10]\n\nWikipedia was launched on January 15, 2001,\
+      \ by Jimmy Wales and Larry Sanger.[11] Sanger coined its name,[12][13] a portmanteau\
+      \ of wiki[notes 4] and encyclopedia. There was only the English-language version\
+      \ initially, but it quickly developed similar versions in other languages, which\
+      \ differ in content and in editing practices. With 5,459,675 articles,[notes\
+      \ 5] the English Wikipedia is the largest of the more than 290 Wikipedia encyclopedias.\
+      \ Overall, Wikipedia consists of more than 40 million articles in more than\
+      \ 250 different languages[15] and, as of February 2014, it had 18 billion page\
+      \ views and nearly 500 million unique visitors each month.[16]\n\nAs of March\
+      \ 2017, Wikipedia has about forty thousand high-quality articles known as Featured\
+      \ Articles and Good Articles that cover vital topics.[17][18] In 2005, Nature\
+      \ published a peer review comparing 42 science articles from Encyclop\xE6dia\
+      \ Britannica and Wikipedia, and found that Wikipedia's level of accuracy approached\
+      \ that of Encyclop\xE6dia Britannica.[19]\n\nWikipedia has been criticized for\
+      \ allegedly exhibiting systemic bias, presenting a mixture of \"truths, half\
+      \ truths, and some falsehoods\",[20] and, in controversial topics, being subject\
+      \ to manipulation and spin.[21]"
+    description_short: Wikipedia, the free encyclopedia
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Wikipedia_large_screenshot.png, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Wikipedia_large_screenshot.png, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Wikipedia
+    listing_type: Widget
+    owners: [wsmith, jones]
+    requirements: none
+    screenshots:
+    - description: null
+      large_image: {filename: Wikipedia_0_large_screenshot.png, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Wikipedia_0_large_screenshot.png, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Wikipedia_large_screenshot.png, security_marking: UNCLASSIFIED}
+    tags: [test, info, data, research]
+    title: Wikipedia
+    unique_name: wikipedia
+    version_name: '1'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: jones, description: null}
+  - {action: SUBMITTED, author: jones, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Minitrue
+    banner_icon: {filename: Cheesecake_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Education]
+    contacts: []
+    description: Cheesecake is a sweet dessert consisting of one or more layers. The
+      main, and thickest layer, consists of a mixture of soft, fresh cheese (typically
+      cream cheese or ricotta), eggs, and sugar; if there is a bottom layer it often
+      consists of a crust or base made from crushed cookies (or digestive biscuits),
+      graham crackers, pastry, or sponge cake.[1] It may be baked or unbaked (usually
+      refrigerated). Cheesecake is usually sweetened with sugar and may be flavored
+      or topped with fruit, whipped cream, nuts, cookies, fruit sauce, or chocolate
+      syrup. Cheesecake can be prepared in many flavors, such as strawberry, pumpkin,
+      key lime, chocolate, Oreo, chestnut, or toffee.
+    description_short: 'Cheesecakes can be broadly categorized into two basic types:
+      baked and unbaked.'
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Cheesecake_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Cheesecake_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Cheesecake
+    listing_type: Widget
+    owners: [bettafish, jones]
+    requirements: none
+    screenshots:
+    - description: null
+      large_image: {filename: Cheesecake_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Cheesecake_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    - description: null
+      large_image: {filename: Cheesecake_1_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 1
+      small_image: {filename: Cheesecake_1_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    - description: null
+      large_image: {filename: Cheesecake_2_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 2
+      small_image: {filename: Cheesecake_2_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Cheesecake_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    tags: [fish, good, yum, cake]
+    title: Cheesecake
+    unique_name: cheesecake
+    version_name: '1'
+    what_is_new: Good eats.
+  listing_activity:
+  - {action: CREATED, author: jones, description: null}
+  - {action: MODIFIED, author: jones, description: null}
+  - {action: SUBMITTED, author: jones, description: null}
+  - {action: APPROVED_ORG, author: bettafish, description: null}
+  - {action: APPROVED, author: bettafish, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Minitrue
+    banner_icon: {filename: Steak_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Education]
+    contacts: []
+    description: "A steak (/\u02C8ste\u026Ak/) is a meat generally sliced across the\
+      \ muscle fibers, potentially including a bone. Exceptions, in which the meat\
+      \ is sliced parallel to the fibers, include the skirt steak that is cut from\
+      \ the plate, the flank steak that is cut from the abdominal muscles, and the\
+      \ Silverfinger steak that is cut from the loin and includes three rib bones.\
+      \ When the word \"steak\" is used without qualification, it generally refers\
+      \ to a beefsteak. In a larger sense, there are also fish steaks, ground meat\
+      \ steaks, pork steak and many more varieties of steaks.\n\nSteaks are usually\
+      \ grilled,[1] but they can be pan-fried, or broiled. Steak is often grilled\
+      \ in an attempt to replicate the flavor of steak cooked over the glowing coals\
+      \ of an open fire.[1] Steak can also be cooked in sauce, such as in steak and\
+      \ kidney pie, or minced and formed into patties, such as hamburgers.\n\nSteaks\
+      \ are also cut from grazing animals, usually farmed, other than cattle, including\
+      \ bison, camel, goat, horse, kangaroo,[2][3] sheep, ostrich, pigs, reindeer,\
+      \ turkey, deer and zebu as well as various types of fish, especially salmon\
+      \ and large pelagic fish such as swordfish, shark and marlin. For some meats,\
+      \ such as pork, lamb and mutton, chevon and veal, these cuts are often referred\
+      \ to as chops. Some cured meat, such as gammon, is commonly served as steak.\n\
+      \nGrilled Portobello mushroom may be called mushroom steak, and similarly for\
+      \ other vegetarian dishes.[4] Imitation steak is a food product that is formed\
+      \ into a steak shape from various pieces of meat. Grilled fruits, such as watermelon\
+      \ have been used as vegetarian steak alternatives."
+    description_short: Beef steaks are commonly grilled, broiled or occasionally fried.
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Steak_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Steak_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Steak
+    listing_type: Code Library
+    owners: [bettafish, jones]
+    requirements: none
+    screenshots:
+    - description: null
+      large_image: {filename: Steak_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Steak_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    - description: null
+      large_image: {filename: Steak_1_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 1
+      small_image: {filename: Steak_1_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Steak_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    tags: [steak]
+    title: Steak
+    unique_name: steak
+    version_name: '1'
+    what_is_new: King of meats.
+  listing_activity:
+  - {action: CREATED, author: jones, description: null}
+  - {action: SUBMITTED, author: jones, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Minitrue
+    banner_icon: {filename: WitchDoctor_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Communication]
+    contacts: []
+    description: "A witch doctor was originally a type of healer who treated ailments\
+      \ believed to be caused by witchcraft.[1] The term witch doctor is sometimes\
+      \ used to refer to healers, particularly in third world regions, who use traditional\
+      \ healing rather than contemporary medicine. In contemporary society, \"witch\
+      \ doctor\" is sometimes used derisively to refer to chiropractors,[dubious \u2013\
+      \ discuss] homeopaths and faith healers."
+    description_short: In southern Africa, the witch doctors are known as sangomas
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: WitchDoctor_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: WitchDoctor_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Witch_doctor
+    listing_type: Widget
+    owners: [bettafish, jones]
+    requirements: none
+    screenshots:
+    - description: null
+      large_image: {filename: WitchDoctor_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: WitchDoctor_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    - description: null
+      large_image: {filename: WitchDoctor_1_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 1
+      small_image: {filename: WitchDoctor_1_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: WitchDoctor_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    tags: [doc, doctor, medicine]
+    title: Witch Doctor
+    unique_name: witch_doctor
+    version_name: '1'
+    what_is_new: Modern science.
+  listing_activity:
+  - {action: CREATED, author: jones, description: null}
+  - {action: SUBMITTED, author: jones, description: null}
+  - {action: MODIFIED, author: bettafish, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Minitrue
+    banner_icon: {filename: Voodoo_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Education]
+    contacts: []
+    description: "Louisiana Voodoo, also known as New Orleans Voodoo, describes a\
+      \ set of spiritual folkways developed from the traditions of the African diaspora.\
+      \ It is a cultural form of the Afro-American religions developed by West and\
+      \ Central Africans populations of the U.S. state of Louisiana. Voodoo is one\
+      \ of many incarnations of African-based spiritual folkways rooted in West African\
+      \ Dahomeyan Vodun. Its liturgical language is Louisiana Creole French, the language\
+      \ of the Louisiana Creole people.\n\nVoodoo became syncretized with the Catholic\
+      \ and Francophone culture of New Orleans as a result of the African cultural\
+      \ oppression in the region resulting from the Atlantic slave trade. Louisiana\
+      \ Voodoo is often confused with\u2014but is not completely separable from\u2014\
+      Haitian Vodou and Deep Southern Hoodoo. It differs from Haitian Vodou in its\
+      \ emphasis upon gris-gris, Voodoo queens, use of Hoodoo paraphernalia, and Li\
+      \ Grand Zombi. It was through Louisiana Voodoo that such terms as gris-gris\
+      \ (a Wolof term)[citation needed] and \"Voodoo dolls\"' were introduced into\
+      \ the American lexicon."
+    description_short: Voodoo was brought to French Louisiana during the colonial
+      period by enslaved Africans.
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Voodoo_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Voodoo_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Louisiana_Voodoo
+    listing_type: Widget
+    owners: [bettafish, jones]
+    requirements: none
+    screenshots:
+    - description: null
+      large_image: {filename: Voodoo_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Voodoo_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Voodoo_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    tags: [magic]
+    title: Voodoo
+    unique_name: voodoo
+    version_name: '1'
+    what_is_new: None.
+  listing_activity:
+  - {action: CREATED, author: jones, description: null}
+  - {action: MODIFIED, author: jones, description: null}
+  - {action: SUBMITTED, author: jones, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Minitrue
+    banner_icon: {filename: Ruby_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Finance]
+    contacts: []
+    description: 'A ruby is a pink to blood-red colored gemstone, a variety of the
+      mineral corundum (aluminium oxide). Other varieties of gem-quality corundum
+      are called sapphires. Ruby is one of the traditional cardinal gems, together
+      with amethyst, sapphire, emerald, and diamond.[3] The word ruby comes from ruber,
+      Latin for red. The color of a ruby is due to the element chromium.
+
+
+      The quality of a ruby is determined by its color, cut, and clarity, which, along
+      with carat weight, affect its value. The brightest and most valuable shade of
+      red called blood-red or pigeon blood, commands a large premium over other rubies
+      of similar quality. After color follows clarity: similar to diamonds, a clear
+      stone will command a premium, but a ruby without any needle-like rutile inclusions
+      may indicate that the stone has been treated. Ruby is the traditional birthstone
+      for July and is usually more pink than garnet, although some rhodolite garnets
+      have a similar pinkish hue to most rubies. The world''s most expensive ruby
+      is the Sunrise Ruby.'
+    description_short: A red-colored gem stone
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Ruby_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Ruby_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Ruby
+    listing_type: Widget
+    owners: [wsmith]
+    requirements: Must be wealthy
+    screenshots:
+    - description: example of a ruby
+      large_image: {filename: Ruby_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Ruby_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Ruby_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    tags: [ruby, gem, gemstone, stone, red, jewelry]
+    title: Ruby
+    unique_name: ruby
+    version_name: '1'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: khaleesi, description: null}
+  - {action: SUBMITTED, author: khaleesi, description: null}
+  - {action: APPROVED_ORG, author: khaleesi, description: null}
+  - {action: APPROVED, author: khaleesi, description: null}
+  listing_review_batch:
+  - {author: khaleesi, rate: 5, text: Good for jewelry in my house colors.}
+- library_entries:
+  - {folder: null, owner: wsmith, position: 2}
+  listing:
+    agency: Miniplen
+    banner_icon: {filename: Diamond_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Finance]
+    contacts: []
+    description: "Diamond ( /\u02C8da\u026A\u0259m\u0259nd/ or /\u02C8da\u026Am\u0259\
+      nd/) is a metastable allotrope of carbon, where the carbon atoms are arranged\
+      \ in a variation of the face-centered cubic crystal structure called a diamond\
+      \ lattice. Diamond is less stable than graphite, but the conversion rate from\
+      \ diamond to graphite is negligible at standard conditions. Diamond is renowned\
+      \ as a material with superlative physical qualities, most of which originate\
+      \ from the strong covalent bonding between its atoms. In particular, diamond\
+      \ has the highest hardness and thermal conductivity of any bulk material. Those\
+      \ properties determine the major industrial application of diamond in cutting\
+      \ and polishing tools and the scientific applications in diamond knives and\
+      \ diamond anvil cells.\n\nBecause of its extremely rigid lattice, it can be\
+      \ contaminated by very few types of impurities, such as boron and nitrogen.\
+      \ Small amounts of defects or impurities (about one per million of lattice atoms)\
+      \ color diamond blue (boron), yellow (nitrogen), brown (lattice defects), green\
+      \ (radiation exposure), purple, pink, orange or red. Diamond also has relatively\
+      \ high optical dispersion (ability to disperse light of different colors).\n\
+      \nMost natural diamonds are formed at high temperature and pressure at depths\
+      \ of 140 to 190 kilometers (87 to 118 mi) in the Earth's mantle. Carbon-containing\
+      \ minerals provide the carbon source, and the growth occurs over periods from\
+      \ 1 billion to 3.3 billion years (25% to 75% of the age of the Earth). Diamonds\
+      \ are brought close to the Earth's surface through deep volcanic eruptions by\
+      \ magma, which cools into igneous rocks known as kimberlites and lamproites.\
+      \ Diamonds can also be produced synthetically in a HPHT method which approximately\
+      \ simulates the conditions in the Earth's mantle. An alternative, and completely\
+      \ different growth technique is chemical vapor deposition (CVD). Several non-diamond\
+      \ materials, which include cubic zirconia and silicon carbide and are often\
+      \ called diamond simulants, resemble diamond in appearance and many properties.\
+      \ Special gemological techniques have been developed to distinguish natural\
+      \ diamonds, synthetic diamonds, and diamond simulants. The word is from the\
+      \ ancient Greek \u1F00\u03B4\u03AC\u03BC\u03B1\u03C2 \u2013 ad\xE1mas \"unbreakable\"\
+      ."
+    description_short: An overpriced gemstone whose price is inflated by the De Beers
+      cartel
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Diamond_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Diamond_large_screenshot.png, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Diamond
+    listing_type: Widget
+    owners: [wsmith]
+    requirements: Must spend x amount of your salary to show your love
+    screenshots:
+    - description: Loose diamonds on a white background
+      large_image: {filename: Diamond_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Diamond_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    - description: Diamond necklace
+      large_image: {filename: Diamond_1_large_screenshot.png, security_marking: UNCLASSIFIED}
+      order: 1
+      small_image: {filename: Diamond_1_large_screenshot.png, security_marking: UNCLASSIFIED}
+    - description: A pendant with diamond and other gem stones
+      large_image: {filename: Diamond_2_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 2
+      small_image: {filename: Diamond_2_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    - description: a diamond on a black background
+      large_image: {filename: Diamond_3_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 3
+      small_image: {filename: Diamond_3_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Diamond_large_screenshot.png, security_marking: UNCLASSIFIED}
+    tags: [white, gem, gemstone, jewelry, diamond, chocolate, carbon]
+    title: Diamond
+    unique_name: diamond
+    version_name: '2'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: khaleesi, description: null}
+  - {action: SUBMITTED, author: khaleesi, description: null}
+  - {action: APPROVED_ORG, author: khaleesi, description: null}
+  - {action: APPROVED, author: khaleesi, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Miniplen
+    banner_icon: {filename: Sapphire_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Finance]
+    contacts: []
+    description: "Sapphire is a gemstone, a variety of the mineral corundum, an aluminium\
+      \ oxide (\u03B1-Al2O3). It is typically blue in color, but natural \"fancy\"\
+      \ sapphires also occur in yellow, purple, orange, and green colors; \"parti\
+      \ sapphires\" show two or more colors. The only color which sapphire cannot\
+      \ be is red \u2013 as red colored corundum is called ruby,[2] another corundum\
+      \ variety. Pink colored corundum may be either classified as ruby or sapphire\
+      \ depending on locale. This variety in color is due to trace amounts of elements\
+      \ such as iron, titanium, chromium, copper, or magnesium.\n\nCommonly, natural\
+      \ sapphires are cut and polished into gemstones and worn in jewelry. They also\
+      \ may be created synthetically in laboratories for industrial or decorative\
+      \ purposes in large crystal boules. Because of the remarkable hardness of sapphires\
+      \ \u2013 9 on the Mohs scale (the third hardest mineral, after diamond at 10\
+      \ and moissanite at 9.5) \u2013 sapphires are also used in some non-ornamental\
+      \ applications, such as infrared optical components, high-durability windows,\
+      \ wristwatch crystals and movement bearings, and very thin electronic wafers,\
+      \ which are used as the insulating substrates of very special-purpose solid-state\
+      \ electronics (especially integrated circuits and GaN-based LEDs)."
+    description_short: A blue gem stone
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Sapphire_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Sapphire_large_screenshot.png, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Sapphire
+    listing_type: Widget
+    owners: [wsmith]
+    requirements: Must be fairly wealthy
+    screenshots:
+    - description: A sapphire and diamond ring
+      large_image: {filename: Sapphire_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Sapphire_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Sapphire_large_screenshot.png, security_marking: UNCLASSIFIED}
+    tags: [gem, gemstone, stone, jewelry, blue]
+    title: Sapphire
+    unique_name: sapphire
+    version_name: '3'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: khaleesi, description: null}
+  - {action: MODIFIED, author: khaleesi, description: null}
+  - {action: SUBMITTED, author: khaleesi, description: null}
+  - {action: APPROVED_ORG, author: khaleesi, description: null}
+  - {action: APPROVED, author: khaleesi, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Miniluv
+    banner_icon: {filename: MotorcycleHelmet_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Health and Fitness]
+    contacts: []
+    description: 'A motorcycle helmet is a type of helmet used by motorcycle riders.
+      The primary goal of a motorcycle helmet is motorcycle safety - to protect the
+      rider''s head during impact, thus preventing or reducing head injury and saving
+      the rider''s life. Some helmets provide additional conveniences, such as ventilation,
+      face shields, ear protection, intercom etc.
+
+
+      Motorcyclists are at high risk in traffic crashes. A 2008 systematic review[1]
+      examined studies on motorcycle riders who had crashed and looked at helmet use
+      as an intervention. The review concluded that helmets reduce the risk of head
+      injury by around 69% and death by around 42%. Although it was once speculated
+      that wearing a motorcycle helmet increased neck and spinal injuries in a crash,
+      recent evidence has shown the opposite to be the case, that helmets protect
+      against cervical spine injury, and that an often-cited small study dating to
+      the mid-1980s, "used flawed statistical reasoning".'
+    description_short: A motorcycle helmet is a type of helmet used by motorcycle
+      riders.
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: MotorcycleHelmet_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: MotorcycleHelmet_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Motorcycle_helmet
+    listing_type: Desktop App
+    owners: [bettafish]
+    requirements: 'A motorcycle
+
+      A head'
+    screenshots:
+    - description: null
+      large_image: {filename: MotorcycleHelmet_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: MotorcycleHelmet_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: MotorcycleHelmet_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    tags: [bike, motorcycle, vehicle]
+    title: Motorcycle Helmet
+    unique_name: motorcycle_helmet
+    version_name: '1'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: bettafish, description: null}
+  - {action: SUBMITTED, author: bettafish, description: null}
+  - {action: APPROVED_ORG, author: bettafish, description: null}
+  - {action: APPROVED, author: bettafish, description: null}
+  listing_review_batch:
+  - {author: bigbrother, rate: 5, text: A motorcycle helmet can be a life saver}
+- library_entries: []
+  listing:
+    agency: Minitrue
+    banner_icon: {filename: KomodoDragon_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Entertainment]
+    contacts: []
+    description: 'The Komodo dragon[4] (Varanus komodoensis), also known as the Komodo
+      monitor, is a large species of lizard found in the Indonesian islands of Komodo,
+      Rinca, Flores, Gili Motang, and Padar.[5] A member of the monitor lizard family
+      Varanidae, it is the largest living species of lizard, growing to a maximum
+      length of 3 metres (10 ft) in rare cases and weighing up to approximately 70
+      kilograms (150 lb).[5]
+
+
+      Their unusually large size has been attributed to island gigantism, since no
+      other carnivorous animals fill the niche on the islands where they live.[6][7]
+      However, recent research suggests the large size of Komodo dragons may be better
+      understood as representative of a relict population of very large varanid lizards
+      that once lived across Indonesia and Australia, most of which, along with other
+      megafauna,[1] died out after the Pleistocene. Fossils very similar to V. komodoensis
+      have been found in Australia dating to greater than 3.8 million years ago, and
+      its body size remained stable on Flores, one of the handful of Indonesian islands
+      where it is currently found, over the last 900,000 years, "a time marked by
+      major faunal turnovers, extinction of the island''s megafauna, and the arrival
+      of early hominids by 880 ka [kiloannums]."[1]
+
+
+      As a result of their size, these lizards dominate the ecosystems in which they
+      live.[8] Komodo dragons hunt and ambush prey including invertebrates, birds,
+      and mammals. It has been claimed that they have a venomous bite; there are two
+      glands in the lower jaw which secrete several toxic proteins. The biological
+      significance of these proteins is disputed, but the glands have been shown to
+      secrete an anticoagulant. Komodo dragon group behaviour in hunting is exceptional
+      in the reptile world. The diet of big Komodo dragons mainly consists of deer,
+      though they also eat considerable amounts of carrion.[5] Komodo dragons also
+      occasionally attack humans.[9]
+
+
+      Mating begins between May and August, and the eggs are laid in September. About
+      20 eggs are deposited in abandoned megapode nests or in a self-dug nesting hole.[5]
+      The eggs are incubated for seven to eight months, hatching in April, when insects
+      are most plentiful. Young Komodo dragons are vulnerable and therefore dwell
+      in trees, safe from predators and cannibalistic adults. They take 8 to 9 years
+      to mature, and are estimated to live up to 30 years.[5]
+
+
+      Komodo dragons were first recorded by Western scientists in 1910.[10] Their
+      large size and fearsome reputation make them popular zoo exhibits. In the wild,
+      their range has contracted due to human activities, and they are listed as vulnerable
+      by the IUCN.[2] They are protected under Indonesian law, and a national park,
+      Komodo National Park, was founded to aid protection efforts.'
+    description_short: A huge lizard!
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: KomodoDragon_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: KomodoDragon_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Komodo_dragon
+    listing_type: Desktop App
+    owners: [khaleesi]
+    requirements: None
+    screenshots:
+    - description: Komodo Dragon on a rock
+      large_image: {filename: KomodoDragon_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: KomodoDragon_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: KomodoDragon_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    tags: [Lizard, Monitor, Reptile]
+    title: Komodo Dragon
+    unique_name: komodo_dragon
+    version_name: '1'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: khaleesi, description: null}
+  - {action: SUBMITTED, author: khaleesi, description: null}
+  - {action: APPROVED_ORG, author: khaleesi, description: null}
+  - {action: APPROVED, author: khaleesi, description: null}
+  - {action: DISABLED, author: khaleesi, description: null}
+  - {action: ENABLED, author: khaleesi, description: null}
+  listing_review_batch:
+  - {author: bigbrother, rate: 1, text: 'I don''t think that cold blooded animals
+      are very efficient '}
+- library_entries: []
+  listing:
+    agency: Test 3
+    banner_icon: {filename: Astrologysoftware_large_screenshot.png, security_marking: UNCLASSIFIED}
+    categories: [Education, Weather]
+    contacts: [a@b.com]
+    description: 'Astrology software is a type of computer programs designed to calculate
+      horoscopes. Many of them also assemble interpretive text into narrative reports.
+
+
+      Astro Computing Services (ACS) in San Diego, founded by Neil Michelsen in 1973,
+      published a computer-generated astrological ephemeris in 1976, The American
+      Ephemeris.[5]
+
+
+      When personal computers generally became available, astrologers and astrology
+      hobbyists were able to purchase them and use astrological or astronomical calculation
+      software or make such programs themselves. Astrologer and computer programmer
+      Michael Erlewine was involved early in making astrological software for microcomputers
+      available to the general public in the late 1970s. In 1978, Erlewine founded
+      Matrix Software, and in 1980 he published a book with all the algorithms and
+      data required for owners of microcomputers to make their own complete astrological
+      programs.[5] At first, astrology software was opposed by American astrologers
+      who did not approve of computers in their field. However, acceptance grew as
+      it became clear how more efficient and profitable such software could be.[5]
+
+
+      A few hundred fixed-purpose astrology computers were made, one of which was
+      used by Nancy Reagan''s astrologer beginning in about 1981'
+    description_short: Astrology software is a type of computer programs designed
+      to calculate horoscopes.
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Astrologysoftware_large_screenshot.png, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Astrologysoftware_large_screenshot.png, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Astrology_software
+    listing_type: Desktop App
+    owners: [bettafish]
+    requirements: None
+    screenshots:
+    - description: null
+      large_image: {filename: Astrologysoftware_0_large_screenshot.png, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Astrologysoftware_0_large_screenshot.png, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Astrologysoftware_large_screenshot.png, security_marking: UNCLASSIFIED}
+    tags: [horoscope, hocus pocus]
+    title: Astrology software
+    unique_name: astrology_software
+    version_name: '1'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: bettafish, description: null}
+  - {action: SUBMITTED, author: bettafish, description: null}
+  - {action: APPROVED_ORG, author: bettafish, description: null}
+  - {action: APPROVED, author: bettafish, description: null}
+  listing_review_batch:
+  - {author: rutherford, rate: 5, text: I think that this is very cool software.  Must
+      try it out.}
+- library_entries: []
+  listing:
+    agency: Miniluv
+    banner_icon: {filename: ChickenandWaffles_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Health and Fitness]
+    contacts: []
+    description: "Chicken and waffles refers to either of two American dishes \u2013\
+      \ one from soul food, the other Pennsylvania Dutch \u2013 that combine chicken\
+      \ with waffles. It is served in certain specialty restaurants in the United\
+      \ States"
+    description_short: Chicken and waffles
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: ChickenandWaffles_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: ChickenandWaffles_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Chicken_and_waffles
+    listing_type: Widget
+    owners: [bettafish]
+    requirements: None
+    screenshots:
+    - description: null
+      large_image: {filename: ChickenandWaffles_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: ChickenandWaffles_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    - description: null
+      large_image: {filename: ChickenandWaffles_1_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 1
+      small_image: {filename: ChickenandWaffles_1_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: ChickenandWaffles_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    tags: [food, chicken, waffles]
+    title: Chicken and Waffles
+    unique_name: chicken_and_waffles
+    version_name: '1'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: bettafish, description: null}
+  - {action: SUBMITTED, author: bettafish, description: null}
+  - {action: APPROVED_ORG, author: bettafish, description: null}
+  - {action: APPROVED, author: bettafish, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Miniluv
+    banner_icon: {filename: MixingConsole_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Entertainment]
+    contacts: []
+    description: 'In audio, a mixing console is an electronic device for combining
+      (also called "mixing"), routing, and changing the volume level, timbre (tone
+      color) and/or dynamics of many different audio signals, such as microphones
+      being used by singers, mics picking up acoustic instruments such as drums or
+      saxophones, signals from electric or electronic instruments such as the electric
+      bass or synthesizer, or recorded music playing on a CD player. In the 2010s,
+      a mixer is able to control analog or digital signals, depending on the type
+      of mixer. The modified signals (voltages or digital samples) are summed to produce
+      the combined output signals, which can then be broadcast, amplified through
+      a sound reinforcement system or recorded (or some combination of these applications).
+
+
+      Mixing consoles are used in many applications, including recording studios,
+      public address systems, sound reinforcement systems, nightclubs, dance clubs,
+      broadcasting, television, and film post-production. A typical, simple application
+      combines signals from two microphones (each used by vocalists singing a duet,
+      perhaps) into an amplifier that drives one set of speakers simultaneously. In
+      live performances, the signal from the mixer usually goes directly to an amplifier
+      which is plugged into speaker cabinets, unless the mixer has a built-in power
+      amplifier or is connected to powered speakers. A DJ mixer may have only two
+      channels, for mixing two record players. A coffeehouse''s tiny stage might only
+      have a six channel mixer, enough for two singer-guitarists and a percussionist.
+      A nightclub stage''s mixer for rock music shows may have 24 channels for mixing
+      the signals from a rhythm section, lead guitar and several vocalists. A mixing
+      console for a large concert may have 48 channels. A mixing console in a professional
+      recording studio may have as many as 96 channels.'
+    description_short: a mixing console is an electronic device for combining, routing,
+      and changing the volume level
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: MixingConsole_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: MixingConsole_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Mixing_console
+    listing_type: Desktop App
+    owners: [bettafish]
+    requirements: Music
+    screenshots:
+    - description: null
+      large_image: {filename: MixingConsole_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: MixingConsole_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    - description: null
+      large_image: {filename: MixingConsole_1_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 1
+      small_image: {filename: MixingConsole_1_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: MixingConsole_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    tags: [music]
+    title: Mixing Console
+    unique_name: mixing_console
+    version_name: '1'
+    what_is_new: null
+  listing_activity:
+  - {action: CREATED, author: bettafish, description: null}
+  - {action: SUBMITTED, author: bettafish, description: null}
+  - {action: APPROVED_ORG, author: bettafish, description: null}
+  - {action: APPROVED, author: bettafish, description: null}
+  listing_review_batch:
+  - {author: bigbrother, rate: 1, text: I was looking for a food mixer and could not
+      find it}
+- library_entries: []
+  listing:
+    agency: Minipax
+    banner_icon: {filename: NetworkSwitch_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Communication]
+    contacts: []
+    description: A computer networking device that connects devices together on a
+      computer network by using packet switching to receive, process, and forward
+      data to the destination device.  Multiple data cables are plugged into a switch
+      to enable communication between different networked devices. Switches manage
+      the flow of data across a network by transmitting a received network packet
+      only to the one or more devices for which the packet is intended. Each networked
+      device connected to a switch can be identified by its network address, allowing
+      the switch to regulate the flow of traffic. This maximizes the security and
+      efficiency of the network.
+    description_short: A computer networking device that connects devices together
+      on a computer network
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: NetworkSwitch_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: NetworkSwitch_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Network_switch
+    listing_type: Web Application
+    owners: [bigbrother]
+    requirements: "Unmanaged switches \u2013 these switches have no configuration\
+      \ interface or options. They are plug and play. They are typically the least\
+      \ expensive switches, and therefore often used in a small office/home office\
+      \ environment. Unmanaged switches can be desktop or rack mounted.\nManaged switches\
+      \ - these switches have one or more methods to modify the operation of the switch.\
+      \ Common management methods include: a command-line interface (CLI) accessed\
+      \ via serial console, telnet or Secure Shell, an embedded Simple Network Management\
+      \ Protocol (SNMP) agent allowing management from a remote console or management\
+      \ station, or a web interface for management from a web browser. Examples of\
+      \ configuration changes that one can do from a managed switch include: enabling\
+      \ features such as Spanning Tree Protocol or port mirroring, setting port bandwidth,\
+      \ creating or modifying virtual LANs (VLANs), etc. Two sub-classes of managed\
+      \ switches are marketed today:"
+    screenshots:
+    - description: null
+      large_image: {filename: NetworkSwitch_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: NetworkSwitch_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: NetworkSwitch_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    tags: [computer, connection, electronic, equipment, internet, rack, wire, person]
+    title: Network Switch
+    unique_name: network_switch
+    version_name: 0.5.8
+    what_is_new: Layer-7 switches may distribute the load based on uniform resource
+      locators (URLs)
+  listing_activity:
+  - {action: CREATED, author: bigbrother, description: null}
+  - {action: SUBMITTED, author: bigbrother, description: null}
+  - {action: APPROVED_ORG, author: bigbrother, description: null}
+  - {action: APPROVED, author: bigbrother, description: null}
+  listing_review_batch:
+  - {author: bigbrother, rate: 4, text: This switch allows many computers to be connected}
+- library_entries: []
+  listing:
+    agency: Minipax
+    banner_icon: {filename: SmartPhone_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Business, Communication, Sports]
+    contacts: []
+    description: A mobile personal computer with a mobile operating system with features
+      useful for mobile or handheld use.[1] Smartphones, which are typically pocket-sized
+      (as opposed to tablets, which are much larger than a pocket), have the ability
+      to place and receive voice/video calls and create and receive text messages,
+      have personal digital assistants
+    description_short: Handheld Wireless Phone used to call people and connect to
+      the internet
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: SmartPhone_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: SmartPhone_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Smartphone
+    listing_type: Web Application
+    owners: [bigbrother]
+    requirements: Have high-speed mobile broadband 4G LTE, motion sensors, and mobile
+      payment features
+    screenshots:
+    - description: Smart Phone
+      large_image: {filename: SmartPhone_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: SmartPhone_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: SmartPhone_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    tags: [business, connection, communication, contacts, device, display, smartphone,
+      phone, wireless, modern, cellphone, cellular]
+    title: Smart Phone
+    unique_name: smart_phone
+    version_name: '7.0'
+    what_is_new: 5G Connection will be faster than 4G
+  listing_activity:
+  - {action: CREATED, author: bigbrother, description: null}
+  - {action: MODIFIED, author: bigbrother, description: null}
+  - {action: SUBMITTED, author: bigbrother, description: null}
+  - {action: APPROVED_ORG, author: bigbrother, description: null}
+  - {action: APPROVED, author: bigbrother, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Minipax
+    banner_icon: {filename: Writing_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Communication]
+    contacts: []
+    description: Writing is a medium of human communication that represents language
+      and emotion with signs and symbols. In most languages, writing is a complement
+      to speech or spoken language. Writing is not a language, but a tool developed
+      by human society. Within a language system, writing relies on many of the same
+      structures as speech, such as vocabulary, grammar, and semantics, with the added
+      dependency of a system of signs or symbols. The result of writing is called
+      text, and the recipient of text is called a reader. Motivations for writing
+      include publication, storytelling, correspondence and diary. Writing has been
+      instrumental in keeping history, maintaining culture, dissemination of knowledge
+      through the media and the formation of legal systems.
+    description_short: Writing is a medium of human communication, represents language
+      and emotion with signs and symbols
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Writing_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Writing_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Writing
+    listing_type: Web Application
+    owners: [bigbrother]
+    requirements: A pen and paper
+    screenshots:
+    - description: Writing down on a piece of paper
+      large_image: {filename: Writing_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Writing_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED//FOR OFFICIAL USE ONLY
+    small_icon: {filename: Writing_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    tags: [paper, notebook, pen, writing]
+    title: Writing
+    unique_name: writing
+    version_name: '15.05'
+    what_is_new: It is possible to also write using a laptop
+  listing_activity:
+  - {action: CREATED, author: bigbrother, description: null}
+  - {action: SUBMITTED, author: bigbrother, description: null}
+  - {action: APPROVED_ORG, author: bigbrother, description: null}
+  - {action: APPROVED, author: bigbrother, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Minipax
+    banner_icon: {filename: Formula_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Books and Reference, Education]
+    contacts: []
+    description: A formula is a concise way of expressing information symbolically,
+      as in a mathematical or chemical formula. The informal use of the term formula
+      in science refers to the general construct of a relationship between given quantities.
+      The plural of formula can be spelled either as formulas or formulae
+    description_short: A formula is a concise way of expressing information symbolically
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Formula_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Formula_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Formula
+    listing_type: Desktop App
+    owners: [bigbrother]
+    requirements: Expressions are distinct from formulas in that they cannot contain
+      an equals sign (=).[6] Whereas formulas are comparable to sentences, expressions
+      are more like phrases.
+    screenshots:
+    - description: Math Formula
+      large_image: {filename: Formula_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Formula_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Formula_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    tags: [science, learning, writing, chalk, conceptual, text, handwritten, math,
+      physics]
+    title: Formula
+    unique_name: formula
+    version_name: 8.1.9
+    what_is_new: When the chemical compound of the formula consists of simple molecules,
+      chemical formulas often employ ways to suggest the structure of the molecule.
+      There are several types of these formulas, including molecular formulas and
+      condensed formulas
+  listing_activity:
+  - {action: CREATED, author: bigbrother, description: null}
+  - {action: SUBMITTED, author: bigbrother, description: null}
+  - {action: APPROVED_ORG, author: bigbrother, description: null}
+  - {action: APPROVED, author: bigbrother, description: null}
+  - {action: MODIFIED, author: bigbrother, description: null}
+  listing_review_batch: []
+- library_entries: []
+  listing:
+    agency: Minipax
+    banner_icon: {filename: Newspaper_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    categories: [Communication, News]
+    contacts: []
+    description: A serial publication containing news about current events, other
+      informative articles about politics, sports, arts, and so on, and advertising.
+      A newspaper is usually, but not exclusively, printed on relatively inexpensive,
+      low-grade paper such as newsprint. The journalism organizations that publish
+      newspapers are themselves often metonymically called newspapers.
+    description_short: A publication containing news about current events usually
+      on low-grade paper
+    doc_urls: []
+    iframe_compatible: true
+    is_deleted: false
+    is_enabled: true
+    is_featured: false
+    is_private: false
+    large_banner_icon: {filename: Newspaper_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    large_icon: {filename: Newspaper_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    launch_url: https://en.wikipedia.org/wiki/Newspaper
+    listing_type: Web Services
+    owners: [bigbrother]
+    requirements: Wide variety of material is published in newspapers, including opinion
+      columns, weather forecasts, reviews of local services, obituaries, birth notices,
+      crosswords, editorial cartoons, comic strips, and advice columns. Most newspapers
+      are businesses, and they pay their expenses with a mixture of subscription revenue,
+      newsstand sales, and advertising revenue.
+    screenshots:
+    - description: Newspaper
+      large_image: {filename: Newspaper_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Newspaper_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Newspaper_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    tags: [business, paper, facts, information, journal, journalist, journalism, news,
+      newspaper, press, office]
+    title: Newspaper
+    unique_name: newspaper
+    version_name: '8.05'
+    what_is_new: By the early 19th century, many cities in Europe, as well as North
+      and South America, published newspapers. As of 2017, most newspapers are now
+      published online as well as in print. The online versions are called online
+      newspapers or news websites.
+  listing_activity:
+  - {action: CREATED, author: bigbrother, description: null}
+  - {action: SUBMITTED, author: bigbrother, description: null}
+  - {action: APPROVED_ORG, author: bigbrother, description: null}
+  - {action: APPROVED, author: bigbrother, description: null}
+  - {action: MODIFIED, author: bigbrother, description: null}
   listing_review_batch: []

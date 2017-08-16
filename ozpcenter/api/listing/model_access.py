@@ -1,6 +1,38 @@
 """
 Listing Model Access
 
+Approval Status Stages
+- There are approved transitions for each action the user preforms
+
+APPROVAL_STATUS_CHOICES = (
+    (IN_PROGRESS, 'IN_PROGRESS'),
+    (PENDING, 'PENDING'),
+    (APPROVED_ORG, 'APPROVED_ORG'),
+    (APPROVED, 'APPROVED'),
+    (REJECTED, 'REJECTED'),
+    (DELETED, 'DELETED'),
+    (PENDING_DELETION, 'PENDING_DELETION')
+)
+
+
+                           Submitted
+ +--------+                Listing     +---------------------+
+ |  USER  +------------------------->  |  ORG STEWARD/ADMIN  |
+ +---+----+                            +---+----+------------+
+     ^           Rejected Listing          |    |
+     +---------------------+---------------+    |
+                           ^                    |
+                           |          Approved  |
+                Approved   |          Listing   |
++-----------+   Listing   ++-------+            |
+|Published  | <-----------+  ADMIN | <----------+
++-----------+             +--------+
+
+
+
+def validate_approval_status_transistion(current_approval_status, next_approval_status):
+    pass
+
 TODO: Add Validation to below method
     listing_model_access.create_listing(listing_activity_author, listing)
     listing_model_access.submit_listing(listing_activity_author, listing)

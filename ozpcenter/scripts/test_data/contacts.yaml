@@ -189,3 +189,15 @@ contacts:
   organization: null
   secure_phone: null
   unsecure_phone: null
+- contact_type: Civilian
+  email: gsmith@science.com
+  name: Dr. George Smith
+  organization: Organization for animal heath
+  secure_phone: null
+  unsecure_phone: 666-555-5555
+- contact_type: Civilian
+  email: a@b.com
+  name: A B
+  organization: null
+  secure_phone: 123-3211
+  unsecure_phone: null
