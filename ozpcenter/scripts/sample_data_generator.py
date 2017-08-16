@@ -289,9 +289,10 @@ def run():
                 current_contact_obj = models.Contact(name=current_contact['name'],
                                                      organization=current_contact['organization'],
                                                      contact_type=models.ContactType.objects.get(
-                    name=current_contact['contact_type']),
-                    email=current_contact['email'],
-                    unsecure_phone=current_contact['unsecure_phone'])
+                                                        name=current_contact['contact_type']),
+                                                    email=current_contact['email'],
+                                                    unsecure_phone=current_contact['unsecure_phone'],
+                                                    secure_phone=current_contact['secure_phone'])
                 current_contact_obj.save()
 
     ############################################################################

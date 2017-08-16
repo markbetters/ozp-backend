@@ -133,7 +133,6 @@ Purpose of this script: Export All Listings for sample data generator
 
 import os
 import sys
-# import json
 import yaml
 
 sys.path.insert(0, os.path.realpath(os.path.join(os.path.dirname(__file__), '../../')))
@@ -153,7 +152,7 @@ def extract_contacts():
     Function used to extract contact types and contacts into a yaml file
     """
     contacts_list = []
-    for current_contact in models.Contact.objects.iterator():
+    for current_contact in models.Contact.objects.order_by('contact_type', 'name').iterator():
         contact = {}
         contact['name'] = current_contact.name
         contact['organization'] = current_contact.organization
@@ -175,7 +174,7 @@ def extract_categories():
     Function used to extract categories into a yaml file
     """
     categories_list = []
-    for current_category in models.Category.objects.iterator():
+    for current_category in models.Category.objects.order_by('title').iterator():
         category = {}
         category['title'] = current_category.title
         category['description'] = current_category.description
@@ -191,7 +190,7 @@ def extract_listings():
     Function used to extract listings into a yaml file
     """
     output_list = []
-    for current_listing in models.Listing.objects.iterator():
+    for current_listing in models.Listing.objects.order_by('title').iterator():
         listing = {}
         listing['agency'] = current_listing.agency.short_name
         listing['title'] = current_listing.title
@@ -221,11 +220,13 @@ def extract_listings():
         listing['is_private'] = current_listing.is_private
 
         # "intents": [],
-        listing['doc_urls'] = [{'name': doc_url.name, 'url': doc_url.url} for doc_url in models.DocUrl.objects.filter(listing=current_listing).all()]
-        listing['owners'] = [current_owner.user.username for current_owner in current_listing.owners.iterator()]
-        listing['tags'] = [current_tag.name for current_tag in current_listing.tags.iterator()]
-        listing['categories'] = [current_category.title for current_category in current_listing.categories.iterator()]
-        listing['contacts'] = [current_contact.email for current_contact in current_listing.contacts.iterator()]
+        listing['doc_urls'] = sorted([{'name': doc_url.name, 'url': doc_url.url} for doc_url in models.DocUrl.objects.filter(listing=current_listing).all()], key=lambda doc: doc['name'])
+        listing['owners'] = sorted([current_owner.user.username for current_owner in current_listing.owners.iterator()])
+
+        # Convert list of tags names into set, then back into list for unique tags name
+        listing['tags'] = sorted(list(set([current_tag.name for current_tag in current_listing.tags.iterator()])))
+        listing['categories'] = sorted([current_category.title for current_category in current_listing.categories.iterator()])
+        listing['contacts'] = sorted([current_contact.email for current_contact in current_listing.contacts.iterator()])
 
         screenshot_entry_counter = 0
         screenshot_entry_list = []
