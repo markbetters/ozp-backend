@@ -6,54 +6,24 @@ Purpose of this script: Export All Listings for sample data generator
 # {
 #     "listing_activity": [
 #       {
-#         "action": "CREATED",
+#         "action": "CREATED/SUBMITTED/APPROVED_ORG/APPROVED",
 #         "author": "wsmith",
 #         "description": null
-#       },
-#       {
-#         "action": "SUBMITTED",
-#         "author": "wsmith",
-#         "description": null
-#       },
-#       {
-#         "action": "APPROVED_ORG",
-#         "author": "wsmith",
-#         "description": null
-#       },
-#       {
-#         "action": "APPROVED",
-#         "author": "wsmith",
-#         "description": null
-#       }
+#       },....
 #     ],
 #     "library_entries": [
 #       {
 #         "owner": "wsmith",
 #         "position": 0,
 #         "folder": null
-#       },
-#       {
-#         "owner": "hodor",
-#         "position": 0,
-#         "folder": null
-#       }
+#       },...
 #     ],
 #     "listing_review_batch": [
 #       {
 #         "text": "This app is great - well designed and easy to use",
 #         "author": "charrington",
 #         "rate": 5
-#       },
-#       {
-#         "text": "Air mail is ok - does what it says and no more",
-#         "author": "tparsons",
-#         "rate": 3
-#       },
-#       {
-#         "text": "Air mail crashes all the time - it doesn't even support IE 6!",
-#         "author": "syme",
-#         "rate": 1
-#       }
+#       },....
 #     ],
 #     "listing": {
 #       "large_icon": {
@@ -147,9 +117,9 @@ COPY_IMG_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../
 DEMO_APP_ROOT = settings.OZP['DEMO_APP_ROOT']
 
 
-def extract_contacts():
+def extract_contacts_database():
     """
-    Function used to extract contact types and contacts into a yaml file
+    Function used to extract contact types and contacts from database into python objects
     """
     contacts_list = []
     for current_contact in models.Contact.objects.order_by('contact_type', 'name').iterator():
@@ -161,17 +131,16 @@ def extract_contacts():
         contact['unsecure_phone'] = current_contact.unsecure_phone
         contact['secure_phone'] = current_contact.secure_phone
         contacts_list.append(contact)
-    output_dict = {'contacts': contacts_list}
 
+    output_dict = {'contacts': contacts_list}
     output_dict['contact_types'] = [contact_type.name for contact_type in models.ContactType.objects.iterator()]
 
-    with open('contacts.yaml', 'w') as file_stream:
-        yaml.dump(output_dict, file_stream, indent=2, default_flow_style=False)
+    return output_dict
 
 
-def extract_categories():
+def extract_categories_database():
     """
-    Function used to extract categories into a yaml file
+    Function used to extract categories from database into python objects
     """
     categories_list = []
     for current_category in models.Category.objects.order_by('title').iterator():
@@ -181,13 +150,12 @@ def extract_categories():
         categories_list.append(category)
     output_dict = {'categories': categories_list}
 
-    with open('categories.yaml', 'w') as file_stream:
-        yaml.dump(output_dict, file_stream, indent=2, default_flow_style=False)
+    return output_dict
 
 
-def extract_listings():
+def extract_listings_database():
     """
-    Function used to extract listings into a yaml file
+    Function used to extract listings from database into python objects
     """
     output_list = []
     for current_listing in models.Listing.objects.order_by('title').iterator():
@@ -255,7 +223,6 @@ def extract_listings():
 
         for current_image_type in image_types:
             current_image = getattr(current_listing, current_image_type)
-
             current_image_path = str(current_image.id) + '_' + current_image.image_type.name + '.' + current_image.file_extension
 
             with media_storage.open(current_image_path) as current_image_file:
@@ -299,10 +266,7 @@ def extract_listings():
         output_dict['listing_activity'] = listing_activity_list
         output_list.append(output_dict)
 
-    print('titles:{}'.format([record['listing']['title'] for record in output_list]))
-
-    with open('listings.yaml', 'w') as file_stream:
-        yaml.dump(output_list, file_stream, indent=2)
+    return output_list
 
 
 def run():
@@ -313,6 +277,15 @@ def run():
     if not os.path.exists(COPY_IMG_PATH):
         os.mkdir(COPY_IMG_PATH)
 
-    extract_categories()
-    extract_contacts()
-    extract_listings()
+    categories_dict = extract_categories_database()
+    with open('categories.yaml', 'w') as file_stream:
+        yaml.dump(categories_dict, file_stream, indent=2, default_flow_style=False)
+
+    contacts_dict = extract_contacts_database()
+    with open('contacts.yaml', 'w') as file_stream:
+        yaml.dump(contacts_dict, file_stream, indent=2, default_flow_style=False)
+
+    listings_list = extract_listings_database()
+    print('titles:{}'.format([record['listing']['title'] for record in listings_list]))
+    with open('listings.yaml', 'w') as file_stream:
+        yaml.dump(listings_list, file_stream, indent=2)

@@ -276,7 +276,7 @@ def run():
         contact_data = None
         with open(os.path.join(TEST_DATA_PATH, 'contacts.yaml'), 'r') as stream:
             try:
-                contact_data = yaml.load(stream)
+                contact_data = yaml.load(stream)  # TODO: Use Stream API
             except yaml.YAMLError as exc:
                 print(exc)
 
@@ -289,10 +289,10 @@ def run():
                 current_contact_obj = models.Contact(name=current_contact['name'],
                                                      organization=current_contact['organization'],
                                                      contact_type=models.ContactType.objects.get(
-                                                        name=current_contact['contact_type']),
-                                                    email=current_contact['email'],
-                                                    unsecure_phone=current_contact['unsecure_phone'],
-                                                    secure_phone=current_contact['secure_phone'])
+                    name=current_contact['contact_type']),
+                    email=current_contact['email'],
+                    unsecure_phone=current_contact['unsecure_phone'],
+                    secure_phone=current_contact['secure_phone'])
                 current_contact_obj.save()
 
     ############################################################################

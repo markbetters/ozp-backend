@@ -8,6 +8,7 @@ import ozpcenter.api.listing.model_access as model_access
 from ozpcenter import errors
 import ozpcenter.model_access as generic_model_access
 from ozpcenter import models
+from ozpcenter.tests.helper import ListingFile
 
 
 class ListingTest(TestCase):
@@ -25,12 +26,14 @@ class ListingTest(TestCase):
         """
         data_gen.run()
 
-    def test_get_listings(self):
+    def test_get_listings_for_user(self):
         username = 'wsmith'
         listings = model_access.get_listings(username)
         self.assertTrue(len(listings) >= 2)
+
+    def test_get_all_listings(self):
         all_listings = models.Listing.objects.all()
-        self.assertEqual(len(all_listings), 120)
+        self.assertEqual(len(all_listings), len(ListingFile.listings_titles()))
 
     def test_filter_listings(self):
         username = 'wsmith'
@@ -70,60 +73,45 @@ class ListingTest(TestCase):
 
     def test_create_listing(self):
         author = generic_model_access.get_profile('wsmith')
-
-        air_mail = models.Listing.objects.for_user(author.user.username).get(
-            title='Air Mail')
-
+        air_mail = models.Listing.objects.for_user(author.user.username).get(title='Air Mail')
         model_access.create_listing(author, air_mail)
 
-        air_mail = models.Listing.objects.for_user(author.user.username).get(
-            title='Air Mail')
-        self.assertEqual(air_mail.last_activity.action,
-            models.ListingActivity.CREATED)
-        self.assertEqual(air_mail.approval_status,
-            models.Listing.IN_PROGRESS)
+        air_mail = models.Listing.objects.for_user(author.user.username).get(title='Air Mail')
+        self.assertEqual(air_mail.last_activity.action, models.ListingActivity.CREATED)
+        self.assertEqual(air_mail.approval_status, models.Listing.IN_PROGRESS)
 
     def test_log_listing_modification(self):
         author = generic_model_access.get_profile('wsmith')
-        air_mail = models.Listing.objects.for_user(author.user.username).get(
-            title='Air Mail')
+        air_mail = models.Listing.objects.for_user(author.user.username).get(title='Air Mail')
 
         # fields to change
         change_details = [
-            {'old_value': '', 'new_value': 'lots of things',
-                'field_name': 'what_is_new'},
-            {'old_value': 'Ministry of Truth', 'new_value': 'Ministry of Love',
-                'field_name': 'agency'}
+            {'old_value': '', 'new_value': 'lots of things', 'field_name': 'what_is_new'},
+            {'old_value': 'Ministry of Truth', 'new_value': 'Ministry of Love', 'field_name': 'agency'}
         ]
         model_access.log_listing_modification(author, air_mail, change_details)
 
-        listing_activities = air_mail.listing_activities.filter(
-            action=models.ListingActivity.MODIFIED)
+        listing_activities = air_mail.listing_activities.filter(action=models.ListingActivity.MODIFIED)
 
         modified_activity = listing_activities[0]
-        self.assertEqual(modified_activity.author.user.username,
-            author.user.username)
+        self.assertEqual(modified_activity.author.user.username, author.user.username)
+
         change_details = modified_activity.change_details.all()
         self.assertEqual(len(change_details), 2)
 
-        air_mail = models.Listing.objects.for_user(author.user.username).get(
-            title='Air Mail')
+        air_mail = models.Listing.objects.for_user(author.user.username).get(title='Air Mail')
         self.assertEqual(air_mail.last_activity, modified_activity)
 
     def test_submit_listing(self):
         author = generic_model_access.get_profile('wsmith')
-        air_mail = models.Listing.objects.for_user(author.user.username).get(
-            title='Air Mail')
+        air_mail = models.Listing.objects.for_user(author.user.username).get(title='Air Mail')
 
         model_access.submit_listing(author, air_mail)
 
-        air_mail = models.Listing.objects.for_user(author.user.username).get(
-            title='Air Mail')
-        self.assertEqual(air_mail.last_activity.action,
-            models.ListingActivity.SUBMITTED)
+        air_mail = models.Listing.objects.for_user(author.user.username).get(title='Air Mail')
+        self.assertEqual(air_mail.last_activity.action, models.ListingActivity.SUBMITTED)
 
-        listing_activities = air_mail.listing_activities.filter(
-            action=models.ListingActivity.SUBMITTED)
+        listing_activities = air_mail.listing_activities.filter(action=models.ListingActivity.SUBMITTED)
         submitted_activity = listing_activities[0]
         self.assertEqual(submitted_activity.author.user.username,
             author.user.username)
@@ -131,56 +119,43 @@ class ListingTest(TestCase):
     def test_approve_listing_by_org_steward(self):
         org_steward = generic_model_access.get_profile('wsmith')
         username = org_steward.user.username
-        air_mail = models.Listing.objects.for_user(username).get(
-            title='Air Mail')
+        air_mail = models.Listing.objects.for_user(username).get(title='Air Mail')
 
         model_access.approve_listing_by_org_steward(org_steward, air_mail)
 
-        air_mail = models.Listing.objects.for_user(username).get(
-            title='Air Mail')
-        self.assertEqual(air_mail.last_activity.action,
-            models.ListingActivity.APPROVED_ORG)
+        air_mail = models.Listing.objects.for_user(username).get(title='Air Mail')
+        self.assertEqual(air_mail.last_activity.action, models.ListingActivity.APPROVED_ORG)
 
-        listing_activities = air_mail.listing_activities.filter(
-            action=models.ListingActivity.APPROVED_ORG)
+        listing_activities = air_mail.listing_activities.filter(action=models.ListingActivity.APPROVED_ORG)
         approved_org_activity = listing_activities[0]
         self.assertEqual(approved_org_activity.author.user.username, username)
 
     def test_approve_listing(self):
         apps_mall_steward = generic_model_access.get_profile('wsmith')
         username = apps_mall_steward.user.username
-        air_mail = models.Listing.objects.for_user(username).get(
-            title='Air Mail')
+        air_mail = models.Listing.objects.for_user(username).get(title='Air Mail')
 
         model_access.approve_listing(apps_mall_steward, air_mail)
 
-        air_mail = models.Listing.objects.for_user(username).get(
-            title='Air Mail')
-        self.assertEqual(air_mail.last_activity.action,
-            models.ListingActivity.APPROVED)
+        air_mail = models.Listing.objects.for_user(username).get(title='Air Mail')
+        self.assertEqual(air_mail.last_activity.action, models.ListingActivity.APPROVED)
 
-        listing_activities = air_mail.listing_activities.filter(
-            action=models.ListingActivity.APPROVED)
+        listing_activities = air_mail.listing_activities.filter(action=models.ListingActivity.APPROVED)
         approved_org_activity = listing_activities[0]
         self.assertEqual(approved_org_activity.author.user.username, username)
 
     def test_reject_listing(self):
         steward = generic_model_access.get_profile('wsmith')
         username = steward.user.username
-        air_mail = models.Listing.objects.for_user(username).get(
-            title='Air Mail')
+        air_mail = models.Listing.objects.for_user(username).get(title='Air Mail')
 
         description = 'this app is bad'
-        model_access.reject_listing(steward, air_mail,
-            description)
+        model_access.reject_listing(steward, air_mail, description)
 
-        air_mail = models.Listing.objects.for_user(username).get(
-            title='Air Mail')
-        self.assertEqual(air_mail.last_activity.action,
-            models.ListingActivity.REJECTED)
+        air_mail = models.Listing.objects.for_user(username).get(title='Air Mail')
+        self.assertEqual(air_mail.last_activity.action, models.ListingActivity.REJECTED)
 
-        listing_activities = air_mail.listing_activities.filter(
-            action=models.ListingActivity.REJECTED)
+        listing_activities = air_mail.listing_activities.filter(action=models.ListingActivity.REJECTED)
         rejected_activity = listing_activities[0]
         self.assertEqual(rejected_activity.author.user.username, username)
         self.assertEqual(rejected_activity.description, description)
@@ -188,17 +163,12 @@ class ListingTest(TestCase):
     def test_enable_listing(self):
         user = generic_model_access.get_profile('wsmith')
         username = user.user.username
-
-        air_mail = models.Listing.objects.for_user(username).get(
-            title='Air Mail')
+        air_mail = models.Listing.objects.for_user(username).get(title='Air Mail')
 
         model_access.enable_listing(user, air_mail)
+        self.assertEqual(air_mail.last_activity.action, models.ListingActivity.ENABLED)
 
-        self.assertEqual(air_mail.last_activity.action,
-            models.ListingActivity.ENABLED)
-
-        listing_activities = air_mail.listing_activities.filter(
-            action=models.ListingActivity.ENABLED)
+        listing_activities = air_mail.listing_activities.filter(action=models.ListingActivity.ENABLED)
         enabled_activity = listing_activities[0]
         self.assertEqual(enabled_activity.author.user.username, username)
         self.assertTrue(air_mail.is_enabled)
@@ -206,86 +176,59 @@ class ListingTest(TestCase):
     def test_disable_listing(self):
         user = generic_model_access.get_profile('wsmith')
         username = user.user.username
-
-        air_mail = models.Listing.objects.for_user(username).get(
-            title='Air Mail')
+        air_mail = models.Listing.objects.for_user(username).get(title='Air Mail')
 
         model_access.disable_listing(user, air_mail)
+        self.assertEqual(air_mail.last_activity.action, models.ListingActivity.DISABLED)
 
-        self.assertEqual(air_mail.last_activity.action,
-            models.ListingActivity.DISABLED)
-
-        listing_activities = air_mail.listing_activities.filter(
-            action=models.ListingActivity.DISABLED)
+        listing_activities = air_mail.listing_activities.filter(action=models.ListingActivity.DISABLED)
         enabled_activity = listing_activities[0]
         self.assertEqual(enabled_activity.author.user.username, username)
         self.assertFalse(air_mail.is_enabled)
 
     def test_edit_listing_review(self):
         username = 'charrington'
-        air_mail = models.Listing.objects.for_user(username).get(
-            title='Air Mail')
-        review = models.Review.objects.get(listing=air_mail,
-            author__user__username=username)
+        air_mail = models.Listing.objects.for_user(username).get(title='Air Mail')
+        review = models.Review.objects.get(listing=air_mail, author__user__username=username)
 
-        model_access.edit_listing_review(username, review,
-            2, 'not great')
+        model_access.edit_listing_review(username, review, 2, 'not great')
+        air_mail = models.Listing.objects.for_user(username).get(title='Air Mail')
+        self.assertEqual(air_mail.last_activity.action, models.ListingActivity.REVIEW_EDITED)
 
-        air_mail = models.Listing.objects.for_user(username).get(
-            title='Air Mail')
-        self.assertEqual(air_mail.last_activity.action,
-            models.ListingActivity.REVIEW_EDITED)
-
-        listing_activities = air_mail.listing_activities.filter(
-            action=models.ListingActivity.REVIEW_EDITED)
+        listing_activities = air_mail.listing_activities.filter(action=models.ListingActivity.REVIEW_EDITED)
         enabled_activity = listing_activities[0]
         self.assertEqual(enabled_activity.author.user.username, username)
 
-        # edit listing by another user should fail
-        self.assertRaises(errors.PermissionDenied,
-            model_access.edit_listing_review,
-            'wsmith', review, 2, 'still not great')
+        # Editing listing by another user should fail
+        self.assertRaises(errors.PermissionDenied, model_access.edit_listing_review, 'wsmith', review, 2, 'still not great')
 
     def test_delete_listing_review(self):
         username = 'charrington'
-        air_mail = models.Listing.objects.for_user(username).get(
-            title='Air Mail')
-        review = models.Review.objects.get(listing=air_mail,
-            author__user__username=username)
+        air_mail = models.Listing.objects.for_user(username).get(title='Air Mail')
+        review = models.Review.objects.get(listing=air_mail, author__user__username=username)
+
         model_access.delete_listing_review(username, review)
+        air_mail = models.Listing.objects.for_user(username).get(title='Air Mail')
+        self.assertEqual(air_mail.last_activity.action, models.ListingActivity.REVIEW_DELETED)
 
-        air_mail = models.Listing.objects.for_user(username).get(
-            title='Air Mail')
-        self.assertEqual(air_mail.last_activity.action,
-            models.ListingActivity.REVIEW_DELETED)
-
-        listing_activities = air_mail.listing_activities.filter(
-            action=models.ListingActivity.REVIEW_DELETED)
+        listing_activities = air_mail.listing_activities.filter(action=models.ListingActivity.REVIEW_DELETED)
         enabled_activity = listing_activities[0]
         self.assertEqual(enabled_activity.author.user.username, username)
 
     def test_delete_listing(self):
         username = 'wsmith'
-        air_mail = models.Listing.objects.for_user(username).get(
-            title='Air Mail')
+        air_mail = models.Listing.objects.for_user(username).get(title='Air Mail')
         model_access.delete_listing(username, air_mail)
-        self.assertEquals(1, models.Listing.objects.for_user(username).filter(
-            title='Air Mail').count())
-        self.assertTrue(models.Listing.objects.for_user(username).filter(
-            title='Air Mail').first().is_deleted)
+        self.assertEquals(1, models.Listing.objects.for_user(username).filter(title='Air Mail').count())
+        self.assertTrue(models.Listing.objects.for_user(username).filter(title='Air Mail').first().is_deleted)
 
     def test_delete_listing_no_permission(self):
         username = 'jones'
-        air_mail = models.Listing.objects.for_user(username).get(
-            title='Air Mail')
-        self.assertRaises(errors.PermissionDenied,
-            model_access.delete_listing,
-            username, air_mail)
+        air_mail = models.Listing.objects.for_user(username).get(title='Air Mail')
+        self.assertRaises(errors.PermissionDenied, model_access.delete_listing, username, air_mail)
+        self.assertEquals(1, models.Listing.objects.for_user(username).filter(title='Air Mail').count())
 
-        self.assertEquals(1, models.Listing.objects.for_user(username).filter(
-            title='Air Mail').count())
-
-    def test_doc_urls_to_string(self):
+    def test_doc_urls_to_string_dict(self):
         doc_urls = [
             {"name": "wiki", "url": "http://www.wiki.com"},
             {"name": "guide", "url": "http://www.guide.com"}
@@ -293,11 +236,12 @@ class ListingTest(TestCase):
         out = model_access.doc_urls_to_string(doc_urls)
         self.assertEqual(out, "[('guide', 'http://www.guide.com'), ('wiki', 'http://www.wiki.com')]")
 
-        doc_urls = models.DocUrl.objects.filter(listing__id=1)
+    def test_doc_urls_to_string_object(self):
+        doc_urls = models.DocUrl.objects.filter(listing__unique_name='ozp.test.air_mail')
         out = model_access.doc_urls_to_string(doc_urls, True)
         self.assertEqual(out, "[('guide', 'http://www.google.com/guide'), ('wiki', 'http://www.google.com/wiki')]")
 
-    def test_screenshots_to_string(self):
+    def test_screenshots_to_string_dict(self):
         screenshots = [
             {
                 "order": 0,
@@ -318,11 +262,15 @@ class ListingTest(TestCase):
         out = model_access.screenshots_to_string(screenshots)
         self.assertEqual(out, "[(0, 1, 'UNCLASSIFIED', 2, 'UNCLASSIFIED', 'Test Description')]")
 
-        screenshots = models.Screenshot.objects.filter(listing__id=1)
-        out = model_access.screenshots_to_string(screenshots, True)
-        self.assertEqual(out, "[(0, 15, 'UNCLASSIFIED', 16, 'UNCLASSIFIED', 'airmail screenshot set 1'), (1, 17, 'UNCLASSIFIED', 18, 'UNCLASSIFIED', 'airmail screenshot set 2')]")
+    def test_screenshots_to_string_object(self):
+        screenshots = models.Screenshot.objects.filter(listing__unique_name='ozp.test.air_mail')
+        screenshots_ids = [{'small_image_id':screenshot.small_image.id, 'large_image_id':screenshot.large_image.id } for screenshot in screenshots]
 
-    def test_image_to_string(self):
+        out = model_access.screenshots_to_string(screenshots, True)
+        self.assertEqual(out, str([(0, screenshots_ids[0]['small_image_id'], 'UNCLASSIFIED', screenshots_ids[0]['large_image_id'], 'UNCLASSIFIED', 'airmail screenshot set 1'),
+                                   (1, screenshots_ids[1]['small_image_id'], 'UNCLASSIFIED', screenshots_ids[1]['large_image_id'], 'UNCLASSIFIED', 'airmail screenshot set 2')]))
+
+    def test_image_to_string_dict(self):
         image = {
             "url": "http://localhost:8000/api/image/2/",
             "id": 2,
@@ -332,11 +280,13 @@ class ListingTest(TestCase):
         out = model_access.image_to_string(image)
         self.assertEqual(out, "2.UNCLASSIFIED")
 
-        image = models.Image.objects.get(id=1)
+    def test_image_to_string_object(self):
+        listing_banner_icon_id = models.Listing.objects.get(unique_name='ozp.test.air_mail').banner_icon.id
+        image = models.Image.objects.get(id=listing_banner_icon_id)
         out = model_access.image_to_string(image, True)
-        self.assertEqual(out, "1.UNCLASSIFIED")
+        self.assertEqual(out, "{}.UNCLASSIFIED".format(listing_banner_icon_id))
 
-    def test_contacts_to_string(self):
+    def test_contacts_to_string_dict(self):
         contacts = [
             {
                 "contact_type": {"name": "Government"},
@@ -357,55 +307,58 @@ class ListingTest(TestCase):
         ]
 
         out = model_access.contacts_to_string(contacts)
-
-        ext = ("[('me', 'me@google.com', '111-222-3434', '444-555-4545', None, 'Government'), " +
-               "('you', 'you@google.com', '111-222-3434', '444-555-4545', None, 'Military')]")
-
+        ext = str([('me', 'me@google.com', '111-222-3434', '444-555-4545', None, 'Government'),
+                   ('you', 'you@google.com', '111-222-3434', '444-555-4545', None, 'Military')])
         self.assertEqual(out, ext)
 
+    def test_contacts_to_string_object(self):
         contacts = models.Contact.objects.filter(organization='House Stark')
         out = model_access.contacts_to_string(contacts, True)
 
-        ext = ("[('Brienne Tarth', 'brienne@stark.com', None, '222-324-3846', 'House Stark', 'Military')," +
-               " ('Osha', 'osha@stark.com', None, '321-123-7894', 'House Stark', 'Civilian')]")
+        ext = str([('Brienne Tarth', 'brienne@stark.com', '741-774-7414', '222-324-3846', 'House Stark', 'Military'),
+                   ('Osha', 'osha@stark.com', '741-774-7414', '321-123-7894', 'House Stark', 'Civilian')])
 
         self.assertEqual(out, ext)
 
-    def test_categories_to_string(self):
+    def test_categories_to_string_dict(self):
         categories = [
             {"title": "Business"},
             {"title": "Education"}
         ]
 
         out = model_access.categories_to_string(categories)
-        self.assertEqual(out, "['Business', 'Education']")
+        self.assertEqual(out, str(['Business', 'Education']))
 
+    def test_categories_to_string_object(self):
         categories = models.Category.objects.filter(title__istartswith='b')
         out = model_access.categories_to_string(categories, True)
-        self.assertEqual(out, "['Books and Reference', 'Business']")
+        self.assertEqual(out, str(['Books and Reference', 'Business']))
 
-    def test_tags_to_string(self):
+    def test_tags_to_string_dict(self):
         tags = [
             {"name": "test tag one"},
             {"name": "test tag two"}
         ]
 
         out = model_access.tags_to_string(tags)
-        self.assertEqual(out, "['test tag one', 'test tag two']")
+        self.assertEqual(out, str(['test tag one', 'test tag two']))
 
-        tags = models.Tag.objects.all()
+    def test_tags_to_string_object(self):
+        tags = models.Tag.objects.order_by('name').all()
         out = model_access.tags_to_string(tags, True)
-        self.assertEqual(out, "['demo', 'example', 'tag_0', 'tag_1', 'tag_2', 'tag_3', 'tag_4', 'tag_5', 'tag_6', 'tag_7', 'tag_8', 'tag_9']")
 
-    def test_owners_to_string(self):
+        self.assertEqual(out, str(ListingFile.listings_tags()))
+
+    def test_owners_to_string_dict(self):
         owners = [
             {"user": {"username": "jack"}},
             {"user": {"username": "jill"}}
         ]
 
         out = model_access.owners_to_string(owners)
-        self.assertEqual(out, "['jack', 'jill']")
+        self.assertEqual(out, str(['jack', 'jill']))
 
+    def test_owners_to_string_object(self):
         owners = models.Profile.objects.filter(user__username__istartswith='j')
         out = model_access.owners_to_string(owners, True)
         self.assertEqual(out, "['johnson', 'jones', 'jsnow', 'julia']")

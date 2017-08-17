@@ -16,6 +16,7 @@ class ListingApiTest(APITestCase):
         """
         setUp is invoked before each test method
         """
+        self.maxDiff = None
         pass
 
     @classmethod
@@ -493,8 +494,7 @@ class ListingApiTest(APITestCase):
         self.assertTrue(4 in screenshots_large)
 
         self.assertTrue(response.data['approved_date'])
-        self.assertEqual(response.data['approval_status'],
-            models.Listing.APPROVED)
+        self.assertEqual(response.data['approval_status'], models.Listing.APPROVED)
         self.assertEqual(response.data['is_enabled'], False)
         self.assertEqual(response.data['is_featured'], False)
         self.assertEqual(response.data['avg_rate'], 3.0)
@@ -524,118 +524,50 @@ class ListingApiTest(APITestCase):
             'large_icon', 'banner_icon', 'large_banner_icon', 'security_marking',
             'listing_type', 'approval_status', 'intents']
 
-        total_found = 0
+        changed_found_fields = []
+
         for activity in activity_data:
             if activity['action'] == 'MODIFIED':
                 for change in activity['change_details']:
-                    if change['field_name'] == 'title':
-                        self.assertEqual(change['new_value'], data['title'])
-                        self.assertEqual(change['old_value'], old_listing_data['title'])
-                        total_found += 1
-                    if change['field_name'] == 'description':
-                        self.assertEqual(change['new_value'], data['description'])
-                        self.assertEqual(change['old_value'], old_listing_data['description'])
-                        total_found += 1
-                    if change['field_name'] == 'description_short':
-                        self.assertEqual(change['new_value'], data['description_short'])
-                        self.assertEqual(change['old_value'], old_listing_data['description_short'])
-                        total_found += 1
-                    if change['field_name'] == 'version_name':
-                        self.assertEqual(change['new_value'], data['version_name'])
-                        self.assertEqual(change['old_value'], old_listing_data['version_name'])
-                        total_found += 1
-                    if change['field_name'] == 'requirements':
-                        self.assertEqual(change['new_value'], data['requirements'])
-                        self.assertEqual(change['old_value'], old_listing_data['requirements'])
-                        total_found += 1
-                    if change['field_name'] == 'what_is_new':
-                        self.assertEqual(change['new_value'], data['what_is_new'])
-                        self.assertEqual(change['old_value'], old_listing_data['what_is_new'])
-                        total_found += 1
-                    if change['field_name'] == 'unique_name':
-                        self.assertEqual(change['new_value'], data['unique_name'])
-                        self.assertEqual(change['old_value'], old_listing_data['unique_name'])
-                        total_found += 1
-                    if change['field_name'] == 'launch_url':
-                        self.assertEqual(change['new_value'], data['launch_url'])
-                        self.assertEqual(change['old_value'], old_listing_data['launch_url'])
-                        total_found += 1
-                    if change['field_name'] == 'is_private':
-                        self.assertEqual(change['new_value'], data['is_private'])
-                        self.assertEqual(change['old_value'], model_access.bool_to_string(old_listing_data['is_private']))
-                        total_found += 1
-                    if change['field_name'] == 'is_featured':
-                        self.assertEqual(change['new_value'], data['is_featured'])
-                        self.assertEqual(change['old_value'], model_access.bool_to_string(old_listing_data['is_featured']))
-                        total_found += 1
-                    if change['field_name'] == 'listing_type':
-                        self.assertEqual(change['new_value'], data['listing_type']['title'])
-                        self.assertEqual(change['old_value'], old_listing_data['listing_type']['title'])
-                        total_found += 1
-                    if change['field_name'] == 'security_marking':
-                        self.assertEqual(change['new_value'], data['security_marking'])
-                        self.assertEqual(change['old_value'], old_listing_data['security_marking'])
-                        total_found += 1
-                    if change['field_name'] == 'small_icon':
-                        self.assertEqual(change['new_value'], str(data['small_icon']['id']) + '.UNCLASSIFIED')
-                        self.assertEqual(change['old_value'], str(old_listing_data['small_icon']['id']) + '.UNCLASSIFIED')
-                        total_found += 1
-                    if change['field_name'] == 'large_icon':
-                        self.assertEqual(change['new_value'], str(data['large_icon']['id']) + '.UNCLASSIFIED')
-                        self.assertEqual(change['old_value'], str(old_listing_data['large_icon']['id']) + '.UNCLASSIFIED')
-                        total_found += 1
-                    if change['field_name'] == 'banner_icon':
-                        self.assertEqual(change['new_value'], str(data['banner_icon']['id']) + '.UNCLASSIFIED')
-                        self.assertEqual(change['old_value'], str(old_listing_data['banner_icon']['id']) + '.UNCLASSIFIED')
-                        total_found += 1
-                    if change['field_name'] == 'large_banner_icon':
-                        self.assertEqual(change['new_value'], str(data['large_banner_icon']['id']) + '.UNCLASSIFIED')
-                        self.assertEqual(change['old_value'], str(old_listing_data['large_banner_icon']['id']) + '.UNCLASSIFIED')
-                        total_found += 1
-                    if change['field_name'] == 'doc_urls':
-                        self.assertEqual(change['new_value'],
-                            model_access.doc_urls_to_string(data['doc_urls']))
-                        self.assertEqual(change['old_value'],
-                            model_access.doc_urls_to_string(old_listing_data['doc_urls']))
-                        total_found += 1
-                    if change['field_name'] == 'screenshots':
-                        self.assertEqual(change['new_value'],
-                            model_access.screenshots_to_string(data['screenshots']))
-                        self.assertEqual(change['old_value'],
-                            model_access.screenshots_to_string(old_listing_data['screenshots']))
-                        total_found += 1
-                    if change['field_name'] == 'contacts':
-                        self.assertEqual(change['new_value'],
-                            model_access.contacts_to_string(data['contacts']))
-                        self.assertEqual(change['old_value'],
-                            model_access.contacts_to_string(old_listing_data['contacts']))
-                        total_found += 1
-                    if change['field_name'] == 'intents':
-                        self.assertEqual(change['new_value'],
-                            model_access.intents_to_string(data['intents']))
-                        self.assertEqual(change['old_value'],
-                            model_access.intents_to_string(old_listing_data['intents']))
-                        total_found += 1
-                    if change['field_name'] == 'categories':
-                        self.assertEqual(change['new_value'],
-                            model_access.categories_to_string(data['categories']))
-                        self.assertEqual(change['old_value'],
-                            model_access.categories_to_string(old_listing_data['categories']))
-                        total_found += 1
-                    if change['field_name'] == 'tags':
-                        self.assertEqual(change['new_value'],
-                            model_access.tags_to_string(data['tags']))
-                        self.assertEqual(change['old_value'],
-                            model_access.tags_to_string(old_listing_data['tags']))
-                        total_found += 1
-                    if change['field_name'] == 'owners':
-                        self.assertEqual(change['new_value'],
-                            model_access.owners_to_string(data['owners']))
-                        self.assertEqual(change['old_value'],
-                            model_access.owners_to_string(old_listing_data['owners']))
-                        total_found += 1
+                    # Field Set 1
+                    temp_change_fields = ['title', 'description', 'description_short',
+                        'version_name', 'requirements','what_is_new', 'unique_name','launch_url',
+                        'is_private', 'is_featured', 'listing_type', 'security_marking']
 
-        self.assertEqual(total_found, len(fields) - 2)    # (-1 for approved_status) + (-1 for is_enabled)
+                    for temp_field in temp_change_fields:
+                        if change['field_name'] == temp_field:
+                            if temp_field == 'listing_type':
+                                self.assertEqual(change['new_value'], data[temp_field]['title'], 'new_value assertion for {}'.format(temp_field))
+                            else:
+                                self.assertEqual(change['new_value'], data[temp_field], 'new_value assertion for {}'.format(temp_field))
+
+                            if temp_field.startswith('is_'):
+                                self.assertEqual(change['old_value'], model_access.bool_to_string(old_listing_data[temp_field]),  'old_value assertion for {}'.format(temp_field))
+                            elif temp_field == 'listing_type':
+                                self.assertEqual(change['old_value'], old_listing_data[temp_field]['title'],  'old_value assertion for {}'.format(temp_field))
+                            else:
+                                self.assertEqual(change['old_value'], old_listing_data[temp_field],  'old_value assertion for {}'.format(temp_field))
+                            changed_found_fields.append(temp_field)
+
+                    # Field Set 2
+                    temp_change_fields = ['small_icon', 'large_icon', 'banner_icon', 'large_banner_icon']
+                    for temp_field in temp_change_fields:
+                        if change['field_name'] == temp_field:
+                            self.assertEqual(change['new_value'], str(data[temp_field]['id']) + '.UNCLASSIFIED',  'new_value assertion for {}'.format(temp_field))
+                            self.assertEqual(change['old_value'], str(old_listing_data[temp_field]['id']) + '.UNCLASSIFIED',  'old_value assertion for {}'.format(temp_field))
+                            changed_found_fields.append(temp_field)
+
+                    # Field Set 3
+                    temp_change_fields = ['doc_urls', 'screenshots', 'contacts', 'intents', 'categories', 'tags', 'owners']
+                    for temp_field in temp_change_fields:
+                        if change['field_name'] == temp_field:
+                            temp_field_function = getattr(model_access, '{}_to_string'.format(temp_field))
+                            self.assertEqual(change['new_value'], temp_field_function(data[temp_field]))
+                            self.assertEqual(change['old_value'], temp_field_function(old_listing_data[temp_field]))
+                            changed_found_fields.append(temp_field)
+
+        difference_in_fields = sorted(list(set(fields) - set(changed_found_fields)))  # TODO: Better way to do this
+        self.assertEqual(difference_in_fields, ['approval_status', 'is_enabled', 'is_featured'])
 
     # TODO: def test_update_listing_full_access_control(self):
 
@@ -921,30 +853,29 @@ class ListingApiTest(APITestCase):
         last_item = data[-1]
 
         expected_item = {"counts": {
-            "organizations": {
-                "4": 0,
-                "2": 0,
-                "1": 100,
-                "3": 20,
-                "5": 0,
-                "6": 0,
-                "7": 0,
-                "8": 0,
-                "9": 0
-                },
-            "REJECTED": 0,
-            "enabled": 120,
-            "APPROVED_ORG": 0,
-            "total": 120,
-            "APPROVED": 120,
-            "PENDING": 0,
-            "PENDING_DELETION": 0,
+            "APPROVED": 175,
+            "APPROVED_ORG": 1,
+            "DELETED": 0,
             "IN_PROGRESS": 0,
-            "DELETED": 0
-            }
-            }
+            "PENDING": 10,
+            "PENDING_DELETION": 0,
+            "enabled": 182,
+            "REJECTED": 0,
+            "organizations": {
+              "1": 44,
+              "2": 41,
+              "3": 49,
+              "4": 37,
+              "5": 5,
+              "6": 3,
+              "7": 2,
+              "8": 3,
+              "9": 2
+            },
+            "total": 186
+          }
+        }
         self.assertEquals(last_item, expected_item)
-
     # TODO: test_counts_in_listings - 2ndparty
 
     def test_create_listing_with_different_agency(self):

@@ -12,7 +12,7 @@
     description_short: A guitar that produces sound acoustically by transmitting the
       vibration of the strings.
     doc_urls: []
-    iframe_compatible: true
+    iframe_compatible: false
     is_deleted: false
     is_enabled: true
     is_featured: false
@@ -42,7 +42,11 @@
   - {action: SUBMITTED, author: bigbrother, description: null}
   - {action: APPROVED_ORG, author: bigbrother, description: null}
   - {action: APPROVED, author: bigbrother, description: null}
-  listing_review_batch: []
+  listing_review_batch:
+  - {author: bigbrother, rate: 3, text: Favorite Instrument by far. BY. FAR.}
+  - {author: wsmith, rate: 1, text: I don't like the sound of acoustic guitars. I
+      like electric guitars more}
+  - {author: syme, rate: 5, text: I love the sound of acoustic guitars}
 - library_entries:
   - {folder: old, owner: wsmith, position: 0}
   - {folder: null, owner: hodor, position: 0}
