@@ -610,6 +610,14 @@ def make_search_query_obj(search_param_parser, exclude_agencies=None):
             }
         })
 
+        # Search the title first to give it the score it needs and weight to order
+        # the list by title preferance.
+        temp_should.append({
+           "match": {
+              "title": user_string
+           }
+        })
+
         # The reason fuzziness is needed using the sample_data is because if
         # searching for 'ir', the results should bring up 'air mail' listings
         # without it will not bring 'air mail' listings
@@ -666,6 +674,8 @@ def make_search_query_obj(search_param_parser, exclude_agencies=None):
 
     if user_offset:
         search_query['from'] = user_offset
+    print("**********************QUERY IS:")
+    print(search_query)
     return search_query
 
 
