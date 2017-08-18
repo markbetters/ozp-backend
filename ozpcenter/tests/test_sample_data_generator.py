@@ -1,12 +1,14 @@
 """
 Tests that the sample data was created correctly
 """
+from django.test import override_settings
 from django.test import TestCase
 
 from ozpcenter import models
 from ozpcenter.scripts import sample_data_generator as data_gen
 
 
+@override_settings(ES_ENABLED=False)
 class SampleDataGeneratorTest(TestCase):
 
     def setUp(self):

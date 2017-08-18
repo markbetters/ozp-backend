@@ -82,7 +82,7 @@
       small_image: {filename: AirMail_1_small_screenshot.png, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: AirMail_small_icon.png, security_marking: UNCLASSIFIED}
-    tags: [demo, example, tag_0]
+    tags: [demo, demo_tag, example, tag_0]
     title: Air Mail
     unique_name: ozp.test.air_mail
     version_name: 1.0.0
@@ -1335,7 +1335,7 @@
       small_image: {filename: BreadBasket_0_small_screenshot.png, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: BreadBasket_small_icon.png, security_marking: UNCLASSIFIED}
-    tags: [demo, example]
+    tags: [demo, demo_tag, example]
     title: Bread Basket
     unique_name: ozp.test.bread_basket
     version_name: 1.0.0
@@ -1692,7 +1692,7 @@
       small_image: {filename: ChartCourse_0_small_screenshot.png, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: ChartCourse_small_icon.png, security_marking: UNCLASSIFIED}
-    tags: [demo]
+    tags: [demo, demo_tag]
     title: Chart Course
     unique_name: ozp.test.chartcourse
     version_name: 1.0.0
@@ -1784,7 +1784,7 @@
       small_image: {filename: ChatterBox_0_small_screenshot.png, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: ChatterBox_small_icon.png, security_marking: UNCLASSIFIED}
-    tags: [demo]
+    tags: [demo, demo_tag]
     title: Chatter Box
     unique_name: ozp.test.chatterbox
     version_name: 1.0.0
@@ -2064,7 +2064,7 @@
       small_image: {filename: Clipboard_0_small_screenshot.png, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Clipboard_small_icon.png, security_marking: UNCLASSIFIED}
-    tags: [demo]
+    tags: [demo, demo_tag]
     title: Clipboard
     unique_name: ozp.test.clipboard
     version_name: 1.0.0
@@ -3105,7 +3105,7 @@
       small_image: {filename: FrameIt_0_small_screenshot.png, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: FrameIt_small_icon.png, security_marking: UNCLASSIFIED}
-    tags: [demo]
+    tags: [demo, demo_tag]
     title: FrameIt
     unique_name: ozp.test.frameit
     version_name: 1.0.0
@@ -3515,7 +3515,7 @@
       small_image: {filename: HatchLatch_0_small_screenshot.png, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: HatchLatch_small_icon.png, security_marking: UNCLASSIFIED}
-    tags: [demo]
+    tags: [demo, demo_tag]
     title: Hatch Latch
     unique_name: ozp.test.hatchlatch
     version_name: 1.0.0
@@ -4440,7 +4440,7 @@
       small_image: {filename: JotSpot_0_small_screenshot.png, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: JotSpot_small_icon.png, security_marking: UNCLASSIFIED}
-    tags: [demo]
+    tags: [demo, demo_tag]
     title: JotSpot
     unique_name: ozp.test.jotspot
     version_name: 1.0.0
@@ -5179,7 +5179,7 @@
       small_image: {filename: LocationAnalyzer_0_small_screenshot.png, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: LocationAnalyzer_small_icon.png, security_marking: UNCLASSIFIED}
-    tags: [demo]
+    tags: [demo, demo_tag]
     title: LocationAnalyzer
     unique_name: ozp.test.locationanalyzer
     version_name: 1.0.0
@@ -5218,7 +5218,7 @@
       small_image: {filename: LocationLister_0_small_screenshot.png, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: LocationLister_small_icon.png, security_marking: UNCLASSIFIED}
-    tags: [demo]
+    tags: [demo, demo_tag]
     title: LocationLister
     unique_name: ozp.test.locationlister
     version_name: 1.0.0
@@ -5257,7 +5257,7 @@
       small_image: {filename: LocationViewer_0_small_screenshot.png, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: LocationViewer_small_icon.png, security_marking: UNCLASSIFIED}
-    tags: [demo]
+    tags: [demo, demo_tag]
     title: LocationViewer
     unique_name: ozp.test.locationviewer
     version_name: 1.0.0
@@ -5867,7 +5867,7 @@
       small_image: {filename: MonkeyFinder_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED//FOR OFFICIAL USE ONLY
     small_icon: {filename: MonkeyFinder_small_icon.jpeg, security_marking: UNCLASSIFIED}
-    tags: [demo, mammal, monkey]
+    tags: [demo, demo_tag, mammal, monkey]
     title: Monkey Finder
     unique_name: monkey_finder
     version_name: 5.0.5
@@ -6531,7 +6531,7 @@
     is_deleted: false
     is_enabled: true
     is_featured: false
-    is_private: true
+    is_private: false
     large_banner_icon: {filename: Newspaper_large_banner_icon.jpeg, security_marking: UNCLASSIFIED}
     large_icon: {filename: Newspaper_large_icon.jpeg, security_marking: UNCLASSIFIED}
     launch_url: https://en.wikipedia.org/wiki/Newspaper
@@ -8282,7 +8282,7 @@
       small_image: {filename: Skybox_0_small_screenshot.png, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Skybox_small_icon.png, security_marking: UNCLASSIFIED}
-    tags: [demo]
+    tags: [demo, demo_tag,demo_tag]
     title: Skybox
     unique_name: ozp.test.skybox
     version_name: 1.0.0

@@ -1,6 +1,7 @@
 """
 Tests for listing endpoints
 """
+from django.test import override_settings
 from rest_framework import status
 from rest_framework.test import APITestCase
 
@@ -8,8 +9,11 @@ from ozpcenter import model_access as generic_model_access
 from ozpcenter import models
 from ozpcenter.scripts import sample_data_generator as data_gen
 import ozpcenter.api.listing.model_access as model_access
+from ozpcenter.tests.helper import validate_listing_map_keys
+from ozpcenter.tests.helper import unittest_request_helper
 
 
+@override_settings(ES_ENABLED=False)
 class ListingApiTest(APITestCase):
 
     def setUp(self):
@@ -26,67 +30,6 @@ class ListingApiTest(APITestCase):
         """
         data_gen.run()
 
-    def _validate_listing_map_keys(self, listing_map):
-        """
-        Used to validate the keys of a listing
-        """
-        if not isinstance(listing_map, dict):
-            raise Exception('listing_map is not type dict, it is {0!s}'.format(type(listing_map)))
-
-        listing_map_default_keys = ['id', 'is_bookmarked', 'screenshots',
-                                    'doc_urls', 'owners', 'categories', 'tags', 'contacts', 'intents',
-                                    'small_icon', 'large_icon', 'banner_icon', 'large_banner_icon',
-                                    'agency', 'last_activity', 'current_rejection', 'listing_type',
-                                    'title', 'approved_date', 'edited_date', 'description', 'launch_url',
-                                    'version_name', 'unique_name', 'what_is_new', 'description_short',
-                                    'requirements', 'approval_status', 'is_enabled', 'is_featured',
-                                    'is_deleted', 'avg_rate', 'total_votes', 'total_rate5', 'total_rate4',
-                                    'total_rate3', 'total_rate2', 'total_rate1', 'total_reviews',
-                                    'iframe_compatible', 'security_marking', 'is_private',
-                                    'required_listings', 'cert_issues']
-
-        listing_keys = [k for k, v in listing_map.items()]
-
-        invalid_key_list = []
-
-        for current_key in listing_map_default_keys:
-            if current_key not in listing_keys:
-                invalid_key_list.append(current_key)
-
-        return invalid_key_list
-
-    def _request_helper(self, url, method, data=None, username='bigbrother', status_code=200):
-        """
-        Request Helper
-        """
-        user = generic_model_access.get_profile(username).user
-        self.client.force_authenticate(user=user)
-
-        response = None
-
-        if method.upper() == 'GET':
-            response = self.client.get(url, format='json')
-        elif method.upper() == 'POST':
-            response = self.client.post(url, data, format='json')
-        elif method.upper() == 'PUT':
-            response = self.client.put(url, data, format='json')
-        elif method.upper() == 'DELETE':
-            response = self.client.delete(url, format='json')
-        else:
-            raise Exception('method is not supported')
-
-        if response:
-            if status_code == 200:
-                self.assertEqual(response.status_code, status.HTTP_200_OK)
-            elif status_code == 201:
-                self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-            elif status_code == 204:
-                self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-            else:
-                raise Exception('status code is not supported')
-
-        return response
-
     def test_create_listing_minimal(self):
         # create a new listing with minimal data (title)
         user = generic_model_access.get_profile('julia').user
@@ -97,7 +40,7 @@ class ListingApiTest(APITestCase):
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data['title'], title)
-        self.assertEquals(self._validate_listing_map_keys(response.data), [])
+        self.assertEquals(validate_listing_map_keys(response.data), [])
         self.assertEquals(response.data['is_bookmarked'], False)
 
     def test_create_listing_no_title(self):
@@ -201,11 +144,9 @@ class ListingApiTest(APITestCase):
         self.assertTrue('me' in names)
         self.assertTrue('you' in names)
         # security_marking
-        self.assertEqual(response.data['security_marking'],
-            'UNCLASSIFIED')
+        self.assertEqual(response.data['security_marking'], 'UNCLASSIFIED')
         # listing_type
-        self.assertEqual(response.data['listing_type']['title'],
-            'Web Application')
+        self.assertEqual(response.data['listing_type']['title'], 'Web Application')
         # icons
         self.assertEqual(response.data['small_icon']['id'], 1)
         self.assertEqual(response.data['large_icon']['id'], 2)
@@ -271,22 +212,22 @@ class ListingApiTest(APITestCase):
         self.assertEqual(response.data['iframe_compatible'], True)
         self.assertEqual(response.data['required_listings'], None)
         self.assertTrue(response.data['edited_date'])
-        self.assertEquals(self._validate_listing_map_keys(response.data), [])
+        self.assertEquals(validate_listing_map_keys(response.data), [])
         self.assertEquals(response.data['is_bookmarked'], False)
 
     def test_delete_listing(self):
         url = '/api/listing/1/'
-        response = self._request_helper(url, 'GET', username='wsmith', status_code=200)
+        response = unittest_request_helper(self, url, 'GET', username='wsmith', status_code=200)
         self.assertFalse(response.data.get('is_deleted'))
-        self.assertEquals(self._validate_listing_map_keys(response.data), [])
+        self.assertEquals(validate_listing_map_keys(response.data), [])
 
         url = '/api/listing/1/'
-        response = self._request_helper(url, 'DELETE', username='wsmith', status_code=204)
+        response = unittest_request_helper(self, url, 'DELETE', username='wsmith', status_code=204)
 
         url = '/api/listing/1/'
-        response = self._request_helper(url, 'GET', username='wsmith', status_code=200)
+        response = unittest_request_helper(self, url, 'GET', username='wsmith', status_code=200)
         self.assertTrue(response.data.get('is_deleted'))
-        self.assertEquals(self._validate_listing_map_keys(response.data), [])
+        self.assertEquals(validate_listing_map_keys(response.data), [])
 
     def test_delete_listing_permission_denied(self):
         user = generic_model_access.get_profile('jones').user
@@ -342,7 +283,7 @@ class ListingApiTest(APITestCase):
         self.assertEqual(response.data['banner_icon']['id'], 3)
         self.assertEqual(response.data['large_banner_icon']['id'], 4)
         self.assertEqual(response.data['is_bookmarked'], True)
-        self.assertEquals(self._validate_listing_map_keys(response.data), [])
+        self.assertEquals(validate_listing_map_keys(response.data), [])
 
     def test_update_listing_full(self):
         user = generic_model_access.get_profile('julia').user
@@ -508,7 +449,7 @@ class ListingApiTest(APITestCase):
         self.assertEqual(response.data['iframe_compatible'], False)
         self.assertEqual(response.data['required_listings'], None)
         self.assertTrue(response.data['edited_date'])
-        self.assertEquals(self._validate_listing_map_keys(response.data), [])
+        self.assertEquals(validate_listing_map_keys(response.data), [])
 
         # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         #                   verify change_details
@@ -531,7 +472,7 @@ class ListingApiTest(APITestCase):
                 for change in activity['change_details']:
                     # Field Set 1
                     temp_change_fields = ['title', 'description', 'description_short',
-                        'version_name', 'requirements','what_is_new', 'unique_name','launch_url',
+                        'version_name', 'requirements', 'what_is_new', 'unique_name', 'launch_url',
                         'is_private', 'is_featured', 'listing_type', 'security_marking']
 
                     for temp_field in temp_change_fields:
@@ -542,19 +483,19 @@ class ListingApiTest(APITestCase):
                                 self.assertEqual(change['new_value'], data[temp_field], 'new_value assertion for {}'.format(temp_field))
 
                             if temp_field.startswith('is_'):
-                                self.assertEqual(change['old_value'], model_access.bool_to_string(old_listing_data[temp_field]),  'old_value assertion for {}'.format(temp_field))
+                                self.assertEqual(change['old_value'], model_access.bool_to_string(old_listing_data[temp_field]), 'old_value assertion for {}'.format(temp_field))
                             elif temp_field == 'listing_type':
-                                self.assertEqual(change['old_value'], old_listing_data[temp_field]['title'],  'old_value assertion for {}'.format(temp_field))
+                                self.assertEqual(change['old_value'], old_listing_data[temp_field]['title'], 'old_value assertion for {}'.format(temp_field))
                             else:
-                                self.assertEqual(change['old_value'], old_listing_data[temp_field],  'old_value assertion for {}'.format(temp_field))
+                                self.assertEqual(change['old_value'], old_listing_data[temp_field], 'old_value assertion for {}'.format(temp_field))
                             changed_found_fields.append(temp_field)
 
                     # Field Set 2
                     temp_change_fields = ['small_icon', 'large_icon', 'banner_icon', 'large_banner_icon']
                     for temp_field in temp_change_fields:
                         if change['field_name'] == temp_field:
-                            self.assertEqual(change['new_value'], str(data[temp_field]['id']) + '.UNCLASSIFIED',  'new_value assertion for {}'.format(temp_field))
-                            self.assertEqual(change['old_value'], str(old_listing_data[temp_field]['id']) + '.UNCLASSIFIED',  'old_value assertion for {}'.format(temp_field))
+                            self.assertEqual(change['new_value'], str(data[temp_field]['id']) + '.UNCLASSIFIED', 'new_value assertion for {}'.format(temp_field))
+                            self.assertEqual(change['old_value'], str(old_listing_data[temp_field]['id']) + '.UNCLASSIFIED', 'old_value assertion for {}'.format(temp_field))
                             changed_found_fields.append(temp_field)
 
                     # Field Set 3
@@ -715,7 +656,7 @@ class ListingApiTest(APITestCase):
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data['approval_status'], 'IN_PROGRESS')
-        self.assertEquals(self._validate_listing_map_keys(response.data), [])
+        self.assertEquals(validate_listing_map_keys(response.data), [])
         listing_id = response.data['id']
 
         data = {
@@ -796,7 +737,7 @@ class ListingApiTest(APITestCase):
         contacts = response.data['contacts']
         contact_types = [i['contact_type']['name'] for i in contacts]
         self.assertEqual(str(contact_types), str(['Civilian', 'Government']))
-        self.assertEquals(self._validate_listing_map_keys(response.data), [])
+        self.assertEquals(validate_listing_map_keys(response.data), [])
 
     def test_update_listing_approval_status_deny_user(self):
         # a standard user cannot update the approval_status
@@ -812,7 +753,7 @@ class ListingApiTest(APITestCase):
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data['approval_status'], 'IN_PROGRESS')
-        self.assertEquals(self._validate_listing_map_keys(response.data), [])
+        self.assertEquals(validate_listing_map_keys(response.data), [])
 
         data = response.data
         data['approval_status'] = models.Listing.APPROVED
@@ -830,6 +771,7 @@ class ListingApiTest(APITestCase):
 
     def test_get_listings_with_query_params(self):
         """
+        test_get_listings_with_query_params
         Supported query params: org (agency title), approval_status, enabled
         """
         user = generic_model_access.get_profile('julia').user
@@ -842,6 +784,7 @@ class ListingApiTest(APITestCase):
 
     def test_counts_in_listings(self):
         """
+        test_counts_in_listings
         Supported query params: org (agency title), approval_status, enabled
         """
         user = generic_model_access.get_profile('julia').user
@@ -853,17 +796,17 @@ class ListingApiTest(APITestCase):
         last_item = data[-1]
 
         expected_item = {"counts": {
-            "APPROVED": 175,
+            "APPROVED": 176,
             "APPROVED_ORG": 1,
             "DELETED": 0,
             "IN_PROGRESS": 0,
             "PENDING": 10,
             "PENDING_DELETION": 0,
-            "enabled": 182,
+            "enabled": 183,
             "REJECTED": 0,
             "organizations": {
               "1": 44,
-              "2": 41,
+              "2": 42,
               "3": 49,
               "4": 37,
               "5": 5,
@@ -872,7 +815,7 @@ class ListingApiTest(APITestCase):
               "8": 3,
               "9": 2
             },
-            "total": 186
+            "total": 187
           }
         }
         self.assertEquals(last_item, expected_item)

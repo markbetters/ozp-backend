@@ -3,10 +3,12 @@ Tests for data.api utility functions
 """
 from django.test import TestCase
 
+from django.test import override_settings
 from ozpcenter.scripts import sample_data_generator as data_gen
 import ozpiwc.api.data.model_access as model_access
 
 
+@override_settings(ES_ENABLED=False)
 class DataTest(TestCase):
 
     def setUp(self):

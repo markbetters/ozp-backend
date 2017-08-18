@@ -1,6 +1,7 @@
 """
 Listing tests
 """
+from django.test import override_settings
 from django.test import TestCase
 
 from ozpcenter.scripts import sample_data_generator as data_gen
@@ -11,6 +12,7 @@ from ozpcenter import models
 from ozpcenter.tests.helper import ListingFile
 
 
+@override_settings(ES_ENABLED=False)
 class ListingTest(TestCase):
 
     def setUp(self):
@@ -264,7 +266,7 @@ class ListingTest(TestCase):
 
     def test_screenshots_to_string_object(self):
         screenshots = models.Screenshot.objects.filter(listing__unique_name='ozp.test.air_mail')
-        screenshots_ids = [{'small_image_id':screenshot.small_image.id, 'large_image_id':screenshot.large_image.id } for screenshot in screenshots]
+        screenshots_ids = [{'small_image_id': screenshot.small_image.id, 'large_image_id': screenshot.large_image.id} for screenshot in screenshots]
 
         out = model_access.screenshots_to_string(screenshots, True)
         self.assertEqual(out, str([(0, screenshots_ids[0]['small_image_id'], 'UNCLASSIFIED', screenshots_ids[0]['large_image_id'], 'UNCLASSIFIED', 'airmail screenshot set 1'),

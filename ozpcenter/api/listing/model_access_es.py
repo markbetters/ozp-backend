@@ -3,6 +3,7 @@ Listing Model Access For Elasticsearch
 
 Code was developed to work with Elasticsearch 2.4.*
 """
+import time
 import json
 import logging
 
@@ -212,7 +213,11 @@ def bulk_reindex():
     # Bulk index the data
     logger.info('Bulk indexing listings...')
     res = es_client.bulk(index=settings.ES_INDEX_NAME, body=bulk_data, refresh=True)
-    logger.info(" response: '%s'" % (res))
+    # logger.info(" response: '%s'" % (res))
+
+    # TODO: Figure out a better method to insure index is created on server than using sleep (rivera 11/14/2016)
+    # Seems like there needs to be a delay if not a 503 error will happen
+    time.sleep(5)
 
     logger.info("Done Indexing")
 

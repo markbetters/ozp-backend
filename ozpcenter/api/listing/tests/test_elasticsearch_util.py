@@ -4,6 +4,7 @@ Elasticsearch Utils tests
 Test this class indiviual with command:
 python manage.py test ozpcenter.api.listing.tests.test_elasticsearch_util
 """
+from django.test import override_settings
 from unittest import skip
 from django.test import TestCase
 
@@ -11,6 +12,7 @@ from ozpcenter.scripts import sample_data_generator as data_gen
 from ozpcenter.api.listing import elasticsearch_util
 
 
+@override_settings(ES_ENABLED=False)
 class ElasticsearchUtilTest(TestCase):
 
     def setUp(self):

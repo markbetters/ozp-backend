@@ -6,6 +6,7 @@ import copy
 import datetime
 import pytz
 
+from django.test import override_settings
 from rest_framework import status
 from rest_framework.test import APITestCase
 
@@ -32,6 +33,7 @@ def _import_bookmarks(test_case_instance, username, bookmark_notification_id, st
     return response
 
 
+@override_settings(ES_ENABLED=False)
 class NotificationApiTest(APITestCase):
 
     def setUp(self):

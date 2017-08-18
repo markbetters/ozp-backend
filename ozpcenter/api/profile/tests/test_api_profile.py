@@ -3,6 +3,7 @@ Tests for Profile endpoints
 """
 from unittest.mock import patch
 
+from django.test import override_settings
 from django.conf import settings
 from rest_framework import status
 from rest_framework.test import APITestCase
@@ -12,6 +13,7 @@ from ozpcenter import model_access as generic_model_access
 from ozpcenter.scripts import sample_data_generator as data_gen
 
 
+@override_settings(ES_ENABLED=False)
 class ProfileApiTest(APITestCase):
     """
     Testing Profile API

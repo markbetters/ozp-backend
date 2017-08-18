@@ -1,6 +1,7 @@
 """
 Tests for library endpoints (listings in a user's library)
 """
+from django.test import override_settings
 from rest_framework import status
 from rest_framework.test import APITestCase
 
@@ -69,6 +70,7 @@ def _create_create_bookmark(test_case_instance, username, listing_id, folder_nam
     return response
 
 
+@override_settings(ES_ENABLED=False)
 class LibraryApiTest(APITestCase):
 
     def setUp(self):

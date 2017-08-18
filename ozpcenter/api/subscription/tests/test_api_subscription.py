@@ -1,12 +1,14 @@
 """
 Tests for notification endpoints
 """
+from django.test import override_settings
 # from rest_framework import status
 from rest_framework.test import APITestCase
 
 from ozpcenter.scripts import sample_data_generator as data_gen
 
 
+@override_settings(ES_ENABLED=False)
 class SubscriptionApiTest(APITestCase):
 
     def setUp(self):
