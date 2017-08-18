@@ -674,8 +674,6 @@ def make_search_query_obj(search_param_parser, exclude_agencies=None):
 
     if user_offset:
         search_query['from'] = user_offset
-    print("**********************QUERY IS:")
-    print(search_query)
     return search_query
 
 
