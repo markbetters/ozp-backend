@@ -1,5 +1,7 @@
 """
 Tests for listing endpoints
+
+TODO: Refactor Code to use unittest_request_helper
 """
 from django.test import override_settings
 from unittest import skip
@@ -31,13 +33,9 @@ class ListingSearchApiTest(APITestCase):
         data_gen.run()
 
     def test_search_categories_single_with_space(self):
-        user = generic_model_access.get_profile('wsmith').user
-        self.client.force_authenticate(user=user)
-
         search_category = 'Health and Fitness'
         url = '/api/listings/search/?category={}'.format(search_category)
-        response = self.client.get(url, format='json')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        response = unittest_request_helper(self, url, 'GET', username='wsmith', status_code=200)
 
         titles = sorted([i['title'] for i in response.data])
         listings_from_file = ListingFile.filter_listings(is_enabled=True,

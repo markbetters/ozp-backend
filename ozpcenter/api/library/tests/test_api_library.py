@@ -1,5 +1,7 @@
 """
 Tests for library endpoints (listings in a user's library)
+
+TODO: Figure out better way to test
 """
 from django.test import override_settings
 from rest_framework import status
@@ -123,7 +125,8 @@ class LibraryApiTest(APITestCase):
         response = self.client.get(url, format='json')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(5, len(response.data))
+        self.assertEqual(10, len(response.data))
+
         self.assertIn('listing', response.data[0])
         self.assertIn('id', response.data[0]['listing'])
         self.assertIn('title', response.data[0]['listing'])
@@ -140,7 +143,7 @@ class LibraryApiTest(APITestCase):
         listing_ids = [record['listing']['id'] for record in response.data]
         first_listing_id = listing_ids[0]  # Should be 2
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(listing_ids, [11, 1, 112, 113, 114], 'Comparing Ids #1')
+        self.assertEqual([2, 23, 44, 63, 10, 77, 81, 101, 9, 147], listing_ids, 'Comparing Ids #1')
 
         # Get Library for current user after listing was disabled
         _edit_listing(self, first_listing_id, {'is_enabled': False})
@@ -153,7 +156,7 @@ class LibraryApiTest(APITestCase):
 
         listing_ids = [record['listing']['id'] for record in response.data]
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(listing_ids, [1, 112, 113, 114], 'Comparing Ids #2')
+        self.assertEqual([23, 44, 63, 10, 77, 81, 101, 9, 147], listing_ids, 'Comparing Ids #2')
 
         # Get Library for current user after listing was Enable
         _edit_listing(self, first_listing_id, {'is_enabled': True})
@@ -166,7 +169,7 @@ class LibraryApiTest(APITestCase):
 
         listing_ids = [record['listing']['id'] for record in response.data]
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(listing_ids, [11, 1, 112, 113, 114], 'Comparings Ids #3')
+        self.assertEqual([2, 23, 44, 63, 10, 77, 81, 101, 9, 147], listing_ids, 'Comparings Ids #3')
 
     def test_get_library_list_listing_type(self):
         user = generic_model_access.get_profile('wsmith').user
@@ -176,7 +179,7 @@ class LibraryApiTest(APITestCase):
         response = self.client.get(url, format='json')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(5, len(response.data))
+        self.assertEqual(4, len(response.data))
         self.assertIn('listing', response.data[0])
         self.assertIn('id', response.data[0]['listing'])
         self.assertIn('title', response.data[0]['listing'])
@@ -197,7 +200,7 @@ class LibraryApiTest(APITestCase):
         user = generic_model_access.get_profile('wsmith').user
         self.client.force_authenticate(user=user)
 
-        url = '/api/self/library/1/'
+        url = '/api/self/library/2/'
         response = self.client.get(url, format='json')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)

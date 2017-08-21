@@ -3,7 +3,6 @@ Listing Model Access For Elasticsearch
 
 Code was developed to work with Elasticsearch 2.4.*
 """
-import time
 import json
 import logging
 
@@ -122,7 +121,7 @@ def check_elasticsearch():
     Method used to check to see if elasticsearch is up
     """
     if settings.ES_ENABLED is False:
-        raise errors.ElasticsearchServiceUnavailable("Elasticsearch is disabled in the settings")
+        raise errors.ElasticsearchServiceUnavailable('Elasticsearch is disabled in the settings')
     try:
         results = es_client.info()
         # Results: {'name': 'Human Top', 'version': {'build_snapshot': False, 'number': '2.4.0', 'build_hash': 'ce9f0c7394dee074091dd1bc4e9469251181fc55',
@@ -130,23 +129,23 @@ def check_elasticsearch():
         keys_to_check = ['name', 'version', 'cluster_name', 'tagline']
         for key in keys_to_check:
             if key not in results:
-                raise errors.ElasticsearchServiceUnavailable("Elasticsearch Results missing keys")
+                raise errors.ElasticsearchServiceUnavailable('Elasticsearch Results missing keys')
         return True
     except exceptions.SerializationError:
         # Exception Value: Unknown mimetype, unable to deserialize: text/html
-        raise errors.ElasticsearchServiceUnavailable("Elasticsearch Serialization Error")
+        raise errors.ElasticsearchServiceUnavailable('Elasticsearch Serialization Error')
     except exceptions.AuthenticationException:
         # Ngnix BasicAuth Fail: TransportError(401, '<html>\r\n<head><title>401 Authorization
         #   Required</title></head>\r\n<body bgcolor="white">\r\n<center><h1>401 Authorization Required</h1></center>\r\n<hr><center>nginx/1.11.6</center>\r\n</body>\r\n</html>\r\n')
-        raise errors.ElasticsearchServiceUnavailable("Elasticsearch Authentication Exception")
+        raise errors.ElasticsearchServiceUnavailable('Elasticsearch Authentication Exception')
     except exceptions.ConnectionError:
         # ConnectionError(<urllib3.connection.HTTPConnection object at 0x7f6343212c50>: Failed to establish a new connection: [Errno 111] Connection refused) ...
-        raise errors.ElasticsearchServiceUnavailable("Elasticsearch Connection Error")
+        raise errors.ElasticsearchServiceUnavailable('Elasticsearch Connection Error')
     except exceptions.TransportError:
         # Nginx reverse proxy can't find elasticsearch but correct BasicAuth
         #    TransportError(502, 'An error occurred.</h1>\n<p>Sorry, the page you are looking for is currently unavailable.<br/>\nPlease try again later.....
-        raise errors.ElasticsearchServiceUnavailable("Elasticsearch Transport Error")
-    raise errors.ElasticsearchServiceUnavailable("Elasticsearch Check Error")
+        raise errors.ElasticsearchServiceUnavailable('Elasticsearch Transport Error')
+    raise errors.ElasticsearchServiceUnavailable('Elasticsearch Check Error')
 
 
 def recreate_index_mapping():
@@ -155,19 +154,20 @@ def recreate_index_mapping():
     """
     if settings.ES_ENABLED:
         check_elasticsearch()
-
         logger.info('Checking to see if Index [{}] exist'.format(settings.ES_INDEX_NAME))
 
         if es_client.indices.exists(settings.ES_INDEX_NAME):
-            logger.info("deleting '%s' index..." % (settings.ES_INDEX_NAME))
+            logger.info('Deleting [{}] index...'.format(settings.ES_INDEX_NAME))
             res = es_client.indices.delete(index=settings.ES_INDEX_NAME)
-            logger.info(" response: '%s'" % (res))
+            logger.info('Delete acknowledged: {}'.format(res.get('acknowledged', False)))
 
         request_body = elasticsearch_util.get_mapping_setting_obj()
 
-        logger.info("Creating '%s' index..." % (settings.ES_INDEX_NAME))
+        logger.info('Creating [{}] index...'.format(settings.ES_INDEX_NAME))
         res = es_client.indices.create(index=settings.ES_INDEX_NAME, body=request_body)
-        logger.info(" response: '%s'" % (res))
+        logger.info('Create Index Acknowledged: {}'.format(res.get('acknowledged', False)))
+
+        es_client.cluster.health(wait_for_status='yellow', request_timeout=20)
     else:
         logger.debug('Elasticsearch is not enabled')
 
@@ -181,6 +181,7 @@ def bulk_reindex():
         Removes the index if it already exist
         Creates the index with mapping
         Reindex data
+        Wait for the cluster health to turn yellow
 
     To check index in elasticsearch:
         http://127.0.0.1:9200/appsmall/_search?size=10000&pretty
@@ -200,10 +201,10 @@ def bulk_reindex():
         record_clean_obj = elasticsearch_util.prepare_clean_listing_record(record)
 
         op_dict = {
-            "index": {
-                "_index": settings.ES_INDEX_NAME,
-                "_type": settings.ES_TYPE_NAME,
-                "_id": record_clean_obj[settings.ES_ID_FIELD]
+            'index': {
+                '_index': settings.ES_INDEX_NAME,
+                '_type': settings.ES_TYPE_NAME,
+                '_id': record_clean_obj[settings.ES_ID_FIELD]
             }
         }
 
@@ -213,13 +214,15 @@ def bulk_reindex():
     # Bulk index the data
     logger.info('Bulk indexing listings...')
     res = es_client.bulk(index=settings.ES_INDEX_NAME, body=bulk_data, refresh=True)
-    # logger.info(" response: '%s'" % (res))
 
-    # TODO: Figure out a better method to insure index is created on server than using sleep (rivera 11/14/2016)
-    # Seems like there needs to be a delay if not a 503 error will happen
-    time.sleep(5)
+    if res.get('errors', True):
+        logger.error('Error Bulk Indexing')
+    else:
+        logger.info('Bulk Indexing Successful')
 
-    logger.info("Done Indexing")
+    logger.debug('Waiting for cluster to turn yellow')
+    es_client.cluster.health(wait_for_status='yellow', request_timeout=20)
+    logger.debug('Finish waiting for cluster to turn yellow')
 
 
 def get_user_exclude_orgs(username):
@@ -250,7 +253,6 @@ def get_user_exclude_orgs(username):
 def suggest(request_username, search_param_parser):
     """
     Suggest
-
 
     It must respects restrictions
      - Private apps (apps only from user's agency)
@@ -344,22 +346,22 @@ def search(request_username, search_param_parser):
      - listing types
 
     Users shall only see what they are authorized to see
-      "is_private": false,
-      "approval_status": "APPROVED",
-      "is_deleted": false,
-      "is_enabled": true,
-      "security_marking": "UNCLASSIFIED",
+      'is_private': false,
+      'approval_status': 'APPROVED',
+      'is_deleted': false,
+      'is_enabled': true,
+      'security_marking': 'UNCLASSIFIED',
 
     Sorted by Relevance
-      "avg_rate": 0,
-      "total_votes": 0,
-      "total_rate5": 0,
-      "total_rate4": 0,
-      "total_rate3": 0,
-      "total_rate2": 0,
-      "total_rate1": 0,
-      "total_reviews": 0,
-      "is_featured": true,
+      'avg_rate': 0,
+      'total_votes': 0,
+      'total_rate5': 0,
+      'total_rate4': 0,
+      'total_rate3': 0,
+      'total_rate2': 0,
+      'total_rate1': 0,
+      'total_reviews': 0,
+      'is_featured': true,
 
     It must respects restrictions
      - Private apps (apps only from user's agency)

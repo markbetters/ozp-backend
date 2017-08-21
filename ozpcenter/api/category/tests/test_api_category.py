@@ -48,8 +48,8 @@ class CategoryApiTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         title = response.data['title']
         description = response.data['description']
-        self.assertEqual(title, 'Books and Reference')
-        self.assertTrue(description is not None)
+        self.assertEqual(title, 'Accessories')
+        self.assertEqual(description, 'Accessories Description')
 
     def test_create_category(self):
         user = generic_model_access.get_profile('bigbrother').user

@@ -29,26 +29,25 @@ class ListingReviewApiTest(APITestCase):
         data_gen.run()
 
     def test_get_reviews(self):
-        user = generic_model_access.get_profile('wsmith').user
-        self.client.force_authenticate(user=user)
         air_mail_id = models.Listing.objects.get(title='Air Mail').id
         url = '/api/listing/{0!s}/review/'.format(air_mail_id)
-        response = self.client.get(url, format='json')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        response = unittest_request_helper(self, url, 'GET', username='wsmith', status_code=200)
+        self.assertEqual(4, len(response.data))
 
     def test_get_single_review(self):
-        user = generic_model_access.get_profile('wsmith').user
-        self.client.force_authenticate(user=user)
         air_mail_id = models.Listing.objects.get(title='Air Mail').id
-        url = '/api/listing/{0!s}/review/1/'.format(air_mail_id)
-        response = self.client.get(url, format='json')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        url = '/api/listing/{0!s}/review/4/'.format(air_mail_id)  # 4/5/6/7
+        response = unittest_request_helper(self, url, 'GET', username='wsmith', status_code=200)
+
         self.assertTrue('rate' in response.data)
         self.assertTrue('text' in response.data)
         self.assertTrue('author' in response.data)
         self.assertTrue('listing' in response.data)
 
     def test_create_review(self):
+        """
+        test_create_review
+        """
         # create a new review
         user = generic_model_access.get_profile('wsmith').user
         self.client.force_authenticate(user=user)
@@ -72,7 +71,10 @@ class ListingReviewApiTest(APITestCase):
         #     pass
 
     def test_create_review_not_found(self):
-        # creating a review for an app this user cannot see should fail
+        """
+        test_create_review_not_found
+        Creating a review for an app this user cannot see should fail
+        """
         bread_basket_id = models.Listing.objects.get(title='Bread Basket').id
         user = generic_model_access.get_profile('rutherford').user
         self.client.force_authenticate(user=user)
@@ -82,7 +84,7 @@ class ListingReviewApiTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_create_review_no_text(self):
-        # create a new review
+        # test_create_review_no_text
         user = generic_model_access.get_profile('julia').user
         self.client.force_authenticate(user=user)
         air_mail_id = models.Listing.objects.get(title='Air Mail').id
@@ -96,6 +98,7 @@ class ListingReviewApiTest(APITestCase):
 
     def test_update_review(self):
         """
+        test_update_review
         Also tests the listing/<id>/activity endpoint
         """
         # create a new review
@@ -130,7 +133,7 @@ class ListingReviewApiTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_simple_delete_review(self):
-        # create a new review
+        # test_simple_delete_review
         user = generic_model_access.get_profile('rutherford').user
         self.client.force_authenticate(user=user)
         air_mail_id = models.Listing.objects.get(title='Air Mail').id
@@ -153,7 +156,7 @@ class ListingReviewApiTest(APITestCase):
         self.assertTrue(models.ListingActivity.REVIEW_DELETED in activiy_actions)
 
     def test_delete_review(self):
-        # create a new review
+        # test_delete_review
         user = generic_model_access.get_profile('wsmith').user
         self.client.force_authenticate(user=user)
         air_mail_id = models.Listing.objects.get(title='Air Mail').id
@@ -188,6 +191,7 @@ class ListingReviewApiTest(APITestCase):
 
     def test_rating_updates(self):
         """
+        test_rating_updates
         Tests that reviews are updated
         """
         title = 'Hatch Latch'

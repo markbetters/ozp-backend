@@ -248,27 +248,17 @@ def run():
     ############################################################################
     #                           Categories
     ############################################################################
-    category_start_time = time_ms()
+    with transaction.atomic():
+        categories_data = None
+        with open(os.path.join(TEST_DATA_PATH, 'categories.yaml'), 'r') as stream:
+            try:
+                categories_data = yaml.load(stream)  # TODO: Use Stream API
+            except yaml.YAMLError as exc:
+                print(exc)
 
-    categories_bulk = models.Category.objects.bulk_create([
-        models.Category(title="Books and Reference", description="Things made of paper"),
-        models.Category(title="Business", description="For making money"),
-        models.Category(title="Communication", description="Moving info between people and things"),
-        models.Category(title="Education", description="Educational in nature"),
-        models.Category(title="Entertainment", description="For fun"),
-        models.Category(title="Finance", description="For managing money"),
-        models.Category(title="Health and Fitness", description="Be healthy, be fit"),
-        models.Category(title="Media and Video", description="Videos and media stuff"),
-        models.Category(title="Music and Audio", description="Using your ears"),
-        models.Category(title="News", description="What's happening where"),
-        models.Category(title="Productivity", description="Do more in less time"),
-        models.Category(title="Shopping", description="For spending your money"),
-        models.Category(title="Sports", description="Score more points than your opponent"),
-        models.Category(title="Tools", description="Tools and Utilities"),
-        models.Category(title="Weather", description="Get the temperature")
-        ])
-
-    category_end_time = time_ms()
+        for current_category in categories_data['categories']:
+            current_category_obj = models.Category(title=current_category['title'], description=current_category['description'])
+            current_category_obj.save()
 
     ############################################################################
     #                           Contact Types and Contacts

@@ -26,7 +26,7 @@ class SampleDataGeneratorTest(TestCase):
 
     def test_categories(self):
         categories = list(models.Category.objects.values_list('title', flat=True))
-        expected_categories = ['Books and Reference', 'Business', 'Communication', 'Education',
+        expected_categories = ['Accessories', 'Books and Reference', 'Business', 'Communication', 'Education',
                                'Entertainment', 'Finance', 'Health and Fitness', 'Media and Video',
                                'Music and Audio', 'News', 'Productivity', 'Shopping', 'Sports', 'Tools', 'Weather']
 

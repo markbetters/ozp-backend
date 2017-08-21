@@ -169,7 +169,6 @@ class ListingFileClass(object):
         """
         listings_data = self.listing_records()
 
-        library_entries = []
         listing_tags = set()
         for current_listing_data in listings_data:
             current_listing = current_listing_data['listing']

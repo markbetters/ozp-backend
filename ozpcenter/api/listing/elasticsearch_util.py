@@ -18,7 +18,6 @@ Reference
 """
 import json
 import logging
-import time
 
 from django.conf import settings
 from elasticsearch import Elasticsearch
@@ -314,17 +313,15 @@ def update_es_listing(current_listing_id, record, is_new):
         logger.warn('Elasticsearch Service Unavailable')
         # raise errors.ElasticsearchServiceUnavailable()
     else:
-
+        # If the index does not exist in Elasticsearch, create index so that adding records work
         if not es_client.indices.exists(settings.ES_INDEX_NAME):
             request_body = get_mapping_setting_obj()
 
-            logger.info("Creating '{}' index...".format(settings.ES_INDEX_NAME))
+            logger.info('Creating [{}] index...'.format(settings.ES_INDEX_NAME))
             res = es_client.indices.create(index=settings.ES_INDEX_NAME, body=request_body)
-            logger.info("response: '{}'".format(res))
+            logger.info('Create Index Acknowledged: {}'.format(res.get('acknowledged', False)))
 
-            # TODO: Figure out a better method to insure index is created on server than using sleep (rivera 11/14/2016)
-            # Seems like there needs to be a delay if not a 503 error will happen
-            time.sleep(20)
+            es_client.cluster.health(wait_for_status='yellow', request_timeout=20)
 
         es_record_exist = es_client.exists(
             index=settings.ES_INDEX_NAME,
