@@ -16,11 +16,7 @@ from ozpcenter.tests.helper import ListingFile
 
 from ozpcenter.tests.helper import unittest_request_helper
 from ozpcenter.api.listing import model_access_es
-from ozpcenter.api.listing import elasticsearch_util
-
-
-# Create ES client
-es_client = elasticsearch_util.es_client
+from ozpcenter.api.listing.elasticsearch_util import elasticsearch_factory
 
 
 @override_settings(ES_ENABLED=False)
@@ -31,10 +27,12 @@ class ListingESSearchApiTest(APITestCase):
         """
         setUp is invoked before each test method
         """
+        self.error_string = None
         self.es_failed = False
         try:
-            model_access_es.check_elasticsearch()
-        except:
+            elasticsearch_factory.check_elasticsearch()
+        except Exception as err:
+            self.error_string = str(err)
             self.es_failed = True
 
         if not self.es_failed:
@@ -56,7 +54,7 @@ class ListingESSearchApiTest(APITestCase):
         TODO: TEST listing_title = Newspaper when is_private = True
         """
         if self.es_failed:
-            self.skipTest('Elasticsearch is not currently up')
+            self.skipTest('Elasticsearch is not currently up: {}'.format(self.error_string))
 
         search_category = 'Health and Fitness'
         url = '/api/listings/essearch/?category={}'.format(search_category)
@@ -76,7 +74,7 @@ class ListingESSearchApiTest(APITestCase):
         TODO: TEST listing_title = Newspaper when is_private = True
         """
         if self.es_failed:
-            self.skipTest('Elasticsearch is not currently up')
+            self.skipTest('Elasticsearch is not currently up: {}'.format(self.error_string))
         url = '/api/listings/essearch/?category=Health and Fitness&category=Communication'
         response = unittest_request_helper(self, url, 'GET', username='wsmith', status_code=200)
 
@@ -133,7 +131,7 @@ class ListingESSearchApiTest(APITestCase):
         TODO: Iterate through all Listings types in listings_types.yaml file, Deal with Private apps
         """
         if self.es_failed:
-            self.skipTest('Elasticsearch is not currently up')
+            self.skipTest('Elasticsearch is not currently up: {}'.format(self.error_string))
 
         url = '/api/listings/essearch/?type=Web Application'
         response = unittest_request_helper(self, url, 'GET', username='wsmith', status_code=200)
@@ -148,7 +146,7 @@ class ListingESSearchApiTest(APITestCase):
     @override_settings(ES_ENABLED=True)
     def test_essearch_tags(self):
         if self.es_failed:
-            self.skipTest('Elasticsearch is not currently up')
+            self.skipTest('Elasticsearch is not currently up: {}'.format(self.error_string))
 
         url = '/api/listings/essearch/?search=demo_tag'
         response = unittest_request_helper(self, url, 'GET', username='wsmith', status_code=200)
@@ -166,7 +164,7 @@ class ListingESSearchApiTest(APITestCase):
     @override_settings(ES_ENABLED=True)
     def test_essearch_filter_tag(self):
         if self.es_failed:
-            self.skipTest('Elasticsearch is not currently up')
+            self.skipTest('Elasticsearch is not currently up: {}'.format(self.error_string))
 
         url = '/api/listings/essearch/?tag=demo_tag'
         response = unittest_request_helper(self, url, 'GET', username='wsmith', status_code=200)
@@ -195,7 +193,7 @@ class ListingESSearchApiTest(APITestCase):
     @override_settings(ES_ENABLED=True)
     def test_essearch_is_enable(self):
         if self.es_failed:
-            self.skipTest('Elasticsearch is not currently up')
+            self.skipTest('Elasticsearch is not currently up: {}'.format(self.error_string))
 
         url = '/api/listings/essearch/?search=demo_tag&type=Web Application'
         response = unittest_request_helper(self, url, 'GET', username='wsmith', status_code=200)
@@ -267,7 +265,8 @@ class ListingESSearchApiTest(APITestCase):
 
             }
         response = unittest_request_helper(self, url, 'PUT', data=data, username='bigbrother', status_code=200)
-        es_client.cluster.health(wait_for_status='yellow', request_timeout=20)
+
+        elasticsearch_factory.wait_for_yellow_cluster_heath()
 
         # Check
         user = generic_model_access.get_profile('wsmith').user

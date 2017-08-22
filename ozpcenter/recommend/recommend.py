@@ -37,18 +37,12 @@ from django.db import transaction
 from django.conf import settings
 
 from ozpcenter import models
-from ozpcenter.api.listing import model_access_es
-from ozpcenter.api.listing.model_access_es import check_elasticsearch
 from ozpcenter.recommend import recommend_utils
 from ozpcenter.recommend.graph_factory import GraphFactory
-# from ozpcenter.recommend.graph_factory import GraphFactory
-
+from ozpcenter.api.listing.elasticsearch_util import elasticsearch_factory
 
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center.' + str(__name__))
-
-# Create ES client
-es_client = model_access_es.es_client
 
 
 class Recommender(object):
@@ -267,7 +261,7 @@ class ElasticsearchContentBaseRecommender(Recommender):
         Initiate any variables needed for recommendation_logic function
         Make sure the Elasticsearch is up and running
         """
-        check_elasticsearch()
+        elasticsearch_factory.check_elasticsearch()
         # TODO: Make sure the elasticsearch index is created here with the mappings
 
     def recommendation_logic(self):
@@ -278,7 +272,7 @@ class ElasticsearchContentBaseRecommender(Recommender):
         This code should be replace by real algorthim
         """
         logger.debug('Elasticsearch Content Base Recommendation Engine')
-        logger.debug('Elasticsearch Health : {}'.format(es_client.cluster.health()))
+        logger.debug('Elasticsearch Health : {}'.format(elasticsearch_factory.get_heath()))
 
 
 class ElasticsearchUserBaseRecommender(Recommender):
@@ -371,8 +365,7 @@ class ElasticsearchUserBaseRecommender(Recommender):
             - If new record, then create the contents just retrieved into a document
             - Else, append the information to the existing document
         '''
-
-        check_elasticsearch()
+        elasticsearch_factory.check_elasticsearch()
         # TODO: Make sure the elasticsearch index is created here with the mappings
 
         '''
@@ -430,14 +423,16 @@ class ElasticsearchUserBaseRecommender(Recommender):
             }
         }
 
+        self.es_client = elasticsearch_factory.get_client()
+
         # Initialize Tables:
         # Initializing Recommended by Ratings ES Table by removing old Elasticsearch Table:
-        if es_client.indices.exists(settings.ES_RECOMMEND_USER):
-            resdel = es_client.indices.delete(index=settings.ES_RECOMMEND_USER)
+        if self.es_client.indices.exists(settings.ES_RECOMMEND_USER):
+            resdel = self.es_client.indices.delete(index=settings.ES_RECOMMEND_USER)
             logger.info("Deleting Existing ES Index Result: '{}'".format(resdel))
 
         # Create ES Index since it has not been created or is deleted above:
-        connect_es_record_exist = es_client.indices.create(index=settings.ES_RECOMMEND_USER, body=rate_request_body)
+        connect_es_record_exist = self.es_client.indices.create(index=settings.ES_RECOMMEND_USER, body=rate_request_body)
         logger.info("Creating ES Index after Deletion Result: '{}'".format(connect_es_record_exist))
 
         # Recommendation Listings loaded at start:
@@ -456,7 +451,7 @@ class ElasticsearchUserBaseRecommender(Recommender):
             }
 
             # Get current reviewed items for Person (author_id):
-            es_search_result = es_client.search(
+            es_search_result = self.es_client.search(
                 index=settings.ES_RECOMMEND_USER,
                 body=query_term
             )
@@ -477,7 +472,7 @@ class ElasticsearchUserBaseRecommender(Recommender):
 
             # Only take categories when the rating is above a 3, do not look at categories when the rating is 3 and below:
             if record[2] > self.MIN_ES_RATING:
-                es_cat_search = es_client.search(
+                es_cat_search = self.es_client.search(
                     index=settings.ES_INDEX_NAME,
                     body=es_cat_query_term
                 )
@@ -493,7 +488,7 @@ class ElasticsearchUserBaseRecommender(Recommender):
 
             if es_search_result['hits']['total'] == 0:
                 # If record does not exist in Recommendation List, then create it:
-                result_es = es_client.create(
+                result_es = self.es_client.create(
                     index=settings.ES_RECOMMEND_USER,
                     doc_type=settings.ES_RECOMMEND_TYPE,
                     id=record[0],
@@ -513,7 +508,7 @@ class ElasticsearchUserBaseRecommender(Recommender):
                 # Since exisiting recommendation lists have been deleted, no need to worry about
                 # adding duplicate data.
 
-                result_es = es_client.update(
+                result_es = self.es_client.update(
                    index=settings.ES_RECOMMEND_USER,
                    doc_type=settings.ES_RECOMMEND_TYPE,
                    id=record_to_update,
@@ -553,7 +548,7 @@ class ElasticsearchUserBaseRecommender(Recommender):
         '''
 
         logger.debug('Elasticsearch User Base Recommendation Engine')
-        logger.debug('Elasticsearch Health : {}'.format(es_client.cluster.health()))
+        logger.debug('Elasticsearch Health : {}'.format(self.es_client.cluster.health()))
 
         #########################
         # Information on Algorithms: (as per Elasticsearch: https://www.elastic.co/guide/en/elasticsearch/reference/2.4/search-aggregations-bucket-significantterms-aggregation.html)
@@ -594,7 +589,7 @@ class ElasticsearchUserBaseRecommender(Recommender):
             }
 
             # Retrieve results from ES Table for matching profile to update and get recommendations:
-            es_search_result = es_client.search(
+            es_search_result = self.es_client.search(
                 index=settings.ES_RECOMMEND_USER,
                 body=es_profile_search
             )
@@ -616,7 +611,7 @@ class ElasticsearchUserBaseRecommender(Recommender):
                             }
                         }
                     }
-                    es_cat_search = es_client.search(
+                    es_cat_search = self.es_client.search(
                         index=settings.ES_INDEX_NAME,
                         body=es_cat_query_term
                     )
@@ -634,7 +629,7 @@ class ElasticsearchUserBaseRecommender(Recommender):
                 # No Reviews were made, but user has bookmarked apps:
                 if es_search_result['hits']['total'] == 0:
                     # print("PROFILE: ", profile_id)
-                    result_es = es_client.create(
+                    result_es = self.es_client.create(
                         index=settings.ES_RECOMMEND_USER,
                         doc_type=settings.ES_RECOMMEND_TYPE,
                         id=profile_id,
@@ -649,7 +644,7 @@ class ElasticsearchUserBaseRecommender(Recommender):
                     record_to_update = es_search_result['hits']['hits'][0]['_id']
                     # Get current categories and then use to add to category_items:
                     current_categories = es_search_result['hits']['hits'][0]['_source']['categories']
-                    result_es = es_client.update(
+                    result_es = self.es_client.update(
                        index=settings.ES_RECOMMEND_USER,
                        doc_type=settings.ES_RECOMMEND_TYPE,
                        id=record_to_update,
@@ -761,7 +756,7 @@ class ElasticsearchUserBaseRecommender(Recommender):
             # print("+++++++++++++++++++++++++++++++++++++")
             # print("QUERY TERM: ", agg_search_query)
             # print("+++++++++++++++++++++++++++++++++++++")
-            es_query_result = es_client.search(
+            es_query_result = self.es_client.search(
                 index=settings.ES_RECOMMEND_USER,
                 body=agg_search_query
             )

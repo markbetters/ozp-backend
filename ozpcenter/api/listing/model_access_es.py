@@ -2,6 +2,7 @@
 Listing Model Access For Elasticsearch
 
 Code was developed to work with Elasticsearch 2.4.*
+TODO: Refactor Elasticsearch Code
 """
 import json
 import logging
@@ -9,19 +10,15 @@ import logging
 from django.conf import settings
 from django.http.request import QueryDict
 from rest_framework import serializers
-from elasticsearch import exceptions
 
 from ozpcenter import models
-from ozpcenter import errors
 from ozpcenter import constants
 from plugins_util.plugin_manager import system_has_access_control
 from ozpcenter.api.listing import elasticsearch_util
+from ozpcenter.api.listing.elasticsearch_util import elasticsearch_factory
 
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center.' + str(__name__))
-
-# Create ES client
-es_client = elasticsearch_util.es_client
 
 
 class SearchParamParser(object):
@@ -107,6 +104,14 @@ class SearchParamParser(object):
         return json.dumps(temp_dict)
 
 
+def recreate_index_mapping():
+    """
+    Recreate Index Mapping
+    """
+    index_mapping = elasticsearch_util.get_mapping_setting_obj()
+    elasticsearch_factory.recreate_index_mapping(settings.ES_INDEX_NAME, index_mapping)
+
+
 class ReadOnlyListingSerializer(serializers.ModelSerializer):
     """
     Serializer used to convert listing object into python friendly object
@@ -114,62 +119,6 @@ class ReadOnlyListingSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Listing
         depth = 2
-
-
-def check_elasticsearch():
-    """
-    Method used to check to see if elasticsearch is up
-    """
-    if settings.ES_ENABLED is False:
-        raise errors.ElasticsearchServiceUnavailable('Elasticsearch is disabled in the settings')
-    try:
-        results = es_client.info()
-        # Results: {'name': 'Human Top', 'version': {'build_snapshot': False, 'number': '2.4.0', 'build_hash': 'ce9f0c7394dee074091dd1bc4e9469251181fc55',
-        # 'build_timestamp': '2016-08-29T09:14:17Z', 'lucene_version': '5.5.2'}, 'cluster_name': 'elasticsearch', 'tagline': 'You Know, for Search'}
-        keys_to_check = ['name', 'version', 'cluster_name', 'tagline']
-        for key in keys_to_check:
-            if key not in results:
-                raise errors.ElasticsearchServiceUnavailable('Elasticsearch Results missing keys')
-        return True
-    except exceptions.SerializationError:
-        # Exception Value: Unknown mimetype, unable to deserialize: text/html
-        raise errors.ElasticsearchServiceUnavailable('Elasticsearch Serialization Error')
-    except exceptions.AuthenticationException:
-        # Ngnix BasicAuth Fail: TransportError(401, '<html>\r\n<head><title>401 Authorization
-        #   Required</title></head>\r\n<body bgcolor="white">\r\n<center><h1>401 Authorization Required</h1></center>\r\n<hr><center>nginx/1.11.6</center>\r\n</body>\r\n</html>\r\n')
-        raise errors.ElasticsearchServiceUnavailable('Elasticsearch Authentication Exception')
-    except exceptions.ConnectionError:
-        # ConnectionError(<urllib3.connection.HTTPConnection object at 0x7f6343212c50>: Failed to establish a new connection: [Errno 111] Connection refused) ...
-        raise errors.ElasticsearchServiceUnavailable('Elasticsearch Connection Error')
-    except exceptions.TransportError:
-        # Nginx reverse proxy can't find elasticsearch but correct BasicAuth
-        #    TransportError(502, 'An error occurred.</h1>\n<p>Sorry, the page you are looking for is currently unavailable.<br/>\nPlease try again later.....
-        raise errors.ElasticsearchServiceUnavailable('Elasticsearch Transport Error')
-    raise errors.ElasticsearchServiceUnavailable('Elasticsearch Check Error')
-
-
-def recreate_index_mapping():
-    """
-    Recreate Index Mapping
-    """
-    if settings.ES_ENABLED:
-        check_elasticsearch()
-        logger.info('Checking to see if Index [{}] exist'.format(settings.ES_INDEX_NAME))
-
-        if es_client.indices.exists(settings.ES_INDEX_NAME):
-            logger.info('Deleting [{}] index...'.format(settings.ES_INDEX_NAME))
-            res = es_client.indices.delete(index=settings.ES_INDEX_NAME)
-            logger.info('Delete acknowledged: {}'.format(res.get('acknowledged', False)))
-
-        request_body = elasticsearch_util.get_mapping_setting_obj()
-
-        logger.info('Creating [{}] index...'.format(settings.ES_INDEX_NAME))
-        res = es_client.indices.create(index=settings.ES_INDEX_NAME, body=request_body)
-        logger.info('Create Index Acknowledged: {}'.format(res.get('acknowledged', False)))
-
-        es_client.cluster.health(wait_for_status='yellow', request_timeout=20)
-    else:
-        logger.debug('Elasticsearch is not enabled')
 
 
 def bulk_reindex():
@@ -186,8 +135,11 @@ def bulk_reindex():
     To check index in elasticsearch:
         http://127.0.0.1:9200/appsmall/_search?size=10000&pretty
     """
+    # Create ES client
+    es_client = elasticsearch_factory.get_client()
+
     logger.info('Starting Indexing Process')
-    check_elasticsearch()
+    elasticsearch_factory.check_elasticsearch()
     recreate_index_mapping()
     # Convert Listing Objects into Python Objects
     all_listings = models.Listing.objects.all()
@@ -265,7 +217,10 @@ def suggest(request_username, search_param_parser):
     Returns:
         listing titles in a list
     """
-    check_elasticsearch()
+    # Create ES client
+    es_client = elasticsearch_factory.get_client()
+
+    elasticsearch_factory.check_elasticsearch()
 
     if search_param_parser.search_string is None:
         return []
@@ -371,7 +326,9 @@ def search(request_username, search_param_parser):
         username(str): username
         search_param_parser(SearchParamParser): parameters
     """
-    check_elasticsearch()
+    elasticsearch_factory.check_elasticsearch()
+    # Create ES client
+    es_client = elasticsearch_factory.get_client()
 
     user_exclude_orgs = get_user_exclude_orgs(request_username)
     search_query = elasticsearch_util.make_search_query_obj(search_param_parser, exclude_agencies=user_exclude_orgs)
