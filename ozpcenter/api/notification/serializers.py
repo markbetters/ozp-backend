@@ -58,7 +58,7 @@ class NotificationMailBoxSerializer(serializers.HyperlinkedModelSerializer):
     message = serializers.CharField(required=False, source='notification.message')
     listing = NotificationListingSerializer(required=False, source='notification.listing')
     agency = NotificationAgencySerializer(required=False, source='notification.agency')
-    peer = serializers.CharField(required=False, source='notification.peer')
+    peer = DictField(required=False, source='notification.peer')
     notification_type = serializers.CharField(required=False, source='notification.notification_type')
     entity_id = serializers.IntegerField(required=False, source='notification.entity_id')
     notification_id = serializers.IntegerField(required=False, source='notification.id')
