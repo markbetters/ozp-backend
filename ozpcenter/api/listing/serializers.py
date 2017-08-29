@@ -1027,4 +1027,34 @@ class ReviewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Review
-        fields = ('author', 'listing', 'rate', 'text', 'edited_date', 'id')
+        fields = ('id', 'author', 'listing', 'rate', 'text', 'edited_date', 'review_parent')
+        # read_only_fields = ('author', 'listing', 'review_parent')
+
+        extra_kwargs = {
+            'author': {'required': False},
+            'review_parent': {'required': False}
+        }
+        validators = []  # Remove a default "unique together" constraint.
+
+    def validate(self, data):
+        print('inside ReviewSerializer.validate')
+        profile = generic_model_access.get_profile(self.context['request'].user.username)
+        data['listing'] = self.context['listing']
+
+        if 'review_parent' not in data:
+            data['review_parent'] = None
+
+        print('data {}'.format(data))
+        return data
+
+    def create(self, validated_data):
+        import pprint
+        print(pprint.pprint(validated_data))
+        profile = generic_model_access.get_profile(self.context['request'].user.username)
+
+        resp = model_access.create_listing_review(profile,
+                    validated_data['listing'],
+            validated_data['rate'],
+            validated_data['text'],
+            validated_data['review_parent'])
+        return resp

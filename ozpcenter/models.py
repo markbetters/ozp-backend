@@ -625,8 +625,14 @@ class Review(models.Model):
     """
     A Review made on a Listing
     """
-    text = models.CharField(max_length=constants.MAX_VALUE_LENGTH,
-                            blank=True, null=True)
+    class Meta:
+        # a user can only have one review per listing
+        unique_together = ('review_parent', 'author', 'listing')
+
+    # Self Referencing
+    review_parent = models.ForeignKey('Review', null=True, blank=True)
+
+    text = models.CharField(max_length=constants.MAX_VALUE_LENGTH, blank=True, null=True)
     rate = models.IntegerField(validators=[
         MinValueValidator(1),
         MaxValueValidator(5)
@@ -635,23 +641,31 @@ class Review(models.Model):
     listing = models.ForeignKey('Listing', related_name='reviews')
     author = models.ForeignKey('Profile', related_name='reviews')
 
-    # use a custom Manager class to limit returned Reviews
-    objects = AccessControlReviewManager()
-    # TODO: change this back after the database migration
     # edited_date = models.DateTimeField(auto_now=True)
     edited_date = models.DateTimeField(default=utils.get_now_utc)
 
+    # use a custom Manager class to limit returned Reviews
+    objects = AccessControlReviewManager()
+    # TODO: change this back after the database migration
+
+    def validate_unique(self, exclude=None):
+        # If review_parent is None
+        if not self.review_parent:
+            if Review.objects.filter(author=self.author, listing=self.listing, review_parent__isnull=True).exists():
+                raise ValidationError("Duplicate Review")
+        super(Review, self).validate_unique(exclude)
+
+    def save(self, *args, **kwargs):
+        self.validate_unique()  # TODO: Figure why when review_parent, pre overwritten validate_unique does not work
+        super(Review, self).save(*args, **kwargs)
+
     def __repr__(self):
-        return '{0!s}: rate: {1:d} text: {2!s}'.format(self.author.user.username,
-                                          self.rate, self.text)
+        return '[{0!s}] rate: [{1:d}] text:[{2!s}] parent: [{3!s}]'.format(self.author.user.username,
+                                          self.rate, self.text, self.review_parent)
 
     def __str__(self):
-        return '{0!s}: rate: {1:d} text: {2!s}'.format(self.author.user.username,
-                                          self.rate, self.text)
-
-    class Meta:
-        # a user can only have one review per listing
-        unique_together = ('author', 'listing')
+        return '[{0!s}] rate: [{1:d}] text:[{2!s}] parent: [{3!s}]'.format(self.author.user.username,
+                                          self.rate, self.text, self.review_parent)
 
 
 class Profile(models.Model):
@@ -968,22 +982,16 @@ class Listing(models.Model):
     )
     version_name = models.CharField(max_length=255, null=True, blank=True)
     # NOTE: replacing uuid with this - will need to add to the form
-    unique_name = models.CharField(max_length=255, unique=True, null=True,
-                                   blank=True)
-    small_icon = models.ForeignKey(Image, related_name='listing_small_icon',
-                                   null=True, blank=True)
-    large_icon = models.ForeignKey(Image, related_name='listing_large_icon',
-                                   null=True, blank=True)
-    banner_icon = models.ForeignKey(Image, related_name='listing_banner_icon',
-                                    null=True, blank=True)
-    large_banner_icon = models.ForeignKey(Image,
-                                          related_name='listing_large_banner_icon', null=True, blank=True)
+    unique_name = models.CharField(max_length=255, unique=True, null=True, blank=True)
+    small_icon = models.ForeignKey(Image, related_name='listing_small_icon', null=True, blank=True)
+    large_icon = models.ForeignKey(Image, related_name='listing_large_icon', null=True, blank=True)
+    banner_icon = models.ForeignKey(Image, related_name='listing_banner_icon', null=True, blank=True)
+    large_banner_icon = models.ForeignKey(Image, related_name='listing_large_banner_icon', null=True, blank=True)
 
     what_is_new = models.CharField(max_length=255, null=True, blank=True)
     description_short = models.CharField(max_length=150, null=True, blank=True)
     requirements = models.CharField(max_length=1000, null=True, blank=True)
-    approval_status = models.CharField(max_length=255,
-                                       choices=APPROVAL_STATUS_CHOICES, default=IN_PROGRESS)
+    approval_status = models.CharField(max_length=255, choices=APPROVAL_STATUS_CHOICES, default=IN_PROGRESS)
     is_enabled = models.BooleanField(default=True)
     is_featured = models.BooleanField(default=False)
     is_deleted = models.BooleanField(default=False)
@@ -1024,11 +1032,9 @@ class Listing(models.Model):
 
     required_listings = models.ForeignKey('self', null=True, blank=True)
     # no reverse relationship - use '+'
-    last_activity = models.OneToOneField('ListingActivity', related_name='+',
-                                         null=True, blank=True)
+    last_activity = models.OneToOneField('ListingActivity', related_name='+', null=True, blank=True)
     # no reverse relationship - use '+'
-    current_rejection = models.OneToOneField('ListingActivity', related_name='+',
-                                             null=True, blank=True)
+    current_rejection = models.OneToOneField('ListingActivity', related_name='+', null=True, blank=True)
 
     intents = models.ManyToManyField(
         'Intent',

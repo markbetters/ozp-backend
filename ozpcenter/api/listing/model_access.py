@@ -536,7 +536,7 @@ def disable_listing(steward, listing):
     return listing
 
 
-def create_listing_review(username, listing, rating, text=None):
+def create_listing_review(username, listing, rating, text=None, review_parent=None):
     """
     Create a new review for a listing
 
@@ -555,8 +555,11 @@ def create_listing_review(username, listing, rating, text=None):
         }
     """
     author = generic_model_access.get_profile(username)
-    review = models.Review(listing=listing, author=author,
-                rate=rating, text=text)
+    review = models.Review(listing=listing, author=author, rate=rating, text=text)
+    print(review_parent)
+    if review_parent:
+        review.review_parent = review_parent
+
     review.save()
 
     # update this listing's rating
@@ -572,7 +575,7 @@ def create_listing_review(username, listing, rating, text=None):
 
     dispatcher.publish('listing_review_created', listing=listing, profile=author, rating=rating, text=text)
 
-    return resp
+    return review
 
 
 def edit_listing_review(username, review, rate, text=None):

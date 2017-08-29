@@ -137,8 +137,7 @@ class ReviewViewSet(viewsets.ModelViewSet):
 
     def retrieve(self, request, pk=None, listing_pk=None):
         queryset = self.get_queryset().get(pk=pk, listing=listing_pk)
-        serializer = serializers.ReviewSerializer(queryset,
-            context={'request': request})
+        serializer = serializers.ReviewSerializer(queryset, context={'request': request})
         return Response(serializer.data)
 
     def create(self, request, listing_pk=None):
@@ -146,15 +145,31 @@ class ReviewViewSet(viewsets.ModelViewSet):
         Create a new review
         """
         request_current_username = request.user.username
-        listing = model_access.get_listing_by_id(request_current_username,
-            listing_pk, True)
+        listing = model_access.get_listing_by_id(request_current_username, listing_pk, True)
 
-        rate = int(request.data.get('rate', None))
-        text = request.data.get('text', None)
+        serializer = serializers.ReviewSerializer(data=request.data, context={'request': request, 'listing': listing}, partial=True)
+        print('ReviewViewSet Pre serializer.is_valid()')
+        if not serializer.is_valid():
+            print('*' * 10)
+            print(serializer.get_extra_kwargs())
+            print('*' * 10)
+            print('ReviewViewSet Post serializer.is_valid()')
+            logger.error('{0!s}'.format(serializer.errors), extra={'request': request})
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        print('ReviewViewSet Pre serializer.save()')
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-        resp = model_access.create_listing_review(request_current_username,
-            listing, rate, text)
-        return Response(resp, status=status.HTTP_201_CREATED)
+        #
+        #
+        # # TODO: use serializer
+        # rate = int(request.data.get('rate', None))
+        # text = request.data.get('text', None)
+        # review_parent = int(request.data.get('review_parent', None))
+        #
+        # resp = model_access.create_listing_review(request_current_username,
+        #     listing, rate, text, review_parent)
+        # return Response(resp, status=status.HTTP_201_CREATED)
 
     def update(self, request, pk=None, listing_pk=None):
         """
