@@ -1,12 +1,14 @@
 """
 Tests that the sample data was created correctly
 """
+from django.test import override_settings
 from django.test import TestCase
 
 from ozpcenter import models
 from ozpcenter.scripts import sample_data_generator as data_gen
 
 
+@override_settings(ES_ENABLED=False)
 class SampleDataGeneratorTest(TestCase):
 
     def setUp(self):
@@ -24,7 +26,7 @@ class SampleDataGeneratorTest(TestCase):
 
     def test_categories(self):
         categories = list(models.Category.objects.values_list('title', flat=True))
-        expected_categories = ['Books and Reference', 'Business', 'Communication', 'Education',
+        expected_categories = ['Accessories', 'Books and Reference', 'Business', 'Communication', 'Education',
                                'Entertainment', 'Finance', 'Health and Fitness', 'Media and Video',
                                'Music and Audio', 'News', 'Productivity', 'Shopping', 'Sports', 'Tools', 'Weather']
 

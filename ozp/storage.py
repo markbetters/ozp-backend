@@ -5,7 +5,6 @@ from io import StringIO; from ozp.storage import MediaFilesStorage; MediaFilesSt
 
 http://stackoverflow.com/questions/29383373/creating-signed-cookies-for-amazon-cloudfront
 
-
 Steps for Minio:
 
 # Make Local Dev
@@ -20,11 +19,8 @@ chmod +x minio
 export AWS_ACCESS_KEY_ID=2Q87EJPVQ0739BYNXMGH;export AWS_SECRET_ACCESS_KEY=UmjiZ8qnNqGSexo49yVcJmzaJ1x835/na0TcIFFa;export DEFAULT_MEDIA_FILE_STORAGE=ozp.storage.MediaS3Storage
 
 Under MediaS3Storage in ozp/storage.py uncomment endpoint_url
-
-python manage.py runscript upload_media
-
-make run
-
+    python manage.py runscript upload_media
+    make run
 """
 import os
 

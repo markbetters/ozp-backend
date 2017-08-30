@@ -1,6 +1,7 @@
 """
 Tests for category endpoints
 """
+from django.test import override_settings
 from rest_framework import status
 from rest_framework.test import APITestCase
 
@@ -8,6 +9,7 @@ from ozpcenter import model_access as generic_model_access
 from ozpcenter.scripts import sample_data_generator as data_gen
 
 
+@override_settings(ES_ENABLED=False)
 class CategoryApiTest(APITestCase):
 
     def setUp(self):
@@ -46,8 +48,8 @@ class CategoryApiTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         title = response.data['title']
         description = response.data['description']
-        self.assertEqual(title, 'Books and Reference')
-        self.assertTrue(description is not None)
+        self.assertEqual(title, 'Accessories')
+        self.assertEqual(description, 'Accessories Description')
 
     def test_create_category(self):
         user = generic_model_access.get_profile('bigbrother').user

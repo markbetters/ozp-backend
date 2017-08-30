@@ -30,6 +30,7 @@ ALLOWED_HOSTS = ['*']
 # Use nose to run all tests
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
+# OZP_LOG_LEVEL=CRITICAL
 # Tell nose to measure coverage on the ozp, ozpcenter, ozpiwc  apps
 NOSE_ARGS = [
     '--with-coverage',
@@ -143,11 +144,11 @@ LOGGING = {
         },
         'ozp-center': {
             'handlers': ['console', 'file'],
-            'level': 'DEBUG',
+            'level': os.getenv('OZP_LOG_LEVEL', 'DEBUG'),
         },
         'ozp-iwc': {
             'handlers': ['console', 'file'],
-            'level': 'DEBUG',
+            'level': os.getenv('OZP_LOG_LEVEL', 'DEBUG'),
         }
     },
 }

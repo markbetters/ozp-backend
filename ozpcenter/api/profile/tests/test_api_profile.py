@@ -3,6 +3,7 @@ Tests for Profile endpoints
 """
 from unittest.mock import patch
 
+from django.test import override_settings
 from django.conf import settings
 from rest_framework import status
 from rest_framework.test import APITestCase
@@ -10,8 +11,10 @@ from rest_framework.test import APITestCase
 from ozp.tests import helper
 from ozpcenter import model_access as generic_model_access
 from ozpcenter.scripts import sample_data_generator as data_gen
+from ozpcenter.tests.helper import unittest_request_helper
 
 
+@override_settings(ES_ENABLED=False)
 class ProfileApiTest(APITestCase):
     """
     Testing Profile API
@@ -53,132 +56,6 @@ class ProfileApiTest(APITestCase):
         """
         data_gen.run()
 
-    def _all_listing_for_self_profile(self):
-        user = generic_model_access.get_profile('wsmith').user
-        self.client.force_authenticate(user=user)
-        url = '/api/profile/self/listing/'
-        response = self.client.get(url, format='json')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        ids = [i['id'] for i in response.data]
-        self.assertTrue(1 in ids)
-        self.assertEquals(len(ids), 90)
-
-    @patch('plugins_util.plugin_manager.requests.get', side_effect=helper.mocked_requests_get)
-    def test_all_listing_for_self_profile_auth_enabled(self, mock_request):
-        """
-        Testing GET /api/profile/self/listing endpoint
-        """
-        settings.OZP['USE_AUTH_SERVER'] = True
-        self._all_listing_for_self_profile()
-
-    def test_all_listing_for_self_profile_auth_disabled(self):
-        """
-        Testing GET /api/profile/self/listing endpoint
-        """
-        settings.OZP['USE_AUTH_SERVER'] = False
-        self._all_listing_for_self_profile()
-
-    def _one_listing_for_self_profile(self):
-        user = generic_model_access.get_profile('wsmith').user
-        self.client.force_authenticate(user=user)
-        url = '/api/profile/self/listing/1/'
-        response = self.client.get(url, format='json')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        data = response.data
-        self.assertEquals(data['id'], 1)
-
-    @patch('plugins_util.plugin_manager.requests.get', side_effect=helper.mocked_requests_get)
-    def test_one_listing_for_self_profile_auth_enabled(self, mock_request):
-        """
-        Testing GET /api/profile/self/listing/{pk} endpoint
-        """
-        settings.OZP['USE_AUTH_SERVER'] = True
-        self._one_listing_for_self_profile()
-
-    def test_one_listing_for_self_profile_auth_disabled(self):
-        """
-        Testing GET /api/profile/self/listing/{pk} endpoint
-        """
-        settings.OZP['USE_AUTH_SERVER'] = False
-        self._one_listing_for_self_profile()
-
-    def _all_listing_for_minitrue_profile_from_multi_org_profile(self):
-        user = generic_model_access.get_profile('charrington').user
-        self.client.force_authenticate(user=user)
-
-        url = self._get_profile_url_for_username('wsmith', 'listing/')
-
-        response = self.client.get(url, format='json')
-        data = response.data
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        ids = [i['id'] for i in data]
-        self.assertTrue(110 in ids)
-        self.assertEquals(len(ids), 90)
-
-    @patch('plugins_util.plugin_manager.requests.get', side_effect=helper.mocked_requests_get)
-    def test_all_listing_for_minitrue_profile_from_multi_org_profile_auth_enabled(self, mock_request):
-        """
-        test_all_listing_for_minitrue_profile_from_multi_org_profile_auth_enabled
-
-        Getting
-            wsmith (minitrue, stewarded_orgs: minitrue) - Winston Smith - 4
-        From
-            charrington (minipax, miniluv, minitrue) - Charrington - 17
-        """
-        settings.OZP['USE_AUTH_SERVER'] = True
-        self._all_listing_for_minitrue_profile_from_multi_org_profile()
-
-    def test_all_listing_for_minitrue_profile_from_multi_org_profile_auth_disabled(self):
-        """
-        test_all_listing_for_minitrue_profile_from_multi_org_profile_auth_disabled
-
-        Getting
-            wsmith (minitrue, stewarded_orgs: minitrue) - Winston Smith - 4
-        From
-            charrington (minipax, miniluv, minitrue) - Charrington - 17
-        """
-        settings.OZP['USE_AUTH_SERVER'] = False
-        self._all_listing_for_minitrue_profile_from_multi_org_profile()
-
-    def _all_listing_for_app_profile_from_multi_org_profile(self):
-        user = generic_model_access.get_profile('bigbrother').user
-        self.client.force_authenticate(user=user)
-
-        url = self._get_profile_url_for_username('wsmith', 'listing/')
-
-        response = self.client.get(url, format='json')
-        data = response.data
-
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        listing_unique_names = [i['unique_name'] for i in data]
-        self.assertTrue('ozp.test.air_mail' in listing_unique_names)
-        self.assertEquals(len(listing_unique_names), 90)
-
-    @patch('plugins_util.plugin_manager.requests.get', side_effect=helper.mocked_requests_get)
-    def test_all_listing_for_app_profile_from_multi_org_profile_auth_enabled(self, mock_request):
-        """
-        test_all_listing_for_app_profile_from_multi_org_profile_auth_enabled
-
-        Getting
-            wsmith (minitrue, stewarded_orgs: minitrue) - Winston Smith - 4
-        From
-            bigbrother (minipax) - Big Brother - 1
-        """
-        settings.OZP['USE_AUTH_SERVER'] = True
-        self._all_listing_for_app_profile_from_multi_org_profile()
-
-    def test_all_listing_for_app_profile_from_multi_org_profile_auth_disabled(self):
-        """
-        Testing GET /api/profile/4/listing/ endpoint
-
-        Getting
-            wsmith (minitrue, stewarded_orgs: minitrue) - Winston Smith - 4
-        From
-            bigbrother (minipax) - Big Brother - 1
-        """
-        settings.OZP['USE_AUTH_SERVER'] = False
-        self._all_listing_for_app_profile_from_multi_org_profile()
-
     def _get_profile_url_for_username(self, username, postfix=None):
         """
         Get Profile Url
@@ -187,21 +64,105 @@ class ProfileApiTest(APITestCase):
         user_id = generic_model_access.get_profile(username).user.id
         return '/api/profile/{}/{}'.format(user_id, postfix)
 
-    def _all_listing_for_minitrue_profile_from_minitrue_profile(self):
-        user = generic_model_access.get_profile('jones').user
-        self.client.force_authenticate(user=user)
+    @patch('plugins_util.plugin_manager.requests.get', side_effect=helper.mocked_requests_get)
+    def test_all_listing_for_self_profile_auth_enabled(self, mock_request):
+        settings.OZP['USE_AUTH_SERVER'] = True
+        self._all_listing_for_self_profile()
 
-        url = self._get_profile_url_for_username('julia', 'listing/')
+    def test_all_listing_for_self_profile_auth_disabled(self):
+        settings.OZP['USE_AUTH_SERVER'] = False
+        self._all_listing_for_self_profile()
 
-        response = self.client.get(url, format='json')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+    def _all_listing_for_self_profile(self):
+        url = '/api/profile/self/listing/'  # 2/7/18/26/27
+        response = unittest_request_helper(self, url, 'GET', username='wsmith', status_code=200)
+        titles = sorted([i['title'] for i in response.data])
+        expected_listing = ['Air Mail', 'Applied Ethics Inc.', 'Bleach', 'Business Insurance Risk',
+            'Business Management System', 'Chart Course', 'Clipboard', 'Desktop Virtualization',
+            'Diamond', 'FrameIt', 'Hatch Latch', 'Intelligence Unleashed', 'JotSpot',
+            'LocationAnalyzer', 'LocationLister', 'LocationViewer', 'Project Management',
+            'Ruby', 'Ruby Miner', 'Sapphire', 'Wikipedia']
+        self.assertEquals(expected_listing, titles)
+
+    @patch('plugins_util.plugin_manager.requests.get', side_effect=helper.mocked_requests_get)
+    def test_one_listing_for_self_profile_auth_enabled(self, mock_request):
+        settings.OZP['USE_AUTH_SERVER'] = True
+        self._one_listing_for_self_profile()
+
+    def test_one_listing_for_self_profile_auth_disabled(self):
+        settings.OZP['USE_AUTH_SERVER'] = False
+        self._one_listing_for_self_profile()
+
+    def _one_listing_for_self_profile(self):
+        url = '/api/profile/self/listing/2/'  # 2/7/18/26/27
+        response = unittest_request_helper(self, url, 'GET', username='wsmith', status_code=200)
         data = response.data
-        listing_unique_names = [i['unique_name'] for i in data]
-        self.assertTrue('ozp.test.chatterbox.8' in listing_unique_names)
-        self.assertEquals(len(listing_unique_names), 10)
+        self.assertEquals(data['id'], 2)
+
+    @patch('plugins_util.plugin_manager.requests.get', side_effect=helper.mocked_requests_get)
+    def test_all_listing_for_minitrue_profile_from_multi_org_profile_auth_enabled(self, mock_request):
+        settings.OZP['USE_AUTH_SERVER'] = True
+        self._all_listing_for_minitrue_profile_from_multi_org_profile()
+
+    def test_all_listing_for_minitrue_profile_from_multi_org_profile_auth_disabled(self):
+        settings.OZP['USE_AUTH_SERVER'] = False
+        self._all_listing_for_minitrue_profile_from_multi_org_profile()
+
+    def _all_listing_for_minitrue_profile_from_multi_org_profile(self):
+        """
+        test_all_listing_for_minitrue_profile_from_multi_org_profile_auth_disabled
+
+        Getting
+            wsmith (minitrue, stewarded_orgs: minitrue) - Winston Smith - 4
+        From
+            charrington (minipax, miniluv, minitrue) - Charrington - 17
+        """
+        url = self._get_profile_url_for_username('wsmith', 'listing/')
+        response = unittest_request_helper(self, url, 'GET', username='charrington', status_code=200)
+
+        titles = sorted([i['title'] for i in response.data])
+        expected_listing = ['Air Mail', 'Applied Ethics Inc.', 'Bleach', 'Business Insurance Risk',
+            'Business Management System', 'Chart Course', 'Clipboard', 'Desktop Virtualization',
+            'Diamond', 'FrameIt', 'Hatch Latch', 'Intelligence Unleashed', 'JotSpot',
+            'LocationAnalyzer', 'LocationLister', 'LocationViewer', 'Project Management',
+            'Ruby', 'Ruby Miner', 'Sapphire', 'Wikipedia']
+        self.assertEquals(expected_listing, titles)
+
+    @patch('plugins_util.plugin_manager.requests.get', side_effect=helper.mocked_requests_get)
+    def test_all_listing_for_app_profile_from_multi_org_profile_auth_enabled(self, mock_request):
+        settings.OZP['USE_AUTH_SERVER'] = True
+        self._all_listing_for_app_profile_from_multi_org_profile()
+
+    def test_all_listing_for_app_profile_from_multi_org_profile_auth_disabled(self):
+        settings.OZP['USE_AUTH_SERVER'] = False
+        self._all_listing_for_app_profile_from_multi_org_profile()
+
+    def _all_listing_for_app_profile_from_multi_org_profile(self):
+        """
+        Testing GET /api/profile/4/listing/ endpoint
+
+        Getting
+            wsmith (minitrue, stewarded_orgs: minitrue) - Winston Smith - 4
+        From
+            bigbrother (minipax) - Big Brother - 1
+        """
+        url = self._get_profile_url_for_username('wsmith', 'listing/')
+        response = unittest_request_helper(self, url, 'GET', username='bigbrother', status_code=200)
+
+        titles = sorted([i['title'] for i in response.data])
+        expected_listing = ['Air Mail', 'Applied Ethics Inc.', 'Bleach', 'Business Insurance Risk',
+            'Business Management System', 'Chart Course', 'Clipboard', 'Desktop Virtualization',
+            'Diamond', 'FrameIt', 'Hatch Latch', 'Intelligence Unleashed', 'JotSpot',
+            'LocationAnalyzer', 'LocationLister', 'LocationViewer', 'Project Management',
+            'Ruby', 'Ruby Miner', 'Sapphire', 'Wikipedia']
+        self.assertEquals(expected_listing, titles)
 
     @patch('plugins_util.plugin_manager.requests.get', side_effect=helper.mocked_requests_get)
     def test_all_listing_for_minitrue_profile_from_minitrue_profile(self, mock_request):
+        settings.OZP['USE_AUTH_SERVER'] = True
+        self._all_listing_for_minitrue_profile_from_minitrue_profile()
+
+    def _all_listing_for_minitrue_profile_from_minitrue_profile(self):
         """
         test_all_listing_for_minitrue_profile_from_minitrue_profile
 
@@ -210,8 +171,15 @@ class ProfileApiTest(APITestCase):
         From
             jones (minitrue) - Jones - 9
         """
-        settings.OZP['USE_AUTH_SERVER'] = True
-        self._all_listing_for_minitrue_profile_from_minitrue_profile()
+        url = self._get_profile_url_for_username('julia', 'listing/')
+        response = unittest_request_helper(self, url, 'GET', username='jones', status_code=200)
+
+        titles = sorted([i['title'] for i in response.data])
+        expected_listing = ['Chatter Box']
+        # BreadBasket(Minitrue, private, julia)
+        # ChatterBox(Miniluv, public, julia)
+        # TODO: Figure out why BreadBasket is not in the list
+        self.assertEquals(expected_listing, titles)
 
     @patch('plugins_util.plugin_manager.requests.get', side_effect=helper.mocked_requests_get)
     def test_username_starts_with(self, mock_request):
@@ -219,13 +187,12 @@ class ProfileApiTest(APITestCase):
         Testing GET /api/profile/?username_starts_with={username} endpoint
         """
         settings.OZP['USE_AUTH_SERVER'] = True
-        user = generic_model_access.get_profile('wsmith').user
-        self.client.force_authenticate(user=user)
+
         url = '/api/profile/?username_starts_with=ws'
-        response = self.client.get(url, format='json')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), 1)
-        self.assertEqual(response.data[0]['user']['username'], 'wsmith')
+        response = unittest_request_helper(self, url, 'GET', username='wsmith', status_code=200)
+        usernames = sorted([i['user']['username'] for i in response.data])
+        expected_usernames = ['wsmith']
+        self.assertEqual(usernames, expected_usernames)
 
     @patch('plugins_util.plugin_manager.requests.get', side_effect=helper.mocked_requests_get)
     def test_username_starts_with_no_results(self, mock_request):
@@ -233,12 +200,12 @@ class ProfileApiTest(APITestCase):
         Testing GET /api/profile/?username_starts_with={username} endpoint
         """
         settings.OZP['USE_AUTH_SERVER'] = True
-        user = generic_model_access.get_profile('wsmith').user
-        self.client.force_authenticate(user=user)
+
         url = '/api/profile/?username_starts_with=asdf'
-        response = self.client.get(url, format='json')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), 0)
+        response = unittest_request_helper(self, url, 'GET', username='wsmith', status_code=200)
+        usernames = sorted([i['user']['username'] for i in response.data])
+        expected_usernames = []
+        self.assertEqual(usernames, expected_usernames)
 
     @patch('plugins_util.plugin_manager.requests.get', side_effect=helper.mocked_requests_get)
     def test_get_users_based_on_roles_for_all_access_control_levels(self, mock_request):

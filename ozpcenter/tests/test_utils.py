@@ -1,12 +1,14 @@
 """
 Utils tests
 """
+from django.test import override_settings
 from django.test import TestCase
 
 from ozpcenter import utils as utils
 from ozpcenter.scripts import sample_data_generator as data_gen
 
 
+@override_settings(ES_ENABLED=False)
 class UtilsTest(TestCase):
 
     def setUp(self):

@@ -1,12 +1,14 @@
 """
 Tests for (most) of the Utils mechanism
 """
+from django.test import override_settings
 from django.test import TestCase
 
 from ozpcenter.recommend import recommend_utils
 from ozpcenter.scripts import sample_data_generator as data_gen
 
 
+@override_settings(ES_ENABLED=False)
 class UtilsTest(TestCase):
 
     def setUp(self):

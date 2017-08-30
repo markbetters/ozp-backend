@@ -1,6 +1,7 @@
 """
 Make sure that Pipe and Pipeline classes work
 """
+from django.test import override_settings
 from django.test import TestCase
 
 from ozpcenter.recommend.graph import Graph
@@ -8,6 +9,7 @@ from ozpcenter.recommend.graph_factory import GraphFactory
 from ozpcenter.scripts import sample_data_generator as data_gen
 
 
+@override_settings(ES_ENABLED=False)
 class GraphQueryTest(TestCase):
 
     def setUp(self):

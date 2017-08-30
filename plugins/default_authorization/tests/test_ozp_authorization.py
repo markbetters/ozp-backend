@@ -4,6 +4,7 @@ Tests for base_authorization
 import datetime
 import pytz
 
+from django.test import override_settings
 from django.conf import settings
 from django.test import TestCase
 
@@ -13,6 +14,7 @@ from plugins.default_authorization.main import PluginMain
 import ozpcenter.model_access as model_access
 
 
+@override_settings(ES_ENABLED=False)
 class OzpAuthorizationTest(TestCase):
 
     def setUp(self):

@@ -5,6 +5,7 @@ TODO: Make below code work
 if not len_pipe.has_next():
     break
 """
+from django.test import override_settings
 from django.test import TestCase
 
 from ozpcenter.scripts import sample_data_generator as data_gen
@@ -14,6 +15,7 @@ from ozpcenter.pipe import pipeline
 from ozpcenter.recommend.graph import Graph
 
 
+@override_settings(ES_ENABLED=False)
 class PipelineTest(TestCase):
 
     def setUp(self):

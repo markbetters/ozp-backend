@@ -1,6 +1,7 @@
 """
 Tests for (most) of the PkiAuthentication mechanism
 """
+from django.test import override_settings
 from django.test import TestCase
 
 from ozpcenter import models
@@ -9,6 +10,7 @@ import ozpcenter.auth.pkiauth as pkiauth
 import ozpcenter.model_access as model_access
 
 
+@override_settings(ES_ENABLED=False)
 class PkiAuthenticationTest(TestCase):
 
     def setUp(self):
