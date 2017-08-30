@@ -649,10 +649,20 @@ class Review(models.Model):
     # TODO: change this back after the database migration
 
     def validate_unique(self, exclude=None):
-        # If review_parent is None
-        if not self.review_parent:
-            if Review.objects.filter(author=self.author, listing=self.listing, review_parent__isnull=True).exists():
-                raise ValidationError("Duplicate Review")
+        queryset = Review.objects.filter(author=self.author, listing=self.listing)
+        self_id = self.pk  # If None: it means it is a new review
+
+        if self_id:
+            queryset = queryset.exclude(id=self_id)
+
+        if self.review_parent is None:
+            queryset = queryset.filter(review_parent__isnull=True)
+        else:
+            queryset = queryset.filter(review_parent=self.review_parent)
+
+        if queryset.exists():
+            raise ValidationError('Can not create duplicate review')
+
         super(Review, self).validate_unique(exclude)
 
     def save(self, *args, **kwargs):

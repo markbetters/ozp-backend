@@ -555,26 +555,13 @@ def create_listing_review(username, listing, rating, text=None, review_parent=No
         }
     """
     author = generic_model_access.get_profile(username)
-    review = models.Review(listing=listing, author=author, rate=rating, text=text)
-    print(review_parent)
-    if review_parent:
-        review.review_parent = review_parent
-
+    review = models.Review(listing=listing, author=author, rate=rating, text=text, review_parent=review_parent)
     review.save()
 
     # update this listing's rating
     _update_rating(username, listing)
 
-    resp = {
-        "rate": rating,
-        "text": text,
-        "author": author.id,
-        "listing": listing.id,
-        "id": review.id
-    }
-
     dispatcher.publish('listing_review_created', listing=listing, profile=author, rating=rating, text=text)
-
     return review
 
 
