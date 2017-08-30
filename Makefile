@@ -2,6 +2,13 @@
 root:
 	# '==Commands=='
 	# 'dev - make new development environment'
+	# --Running--
+	# 'run - run development environment'
+	# 'run_es - run development environment with Elasticsearch'
+	# 'runp - run development environment in multithreaded mode'
+	# 'runp_es - run development environment with Elasticsearch  in multithreaded mode'
+	# 'install_git_hooks - Install Git Hooks to run code checker'
+	# 'shell - Enter into interactive shell'
 
 clean:
 	rm -f db.sqlite3
@@ -39,7 +46,13 @@ run_psql_es:
 	MAIN_DATABASE=psql ES_ENABLED=True python manage.py runserver localhost:8001
 
 runp:
-	gunicorn --workers=`nproc` ozp.wsgi -b localhost:8000 --access-logfile logs.txt --error-logfile logs.txt -p gunicorn.pid
+	gunicorn --workers=`nproc` ozp.wsgi -b localhost:8001 --access-logfile logs.txt --error-logfile logs.txt -p gunicorn.pid
+
+runp_es:
+	ES_ENABLED=True gunicorn --workers=`nproc` ozp.wsgi -b localhost:8001 --access-logfile logs.txt --error-logfile logs.txt -p gunicorn.pid
+
+runp_psql_es:
+	MAIN_DATABASE=psql ES_ENABLED=True gunicorn --workers=`nproc` ozp.wsgi -b localhost:8001 --access-logfile logs.txt --error-logfile logs.txt -p gunicorn.pid
 
 codecheck:
 	flake8 ozp ozpcenter ozpiwc plugins plugins_util --ignore=E501,E123,E128,E121,E124,E711,E402 --show-source

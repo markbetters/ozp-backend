@@ -1,0 +1,33 @@
+categories:
+- description: Accessories Description
+  title: Accessories
+- description: Things made of paper
+  title: Books and Reference
+- description: For making money
+  title: Business
+- description: Moving info between people and things
+  title: Communication
+- description: Educational in nature
+  title: Education
+- description: For fun
+  title: Entertainment
+- description: For managing money
+  title: Finance
+- description: Be healthy, be fit
+  title: Health and Fitness
+- description: Videos and media stuff
+  title: Media and Video
+- description: Using your ears
+  title: Music and Audio
+- description: What's happening where
+  title: News
+- description: Do more in less time
+  title: Productivity
+- description: For spending your money
+  title: Shopping
+- description: Score more points than your opponent
+  title: Sports
+- description: Tools and Utilities
+  title: Tools
+- description: Get the temperature
+  title: Weather

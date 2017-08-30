@@ -6,6 +6,7 @@ examples for how to test various things
 """
 import json
 
+from django.test import override_settings
 from django.test import TestCase
 from django.db.utils import IntegrityError
 from django.db import transaction
@@ -14,6 +15,7 @@ from ozpcenter import models
 import ozpcenter.tests.factories as f
 
 
+@override_settings(ES_ENABLED=False)
 class ProfileTest(TestCase):
 
     def setUp(self):

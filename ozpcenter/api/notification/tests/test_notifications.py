@@ -1,6 +1,7 @@
 """
 Notification tests
 """
+from django.test import override_settings
 from django.test import TestCase
 
 # from ozpcenter import models
@@ -11,6 +12,7 @@ from ozpcenter.scripts import sample_data_generator as data_gen
 # TODO: Add More Tests
 
 
+@override_settings(ES_ENABLED=False)
 class NotificationTest(TestCase):
 
     def setUp(self):

@@ -1,0 +1,203 @@
+contact_types:
+- Civilian
+- Government
+- Military
+contacts:
+- contact_type: Civilian
+  email: a@b.com
+  name: A B
+  organization: null
+  secure_phone: 741-774-7414
+  unsecure_phone: null
+- contact_type: Civilian
+  email: cersei@gmail.com
+  name: Cersei
+  organization: Default
+  secure_phone: 741-774-7414
+  unsecure_phone: 965-8569
+- contact_type: Civilian
+  email: gsmith@science.com
+  name: Dr. George Smith
+  organization: Organization for animal heath
+  secure_phone: 741-774-7414
+  unsecure_phone: 666-555-5555
+- contact_type: Civilian
+  email: riderhard@mine.net
+  name: HOF
+  organization: HOG2
+  secure_phone: 741-774-7414
+  unsecure_phone: 666-7774
+- contact_type: Civilian
+  email: smokinaces@mine.net
+  name: Joe Dirt
+  organization: Smokin Aces
+  secure_phone: 741-774-7414
+  unsecure_phone: 555-1212
+- contact_type: Civilian
+  email: johnsnow@gmail.com
+  name: John Snow
+  organization: Default
+  secure_phone: 741-774-7414
+  unsecure_phone: 854-8569
+- contact_type: Civilian
+  email: silentbob@clerks.com
+  name: Kevin Smith
+  organization: Default
+  secure_phone: 741-774-7414
+  unsecure_phone: 784-1548
+- contact_type: Civilian
+  email: osha@stark.com
+  name: Osha
+  organization: House Stark
+  secure_phone: 741-774-7414
+  unsecure_phone: 321-123-7894
+- contact_type: Civilian
+  email: r@s.com
+  name: P Scale
+  organization: null
+  secure_phone: 741-774-7414
+  unsecure_phone: 555-555-5555
+- contact_type: Civilian
+  email: scott@stp.com
+  name: Scott
+  organization: Default
+  secure_phone: 741-774-7414
+  unsecure_phone: 784-1548
+- contact_type: Civilian
+  email: Tyler@fc.com
+  name: Tyler
+  organization: null
+  secure_phone: 741-774-7414
+  unsecure_phone: null
+- contact_type: Civilian
+  email: w@s.com
+  name: W Smith
+  organization: Default
+  secure_phone: 741-774-7414
+  unsecure_phone: 555-555-5555
+- contact_type: Civilian
+  email: willieg@mustride.net
+  name: Willie G
+  organization: null
+  secure_phone: 741-774-7414
+  unsecure_phone: 202-5555
+- contact_type: Civilian
+  email: no@gmail.com
+  name: someguy
+  organization: someplace
+  secure_phone: 741-774-7414
+  unsecure_phone: 784-1548
+- contact_type: Government
+  email: chris@sound.com
+  name: Chris
+  organization: Default
+  secure_phone: 741-774-7414
+  unsecure_phone: 123-456-7890
+- contact_type: Government
+  email: riderdie@mustride.net
+  name: Frank Beans
+  organization: Ride r' Die
+  secure_phone: 741-774-7414
+  unsecure_phone: 555-1212
+- contact_type: Government
+  email: rbaratheon@baratheon.com
+  name: Robert Baratheon
+  organization: House Baratheon
+  secure_phone: 741-774-7414
+  unsecure_phone: 123-456-7890
+- contact_type: Government
+  email: sansa@gmail.com
+  name: Sansa
+  organization: Default
+  secure_phone: 741-774-7414
+  unsecure_phone: 652-5236
+- contact_type: Government
+  email: scott@vr.com
+  name: Scott
+  organization: Default
+  secure_phone: 741-774-7414
+  unsecure_phone: 784-1548
+- contact_type: Government
+  email: goodtogo@my.net
+  name: Slippery Wen Wet
+  organization: HOG
+  secure_phone: 741-774-7414
+  unsecure_phone: 666-1111
+- contact_type: Government
+  email: t@t.com
+  name: Tammy
+  organization: Default
+  secure_phone: 741-774-7414
+  unsecure_phone: 555-555-5555
+- contact_type: Government
+  email: tyrion@gmail.com
+  name: Tyrion Lannister
+  organization: Default
+  secure_phone: 741-774-7414
+  unsecure_phone: 632-5236
+- contact_type: Government
+  email: willie.g@hog.net
+  name: willie g
+  organization: HOG
+  secure_phone: 741-774-7414
+  unsecure_phone: 555-1212
+- contact_type: Military
+  email: arya@gmail.com
+  name: Arya
+  organization: Default
+  secure_phone: 741-774-7414
+  unsecure_phone: 856-9632
+- contact_type: Military
+  email: bowsers@castle.com
+  name: Bowser
+  organization: null
+  secure_phone: 741-774-7414
+  unsecure_phone: null
+- contact_type: Military
+  email: brienne@stark.com
+  name: Brienne Tarth
+  organization: House Stark
+  secure_phone: 741-774-7414
+  unsecure_phone: 222-324-3846
+- contact_type: Military
+  email: chester@lp.com
+  name: Chester
+  organization: Default
+  secure_phone: 741-774-7414
+  unsecure_phone: 784-1548
+- contact_type: Military
+  email: d@d.com
+  name: Donald Duck
+  organization: null
+  secure_phone: 741-774-7414
+  unsecure_phone: 555-555-5555
+- contact_type: Military
+  email: jamie@gmail.com
+  name: Jamie Lannister
+  organization: Default
+  secure_phone: 741-774-7414
+  unsecure_phone: 523-5547
+- contact_type: Military
+  email: m@m.com
+  name: M Smith
+  organization: Default
+  secure_phone: 741-774-7414
+  unsecure_phone: 555-555-5555
+- contact_type: Military
+  email: mario@plumbersinc.com
+  name: Mario
+  organization: null
+  secure_phone: 741-774-7414
+  unsecure_phone: null
+- contact_type: Military
+  email: mustride@aka.net
+  name: Must Ride
+  organization: HOG
+  secure_phone: 741-774-7414
+  unsecure_phone: 555-6666
+- contact_type: Military
+  email: HOG@miniture.net
+  name: Willie G
+  organization: HOG
+  secure_phone: 741-774-7414
+  unsecure_phone: 555-1212

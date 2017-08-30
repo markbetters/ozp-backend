@@ -20,6 +20,7 @@ from django.conf import settings
 from django.db import transaction
 import yaml
 
+
 from ozpcenter import models
 from ozpcenter.api.notification import model_access as notification_model_access
 from ozpcenter.recommend.recommend import RecommenderDirectory
@@ -37,42 +38,183 @@ def time_ms():
     return time.time() * 1000.0
 
 
-def create_listing_review_batch(*input_list):
+def create_listing_review_batch(listing, review_list):
     """
     Create Listing
 
-    example:
-        [
-            listing,
-            [profile_ref['charrington'], 5, "This app is great - well designed and easy to use"],
-            [profile_ref['tparsons'], 3, "This app is great - well designed and easy to use"],
-            [profile_ref['syme'], 1, "This app is great - well designed and easy to use"]
-        ]
-    """
-    current_listing = input_list[0]
+    Args:
+        listing
+        review_list
+            [{
+              "text": "This app is great - well designed and easy to use",
+              "author": "charrington",
+              "rate": 5
+            },..
+            ]
 
-    for input_set in input_list[1:]:
-        profile_obj = input_set[0]
-        current_rating = input_set[1]
-        current_text = input_set[2]
+    """
+    current_listing = listing
+
+    for review_entry in review_list:
+        profile_obj = models.Profile.objects.get(user__username=review_entry['author'])
+        current_rating = review_entry['rate']
+        current_text = review_entry['text']
         listing_model_access.create_listing_review(profile_obj.user.username, current_listing, current_rating, text=current_text)
 
 
-def create_library_entries(entries):
+def create_library_entries(library_entries):
     """
     Create Bookmarks for users
-    """
-    for current_entry in entries:
-        current_profile_string = current_entry[0]
-        current_profile = models.Profile.objects.filter(user__username=current_profile_string).first()
-        current_unique_name = current_entry[1]
-        current_folder_name = current_entry[2]
 
+    # library_entries = [{'folder': None, 'listing_id': 8, 'owner': 'wsmith', 'position': 0},
+    #    {'folder': None, 'listing_id': 5, 'owner': 'hodor', 'position': 0},...]
+    """
+    print('Creating Library Entries...')
+    for current_entry in library_entries:
+        current_profile = models.Profile.objects.filter(user__username=current_entry['owner']).first()
+        current_listing = models.Listing.objects.get(id=current_entry['listing_id'])
         library_entry = models.ApplicationLibraryEntry(
             owner=current_profile,
-            listing=models.Listing.objects.get(unique_name=current_unique_name),
-            folder=current_folder_name)
+            listing=current_listing,
+            folder=current_entry['folder'],
+            position=current_entry['position'])
         library_entry.save()
+        print('--[{}] creating bookmark for listing [{}]'.format(current_profile.user.username, current_listing.title))
+    print('Finished Library Entries...')
+
+
+def create_listing(listing_builder_dict):
+    """
+    Create Listing Helper Function
+    """
+    listing_data = listing_builder_dict['listing']
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    #                           Icons
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    small_icon = models.Image.create_image(
+        Image.open(TEST_IMG_PATH + listing_data['small_icon']['filename']),
+        file_extension=listing_data['small_icon']['filename'].split('.')[-1],
+        security_marking=listing_data['small_icon']['security_marking'],
+        image_type=models.ImageType.objects.get(name='small_icon').name)
+
+    large_icon = models.Image.create_image(
+        Image.open(TEST_IMG_PATH + listing_data['large_icon']['filename']),
+        file_extension=listing_data['large_icon']['filename'].split('.')[-1],
+        security_marking=listing_data['large_icon']['security_marking'],
+        image_type=models.ImageType.objects.get(name='large_icon').name)
+
+    banner_icon = models.Image.create_image(
+        Image.open(TEST_IMG_PATH + listing_data['banner_icon']['filename']),
+        file_extension=listing_data['banner_icon']['filename'].split('.')[-1],
+        security_marking=listing_data['banner_icon']['security_marking'],
+        image_type=models.ImageType.objects.get(name='banner_icon').name)
+
+    large_banner_icon = models.Image.create_image(
+        Image.open(TEST_IMG_PATH + listing_data['large_banner_icon']['filename']),
+        file_extension=listing_data['large_banner_icon']['filename'].split('.')[-1],
+        security_marking=listing_data['large_banner_icon']['security_marking'],
+        image_type=models.ImageType.objects.get(name='large_banner_icon').name)
+
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    #                           Listing
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    listing = models.Listing(
+        title=listing_data['title'],
+        agency=models.Agency.objects.get(short_name=listing_data['agency']),
+        listing_type=models.ListingType.objects.get(title=listing_data['listing_type']),
+        description=listing_data['description'],
+        launch_url=listing_data['launch_url'].format_map({'DEMO_APP_ROOT': DEMO_APP_ROOT}),
+        version_name=listing_data['version_name'],
+        unique_name=listing_data['unique_name'],
+        small_icon=small_icon,
+        large_icon=large_icon,
+        banner_icon=banner_icon,
+        large_banner_icon=large_banner_icon,
+        what_is_new=listing_data['what_is_new'],
+        description_short=listing_data['description_short'],
+        requirements=listing_data['requirements'],
+        is_enabled=listing_data['is_enabled'],
+        is_private=listing_data['is_private'],
+        is_featured=listing_data['is_featured'],
+        iframe_compatible=listing_data['iframe_compatible'],
+        security_marking=listing_data['security_marking']
+    )
+    listing.save()
+
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    #                           Contacts
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    for current_contact in listing_data['contacts']:
+        listing.contacts.add(models.Contact.objects.get(email=current_contact))
+
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    #                           Owners
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    for current_owner in listing_data['owners']:
+        listing.owners.add(models.Profile.objects.get(user__username=current_owner))
+
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    #                           Categories
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    for current_category in listing_data['categories']:
+        listing.categories.add(models.Category.objects.get(title=current_category))
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    #                           Tags
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    for current_tag in listing_data['tags']:
+        current_tag_obj, created = models.Tag.objects.get_or_create(name=current_tag)
+        listing.tags.add(current_tag_obj)
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    #                           Screenshots
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    for current_screenshot_entry in listing_data['screenshots']:
+        small_image = models.Image.create_image(
+            Image.open(TEST_IMG_PATH + current_screenshot_entry['small_image']['filename']),
+            file_extension=current_screenshot_entry['small_image']['filename'].split('.')[-1],
+            security_marking=current_screenshot_entry['small_image']['security_marking'],
+            image_type=models.ImageType.objects.get(name='small_screenshot').name)
+
+        large_image = models.Image.create_image(
+            Image.open(TEST_IMG_PATH + current_screenshot_entry['large_image']['filename']),
+            file_extension=current_screenshot_entry['large_image']['filename'].split('.')[-1],
+            security_marking=current_screenshot_entry['large_image']['security_marking'],
+            image_type=models.ImageType.objects.get(name='large_screenshot').name)
+
+        screenshot = models.Screenshot(small_image=small_image,
+                                       large_image=large_image,
+                                       listing=listing,
+                                       description=current_screenshot_entry['description'],
+                                       order=current_screenshot_entry['order'])
+        screenshot.save()
+
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    #                           Document URLs
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    for current_doc_url_entry in listing_data['doc_urls']:
+        current_doc_url_obj = models.DocUrl(name=current_doc_url_entry['name'], url=current_doc_url_entry['url'],
+            listing=listing)
+        current_doc_url_obj.save()
+
+    # listing_activity
+    for listing_activity_entry in listing_builder_dict['listing_activity']:
+        listing_activity_action = listing_activity_entry['action']
+        listing_activity_author = models.Profile.objects.get(user__username=listing_activity_entry['author'])
+
+        if listing_activity_action == 'CREATED':
+            listing_model_access.create_listing(listing_activity_author, listing)
+        elif listing_activity_action == 'SUBMITTED':
+            listing_model_access.submit_listing(listing_activity_author, listing)
+        elif listing_activity_action == 'APPROVED_ORG':
+            listing_model_access.approve_listing_by_org_steward(listing_activity_author, listing)
+        elif listing_activity_action == 'APPROVED':
+            listing_model_access.approve_listing(listing_activity_author, listing)
+
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    #                           Reviews
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    # listing_review_batch
+    create_listing_review_batch(listing, listing_builder_dict['listing_review_batch'])
+    return listing
 
 
 def run():
@@ -106,45 +248,43 @@ def run():
     ############################################################################
     #                           Categories
     ############################################################################
-    category_start_time = time_ms()
+    with transaction.atomic():
+        categories_data = None
+        with open(os.path.join(TEST_DATA_PATH, 'categories.yaml'), 'r') as stream:
+            try:
+                categories_data = yaml.load(stream)  # TODO: Use Stream API
+            except yaml.YAMLError as exc:
+                print(exc)
 
-    categories_bulk = models.Category.objects.bulk_create([
-        models.Category(title="Books and Reference", description="Things made of paper"),
-        models.Category(title="Business", description="For making money"),
-        models.Category(title="Communication", description="Moving info between people and things"),
-        models.Category(title="Education", description="Educational in nature"),
-        models.Category(title="Entertainment", description="For fun"),
-        models.Category(title="Finance", description="For managing money"),
-        models.Category(title="Health and Fitness", description="Be healthy, be fit"),
-        models.Category(title="Media and Video", description="Videos and media stuff"),
-        models.Category(title="Music and Audio", description="Using your ears"),
-        models.Category(title="News", description="What's happening where"),
-        models.Category(title="Productivity", description="Do more in less time"),
-        models.Category(title="Shopping", description="For spending your money"),
-        models.Category(title="Sports", description="Score more points than your opponent"),
-        models.Category(title="Tools", description="Tools and Utilities"),
-        models.Category(title="Weather", description="Get the temperature")
-        ])
-
-    categories_ref = {}
-
-    for category in categories_bulk:
-        categories_ref[category.title.lower().replace(' and ', ' ').replace(' ', '_')] = models.Category.objects.get(title=category.title)
-
-    category_end_time = time_ms()
+        for current_category in categories_data['categories']:
+            current_category_obj = models.Category(title=current_category['title'], description=current_category['description'])
+            current_category_obj.save()
 
     ############################################################################
-    #                           Contact Types
+    #                           Contact Types and Contacts
     ############################################################################
     with transaction.atomic():
-        Civilian = models.ContactType(name='Civilian')
-        Civilian.save()
+        contact_data = None
+        with open(os.path.join(TEST_DATA_PATH, 'contacts.yaml'), 'r') as stream:
+            try:
+                contact_data = yaml.load(stream)  # TODO: Use Stream API
+            except yaml.YAMLError as exc:
+                print(exc)
 
-        government = models.ContactType(name='Government')
-        government.save()
+        for contact_type in contact_data['contact_types']:
+            current_contact_type_obj = models.ContactType(name=contact_type)
+            current_contact_type_obj.save()
 
-        military = models.ContactType(name='Military')
-        military.save()
+        for current_contact in contact_data['contacts']:
+            if not models.Contact.objects.filter(email=current_contact['email']).exists():
+                current_contact_obj = models.Contact(name=current_contact['name'],
+                                                     organization=current_contact['organization'],
+                                                     contact_type=models.ContactType.objects.get(
+                    name=current_contact['contact_type']),
+                    email=current_contact['email'],
+                    unsecure_phone=current_contact['unsecure_phone'],
+                    secure_phone=current_contact['secure_phone'])
+                current_contact_obj.save()
 
     ############################################################################
     #                           Listing Types
@@ -343,873 +483,47 @@ def run():
                                                            'System will be functioning in a degredaded state between 2100Z-0430Z on F/G')
 
     # -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
-    ############################################################################
-    #                           Contacts
-    ############################################################################
-    with transaction.atomic():
-        osha = models.Contact(name='Osha', organization='House Stark',
-            contact_type=models.ContactType.objects.get(name='Civilian'),
-            email='osha@stark.com', unsecure_phone='321-123-7894')
-        osha.save()
-
-        rob_baratheon = models.Contact(name='Robert Baratheon',
-            organization='House Baratheon',
-            contact_type=models.ContactType.objects.get(name='Government'),
-            email='rbaratheon@baratheon.com', unsecure_phone='123-456-7890')
-        rob_baratheon.save()
-
-        brienne = models.Contact(name='Brienne Tarth', organization='House Stark',
-            contact_type=models.ContactType.objects.get(name='Military'),
-            email='brienne@stark.com', unsecure_phone='222-324-3846')
-        brienne.save()
-
-    # -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
     # ===========================================================================
     #                           Listings
+    #                           Listings from File
     # ===========================================================================
+    with transaction.atomic():  # Maybe too large of a transaction
+        listings_data = None
+        with open(os.path.join(TEST_DATA_PATH, 'listings.yaml'), 'r') as stream:
+            try:
+                listings_data = yaml.load(stream)
+            except yaml.YAMLError as exc:
+                print(exc)
+
+        library_entries = []
+        for current_listing_data in listings_data:
+            listing_obj = create_listing(current_listing_data)
+
+            listing_id = listing_obj.id
+            listing_library_entries = current_listing_data['library_entries']
+
+            if listing_library_entries:
+
+                for listing_library_entry in listing_library_entries:
+                    listing_library_entry['listing_id'] = listing_id
+                    library_entries.append(listing_library_entry)
 
     ############################################################################
-    #                           Air Mail
+    #                           Library (bookmark listings)
     ############################################################################
-    # Looping for more sample results
-    print('== Creating Air Mail Listings')
     with transaction.atomic():
-        for i in range(0, 10):
-            postfix_space = "" if (i == 0) else " " + str(i)
-            postfix_dot = "" if (i == 0) else "." + str(i)
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            #                           Icons
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            img = Image.open(TEST_IMG_PATH + 'AirMail16.png')
-            small_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=small_icon_type.name)
-            img = Image.open(TEST_IMG_PATH + 'AirMail32.png')
-            large_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=large_icon_type.name)
-            img = Image.open(TEST_IMG_PATH + 'AirMail.png')
-            banner_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=banner_icon_type.name)
-            img = Image.open(TEST_IMG_PATH + 'AirMailFeatured.png')
-            large_banner_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=large_banner_icon_type.name)
+        create_library_entries(library_entries)
 
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            #                           Listing
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            listing = models.Listing(
-                title='Air Mail{0!s}'.format(postfix_space),
-                agency=minitrue,
-                listing_type=web_app,
-                description='Sends mail via air',
-                launch_url='{0!s}/demo_apps/centerSampleListings/airMail/index.html'.format(DEMO_APP_ROOT),
-                version_name='1.0.0',
-                unique_name='ozp.test.air_mail{0!s}'.format(postfix_dot),
-                small_icon=small_icon,
-                large_icon=large_icon,
-                banner_icon=banner_icon,
-                large_banner_icon=large_banner_icon,
-                what_is_new='Nothing really new here',
-                description_short='Sends airmail',
-                requirements='None',
-                is_enabled=True,
-                is_featured=True,
-                iframe_compatible=False,
-                security_marking=unclass
-            )
-            listing.save()
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            #                           Contacts
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            listing.contacts.add(osha)
-            listing.contacts.add(brienne)
+        for current_id in [entry['listing_id'] for entry in library_entries]:
+            current_listing = models.Listing.objects.get(id=current_id)
+            current_listing_owner = current_listing.owners.first()
 
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            #                           Owners
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            listing.owners.add(profile_ref['wsmith'])
+            print('={} Creating Notification for {}='.format(current_listing_owner.user.username, current_listing.title))
 
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            #                           Categories
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            listing.categories.add(categories_ref['communication'])
-            listing.categories.add(categories_ref['productivity'])
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            #                           Tags
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-            current_tag = models.Tag(name='tag_{0}'.format(i))
-            current_tag.save()
-
-            listing.tags.add(demo)
-            listing.tags.add(example)
-            listing.tags.add(current_tag)
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            #                           Screenshots
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            img = Image.open(TEST_IMG_PATH + 'screenshot_small.png')
-            small_img = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=small_screenshot_type.name)
-            img = Image.open(TEST_IMG_PATH + 'screenshot_large.png')
-            large_img = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=large_screenshot_type.name)
-            screenshot = models.Screenshot(small_image=small_img,
-                large_image=large_img,
-                listing=listing)
-            screenshot.save()
-
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            #                           Document URLs
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            wiki = models.DocUrl(name='wiki', url='http://www.google.com/wiki',
-                listing=listing)
-            wiki.save()
-            guide = models.DocUrl(name='guide', url='http://www.google.com/guide',
-                listing=listing)
-            guide.save()
-
-            listing_model_access.create_listing(profile_ref['wsmith'], listing)
-            listing_model_access.submit_listing(profile_ref['wsmith'], listing)
-            listing_model_access.approve_listing_by_org_steward(profile_ref['wsmith'], listing)
-            listing_model_access.approve_listing(profile_ref['wsmith'], listing)
-
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            #                           Reviews
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            create_listing_review_batch(listing,
-                [profile_ref['charrington'], 5, "This app is great - well designed and easy to use"],
-                [profile_ref['tparsons'], 3, "Air mail is ok - does what it says and no more"],
-                [profile_ref['syme'], 1, "Air mail crashes all the time - it doesn't even support IE 6!"]
-            )
-
-    ############################################################################
-    #                           Bread Basket
-    ############################################################################
-    print('== Creating Bread Basket Listings')
-    with transaction.atomic():
-        for i in range(0, 10):
-            postfix_space = "" if (i == 0) else " " + str(i)
-            postfix_dot = "" if (i == 0) else "." + str(i)
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            #                           Icons
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            img = Image.open(TEST_IMG_PATH + 'BreadBasket16.png')
-            small_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=small_icon_type.name)
-            img = Image.open(TEST_IMG_PATH + 'BreadBasket32.png')
-            large_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=large_icon_type.name)
-            img = Image.open(TEST_IMG_PATH + 'BreadBasket.png')
-            banner_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=banner_icon_type.name)
-            img = Image.open(TEST_IMG_PATH + 'BreadBasketFeatured.png')
-            large_banner_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=large_banner_icon_type.name)
-
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            #                           Listing
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            listing = models.Listing(
-                title='Bread Basket{0!s}'.format(postfix_space),
-                agency=minitrue,
-                listing_type=web_app,
-                description='Carries delicious bread',
-                launch_url='{0!s}/demo_apps/centerSampleListings/breadBasket/index.html'.format(DEMO_APP_ROOT),
-                version_name='1.0.0',
-                unique_name='ozp.test.bread_basket{0!s}'.format(postfix_dot),
-                small_icon=small_icon,
-                large_icon=large_icon,
-                banner_icon=banner_icon,
-                large_banner_icon=large_banner_icon,
-                what_is_new='Nothing really new here',
-                description_short='Carries bread',
-                requirements='None',
-                is_enabled=True,
-                is_featured=True,
-                iframe_compatible=False,
-                is_private=True,
-                security_marking=unclass
-            )
-            listing.save()
-
-            listing.contacts.add(osha)
-            listing.owners.add(profile_ref['julia'])
-            listing.categories.add(categories_ref['health_fitness'])
-            listing.categories.add(categories_ref['shopping'])
-
-            listing.tags.add(demo)
-            listing.tags.add(example)
-
-            listing_model_access.create_listing(profile_ref['julia'], listing)
-            listing_model_access.submit_listing(profile_ref['julia'], listing)
-            listing_model_access.approve_listing_by_org_steward(profile_ref['wsmith'], listing)
-            listing_model_access.approve_listing(profile_ref['wsmith'], listing)
-
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            #                           Reviews
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            create_listing_review_batch(listing,
-                [profile_ref['jones'], 2, "This bread is stale!"],
-                [profile_ref['julia'], 5, "Yum!"]
-            )
-
-    ############################################################################
-    #                           Chart Course
-    ############################################################################
-    print('== Creating Chart Course Listings')
-    with transaction.atomic():
-        for i in range(0, 10):
-            postfix_space = "" if (i == 0) else " " + str(i)
-            postfix_dot = "" if (i == 0) else "." + str(i)
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            #                           Icons
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            # ChartCourse16
-            img = Image.open(TEST_IMG_PATH + 'ChartCourse16.png')
-            small_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=small_icon_type.name)
-
-            # ChartCourse32
-            img = Image.open(TEST_IMG_PATH + 'ChartCourse32.png')
-            large_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=large_icon_type.name)
-
-            # ChartCourse
-            img = Image.open(TEST_IMG_PATH + 'ChartCourse.png')
-            banner_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=banner_icon_type.name)
-
-            # ChartCourseFeatured
-            img = Image.open(TEST_IMG_PATH + 'ChartCourseFeatured.png')
-            large_banner_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=large_banner_icon_type.name)
-
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            #                           Listing
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            listing = models.Listing(
-                title='Chart Course{0!s}'.format(postfix_space),
-                agency=minitrue,
-                listing_type=web_app,
-                description='Chart your course',
-                launch_url='{0!s}/demo_apps/centerSampleListings/chartCourse/index.html'.format(DEMO_APP_ROOT),
-                version_name='1.0.0',
-                unique_name='ozp.test.chartcourse{0!s}'.format(postfix_dot),
-                small_icon=small_icon,
-                large_icon=large_icon,
-                banner_icon=banner_icon,
-                large_banner_icon=large_banner_icon,
-                what_is_new='Nothing really new here',
-                description_short='Chart your course',
-                requirements='None',
-                is_enabled=True,
-                is_featured=True,
-                iframe_compatible=False,
-                is_private=False,
-                security_marking=unclass
-            )
-            listing.save()
-            listing.contacts.add(rob_baratheon)
-            listing.owners.add(profile_ref['wsmith'])
-            listing.categories.add(categories_ref['tools'])
-            listing.categories.add(categories_ref['education'])
-            listing.tags.add(demo)
-
-            listing_model_access.create_listing(profile_ref['wsmith'], listing)
-            listing_model_access.submit_listing(profile_ref['wsmith'], listing)
-            listing_model_access.approve_listing_by_org_steward(profile_ref['wsmith'], listing)
-            listing_model_access.approve_listing(profile_ref['wsmith'], listing)
-
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            #                           Reviews
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            create_listing_review_batch(listing,
-                [profile_ref['wsmith'], 2, "This Chart is bad"],
-                [profile_ref['bigbrother'], 5, "Good Chart!"]
-            )
-
-    ############################################################################
-    #                           Chatter Box
-    ############################################################################
-    print('== Creating Chatter Box Listings')
-    with transaction.atomic():
-        for i in range(0, 10):
-            postfix_space = "" if (i == 0) else " " + str(i)
-            postfix_dot = "" if (i == 0) else "." + str(i)
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            #                           Icons
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            img = Image.open(TEST_IMG_PATH + 'ChatterBox16.png')
-            small_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=small_icon_type.name)
-            img = Image.open(TEST_IMG_PATH + 'ChatterBox32.png')
-            large_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=large_icon_type.name)
-            img = Image.open(TEST_IMG_PATH + 'ChatterBox.png')
-            banner_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=banner_icon_type.name)
-            img = Image.open(TEST_IMG_PATH + 'ChatterBoxFeatured.png')
-            large_banner_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=large_banner_icon_type.name)
-
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            #                           Listing
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            listing = models.Listing(
-                title='Chatter Box{0!s}'.format(postfix_space),
-                agency=miniluv,
-                listing_type=web_app,
-                description='Chat with people',
-                launch_url='{0!s}/demo_apps/centerSampleListings/chatterBox/index.html'.format(DEMO_APP_ROOT),
-                version_name='1.0.0',
-                unique_name='ozp.test.chatterbox{0!s}'.format(postfix_dot),
-                small_icon=small_icon,
-                large_icon=large_icon,
-                banner_icon=banner_icon,
-                large_banner_icon=large_banner_icon,
-                what_is_new='Nothing really new here',
-                description_short='Chat in a box',
-                requirements='None',
-                is_enabled=True,
-                is_featured=True,
-                iframe_compatible=False,
-                is_private=False,
-                security_marking=unclass
-            )
-            listing.save()
-            listing.contacts.add(rob_baratheon)
-            listing.owners.add(profile_ref['julia'])
-            listing.categories.add(categories_ref['communication'])
-            listing.tags.add(demo)
-
-            listing_model_access.create_listing(profile_ref['julia'], listing)
-            listing_model_access.submit_listing(profile_ref['julia'], listing)
-            listing_model_access.approve_listing_by_org_steward(profile_ref['wsmith'], listing)
-            listing_model_access.approve_listing(profile_ref['wsmith'], listing)
-
-    ############################################################################
-    #                           Clipboard
-    ############################################################################
-    print('== Creating Clipboard Listings')
-    with transaction.atomic():
-        for i in range(0, 10):
-            postfix_space = "" if (i == 0) else " " + str(i)
-            postfix_dot = "" if (i == 0) else "." + str(i)
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            #                           Icons
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            img = Image.open(TEST_IMG_PATH + 'Clipboard16.png')
-            small_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=small_icon_type.name)
-            img = Image.open(TEST_IMG_PATH + 'Clipboard32.png')
-            large_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=large_icon_type.name)
-            img = Image.open(TEST_IMG_PATH + 'Clipboard.png')
-            banner_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=banner_icon_type.name)
-            img = Image.open(TEST_IMG_PATH + 'ClipboardFeatured.png')
-            large_banner_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=large_banner_icon_type.name)
-
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            #                           Listing
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            listing = models.Listing(
-                title='Clipboard{0!s}'.format(postfix_space),
-                agency=minitrue,
-                listing_type=web_app,
-                description='Clip stuff on a board',
-                launch_url='{0!s}/demo_apps/centerSampleListings/clipboard/index.html'.format(DEMO_APP_ROOT),
-                version_name='1.0.0',
-                unique_name='ozp.test.clipboard{0!s}'.format(postfix_dot),
-                small_icon=small_icon,
-                large_icon=large_icon,
-                banner_icon=banner_icon,
-                large_banner_icon=large_banner_icon,
-                what_is_new='Nothing really new here',
-                description_short='Its a clipboard',
-                requirements='None',
-                is_enabled=True,
-                is_featured=True,
-                iframe_compatible=False,
-                is_private=False,
-                security_marking=unclass
-            )
-            listing.save()
-            listing.contacts.add(rob_baratheon)
-            listing.owners.add(profile_ref['wsmith'])
-            listing.categories.add(categories_ref['tools'])
-            listing.categories.add(categories_ref['education'])
-            listing.tags.add(demo)
-
-            listing_model_access.create_listing(profile_ref['wsmith'], listing)
-            listing_model_access.submit_listing(profile_ref['wsmith'], listing)
-            listing_model_access.approve_listing_by_org_steward(profile_ref['wsmith'], listing)
-            listing_model_access.approve_listing(profile_ref['wsmith'], listing)
-
-    ############################################################################
-    #                           FrameIt
-    ############################################################################
-    print('== Creating FrameIt Listings')
-    with transaction.atomic():
-        for i in range(0, 10):
-            postfix_space = "" if (i == 0) else " " + str(i)
-            postfix_dot = "" if (i == 0) else "." + str(i)
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            #                           Icons
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            img = Image.open(TEST_IMG_PATH + 'FrameIt16.png')
-            small_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=small_icon_type.name)
-            img = Image.open(TEST_IMG_PATH + 'FrameIt32.png')
-            large_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=large_icon_type.name)
-            img = Image.open(TEST_IMG_PATH + 'FrameIt.png')
-            banner_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=banner_icon_type.name)
-            img = Image.open(TEST_IMG_PATH + 'FrameItFeatured.png')
-            large_banner_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=large_banner_icon_type.name)
-
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            #                           Listing
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            listing = models.Listing(
-                title='FrameIt{0!s}'.format(postfix_space),
-                agency=minitrue,
-                listing_type=web_app,
-                description='Show things in an iframe',
-                launch_url='{0!s}/demo_apps/frameit/index.html'.format(DEMO_APP_ROOT),
-                version_name='1.0.0',
-                unique_name='ozp.test.frameit{0!s}'.format(postfix_dot),
-                small_icon=small_icon,
-                large_icon=large_icon,
-                banner_icon=banner_icon,
-                large_banner_icon=large_banner_icon,
-                what_is_new='Nothing really new here',
-                description_short='Its an iframe',
-                requirements='None',
-                is_enabled=True,
-                is_featured=True,
-                iframe_compatible=False,
-                is_private=False,
-                security_marking=unclass
-            )
-            listing.save()
-            listing.contacts.add(rob_baratheon)
-            listing.owners.add(profile_ref['wsmith'])
-            listing.categories.add(categories_ref['tools'])
-            listing.categories.add(categories_ref['education'])
-            listing.tags.add(demo)
-
-            listing_model_access.create_listing(profile_ref['wsmith'], listing)
-            listing_model_access.submit_listing(profile_ref['wsmith'], listing)
-            listing_model_access.approve_listing_by_org_steward(profile_ref['wsmith'], listing)
-            listing_model_access.approve_listing(profile_ref['wsmith'], listing)
-
-    ############################################################################
-    #                           Hatch Latch
-    ############################################################################
-    print('== Creating Hatch Latch Listings')
-    with transaction.atomic():
-        for i in range(0, 10):
-            postfix_space = "" if (i == 0) else " " + str(i)
-            postfix_dot = "" if (i == 0) else "." + str(i)
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            #                           Icons
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            img = Image.open(TEST_IMG_PATH + 'HatchLatch16.png')
-            small_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=small_icon_type.name)
-            img = Image.open(TEST_IMG_PATH + 'HatchLatch32.png')
-            large_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=large_icon_type.name)
-            img = Image.open(TEST_IMG_PATH + 'HatchLatch.png')
-            banner_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=banner_icon_type.name)
-            img = Image.open(TEST_IMG_PATH + 'HatchLatchFeatured.png')
-            large_banner_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=large_banner_icon_type.name)
-
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            #                           Listing
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            listing = models.Listing(
-                title='Hatch Latch{0!s}'.format(postfix_space),
-                agency=minitrue,
-                listing_type=web_app,
-                description='Hatch latches',
-                launch_url='{0!s}/demo_apps/centerSampleListings/hatchLatch/index.html'.format(DEMO_APP_ROOT),
-                version_name='1.0.0',
-                unique_name='ozp.test.hatchlatch{0!s}'.format(postfix_dot),
-                small_icon=small_icon,
-                large_icon=large_icon,
-                banner_icon=banner_icon,
-                large_banner_icon=large_banner_icon,
-                what_is_new='Nothing really new here',
-                description_short='Its a hatch latch',
-                requirements='None',
-                is_enabled=True,
-                is_featured=True,
-                iframe_compatible=False,
-                is_private=False,
-                security_marking=unclass
-            )
-            listing.save()
-            listing.contacts.add(rob_baratheon)
-            listing.owners.add(profile_ref['wsmith'])
-            listing.categories.add(categories_ref['tools'])
-            listing.categories.add(categories_ref['education'])
-            listing.categories.add(categories_ref['health_fitness'])
-            listing.tags.add(demo)
-
-            listing_model_access.create_listing(profile_ref['wsmith'], listing)
-            listing_model_access.submit_listing(profile_ref['wsmith'], listing)
-            listing_model_access.approve_listing_by_org_steward(profile_ref['wsmith'], listing)
-            listing_model_access.approve_listing(profile_ref['wsmith'], listing)
-
-            ############################################################################
-            #                           Jot Spot
-            ############################################################################
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            #                           Icons
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            img = Image.open(TEST_IMG_PATH + 'JotSpot16.png')
-            small_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=small_icon_type.name)
-            img = Image.open(TEST_IMG_PATH + 'JotSpot32.png')
-            large_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=large_icon_type.name)
-            img = Image.open(TEST_IMG_PATH + 'JotSpot.png')
-            banner_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=banner_icon_type.name)
-            img = Image.open(TEST_IMG_PATH + 'JotSpotFeatured.png')
-            large_banner_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=large_banner_icon_type.name)
-
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            #                           Listing
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-            listing = models.Listing(
-                title='JotSpot{0!s}'.format(postfix_space),
-                agency=minitrue,
-                listing_type=web_app,
-                description='Jot things down',
-                launch_url='{0!s}/demo_apps/centerSampleListings/jotSpot/index.html'.format(DEMO_APP_ROOT),
-                version_name='1.0.0',
-                unique_name='ozp.test.jotspot{0!s}'.format(postfix_dot),
-                small_icon=small_icon,
-                large_icon=large_icon,
-                banner_icon=banner_icon,
-                large_banner_icon=large_banner_icon,
-                what_is_new='Nothing really new here',
-                description_short='Jot stuff down',
-                requirements='None',
-                is_enabled=True,
-                is_featured=True,
-                iframe_compatible=False,
-                is_private=False,
-                security_marking=unclass
-            )
-            listing.save()
-            listing.contacts.add(rob_baratheon)
-            listing.owners.add(profile_ref['wsmith'])
-            listing.categories.add(categories_ref['tools'])
-            listing.categories.add(categories_ref['education'])
-            listing.tags.add(demo)
-
-            listing_model_access.create_listing(profile_ref['wsmith'], listing)
-            listing_model_access.submit_listing(profile_ref['wsmith'], listing)
-            listing_model_access.approve_listing_by_org_steward(profile_ref['wsmith'], listing)
-            listing_model_access.approve_listing(profile_ref['wsmith'], listing)
-
-            listing_model_access.create_listing_review(profile_ref['charrington'].user.username, listing, 4, text="I really like it")
-
-    ############################################################################
-    #                           Location Lister
-    ############################################################################
-    print('== Creating Location Lister Listings')
-    with transaction.atomic():
-        for i in range(0, 10):
-            postfix_space = "" if (i == 0) else " " + str(i)
-            postfix_dot = "" if (i == 0) else "." + str(i)
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            #                           Icons
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            img = Image.open(TEST_IMG_PATH + 'LocationLister16.png')
-            small_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=small_icon_type.name)
-            img = Image.open(TEST_IMG_PATH + 'LocationLister32.png')
-            large_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=large_icon_type.name)
-            img = Image.open(TEST_IMG_PATH + 'LocationLister.png')
-            banner_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=banner_icon_type.name)
-            img = Image.open(TEST_IMG_PATH + 'LocationListerFeatured.png')
-            large_banner_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=large_banner_icon_type.name)
-
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            #                           Listing
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-            listing = models.Listing(
-                title='LocationLister{0!s}'.format(postfix_space),
-                agency=minitrue,
-                listing_type=web_app,
-                description='List locations',
-                launch_url='{0!s}/demo_apps/locationLister/index.html'.format(DEMO_APP_ROOT),
-                version_name='1.0.0',
-                unique_name='ozp.test.locationlister{0!s}'.format(postfix_dot),
-                small_icon=small_icon,
-                large_icon=large_icon,
-                banner_icon=banner_icon,
-                large_banner_icon=large_banner_icon,
-                what_is_new='Nothing really new here',
-                description_short='List locations',
-                requirements='None',
-                is_enabled=True,
-                is_featured=True,
-                iframe_compatible=False,
-                is_private=False,
-                security_marking=unclass
-            )
-            listing.save()
-            listing.contacts.add(rob_baratheon)
-            listing.owners.add(profile_ref['wsmith'])
-            listing.categories.add(categories_ref['tools'])
-            listing.categories.add(categories_ref['education'])
-            listing.tags.add(demo)
-
-            listing_model_access.create_listing(profile_ref['wsmith'], listing)
-            listing_model_access.submit_listing(profile_ref['wsmith'], listing)
-            listing_model_access.approve_listing_by_org_steward(profile_ref['wsmith'], listing)
-            listing_model_access.approve_listing(profile_ref['wsmith'], listing)
-
-            listing_model_access.create_listing_review(profile_ref['charrington'].user.username, listing, 4, text="I really like it")
-
-    ############################################################################
-    #                           Location Viewer
-    ############################################################################
-    print('== Creating Location Viewer Listings')
-    with transaction.atomic():
-        for i in range(0, 10):
-            postfix_space = "" if (i == 0) else " " + str(i)
-            postfix_dot = "" if (i == 0) else "." + str(i)
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            #                           Icons
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            img = Image.open(TEST_IMG_PATH + 'LocationViewer16.png')
-            small_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=small_icon_type.name)
-            img = Image.open(TEST_IMG_PATH + 'LocationViewer32.png')
-            large_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=large_icon_type.name)
-            img = Image.open(TEST_IMG_PATH + 'LocationViewer.png')
-            banner_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=banner_icon_type.name)
-            img = Image.open(TEST_IMG_PATH + 'LocationViewerFeatured.png')
-            large_banner_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=large_banner_icon_type.name)
-
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            #                           Listing
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            listing = models.Listing(
-                title='LocationViewer{0!s}'.format(postfix_space),
-                agency=minitrue,
-                listing_type=web_app,
-                description='View locations',
-                launch_url='{0!s}/demo_apps/locationViewer/index.html'.format(DEMO_APP_ROOT),
-                version_name='1.0.0',
-                unique_name='ozp.test.locationviewer{0!s}'.format(postfix_dot),
-                small_icon=small_icon,
-                large_icon=large_icon,
-                banner_icon=banner_icon,
-                large_banner_icon=large_banner_icon,
-                what_is_new='Nothing really new here',
-                description_short='View locations',
-                requirements='None',
-                is_enabled=True,
-                is_featured=True,
-                iframe_compatible=False,
-                is_private=False,
-                security_marking=unclass
-            )
-            listing.save()
-            listing.contacts.add(rob_baratheon)
-            listing.owners.add(profile_ref['wsmith'])
-            listing.categories.add(categories_ref['tools'])
-            listing.categories.add(categories_ref['education'])
-            listing.tags.add(demo)
-
-            listing_model_access.create_listing(profile_ref['wsmith'], listing)
-            listing_model_access.submit_listing(profile_ref['wsmith'], listing)
-            listing_model_access.approve_listing_by_org_steward(profile_ref['wsmith'], listing)
-            listing_model_access.approve_listing(profile_ref['wsmith'], listing)
-
-    ############################################################################
-    #                           Location Analyzer
-    ############################################################################
-    print('== Creating Location Analyzer Listings')
-    with transaction.atomic():
-        for i in range(0, 10):
-            postfix_space = "" if (i == 0) else " " + str(i)
-            postfix_dot = "" if (i == 0) else "." + str(i)
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            #                           Icons
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            img = Image.open(TEST_IMG_PATH + 'LocationAnalyzer16.png')
-            small_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=small_icon_type.name)
-            img = Image.open(TEST_IMG_PATH + 'LocationAnalyzer32.png')
-            large_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=large_icon_type.name)
-            img = Image.open(TEST_IMG_PATH + 'LocationAnalyzer.png')
-            banner_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=banner_icon_type.name)
-            img = Image.open(TEST_IMG_PATH + 'LocationAnalyzerFeatured.png')
-            large_banner_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=large_banner_icon_type.name)
-
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            #                           Listing
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            listing = models.Listing(
-                title='LocationAnalyzer{0!s}'.format(postfix_space),
-                agency=minitrue,
-                listing_type=web_app,
-                description='Analyze locations',
-                launch_url='{0!s}/demo_apps/locationAnalyzer/index.html'.format(DEMO_APP_ROOT),
-                version_name='1.0.0',
-                unique_name='ozp.test.locationanalyzer{0!s}'.format(postfix_dot),
-                small_icon=small_icon,
-                large_icon=large_icon,
-                banner_icon=banner_icon,
-                large_banner_icon=large_banner_icon,
-                what_is_new='Nothing really new here',
-                description_short='Analyze locations',
-                requirements='None',
-                is_enabled=True,
-                is_featured=True,
-                iframe_compatible=False,
-                is_private=False,
-                security_marking=unclass
-            )
-            listing.save()
-            listing.contacts.add(rob_baratheon)
-            listing.owners.add(profile_ref['wsmith'])
-            listing.categories.add(categories_ref['tools'])
-            listing.categories.add(categories_ref['education'])
-            listing.tags.add(demo)
-
-            listing_model_access.create_listing(profile_ref['wsmith'], listing)
-            listing_model_access.submit_listing(profile_ref['wsmith'], listing)
-            listing_model_access.approve_listing_by_org_steward(profile_ref['wsmith'], listing)
-            listing_model_access.approve_listing(profile_ref['wsmith'], listing)
-
-    ############################################################################
-    #                           Skybox
-    ############################################################################
-    #   Looping for more sample listings
-    print('== Creating Skybox Listings')
-    with transaction.atomic():
-        for i in range(0, 10):
-            postfix_space = "" if (i == 0) else " " + str(i)
-            postfix_dot = "" if (i == 0) else "." + str(i)
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            #                           Icons
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            img = Image.open(TEST_IMG_PATH + 'Skybox16.png')
-            small_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=small_icon_type.name)
-            img = Image.open(TEST_IMG_PATH + 'Skybox32.png')
-            large_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=large_icon_type.name)
-            img = Image.open(TEST_IMG_PATH + 'Skybox.png')
-            banner_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=banner_icon_type.name)
-            img = Image.open(TEST_IMG_PATH + 'SkyboxFeatured.png')
-            large_banner_icon = models.Image.create_image(img, file_extension='png',
-                security_marking=unclass, image_type=large_banner_icon_type.name)
-
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            #                           Listing
-            # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            listing = models.Listing(
-                title='Skybox{0!s}'.format(postfix_space),
-                agency=miniluv,
-                listing_type=web_app,
-                description='Sky Overlord',
-                launch_url='{0!s}/demo_apps/Skybox/index.html'.format(DEMO_APP_ROOT),
-                version_name='1.0.0',
-                unique_name='ozp.test.skybox{0!s}'.format(postfix_dot),
-                small_icon=small_icon,
-                large_icon=large_icon,
-                banner_icon=banner_icon,
-                large_banner_icon=large_banner_icon,
-                what_is_new="It's a box in the sky",
-                description_short='Sky Overlord',
-                requirements='None',
-                is_enabled=True,
-                is_featured=True,
-                iframe_compatible=False,
-                is_private=False,
-                security_marking=unclass
-            )
-            listing.save()
-            listing.contacts.add(rob_baratheon)
-
-            listing.owners.add(profile_ref['pmurt'])
-            listing.owners.add(profile_ref['david'])
-
-            listing.categories.add(categories_ref['tools'])
-            listing.categories.add(categories_ref['education'])
-
-            listing.tags.add(demo)
-
-            listing_model_access.create_listing(profile_ref['wsmith'], listing)
-            listing_model_access.submit_listing(profile_ref['wsmith'], listing)
-            listing_model_access.approve_listing_by_org_steward(profile_ref['wsmith'], listing)
-            listing_model_access.approve_listing(profile_ref['wsmith'], listing)
-
-    ############################################################################
-    #                           Library
-    ############################################################################
-    # bookmark listings
-    # [[entry.owner.user.username , entry.listing.unique_name, entry.folder] for entry in ApplicationLibraryEntry.objects.all()]
-
-    library_entries = [
-        # wsmith
-        ['wsmith', 'ozp.test.bread_basket', None],
-        ['wsmith', 'ozp.test.air_mail', None],
-        ['wsmith', 'ozp.test.skybox.1', None],
-        ['wsmith', 'ozp.test.skybox.2', None],
-        ['wsmith', 'ozp.test.skybox.3', None],
-
-        # Hodor
-        ['hodor', 'ozp.test.jotspot', None],
-        ['hodor', 'ozp.test.locationlister', None],
-        ['hodor', 'ozp.test.chartcourse', None],
-        ['hodor', 'ozp.test.air_mail', None],
-        ['hodor', 'ozp.test.skybox', None],
-        ['hodor', 'ozp.test.skybox.1', None],
-
-        ['bigbrother', 'ozp.test.bread_basket', None]
-    ]
-
-    create_library_entries(
-        library_entries
-    )
-
-    for current_unique_name in [entry[1] for entry in library_entries]:
-        print('======={}======'.format(current_unique_name))
-        current_listing = models.Listing.objects.get(unique_name=current_unique_name)
-        current_listing_owner = current_listing.owners.first()
-        listing_notification = notification_model_access.create_notification(current_listing_owner,  # noqa: F841
-                                                                      next_week,
-                                                                      '{} update next week'.format(current_listing.title),
-                                                                      listing=current_listing)
+            listing_notification = notification_model_access.create_notification(current_listing_owner,  # noqa: F841
+                                                                          next_week,
+                                                                          '{} update next week'.format(current_listing.title),
+                                                                          listing=current_listing)
 
     ############################################################################
     #                           Subscription
