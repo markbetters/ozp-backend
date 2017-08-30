@@ -1035,7 +1035,6 @@ class ReviewSerializer(serializers.ModelSerializer):
         """
         validate review
         """
-        profile = generic_model_access.get_profile(self.context['request'].user.username)
         data['listing'] = self.context['listing']
 
         if 'rate' not in data:
@@ -1059,9 +1058,9 @@ class ReviewSerializer(serializers.ModelSerializer):
         try:
             resp = model_access.create_listing_review(profile,
                         validated_data['listing'],
-                        validated_data['rate'],
-                        validated_data['text'],
-                        validated_data['review_parent'])
+                validated_data['rate'],
+                validated_data['text'],
+                validated_data['review_parent'])
         except ValidationError as err:
             raise serializers.ValidationError('{}'.format(err))
         return resp
@@ -1069,9 +1068,9 @@ class ReviewSerializer(serializers.ModelSerializer):
     def update(self, review_instance, validated_data):
         try:
             review = model_access.edit_listing_review(self.context['request'].user.username,
-                                                        review_instance,
-                                                        validated_data['rate'],
-                                                        validated_data['text'])
+                                                      review_instance,
+                                                      validated_data['rate'],
+                                                      validated_data['text'])
         except ValidationError as err:
             raise serializers.ValidationError('{}'.format(err))
         return review
