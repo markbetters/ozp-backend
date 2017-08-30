@@ -256,7 +256,7 @@ def get_reviews(username):
         username (str): username
     """
     try:
-        return models.Review.objects.for_user(username).all()
+        return models.Review.objects.for_user(username)
     except ObjectDoesNotExist:
         return None
 

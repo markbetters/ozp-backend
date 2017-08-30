@@ -13,7 +13,7 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.decorators import list_route
 
-#  from ozpcenter import pagination  # TODO: Is Necessary?
+from ozpcenter import pagination
 from ozpcenter import permissions
 from ozpcenter.pipe import pipes
 from ozpcenter.pipe import pipeline
@@ -114,25 +114,27 @@ class ReviewViewSet(viewsets.ModelViewSet):
     Summary:
         Delete a Review Entry by ID
     """
-
     permission_classes = (permissions.IsUser,)
     serializer_class = serializers.ReviewSerializer
-    # pagination_class = pagination.StandardPagination
+    filter_backends = (filters.OrderingFilter,)
+    pagination_class = pagination.ReviewLimitOffsetPagination
+
+    ordering_fields = ('id', 'listing', 'text', 'rate', 'edited_date')
+    ordering = ('-edited_date')
 
     def get_queryset(self):
         return model_access.get_reviews(self.request.user.username)
 
     def list(self, request, listing_pk=None):
-        queryset = self.get_queryset().filter(listing=listing_pk).order_by('-edited_date')
+        queryset = self.get_queryset().filter(listing=listing_pk)
+        queryset = self.filter_queryset(queryset)
         # it appears that because we override the queryset here, we must
         # manually invoke the pagination methods
         page = self.paginate_queryset(queryset)
         if page is not None:
-            serializer = serializers.ReviewSerializer(page,
-                context={'request': request}, many=True)
+            serializer = serializers.ReviewSerializer(page, context={'request': request}, many=True)
             return self.get_paginated_response(serializer.data)
-        serializer = serializers.ReviewSerializer(queryset, many=True,
-            context={'request': request})
+        serializer = serializers.ReviewSerializer(queryset, many=True, context={'request': request})
         return Response(serializer.data)
 
     def retrieve(self, request, pk=None, listing_pk=None):
