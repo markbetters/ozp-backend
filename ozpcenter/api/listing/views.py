@@ -126,7 +126,7 @@ class ReviewViewSet(viewsets.ModelViewSet):
         return model_access.get_reviews(self.request.user.username)
 
     def list(self, request, listing_pk=None):
-        queryset = self.get_queryset().filter(listing=listing_pk)
+        queryset = self.get_queryset().filter(listing=listing_pk, review_parent__isnull=True)
         queryset = self.filter_queryset(queryset)
         # it appears that because we override the queryset here, we must
         # manually invoke the pagination methods

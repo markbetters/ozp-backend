@@ -606,6 +606,7 @@ def create_listing_review(username, listing, rating, text=None, review_parent=No
         }
     """
     author = generic_model_access.get_profile(username)
+
     review = models.Review(listing=listing, author=author, rate=rating, text=text, review_parent=review_parent)
     review.save()
 
