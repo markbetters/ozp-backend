@@ -1032,32 +1032,8 @@ class ReviewResponsesSerializer(serializers.ModelSerializer):
         validators = []  # Remove a default "unique together" constraint.
 
 
-def get_primary_key_related_model(model_class, **kwargs):
-    """
-    Nested serializers are a mess. https://stackoverflow.com/a/28016439/2689986
-    This lets us accept ids when saving / updating instead of nested objects.
-    Representation would be into an object (depending on model_class).
-    """
-    class PrimaryKeyNestedMixin(model_class):
-
-        def to_internal_value(self, data):
-            print(data)
-            try:
-                return model_class.Meta.model.objects.get(pk=data)
-            except model_class.Meta.model.DoesNotExist:
-                self.fail('does_not_exist', pk_value=data)
-            except (TypeError, ValueError):
-                self.fail('incorrect_type', data_type=type(data).__name__)
-
-        def to_representation(self, data):
-            return model_class.to_representation(self, data)
-
-    return PrimaryKeyNestedMixin(**kwargs)
-
-
 class ReviewSerializer(serializers.ModelSerializer):
     author = profile_serializers.ShortProfileSerializer()
-    review_parent = get_primary_key_related_model(ReviewResponsesSerializer)
 
     class Meta:
         model = models.Review
@@ -1066,6 +1042,10 @@ class ReviewSerializer(serializers.ModelSerializer):
 
     def to_representation(self, data):
         data = super(ReviewSerializer, self).to_representation(data)
+
+        responses_queryset = models.Review.objects.for_user(self.context['request'].user.username).filter(review_parent=data['id']).order_by('edited_date')
+        review_responses_serializer = ReviewResponsesSerializer(responses_queryset, context={'request': self.context['request']}, many=True)
+        data['review_responses'] = review_responses_serializer.data
 
         return data
 
@@ -1087,7 +1067,6 @@ class ReviewSerializer(serializers.ModelSerializer):
         else:
             review_parent = data['review_parent']
 
-            print(review_parent)
             if review_parent.review_parent is not None:
                 raise serializers.ValidationError('More than one level review responses not allowed')
 
