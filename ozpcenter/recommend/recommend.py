@@ -37,7 +37,7 @@ from django.db import transaction
 from django.conf import settings
 
 from ozpcenter import models
-import ozpcenter.api.profile.model_access as model_access
+# import ozpcenter.api.profile.model_access as model_access
 from ozpcenter.recommend import recommend_utils
 from ozpcenter.recommend.graph_factory import GraphFactory
 from ozpcenter.api.listing.elasticsearch_util import elasticsearch_factory
@@ -48,6 +48,7 @@ logger = logging.getLogger('ozp-center.' + str(__name__))
 
 # Store if ES index has been created:
 es_table_created = False
+
 
 class Recommender(object):
     """

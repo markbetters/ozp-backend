@@ -8,13 +8,10 @@ from django.conf import settings
 
 from ozpcenter import models
 import ozpcenter.api.profile.model_access as model_access
-from ozpcenter.api.listing import model_access_es
+from ozpcenter.api.listing.elasticsearch_util import elasticsearch_factory
 
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center.' + str(__name__))
-
-# Create ES client
-es_client = model_access_es.es_client
 
 # Static Variables to get ratings greater than this value entered into ES User Profile Table:
 MIN_ES_RATING = 3.5
@@ -143,6 +140,7 @@ class ESRecommendUtils(object):
                 Get Bookmarked Listings with Categories, Title, Description, and Description Short Text
                 Add information to Elasticsearch Table for profile
         """
+        es_client = elasticsearch_factory.get_client()
         request_body = ESRecommendUtils.initialize_es_recommender_table()
         # Preventive measure to make sure that the ES Table has been cleared before executing this method.
         # Assumption is that by executing this routine, a new ES Table of data is needed, there for no checks
@@ -297,6 +295,7 @@ class ESRecommendUtils(object):
         # Set Aggrelation List size for number of results to return:
         AGG_LIST_SIZE = 50  # Will return up to 50 results based on query.  Default is 10 if parameter is left out of query.
 
+        es_client = elasticsearch_factory.get_client()
         # Create ES profile to search records:
         es_profile_search = {
             "query": {
@@ -405,6 +404,8 @@ class ESRecommendUtils(object):
         - Perform search based on queries and return results
         - Return list of recommended items back to calling method for the profile
         """
+        es_client = elasticsearch_factory.get_client()
+
         # Query the results for the profile passed in to get details to
         # base recommendation on:
         query = {
@@ -535,6 +536,7 @@ class ESRecommendUtils(object):
                 populating new user recommendations.
         """
         # Initialize variables:
+        es_client = elasticsearch_factory.get_client()
         title_to_search_list = []
 
         # Create a search query to get a list of aggregations for users based on the title keywords:
