@@ -258,6 +258,7 @@ class BaselineRecommender(Recommender):
                 calculation = recommend_utils.map_numbers(count, old_min, old_max, new_min, new_max)
                 self.add_listing_to_user_profile(profile_id, listing_id, calculation, True)
 
+
 class ElasticsearchRecommender(Recommender):
 
     @staticmethod
