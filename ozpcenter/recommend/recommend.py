@@ -37,7 +37,6 @@ from django.db import transaction
 from django.conf import settings
 
 from ozpcenter import models
-# import ozpcenter.api.profile.model_access as model_access
 from ozpcenter.recommend import recommend_utils
 from ozpcenter.recommend.graph_factory import GraphFactory
 from ozpcenter.api.listing.elasticsearch_util import elasticsearch_factory
@@ -348,7 +347,7 @@ class ElasticsearchContentBaseRecommender(Recommender):
             current_profile_count = current_profile_count + 1
 
             # Get the profile id so that it can be used in later items:
-            profile_id = profile
+            profile_id = profile.id
             """
             Check if results have been returned and if not then this is a NEW USER Problem.
             If no results are returned call the new user method in ESRecommendUtils to get the list of most common apps based on content

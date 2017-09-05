@@ -141,7 +141,7 @@ class ESRecommendUtils(object):
                 Add information to Elasticsearch Table for profile
         """
         es_client = elasticsearch_factory.get_client()
-        request_body = ESRecommendUtils.initialize_es_recommender_table()
+        request_body = ESRecommendUtils.get_index_mapping()
         # Preventive measure to make sure that the ES Table has been cleared before executing this method.
         # Assumption is that by executing this routine, a new ES Table of data is needed, there for no checks
         # on the validity of the old data is performed here:
