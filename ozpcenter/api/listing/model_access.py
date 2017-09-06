@@ -321,7 +321,8 @@ def _update_rating(username, listing):
     """
     Invoked each time a review is created, deleted, or updated
     """
-    reviews = models.Review.objects.filter(listing=listing)
+    reviews = models.Review.objects.filter(listing=listing, review_parent__isnull=True)
+    review_responses = models.Review.objects.filter(listing=listing, review_parent__isnull=False)
     rate1 = reviews.filter(rate=1).count()
     rate2 = reviews.filter(rate=2).count()
     rate3 = reviews.filter(rate=3).count()
@@ -329,6 +330,7 @@ def _update_rating(username, listing):
     rate5 = reviews.filter(rate=5).count()
     total_votes = reviews.count()
     total_reviews = total_votes - reviews.filter(text=None).count()
+    total_review_responses = review_responses.count()
 
     # calculate weighted average
     if total_votes == 0:
@@ -345,6 +347,7 @@ def _update_rating(username, listing):
     listing.total_rate5 = rate5
     listing.total_votes = total_votes
     listing.total_reviews = total_reviews
+    listing.total_review_responses = total_review_responses
     listing.avg_rate = avg_rate
     listing.edited_date = utils.get_now_utc()
     listing.save()
