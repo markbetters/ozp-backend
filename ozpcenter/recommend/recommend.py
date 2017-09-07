@@ -265,7 +265,7 @@ class ElasticsearchRecommender(Recommender):
     # Wait time in Minutes before running recreation of index:
     # Setting default to 30 min to prevent recreating index between ES runs.  The time should be set at the end of
     # the data set creation.
-    WAIT_TIME = 1
+    WAIT_TIME = 30
 
     TIMESTAMP_INDEX_TYPE = 'custom_meta'
 
