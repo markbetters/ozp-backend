@@ -1154,6 +1154,9 @@ class ElasticsearchUserBaseRecommender(ElasticsearchRecommender):
         ############################
         # END ES USER BASED RECOMMENDATION
         ############################
+###################
+# END ElasticsearchRecommender class..................
+###################
 
 
 class GraphCollaborativeFilteringBaseRecommender(Recommender):
