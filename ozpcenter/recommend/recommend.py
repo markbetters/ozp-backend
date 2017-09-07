@@ -41,13 +41,9 @@ import ozpcenter.api.profile.model_access as model_access
 from ozpcenter.recommend import recommend_utils
 from ozpcenter.recommend.graph_factory import GraphFactory
 from ozpcenter.api.listing.elasticsearch_util import elasticsearch_factory
-# from ozpcenter.recommend.es_recommend_utils import ESRecommendUtils
 
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center.' + str(__name__))
-
-# Store if ES index has been created:
-# es_table_created = False
 
 
 class Recommender(object):
@@ -269,7 +265,7 @@ class ElasticsearchRecommender(Recommender):
     # Wait time in Minutes before running recreation of index:
     # Setting default to 30 min to prevent recreating index between ES runs.  The time should be set at the end of
     # the data set creation.
-    WAIT_TIME = 30
+    WAIT_TIME = 1
 
     TIMESTAMP_INDEX_TYPE = 'custom_meta'
 
