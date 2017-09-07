@@ -1043,7 +1043,7 @@ class ReviewSerializer(serializers.ModelSerializer):
     def to_representation(self, data):
         data = super(ReviewSerializer, self).to_representation(data)
 
-        responses_queryset = models.Review.objects.for_user(self.context['request'].user.username).filter(review_parent=data['id']).order_by('-edited_date')
+        responses_queryset = models.Review.objects.for_user(self.context['request'].user.username).filter(review_parent=data['id']).order_by('edited_date')
         review_responses_serializer = ReviewResponsesSerializer(responses_queryset, context={'request': self.context['request']}, many=True)
         data['review_responses'] = review_responses_serializer.data
 
