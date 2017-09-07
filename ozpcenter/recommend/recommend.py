@@ -310,10 +310,16 @@ class ElasticsearchRecommender(Recommender):
                 }
             }
         }
-        result_es = es_client.search(
-            index=settings.ES_RECOMMEND_USER,
-            body=query_es_date
-        )
+
+        if es_client.indices.exists(settings.ES_RECOMMEND_USER):
+            result_es = es_client.search(
+                index=settings.ES_RECOMMEND_USER,
+                body=query_es_date
+            )
+        else:
+            # There is no index created and need to create one, return True to do so:
+            logger.info("== ES Table Does not exist, create a new one ==")
+            return True
 
         lastupdate = result_es['hits']['hits'][0]['_source']['lastupdated']
         currenttime = time.time()
