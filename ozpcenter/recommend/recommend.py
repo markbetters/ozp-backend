@@ -47,9 +47,7 @@ from ozpcenter.api.listing.elasticsearch_util import elasticsearch_factory
 logger = logging.getLogger('ozp-center.' + str(__name__))
 
 # Store if ES index has been created:
-es_table_created = False
-# Static Variables to get ratings greater than this value entered into ES User Profile Table:
-MIN_ES_RATING = 3.5
+# es_table_created = False
 
 
 class Recommender(object):
@@ -260,6 +258,75 @@ class BaselineRecommender(Recommender):
 
 
 class ElasticsearchRecommender(Recommender):
+    """
+    Elasticsearch methods to create mappings, populate data, and run core recommendation queries for both Content and
+    Collaborative based recommendations.  This is meant to be in a fashion so that it will also allow for execution
+    from outside in other classes.  Thus will then facilitate a realtime execution when needed.
+    """
+    # Static Contstant to get ratings greater than this value entered into ES User Profile Table:
+    MIN_ES_RATING = 3.5
+
+    # Wait time in Minutes before running recreation of index:
+    # Setting default to 30 min to prevent recreating index between ES runs.  The time should be set at the end of
+    # the data set creation.
+    WAIT_TIME = 30
+
+    TIMESTAMP_INDEX_TYPE = 'custom_meta'
+
+    @staticmethod
+    def set_timestamp_record():
+        """
+        Method to set timestamp for creation and last update of ES Recommendation Table data
+        """
+        es_client = elasticsearch_factory.get_client()
+
+        index_name = settings.ES_RECOMMEND_USER
+        timestamp = time.time()
+        result_es = None
+
+        if es_client.indices.exists(index_name):
+            result_es = es_client.create(
+                index=settings.ES_RECOMMEND_USER,
+                doc_type=ElasticsearchRecommender.TIMESTAMP_INDEX_TYPE,
+                id=0,
+                refresh=True,
+                body={
+                    "lastupdated": timestamp
+                }
+            )
+
+        return result_es
+
+    @staticmethod
+    def is_data_old():
+        """
+        Method to determine if the ES Recommendation Table data is out of date and needs to be recreated
+        """
+        # time.time() returns time in seconds since epoch.  To convert wait time to seconds need to multiply
+        # by 60.  REF: https://docs.python.org/3/library/time.html
+        trigger_recreate = ElasticsearchRecommender.WAIT_TIME * 60
+        es_client = elasticsearch_factory.get_client()
+
+        query_es_date = {
+            "query": {
+                "term": {
+                    "_type": "custom_meta"
+                }
+            }
+        }
+        result_es = es_client.search(
+            index=settings.ES_RECOMMEND_USER,
+            body=query_es_date
+        )
+
+        lastupdate = result_es['hits']['hits'][0]['_source']['lastupdated']
+        currenttime = time.time()
+        logger.info("== ES Table Last Update: {}, Current Time: {}, Recreate Index: {} ==".format(currenttime, lastupdate, ((currenttime - lastupdate) > trigger_recreate)))
+        # print("TIME: {} ==== LAST UPDATE TIME: {}   ===== TRIGGER COMPARE: {}".format(time.time(),lastupdate, trigger_recreate))
+        if (currenttime - lastupdate) > trigger_recreate:
+            return True
+        else:
+            return False
 
     @staticmethod
     def get_index_mapping():
@@ -298,6 +365,14 @@ class ElasticsearchRecommender(Recommender):
                 "number_of_replicas": number_of_replicas
             },
             "mappings": {
+                "custom_meta": {
+                    "dynamic": "strict",
+                    "properties": {
+                        "lastupdated": {
+                            "type": "long"
+                        }
+                    }
+                },
                 "recommend": {
                     "dynamic": "strict",
                     "properties": {
@@ -382,16 +457,10 @@ class ElasticsearchRecommender(Recommender):
         # Preventive measure to make sure that the ES Table has been cleared before executing this method.
         # Assumption is that by executing this routine, a new ES Table of data is needed, there for no checks
         # on the validity of the old data is performed here:
-        if es_client.indices.exists(settings.ES_RECOMMEND_USER):
-            resdel = es_client.indices.delete(index=settings.ES_RECOMMEND_USER)
-            logger.info("Deleting Existing ES Index Result: '{}'".format(resdel))
+        elasticsearch_factory.recreate_index_mapping(settings.ES_RECOMMEND_USER, request_body)
 
-        # Create ES Index since it has not been created or is deleted above:
-        connect_es_record_exist = es_client.indices.create(index=settings.ES_RECOMMEND_USER, body=request_body)
-
-        if connect_es_record_exist['acknowledged'] is False:
-            logger.error("ERROR: Creating ES Index after Deletion Failed Result: '{}'".format(connect_es_record_exist))
-            exit(1)
+        # Create ES Index since it has not been created or is deleted above:set_timestamp_record
+        es_client = elasticsearch_factory.get_client()
 
         # Retreive all of the profiles from database:
         all_profiles = models.Profile.objects.all()
@@ -421,7 +490,7 @@ class ElasticsearchRecommender(Recommender):
                 # Get the details of the Listing by querying the listing object linked to the Review:
                 listing_obj = review_listing_query.listing
 
-                if review_listing_query.rate > MIN_ES_RATING:
+                if review_listing_query.rate > ElasticsearchRecommender.MIN_ES_RATING:
                     # Add Title text to list of Titles:
                     title_text_list.add(listing_obj.title)
 
@@ -504,6 +573,9 @@ class ElasticsearchRecommender(Recommender):
 
             logger.info("= ES RECOMMENDATION Creation of profile {}/{} =".format(current_profile_count, all_profiles_count))
 
+        # Set timestamp for index to the current time so that indexing will not occur repeadily when it is unnecessary:
+        ElasticsearchRecommender.set_timestamp_record()
+
         return
 
     @staticmethod
@@ -555,7 +627,7 @@ class ElasticsearchRecommender(Recommender):
         categories_to_match = es_search_result['hits']['hits'][0]['_source']['categories_id']
         bookmarks_to_match = es_search_result['hits']['hits'][0]['_source']['bookmark_ids']
         rated_apps_list = list([rate['listing_id'] for rate in es_search_result['hits']['hits'][0]['_source']['ratings']])
-        rated_apps_list_match = list([rate['listing_id'] for rate in es_search_result['hits']['hits'][0]['_source']['ratings'] if rate['rate'] > MIN_ES_RATING])
+        rated_apps_list_match = list([rate['listing_id'] for rate in es_search_result['hits']['hits'][0]['_source']['ratings'] if rate['rate'] > ElasticsearchRecommender.MIN_ES_RATING])
 
         agg_query_term = {
             "constant_score": {
@@ -596,7 +668,7 @@ class ElasticsearchRecommender(Recommender):
                             "filter": {
                                 "range": {
                                     "ratings.rate": {
-                                        "gte": MIN_ES_RATING
+                                        "gte": ElasticsearchRecommender.MIN_ES_RATING
                                     }
                                 }
                             }
@@ -835,7 +907,6 @@ class ElasticsearchContentBaseRecommender(ElasticsearchRecommender):
     Elasticsearch Content based recommendation engine
     Steps:
     - Initialize Mappings by calling common Utils command to create table if it has not already been created recently
-    -
     - Import listings into main Elasticsearch table (if not already created recently)
         - Cycle through all reviews and add information to table (including text)
             - Add rating that the user given
@@ -882,7 +953,7 @@ class ElasticsearchContentBaseRecommender(ElasticsearchRecommender):
         - Take recommendations and add them to the user profile
         """
         # Global variable to maintain if ES Table has been crated already or not (not persistant):
-        global es_table_created
+        # global es_table_created
 
         # Ensure that Elasticsearch is running, otherwise will exit:
         elasticsearch_factory.check_elasticsearch()
@@ -890,14 +961,12 @@ class ElasticsearchContentBaseRecommender(ElasticsearchRecommender):
         # Initialize ratings table for Elasticsearch to perform User Based Recommendations if needed:
         # If the ES table has not been created already then delete old one and create new one with
         # load_data_into_es_table routine:
-        self.es_client = elasticsearch_factory.get_client()
-        if not es_table_created:
+        # self.es_client = elasticsearch_factory.get_client()
+        if ElasticsearchRecommender.is_data_old():
             elasticsearch_factory.recreate_index_mapping(settings.ES_RECOMMEND_USER, ElasticsearchRecommender.get_index_mapping())
 
             # Load data into Table:
             ElasticsearchRecommender.load_data_into_es_table()
-            # Set Table Created variable so that it does not run a second time in the same run:
-            es_table_created = True
 
     def recommendation_logic(self):
         """
@@ -1027,21 +1096,16 @@ class ElasticsearchUserBaseRecommender(ElasticsearchRecommender):
             - If so and the conditions match that it has been recently created then skip creating it again
             - Else create a new index and populate with user data
         """
-        global es_table_created
-
         elasticsearch_factory.check_elasticsearch()
         # Initialize ratings table for Elasticsearch to perform User Based Recommendations if not already initialized:
         # If the ES table has not been created already then delete old one and create new one with
         # load_data_into_es_table routine:
-        self.es_client = elasticsearch_factory.get_client()
-        if not es_table_created:
-            elasticsearch_factory.recreate_index_mapping(settings.ES_RECOMMEND_USER, self.get_index_mapping())
-            logger.info("Recreated ES Index")
+        # self.es_client = elasticsearch_factory.get_client()
+        if ElasticsearchRecommender.is_data_old():
+            elasticsearch_factory.recreate_index_mapping(settings.ES_RECOMMEND_USER, ElasticsearchRecommender.get_index_mapping())
 
             # Load data into Table:
             ElasticsearchRecommender.load_data_into_es_table()
-            # Set Table Created variable so that it does not run a second time in the same run:
-            es_table_created = True
 
     def recommendation_logic(self):
         """
