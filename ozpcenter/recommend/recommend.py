@@ -321,7 +321,10 @@ class ElasticsearchRecommender(Recommender):
             logger.info("== ES Table Does not exist, create a new one ==")
             return True
 
-        lastupdate = result_es['hits']['hits'][0]['_source']['lastupdated']
+        if result_es['hits']['total'] == 0:
+            lastupdate = 0
+        else:
+            lastupdate = result_es['hits']['hits'][0]['_source']['lastupdated']
         currenttime = time.time()
         logger.info("== ES Table Last Update: {}, Current Time: {}, Recreate Index: {} ==".format(currenttime, lastupdate, ((currenttime - lastupdate) > trigger_recreate)))
         # print("TIME: {} ==== LAST UPDATE TIME: {}   ===== TRIGGER COMPARE: {}".format(time.time(),lastupdate, trigger_recreate))
