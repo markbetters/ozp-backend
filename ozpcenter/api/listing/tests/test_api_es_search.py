@@ -201,7 +201,7 @@ class ListingESSearchApiTest(APITestCase):
         titles = sorted([i[0] for i in titles_ids])
         expected_titles = ['Air Mail', 'Bread Basket', 'Chart Course', 'Chatter Box', 'Clipboard',
             'FrameIt', 'Hatch Latch', 'JotSpot', 'LocationAnalyzer', 'LocationLister',
-            'LocationViewer', 'Monkey Finder', 'Skybox',  'Smart Phone', 'Taxonomy Classifier']
+            'LocationViewer', 'Monkey Finder', 'Skybox', 'Smart Phone', 'Taxonomy Classifier']
 
         self.assertEqual(titles, expected_titles)
 
