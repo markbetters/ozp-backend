@@ -813,8 +813,11 @@ class ElasticsearchUserBaseRecommender(ElasticsearchRecommender):
             body=es_profile_search
         )
 
+        print("QUERY: ", es_search_result)
+
         agg_query_term = {}
         categories_to_match = es_search_result['hits']['hits'][0]['_source']['categories_id']
+        tags_to_match = es_search_result['hits']['hits'][0]['_source']['tags']
         bookmarks_to_match = es_search_result['hits']['hits'][0]['_source']['bookmark_ids']
         rated_apps_list = list([rate['listing_id'] for rate in es_search_result['hits']['hits'][0]['_source']['ratings']])
         rated_apps_list_match = list([rate['listing_id'] for rate in es_search_result['hits']['hits'][0]['_source']['ratings'] if rate['rate'] > ElasticsearchRecommender.MIN_ES_RATING])
@@ -826,6 +829,7 @@ class ElasticsearchUserBaseRecommender(ElasticsearchRecommender):
                         "should": [
                             {"terms": {"bookmark_ids": bookmarks_to_match}},
                             {"terms": {"categories": categories_to_match}},
+                            {"terms": {"tags": tags_to_match}},
                             {
                                 "nested": {
                                     "path": "ratings",
