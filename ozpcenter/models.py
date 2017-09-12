@@ -624,9 +624,6 @@ class Review(models.Model):
     """
     A Review made on a Listing
     """
-    class Meta:
-        # a user can only have one review per listing
-        unique_together = ('review_parent', 'author', 'listing')
 
     # Self Referencing
     review_parent = models.ForeignKey('Review', null=True, blank=True)
@@ -656,12 +653,10 @@ class Review(models.Model):
             queryset = queryset.exclude(id=self_id)
 
         if self.review_parent is None:
-            queryset = queryset.filter(review_parent__isnull=True)
-        else:
-            queryset = queryset.filter(review_parent=self.review_parent)
+            queryset = queryset.filter(review_parent__isnull=True, author=self.author)
 
-        if queryset.exists():
-            raise ValidationError('Can not create duplicate review')
+            if queryset.count() >= 1:
+                raise ValidationError('Can not create duplicate review')
 
         super(Review, self).validate_unique(exclude)
 
