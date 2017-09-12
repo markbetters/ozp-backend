@@ -601,6 +601,17 @@ class ElasticsearchContentBaseRecommender(ElasticsearchRecommender):
         }
         query_object.append(categories_to_query)
 
+        tags_to_query = {
+            "query": {
+                "bool": {
+                    "should": [
+                        {"terms": {"tags.name_string": each_profile_source['tags']}}
+                    ]
+                }
+            }
+        }
+        query_object.append(tags_to_query)
+
         title_list = {}
         for items in each_profile_source['titles']:
             title_list = {
