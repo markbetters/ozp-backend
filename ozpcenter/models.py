@@ -642,6 +642,7 @@ class Review(models.Model):
 
     # edited_date = models.DateTimeField(auto_now=True)
     edited_date = models.DateTimeField(default=utils.get_now_utc)
+    created_date = models.DateTimeField(default=utils.get_now_utc)
 
     # use a custom Manager class to limit returned Reviews
     objects = AccessControlReviewManager()

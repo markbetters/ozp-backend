@@ -119,8 +119,8 @@ class ReviewViewSet(viewsets.ModelViewSet):
     filter_backends = (filters.OrderingFilter,)
     pagination_class = pagination.ReviewLimitOffsetPagination
 
-    ordering_fields = ('id', 'listing', 'text', 'rate', 'edited_date')
-    ordering = ('-edited_date')
+    ordering_fields = ('id', 'listing', 'text', 'rate', 'edited_date', 'created_date')
+    ordering = ('-created_date')
 
     def get_queryset(self):
         return model_access.get_reviews(self.request.user.username)
