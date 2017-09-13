@@ -378,13 +378,11 @@ class ElasticsearchRecommender(Recommender):
                             "type": "string",
                             "analyzer": "english"
                         },
-                        "agency_short_name": {
-                            "type": "string",
-                            "analyzer": "english"
+                        "agency_name_list": {
+                            "type": "string"
                         },
-                        "tags": {
-                            "type": "string",
-                            "analyzer": "english"
+                        "tags_list": {
+                            "type": "string"
                         },
                         "categories_text": {
                             "type": "string",
@@ -457,6 +455,11 @@ class ElasticsearchRecommender(Recommender):
             categories_text_list = set()
             category_id_list = set()
             tags_text_list = set()
+            organizations_text_list = [agency.short_name for agency in profile.organizations.all()]
+            # orgs_text_list = str(organizations_text_list).strip('[').strip(']')
+            #
+            # print("orig: ", organizations_text_list)
+            # print("modi: ", orgs_text_list)
 
             profile_listings_review = []
             for review_object in models.Review.objects.filter(author=profile.user_id):
@@ -500,10 +503,11 @@ class ElasticsearchRecommender(Recommender):
 
             data_to_bulk_index.append({"author_id": profile.user_id,
                 "author": profile_username,
+                "agency_name_list": organizations_text_list,
                 "titles": list(title_text_list),
                 "descriptions": list(description_text_list),
                 "description_shorts": list(description_short_text_list),
-                "tags": list(tags_text_list),
+                "tags_list": list(tags_text_list),
                 "categories_text": list(categories_text_list),
                 "bookmark_ids": list(bookmarked_id_list),
                 "categories_id": list(category_id_list),
@@ -587,6 +591,18 @@ class ElasticsearchContentBaseRecommender(ElasticsearchRecommender):
 
         query_object = []
 
+        agency_text_query = str(each_profile_source['agency_name_list']).strip('[').strip(']')
+        agency_to_query = {
+            "query": {
+                "bool": {
+                    "should": [
+                        {"match": {"agency_short_name": agency_text_query}}
+                    ]
+                }
+            }
+        }
+        query_object.append(agency_to_query)
+
         categories_to_query = {
             "nested": {
                 "path": "categories",
@@ -602,11 +618,14 @@ class ElasticsearchContentBaseRecommender(ElasticsearchRecommender):
         query_object.append(categories_to_query)
 
         tags_to_query = {
-            "query": {
-                "bool": {
-                    "should": [
-                        {"terms": {"tags.name_string": each_profile_source['tags']}}
-                    ]
+            "nested": {
+                "path": "tags",
+                "query": {
+                    "bool": {
+                        "should": [
+                            {"terms": {"tags.name_string": each_profile_source['tags_list']}}
+                        ]
+                    }
                 }
             }
         }
@@ -813,14 +832,13 @@ class ElasticsearchUserBaseRecommender(ElasticsearchRecommender):
             body=es_profile_search
         )
 
-        print("QUERY: ", es_search_result)
-
         agg_query_term = {}
         categories_to_match = es_search_result['hits']['hits'][0]['_source']['categories_id']
-        tags_to_match = es_search_result['hits']['hits'][0]['_source']['tags']
+        tags_to_match = es_search_result['hits']['hits'][0]['_source']['tags_list']
         bookmarks_to_match = es_search_result['hits']['hits'][0]['_source']['bookmark_ids']
         rated_apps_list = list([rate['listing_id'] for rate in es_search_result['hits']['hits'][0]['_source']['ratings']])
         rated_apps_list_match = list([rate['listing_id'] for rate in es_search_result['hits']['hits'][0]['_source']['ratings'] if rate['rate'] > ElasticsearchRecommender.MIN_ES_RATING])
+        agency_to_match = str(es_search_result['hits']['hits'][0]['_source']['agency_name_list'])
 
         agg_query_term = {
             "constant_score": {
@@ -829,7 +847,8 @@ class ElasticsearchUserBaseRecommender(ElasticsearchRecommender):
                         "should": [
                             {"terms": {"bookmark_ids": bookmarks_to_match}},
                             {"terms": {"categories": categories_to_match}},
-                            {"terms": {"tags": tags_to_match}},
+                            {"terms": {"tags_list": tags_to_match}},
+                            {"term": {"agency_name_list": agency_to_match}},
                             {
                                 "nested": {
                                     "path": "ratings",
