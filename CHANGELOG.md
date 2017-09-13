@@ -1,25 +1,4 @@
 
-### 1.0.74 (2017-09-11)
-
-#### Feature 
-* **title_priority_ut_fix**
-  *  Corrected space for Travis ([3ecf5e65](https://github.com/aml-development/ozp-backend/commit/3ecf5e65c3691843f6e801908a456c1f75d85535))
-  *  Fixed Unit Tests ([515cf34c](https://github.com/aml-development/ozp-backend/commit/515cf34cc2743e63ca1e3a8216f3a7895642faf4))    
-* **es_recommend_optimize**
-  *  Refactor code per comments ([231d5e43](https://github.com/aml-development/ozp-backend/commit/231d5e4310c7df50e0c0280ebcce8b2e209235ee))
-  *  Fix for first time run. ([7c7b6cad](https://github.com/aml-development/ozp-backend/commit/7c7b6cad3409040da8672afab8553581ce83e295))
-  *  Changing WAIT_TIME back to 30 minutes ([e286db46](https://github.com/aml-development/ozp-backend/commit/e286db464ba7e1641259ea71c3937b4a20888673))
-  *  First time creation fix ([c992655d](https://github.com/aml-development/ozp-backend/commit/c992655d5694bf9321ca3cb7f2b5099d6d3e62d7))
-  *  Removed commented code that is no longer needed ([624e448f](https://github.com/aml-development/ozp-backend/commit/624e448f2fadb790dc1dd9d00c3bf46e80baabe9))
-  *  Added comment to indicate end of ElasticsearchRecommender class for maintainability purposes. ([70769e3d](https://github.com/aml-development/ozp-backend/commit/70769e3d14b84880edbbd1450fcb534413210fa6))
-  *  Added code to prevent recreating index in short amount of time ([5bf84b8a](https://github.com/aml-development/ozp-backend/commit/5bf84b8a5ab347e431142ab131e807632d3546e5))       
-
-#### Merge Pull Requests  
-* Merge pull request #345 from aml-development/es_recommend_optimize_2 ([4666b87c](https://github.com/aml-development/ozp-backend/commit/4666b87cda8d2d0e9803a9e7773af5cf673f55b5))
-* Merge branch 'master' into es_recommend_optimize_2 ([82cbe340](https://github.com/aml-development/ozp-backend/commit/82cbe3405b68c72f022af67728a1c3b753d6c5f0))
-* Merge pull request #346 from aml-development/title_priority_test_fix ([bdea71fc](https://github.com/aml-development/ozp-backend/commit/bdea71fc4d98c0c148e57bc5e7663bb09bbb2c1a))
-* Merge pull request #340 from aml-development/title_priority ([178a2bd9](https://github.com/aml-development/ozp-backend/commit/178a2bd91037caa4715a8ca29b71d23490df9a5e))           
-
 ### 1.0.73 (2017-09-06)
 
 #### Feature 
