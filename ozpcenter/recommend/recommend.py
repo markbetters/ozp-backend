@@ -257,6 +257,9 @@ class ElasticsearchRecommender(Recommender):
     Elasticsearch methods to create mappings, populate data, and run core recommendation queries for both Content and
     Collaborative based recommendations.  This is meant to be in a fashion so that it will also allow for execution
     from outside in other classes.  Thus will then facilitate a realtime execution when needed.
+
+    See link for information on methods that have content:
+    https://github.com/aml-development/ozp-backend/wiki/Elasticsearch-Recommendation-Engine
     """
     # Static Contstant to get ratings greater than this value entered into ES User Profile Table:
     MIN_ES_RATING = 3.5
@@ -330,6 +333,7 @@ class ElasticsearchRecommender(Recommender):
     def get_index_mapping():
         """
         Mapping to be used for Elasticsearch Table for both Content and Collaborative Recommendation Engines
+        See: https://github.com/aml-development/ozp-backend/wiki/Elasticsearch-Recommendation-Engine
         """
         number_of_shards = settings.ES_NUMBER_OF_SHARDS
         number_of_replicas = settings.ES_NUMBER_OF_REPLICAS
@@ -547,6 +551,7 @@ class ElasticsearchContentBaseRecommender(ElasticsearchRecommender):
         - Add all users that have bookmarked the app to the table
         - Go through User tables and add text to each record of a User Table
     - Perform calculations via query on data
+    See: https://github.com/aml-development/ozp-backend/wiki/Elasticsearch-Recommendation-Engine
     """
     friendly_name = 'Elasticsearch Content Filtering'
     recommendation_weight = 0.9  # Weighting is based on rebasing the results
@@ -668,6 +673,7 @@ class ElasticsearchContentBaseRecommender(ElasticsearchRecommender):
         This procedure is a uses all profile contents to create recommendations for a new user.
         RETURN: The procedure will return a query results of applications matching query of result_size to be used for
                 populating new user recommendations.
+        See: https://github.com/aml-development/ozp-backend/wiki/Elasticsearch-Recommendation-Engine
         """
         es_client = elasticsearch_factory.get_client()
         title_to_search_list = []
@@ -765,6 +771,7 @@ class ElasticsearchUserBaseRecommender(ElasticsearchRecommender):
        - Perform aggregations on data to obtain recommendation list
        - Need to ensure that user apps and bookmarked apps are not in list
        - Output with query and put into recommendation table:
+    See: https://github.com/aml-development/ozp-backend/wiki/Elasticsearch-Recommendation-Engine
     """
     friendly_name = 'Elasticsearch User Based Filtering'
     recommendation_weight = 1.0  # Weight that the overall results are multiplied against.  The rating for user based is less than 1.
@@ -783,6 +790,7 @@ class ElasticsearchUserBaseRecommender(ElasticsearchRecommender):
         - Perform ES Query and get the aggregations that have all of the apps already identified by the user
           removed.
         - Return list of recommended items back to calling method
+        See: https://github.com/aml-development/ozp-backend/wiki/Elasticsearch-Recommendation-Engine
         """
         AGG_LIST_SIZE = 50  # Default is 10 if parameter is left out of query.
 
