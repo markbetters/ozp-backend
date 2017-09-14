@@ -285,10 +285,6 @@ def get_mapping_setting_obj(number_of_shards=None, number_of_replicas=None):
             "launch_url": {
               "type": "string"
             },
-            "avg_rate": {
-              "type": "double"
-            },
-
             "is_featured": {
               "type": "boolean"
             },
@@ -362,8 +358,14 @@ def get_mapping_setting_obj(number_of_shards=None, number_of_replicas=None):
             "total_reviews": {
               "type": "long"
             },
+            "total_review_responses": {
+              "type": "long"
+            },
             "total_votes": {
               "type": "long"
+            },
+            "avg_rate": {
+              "type": "double"
             }
           }
         }

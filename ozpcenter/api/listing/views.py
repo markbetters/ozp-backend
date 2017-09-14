@@ -13,7 +13,7 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.decorators import list_route
 
-#  from ozpcenter import pagination  # TODO: Is Necessary?
+from ozpcenter import pagination
 from ozpcenter import permissions
 from ozpcenter.pipe import pipes
 from ozpcenter.pipe import pipeline
@@ -114,63 +114,60 @@ class ReviewViewSet(viewsets.ModelViewSet):
     Summary:
         Delete a Review Entry by ID
     """
-
     permission_classes = (permissions.IsUser,)
     serializer_class = serializers.ReviewSerializer
-    # pagination_class = pagination.StandardPagination
+    filter_backends = (filters.OrderingFilter,)
+    pagination_class = pagination.ReviewLimitOffsetPagination
+
+    ordering_fields = ('id', 'listing', 'text', 'rate', 'edited_date', 'created_date')
+    ordering = ('-created_date')
 
     def get_queryset(self):
         return model_access.get_reviews(self.request.user.username)
 
     def list(self, request, listing_pk=None):
-        queryset = self.get_queryset().filter(listing=listing_pk).order_by('-edited_date')
+        queryset = self.get_queryset().filter(listing=listing_pk, review_parent__isnull=True)
+        queryset = self.filter_queryset(queryset)
         # it appears that because we override the queryset here, we must
         # manually invoke the pagination methods
         page = self.paginate_queryset(queryset)
         if page is not None:
-            serializer = serializers.ReviewSerializer(page,
-                context={'request': request}, many=True)
+            serializer = serializers.ReviewSerializer(page, context={'request': request}, many=True)
             return self.get_paginated_response(serializer.data)
-        serializer = serializers.ReviewSerializer(queryset, many=True,
-            context={'request': request})
+        serializer = serializers.ReviewSerializer(queryset, many=True, context={'request': request})
         return Response(serializer.data)
 
     def retrieve(self, request, pk=None, listing_pk=None):
         queryset = self.get_queryset().get(pk=pk, listing=listing_pk)
-        serializer = serializers.ReviewSerializer(queryset,
-            context={'request': request})
+        serializer = serializers.ReviewSerializer(queryset, context={'request': request})
         return Response(serializer.data)
 
     def create(self, request, listing_pk=None):
         """
         Create a new review
         """
-        request_current_username = request.user.username
-        listing = model_access.get_listing_by_id(request_current_username,
-            listing_pk, True)
+        listing = model_access.get_listing_by_id(request.user.username, listing_pk, True)
 
-        rate = int(request.data.get('rate', None))
-        text = request.data.get('text', None)
-
-        resp = model_access.create_listing_review(request_current_username,
-            listing, rate, text)
-        return Response(resp, status=status.HTTP_201_CREATED)
+        serializer = serializers.ReviewSerializer(data=request.data, context={'request': request, 'listing': listing}, partial=True)
+        if not serializer.is_valid():
+            logger.error('{0!s}'.format(serializer.errors), extra={'request': request})
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def update(self, request, pk=None, listing_pk=None):
         """
         Update an existing review
         """
+        listing = model_access.get_listing_by_id(request.user.username, listing_pk, True)
         review = model_access.get_review_by_id(pk)
 
-        rate = request.data.get('rate', review.rate)
-        text = request.data.get('text', None)
-
-        review = model_access.edit_listing_review(request.user.username,
-            review, rate, text)
-        output = {"rate": review.rate, "text": review.text,
-                  "author": review.author.id,
-                  "listing": review.listing.id, "id": review.id}
-        return Response(output, status=status.HTTP_200_OK)
+        serializer = serializers.ReviewSerializer(review, data=request.data, context={'request': request, 'listing': listing}, partial=True)
+        if not serializer.is_valid():
+            logger.error('{0!s}'.format(serializer.errors), extra={'request': request})
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def destroy(self, request, pk=None, listing_pk=None):
         queryset = self.get_queryset()
@@ -891,8 +888,7 @@ class ListingViewSet(viewsets.ModelViewSet):
         """
         # logger.debug('inside ListingViewSet.update', extra={'request': request})
         instance = self.get_queryset().get(pk=pk)
-        serializer = serializers.ListingSerializer(instance,
-            data=request.data, context={'request': request}, partial=True)
+        serializer = serializers.ListingSerializer(instance, data=request.data, context={'request': request}, partial=True)
 
         # logger.debug('created ListingSerializer', extra={'request': request})
 

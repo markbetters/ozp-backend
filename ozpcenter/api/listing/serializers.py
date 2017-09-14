@@ -6,6 +6,7 @@ import logging
 import pytz
 
 from django.contrib import auth
+from django.core.exceptions import ValidationError
 from rest_framework import serializers
 
 from ozpcenter import constants
@@ -1022,9 +1023,73 @@ class ListingSerializer(serializers.ModelSerializer):
         return instance
 
 
+class ReviewResponsesSerializer(serializers.ModelSerializer):
+    author = profile_serializers.ShortProfileSerializer()
+
+    class Meta:
+        model = models.Review
+        fields = ('id', 'author', 'listing', 'rate', 'text', 'edited_date', 'created_date')
+        validators = []  # Remove a default "unique together" constraint.
+
+
 class ReviewSerializer(serializers.ModelSerializer):
     author = profile_serializers.ShortProfileSerializer()
 
     class Meta:
         model = models.Review
-        fields = ('author', 'listing', 'rate', 'text', 'edited_date', 'id')
+        fields = ('id', 'author', 'listing', 'rate', 'text', 'edited_date', 'created_date', 'review_parent')
+        validators = []  # Remove a default "unique together" constraint.
+
+    def to_representation(self, data):
+        data = super(ReviewSerializer, self).to_representation(data)
+
+        responses_queryset = models.Review.objects.for_user(self.context['request'].user.username).filter(review_parent=data['id']).order_by('created_date')
+        review_responses_serializer = ReviewResponsesSerializer(responses_queryset, context={'request': self.context['request']}, many=True)
+        data['review_responses'] = review_responses_serializer.data
+
+        return data
+
+    def validate(self, data):
+        """
+        validate review
+        """
+        data['listing'] = self.context['listing']
+
+        if 'rate' not in data:
+            raise serializers.ValidationError('Missing required rate field')
+
+        if 'text' not in data:
+            data['text'] = None
+            # raise serializers.ValidationError('Missing required text field')
+
+        if 'review_parent' not in data:
+            data['review_parent'] = None
+        else:
+            review_parent = data['review_parent']
+
+            if review_parent.review_parent is not None:
+                raise serializers.ValidationError('More than one level review responses not allowed')
+
+        return data
+
+    def create(self, validated_data):
+        profile = generic_model_access.get_profile(self.context['request'].user.username)
+        try:
+            resp = model_access.create_listing_review(profile,
+                        validated_data['listing'],
+                validated_data['rate'],
+                validated_data['text'],
+                validated_data['review_parent'])
+        except ValidationError as err:
+            raise serializers.ValidationError('{}'.format(err))
+        return resp
+
+    def update(self, review_instance, validated_data):
+        try:
+            review = model_access.edit_listing_review(self.context['request'].user.username,
+                                                      review_instance,
+                                                      validated_data['rate'],
+                                                      validated_data['text'])
+        except ValidationError as err:
+            raise serializers.ValidationError('{}'.format(err))
+        return review
