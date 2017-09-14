@@ -687,9 +687,13 @@ def make_search_query_obj(search_param_parser, exclude_agencies=None):
         # Search the title first to give it the score it needs and weight to order
         # the list by title preferance.
         temp_should.append({
-           "match": {
-              "title": user_string
-           }
+            "match": {
+                "title": {
+                    "query": user_string,
+                    "operator": "and",
+                    "boost": 10
+                }
+            }
         })
 
         # The reason fuzziness is needed using the sample_data is because if
