@@ -1394,6 +1394,7 @@ class Notification(models.Model):
     notification_type = models.CharField(default=SYSTEM, max_length=24, choices=NOTIFICATION_TYPE_CHOICES)  # db_index=True)
 
     # Notification Subtype
+    LISTING_NEW = 'listing_new'
     LISTING_REVIEW = 'listing_review'  # When a review is left on a listing
     LISTING_PRIVATE_STATUS = 'listing_private_status'  # When a listing is changed to private
     PENDING_DELETION_REQUEST = 'pending_deletion_request'  # When an owner requests their app be deleted
@@ -1402,6 +1403,7 @@ class Notification(models.Model):
     SUBSCRIPTION_TAG = 'subscription_tag'  # When there is a new app in a subscribed tag
 
     NOTIFICATION_SUBTYPE_CHOICES = (
+        (LISTING_NEW, 'listing_new'),
         (LISTING_REVIEW, 'listing_review'),
         (LISTING_PRIVATE_STATUS, 'listing_private_status'),
         (PENDING_DELETION_REQUEST, 'pending_deletion_request'),
@@ -1409,7 +1411,7 @@ class Notification(models.Model):
         (SUBSCRIPTION_CATEGORY, 'subscription_category'),
         (SUBSCRIPTION_TAG, 'subscription_tag')
     )
-    notification_subtype = models.CharField(default=SYSTEM, max_length=36, choices=NOTIFICATION_SUBTYPE_CHOICES)  # db_index=True)
+    notification_subtype = models.CharField(default=SYSTEM, max_length=36, choices=NOTIFICATION_SUBTYPE_CHOICES, null=True)  # db_index=True)
 
     # User Target
     ALL = 'all'  # All users
