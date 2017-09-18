@@ -79,7 +79,8 @@ SELECT DISTINCT
   ozpcenter_listing.version_name,
   ozpcenter_listing.unique_name,
   ozpcenter_listing.what_is_new,
-  ozpcenter_listing.requirements,
+  ozpcenter_listing.usage_requirements,
+  ozpcenter_listing.system_requirements,
   ozpcenter_listing.description_short,
   ozpcenter_listing.approval_status,
   ozpcenter_listing.is_enabled,
@@ -245,7 +246,8 @@ def get_user_listings(username, request, exclude_orgs=None):
 
                 "approved_date": row['approved_date'],
 
-                "requirements": row['requirements'],
+                "usage_requirements": row['usage_requirements'],
+                "system_requirements": row['system_requirements'],
                 "iframe_compatible": row['iframe_compatible'],
 
                 "what_is_new": row['what_is_new'],

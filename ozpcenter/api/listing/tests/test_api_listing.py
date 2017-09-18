@@ -70,7 +70,8 @@ class ListingApiTest(APITestCase):
             "unique_name": "org.apps.julia-one",
             "what_is_new": "nothing is new",
             "description_short": "a shorter description",
-            "requirements": "None",
+            "usage_requirements": "None",
+            "system_requirements": "None",
             "is_private": "true",
             "contacts": [
                 {"email": "a@a.com", "secure_phone": "111-222-3434",
@@ -132,8 +133,10 @@ class ListingApiTest(APITestCase):
         # description_short
         self.assertEqual(response.data['description_short'],
             'a shorter description')
-        # requirements
-        self.assertEqual(response.data['requirements'], 'None')
+        # usage_requirements
+        self.assertEqual(response.data['usage_requirements'], 'None')
+        # system_requirements
+        self.assertEqual(response.data['system_requirements'], 'None')
         # is_private
         self.assertEqual(response.data['is_private'], True)
         # contacts
@@ -298,7 +301,8 @@ class ListingApiTest(APITestCase):
             "unique_name": "org.apps.julia-one",
             "what_is_new": "nothing is new",
             "description_short": "a shorter description",
-            "requirements": "Many new things",
+            "usage_requirements": "Many new things",
+            "system_requirements": "Good System",
             "is_private": "true",
             "is_enabled": "false",
             "is_featured": "false",
@@ -363,8 +367,10 @@ class ListingApiTest(APITestCase):
         self.assertEqual(response.data['what_is_new'], data['what_is_new'])
         # description_short
         self.assertEqual(response.data['description_short'], data['description_short'])
-        # requirements
-        self.assertEqual(response.data['requirements'], data['requirements'])
+        # usage_requirements
+        self.assertEqual(response.data['usage_requirements'], data['usage_requirements'])
+        # system_requirements
+        self.assertEqual(response.data['system_requirements'], data['system_requirements'])
         # is_private
         self.assertEqual(response.data['is_private'], True)
         # contacts
@@ -459,7 +465,7 @@ class ListingApiTest(APITestCase):
         activity_data = activity_response.data
 
         fields = ['title', 'description', 'description_short', 'version_name',
-            'requirements', 'unique_name', 'what_is_new', 'launch_url',
+            'usage_requirements', 'system_requirements', 'unique_name', 'what_is_new', 'launch_url',
             'is_enabled', 'is_featured', 'is_private', 'doc_urls', 'contacts',
             'screenshots', 'categories', 'owners', 'tags', 'small_icon',
             'large_icon', 'banner_icon', 'large_banner_icon', 'security_marking',
@@ -472,7 +478,7 @@ class ListingApiTest(APITestCase):
                 for change in activity['change_details']:
                     # Field Set 1
                     temp_change_fields = ['title', 'description', 'description_short',
-                        'version_name', 'requirements', 'what_is_new', 'unique_name', 'launch_url',
+                        'version_name', 'usage_requirements', 'system_requirements', 'what_is_new', 'unique_name', 'launch_url',
                         'is_private', 'is_featured', 'listing_type', 'security_marking']
 
                     for temp_field in temp_change_fields:
@@ -543,7 +549,8 @@ class ListingApiTest(APITestCase):
             "unique_name": "org.apps.julia-one",
             "what_is_new": "nothing is new",
             "description_short": "a shorter description",
-            "requirements": "Many new things",
+            "usage_requirements": "Many new things",
+            "system_requirements": "Good System",
             "is_private": "true",
             "is_enabled": "false",
             "is_featured": "false",
@@ -692,7 +699,8 @@ class ListingApiTest(APITestCase):
           "avg_rate": 0,
           "total_votes": 0,
           "tags": [],
-          "requirements": None,
+          "usage_requirements": None,
+          "system_requirements": None,
           "version_name": None,
           "launch_url": None,
           "what_is_new": None,

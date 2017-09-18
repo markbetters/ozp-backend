@@ -22,7 +22,6 @@
     launch_url: https://en.wikipedia.org/wiki/Acoustic_guitar
     listing_type: Web Application
     owners: [bigbrother]
-    requirements: Knowledge of acoustic properties of guitar
     screenshots:
     - description: Black and White picture of Two Guitars
       large_image: {filename: AcousticGuitar_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -30,10 +29,12 @@
       small_image: {filename: AcousticGuitar_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: AcousticGuitar_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [acoustic, classical, concert, guitar, instrument, spanish, string, strings,
       wooded]
     title: Acoustic Guitar
     unique_name: acoustic_guitar
+    usage_requirements: Knowledge of acoustic properties of guitar
     version_name: '10.0'
     what_is_new: Introduction of Steel strings and increased the area of the guitar
       top
@@ -70,7 +71,6 @@
     launch_url: '{DEMO_APP_ROOT}/demo_apps/centerSampleListings/airMail/index.html'
     listing_type: Web Application
     owners: [wsmith]
-    requirements: None
     screenshots:
     - description: airmail screenshot set 1
       large_image: {filename: AirMail_0_large_screenshot.png, security_marking: UNCLASSIFIED}
@@ -82,9 +82,11 @@
       small_image: {filename: AirMail_1_small_screenshot.png, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: AirMail_small_icon.png, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [demo, demo_tag, example, tag_0]
     title: Air Mail
     unique_name: ozp.test.air_mail
+    usage_requirements: None
     version_name: 1.0.0
     what_is_new: Nothing really new here
   listing_activity:
@@ -123,7 +125,6 @@
     launch_url: https://en.wikipedia.org/wiki/Albatron_Technology
     listing_type: Desktop App
     owners: [bettafish]
-    requirements: None
     screenshots:
     - description: null
       large_image: {filename: AlbatronTechnology_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -131,9 +132,11 @@
       small_image: {filename: AlbatronTechnology_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: AlbatronTechnology_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [hardware]
     title: Albatron Technology
     unique_name: albatron_technology
+    usage_requirements: None
     version_name: '1'
     what_is_new: null
   listing_activity:
@@ -164,7 +167,6 @@
     launch_url: http://localhost.com
     listing_type: Web Application
     owners: [aaronson]
-    requirements: None
     screenshots:
     - description: Not actual photo of alien
       large_image: {filename: Aliens_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -172,9 +174,11 @@
       small_image: {filename: Aliens_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Aliens_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [Aliens, Space]
     title: Aliens
     unique_name: aliens
+    usage_requirements: None
     version_name: '1'
     what_is_new: null
   listing_activity:
@@ -225,7 +229,6 @@
     launch_url: https://en.wikipedia.org/wiki/Alingano_Maisu
     listing_type: Web Services
     owners: [rutherford]
-    requirements: None
     screenshots:
     - description: null
       large_image: {filename: AlinganoMaisu_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -233,9 +236,11 @@
       small_image: {filename: AlinganoMaisu_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: AlinganoMaisu_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [history, maps, navigation]
     title: Alingano Maisu
     unique_name: alingano_maisu
+    usage_requirements: None
     version_name: '1.0'
     what_is_new: null
   listing_activity:
@@ -274,7 +279,6 @@
     launch_url: https://en.wikipedia.org/wiki/Apocalypse_(comics)
     listing_type: Web Application
     owners: [syme]
-    requirements: None
     screenshots:
     - description: null
       large_image: {filename: Apocalypse_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -282,9 +286,11 @@
       small_image: {filename: Apocalypse_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Apocalypse_small_icon.png, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [bad guys]
     title: Apocalypse
     unique_name: apocalypse
+    usage_requirements: None
     version_name: '1'
     what_is_new: null
   listing_activity:
@@ -325,7 +331,6 @@
     launch_url: http://appliedethicsinc.com
     listing_type: Web Application
     owners: [jones, wsmith]
-    requirements: None
     screenshots:
     - description: null
       large_image: {filename: AppliedEthicsInc._0_large_screenshot.png, security_marking: UNCLASSIFIED}
@@ -333,9 +338,11 @@
       small_image: {filename: AppliedEthicsInc._0_small_screenshot.png, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: AppliedEthicsInc._small_icon.png, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [ethics, organizational, social]
     title: Applied Ethics Inc.
     unique_name: applied_ethics_inc.
+    usage_requirements: None
     version_name: '2.5'
     what_is_new: null
   listing_activity:
@@ -383,7 +390,6 @@
     launch_url: https://en.wikipedia.org/wiki/Astrology_software
     listing_type: Desktop App
     owners: [bettafish]
-    requirements: None
     screenshots:
     - description: Astrology Software
       large_image: {filename: Astrologysoftware_0_large_screenshot.png, security_marking: UNCLASSIFIED}
@@ -391,9 +397,11 @@
       small_image: {filename: Astrologysoftware_0_small_screenshot.png, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Astrologysoftware_small_icon.png, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [hocus pocus, horoscope]
     title: Astrology software
     unique_name: astrology_software
+    usage_requirements: None
     version_name: '1'
     what_is_new: null
   listing_activity:
@@ -440,7 +448,6 @@
     launch_url: http://wowwiki.wikia.com/wiki/Azeroth_(world)
     listing_type: Web Application
     owners: [betaraybill]
-    requirements: Requires the internet. And skillz.
     screenshots:
     - description: null
       large_image: {filename: Azeroth_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -448,9 +455,11 @@
       small_image: {filename: Azeroth_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Azeroth_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [Planets]
     title: Azeroth
     unique_name: azeroth
+    usage_requirements: Requires the internet. And skillz.
     version_name: '1.0'
     what_is_new: null
   listing_activity:
@@ -499,7 +508,6 @@
     launch_url: https://en.wikipedia.org/wiki/Baltimore_Ravens
     listing_type: Desktop App
     owners: [bettafish]
-    requirements: FOOTBALL
     screenshots:
     - description: null
       large_image: {filename: BaltimoreRavens_0_large_screenshot.png, security_marking: UNCLASSIFIED}
@@ -511,9 +519,11 @@
       small_image: {filename: BaltimoreRavens_1_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: BaltimoreRavens_small_icon.png, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [baltimore, football, maryland, ravens]
     title: Baltimore Ravens
     unique_name: baltimore_ravens
+    usage_requirements: FOOTBALL
     version_name: '2000'
     what_is_new: null
   listing_activity:
@@ -581,7 +591,18 @@
     launch_url: https://en.wikipedia.org/wiki/Barbecue
     listing_type: Desktop App
     owners: [jones]
-    requirements: 'Smoking
+    screenshots:
+    - description: null
+      large_image: {filename: Barbecue_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Barbecue_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Barbecue_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
+    tags: [bbq, food, meat, sause]
+    title: Barbecue
+    unique_name: barbecue
+    usage_requirements: 'Smoking
 
       Smoking is the process of flavoring, cooking, and/or preserving food by exposing
       it to smoke from burning or smoldering material, most often wood. Meat and fish
@@ -597,16 +618,6 @@
       starches, casseroles, and desserts. It uses direct and indirect heat to surround
       the food with hot air to cook, and can be basted in much the same manner as
       grilled foods.'
-    screenshots:
-    - description: null
-      large_image: {filename: Barbecue_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
-      order: 0
-      small_image: {filename: Barbecue_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
-    security_marking: UNCLASSIFIED
-    small_icon: {filename: Barbecue_small_icon.jpeg, security_marking: UNCLASSIFIED}
-    tags: [bbq, food, meat, sause]
-    title: Barbecue
-    unique_name: barbecue
     version_name: '1'
     what_is_new: Barbecue remains one of the most traditional foods in the United
       States.
@@ -667,7 +678,6 @@
     launch_url: https://en.wikipedia.org/wiki/Mars
     listing_type: Web Application
     owners: [betaraybill]
-    requirements: Requires the internet.
     screenshots:
     - description: null
       large_image: {filename: Barsoom_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -675,9 +685,11 @@
       small_image: {filename: Barsoom_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Barsoom_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [Planets]
     title: Barsoom
     unique_name: barsoom
+    usage_requirements: Requires the internet.
     version_name: '1.0'
     what_is_new: null
   listing_activity:
@@ -715,7 +727,6 @@
     launch_url: http://localhost.com
     listing_type: Web Application
     owners: [aaronson]
-    requirements: Must be tall
     screenshots:
     - description: Invented basketball
       large_image: {filename: Basketball_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -723,9 +734,11 @@
       small_image: {filename: Basketball_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Basketball_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [Basketball, NBA, Sports]
     title: Basketball
     unique_name: basketball
+    usage_requirements: Must be tall
     version_name: '23'
     what_is_new: null
   listing_activity:
@@ -769,7 +782,6 @@
     launch_url: https://en.wikipedia.org/wiki/Bass_fishing
     listing_type: Web Application
     owners: [bettafish, jones]
-    requirements: none
     screenshots:
     - description: Now that's a fish.
       large_image: {filename: BassFishing_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -777,9 +789,11 @@
       small_image: {filename: BassFishing_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: BassFishing_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [bass, fish, mike]
     title: Bass Fishing
     unique_name: bass_fishing
+    usage_requirements: none
     version_name: '1'
     what_is_new: The increasing popularity of the sport combined with "catch and release"
       practices have in some cases led to an overpopulation of bass.
@@ -847,16 +861,6 @@
     launch_url: https://en.wikipedia.org/wiki/Fishing_lure
     listing_type: Web Application
     owners: [jones]
-    requirements: A fishing lure is a type of artificial fishing bait which is designed
-      to attract a fish's attention. The lure uses movement, vibration, flash and
-      color to bait fish. Many lures are equipped with one or more hooks that are
-      used to catch fish when they strike the lure. Some lures are placed to attract
-      fish so a spear can be impaled into the fish or so the fish can be captured
-      by hand. Most lures are attached to the end of a fishing line and have various
-      styles of hooks attached to the body and are designed to elicit a strike resulting
-      in a hookset. Many lures are commercially made but some are hand made such as
-      fishing flies. Hand tying fly lures to match the hatch is considered a challenge
-      by many amateur entomologists.
     screenshots:
     - description: Can he land a bass?
       large_image: {filename: BassLures_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -864,9 +868,20 @@
       small_image: {filename: BassLures_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: BassLures_small_icon.png, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [bass, fish, learning, work, xlure]
     title: Bass Lures
     unique_name: bass_lures
+    usage_requirements: A fishing lure is a type of artificial fishing bait which
+      is designed to attract a fish's attention. The lure uses movement, vibration,
+      flash and color to bait fish. Many lures are equipped with one or more hooks
+      that are used to catch fish when they strike the lure. Some lures are placed
+      to attract fish so a spear can be impaled into the fish or so the fish can be
+      captured by hand. Most lures are attached to the end of a fishing line and have
+      various styles of hooks attached to the body and are designed to elicit a strike
+      resulting in a hookset. Many lures are commercially made but some are hand made
+      such as fishing flies. Hand tying fly lures to match the hatch is considered
+      a challenge by many amateur entomologists.
     version_name: '1'
     what_is_new: A daisy chain is a teaser consisting of a "chain" of plastic lures
       run without hooks.
@@ -923,7 +938,6 @@
     launch_url: https://en.wikipedia.org/wiki/Beast_(comics)
     listing_type: Web Services
     owners: [syme]
-    requirements: None
     screenshots:
     - description: null
       large_image: {filename: Beast_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -931,9 +945,11 @@
       small_image: {filename: Beast_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Beast_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [avengers, x-men]
     title: Beast
     unique_name: beast
+    usage_requirements: None
     version_name: '2'
     what_is_new: null
   listing_activity:
@@ -1021,7 +1037,6 @@
     launch_url: https://en.wikipedia.org/wiki/BeiDou_Navigation_Satellite_System
     listing_type: Web Services
     owners: [rutherford]
-    requirements: None
     screenshots:
     - description: null
       large_image: {filename: BeiDouNavigationSatelliteSystem_0_large_screenshot.jpeg,
@@ -1031,9 +1046,11 @@
         security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: BeiDouNavigationSatelliteSystem_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [maps, navigation]
     title: BeiDou Navigation Satellite System
     unique_name: beidou_navigation_satellite_system
+    usage_requirements: None
     version_name: '1.0'
     what_is_new: null
   listing_activity:
@@ -1069,7 +1086,6 @@
     launch_url: https://en.wikipedia.org/wiki/Bleach_%28Nirvana_album%29
     listing_type: Desktop App
     owners: [bettafish, wsmith]
-    requirements: Flannel
     screenshots:
     - description: null
       large_image: {filename: Bleach_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -1085,9 +1101,11 @@
       small_image: {filename: Bleach_2_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Bleach_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [Grunge]
     title: Bleach
     unique_name: bleach
+    usage_requirements: Flannel
     version_name: '1.989'
     what_is_new: null
   listing_activity:
@@ -1128,7 +1146,6 @@
     launch_url: https://en.wikipedia.org/wiki/Blink_(comics)
     listing_type: Code Library
     owners: [syme]
-    requirements: None
     screenshots:
     - description: null
       large_image: {filename: Blink_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -1136,9 +1153,11 @@
       small_image: {filename: Blink_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Blink_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [x-men]
     title: Blink
     unique_name: blink
+    usage_requirements: None
     version_name: '1'
     what_is_new: null
   listing_activity:
@@ -1186,7 +1205,6 @@
     launch_url: https://en.wikipedia.org/wiki/Bombardier_Transportation
     listing_type: Web Services
     owners: [rutherford]
-    requirements: None
     screenshots:
     - description: null
       large_image: {filename: BombardierTransportation_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -1194,9 +1212,11 @@
       small_image: {filename: BombardierTransportation_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: BombardierTransportation_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [rail, transport]
     title: Bombardier Transportation
     unique_name: bombardier_transportation
+    usage_requirements: None
     version_name: '2.4'
     what_is_new: null
   listing_activity:
@@ -1238,7 +1258,6 @@
     launch_url: https://en.wikipedia.org/wiki/Bourbon_whiskey
     listing_type: Desktop App
     owners: [jones]
-    requirements: None
     screenshots:
     - description: The real developers tool kit.
       large_image: {filename: Bourbon_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -1246,9 +1265,11 @@
       small_image: {filename: Bourbon_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Bourbon_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [booze, buzz, drink, good, hangover]
     title: Bourbon
     unique_name: bourbon
+    usage_requirements: None
     version_name: '1'
     what_is_new: Bourbon is served in a variety of manners, including neat, diluted
       with water, over ice ("on the rocks"), with other beverages in simple mixed
@@ -1287,7 +1308,6 @@
     launch_url: https://en.wikipedia.org/wiki/Bowser_%28character%29
     listing_type: Widget
     owners: [bettafish]
-    requirements: Fireballs
     screenshots:
     - description: null
       large_image: {filename: Bowser_0_large_screenshot.png, security_marking: UNCLASSIFIED}
@@ -1295,9 +1315,11 @@
       small_image: {filename: Bowser_0_small_screenshot.png, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Bowser_small_icon.png, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [character]
     title: Bowser
     unique_name: bowser
+    usage_requirements: Fireballs
     version_name: '1'
     what_is_new: null
   listing_activity:
@@ -1327,7 +1349,6 @@
     launch_url: '{DEMO_APP_ROOT}/demo_apps/centerSampleListings/breadBasket/index.html'
     listing_type: Web Application
     owners: [julia]
-    requirements: None
     screenshots:
     - description: null
       large_image: {filename: BreadBasket_0_large_screenshot.png, security_marking: UNCLASSIFIED}
@@ -1335,9 +1356,11 @@
       small_image: {filename: BreadBasket_0_small_screenshot.png, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: BreadBasket_small_icon.png, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [demo, demo_tag, example]
     title: Bread Basket
     unique_name: ozp.test.bread_basket
+    usage_requirements: None
     version_name: 1.0.0
     what_is_new: Nothing really new here
   listing_activity:
@@ -1389,7 +1412,6 @@
     launch_url: https://en.wikipedia.org/wiki/Brisket#Other_variations
     listing_type: Web Services
     owners: [bettafish, jones]
-    requirements: none
     screenshots:
     - description: There's the meat; get in my belly!!!
       large_image: {filename: Brisket_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -1397,9 +1419,11 @@
       small_image: {filename: Brisket_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Brisket_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [USDA, bbq, brisket, meat, smoked, steak]
     title: Brisket
     unique_name: brisket
+    usage_requirements: none
     version_name: '1'
     what_is_new: Brisket is a cut of meat from the breast or lower chest of beef or
       veal. The beef brisket is one of the nine beef primal cuts, though the precise
@@ -1430,7 +1454,6 @@
     launch_url: http://localhost.com
     listing_type: Web Services
     owners: [aaronson]
-    requirements: None
     screenshots:
     - description: null
       large_image: {filename: Building_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -1438,9 +1461,11 @@
       small_image: {filename: Building_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Building_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [Architecture, Buildings]
     title: Building
     unique_name: building
+    usage_requirements: None
     version_name: '1'
     what_is_new: null
   listing_activity:
@@ -1482,7 +1507,6 @@
     launch_url: http://www.i.com
     listing_type: Web Application
     owners: [bettafish, wsmith]
-    requirements: None
     screenshots:
     - description: null
       large_image: {filename: BusinessInsuranceRisk_0_large_screenshot.png, security_marking: UNCLASSIFIED}
@@ -1490,9 +1514,11 @@
       small_image: {filename: BusinessInsuranceRisk_0_small_screenshot.png, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: BusinessInsuranceRisk_small_icon.png, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [business, insurance, risk]
     title: Business Insurance Risk
     unique_name: business_insurance_risk
+    usage_requirements: None
     version_name: '1.0'
     what_is_new: null
   listing_activity:
@@ -1537,7 +1563,6 @@
     launch_url: http://businessmanagment.com
     listing_type: Desktop App
     owners: [wsmith]
-    requirements: None
     screenshots:
     - description: null
       large_image: {filename: BusinessManagementSystem_0_large_screenshot.png, security_marking: UNCLASSIFIED}
@@ -1545,9 +1570,11 @@
       small_image: {filename: BusinessManagementSystem_0_small_screenshot.png, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: BusinessManagementSystem_small_icon.png, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [managment, process, risk]
     title: Business Management System
     unique_name: business_management_system
+    usage_requirements: None
     version_name: '2.02'
     what_is_new: null
   listing_activity:
@@ -1593,7 +1620,6 @@
     launch_url: https://en.wikipedia.org/wiki/Cable_ferry
     listing_type: Desktop App
     owners: [rutherford]
-    requirements: None
     screenshots:
     - description: null
       large_image: {filename: Cableferry_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -1601,9 +1627,11 @@
       small_image: {filename: Cableferry_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Cableferry_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [transport]
     title: Cable ferry
     unique_name: cable_ferry
+    usage_requirements: None
     version_name: '1.1'
     what_is_new: null
   listing_activity:
@@ -1644,7 +1672,6 @@
     launch_url: https://en.wikipedia.org/wiki/Chain_boat_navigation
     listing_type: Widget
     owners: [rutherford]
-    requirements: None
     screenshots:
     - description: null
       large_image: {filename: Chainboatnavigation_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -1652,9 +1679,11 @@
       small_image: {filename: Chainboatnavigation_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Chainboatnavigation_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [navigation]
     title: Chain boat navigation
     unique_name: chain_boat_navigation
+    usage_requirements: None
     version_name: '1.0'
     what_is_new: null
   listing_activity:
@@ -1684,7 +1713,6 @@
     launch_url: '{DEMO_APP_ROOT}/demo_apps/centerSampleListings/chartCourse/index.html'
     listing_type: Web Application
     owners: [wsmith]
-    requirements: None
     screenshots:
     - description: null
       large_image: {filename: ChartCourse_0_large_screenshot.png, security_marking: UNCLASSIFIED}
@@ -1692,9 +1720,11 @@
       small_image: {filename: ChartCourse_0_small_screenshot.png, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: ChartCourse_small_icon.png, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [demo, demo_tag]
     title: Chart Course
     unique_name: ozp.test.chartcourse
+    usage_requirements: None
     version_name: 1.0.0
     what_is_new: Nothing really new here
   listing_activity:
@@ -1737,7 +1767,6 @@
     launch_url: https://en.wikipedia.org/wiki/Chasing_Amy
     listing_type: Code Library
     owners: [bettafish]
-    requirements: None
     screenshots:
     - description: null
       large_image: {filename: ChasingAmy_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -1745,9 +1774,11 @@
       small_image: {filename: ChasingAmy_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: ChasingAmy_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [Kevin Smith]
     title: Chasing Amy
     unique_name: chasing_amy
+    usage_requirements: None
     version_name: '1997'
     what_is_new: null
   listing_activity:
@@ -1776,7 +1807,6 @@
     launch_url: '{DEMO_APP_ROOT}/demo_apps/centerSampleListings/chatterBox/index.html'
     listing_type: Web Application
     owners: [julia]
-    requirements: None
     screenshots:
     - description: null
       large_image: {filename: ChatterBox_0_large_screenshot.png, security_marking: UNCLASSIFIED}
@@ -1784,9 +1814,11 @@
       small_image: {filename: ChatterBox_0_small_screenshot.png, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: ChatterBox_small_icon.png, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [demo, demo_tag]
     title: Chatter Box
     unique_name: ozp.test.chatterbox
+    usage_requirements: None
     version_name: 1.0.0
     what_is_new: Nothing really new here
   listing_activity:
@@ -1820,7 +1852,6 @@
     launch_url: https://en.wikipedia.org/wiki/Cheese_and_crackers
     listing_type: Web Application
     owners: [bettafish]
-    requirements: None
     screenshots:
     - description: null
       large_image: {filename: CheeseandCrackers_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -1832,9 +1863,11 @@
       small_image: {filename: CheeseandCrackers_1_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: CheeseandCrackers_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [food]
     title: Cheese and Crackers
     unique_name: cheese_and_crackers
+    usage_requirements: None
     version_name: '1'
     what_is_new: null
   listing_activity:
@@ -1871,7 +1904,6 @@
     launch_url: https://en.wikipedia.org/wiki/Cheesecake
     listing_type: Widget
     owners: [bettafish, jones]
-    requirements: none
     screenshots:
     - description: null
       large_image: {filename: Cheesecake_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -1887,9 +1919,11 @@
       small_image: {filename: Cheesecake_2_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Cheesecake_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [cake, fish, good, yum]
     title: Cheesecake
     unique_name: cheesecake
+    usage_requirements: none
     version_name: '1'
     what_is_new: Good eats.
   listing_activity:
@@ -1919,7 +1953,6 @@
     launch_url: https://en.wikipedia.org/wiki/Chicken_and_waffles
     listing_type: Widget
     owners: [bettafish]
-    requirements: None
     screenshots:
     - description: Chicken and Waffles
       large_image: {filename: ChickenandWaffles_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -1931,9 +1964,11 @@
       small_image: {filename: ChickenandWaffles_1_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: ChickenandWaffles_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [chicken, food, waffles]
     title: Chicken and Waffles
     unique_name: chicken_and_waffles
+    usage_requirements: None
     version_name: '1'
     what_is_new: null
   listing_activity:
@@ -1969,7 +2004,6 @@
     launch_url: https://en.wikipedia.org/wiki/Clerks
     listing_type: Desktop App
     owners: [bettafish]
-    requirements: None
     screenshots:
     - description: null
       large_image: {filename: Clerks_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -1977,9 +2011,11 @@
       small_image: {filename: Clerks_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Clerks_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [Comedy, Kevin Smith, Movie]
     title: Clerks
     unique_name: clerks
+    usage_requirements: None
     version_name: '1'
     what_is_new: null
   listing_activity:
@@ -2017,7 +2053,6 @@
     launch_url: https://en.wikipedia.org/wiki/Clerks_II
     listing_type: Desktop App
     owners: [bettafish]
-    requirements: Color TV
     screenshots:
     - description: null
       large_image: {filename: ClerksII_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -2025,9 +2060,11 @@
       small_image: {filename: ClerksII_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: ClerksII_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [Kevin Smith, Movie]
     title: Clerks II
     unique_name: clerks_ii
+    usage_requirements: Color TV
     version_name: '2'
     what_is_new: null
   listing_activity:
@@ -2056,7 +2093,6 @@
     launch_url: '{DEMO_APP_ROOT}/demo_apps/centerSampleListings/clipboard/index.html'
     listing_type: Web Application
     owners: [wsmith]
-    requirements: None
     screenshots:
     - description: null
       large_image: {filename: Clipboard_0_large_screenshot.png, security_marking: UNCLASSIFIED}
@@ -2064,9 +2100,11 @@
       small_image: {filename: Clipboard_0_small_screenshot.png, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Clipboard_small_icon.png, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [demo, demo_tag]
     title: Clipboard
     unique_name: ozp.test.clipboard
+    usage_requirements: None
     version_name: 1.0.0
     what_is_new: Nothing really new here
   listing_activity:
@@ -2106,7 +2144,6 @@
     launch_url: https://en.wikipedia.org/wiki/Office_Assistant
     listing_type: Widget
     owners: [bettafish]
-    requirements: Office
     screenshots:
     - description: null
       large_image: {filename: Clippy_0_large_screenshot.png, security_marking: UNCLASSIFIED}
@@ -2114,9 +2151,11 @@
       small_image: {filename: Clippy_0_small_screenshot.png, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Clippy_small_icon.png, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [m$, microsoft, paperclip]
     title: Clippy
     unique_name: clippy
+    usage_requirements: Office
     version_name: '1'
     what_is_new: null
   listing_activity:
@@ -2169,7 +2208,6 @@
     launch_url: https://en.wikipedia.org/wiki/Compound_bow
     listing_type: Widget
     owners: [bettafish, jones]
-    requirements: none
     screenshots:
     - description: null
       large_image: {filename: Compoundbow_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -2177,9 +2215,11 @@
       small_image: {filename: Compoundbow_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Compoundbow_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [arrow, bow, hunting, sport]
     title: Compound bow
     unique_name: compound_bow
+    usage_requirements: none
     version_name: '1'
     what_is_new: The function of the cam systems (known as the 'eccentrics') is to
       maximize the energy storage throughout the draw cycle and provide let-off at
@@ -2230,7 +2270,6 @@
     launch_url: https://en.wikipedia.org/wiki/Cyclops_(comics)
     listing_type: Code Library
     owners: [syme]
-    requirements: None
     screenshots:
     - description: null
       large_image: {filename: Cyclops_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -2238,9 +2277,11 @@
       small_image: {filename: Cyclops_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED//FOR OFFICIAL USE ONLY
     small_icon: {filename: Cyclops_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [x-men]
     title: Cyclops
     unique_name: cyclops
+    usage_requirements: None
     version_name: '1'
     what_is_new: null
   listing_activity:
@@ -2289,7 +2330,6 @@
     launch_url: https://en.wikipedia.org/wiki/Deadpool
     listing_type: Web Services
     owners: [syme]
-    requirements: None
     screenshots:
     - description: null
       large_image: {filename: Deadpool_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -2297,9 +2337,11 @@
       small_image: {filename: Deadpool_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Deadpool_small_icon.png, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [merc]
     title: Deadpool
     unique_name: deadpool
+    usage_requirements: None
     version_name: '1'
     what_is_new: null
   listing_activity:
@@ -2349,7 +2391,6 @@
     launch_url: http://dv.com
     listing_type: Desktop App
     owners: [wsmith]
-    requirements: None
     screenshots:
     - description: null
       large_image: {filename: DesktopVirtualization_0_large_screenshot.png, security_marking: UNCLASSIFIED}
@@ -2361,9 +2402,11 @@
       small_image: {filename: DesktopVirtualization_1_small_screenshot.png, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: DesktopVirtualization_small_icon.png, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [automation, desktop, efficiency, virtualization]
     title: Desktop Virtualization
     unique_name: desktop_virtualization
+    usage_requirements: None
     version_name: '2.01'
     what_is_new: null
   listing_activity:
@@ -2423,7 +2466,6 @@
     launch_url: https://en.wikipedia.org/wiki/Diamond
     listing_type: Widget
     owners: [wsmith]
-    requirements: Must spend x amount of your salary to show your love
     screenshots:
     - description: Loose diamonds on a white background
       large_image: {filename: Diamond_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -2443,9 +2485,11 @@
       small_image: {filename: Diamond_3_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Diamond_small_icon.png, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [carbon, chocolate, diamond, gem, gemstone, jewelry, white]
     title: Diamond
     unique_name: diamond
+    usage_requirements: Must spend x amount of your salary to show your love
     version_name: '2'
     what_is_new: null
   listing_activity:
@@ -2477,7 +2521,6 @@
     launch_url: http://localhost.com
     listing_type: Code Library
     owners: [aaronson]
-    requirements: Windows 95
     screenshots:
     - description: Scariest one in history
       large_image: {filename: Dinosaur_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -2489,9 +2532,11 @@
       small_image: {filename: Dinosaur_1_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Dinosaur_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [Animals, Dead, Extinct, Reptiles]
     title: Dinosaur
     unique_name: dinosaur
+    usage_requirements: Windows 95
     version_name: '1'
     what_is_new: null
   listing_activity:
@@ -2529,7 +2574,6 @@
     launch_url: https://en.wikipedia.org/wiki/Double_Heroides
     listing_type: Web Application
     owners: [bettafish]
-    requirements: None
     screenshots:
     - description: null
       large_image: {filename: DoubleHeroides_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -2537,9 +2581,11 @@
       small_image: {filename: DoubleHeroides_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: DoubleHeroides_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [book]
     title: Double Heroides
     unique_name: double_heroides
+    usage_requirements: None
     version_name: '6'
     what_is_new: null
   listing_activity:
@@ -2583,7 +2629,6 @@
     launch_url: https://en.wikipedia.org/wiki/Dragon
     listing_type: Code Library
     owners: [bigbrother2, khaleesi]
-    requirements: None
     screenshots:
     - description: An example of a dragon
       large_image: {filename: Dragons_0_large_screenshot.png, security_marking: UNCLASSIFIED}
@@ -2595,9 +2640,11 @@
       small_image: {filename: Dragons_1_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Dragons_small_icon.png, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [fantasy, imaginary, legend, mythology]
     title: Dragons
     unique_name: dragons
+    usage_requirements: None
     version_name: '5'
     what_is_new: New illustrations of dragons
   listing_activity:
@@ -2635,7 +2682,6 @@
     launch_url: https://en.wikipedia.org/wiki/E-ZPass
     listing_type: Desktop App
     owners: [bettafish]
-    requirements: None
     screenshots:
     - description: null
       large_image: {filename: E-ZPass_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -2643,9 +2689,11 @@
       small_image: {filename: E-ZPass_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: E-ZPass_small_icon.png, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [car, driving, toll]
     title: E-ZPass
     unique_name: e-zpass
+    usage_requirements: None
     version_name: '1987'
     what_is_new: null
   listing_activity:
@@ -2677,8 +2725,6 @@
     launch_url: https://en.wikipedia.org/wiki/Electric_guitar
     listing_type: Web Application
     owners: [bigbrother]
-    requirements: Magnetic pickup that uses the principle of direct electromagnetic
-      induction
     screenshots:
     - description: null
       large_image: {filename: ElectricGuitar_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -2686,9 +2732,12 @@
       small_image: {filename: ElectricGuitar_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: ElectricGuitar_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [guitar, instrument, music, sound, strings, wood, wooden]
     title: Electric Guitar
     unique_name: electric_guitar
+    usage_requirements: Magnetic pickup that uses the principle of direct electromagnetic
+      induction
     version_name: '1.05'
     what_is_new: Construction vary greatly in the shape of the body and the configuration
       of the neck, bridge, and pickup
@@ -2725,7 +2774,6 @@
     launch_url: https://en.wikipedia.org/wiki/Electric_piano
     listing_type: Web Application
     owners: [bigbrother]
-    requirements: Electricity and motivation to play piano
     screenshots:
     - description: Keyboard
       large_image: {filename: ElectricPiano_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -2733,9 +2781,11 @@
       small_image: {filename: ElectricPiano_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: ElectricPiano_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [instrument, keyboard, music, piano, recording, synthesizer]
     title: Electric Piano
     unique_name: electric_piano
+    usage_requirements: Electricity and motivation to play piano
     version_name: 8.0.9
     what_is_new: Digital electronic stage pianos that provide an emulated electric
       piano sound
@@ -2766,7 +2816,6 @@
     launch_url: https://en.wikipedia.org/wiki/Bitter_%28beer%29
     listing_type: Widget
     owners: [bettafish]
-    requirements: None
     screenshots:
     - description: null
       large_image: {filename: EnglishBitter_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -2774,9 +2823,11 @@
       small_image: {filename: EnglishBitter_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: EnglishBitter_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [beer]
     title: English Bitter
     unique_name: english_bitter
+    usage_requirements: None
     version_name: '3'
     what_is_new: null
   listing_activity:
@@ -2812,7 +2863,6 @@
     launch_url: https://en.wikipedia.org/wiki/Eraser
     listing_type: Widget
     owners: [bettafish]
-    requirements: Pencil
     screenshots:
     - description: null
       large_image: {filename: Eraser_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -2820,9 +2870,11 @@
       small_image: {filename: Eraser_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Eraser_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [pencil]
     title: Eraser
     unique_name: eraser
+    usage_requirements: Pencil
     version_name: '1'
     what_is_new: null
   listing_activity:
@@ -2858,7 +2910,6 @@
     launch_url: https://en.wikipedia.org/wiki/Excitebike
     listing_type: Desktop App
     owners: [bettafish]
-    requirements: NES
     screenshots:
     - description: null
       large_image: {filename: Excitebike_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -2866,9 +2917,11 @@
       small_image: {filename: Excitebike_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Excitebike_small_icon.png, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [bikes, games, nes]
     title: Excitebike
     unique_name: excitebike
+    usage_requirements: NES
     version_name: '1'
     what_is_new: null
   listing_activity:
@@ -2903,7 +2956,6 @@
     launch_url: https://en.wikipedia.org/wiki/Fiat_525
     listing_type: Desktop App
     owners: [bettafish]
-    requirements: None
     screenshots:
     - description: null
       large_image: {filename: Fiat525_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -2911,9 +2963,11 @@
       small_image: {filename: Fiat525_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Fiat525_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [auto, automobile, car]
     title: Fiat 525
     unique_name: fiat_525
+    usage_requirements: None
     version_name: '525'
     what_is_new: null
   listing_activity:
@@ -2960,7 +3014,6 @@
     launch_url: https://en.wikipedia.org/wiki/Fight_Club
     listing_type: Desktop App
     owners: [bettafish]
-    requirements: The first rule of fight club is you do not talk about fight club
     screenshots:
     - description: null
       large_image: {filename: FightClub_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -2968,9 +3021,12 @@
       small_image: {filename: FightClub_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: FightClub_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [about, don't, it, talk]
     title: Fight Club
     unique_name: fight_club
+    usage_requirements: The first rule of fight club is you do not talk about fight
+      club
     version_name: '1'
     what_is_new: null
   listing_activity:
@@ -3002,7 +3058,6 @@
     launch_url: http://localhost.com
     listing_type: Web Application
     owners: [aaronson]
-    requirements: Must have floppy disk drive
     screenshots:
     - description: Floppy Disk
       large_image: {filename: FloppyDisk_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -3014,9 +3069,11 @@
       small_image: {filename: FloppyDisk_1_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: FloppyDisk_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [Memory, Old, Storage]
     title: Floppy Disk
     unique_name: floppy_disk
+    usage_requirements: Must have floppy disk drive
     version_name: '12'
     what_is_new: null
   listing_activity:
@@ -3053,9 +3110,6 @@
     launch_url: https://en.wikipedia.org/wiki/Formula
     listing_type: Desktop App
     owners: [bigbrother]
-    requirements: Expressions are distinct from formulas in that they cannot contain
-      an equals sign (=). Whereas formulas are comparable to sentences, expressions
-      are more like phrases.
     screenshots:
     - description: Math Formula
       large_image: {filename: Formula_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -3063,10 +3117,14 @@
       small_image: {filename: Formula_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Formula_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [chalk, conceptual, handwritten, learning, math, physics, science, text,
       writing]
     title: Formula
     unique_name: formula
+    usage_requirements: Expressions are distinct from formulas in that they cannot
+      contain an equals sign (=). Whereas formulas are comparable to sentences, expressions
+      are more like phrases.
     version_name: 8.1.9
     what_is_new: When the chemical compound of the formula consists of simple molecules,
       chemical formulas often employ ways to suggest the structure of the molecule.
@@ -3097,7 +3155,6 @@
     launch_url: '{DEMO_APP_ROOT}/demo_apps/frameit/index.html'
     listing_type: Web Application
     owners: [wsmith]
-    requirements: None
     screenshots:
     - description: null
       large_image: {filename: FrameIt_0_large_screenshot.png, security_marking: UNCLASSIFIED}
@@ -3105,9 +3162,11 @@
       small_image: {filename: FrameIt_0_small_screenshot.png, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: FrameIt_small_icon.png, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [demo, demo_tag]
     title: FrameIt
     unique_name: ozp.test.frameit
+    usage_requirements: None
     version_name: 1.0.0
     what_is_new: Nothing really new here
   listing_activity:
@@ -3141,7 +3200,6 @@
     launch_url: https://commons.wikimedia.org/wiki/Commons:Featured_pictures/Non-photographic_media/Maps
     listing_type: Widget
     owners: [rutherford]
-    requirements: None
     screenshots:
     - description: null
       large_image: {filename: GalleryofMaps_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -3149,9 +3207,11 @@
       small_image: {filename: GalleryofMaps_0_small_screenshot.png, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: GalleryofMaps_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [maps]
     title: Gallery of Maps
     unique_name: gallery_of_maps
+    usage_requirements: None
     version_name: '1.0'
     what_is_new: null
   listing_activity:
@@ -3170,7 +3230,8 @@
     contacts: []
     description: Gerris is computer software in the field of computational fluid dynamics
       (CFD). Gerris was released as free and open-source software, subject to the
-      requirements of the GNU General Public License (GPL), version 2 or any later.
+      usage_requirements of the GNU General Public License (GPL), version 2 or any
+      later.
     description_short: Gerris is computer software in the field of computational fluid
       dynamics (CFD).
     doc_urls: []
@@ -3184,7 +3245,6 @@
     launch_url: https://en.wikipedia.org/wiki/Gerris_%28software%29
     listing_type: Code Library
     owners: [bettafish]
-    requirements: None
     screenshots:
     - description: null
       large_image: {filename: Gerris_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -3192,9 +3252,11 @@
       small_image: {filename: Gerris_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Gerris_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [software]
     title: Gerris
     unique_name: gerris
+    usage_requirements: None
     version_name: 3d
     what_is_new: null
   listing_activity:
@@ -3234,7 +3296,6 @@
     launch_url: https://en.wikipedia.org/wiki/Global_Navigation_Grid_Code
     listing_type: Web Services
     owners: [rutherford]
-    requirements: None
     screenshots:
     - description: null
       large_image: {filename: GlobalNavigationGridCode_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -3242,9 +3303,11 @@
       small_image: {filename: GlobalNavigationGridCode_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: GlobalNavigationGridCode_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [maps, navigation]
     title: Global Navigation Grid Code
     unique_name: global_navigation_grid_code
+    usage_requirements: None
     version_name: '1.0'
     what_is_new: null
   listing_activity:
@@ -3293,7 +3356,6 @@
     launch_url: https://en.wikipedia.org/wiki/Gramophone_record
     listing_type: Widget
     owners: [bettafish]
-    requirements: Record player
     screenshots:
     - description: null
       large_image: {filename: Gramophonerecord_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -3301,9 +3363,11 @@
       small_image: {filename: Gramophonerecord_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Gramophonerecord_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [music, record, vinyl]
     title: Gramophone record
     unique_name: gramophone_record
+    usage_requirements: Record player
     version_name: '45'
     what_is_new: null
   listing_activity:
@@ -3343,7 +3407,6 @@
     launch_url: https://en.wikipedia.org/wiki/Longcase_clock
     listing_type: Desktop App
     owners: [bettafish, jones]
-    requirements: none
     screenshots:
     - description: null
       large_image: {filename: Grandfatherclock_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -3351,9 +3414,11 @@
       small_image: {filename: Grandfatherclock_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Grandfatherclock_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [clock, time]
     title: Grandfather clock
     unique_name: grandfather_clock
+    usage_requirements: none
     version_name: '1'
     what_is_new: 'Traditionally, longcase clocks were made with two types of movement:
       eight-day and one-day (30-hour) movements. A clock with an eight-day movement
@@ -3398,11 +3463,6 @@
     launch_url: https://en.wikipedia.org/wiki/Great_white_shark
     listing_type: Web Application
     owners: [bigbrother]
-    requirements: "Great white sharks live in almost all coastal and offshore waters\
-      \ which have water temperature between 12 and 24 \xB0C (54 and 75 \xB0F), with\
-      \ greater concentrations in the United States (Northeast and California), South\
-      \ Africa, Japan, Oceania, Chile, and the Mediterranean. One of the densest known\
-      \ populations is found around Dyer Island, South Africa."
     screenshots:
     - description: Map and jaw pictures
       large_image: {filename: Greatwhiteshark_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -3410,9 +3470,15 @@
       small_image: {filename: Greatwhiteshark_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Greatwhiteshark_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [fish, science, shark]
     title: Great white shark
     unique_name: great_white_shark
+    usage_requirements: "Great white sharks live in almost all coastal and offshore\
+      \ waters which have water temperature between 12 and 24 \xB0C (54 and 75 \xB0\
+      F), with greater concentrations in the United States (Northeast and California),\
+      \ South Africa, Japan, Oceania, Chile, and the Mediterranean. One of the densest\
+      \ known populations is found around Dyer Island, South Africa."
     version_name: 10.1.9
     what_is_new: The great white shark has no known natural predators other than,
       on very rare occasion, the killer whale.
@@ -3465,7 +3531,6 @@
     launch_url: https://en.wikipedia.org/wiki/Harley-Davidson_CVO
     listing_type: Code Library
     owners: [bettafish, jones]
-    requirements: None
     screenshots:
     - description: null
       large_image: {filename: Harley-DavidsonCVO_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -3473,9 +3538,11 @@
       small_image: {filename: Harley-DavidsonCVO_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Harley-DavidsonCVO_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [CVO, davidson, harley, motorcycle]
     title: Harley-Davidson CVO
     unique_name: harley-davidson_cvo
+    usage_requirements: None
     version_name: '2'
     what_is_new: CVO 125 big bore motors
   listing_activity:
@@ -3507,7 +3574,6 @@
     launch_url: '{DEMO_APP_ROOT}/demo_apps/centerSampleListings/hatchLatch/index.html'
     listing_type: Web Application
     owners: [wsmith]
-    requirements: None
     screenshots:
     - description: null
       large_image: {filename: HatchLatch_0_large_screenshot.png, security_marking: UNCLASSIFIED}
@@ -3515,9 +3581,11 @@
       small_image: {filename: HatchLatch_0_small_screenshot.png, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: HatchLatch_small_icon.png, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [demo, demo_tag]
     title: Hatch Latch
     unique_name: ozp.test.hatchlatch
+    usage_requirements: None
     version_name: 1.0.0
     what_is_new: Nothing really new here
   listing_activity:
@@ -3549,7 +3617,6 @@
     launch_url: http://localhost.com
     listing_type: Web Application
     owners: [aaronson]
-    requirements: None
     screenshots:
     - description: Island
       large_image: {filename: Hawaii_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -3561,9 +3628,11 @@
       small_image: {filename: Hawaii_1_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Hawaii_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [Expensive, Travel, Vacation]
     title: Hawaii
     unique_name: hawaii
+    usage_requirements: None
     version_name: '1'
     what_is_new: null
   listing_activity:
@@ -3596,7 +3665,6 @@
     launch_url: http://www.google.com
     listing_type: Web Application
     owners: [bigbrother]
-    requirements: none
     screenshots:
     - description: Cersei
       large_image: {filename: HouseLannister_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -3612,10 +3680,12 @@
       small_image: {filename: HouseLannister_2_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: HouseLannister_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [House Lannister, casterly rock, cersei, game of thrones, got, jaime, joffrey,
       tyrion]
     title: House Lannister
     unique_name: house_lannister
+    usage_requirements: none
     version_name: v5.0
     what_is_new: null
   listing_activity:
@@ -3646,7 +3716,6 @@
     launch_url: http://www.google.com
     listing_type: Web Application
     owners: [bigbrother]
-    requirements: none
     screenshots:
     - description: John Snow 1
       large_image: {filename: HouseStark_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -3666,10 +3735,12 @@
       small_image: {filename: HouseStark_3_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: HouseStark_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [Starks, arya, bran, catelyn, direwolf, direwolves, game of thrones, got,
       jon, king in the north, ned, red wedding, rickon, sansa, winter is coming]
     title: House Stark
     unique_name: house_stark
+    usage_requirements: none
     version_name: v6.0
     what_is_new: null
   listing_activity:
@@ -3710,7 +3781,6 @@
     launch_url: http://gameofthrones.wikia.com/wiki/House_Targaryen
     listing_type: Web Services
     owners: [khaleesi]
-    requirements: None
     screenshots:
     - description: Targaryen house sigil
       large_image: {filename: HouseTargaryen_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -3722,10 +3792,12 @@
       small_image: {filename: HouseTargaryen_1_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: HouseTargaryen_small_icon.png, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [daenerys, dany, dragon, fire and blood, game of thrones, got, mother of
         dragons, targaryen]
     title: House Targaryen
     unique_name: house_targaryen
+    usage_requirements: None
     version_name: '11'
     what_is_new: Now seeking allies to take down the false rulers of Westeros
   listing_activity:
@@ -3768,7 +3840,6 @@
     launch_url: https://en.wikipedia.org/wiki/Huexotzinco_Codex
     listing_type: Code Library
     owners: [bettafish]
-    requirements: None
     screenshots:
     - description: null
       large_image: {filename: HuexotzincoCodex_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -3776,9 +3847,11 @@
       small_image: {filename: HuexotzincoCodex_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED//FOR OFFICIAL USE ONLY
     small_icon: {filename: HuexotzincoCodex_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [codex]
     title: Huexotzinco Codex
     unique_name: huexotzinco_codex
+    usage_requirements: None
     version_name: '1'
     what_is_new: null
   listing_activity:
@@ -3818,7 +3891,6 @@
     launch_url: https://en.wikipedia.org/wiki/India_pale_ale
     listing_type: Desktop App
     owners: [bettafish]
-    requirements: None
     screenshots:
     - description: null
       large_image: {filename: IndiaPaleAle_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -3826,9 +3898,11 @@
       small_image: {filename: IndiaPaleAle_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: IndiaPaleAle_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [beer]
     title: India Pale Ale
     unique_name: india_pale_ale
+    usage_requirements: None
     version_name: '12'
     what_is_new: null
   listing_activity:
@@ -3864,15 +3938,6 @@
     launch_url: https://wikimediafoundation.org/wiki/Home
     listing_type: Web Application
     owners: [bigbrother]
-    requirements: 'The Wikimedia Foundation relies heavily on the generous support
-      from our users. Please consider making a donation today, be it time or money.
-
-      The Wikimedia Foundation is incorporated as a 501(c)(3) nonprofit organization
-      in the United States, and donations from US citizens are tax deductible. Donations
-      made by citizens of other countries may also be tax deductible. Please see deductibility
-      of donations for details. Please see our fundraising page for details of making
-      donations via credit card, PayPal, postal mail or direct deposit. For all other
-      types of donations, please contact us.'
     screenshots:
     - description: null
       large_image: {filename: InformationalBook_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED//FOR
@@ -3881,9 +3946,19 @@
       small_image: {filename: InformationalBook_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED//FOR OFFICIAL USE ONLY
     small_icon: {filename: InformationalBook_small_icon.png, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [encyclopedia, free]
     title: Informational Book
     unique_name: informational_book
+    usage_requirements: 'The Wikimedia Foundation relies heavily on the generous support
+      from our users. Please consider making a donation today, be it time or money.
+
+      The Wikimedia Foundation is incorporated as a 501(c)(3) nonprofit organization
+      in the United States, and donations from US citizens are tax deductible. Donations
+      made by citizens of other countries may also be tax deductible. Please see deductibility
+      of donations for details. Please see our fundraising page for details of making
+      donations via credit card, PayPal, postal mail or direct deposit. For all other
+      types of donations, please contact us.'
     version_name: 1.0.5
     what_is_new: The annual plan documents the Foundation's 2016-17 financial plan,
       strategic targets, activities, and staffing overview.
@@ -3927,7 +4002,6 @@
     launch_url: http://bi.com
     listing_type: Desktop App
     owners: [bettafish, wsmith]
-    requirements: None
     screenshots:
     - description: null
       large_image: {filename: IntelligenceUnleashed_0_large_screenshot.png, security_marking: UNCLASSIFIED}
@@ -3947,9 +4021,11 @@
       small_image: {filename: IntelligenceUnleashed_3_small_screenshot.png, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: IntelligenceUnleashed_small_icon.png, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [brainstorm, collaborate]
     title: Intelligence Unleashed
     unique_name: intelligence_unleashed
+    usage_requirements: None
     version_name: '2.0'
     what_is_new: null
   listing_activity:
@@ -3990,7 +4066,6 @@
     launch_url: https://en.wikipedia.org/wiki/Intelligent_transportation_system
     listing_type: Web Application
     owners: [rutherford]
-    requirements: None
     screenshots:
     - description: null
       large_image: {filename: Intelligenttransportationsystem_0_large_screenshot.jpeg,
@@ -4000,9 +4075,11 @@
         security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Intelligenttransportationsystem_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [intelligent, transport]
     title: Intelligent transportation system
     unique_name: intelligent_transportation_system
+    usage_requirements: None
     version_name: '1.5'
     what_is_new: null
   listing_activity:
@@ -4044,7 +4121,6 @@
     launch_url: https://en.wikipedia.org/wiki/Internet_meme
     listing_type: Web Application
     owners: [bettafish]
-    requirements: A funny bone
     screenshots:
     - description: null
       large_image: {filename: Internetmeme_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -4060,9 +4136,11 @@
       small_image: {filename: Internetmeme_2_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Internetmeme_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [funny, meme, pictures]
     title: Internet meme
     unique_name: internet_meme
+    usage_requirements: A funny bone
     version_name: '1'
     what_is_new: null
   listing_activity:
@@ -4122,7 +4200,6 @@
     launch_url: https://en.wikipedia.org/wiki/Iron_Man
     listing_type: Code Library
     owners: [syme]
-    requirements: None
     screenshots:
     - description: null
       large_image: {filename: IronMan_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -4130,9 +4207,11 @@
       small_image: {filename: IronMan_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: IronMan_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [Avengers]
     title: Iron Man
     unique_name: iron_man
+    usage_requirements: None
     version_name: '1'
     what_is_new: null
   listing_activity:
@@ -4172,7 +4251,6 @@
     launch_url: https://en.wikipedia.org/wiki/Jar_of_Flies
     listing_type: Web Application
     owners: [bettafish, bigbrother]
-    requirements: None
     screenshots:
     - description: null
       large_image: {filename: JarofFlies_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -4184,9 +4262,11 @@
       small_image: {filename: JarofFlies_1_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED//FOR OFFICIAL USE ONLY
     small_icon: {filename: JarofFlies_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [Grunge]
     title: Jar of Flies
     unique_name: jar_of_flies
+    usage_requirements: None
     version_name: '1.994'
     what_is_new: null
   listing_activity:
@@ -4250,7 +4330,6 @@
     launch_url: https://en.wikipedia.org/wiki/Earth
     listing_type: Web Application
     owners: [betaraybill]
-    requirements: Requires the internet.
     screenshots:
     - description: null
       large_image: {filename: Jasoom_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -4258,9 +4337,11 @@
       small_image: {filename: Jasoom_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Jasoom_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [Planets]
     title: Jasoom
     unique_name: jasoom
+    usage_requirements: Requires the internet.
     version_name: '1.0'
     what_is_new: null
   listing_activity:
@@ -4311,7 +4392,6 @@
     launch_url: https://en.wikipedia.org/wiki/Jay_and_Silent_Bob_Strike_Back
     listing_type: Widget
     owners: [bettafish]
-    requirements: Pop culture knowledge
     screenshots:
     - description: null
       large_image: {filename: JayandSilentBobStrikeBack_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -4319,9 +4399,11 @@
       small_image: {filename: JayandSilentBobStrikeBack_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED//FOR OFFICIAL USE ONLY
     small_icon: {filename: JayandSilentBobStrikeBack_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [Kevin Smith]
     title: Jay and Silent Bob Strike Back
     unique_name: jay_and_silent_bob_strike_back
+    usage_requirements: Pop culture knowledge
     version_name: '20.01'
     what_is_new: null
   listing_activity:
@@ -4388,7 +4470,6 @@
     launch_url: https://en.wikipedia.org/wiki/Jean_Grey
     listing_type: Desktop App
     owners: [syme]
-    requirements: None
     screenshots:
     - description: null
       large_image: {filename: JeanGrey_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -4396,9 +4477,11 @@
       small_image: {filename: JeanGrey_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: JeanGrey_small_icon.png, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [x-men]
     title: Jean Grey
     unique_name: jean_grey
+    usage_requirements: None
     version_name: '1'
     what_is_new: null
   listing_activity:
@@ -4432,7 +4515,6 @@
     launch_url: '{DEMO_APP_ROOT}/demo_apps/centerSampleListings/jotSpot/index.html'
     listing_type: Web Application
     owners: [wsmith]
-    requirements: None
     screenshots:
     - description: null
       large_image: {filename: JotSpot_0_large_screenshot.png, security_marking: UNCLASSIFIED}
@@ -4440,9 +4522,11 @@
       small_image: {filename: JotSpot_0_small_screenshot.png, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: JotSpot_small_icon.png, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [demo, demo_tag]
     title: JotSpot
     unique_name: ozp.test.jotspot
+    usage_requirements: None
     version_name: 1.0.0
     what_is_new: Nothing really new here
   listing_activity:
@@ -4501,7 +4585,6 @@
     launch_url: https://en.wikipedia.org/wiki/Jupiter
     listing_type: Web Application
     owners: [betaraybill]
-    requirements: Requires the internet.
     screenshots:
     - description: null
       large_image: {filename: Jupiter_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -4509,9 +4592,11 @@
       small_image: {filename: Jupiter_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Jupiter_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [Planets]
     title: Jupiter
     unique_name: jupiter
+    usage_requirements: Requires the internet.
     version_name: '1.0'
     what_is_new: null
   listing_activity:
@@ -4556,7 +4641,6 @@
     launch_url: https://en.wikipedia.org/wiki/KIAA0319
     listing_type: Widget
     owners: [bettafish]
-    requirements: None
     screenshots:
     - description: null
       large_image: {filename: KIAA0319_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -4564,9 +4648,11 @@
       small_image: {filename: KIAA0319_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: KIAA0319_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [protein]
     title: KIAA0319
     unique_name: kiaa0319
+    usage_requirements: None
     version_name: KIAA0319
     what_is_new: null
   listing_activity:
@@ -4599,7 +4685,6 @@
     launch_url: https://en.wikipedia.org/wiki/KSnapshot
     listing_type: Desktop App
     owners: [bettafish]
-    requirements: KDE
     screenshots:
     - description: null
       large_image: {filename: KSnapshot_0_large_screenshot.png, security_marking: UNCLASSIFIED}
@@ -4607,9 +4692,11 @@
       small_image: {filename: KSnapshot_0_small_screenshot.png, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: KSnapshot_small_icon.png, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [images, pictures]
     title: KSnapshot
     unique_name: ksnapshot
+    usage_requirements: KDE
     version_name: 0.8.1
     what_is_new: null
   listing_activity:
@@ -4646,7 +4733,6 @@
     launch_url: https://en.wikipedia.org/wiki/Karta_GPS
     listing_type: Code Library
     owners: [rutherford]
-    requirements: None
     screenshots:
     - description: null
       large_image: {filename: KartaGPS_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -4654,9 +4740,11 @@
       small_image: {filename: KartaGPS_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: KartaGPS_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [maps, navigation, tool]
     title: Karta GPS
     unique_name: karta_gps
+    usage_requirements: None
     version_name: '1.0'
     what_is_new: null
   listing_activity:
@@ -4715,10 +4803,6 @@
     launch_url: https://en.wikipedia.org/wiki/Killer_whale
     listing_type: Web Application
     owners: [bigbrother]
-    requirements: Killer whales are found in all oceans and most seas. Due to their
-      enormous range, numbers, and density, distributional estimates are difficult
-      to compare, but they clearly prefer higher latitudes and coastal areas over
-      pelagic environments.
     screenshots:
     - description: null
       large_image: {filename: KillerWhale_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -4726,9 +4810,14 @@
       small_image: {filename: KillerWhale_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: KillerWhale_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [Mammal, Science]
     title: Killer Whale
     unique_name: killer_whale
+    usage_requirements: Killer whales are found in all oceans and most seas. Due to
+      their enormous range, numbers, and density, distributional estimates are difficult
+      to compare, but they clearly prefer higher latitudes and coastal areas over
+      pelagic environments.
     version_name: 1.0.1
     what_is_new: Wild killer whales are not considered a threat to humans
   listing_activity:
@@ -4798,7 +4887,6 @@
     launch_url: https://en.wikipedia.org/wiki/Komodo_dragon
     listing_type: Desktop App
     owners: [khaleesi]
-    requirements: None
     screenshots:
     - description: Komodo Dragon on a rock
       large_image: {filename: KomodoDragon_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -4806,9 +4894,11 @@
       small_image: {filename: KomodoDragon_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: KomodoDragon_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [Lizard, Monitor, Reptile]
     title: Komodo Dragon
     unique_name: komodo_dragon
+    usage_requirements: None
     version_name: '1'
     what_is_new: null
   listing_activity:
@@ -4848,7 +4938,6 @@
     launch_url: http://localhost.com
     listing_type: Widget
     owners: [aaronson]
-    requirements: None
     screenshots:
     - description: A ranch
       large_image: {filename: LITRANCH_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -4856,9 +4945,11 @@
       small_image: {filename: LITRANCH_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: LITRANCH_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [Cows, Lit, Ranch]
     title: LIT RANCH
     unique_name: lit_ranch
+    usage_requirements: None
     version_name: '1'
     what_is_new: null
   listing_activity:
@@ -4900,7 +4991,6 @@
     launch_url: https://en.wikipedia.org/wiki/Lager
     listing_type: Widget
     owners: [bettafish]
-    requirements: Tall cold glass
     screenshots:
     - description: null
       large_image: {filename: Lager_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -4908,9 +4998,11 @@
       small_image: {filename: Lager_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Lager_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [beer]
     title: Lager
     unique_name: lager
+    usage_requirements: Tall cold glass
     version_name: '5.5'
     what_is_new: null
   listing_activity:
@@ -4958,10 +5050,6 @@
     launch_url: https://en.wikipedia.org/wiki/Lamprey
     listing_type: Web Application
     owners: [bigbrother]
-    requirements: Adult lampreys spawn in rivers and then die. The young larvae, ammocoetes,
-      spend several years in the rivers, where they live burrowed in fine sediment,
-      filter feeding on detritus and microorganisms. Then, ammocoetes undergo a metamorphosis
-      lasting several months
     screenshots:
     - description: Adults superficially resemble eels in that they have scaleless,
         elongated bodies, and can range from 13 to 100 cm (5 to 40 inches) in length
@@ -4970,9 +5058,14 @@
       small_image: {filename: Lamprey_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED//FOR OFFICIAL USE ONLY
     small_icon: {filename: Lamprey_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [fish, science]
     title: Lamprey
     unique_name: lamprey
+    usage_requirements: Adult lampreys spawn in rivers and then die. The young larvae,
+      ammocoetes, spend several years in the rivers, where they live burrowed in fine
+      sediment, filter feeding on detritus and microorganisms. Then, ammocoetes undergo
+      a metamorphosis lasting several months
     version_name: 1.0.5
     what_is_new: Lampreys have long been used as food for humans. They were highly
       appreciated by ancient Romans
@@ -5016,7 +5109,6 @@
     launch_url: https://en.wikipedia.org/wiki/Learning_curve
     listing_type: Web Services
     owners: [khaleesi]
-    requirements: Must be able to learn
     screenshots:
     - description: Smooth average learning curve graph.
       large_image: {filename: LearningCurves_0_large_screenshot.png, security_marking: UNCLASSIFIED}
@@ -5036,9 +5128,11 @@
       small_image: {filename: LearningCurves_3_small_screenshot.png, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: LearningCurves_small_icon.png, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [experience, learning, self improvement]
     title: Learning Curves
     unique_name: learning_curves
+    usage_requirements: Must be able to learn
     version_name: '1.1'
     what_is_new: How to help yourself help with your learning curves
   listing_activity:
@@ -5070,8 +5164,6 @@
     launch_url: https://en.wikipedia.org/wiki/Lightning
     listing_type: Web Application
     owners: [bigbrother]
-    requirements: Charged regions in the atmosphere temporarily equalize themselves
-      through this discharge
     screenshots:
     - description: White Lightning
       large_image: {filename: Lightning_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -5079,10 +5171,13 @@
       small_image: {filename: Lightning_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Lightning_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [discharge, electrostatic, lightning, sky, storm, thunder, thunderstorm,
       weather, zeus]
     title: Lightning
     unique_name: lightning
+    usage_requirements: Charged regions in the atmosphere temporarily equalize themselves
+      through this discharge
     version_name: 8.0.9
     what_is_new: Lightning creates light in the form of black body radiation from
       the very hot plasma created by the electron flow
@@ -5130,8 +5225,6 @@
     launch_url: https://en.wikipedia.org/wiki/Lion
     listing_type: Web Application
     owners: [bigbrother]
-    requirements: Lions are muscular, deep-chested felids with short, rounded heads,
-      reduced necks and round ears
     screenshots:
     - description: null
       large_image: {filename: LionFinder_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -5139,9 +5232,12 @@
       small_image: {filename: LionFinder_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: LionFinder_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [mammal, science]
     title: Lion Finder
     unique_name: lion_finder
+    usage_requirements: Lions are muscular, deep-chested felids with short, rounded
+      heads, reduced necks and round ears
     version_name: '2.0'
     what_is_new: null
   listing_activity:
@@ -5171,7 +5267,6 @@
     launch_url: '{DEMO_APP_ROOT}/demo_apps/locationAnalyzer/index.html'
     listing_type: Web Application
     owners: [wsmith]
-    requirements: None
     screenshots:
     - description: null
       large_image: {filename: LocationAnalyzer_0_large_screenshot.png, security_marking: UNCLASSIFIED}
@@ -5179,9 +5274,11 @@
       small_image: {filename: LocationAnalyzer_0_small_screenshot.png, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: LocationAnalyzer_small_icon.png, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [demo, demo_tag]
     title: LocationAnalyzer
     unique_name: ozp.test.locationanalyzer
+    usage_requirements: None
     version_name: 1.0.0
     what_is_new: Nothing really new here
   listing_activity:
@@ -5210,7 +5307,6 @@
     launch_url: '{DEMO_APP_ROOT}/demo_apps/locationLister/index.html'
     listing_type: Web Application
     owners: [wsmith]
-    requirements: None
     screenshots:
     - description: null
       large_image: {filename: LocationLister_0_large_screenshot.png, security_marking: UNCLASSIFIED}
@@ -5218,9 +5314,11 @@
       small_image: {filename: LocationLister_0_small_screenshot.png, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: LocationLister_small_icon.png, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [demo, demo_tag]
     title: LocationLister
     unique_name: ozp.test.locationlister
+    usage_requirements: None
     version_name: 1.0.0
     what_is_new: Nothing really new here
   listing_activity:
@@ -5249,7 +5347,6 @@
     launch_url: '{DEMO_APP_ROOT}/demo_apps/locationViewer/index.html'
     listing_type: Web Application
     owners: [wsmith]
-    requirements: None
     screenshots:
     - description: null
       large_image: {filename: LocationViewer_0_large_screenshot.png, security_marking: UNCLASSIFIED}
@@ -5257,9 +5354,11 @@
       small_image: {filename: LocationViewer_0_small_screenshot.png, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: LocationViewer_small_icon.png, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [demo, demo_tag]
     title: LocationViewer
     unique_name: ozp.test.locationviewer
+    usage_requirements: None
     version_name: 1.0.0
     what_is_new: Nothing really new here
   listing_activity:
@@ -5294,7 +5393,6 @@
     launch_url: https://en.wikipedia.org/wiki/Luigi
     listing_type: Code Library
     owners: [bettafish]
-    requirements: None
     screenshots:
     - description: null
       large_image: {filename: Luigi_0_large_screenshot.png, security_marking: UNCLASSIFIED}
@@ -5302,9 +5400,11 @@
       small_image: {filename: Luigi_0_small_screenshot.png, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Luigi_small_icon.png, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [character]
     title: Luigi
     unique_name: luigi
+    usage_requirements: None
     version_name: '1'
     what_is_new: null
   listing_activity:
@@ -5323,7 +5423,7 @@
       \ based on magnetic sensor data from a smartphone used to wirelessly locate\
       \ objects or people inside a building.\n\nThere is currently no de facto standard\
       \ for IPS, however magnetic positioning appears to be the most complete and\
-      \ cost effective[citation needed]. It offers accuracy without any hardware requirements\
+      \ cost effective[citation needed]. It offers accuracy without any hardware usage_requirements\
       \ and a relatively low total cost of ownership[citation needed]. According to\
       \ Opus Research magnetic positioning will emerge as a \u201Cfoundational\u201D\
       \ indoor location technology.\n\nMagnetic positioning was invented by Professor\
@@ -5347,7 +5447,6 @@
     launch_url: https://en.wikipedia.org/wiki/Magnetic_positioning
     listing_type: Web Services
     owners: [rutherford]
-    requirements: None
     screenshots:
     - description: null
       large_image: {filename: Magneticpositioning_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -5355,9 +5454,11 @@
       small_image: {filename: Magneticpositioning_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Magneticpositioning_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [positioning]
     title: Magnetic positioning
     unique_name: magnetic_positioning
+    usage_requirements: None
     version_name: '1.0'
     what_is_new: null
   listing_activity:
@@ -5415,7 +5516,6 @@
     launch_url: https://en.wikipedia.org/wiki/Magneto_(comics)
     listing_type: Web Application
     owners: [syme]
-    requirements: None
     screenshots:
     - description: null
       large_image: {filename: Magneto_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -5423,9 +5523,11 @@
       small_image: {filename: Magneto_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Magneto_small_icon.png, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [bad guys]
     title: Magneto
     unique_name: magneto
+    usage_requirements: None
     version_name: '1'
     what_is_new: null
   listing_activity:
@@ -5472,7 +5574,6 @@
     launch_url: https://en.wikipedia.org/wiki/Mallrats
     listing_type: Web Services
     owners: [bettafish]
-    requirements: None
     screenshots:
     - description: null
       large_image: {filename: Mallrats_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -5480,9 +5581,11 @@
       small_image: {filename: Mallrats_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Mallrats_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [Kevin Smith]
     title: Mallrats
     unique_name: mallrats
+    usage_requirements: None
     version_name: '1995'
     what_is_new: null
   listing_activity:
@@ -5529,7 +5632,6 @@
     launch_url: https://en.wikipedia.org/wiki/Map
     listing_type: Widget
     owners: [rutherford]
-    requirements: None
     screenshots:
     - description: null
       large_image: {filename: Mapoftheworld_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -5537,9 +5639,11 @@
       small_image: {filename: Mapoftheworld_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Mapoftheworld_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [maps]
     title: Map of the world
     unique_name: map_of_the_world
+    usage_requirements: None
     version_name: '1.0'
     what_is_new: null
   listing_activity:
@@ -5580,7 +5684,6 @@
     launch_url: https://en.wikipedia.org/wiki/Mario
     listing_type: Widget
     owners: [bettafish]
-    requirements: Mushrooms
     screenshots:
     - description: null
       large_image: {filename: Mario_0_large_screenshot.png, security_marking: UNCLASSIFIED}
@@ -5588,9 +5691,11 @@
       small_image: {filename: Mario_0_small_screenshot.png, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Mario_small_icon.png, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [character]
     title: Mario
     unique_name: mario
+    usage_requirements: Mushrooms
     version_name: '1'
     what_is_new: null
   listing_activity:
@@ -5622,7 +5727,6 @@
     launch_url: https://en.wikipedia.org/wiki/Minesweeper_%28video_game%29
     listing_type: Desktop App
     owners: [bettafish]
-    requirements: None
     screenshots:
     - description: null
       large_image: {filename: Minesweeper_0_large_screenshot.png, security_marking: UNCLASSIFIED}
@@ -5630,9 +5734,11 @@
       small_image: {filename: Minesweeper_0_small_screenshot.png, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Minesweeper_small_icon.png, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [game]
     title: Minesweeper
     unique_name: minesweeper
+    usage_requirements: None
     version_name: '1'
     what_is_new: null
   listing_activity:
@@ -5665,7 +5771,6 @@
     launch_url: http://localhost.com
     listing_type: Desktop App
     owners: [aaronson]
-    requirements: None
     screenshots:
     - description: When dachshunds get mad
       large_image: {filename: MiniDachshund_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -5673,9 +5778,11 @@
       small_image: {filename: MiniDachshund_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: MiniDachshund_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [Dogs]
     title: Mini Dachshund
     unique_name: mini_dachshund
+    usage_requirements: None
     version_name: '1'
     what_is_new: null
   listing_activity:
@@ -5729,7 +5836,6 @@
     launch_url: https://en.wikipedia.org/wiki/Mister_Mxyzptlk
     listing_type: Widget
     owners: [bettafish]
-    requirements: None
     screenshots:
     - description: null
       large_image: {filename: MisterMxyzptlk_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -5741,9 +5847,11 @@
       small_image: {filename: MisterMxyzptlk_1_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: MisterMxyzptlk_small_icon.png, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [comics]
     title: Mister Mxyzptlk
     unique_name: mister_mxyzptlk
+    usage_requirements: None
     version_name: '1'
     what_is_new: null
   listing_activity:
@@ -5796,7 +5904,6 @@
     launch_url: https://en.wikipedia.org/wiki/Mixing_console
     listing_type: Desktop App
     owners: [bettafish]
-    requirements: Music
     screenshots:
     - description: null
       large_image: {filename: MixingConsole_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -5808,9 +5915,11 @@
       small_image: {filename: MixingConsole_1_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: MixingConsole_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [music]
     title: Mixing Console
     unique_name: mixing_console
+    usage_requirements: Music
     version_name: '1'
     what_is_new: null
   listing_activity:
@@ -5859,7 +5968,6 @@
     launch_url: https://en.wikipedia.org/wiki/Monkey
     listing_type: Web Application
     owners: [bigbrother]
-    requirements: The many species of monkey have varied relationships with humans
     screenshots:
     - description: Baboon
       large_image: {filename: MonkeyFinder_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -5867,9 +5975,12 @@
       small_image: {filename: MonkeyFinder_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED//FOR OFFICIAL USE ONLY
     small_icon: {filename: MonkeyFinder_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [demo, demo_tag, mammal, monkey]
     title: Monkey Finder
     unique_name: monkey_finder
+    usage_requirements: The many species of monkey have varied relationships with
+      humans
     version_name: 5.0.5
     what_is_new: Hanuman, a prominent divine entity in Hinduism, is a human-like monkey
       god.
@@ -5913,7 +6024,6 @@
     launch_url: https://en.wikipedia.org/wiki/Moonshine
     listing_type: Desktop App
     owners: [jones]
-    requirements: None
     screenshots:
     - description: null
       large_image: {filename: Moonshine_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -5921,9 +6031,11 @@
       small_image: {filename: Moonshine_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Moonshine_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [alchohol, booze, fire water, homemade, white lightning]
     title: Moonshine
     unique_name: moonshine
+    usage_requirements: None
     version_name: '1'
     what_is_new: ''
   listing_activity:
@@ -5963,7 +6075,6 @@
     launch_url: https://en.wikipedia.org/wiki/Morse_code
     listing_type: Code Library
     owners: [bettafish]
-    requirements: -. --- -. .
     screenshots:
     - description: null
       large_image: {filename: MorseCode_0_large_screenshot.png, security_marking: UNCLASSIFIED}
@@ -5971,9 +6082,11 @@
       small_image: {filename: MorseCode_0_small_screenshot.png, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: MorseCode_small_icon.png, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [language, morse code, sos]
     title: Morse Code
     unique_name: morse_code
+    usage_requirements: -. --- -. .
     version_name: '1'
     what_is_new: null
   listing_activity:
@@ -6015,7 +6128,6 @@
     launch_url: https://en.wikipedia.org/wiki/Motorcycle_helmet
     listing_type: Desktop App
     owners: [bettafish]
-    requirements: A motorcycle A head
     screenshots:
     - description: MotorcycleHelmet 1
       large_image: {filename: MotorcycleHelmet_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -6023,9 +6135,11 @@
       small_image: {filename: MotorcycleHelmet_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: MotorcycleHelmet_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [bike, motorcycle, vehicle]
     title: Motorcycle Helmet
     unique_name: motorcycle_helmet
+    usage_requirements: A motorcycle A head
     version_name: '1'
     what_is_new: null
   listing_activity:
@@ -6065,7 +6179,6 @@
     launch_url: https://en.wikipedia.org/wiki/Motorsport
     listing_type: Desktop App
     owners: [rutherford]
-    requirements: None
     screenshots:
     - description: null
       large_image: {filename: Motorsport_0_large_screenshot.png, security_marking: UNCLASSIFIED}
@@ -6073,9 +6186,11 @@
       small_image: {filename: Motorsport_0_small_screenshot.png, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Motorsport_small_icon.png, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [bike, car]
     title: Motorsport
     unique_name: motorsport
+    usage_requirements: None
     version_name: '1.0'
     what_is_new: null
   listing_activity:
@@ -6111,7 +6226,6 @@
     launch_url: https://en.wikipedia.org/wiki/Movie_projector
     listing_type: Desktop App
     owners: [bettafish]
-    requirements: A Wall
     screenshots:
     - description: null
       large_image: {filename: MovieProjector_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -6119,9 +6233,11 @@
       small_image: {filename: MovieProjector_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: MovieProjector_small_icon.gif, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [movie, tv]
     title: Movie Projector
     unique_name: movie_projector
+    usage_requirements: A Wall
     version_name: '1'
     what_is_new: null
   listing_activity:
@@ -6159,7 +6275,6 @@
     launch_url: https://en.wikipedia.org/wiki/Nintendo_64
     listing_type: Desktop App
     owners: [bettafish]
-    requirements: A TV
     screenshots:
     - description: null
       large_image: {filename: N64_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -6167,9 +6282,11 @@
       small_image: {filename: N64_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: N64_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [Video games]
     title: N64
     unique_name: n64
+    usage_requirements: A TV
     version_name: 64bit
     what_is_new: null
   listing_activity:
@@ -6213,7 +6330,6 @@
     launch_url: https://en.wikipedia.org/wiki/Nintendo_Entertainment_System
     listing_type: Desktop App
     owners: [bettafish]
-    requirements: A TV
     screenshots:
     - description: null
       large_image: {filename: NES_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED//FOR
@@ -6227,9 +6343,11 @@
       small_image: {filename: NES_1_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: NES_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [video games]
     title: NES
     unique_name: nes
+    usage_requirements: A TV
     version_name: 8bit
     what_is_new: null
   listing_activity:
@@ -6278,7 +6396,6 @@
     launch_url: https://en.wikipedia.org/wiki/Navigation
     listing_type: Web Application
     owners: [rutherford]
-    requirements: None
     screenshots:
     - description: null
       large_image: {filename: Navigation_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -6286,9 +6403,11 @@
       small_image: {filename: Navigation_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Navigation_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [maps, navigation]
     title: Navigation
     unique_name: navigation
+    usage_requirements: None
     version_name: '1.0'
     what_is_new: null
   listing_activity:
@@ -6351,7 +6470,6 @@
     launch_url: https://en.wikipedia.org/wiki/Google_Maps#External_links
     listing_type: Desktop App
     owners: [rutherford]
-    requirements: None
     screenshots:
     - description: null
       large_image: {filename: NavigationusingMaps_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -6359,9 +6477,11 @@
       small_image: {filename: NavigationusingMaps_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: NavigationusingMaps_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [maps, navigation]
     title: Navigation using Maps
     unique_name: navigation_using_maps
+    usage_requirements: None
     version_name: '1.0'
     what_is_new: null
   listing_activity:
@@ -6430,7 +6550,6 @@
     launch_url: https://en.wikipedia.org/wiki/Neptune
     listing_type: Web Application
     owners: [betaraybill]
-    requirements: Requires the internet.
     screenshots:
     - description: null
       large_image: {filename: Neptune_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -6438,9 +6557,11 @@
       small_image: {filename: Neptune_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Neptune_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [Planets]
     title: Neptune
     unique_name: neptune
+    usage_requirements: Requires the internet.
     version_name: '1.0'
     what_is_new: null
   listing_activity:
@@ -6479,10 +6600,21 @@
     launch_url: https://en.wikipedia.org/wiki/Network_switch
     listing_type: Web Application
     owners: [bigbrother]
-    requirements: 'Unmanaged switches - these switches have no configuration interface
-      or options. They are plug and play. They are typically the least expensive switches,
-      and therefore often used in a small office/home office environment. Unmanaged
-      switches can be desktop or rack mounted.
+    screenshots:
+    - description: null
+      large_image: {filename: NetworkSwitch_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: NetworkSwitch_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: NetworkSwitch_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
+    tags: [computer, connection, electronic, equipment, internet, person, rack, wire]
+    title: Network Switch
+    unique_name: network_switch
+    usage_requirements: 'Unmanaged switches - these switches have no configuration
+      interface or options. They are plug and play. They are typically the least expensive
+      switches, and therefore often used in a small office/home office environment.
+      Unmanaged switches can be desktop or rack mounted.
 
       Managed switches - these switches have one or more methods to modify the operation
       of the switch. Common management methods include: a command-line interface (CLI)
@@ -6493,16 +6625,6 @@
       features such as Spanning Tree Protocol or port mirroring, setting port bandwidth,
       creating or modifying virtual LANs (VLANs), etc. Two sub-classes of managed
       switches are marketed today:'
-    screenshots:
-    - description: null
-      large_image: {filename: NetworkSwitch_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
-      order: 0
-      small_image: {filename: NetworkSwitch_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
-    security_marking: UNCLASSIFIED
-    small_icon: {filename: NetworkSwitch_small_icon.jpeg, security_marking: UNCLASSIFIED}
-    tags: [computer, connection, electronic, equipment, internet, person, rack, wire]
-    title: Network Switch
-    unique_name: network_switch
     version_name: 0.5.8
     what_is_new: Layer-7 switches may distribute the load based on uniform resource
       locators (URLs)
@@ -6537,11 +6659,6 @@
     launch_url: https://en.wikipedia.org/wiki/Newspaper
     listing_type: Web Services
     owners: [bigbrother]
-    requirements: Wide variety of material is published in newspapers, including opinion
-      columns, weather forecasts, reviews of local services, obituaries, birth notices,
-      crosswords, editorial cartoons, comic strips, and advice columns. Most newspapers
-      are businesses, and they pay their expenses with a mixture of subscription revenue,
-      newsstand sales, and advertising revenue.
     screenshots:
     - description: Newspaper
       large_image: {filename: Newspaper_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -6549,10 +6666,16 @@
       small_image: {filename: Newspaper_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Newspaper_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [business, facts, information, journal, journalism, journalist, news, newspaper,
       office, paper, press]
     title: Newspaper
     unique_name: newspaper
+    usage_requirements: Wide variety of material is published in newspapers, including
+      opinion columns, weather forecasts, reviews of local services, obituaries, birth
+      notices, crosswords, editorial cartoons, comic strips, and advice columns. Most
+      newspapers are businesses, and they pay their expenses with a mixture of subscription
+      revenue, newsstand sales, and advertising revenue.
     version_name: '8.05'
     what_is_new: By the early 19th century, many cities in Europe, as well as North
       and South America, published newspapers. As of 2017, most newspapers are now
@@ -6588,9 +6711,6 @@
     launch_url: https://en.wikipedia.org/wiki/Parrot
     listing_type: Web Application
     owners: [bigbrother]
-    requirements: Parrots are found on all tropical and subtropical continents and
-      regions including Australia and Oceania, South Asia, Southeast Asia, Central
-      America, South America, and Africa
     screenshots:
     - description: Green Parrot
       large_image: {filename: Parrot_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -6602,9 +6722,13 @@
       small_image: {filename: Parrot_1_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Parrot_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [animal, avian, bird, feathers, parrot, zygodactyl]
     title: Parrot
     unique_name: parrot
+    usage_requirements: Parrots are found on all tropical and subtropical continents
+      and regions including Australia and Oceania, South Asia, Southeast Asia, Central
+      America, South America, and Africa
     version_name: 0.4.8
     what_is_new: Psittaciform diversity in South America and Australasia suggests
       that the order may have evolved in Gondwana
@@ -6639,7 +6763,6 @@
     launch_url: https://en.wikipedia.org/wiki/Blue-winged_parrotlet
     listing_type: Web Application
     owners: [jones]
-    requirements: none
     screenshots:
     - description: birds...
       large_image: {filename: Parrotlet_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -6647,9 +6770,11 @@
       small_image: {filename: Parrotlet_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Parrotlet_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [pacific, parrot, parrotlet, small, smallest]
     title: Parrotlet
     unique_name: parrotlet
+    usage_requirements: none
     version_name: '1'
     what_is_new: The blue-winged parrotlet is a small parrot found in much of South
       America.
@@ -6684,7 +6809,6 @@
     launch_url: https://en.wikipedia.org/wiki/Pencil
     listing_type: Desktop App
     owners: [bettafish]
-    requirements: Paper
     screenshots:
     - description: null
       large_image: {filename: Pencil_0_large_screenshot.png, security_marking: UNCLASSIFIED}
@@ -6692,9 +6816,11 @@
       small_image: {filename: Pencil_0_small_screenshot.png, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Pencil_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [pencil]
     title: Pencil
     unique_name: pencil
+    usage_requirements: Paper
     version_name: '1'
     what_is_new: null
   listing_activity:
@@ -6751,7 +6877,6 @@
     launch_url: https://en.wikipedia.org/wiki/Personal_computer
     listing_type: Web Services
     owners: [bigbrother]
-    requirements: Web Browser
     screenshots:
     - description: null
       large_image: {filename: PersonalComputer_0_large_screenshot.png, security_marking: UNCLASSIFIED}
@@ -6759,11 +6884,13 @@
       small_image: {filename: PersonalComputer_0_small_screenshot.png, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: PersonalComputer_small_icon.png, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [brand, business, cellphone, computer, connection, contemporary, desk, display,
       electronics, headphone, indoors, internet, keyboard, mobile phone, monitor,
       mouse, office, organized, pc, screen, sony, table, technology, watch, wireless]
     title: Personal Computer
     unique_name: personal_computer
+    usage_requirements: Web Browser
     version_name: '1.0'
     what_is_new: null
   listing_activity:
@@ -6793,7 +6920,6 @@
     launch_url: https://en.wikipedia.org/wiki/Phentolamine
     listing_type: Code Library
     owners: [bettafish]
-    requirements: None
     screenshots:
     - description: null
       large_image: {filename: Phentolamine_0_large_screenshot.png, security_marking: UNCLASSIFIED}
@@ -6801,9 +6927,11 @@
       small_image: {filename: Phentolamine_0_small_screenshot.png, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Phentolamine_small_icon.png, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [Phentolamine]
     title: Phentolamine
     unique_name: phentolamine
+    usage_requirements: None
     version_name: '1'
     what_is_new: null
   listing_activity:
@@ -6848,7 +6976,6 @@
     launch_url: https://en.wikipedia.org/wiki/Phylo_%28video_game%29
     listing_type: Desktop App
     owners: [bettafish, bigbrother, rutherford]
-    requirements: None
     screenshots:
     - description: null
       large_image: {filename: Phylo_0_large_screenshot.png, security_marking: UNCLASSIFIED}
@@ -6856,9 +6983,11 @@
       small_image: {filename: Phylo_0_small_screenshot.png, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Phylo_small_icon.png, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [game, video game]
     title: Phylo
     unique_name: phylo
+    usage_requirements: None
     version_name: '1'
     what_is_new: null
   listing_activity:
@@ -6889,8 +7018,6 @@
     launch_url: https://en.wikipedia.org/wiki/Piano
     listing_type: Web Application
     owners: [bigbrother]
-    requirements: 52 white keys for the notes of the C major scale (C, D, E, F, G,
-      A and B) and 36 shorter black keys
     screenshots:
     - description: null
       large_image: {filename: Piano_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -6898,10 +7025,13 @@
       small_image: {filename: Piano_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Piano_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [antique, black-and-white, grand, instrument, music, musical, piano, wood,
       wooden]
     title: Piano
     unique_name: piano
+    usage_requirements: 52 white keys for the notes of the C major scale (C, D, E,
+      F, G, A and B) and 36 shorter black keys
     version_name: '10.8'
     what_is_new: Most modern pianos have a row of 88 black and white keys
   listing_activity:
@@ -6951,7 +7081,6 @@
     launch_url: https://notaplanet.com
     listing_type: Web Application
     owners: [betaraybill]
-    requirements: Doesn't need anything to be not a planet.
     screenshots:
     - description: null
       large_image: {filename: Pluto(Notaplanet)_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -6959,9 +7088,11 @@
       small_image: {filename: Pluto(Notaplanet)_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Pluto(Notaplanet)_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [NOT A PLANET]
     title: Pluto (Not a planet)
     unique_name: pluto_(not_a_planet)
+    usage_requirements: Doesn't need anything to be not a planet.
     version_name: not.a.planet
     what_is_new: Not a planet again!
   listing_activity:
@@ -7017,7 +7148,6 @@
     launch_url: https://en.wikipedia.org/wiki/Pok%C3%A9mon_Ruby_and_Sapphire
     listing_type: Desktop App
     owners: [khaleesi]
-    requirements: Must have the nintendo gaming system for the version of the game
     screenshots:
     - description: The boxes for the original Gameboy Advance versionsof Pokemon Ruby
         and Sapphire
@@ -7036,10 +7166,13 @@
       small_image: {filename: PokemonRubyandSapphire_2_small_screenshot.gif, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: PokemonRubyandSapphire_small_icon.png, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [game freak, gotta catch 'em all, nintendo, pocket monsters, pokemon, video
         game]
     title: Pokemon Ruby and Sapphire
     unique_name: pokemon_ruby_and_sapphire
+    usage_requirements: Must have the nintendo gaming system for the version of the
+      game
     version_name: '3'
     what_is_new: Now has versions for the Nintendo 3DS!
   listing_activity:
@@ -7086,7 +7219,6 @@
     launch_url: https://en.wikipedia.org/wiki/Polynesian_navigation
     listing_type: Desktop App
     owners: [rutherford]
-    requirements: None
     screenshots:
     - description: null
       large_image: {filename: Polynesiannavigation_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -7094,9 +7226,11 @@
       small_image: {filename: Polynesiannavigation_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Polynesiannavigation_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [maps, navigation]
     title: Polynesian navigation
     unique_name: polynesian_navigation
+    usage_requirements: None
     version_name: '1.0'
     what_is_new: null
   listing_activity:
@@ -7133,7 +7267,6 @@
     launch_url: https://en.wikipedia.org/wiki/Postage_stamp
     listing_type: Code Library
     owners: [bettafish]
-    requirements: Saliva
     screenshots:
     - description: null
       large_image: {filename: PostageStamp_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -7141,9 +7274,11 @@
       small_image: {filename: PostageStamp_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: PostageStamp_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [mail]
     title: Postage Stamp
     unique_name: postage_stamp
+    usage_requirements: Saliva
     version_name: 1c
     what_is_new: null
   listing_activity:
@@ -7177,7 +7312,6 @@
     launch_url: https://en.wikipedia.org/wiki/Princess_Peach
     listing_type: Web Services
     owners: [bettafish]
-    requirements: None
     screenshots:
     - description: null
       large_image: {filename: PrincessPeach_0_large_screenshot.png, security_marking: UNCLASSIFIED}
@@ -7185,9 +7319,11 @@
       small_image: {filename: PrincessPeach_0_small_screenshot.png, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: PrincessPeach_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [character]
     title: Princess Peach
     unique_name: princess_peach
+    usage_requirements: None
     version_name: '1'
     what_is_new: null
   listing_activity:
@@ -7234,7 +7370,6 @@
     launch_url: '{DEMO_APP_ROOT}/default/index.html'
     listing_type: Desktop App
     owners: [bigbrother2, jones, wsmith]
-    requirements: None
     screenshots:
     - description: null
       large_image: {filename: ProjectManagement_0_large_screenshot.png, security_marking: UNCLASSIFIED}
@@ -7246,9 +7381,11 @@
       small_image: {filename: ProjectManagement_1_small_screenshot.png, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: ProjectManagement_small_icon.png, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [agile, pm, pmo, scrum]
     title: Project Management
     unique_name: project_management
+    usage_requirements: None
     version_name: '1.0'
     what_is_new: null
   listing_activity:
@@ -7331,7 +7468,6 @@
     launch_url: https://en.wikipedia.org/wiki/Rail_transport
     listing_type: Web Application
     owners: [rutherford]
-    requirements: None
     screenshots:
     - description: null
       large_image: {filename: Railroad_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -7339,9 +7475,11 @@
       small_image: {filename: Railroad_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Railroad_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [transportation]
     title: Railroad
     unique_name: railroad
+    usage_requirements: None
     version_name: '1.0'
     what_is_new: null
   listing_activity:
@@ -7406,7 +7544,6 @@
     launch_url: https://en.wikipedia.org/wiki/Rogue_(comics)
     listing_type: Widget
     owners: [syme]
-    requirements: None
     screenshots:
     - description: null
       large_image: {filename: Rogue_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -7414,9 +7551,11 @@
       small_image: {filename: Rogue_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Rogue_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [x-men]
     title: Rogue
     unique_name: rogue
+    usage_requirements: None
     version_name: '1'
     what_is_new: null
   listing_activity:
@@ -7460,7 +7599,6 @@
     launch_url: https://en.wikipedia.org/wiki/Ruby
     listing_type: Widget
     owners: [wsmith]
-    requirements: Must be wealthy
     screenshots:
     - description: example of a ruby
       large_image: {filename: Ruby_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -7468,9 +7606,11 @@
       small_image: {filename: Ruby_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Ruby_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [gem, gemstone, jewelry, red, ruby, stone]
     title: Ruby
     unique_name: ruby
+    usage_requirements: Must be wealthy
     version_name: '1'
     what_is_new: null
   listing_activity:
@@ -7499,7 +7639,6 @@
     launch_url: http://guides.rubyonrails.org/active_record_migrations.html
     listing_type: Desktop App
     owners: [wsmith]
-    requirements: Linux, windows or mac compatible.
     screenshots:
     - description: Ruby miner fancy logo
       large_image: {filename: RubyMiner_0_large_screenshot.png, security_marking: UNCLASSIFIED}
@@ -7507,9 +7646,11 @@
       small_image: {filename: RubyMiner_0_small_screenshot.png, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: RubyMiner_small_icon.png, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [programming, rails, ror, ruby]
     title: Ruby Miner
     unique_name: ruby_miner
+    usage_requirements: Linux, windows or mac compatible.
     version_name: '1'
     what_is_new: New gems!
   listing_activity:
@@ -7545,7 +7686,6 @@
     launch_url: https://en.wikipedia.org/wiki/Ruby_on_Rails
     listing_type: Code Library
     owners: [charrington]
-    requirements: Installers are available for all modern operating system
     screenshots:
     - description: Screenshot of rails development
       large_image: {filename: RubyonRails_0_large_screenshot.png, security_marking: UNCLASSIFIED}
@@ -7553,9 +7693,11 @@
       small_image: {filename: RubyonRails_0_small_screenshot.png, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: RubyonRails_small_icon.png, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [developer, development, framework, programming, rails, ror, ruby, software]
     title: Ruby on Rails
     unique_name: ruby_on_rails
+    usage_requirements: Installers are available for all modern operating system
     version_name: '5'
     what_is_new: null
   listing_activity:
@@ -7597,7 +7739,6 @@
     launch_url: https://en.wikipedia.org/wiki/Rutebok_for_Norge
     listing_type: Web Application
     owners: [rutherford]
-    requirements: None
     screenshots:
     - description: null
       large_image: {filename: RutebokforNorge_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -7605,9 +7746,11 @@
       small_image: {filename: RutebokforNorge_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: RutebokforNorge_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [maps, navigation, software]
     title: Rutebok for Norge
     unique_name: rutebok_for_norge
+    usage_requirements: None
     version_name: '1.0'
     what_is_new: null
   listing_activity:
@@ -7649,7 +7792,6 @@
     launch_url: https://en.wikipedia.org/wiki/SimpleText
     listing_type: Desktop App
     owners: [bettafish]
-    requirements: Mac OS
     screenshots:
     - description: null
       large_image: {filename: SImpleText_0_large_screenshot.png, security_marking: UNCLASSIFIED}
@@ -7657,9 +7799,11 @@
       small_image: {filename: SImpleText_0_small_screenshot.png, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: SImpleText_small_icon.png, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [text editor]
     title: SImple Text
     unique_name: simple_text
+    usage_requirements: Mac OS
     version_name: '1.4'
     what_is_new: null
   listing_activity:
@@ -7700,7 +7844,6 @@
     launch_url: https://en.wikipedia.org/wiki/Super_Nintendo_Entertainment_System
     listing_type: Desktop App
     owners: [bettafish]
-    requirements: A TV
     screenshots:
     - description: null
       large_image: {filename: SNES_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -7712,9 +7855,11 @@
       small_image: {filename: SNES_1_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: SNES_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [Video Games]
     title: SNES
     unique_name: snes
+    usage_requirements: A TV
     version_name: 16bit
     what_is_new: null
   listing_activity:
@@ -7746,8 +7891,6 @@
     launch_url: https://en.wikipedia.org/wiki/Yacht_racing
     listing_type: Web Application
     owners: [bigbrother]
-    requirements: competition between countries who are allowed to send one team and
-      three boats of a chosen one design class
     screenshots:
     - description: null
       large_image: {filename: SailboatRacing_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -7755,9 +7898,12 @@
       small_image: {filename: SailboatRacing_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: SailboatRacing_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [boat, boats, racing, sail, sea, yacht]
     title: Sailboat Racing
     unique_name: sailboat_racing
+    usage_requirements: competition between countries who are allowed to send one
+      team and three boats of a chosen one design class
     version_name: '5.0'
     what_is_new: America's Cup established in 1851
   listing_activity:
@@ -7803,7 +7949,6 @@
     launch_url: https://en.wikipedia.org/wiki/Salmon
     listing_type: Desktop App
     owners: [bigbrother, jones]
-    requirements: none
     screenshots:
     - description: null
       large_image: {filename: Salmon_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -7815,9 +7960,11 @@
       small_image: {filename: Salmon_1_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Salmon_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [fish, yummy]
     title: Salmon
     unique_name: salmon
+    usage_requirements: none
     version_name: '1'
     what_is_new: null
   listing_activity:
@@ -7849,7 +7996,6 @@
     launch_url: https://en.wikipedia.org/wiki/San_Bernardino_Strait
     listing_type: Web Application
     owners: [bettafish]
-    requirements: None
     screenshots:
     - description: null
       large_image: {filename: SanBernardinoStrait_0_large_screenshot.png, security_marking: UNCLASSIFIED}
@@ -7857,9 +8003,11 @@
       small_image: {filename: SanBernardinoStrait_0_small_screenshot.png, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: SanBernardinoStrait_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [water]
     title: San Bernardino Strait
     unique_name: san_bernardino_strait
+    usage_requirements: None
     version_name: '1'
     what_is_new: null
   listing_activity:
@@ -7903,7 +8051,6 @@
     launch_url: https://en.wikipedia.org/wiki/Sapphire
     listing_type: Widget
     owners: [wsmith]
-    requirements: Must be fairly wealthy
     screenshots:
     - description: A sapphire and diamond ring
       large_image: {filename: Sapphire_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -7911,9 +8058,11 @@
       small_image: {filename: Sapphire_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Sapphire_small_icon.png, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [blue, gem, gemstone, jewelry, stone]
     title: Sapphire
     unique_name: sapphire
+    usage_requirements: Must be fairly wealthy
     version_name: '3'
     what_is_new: null
   listing_activity:
@@ -7966,7 +8115,6 @@
     launch_url: https://en.wikipedia.org/wiki/Satellite_navigation
     listing_type: Web Services
     owners: [rutherford]
-    requirements: None
     screenshots:
     - description: null
       large_image: {filename: Satellitenavigation_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -7974,9 +8122,11 @@
       small_image: {filename: Satellitenavigation_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Satellitenavigation_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [maps, navigation, satellite]
     title: Satellite navigation
     unique_name: satellite_navigation
+    usage_requirements: None
     version_name: '1.0'
     what_is_new: null
   listing_activity:
@@ -8032,7 +8182,6 @@
     launch_url: https://en.wikipedia.org/wiki/Saturn
     listing_type: Web Application
     owners: [betaraybill]
-    requirements: Requires the internet.
     screenshots:
     - description: null
       large_image: {filename: Saturn_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -8040,9 +8189,11 @@
       small_image: {filename: Saturn_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Saturn_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [Planets]
     title: Saturn
     unique_name: saturn
+    usage_requirements: Requires the internet.
     version_name: '1.0'
     what_is_new: null
   listing_activity:
@@ -8095,7 +8246,6 @@
     launch_url: https://en.wikipedia.org/wiki/Harley-Davidson_CVO#Critical_reception
     listing_type: Web Application
     owners: [jones]
-    requirements: none
     screenshots:
     - description: "2016\n\n    CVO Pro Street Breakout (FXSE)\n    CVO Street Glide\
         \ (FLHXSE)\n    CVO Road Glide Ultra (FLTRUSE)\n    CVO Ultra Limited (FLHTKSE)"
@@ -8104,9 +8254,11 @@
       small_image: {filename: ScreaminEagleCVO_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: ScreaminEagleCVO_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [CVO, Harley, Screamin Eagle, bike, motorcycle]
     title: Screamin Eagle CVO
     unique_name: screamin_eagle_cvo
+    usage_requirements: none
     version_name: '1'
     what_is_new: none
   listing_activity:
@@ -8143,7 +8295,6 @@
     launch_url: https://en.wikipedia.org/wiki/Sheet_music
     listing_type: Desktop App
     owners: [bigbrother]
-    requirements: Knowledge to understand notes on music sheet
     screenshots:
     - description: Music Sheet
       large_image: {filename: Sheetmusic_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -8151,9 +8302,11 @@
       small_image: {filename: Sheetmusic_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Sheetmusic_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [book, close-up, music, note, notes, paper]
     title: Sheet music
     unique_name: sheet_music
+    usage_requirements: Knowledge to understand notes on music sheet
     version_name: '1.09'
     what_is_new: Use of the term "sheet" is intended to differentiate written or printed
       forms of music from sound recordings
@@ -8194,7 +8347,6 @@
     launch_url: https://en.wikipedia.org/wiki/Siemens_Mobility
     listing_type: Web Services
     owners: [rutherford]
-    requirements: None
     screenshots:
     - description: null
       large_image: {filename: SiemensMobility_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -8202,9 +8354,11 @@
       small_image: {filename: SiemensMobility_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: SiemensMobility_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [electric, rail, transport]
     title: Siemens Mobility
     unique_name: siemens_mobility
+    usage_requirements: None
     version_name: '1.9'
     what_is_new: null
   listing_activity:
@@ -8236,7 +8390,6 @@
     launch_url: https://en.wikipedia.org/wiki/Sir_Baboon_McGoon
     listing_type: Desktop App
     owners: [bettafish]
-    requirements: gas
     screenshots:
     - description: null
       large_image: {filename: SirBaboonMcGood_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -8244,9 +8397,11 @@
       small_image: {filename: SirBaboonMcGood_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: SirBaboonMcGood_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [plane]
     title: Sir Baboon McGood
     unique_name: sir_baboon_mcgood
+    usage_requirements: gas
     version_name: B-17
     what_is_new: null
   listing_activity:
@@ -8274,7 +8429,6 @@
     launch_url: '{DEMO_APP_ROOT}/demo_apps/Skybox/index.html'
     listing_type: Web Application
     owners: [david, pmurt]
-    requirements: None
     screenshots:
     - description: null
       large_image: {filename: Skybox_0_large_screenshot.png, security_marking: UNCLASSIFIED}
@@ -8282,9 +8436,11 @@
       small_image: {filename: Skybox_0_small_screenshot.png, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Skybox_small_icon.png, security_marking: UNCLASSIFIED}
-    tags: [demo, demo_tag,demo_tag]
+    system_requirements: None
+    tags: [demo, demo_tag]
     title: Skybox
     unique_name: ozp.test.skybox
+    usage_requirements: None
     version_name: 1.0.0
     what_is_new: It's a box in the sky
   listing_activity:
@@ -8317,8 +8473,6 @@
     launch_url: https://en.wikipedia.org/wiki/Smartphone
     listing_type: Web Application
     owners: [bigbrother]
-    requirements: Have high-speed mobile broadband 4G LTE, motion sensors, and mobile
-      payment features
     screenshots:
     - description: Smart Phone
       large_image: {filename: SmartPhone_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -8326,10 +8480,13 @@
       small_image: {filename: SmartPhone_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: SmartPhone_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [business, cellphone, cellular, communication, connection, contacts, device,
       display, modern, phone, smartphone, wireless]
     title: Smart Phone
     unique_name: smart_phone
+    usage_requirements: Have high-speed mobile broadband 4G LTE, motion sensors, and
+      mobile payment features
     version_name: '7.0'
     what_is_new: 5G Connection will be faster than 4G
   listing_activity:
@@ -8359,7 +8516,6 @@
     launch_url: http://localhost.com
     listing_type: Web Application
     owners: [aaronson]
-    requirements: None
     screenshots:
     - description: After a night of snow
       large_image: {filename: Snow_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -8371,9 +8527,11 @@
       small_image: {filename: Snow_1_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Snow_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [Cold, Weather]
     title: Snow
     unique_name: snow
+    usage_requirements: None
     version_name: '1'
     what_is_new: null
   listing_activity:
@@ -8410,7 +8568,6 @@
     launch_url: https://en.wikipedia.org/wiki/Soterosanthus
     listing_type: Desktop App
     owners: [bettafish]
-    requirements: None
     screenshots:
     - description: null
       large_image: {filename: Soterosanthus_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -8418,9 +8575,11 @@
       small_image: {filename: Soterosanthus_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Soterosanthus_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [flower]
     title: Soterosanthus
     unique_name: soterosanthus
+    usage_requirements: None
     version_name: '1'
     what_is_new: null
   listing_activity:
@@ -8456,7 +8615,6 @@
     launch_url: https://en.wikipedia.org/wiki/Mixing_console
     listing_type: Web Application
     owners: [bigbrother]
-    requirements: Mixing consoles are used in many applications
     screenshots:
     - description: null
       large_image: {filename: SoundMixer_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -8464,9 +8622,11 @@
       small_image: {filename: SoundMixer_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: SoundMixer_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [audio, equalizer, fader, mixer, mixing, music, panel, sound, studio]
     title: Sound Mixer
     unique_name: sound_mixer
+    usage_requirements: Mixing consoles are used in many applications
     version_name: 1.0.15
     what_is_new: Input jacks, Microphone preamplifiers, equalization
   listing_activity:
@@ -8515,7 +8675,6 @@
     launch_url: https://en.wikipedia.org/wiki/Steak
     listing_type: Code Library
     owners: [bettafish, jones]
-    requirements: none
     screenshots:
     - description: null
       large_image: {filename: Steak_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -8527,9 +8686,11 @@
       small_image: {filename: Steak_1_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Steak_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [steak]
     title: Steak
     unique_name: steak
+    usage_requirements: none
     version_name: '1'
     what_is_new: King of meats.
   listing_activity:
@@ -8558,7 +8719,6 @@
     launch_url: https://en.wikipedia.org/wiki/Stop_sign
     listing_type: Desktop App
     owners: [bettafish]
-    requirements: Brake Pedal
     screenshots:
     - description: Stop
       large_image: {filename: Stopsign_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -8566,9 +8726,11 @@
       small_image: {filename: Stopsign_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Stopsign_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [stop]
     title: Stop sign
     unique_name: stop_sign
+    usage_requirements: Brake Pedal
     version_name: '8'
     what_is_new: null
   listing_activity:
@@ -8614,7 +8776,6 @@
     launch_url: https://en.wikipedia.org/wiki/Stout
     listing_type: Desktop App
     owners: [bettafish]
-    requirements: None
     screenshots:
     - description: null
       large_image: {filename: Stout_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -8622,9 +8783,11 @@
       small_image: {filename: Stout_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Stout_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [beer]
     title: Stout
     unique_name: stout
+    usage_requirements: None
     version_name: '17.20'
     what_is_new: null
   listing_activity:
@@ -8665,9 +8828,22 @@
     launch_url: https://en.wikipedia.org/wiki/Stroke_play
     listing_type: Web Services
     owners: [jones]
-    requirements: 'Most tournaments enforce a cut, which in a typical 72-hole tournament
-      is done after 36 holes. The number of players who "make the cut" depends on
-      the tournament rules - in a typical PGA Tour event the top 70 professionals
+    screenshots:
+    - description: In single player, these include a story mode, stroke play mode,
+        and match mode, while in multiplayer, Balloon Pop mode replaces the story
+        mode.
+      large_image: {filename: Strokeplay_0_large_screenshot.png, security_marking: UNCLASSIFIED}
+      order: 0
+      small_image: {filename: Strokeplay_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
+    security_marking: UNCLASSIFIED
+    small_icon: {filename: Strokeplay_small_icon.png, security_marking: UNCLASSIFIED}
+    system_requirements: None
+    tags: [club, golf, speed]
+    title: Stroke play
+    unique_name: stroke_play
+    usage_requirements: 'Most tournaments enforce a cut, which in a typical 72-hole
+      tournament is done after 36 holes. The number of players who "make the cut"
+      depends on the tournament rules - in a typical PGA Tour event the top 70 professionals
       (plus ties) after 36 holes. Any player who turns in a score higher than the
       "cut line" will "miss the cut" and take no further part in the tournament.
 
@@ -8680,18 +8856,6 @@
       before the tie occurred is declared the winner. To put it another way, to win
       a tournament one must equal and then pass the leader...not merely catch up to
       him.'
-    screenshots:
-    - description: In single player, these include a story mode, stroke play mode,
-        and match mode, while in multiplayer, Balloon Pop mode replaces the story
-        mode.
-      large_image: {filename: Strokeplay_0_large_screenshot.png, security_marking: UNCLASSIFIED}
-      order: 0
-      small_image: {filename: Strokeplay_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
-    security_marking: UNCLASSIFIED
-    small_icon: {filename: Strokeplay_small_icon.png, security_marking: UNCLASSIFIED}
-    tags: [club, golf, speed]
-    title: Stroke play
-    unique_name: stroke_play
     version_name: '1'
     what_is_new: none
   listing_activity:
@@ -8730,7 +8894,6 @@
     launch_url: https://en.wikipedia.org/wiki/Sudovian_Book
     listing_type: Web Application
     owners: [bettafish]
-    requirements: None
     screenshots:
     - description: null
       large_image: {filename: SudovianBook_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -8738,9 +8901,11 @@
       small_image: {filename: SudovianBook_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: SudovianBook_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [book]
     title: Sudovian Book
     unique_name: sudovian_book
+    usage_requirements: None
     version_name: '1545'
     what_is_new: null
   listing_activity:
@@ -8797,7 +8962,6 @@
     launch_url: https://en.wikipedia.org/wiki/Sun
     listing_type: Web Application
     owners: [betaraybill]
-    requirements: Requires the internet.
     screenshots:
     - description: null
       large_image: {filename: Sun_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -8805,9 +8969,11 @@
       small_image: {filename: Sun_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Sun_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [Planets]
     title: Sun
     unique_name: sun
+    usage_requirements: Requires the internet.
     version_name: '1.0'
     what_is_new: null
   listing_activity:
@@ -8840,7 +9006,6 @@
     launch_url: https://en.wikipedia.org/wiki/Superunknown
     listing_type: Code Library
     owners: [bettafish]
-    requirements: Good speakers
     screenshots:
     - description: null
       large_image: {filename: Superunknown_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -8852,9 +9017,11 @@
       small_image: {filename: Superunknown_1_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED//FOR OFFICIAL USE ONLY
     small_icon: {filename: Superunknown_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [Grunge, Music, Soundgarden]
     title: Superunknown
     unique_name: superunknown
+    usage_requirements: Good speakers
     version_name: '19.94'
     what_is_new: null
   listing_activity:
@@ -8896,7 +9063,6 @@
     launch_url: https://en.wikipedia.org/wiki/T-slot_nut
     listing_type: Widget
     owners: [bettafish]
-    requirements: None
     screenshots:
     - description: null
       large_image: {filename: T-slotnut_0_large_screenshot.png, security_marking: UNCLASSIFIED}
@@ -8904,9 +9070,11 @@
       small_image: {filename: T-slotnut_0_small_screenshot.png, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: T-slotnut_small_icon.png, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [clamp, nut]
     title: T-slot nut
     unique_name: t-slot_nut
+    usage_requirements: None
     version_name: '1'
     what_is_new: null
   listing_activity:
@@ -8944,7 +9112,6 @@
     launch_url: https://en.wikipedia.org/wiki/Taxonomy_(biology)
     listing_type: Web Application
     owners: [bigbrother]
-    requirements: Knowledge of Science
     screenshots:
     - description: Giant Grouper and Red lionfish
       large_image: {filename: TaxonomyClassifier_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED//FOR
@@ -8953,9 +9120,11 @@
       small_image: {filename: TaxonomyClassifier_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: TaxonomyClassifier_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [classifier, demo]
     title: Taxonomy Classifier
     unique_name: taxonomy_classifier
+    usage_requirements: Knowledge of Science
     version_name: 10.5.1
     what_is_new: Linnaean system has progressed to a system of modern biological classification
       based on the evolutionary relationships between organisms, both living and extinct.
@@ -8990,7 +9159,6 @@
     launch_url: https://en.wikipedia.org/wiki/Ten_%28Pearl_Jam_album%29
     listing_type: Web Application
     owners: [bettafish]
-    requirements: More Flannel
     screenshots:
     - description: null
       large_image: {filename: Ten_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -9004,9 +9172,11 @@
           OFFICIAL USE ONLY}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Ten_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [Grunge, Pearl Jam]
     title: Ten
     unique_name: ten
+    usage_requirements: More Flannel
     version_name: '19.91'
     what_is_new: null
   listing_activity:
@@ -9045,7 +9215,6 @@
     launch_url: https://en.wikipedia.org/wiki/Tennis
     listing_type: Widget
     owners: [bettafish]
-    requirements: Rackets & Balls
     screenshots:
     - description: null
       large_image: {filename: Tennis_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -9053,9 +9222,11 @@
       small_image: {filename: Tennis_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Tennis_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [sport]
     title: Tennis
     unique_name: tennis
+    usage_requirements: Rackets & Balls
     version_name: 2-4
     what_is_new: null
   listing_activity:
@@ -9091,7 +9262,6 @@
     launch_url: https://en.wikipedia.org/wiki/Tiny_Music..._Songs_from_the_Vatican_Gift_Shop
     listing_type: Widget
     owners: [bettafish]
-    requirements: None
     screenshots:
     - description: STP
       large_image: {filename: TinyMusic...SongsfromtheVaticanGiftShop_0_large_screenshot.jpeg,
@@ -9108,9 +9278,11 @@
     security_marking: UNCLASSIFIED
     small_icon: {filename: TinyMusic...SongsfromtheVaticanGiftShop_small_icon.jpeg,
       security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [Grunge, STP]
     title: Tiny Music... Songs from the Vatican Gift Shop
     unique_name: tiny_music..._songs_from_the_vatican_gift_shop
+    usage_requirements: None
     version_name: '199.6'
     what_is_new: null
   listing_activity:
@@ -9147,8 +9319,6 @@
     launch_url: https://en.wikipedia.org/wiki/Tornado
     listing_type: Web Application
     owners: [bigbrother]
-    requirements: Weather system with a low-pressure area in the center around which
-      winds blow counterclockwise
     screenshots:
     - description: Tornado Destruction
       large_image: {filename: Tornado_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -9156,9 +9326,12 @@
       small_image: {filename: Tornado_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Tornado_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [disaster, force, natural, nature, powerful, tornado, weather, wind]
     title: Tornado
     unique_name: tornado
+    usage_requirements: Weather system with a low-pressure area in the center around
+      which winds blow counterclockwise
     version_name: '1.85'
     what_is_new: Most tornadoes have wind speeds less than 110 miles per hour
   listing_activity:
@@ -9202,7 +9375,6 @@
     launch_url: https://en.wikipedia.org/wiki/Toyota
     listing_type: Web Services
     owners: [bettafish]
-    requirements: None
     screenshots:
     - description: null
       large_image: {filename: Toyota_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -9214,9 +9386,11 @@
       small_image: {filename: Toyota_1_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Toyota_small_icon.png, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [car]
     title: Toyota
     unique_name: toyota
+    usage_requirements: None
     version_name: '1'
     what_is_new: null
   listing_activity:
@@ -9252,7 +9426,6 @@
     launch_url: https://en.wikipedia.org/wiki/Transport_Direct_Portal
     listing_type: Web Services
     owners: [rutherford]
-    requirements: None
     screenshots:
     - description: null
       large_image: {filename: TransportDirectPortal_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -9260,9 +9433,11 @@
       small_image: {filename: TransportDirectPortal_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: TransportDirectPortal_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [maps, navigation, software]
     title: Transport Direct Portal
     unique_name: transport_direct_portal
+    usage_requirements: None
     version_name: '1.0'
     what_is_new: null
   listing_activity:
@@ -9300,7 +9475,6 @@
     launch_url: https://en.wikipedia.org/wiki/Udea_washingtonalis
     listing_type: Widget
     owners: [bettafish]
-    requirements: None
     screenshots:
     - description: null
       large_image: {filename: Udeawashingtonalis_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -9308,9 +9482,11 @@
       small_image: {filename: Udeawashingtonalis_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Udeawashingtonalis_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [animal, bug]
     title: Udea washingtonalis
     unique_name: udea_washingtonalis
+    usage_requirements: None
     version_name: '1'
     what_is_new: null
   listing_activity:
@@ -9361,7 +9537,6 @@
     launch_url: https://en.wikipedia.org/wiki/Uranus
     listing_type: Web Application
     owners: [betaraybill]
-    requirements: Requires the internet.
     screenshots:
     - description: null
       large_image: {filename: Uranus_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -9369,9 +9544,11 @@
       small_image: {filename: Uranus_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Uranus_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [Planets]
     title: Uranus
     unique_name: uranus
+    usage_requirements: Requires the internet.
     version_name: '1.0'
     what_is_new: null
   listing_activity:
@@ -9438,7 +9615,6 @@
     launch_url: https://en.wikipedia.org/wiki/Venus
     listing_type: Web Application
     owners: [betaraybill]
-    requirements: Requires the internet.
     screenshots:
     - description: null
       large_image: {filename: Venus_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -9446,9 +9622,11 @@
       small_image: {filename: Venus_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Venus_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [Planets]
     title: Venus
     unique_name: venus
+    usage_requirements: Requires the internet.
     version_name: '1.0'
     what_is_new: null
   listing_activity:
@@ -9482,7 +9660,6 @@
     launch_url: https://en.wikipedia.org/wiki/Violin
     listing_type: Web Application
     owners: [bigbrother]
-    requirements: The body of violin and bow
     screenshots:
     - description: Modern Violin
       large_image: {filename: Violin_0_large_screenshot.png, security_marking: UNCLASSIFIED}
@@ -9490,10 +9667,12 @@
       small_image: {filename: Violin_0_small_screenshot.png, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Violin_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [bow, classic, classical, instrument, music, sound, strings, violin, wood,
       wooden]
     title: Violin
     unique_name: violin
+    usage_requirements: The body of violin and bow
     version_name: 0.5.1
     what_is_new: earliest stringed instruments were mostly plucked
   listing_activity:
@@ -9529,8 +9708,6 @@
     launch_url: https://en.wikipedia.org/wiki/Virtual_Boy
     listing_type: Desktop App
     owners: [bettafish]
-    requirements: Pain meds for headaches and poor posture.  Ability to see red and
-      black.
     screenshots:
     - description: null
       large_image: {filename: VirtualBoy_0_large_screenshot.png, security_marking: UNCLASSIFIED}
@@ -9538,9 +9715,12 @@
       small_image: {filename: VirtualBoy_0_small_screenshot.png, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: VirtualBoy_small_icon.png, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [video games]
     title: Virtual Boy
     unique_name: virtual_boy
+    usage_requirements: Pain meds for headaches and poor posture.  Ability to see
+      red and black.
     version_name: 32bit
     what_is_new: null
   listing_activity:
@@ -9582,7 +9762,6 @@
     launch_url: https://en.wikipedia.org/wiki/Louisiana_Voodoo
     listing_type: Widget
     owners: [bettafish, jones]
-    requirements: none
     screenshots:
     - description: Voodoo 1
       large_image: {filename: Voodoo_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -9590,9 +9769,11 @@
       small_image: {filename: Voodoo_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Voodoo_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [magic]
     title: Voodoo
     unique_name: voodoo
+    usage_requirements: none
     version_name: '1'
     what_is_new: None.
   listing_activity:
@@ -9625,7 +9806,6 @@
     launch_url: http://localhost.com
     listing_type: Desktop App
     owners: [aaronson]
-    requirements: None
     screenshots:
     - description: Slices of watermelon
       large_image: {filename: WatermeLon_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -9633,9 +9813,11 @@
       small_image: {filename: WatermeLon_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: WatermeLon_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [Food, Fruit, Fruits]
     title: Waterme Lon
     unique_name: waterme_lon
+    usage_requirements: None
     version_name: '1'
     what_is_new: null
   listing_activity:
@@ -9681,7 +9863,6 @@
     launch_url: https://en.wikipedia.org/wiki/Wheat_beer#Weissbier
     listing_type: Widget
     owners: [bettafish]
-    requirements: None
     screenshots:
     - description: null
       large_image: {filename: Weissbier_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -9689,9 +9870,11 @@
       small_image: {filename: Weissbier_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED//FOR OFFICIAL USE ONLY
     small_icon: {filename: Weissbier_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [beer]
     title: Weissbier
     unique_name: weissbier
+    usage_requirements: None
     version_name: 15ibu
     what_is_new: null
   listing_activity:
@@ -9729,7 +9912,6 @@
     launch_url: https://en.wikipedia.org/wiki/Horse
     listing_type: Web Application
     owners: [bigbrother]
-    requirements: Horses are prey animals with a strong fight-or-flight response
     screenshots:
     - description: White Horse
       large_image: {filename: WhiteHorse_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -9741,9 +9923,11 @@
       small_image: {filename: WhiteHorse_1_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: WhiteHorse_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [animal, equestrian, horse, mammal, pasture, white, wildlife]
     title: White Horse
     unique_name: white_horse
+    usage_requirements: Horses are prey animals with a strong fight-or-flight response
     version_name: '1.5'
     what_is_new: Horses' anatomy enables them to make use of speed to escape predators
       and they have a well-developed sense of balance and a strong fight-or-flight
@@ -9779,7 +9963,6 @@
     launch_url: https://en.wikipedia.org/wiki/White-tailed_olalla_rat
     listing_type: Widget
     owners: [bettafish]
-    requirements: None
     screenshots:
     - description: null
       large_image: {filename: White-tailedolallarat_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -9787,9 +9970,11 @@
       small_image: {filename: White-tailedolallarat_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED//FOR OFFICIAL USE ONLY
     small_icon: {filename: White-tailedolallarat_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [animal]
     title: White-tailed olalla rat
     unique_name: white-tailed_olalla_rat
+    usage_requirements: None
     version_name: '1'
     what_is_new: null
   listing_activity:
@@ -9825,7 +10010,6 @@
     launch_url: https://en.wikipedia.org/wiki/Wii
     listing_type: Desktop App
     owners: [bettafish]
-    requirements: A TV
     screenshots:
     - description: null
       large_image: {filename: Wii_0_large_screenshot.png, security_marking: UNCLASSIFIED}
@@ -9833,9 +10017,11 @@
       small_image: {filename: Wii_0_small_screenshot.png, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Wii_small_icon.png, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [video games]
     title: Wii
     unique_name: wii
+    usage_requirements: A TV
     version_name: '249.99'
     what_is_new: null
   listing_activity:
@@ -9878,7 +10064,6 @@
     launch_url: https://en.wikipedia.org/wiki/Wii_U
     listing_type: Desktop App
     owners: [bettafish]
-    requirements: A TV, or not.
     screenshots:
     - description: null
       large_image: {filename: WiiU_0_large_screenshot.png, security_marking: UNCLASSIFIED}
@@ -9886,9 +10071,11 @@
       small_image: {filename: WiiU_0_small_screenshot.png, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED//FOR OFFICIAL USE ONLY
     small_icon: {filename: WiiU_small_icon.png, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [video Games]
     title: Wii U
     unique_name: wii_u
+    usage_requirements: A TV, or not.
     version_name: U
     what_is_new: null
   listing_activity:
@@ -9935,7 +10122,6 @@
     launch_url: https://en.wikipedia.org/wiki/Wikipedia
     listing_type: Widget
     owners: [jones, wsmith]
-    requirements: none
     screenshots:
     - description: null
       large_image: {filename: Wikipedia_0_large_screenshot.png, security_marking: UNCLASSIFIED}
@@ -9943,9 +10129,11 @@
       small_image: {filename: Wikipedia_0_small_screenshot.png, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Wikipedia_small_icon.png, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [data, info, research, test]
     title: Wikipedia
     unique_name: wikipedia
+    usage_requirements: none
     version_name: '1'
     what_is_new: null
   listing_activity:
@@ -9976,7 +10164,6 @@
     launch_url: https://en.wikipedia.org/wiki/Witch_doctor
     listing_type: Widget
     owners: [bettafish, jones]
-    requirements: none
     screenshots:
     - description: WitchDoctor 1
       large_image: {filename: WitchDoctor_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -9988,9 +10175,11 @@
       small_image: {filename: WitchDoctor_1_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: WitchDoctor_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [doc, doctor, medicine]
     title: Witch Doctor
     unique_name: witch_doctor
+    usage_requirements: none
     version_name: '1'
     what_is_new: Modern science.
   listing_activity:
@@ -10043,8 +10232,6 @@
     launch_url: https://en.wikipedia.org/wiki/Gray_wolf
     listing_type: Web Application
     owners: [bigbrother]
-    requirements: The gray wolf is a habitat generalist, and can occur in deserts,
-      grasslands, forests and arctic tundras
     screenshots:
     - description: null
       large_image: {filename: WolfFinder_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -10056,9 +10243,12 @@
       small_image: {filename: WolfFinder_1_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: WolfFinder_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [mammal, science]
     title: Wolf Finder
     unique_name: wolf_finder
+    usage_requirements: The gray wolf is a habitat generalist, and can occur in deserts,
+      grasslands, forests and arctic tundras
     version_name: 1.0.9
     what_is_new: null
   listing_activity:
@@ -10119,7 +10309,6 @@
     launch_url: https://en.wikipedia.org/wiki/Wolverine_(character)
     listing_type: Web Services
     owners: [syme]
-    requirements: None
     screenshots:
     - description: null
       large_image: {filename: Wolverine_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -10127,9 +10316,11 @@
       small_image: {filename: Wolverine_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED
     small_icon: {filename: Wolverine_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [x-men]
     title: Wolverine
     unique_name: wolverine
+    usage_requirements: None
     version_name: '1'
     what_is_new: null
   listing_activity:
@@ -10169,7 +10360,6 @@
     launch_url: https://en.wikipedia.org/wiki/Writing
     listing_type: Web Application
     owners: [bigbrother]
-    requirements: A pen and paper
     screenshots:
     - description: Writing down on a piece of paper
       large_image: {filename: Writing_0_large_screenshot.jpeg, security_marking: UNCLASSIFIED}
@@ -10177,9 +10367,11 @@
       small_image: {filename: Writing_0_small_screenshot.jpeg, security_marking: UNCLASSIFIED}
     security_marking: UNCLASSIFIED//FOR OFFICIAL USE ONLY
     small_icon: {filename: Writing_small_icon.jpeg, security_marking: UNCLASSIFIED}
+    system_requirements: None
     tags: [notebook, paper, pen, writing]
     title: Writing
     unique_name: writing
+    usage_requirements: A pen and paper
     version_name: '15.05'
     what_is_new: It is possible to also write using a laptop
   listing_activity:

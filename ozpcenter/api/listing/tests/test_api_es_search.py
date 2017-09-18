@@ -217,7 +217,8 @@ class ListingESSearchApiTest(APITestCase):
             "unique_name": "org.apps.julia-one",
             "what_is_new": "nothing is new",
             "description_short": "a shorter description",
-            "requirements": "None",
+            "usage_requirements": "None",
+            "system_requirements": "None",
             "is_private": "true",
             "is_enable": "false",
             "contacts": [

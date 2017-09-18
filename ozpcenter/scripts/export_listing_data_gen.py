@@ -179,7 +179,8 @@ def extract_listings_database():
 
         listing['what_is_new'] = current_listing.what_is_new
         listing['description_short'] = current_listing.description_short
-        listing['requirements'] = current_listing.requirements
+        listing['usage_requirements'] = current_listing.usage_requirements
+        listing['system_requirements'] = current_listing.system_requirements
         listing['is_enabled'] = current_listing.is_enabled
         listing['is_featured'] = current_listing.is_featured
         listing['is_deleted'] = current_listing.is_deleted

@@ -450,7 +450,8 @@ class ListingSerializer(serializers.ModelSerializer):
         data['unique_name'] = data.get('unique_name')
         data['what_is_new'] = data.get('what_is_new')
         data['description_short'] = data.get('description_short')
-        data['requirements'] = data.get('requirements')
+        data['usage_requirements'] = data.get('usage_requirements')
+        data['system_requirements'] = data.get('system_requirements')
         data['is_private'] = data.get('is_private', False)
         data['security_marking'] = data.get('security_marking')
 
@@ -635,7 +636,8 @@ class ListingSerializer(serializers.ModelSerializer):
             unique_name=validated_data['unique_name'],
             what_is_new=validated_data['what_is_new'],
             description_short=validated_data['description_short'],
-            requirements=validated_data['requirements'],
+            usage_requirements=validated_data['usage_requirements'],
+            system_requirements=validated_data['system_requirements'],
             security_marking=validated_data['security_marking'],
             listing_type=validated_data['listing_type'],
             is_private=validated_data['is_private'])
@@ -732,7 +734,7 @@ class ListingSerializer(serializers.ModelSerializer):
         change_details = []
 
         simple_fields = ['title', 'description', 'description_short',
-            'launch_url', 'version_name', 'requirements', 'unique_name',
+            'launch_url', 'version_name', 'usage_requirements', 'system_requirements', 'unique_name',
             'what_is_new', 'security_marking']
 
         for i in simple_fields:

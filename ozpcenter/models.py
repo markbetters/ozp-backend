@@ -989,7 +989,8 @@ class Listing(models.Model):
 
     what_is_new = models.CharField(max_length=255, null=True, blank=True)
     description_short = models.CharField(max_length=150, null=True, blank=True)
-    requirements = models.CharField(max_length=1000, null=True, blank=True)
+    usage_requirements = models.CharField(max_length=1000, null=True, blank=True)
+    system_requirements = models.CharField(max_length=1000, null=True, blank=True)
     approval_status = models.CharField(max_length=255, choices=APPROVAL_STATUS_CHOICES, default=IN_PROGRESS)
     is_enabled = models.BooleanField(default=True)
     is_featured = models.BooleanField(default=False)

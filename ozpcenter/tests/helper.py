@@ -57,7 +57,7 @@ def validate_listing_map_keys(listing_map):
                                 'agency', 'last_activity', 'current_rejection', 'listing_type',
                                 'title', 'approved_date', 'edited_date', 'description', 'launch_url',
                                 'version_name', 'unique_name', 'what_is_new', 'description_short',
-                                'requirements', 'approval_status', 'is_enabled', 'is_featured',
+                                'usage_requirements', 'system_requirements', 'approval_status', 'is_enabled', 'is_featured',
                                 'is_deleted', 'avg_rate', 'total_votes', 'total_rate5', 'total_rate4',
                                 'total_rate3', 'total_rate2', 'total_rate1', 'total_reviews',
                                 'iframe_compatible', 'security_marking', 'is_private',
