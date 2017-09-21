@@ -14,7 +14,7 @@ if mo:
 else:
     raise RuntimeError("Unable to find version string in {0!s}.".format(VERSIONFILE))
 
-
+# TODO Read requirements from requirements.txt file
 install_requires = [
     'django-cors-headers>=1.1.0',
     'django-enumfield>=1.2.1',
@@ -38,15 +38,31 @@ install_requires = [
 ]
 
 # TODO: add all packages here
-packages = ['ozp', 'ozpcenter', 'ozpcenter.api', 'ozpcenter.scripts',
-            'ozpcenter.migrations', 'ozpcenter.api.agency',
-            'ozpcenter.api.category', 'ozpcenter.api.contact_type',
-            'ozpcenter.api.image', 'ozpcenter.api.intent',
-            'ozpcenter.api.library', 'ozpcenter.api.listing',
-            'ozpcenter.api.notification', 'ozpcenter.api.profile',
-            'ozpcenter.api.storefront', 'ozpiwc', 'ozpiwc.migrations',
-            'ozpiwc.api', 'ozpiwc.api.data',
-            'ozpiwc.api.intent', 'ozpiwc.api.names', 'ozpiwc.api.system']
+packages = ['ozp',
+            'ozpcenter',
+            'ozpcenter.api',
+            'ozpcenter.api.agency',
+            'ozpcenter.api.category',
+            'ozpcenter.api.contact_type',
+            'ozpcenter.api.image',
+            'ozpcenter.api.intent',
+            'ozpcenter.api.library',
+            'ozpcenter.api.listing',
+            'ozpcenter.api.notification',
+            'ozpcenter.api.profile',
+            'ozpcenter.api.storefront',
+            'ozpcenter.scripts',
+            'ozpcenter.migrations',
+            'ozpcenter.pipe'
+            'ozpcenter.recommend'
+            'ozpiwc',
+            'ozpiwc.migrations',
+            'ozpiwc.api',
+            'ozpiwc.api.data',
+            'ozpiwc.api.intent',
+            'ozpiwc.api.names',
+            'ozpiwc.api.system']
+
 package_data = {'': ['README.md', 'static']}
 
 setup(name=PKG,

@@ -12,12 +12,30 @@ logger = logging.getLogger('ozp-center.' + str(__name__))
 
 
 def get_all_categories():
+    """
+    Get all categories
+    """
     return models.Category.objects.all().order_by(Lower('title'))
 
 
 def get_category_by_title(title, reraise=False):
+    """
+    Get a category by title
+    """
     try:
         return models.Category.objects.get(title=title)
+    except models.Category.DoesNotExist as err:
+        if reraise:
+            raise err
+        return None
+
+
+def get_category_by_id(input_id, reraise=False):
+    """
+    Get a category by id
+    """
+    try:
+        return models.Category.objects.get(id=input_id)
     except models.Category.DoesNotExist as err:
         if reraise:
             raise err

@@ -28,6 +28,49 @@ logger = logging.getLogger('ozp-center.' + str(__name__))
 
 
 class ProfileViewSet(viewsets.ModelViewSet):
+    """
+    ModelViewSet for getting all profiles
+
+    Access Control
+    ===============
+    - All users can read
+    - AppsMallSteward can view
+
+    URIs
+    ======
+    GET /api/profile
+    Summary:
+        Get a list of all system-wide Profiles
+    Response:
+        200 - Successful operation - [ProfileSerializer]
+
+    POST /api/profile/
+    Summary:
+        Add a Profile
+    Request:
+        data: ProfileSerializer Schema
+    Response:
+        200 - Successful operation - ProfileSerializer
+
+    GET /api/profile/{pk}
+    Summary:
+        Find a Profile by ID
+    Response:
+        200 - Successful operation - ProfileSerializer
+
+    PUT /api/profile/{pk}
+    Summary:
+        Update a Profile by ID
+
+    PATCH /api/profile/{pk}
+    Summary:
+        Update (Partial) a Profile by ID
+
+    DELETE /api/profile/{pk}
+    Summary:
+        Delete a Profile by ID
+    """
+
     permission_classes = (permissions.IsOrgStewardOrReadOnly,)
     serializer_class = serializers.ProfileSerializer
     filter_backends = (filters.SearchFilter,)
@@ -68,7 +111,42 @@ class ProfileViewSet(viewsets.ModelViewSet):
 class ProfileListingViewSet(viewsets.ModelViewSet):
     """
     Get all listings owned by a specific user
+
+    ModelViewSet for getting all profile listings
+
+    Access Control
+    ===============
+    - All users can view
+
+    URIs
+    ======
+    POST /api/profile/{pk}/listing/
+    Summary:
+        Add a Profile Listing
+    Request:
+        data: ListingSerializer Schema
+    Response:
+        200 - Successful operation - ListingSerializer
+
+    GET /api/profile/{pk}/listing/
+    Summary:
+        Find a Profile Listing by ID
+    Response:
+        200 - Successful operation - ListingSerializer
+
+    PUT /api/profile/{pk}/listing/
+    Summary:
+        Update a Profile Listing by ID
+
+    PATCH /api/profile/{pk}/listing/
+    Summary:
+        Update (Partial) a Profile Listing by ID
+
+    DELETE /api/profile/{pk}/listing/
+    Summary:
+        Delete a Profile Listing by ID
     """
+
     permission_classes = (permissions.IsUser,)
     serializer_class = listing_serializers.ListingSerializer
 
@@ -147,12 +225,96 @@ class ProfileListingViewSet(viewsets.ModelViewSet):
 
 
 class UserViewSet(viewsets.ModelViewSet):
+    """
+    ModelViewSet for getting all Users
+
+    Access Control
+    ===============
+    - AppsMallSteward can view
+
+    URIs
+    ======
+    GET /api/user/
+    Summary:
+        Get a list of all system-wide Users
+    Response:
+        200 - Successful operation - [UserSerializer]
+
+    POST /api/user/
+    Summary:
+        Add a User
+    Request:
+        data: UserSerializer Schema
+    Response:
+        200 - Successful operation - UserSerializer
+
+    GET /api/user/{pk}
+    Summary:
+        Find a User by ID
+    Response:
+        200 - Successful operation - UserSerializer
+
+    PUT /api/user/{pk}
+    Summary:
+        Update a User by ID
+
+    PATCH /api/user/{pk}
+    Summary:
+        Update (Partial) a User by ID
+
+    DELETE /api/user/{pk}
+    Summary:
+        Delete a User by ID
+    """
+
     permission_classes = (permissions.IsOrgSteward,)
     queryset = model_access.get_all_users()
     serializer_class = serializers.UserSerializer
 
 
 class GroupViewSet(viewsets.ModelViewSet):
+    """
+    ModelViewSet for getting all groups
+
+    Access Control
+    ===============
+    - All users can view
+
+    URIs
+    ======
+    GET /api/group/
+    Summary:
+        Get a list of all system-wide Groups
+    Response:
+        200 - Successful operation - [GroupSerializer]
+
+    POST /api/group/
+    Summary:
+        Add a Group
+    Request:
+        data: GroupSerializer Schema
+    Response:
+        200 - Successful operation - GroupSerializer
+
+    GET /api/group/{pk}
+    Summary:
+        Find a Group by ID
+    Response:
+        200 - Successful operation - GroupSerializer
+
+    PUT /api/group/{pk}
+    Summary:
+        Update a Group by ID
+
+    PATCH /api/group/{pk}
+    Summary:
+        Update (Partial) a Group by ID
+
+    DELETE /api/group/{pk}
+    Summary:
+        Delete a Group by ID
+    """
+
     permission_classes = (permissions.IsUser,)
     queryset = model_access.get_all_groups()
     serializer_class = serializers.GroupSerializer
@@ -161,13 +323,34 @@ class GroupViewSet(viewsets.ModelViewSet):
 class CurrentUserViewSet(viewsets.ViewSet):
     """
     A simple ViewSet for listing or retrieving users.
+
+    Access Control
+    ===============
+    - All users can view
+
+    URIs
+    ======
+    GET /api/self/profile/
+    Summary:
+        Find the Current User
+    Response:
+        200 - Successful operation - ProfileSerializer
+
+    PUT /api/self/profile/
+    Summary:
+        Update the Current User
+
+    PATCH /api/self/profile/
+    Summary:
+        Update (Partial) the Current User
     """
+
     permission_classes = (permissions.IsUser,)
 
     def retrieve(self, request):
         current_request_profile = model_access.get_self(request.user.username)
         serializer = serializers.ProfileSerializer(current_request_profile,
-            context={'request': request})
+            context={'request': request, 'self': True})
         return Response(serializer.data)
 
     def update(self, request):

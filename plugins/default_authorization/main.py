@@ -96,6 +96,7 @@ class PluginMain(object):
         user_data['is_org_steward'] = False
         user_data['is_apps_mall_steward'] = False
         user_data['is_metrics_user'] = False
+        user_data['is_beta_user'] = False
 
         for g in groups:
             if self.settings.OZP['OZP_AUTHORIZATION']['APPS_MALL_STEWARD_GROUP_NAME'] == utils.find_between(g, 'cn=', ','):
@@ -104,7 +105,8 @@ class PluginMain(object):
                 user_data['is_org_steward'] = True
             if self.settings.OZP['OZP_AUTHORIZATION']['METRICS_GROUP_NAME'] == utils.find_between(g, 'cn=', ','):
                 user_data['is_org_steward'] = True
-
+            if self.settings.OZP['OZP_AUTHORIZATION']['BETA_USER_GROUP_NAME'] == utils.find_between(g, 'cn=', ','):
+                user_data['is_beta_user'] = True
         return user_data
 
     def authorization_update(self, username, updated_auth_data=None, request=None, method=None):
@@ -210,6 +212,15 @@ class PluginMain(object):
                     profile.user.groups.remove(g)
 
         # TODO: handle metrics user
+        if not updated_auth_data['is_beta_user']:
+            # ensure BETA USER is not in profile.user.groups
+            for g in profile.user.groups.all():
+                if g.name == 'BETA_USER':
+                    profile.user.groups.remove(g)
+        else:
+            # ensure BETA_USER is in profile.user.groups
+            g = Group.objects.get(name='BETA_USER')
+            profile.user.groups.add(g)
 
         # update profile.access_control:
         access_control = json.dumps(updated_auth_data)

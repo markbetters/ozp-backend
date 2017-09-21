@@ -1,6 +1,7 @@
 """
 Utils tests
 """
+from django.test import override_settings
 from django.test import TestCase
 
 from ozpcenter import models
@@ -8,6 +9,7 @@ from ozpcenter.scripts import sample_data_generator as data_gen
 import ozpcenter.api.storefront.model_access as model_access
 
 
+@override_settings(ES_ENABLED=False)
 class StorefrontTest(TestCase):
 
     def setUp(self):
@@ -33,7 +35,7 @@ class StorefrontTest(TestCase):
 
         """
         username = 'wsmith'
-        data = model_access.get_storefront(username)
+        data, extra_data = model_access.get_storefront(username)
 
         # test that only APPROVED listings are returned
         for i in data['featured']:
@@ -52,7 +54,7 @@ class StorefrontTest(TestCase):
         metadata = model_access.get_metadata('wsmith')
         categories = metadata['categories']
         keys = list(categories[0].keys()).sort()
-        expected_keys = ['description', 'title'].sort()
+        expected_keys = ['description', 'id', 'title'].sort()
         self.assertEqual(keys, expected_keys)
 
         agencies = metadata['agencies']

@@ -134,11 +134,11 @@ def run():
     # tar everything up
     if args.version:
         version = get_version()
-        call("cd release && tar -czf ../{0!s}-{1!s}.tar.gz . && cd ..".format('backend', version),
+        call("tar -czf {0!s}-{1!s}.tar.gz release".format('backend', version),
              shell=True)
     else:
         date = get_date_time()
-        call("cd release && tar -czf ../{0!s}-{1!s}.tar.gz . && cd ..".format('backend', date),
+        call("tar -czf {0!s}-{1!s}.tar.gz release".format('backend', date),
              shell=True)
 
     # cleanup build dirs

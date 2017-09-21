@@ -3,11 +3,16 @@ Category Views
 """
 import logging
 
+from django.shortcuts import get_object_or_404
 from rest_framework import viewsets
+from rest_framework import status
+from rest_framework.response import Response
 
+from ozpcenter.errors import PermissionDenied
 from ozpcenter import permissions
 import ozpcenter.api.category.model_access as model_access
 import ozpcenter.api.category.serializers as serializers
+from ozpcenter.models import Listing
 
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center.' + str(__name__))
@@ -61,3 +66,19 @@ class CategoryViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.CategorySerializer
     filter_fields = ('title',)
     permission_classes = (permissions.IsAppsMallStewardOrReadOnly,)
+
+    def destroy(self, request, pk=None):
+        """
+        Validate to make sure that no listing has this category
+        If it does then raise exception with number of listing that has this category
+        """
+        queryset = self.get_queryset()
+        category = get_object_or_404(queryset, pk=pk)
+
+        category_listing_count = Listing.objects.filter(categories__in=[category]).count()
+
+        if category_listing_count >= 1:
+            raise PermissionDenied('Cannot delete category {}, {} listings use this category'.format(category.title, category_listing_count))
+
+        category.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)

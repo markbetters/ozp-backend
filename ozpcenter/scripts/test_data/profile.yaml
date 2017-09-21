@@ -1,0 +1,382 @@
+# This file contains sample users
+# Organizations:
+# - minitrue - Ministry of Truth
+# - miniluv - Ministry of Love
+# - minipax - Ministry of Peace
+# - miniplenty - Ministry of Plenty
+# -- Base Userset --
+# **Admins:**
+# - bigbrother (minipax)
+# - bigbrother2 (minitrue)
+# - khaleesi (miniplen)
+# - bettafish (miniluv) - beta_user
+#
+# **Org Stewards:**
+# - wsmith (minitrue, stewarded_orgs: minitrue)
+# - julia (minitrue, stewarded_orgs: minitrue, miniluv)
+# - obrien (minipax, stewarded_orgs: minipax, miniplenty)
+#
+# **Users:**
+# - aaronson (miniluv)
+# - hodor (miniluv - PKI)
+# - jones (minitrue)
+# - tammy (minitrue - PKI)
+# - rutherford (miniplenty)
+# - noah (miniplenty - PKI)
+# - syme (minipax)
+# - abe (minipax - PKI)
+# - tparsons (minipax, miniluv)
+# - jsnow (minipax, miniluv - PKI)
+# - charrington (minipax, miniluv, minitrue)
+# - johnson (minipax, miniluv, minitrue - PKI)
+#
+# TODO: Create > 45,000 Users
+# 1 APPS_MALL_STEWARDs for each organization: 4 with one being part of beta_user group
+# 1 ORG_STEWARDs for each organization: 4
+#
+# combos group
+# USER GROUP - miniluv
+# USER GROUP - miniluv - PKI
+# USER GROUP - minitrue
+# USER GROUP - minitrue - PKI
+# USER GROUP - miniplenty
+# USER GROUP - miniplenty - PKI
+# USER GROUP - minipax
+# USER GROUP - minipax - PKI
+# USER GROUP - minipax, miniluv
+# USER GROUP - minipax, miniluv - PKI
+# USER GROUP - minipax, miniluv, minitrue
+# USER GROUP - minipax, miniluv, minitrue - PKI
+# 12 combos - 4000 Per combo - for total of 48000
+# ------------------------
+# APPS_MALL_STEWARD
+# ------------------------
+# APPS_MALL_STEWARD - Ministry of Peace
+- access_control:
+    clearances: [UNCLASSIFIED, CONFIDENTIAL, SECRET, TOP SECRET]
+    formal_accesses: [SIERRA, TANGO, GOLF, HOTEL]
+    visas: [NOVEMBER]
+  bio: 'I make everyones life better'
+  display_name: Big Brother
+  dn: Big Brother bigbrother
+  email: bigbrother@oceania.gov
+  groups: [APPS_MALL_STEWARD]
+  organizations: [Ministry of Peace]
+  stewarded_organizations: []
+  username: bigbrother
+
+# APPS_MALL_STEWARD - Ministry of Truth
+- access_control:
+    clearances: [UNCLASSIFIED, CONFIDENTIAL, SECRET, TOP SECRET]
+    formal_accesses: [SIERRA, TANGO, GOLF, HOTEL]
+    visas: [NOVEMBER]
+  bio: 'I also make everyones life better'
+  display_name: Big Brother2
+  dn: Big Brother 2 bigbrother2
+  email: bigbrother2@oceania.gov
+  groups: [APPS_MALL_STEWARD]
+  organizations: [Ministry of Truth]
+  stewarded_organizations: []
+  username: bigbrother2
+
+# APPS_MALL_STEWARD - Ministry of Plenty
+- access_control:
+    clearances: [UNCLASSIFIED, CONFIDENTIAL, SECRET, TOP SECRET]
+    formal_accesses: [SIERRA, TANGO, GOLF, HOTEL]
+    visas: [DRS]
+  bio: 'I am Queen of Meereen, Queen of the Andals(, the Rhoynar) and the First Men, Lady Regnant of the Seven Kingdoms, Khaleesi of the Great Grass Sea, Mhysa, Breaker of Chains, the Unburnt, Mother of Dragons'
+  display_name: Daenerys Targaryen
+  dn: Daenerys Targaryen khaleesi
+  email: khaleesi@dragonborn.gov
+  groups: [APPS_MALL_STEWARD]
+  organizations: [Ministry of Plenty]
+  stewarded_organizations: []
+  username: khaleesi
+
+# APPS_MALL_STEWARD - Ministry of Love
+- access_control:
+    clearances: [UNCLASSIFIED, CONFIDENTIAL, SECRET, TOP SECRET]
+    formal_accesses: [SIERRA, TANGO, GOLF, HOTEL]
+    visas: [NOVEMBER]
+  bio: 'A territorial fish prone to high levels of aggression toward each other'
+  display_name: Betta Fish
+  dn: Bettafish bettafish
+  email: bettafish@oceania.gov
+  groups: [APPS_MALL_STEWARD, BETA_USER]
+  organizations: [Ministry of Love]
+  stewarded_organizations: [Test, Test 1, Ministry of Truth, Test 2, Test 3, Test 4]
+  username: bettafish
+
+# ------------------------
+# ORG_STEWARD
+# ------------------------
+
+# ORG_STEWARD - Ministry of Truth
+- access_control:
+    clearances: [UNCLASSIFIED, CONFIDENTIAL, SECRET, TOP SECRET]
+    formal_accesses: [SIERRA, TANGO]
+    visas: [NOVEMBER]
+  bio: 'I work at the Ministry of Truth'
+  display_name: Winston Smith
+  dn: Winston Smith wsmith
+  email: wsmith@oceania.gov
+  groups: [ORG_STEWARD]
+  organizations: [Ministry of Truth]
+  stewarded_organizations: [Ministry of Truth]
+  username: wsmith
+
+# ORG_STEWARD - Ministry of Truth, Ministry of Love]
+- access_control:
+    clearances: [UNCLASSIFIED, CONFIDENTIAL, SECRET, TOP SECRET]
+    formal_accesses: [SIERRA]
+    visas: []
+  bio: 'An especially zealous propagandist'
+  display_name: Julia Dixon
+  dn: Julia Dixon jdixon
+  email: julia@oceania.gov
+  groups: [ORG_STEWARD]
+  organizations: [Ministry of Truth]
+  stewarded_organizations: [Ministry of Truth, Ministry of Love]
+  username: julia
+
+# ORG_STEWARD - Ministry of Peace, Ministry of Plenty
+- access_control:
+    clearances: [UNCLASSIFIED, CONFIDENTIAL, SECRET, TOP SECRET]
+    formal_accesses: [SIERRA, TANGO, GOLF, HOTEL]
+    visas: [NOVEMBER]
+  bio: 'I will find you, winston and julia'
+  display_name: O'brien
+  dn: OBrien obrien
+  email: obrien@oceania.gov
+  groups: [ORG_STEWARD]
+  organizations: [Ministry of Peace]
+  stewarded_organizations: [Ministry of Peace, Ministry of Plenty]
+  username: obrien
+
+# ORG_STEWARD - Ministry of Love
+- access_control:
+    clearances: [UNCLASSIFIED, CONFIDENTIAL, SECRET, TOP SECRET]
+    formal_accesses: [SIERRA, TANGO, GOLF, HOTEL]
+    visas: [NOVEMBER]
+  bio: 'Minister of Love'
+  display_name: David
+  dn: David david
+  email: david@oceania.gov
+  groups: [ORG_STEWARD]
+  organizations: [Ministry of Love]
+  stewarded_organizations: [Ministry of Love]
+  username: david
+
+# ------------------------
+# USERS - Ministry of Love
+# ------------------------
+# USER
+- access_control:
+    clearances: [UNCLASSIFIED, CONFIDENTIAL, SECRET]
+    formal_accesses: []
+    visas: [NOVEMBER]
+  bio: 'Nothing special'
+  display_name: Aaronson
+  dn: Aaronson aaronson
+  email: aaronson@airstripone.com
+  groups: [USER]
+  organizations: [Ministry of Love]
+  stewarded_organizations: []
+  username: aaronson
+
+# USER
+- access_control:
+    clearances: [UNCLASSIFIED, CONFIDENTIAL, SECRET]
+    formal_accesses: []
+    visas: [NOVEMBER]
+  bio: 'Nothing special 2'
+  display_name: pmurt
+  dn: dlanod pmurt
+  email: pmurt@airstripone.com
+  groups: [USER]
+  organizations: [Ministry of Love]
+  stewarded_organizations: []
+  username: pmurt
+
+# USER - PKI
+- access_control:
+    clearances: [UNCLASSIFIED, CONFIDENTIAL, SECRET]
+    formal_accesses: []
+    visas: [STE, RVR, PKI]
+  bio: 'Hold the door'
+  display_name: Hodor
+  dn: Hodor hodor
+  email: hodor@hodor.com
+  groups: [USER]
+  organizations: [Ministry of Love]
+  stewarded_organizations: []
+  username: hodor
+
+# USER - BETA_USER
+- access_control:
+    clearances: [UNCLASSIFIED, CONFIDENTIAL, SECRET, TOP SECRET]
+    formal_accesses: [SIERRA, TANGO, GOLF, HOTEL]
+    visas: [NOVEMBER]
+  bio: 'Regular person worthy to weild Mjolnir'
+  display_name: Beta Ray Bill
+  dn: BetaRayBill betaraybill
+  email: betaraybill@oceania.gov
+  groups: [USER, BETA_USER]
+  organizations: [Ministry of Love]
+  stewarded_organizations: []
+  username: betaraybill
+
+# ------------------------
+# USERS - Ministry of Truth
+# ------------------------
+# USER
+- access_control:
+    clearances: [UNCLASSIFIED, CONFIDENTIAL, SECRET]
+    formal_accesses: []
+    visas: [NOVEMBER]
+  bio: 'I am a normal person'
+  display_name: Jones
+  dn: Jones jones
+  email: jones@airstripone.com
+  groups: [USER]
+  organizations: [Ministry of Truth]
+  stewarded_organizations: []
+  username: jones
+
+# USER - PKI
+- access_control:
+    clearances: [UNCLASSIFIED, CONFIDENTIAL, SECRET]
+    formal_accesses: []
+    visas: [NOVEMBER, PKI]
+  bio: 'I am a normal person also'
+  display_name: Tammy
+  dn: Tammy tammy
+  email: tammy@airstripone.com
+  groups: [USER]
+  organizations: [Ministry of Truth]
+  stewarded_organizations: []
+  username: tammy
+
+# ------------------------
+# USERS - Ministry of Plenty
+# ------------------------
+# USER
+- access_control:
+    clearances: [UNCLASSIFIED, CONFIDENTIAL, SECRET]
+    formal_accesses: []
+    visas: []
+  bio: 'I am a normal person'
+  display_name: Rutherford
+  dn: Rutherford rutherford
+  email: rutherford@airstripone.com
+  groups: [USER]
+  organizations: [Ministry of Plenty]
+  stewarded_organizations: []
+  username: rutherford
+
+# USER - PKI
+- access_control:
+    clearances: [UNCLASSIFIED, CONFIDENTIAL, SECRET]
+    formal_accesses: []
+    visas: [PKI]
+  bio: 'I am a cool normal person'
+  display_name: Noah
+  dn: Noah noah
+  email: noah@airstripone.com
+  groups: [USER]
+  organizations: [Ministry of Plenty]
+  stewarded_organizations: []
+  username: noah
+
+# ------------------------
+# USERS - Ministry of Peace
+# ------------------------
+# USER
+- access_control:
+    clearances: [UNCLASSIFIED, CONFIDENTIAL, SECRET, TOP SECRET]
+    formal_accesses: [SIERRA]
+    visas: []
+  bio: 'I am too smart for my own good also'
+  display_name: Syme
+  dn: Syme syme
+  email: syme@airstripone.com
+  groups: [USER]
+  organizations: [Ministry of Peace]
+  stewarded_organizations: []
+  username: syme
+
+# USER - PKI
+- access_control:
+    clearances: [UNCLASSIFIED, CONFIDENTIAL, SECRET, TOP SECRET]
+    formal_accesses: [SIERRA]
+    visas: [PKI]
+  bio: 'I am uneducated and loyal'
+  display_name: Abe
+  dn: Abe abe
+  email: abe@airstripone.com
+  groups: [USER]
+  organizations: [Ministry of Peace]
+  stewarded_organizations: []
+  username: abe
+
+# ------------------------
+# USERS - Ministry of Peace, Ministry of Love
+# ------------------------
+# USER
+- access_control:
+    clearances: [UNCLASSIFIED]
+    formal_accesses: []
+    visas: []
+  bio: 'I know nothing.'
+  display_name: Tom Parsons
+  dn: Tparsons tparsons
+  email: tparsons@airstripone.com
+  groups: [USER]
+  organizations: [Ministry of Peace, Ministry of Love]
+  stewarded_organizations: []
+  username: tparsons
+
+# USER - PKI
+- access_control:
+    clearances: [UNCLASSIFIED]
+    formal_accesses: []
+    visas: [TWN, PKI]
+  bio: 'A member of the Thought Police'
+  display_name: Jon Snow
+  dn: Jonsnow jsnow
+  email: jsnow@forthewatch.com
+  groups: [USER]
+  organizations: [Ministry of Peace, Ministry of Love]
+  stewarded_organizations: []
+  username: jsnow
+
+# ------------------------
+# USERS - Ministry of Truth, Ministry of Peace, Ministry of Love
+# ------------------------
+# USER
+- access_control:
+    clearances: [UNCLASSIFIED, CONFIDENTIAL, SECRET, TOP SECRET]
+    formal_accesses: [SIERRA, TANGO, GOLF, HOTEL]
+    visas: [NOVEMBER]
+  bio: 'A member of the Thought Police also'
+  display_name: Charrington
+  dn: Charrington charrington
+  email: charrington@airstripone.com
+  groups: [USER]
+  organizations: [Ministry of Truth, Ministry of Peace, Ministry of Love]
+  stewarded_organizations: []
+  username: charrington
+
+# USER - PKI
+- access_control:
+    clearances: [UNCLASSIFIED, CONFIDENTIAL, SECRET, TOP SECRET]
+    formal_accesses: [SIERRA, TANGO, GOLF, HOTEL]
+    visas: [NOVEMBER, PKI]
+  bio: 'I am uneducated and loyal'
+  display_name: Johnson
+  dn: Johnson johnson
+  email: johnson@airstripone.com
+  groups: [USER]
+  organizations: [Ministry of Truth, Ministry of Peace, Ministry of Love]
+  stewarded_organizations: []
+  username: johnson

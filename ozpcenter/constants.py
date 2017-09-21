@@ -22,3 +22,15 @@ MEDIA_TYPE_REGEX = r'\w'
 VALID_IMAGE_TYPES = ['png', 'jpg', 'jpeg', 'gif']
 
 DEFAULT_SECURITY_MARKING = 'UNCLASSIFIED'
+
+# Smart Search Suggest Limit
+ES_SUGGEST_LIMIT = 15
+
+# Search Min Score
+ES_MIN_SCORE = 0.3
+
+# Boost Scores
+ES_BOOST_TITLE = 10
+ES_BOOST_DESCRIPTION = 3
+ES_BOOST_DESCRIPTION_SHORT = 3
+ES_BOOST_TAGS = 1

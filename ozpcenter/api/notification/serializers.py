@@ -7,6 +7,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import serializers
 
 from ozpcenter import models
+from plugins_util import plugin_manager
 from plugins_util.plugin_manager import system_anonymize_identifiable_data
 import ozpcenter.api.listing.model_access as listing_model_access
 import ozpcenter.api.library.model_access as library_model_access
@@ -41,15 +42,6 @@ class NotificationAgencySerializer(serializers.ModelSerializer):
         }
 
 
-class GenericField(serializers.ReadOnlyField):
-    """
-    Read Only Field
-    """
-
-    def to_native(self, obj):
-        return obj
-
-
 class DictField(serializers.ReadOnlyField):
     """
     Read Only Field
@@ -59,17 +51,34 @@ class DictField(serializers.ReadOnlyField):
         return None
 
 
-class NotificationSerializer(serializers.ModelSerializer):
+class NotificationMailBoxSerializer(serializers.HyperlinkedModelSerializer):
+    created_date = serializers.DateTimeField(required=False, source='notification.created_date')
+    expires_date = serializers.DateTimeField(required=False, source='notification.expires_date')
+    author = profile_serializers.ShortProfileSerializer(required=False, source='notification.author')
+    message = serializers.CharField(required=False, source='notification.message')
+    listing = NotificationListingSerializer(required=False, source='notification.listing')
+    agency = NotificationAgencySerializer(required=False, source='notification.agency')
+    peer = DictField(required=False, source='notification.peer')
+    notification_type = serializers.CharField(required=False, source='notification.notification_type')
+    entity_id = serializers.IntegerField(required=False, source='notification.entity_id')
+    notification_id = serializers.IntegerField(required=False, source='notification.id')
+
+    class Meta:
+        model = models.NotificationMailBox
+        fields = ('id', 'notification_id', 'created_date', 'expires_date', 'author',
+            'message', 'notification_type', 'listing', 'agency', 'entity_id', 'peer',
+            'read_status', 'acknowledged_status', )
+
+
+class NotificationSerializer(serializers.HyperlinkedModelSerializer):
     author = profile_serializers.ShortProfileSerializer(required=False)
     listing = NotificationListingSerializer(required=False)
     agency = NotificationAgencySerializer(required=False)
-    # notification_type is a runtime generated GenericField from the model
-    notification_type = GenericField(required=False)
 
     class Meta:
         model = models.Notification
         fields = ('id', 'created_date', 'expires_date', 'author',
-            'message', 'notification_type', 'listing', 'agency', 'peer', )
+            'message', 'notification_type', 'listing', 'agency', 'entity_id', 'peer', )
 
         extra_kwargs = {
             'listing': {'validators': []},
@@ -77,15 +86,22 @@ class NotificationSerializer(serializers.ModelSerializer):
         }
 
     def to_representation(self, data):
+        access_control_instance = plugin_manager.get_system_access_control_plugin()
         ret = super(NotificationSerializer, self).to_representation(data)
 
+        peer = ret['peer']
+        if peer and peer.get('_bookmark_listing_ids'):
+            del peer['_bookmark_listing_ids']
         # Used to anonymize usernames
         anonymize_identifiable_data = system_anonymize_identifiable_data(self.context['request'].user.username)
 
         if anonymize_identifiable_data:
-            pass
+            if peer:
+                peer['user']['username'] = access_control_instance.anonymize_value('username')
             # TODO: Hide Peer data (erivera 2016-07-29)
 
+        # del ret['agency']
+        # del ret['listing']
         return ret
 
     def validate(self, validated_data):
@@ -161,6 +177,8 @@ class NotificationSerializer(serializers.ModelSerializer):
             if not target_username_profile:
                 raise serializers.ValidationError('Valid User is Required')
 
+            validated_data['entity_target'] = target_username_profile
+            validated_data['entity_id'] = target_username_profile.pk
             # Folder Validation - Optional Field
             temp_folder_name = temp_peer.get('folder_name')
             if temp_folder_name:
@@ -187,12 +205,13 @@ class NotificationSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError('{0}'.format(validated_data['error']))
 
         username = self.context['request'].user.username
-        notification = model_access.create_notification(username,
-                                                        validated_data['expires_date'],
-                                                        validated_data['message'],
-                                                        validated_data['listing'],
-                                                        validated_data['agency'],
-                                                        validated_data['peer'])
+        notification = model_access.create_notification(author_username=username,
+                                                        expires_date=validated_data['expires_date'],
+                                                        message=validated_data['message'],
+                                                        listing=validated_data['listing'],
+                                                        agency=validated_data['agency'],
+                                                        peer=validated_data['peer'],
+                                                        peer_profile=validated_data.get('entity_target'))
         return notification
 
     def update(self, instance, validated_data):

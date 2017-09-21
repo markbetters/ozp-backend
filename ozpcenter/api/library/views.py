@@ -12,7 +12,7 @@ from django.core.cache import cache
 from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework import viewsets
-from rest_framework.decorators import list_route
+from rest_framework.decorators import list_route, detail_route
 from rest_framework.response import Response
 
 from ozpcenter import permissions
@@ -148,6 +148,20 @@ class UserLibraryViewSet(viewsets.ViewSet):
         library_entry.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+    @detail_route(methods=['delete'], permission_classes=[permissions.IsUser])
+    def delete_folder(self, request, pk):
+        """
+        Remove a Listing from the current user's library (unbookmark)
+        and all listings from the current user with the same folderName
+        Delete by library id, not listing id
+        """
+        queryset = self.get_queryset()
+        library_entry = get_object_or_404(queryset, pk=pk)
+        listing_type = self.request.query_params.get('type', None)
+        entries_in_folder = model_access.get_self_application_library(self.request.user.username, listing_type, library_entry.folder)
+        entries_in_folder.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
     @list_route(methods=['post'], permission_classes=[permissions.IsUser])
     def import_bookmarks(self, request):
         """
@@ -164,6 +178,21 @@ class UserLibraryViewSet(viewsets.ViewSet):
                 many=True, context={'request': request})
 
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    @list_route(methods=['post'], permission_classes=[permissions.IsUser])
+    def create_batch(self, request):
+        """
+        Import Bookmarks
+        """
+        current_request_username = request.user.username
+        request_data = request.data
+
+        data = model_access.create_batch_library_entries(current_request_username, request_data)
+
+        serializer = serializers.UserLibrarySerializer(data,
+            many=True, context={'request': request})
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     @list_route(methods=['put'], permission_classes=[permissions.IsUser])
     def update_all(self, request):

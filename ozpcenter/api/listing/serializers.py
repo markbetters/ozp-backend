@@ -6,6 +6,7 @@ import logging
 import pytz
 
 from django.contrib import auth
+from django.core.exceptions import ValidationError
 from rest_framework import serializers
 
 from ozpcenter import constants
@@ -22,6 +23,7 @@ import ozpcenter.api.intent.model_access as intent_model_access
 import ozpcenter.api.listing.model_access as model_access
 import ozpcenter.api.profile.serializers as profile_serializers
 import ozpcenter.model_access as generic_model_access
+from ozpcenter.pubsub import dispatcher
 
 
 # Get an instance of a logger
@@ -39,6 +41,8 @@ class AgencySerializer(serializers.ModelSerializer):
             'title': {'validators': []},
             'short_name': {'validators': []}
         }
+
+# TODO: Remove this Serializer, import from api.image.serializers
 
 
 class ImageSerializer(serializers.HyperlinkedModelSerializer):
@@ -70,6 +74,14 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
                 'Security marking is required')
 
         return value
+
+    def to_representation(self, image):
+        ret = super(ImageSerializer, self).to_representation(image)
+        # # ATo get Presigned URLS # We Don't want to do this
+        # from ozp.storage import media_storage
+        # image_path = str(image.id) + '_' + image.image_type.name + '.' + image.file_extension
+        # ret['url'] = media_storage.url(image_path)
+        return ret
 
 
 class ContactTypeSerializer(serializers.ModelSerializer):
@@ -142,14 +154,18 @@ class ScreenshotSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Screenshot
-        fields = ('small_image', 'large_image')
+        fields = ('order', 'small_image', 'large_image', 'description')
+
+        extra_kwargs = {
+            'description': {'validators': []}
+        }
 
 
 class TagSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Tag
-        fields = ('name',)
+        fields = ('id', 'name',)
 
         extra_kwargs = {
             'name': {'validators': []}
@@ -168,6 +184,29 @@ class ShortListingSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.Listing
         fields = ('unique_name', 'title', 'id', 'agency', 'small_icon', 'is_deleted')
+
+
+class StorefrontListingSerializer(serializers.HyperlinkedModelSerializer):
+    agency = AgencySerializer(required=False)
+    large_banner_icon = ImageSerializer(required=False, allow_null=True)
+    banner_icon = ImageSerializer(required=False, allow_null=True)
+
+    class Meta:
+        model = models.Listing
+        fields = ('id',
+                  'title',
+                  'agency',
+                  'avg_rate',
+                  'total_reviews',
+                  'is_private',
+                  'is_bookmarked',
+                  'description_short',
+                  'security_marking',
+                  'launch_url',
+                  'large_banner_icon',
+                  'banner_icon',
+                  'unique_name',
+                  'is_enabled')
 
 
 class ListingActivitySerializer(serializers.ModelSerializer):
@@ -216,7 +255,7 @@ class CreateListingUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = auth.models.User
-        fields = ('username',)
+        fields = ('id', 'username',)
 
         extra_kwargs = {
             'username': {'validators': []}
@@ -229,7 +268,13 @@ class CreateListingUserSerializer(serializers.ModelSerializer):
         # Used to anonymize usernames
         anonymize_identifiable_data = system_anonymize_identifiable_data(self.context['request'].user.username)
 
-        if anonymize_identifiable_data:
+        check_request_self = False
+        if self.context['request'].user.id == ret['id']:
+            check_request_self = True
+
+        del ret['id']
+
+        if anonymize_identifiable_data and not check_request_self:
             ret['username'] = access_control_instance.anonymize_value('username')
 
         return ret
@@ -240,8 +285,8 @@ class CreateListingProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Profile
-        fields = ('user', 'display_name', 'id')
-        read_only = ('display_name', 'id')
+        fields = ('id', 'user', 'display_name')
+        read_only = ('id', 'display_name')
 
     def to_representation(self, data):
         access_control_instance = plugin_manager.get_system_access_control_plugin()
@@ -250,7 +295,11 @@ class CreateListingProfileSerializer(serializers.ModelSerializer):
         # Used to anonymize usernames
         anonymize_identifiable_data = system_anonymize_identifiable_data(self.context['request'].user.username)
 
-        if anonymize_identifiable_data:
+        check_request_self = False
+        if self.context['request'].user.id == ret['id']:
+            check_request_self = True
+
+        if anonymize_identifiable_data and not check_request_self:
             ret['display_name'] = access_control_instance.anonymize_value('display_name')
 
         return ret
@@ -296,7 +345,30 @@ class ListingSerializer(serializers.ModelSerializer):
 
         if anonymize_identifiable_data:
             ret['contacts'] = []
+        check_failed = []
+        # owners
+        if 'owners' in ret and not anonymize_identifiable_data:
+            for owner in ret['owners']:
+                user_dict = owner.get('user')
+                user_username = None if user_dict is None else user_dict.get('username')
 
+                # if not user_username:
+                # raise serializers.ValidationError('Owner field requires correct format')
+
+                owner_profile = generic_model_access.get_profile(user_username)
+                # if not owner_profile:
+                #    raise serializers.ValidationError('Owner Profile not found')
+
+                # Don't allow user to select a security marking that is above
+                # their own access level\
+                try:
+                    if system_has_access_control(owner_profile.user.username, ret.get('security_marking')) is False:
+                        check_failed.append(owner_profile.user.username)
+                        # raise serializers.ValidationError(owner_profile.user.username + 'User certificate is invalid')
+                except Exception:
+                    check_failed.append(owner_profile.user.username)
+
+        ret['cert_issues'] = check_failed
         return ret
 
     @staticmethod
@@ -344,8 +416,7 @@ class ListingSerializer(serializers.ModelSerializer):
     def validate(self, data):
         access_control_instance = plugin_manager.get_system_access_control_plugin()
         # logger.debug('inside ListingSerializer.validate', extra={'request':self.context.get('request')})
-        profile = generic_model_access.get_profile(
-            self.context['request'].user.username)
+        profile = generic_model_access.get_profile(self.context['request'].user.username)
 
         # This checks to see if value exist as a key and value is not None
         if not data.get('title'):
@@ -365,6 +436,12 @@ class ListingSerializer(serializers.ModelSerializer):
         # their own access level
         if not system_has_access_control(profile.user.username, data.get('security_marking')):
             raise serializers.ValidationError('Security marking too high for current user')
+
+        # Don't allow 2nd-party user to be an submit/edit a listing
+        if system_anonymize_identifiable_data(profile.user.username):
+            raise serializers.ValidationError('Permissions are invalid for current profile')
+
+        # TODO: errors.PermissionDenied instead of serializers.ValidationError
 
         data['description'] = data.get('description')
         data['launch_url'] = data.get('launch_url')
@@ -418,6 +495,7 @@ class ListingSerializer(serializers.ModelSerializer):
             screenshots_out = []
             image_require_fields = ['id']
             for screenshot_set in screenshots:
+
                 if ('small_image' not in screenshot_set or
                         'large_image' not in screenshot_set):
                     raise serializers.ValidationError(
@@ -490,6 +568,10 @@ class ListingSerializer(serializers.ModelSerializer):
                 # their own access level
                 if not system_has_access_control(owner_profile.user.username, data.get('security_marking')):
                     raise serializers.ValidationError('Security marking too high for current owner profile')
+
+                # Don't allow 2nd-party user to be an owner of a listing
+                if system_anonymize_identifiable_data(owner_profile.user.username):
+                    raise serializers.ValidationError('Permissions are invalid for current owner profile')
 
                 owners.append(owner_profile)
         data['owners'] = owners
@@ -621,20 +703,22 @@ class ListingSerializer(serializers.ModelSerializer):
         if validated_data.get('screenshots') is not None:
             for screenshot_dict in validated_data['screenshots']:
                 screenshot = models.Screenshot(
+                    order=screenshot_dict.get('order'),
                     small_image=image_model_access.get_image_by_id(screenshot_dict['small_image']['id']),
                     large_image=image_model_access.get_image_by_id(screenshot_dict['large_image']['id']),
+                    description=screenshot_dict.get('description'),
                     listing=listing)
                 screenshot.save()
 
         # create a new activity
         model_access.create_listing(user, listing)
 
+        dispatcher.publish('listing_created', listing=listing, profile=user)
         return listing
 
     def update(self, instance, validated_data):
         # logger.debug('inside ListingSerializer.update', extra={'request':self.context.get('request')})
-        user = generic_model_access.get_profile(
-            self.context['request'].user.username)
+        user = generic_model_access.get_profile(self.context['request'].user.username)
 
         if user.highest_role() not in ['APPS_MALL_STEWARD', 'ORG_STEWARD']:
             if user not in instance.owners.all():
@@ -664,10 +748,23 @@ class ListingSerializer(serializers.ModelSerializer):
 
             instance.is_enabled = validated_data['is_enabled']
 
+            if validated_data['approval_status'] == models.Listing.APPROVED:
+                dispatcher.publish('listing_enabled_status_changed',
+                                   listing=instance,
+                                   profile=user,
+                                   is_enabled=validated_data['is_enabled'])
+
         if validated_data['is_private'] != instance.is_private:
-            change_details.append({'old_value': model_access.bool_to_string(instance.is_private),
-                    'new_value': model_access.bool_to_string(validated_data['is_private']), 'field_name': 'is_private'})
+            changeset = {'old_value': model_access.bool_to_string(instance.is_private),
+                    'new_value': model_access.bool_to_string(validated_data['is_private']), 'field_name': 'is_private'}
+            change_details.append(changeset)
             instance.is_private = validated_data['is_private']
+
+            if validated_data['approval_status'] == models.Listing.APPROVED:
+                dispatcher.publish('listing_private_status_changed',
+                                   listing=instance,
+                                   profile=user,
+                                   is_private=validated_data['is_private'])
 
         if validated_data['is_featured'] != instance.is_featured:
             if user.highest_role() not in ['APPS_MALL_STEWARD', 'ORG_STEWARD']:
@@ -677,13 +774,16 @@ class ListingSerializer(serializers.ModelSerializer):
             instance.is_featured = validated_data['is_featured']
 
         s = validated_data['approval_status']
-        if s and s != instance.approval_status:
+        if s and s != instance.approval_status:  # Check to see if approval_status has changed
+            old_approval_status = instance.approval_status
             if s == models.Listing.APPROVED and user.highest_role() != 'APPS_MALL_STEWARD':
                 raise errors.PermissionDenied('Only an APPS_MALL_STEWARD can mark a listing as APPROVED')
             if s == models.Listing.APPROVED_ORG and user.highest_role() not in ['APPS_MALL_STEWARD', 'ORG_STEWARD']:
                 raise errors.PermissionDenied('Only stewards can mark a listing as APPROVED_ORG')
             if s == models.Listing.PENDING:
                 model_access.submit_listing(user, instance)
+            if s == models.Listing.PENDING_DELETION:
+                model_access.pending_delete_listing(user, instance)
             if s == models.Listing.APPROVED_ORG:
                 model_access.approve_listing_by_org_steward(user, instance)
             if s == models.Listing.APPROVED:
@@ -691,6 +791,12 @@ class ListingSerializer(serializers.ModelSerializer):
             if s == models.Listing.REJECTED:
                 # TODO: need to get the rejection text from somewhere
                 model_access.reject_listing(user, instance, 'TODO: rejection reason')
+
+            dispatcher.publish('listing_approval_status_changed',
+                               listing=instance,
+                               profile=user,
+                               old_approval_status=old_approval_status,
+                               new_approval_status=instance.approval_status)
 
         if instance.listing_type != validated_data['listing_type']:
             if instance.listing_type:
@@ -772,12 +878,20 @@ class ListingSerializer(serializers.ModelSerializer):
             old_category_instances = instance.categories.all()
             old_categories = model_access.categories_to_string(old_category_instances, True)
             new_categories = model_access.categories_to_string(validated_data['categories'], True)
+
             if old_categories != new_categories:
-                change_details.append({'old_value': old_categories,
-                    'new_value': new_categories, 'field_name': 'categories'})
+                changeset = {'old_value': old_categories,
+                    'new_value': new_categories, 'field_name': 'categories'}
+                change_details.append(changeset)
                 instance.categories.clear()
                 for category in validated_data['categories']:
                     instance.categories.add(category)
+
+                dispatcher.publish('listing_categories_changed',
+                                   listing=instance,
+                                   profile=user,
+                                   old_categories=old_category_instances,
+                                   new_categories=validated_data['categories'])
 
         if 'owners' in validated_data:
             old_owner_instances = instance.owners.all()
@@ -795,19 +909,28 @@ class ListingSerializer(serializers.ModelSerializer):
             old_tag_instances = instance.tags.all()
             old_tags = model_access.tags_to_string(old_tag_instances, True)
             new_tags = model_access.tags_to_string(validated_data['tags'])
+
             if old_tags != new_tags:
-                change_details.append({'old_value': old_tags,
-                    'new_value': new_tags, 'field_name': 'tags'})
+                changeset = {'old_value': old_tags,
+                             'new_value': new_tags, 'field_name': 'tags'}
+                change_details.append(changeset)
                 instance.tags.clear()
+                new_tags_instances = []
                 for tag in validated_data['tags']:
                     obj, created = models.Tag.objects.get_or_create(
                         name=tag['name'])
                     instance.tags.add(obj)
+                    new_tags_instances.append(obj)
+
+                dispatcher.publish('listing_tags_changed',
+                                   listing=instance,
+                                   profile=user,
+                                   old_tags=old_tag_instances,
+                                   new_tags=new_tags_instances)
 
         if 'intents' in validated_data:
             old_intent_instances = instance.intents.all()
-            old_intents = model_access.intents_to_string(old_intent_instances,
-                True)
+            old_intents = model_access.intents_to_string(old_intent_instances, True)
             new_intents = model_access.intents_to_string(validated_data['intents'], True)
             if old_intents != new_intents:
                 change_details.append({'old_value': old_intents,
@@ -849,7 +972,6 @@ class ListingSerializer(serializers.ModelSerializer):
             new_screenshot_instances = []
 
             for s in validated_data['screenshots']:
-
                 new_small_image = image_model_access.get_image_by_id(s['small_image']['id'])
                 new_small_image.security_marking = s['small_image']['security_marking']
                 new_small_image.save()
@@ -859,8 +981,10 @@ class ListingSerializer(serializers.ModelSerializer):
                 new_large_image.save()
 
                 obj, created = models.Screenshot.objects.get_or_create(
+                    order=s.get('order'),
                     small_image=new_small_image,
                     large_image=new_large_image,
+                    description=s.get('description'),
                     listing=instance)
 
                 new_screenshot_instances.append(obj)
@@ -882,8 +1006,29 @@ class ListingSerializer(serializers.ModelSerializer):
         if change_details:
             model_access.log_listing_modification(user, instance, change_details)
 
+            new_change_details = []
+            field_to_exclude = ['is_private', 'categories', 'tags']
+            for change_detail in change_details:
+                if change_detail['field_name'] not in field_to_exclude:
+                    new_change_details.append(change_detail)
+
+            if new_change_details:
+                dispatcher.publish('listing_changed',
+                                   listing=instance,
+                                   profile=user,
+                                   change_details=new_change_details)
+
         instance.edited_date = datetime.datetime.now(pytz.utc)
         return instance
+
+
+class ReviewResponsesSerializer(serializers.ModelSerializer):
+    author = profile_serializers.ShortProfileSerializer()
+
+    class Meta:
+        model = models.Review
+        fields = ('id', 'author', 'listing', 'rate', 'text', 'edited_date', 'created_date')
+        validators = []  # Remove a default "unique together" constraint.
 
 
 class ReviewSerializer(serializers.ModelSerializer):
@@ -891,4 +1036,59 @@ class ReviewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Review
-        fields = ('author', 'listing', 'rate', 'text', 'edited_date', 'id')
+        fields = ('id', 'author', 'listing', 'rate', 'text', 'edited_date', 'created_date', 'review_parent')
+        validators = []  # Remove a default "unique together" constraint.
+
+    def to_representation(self, data):
+        data = super(ReviewSerializer, self).to_representation(data)
+
+        responses_queryset = models.Review.objects.for_user(self.context['request'].user.username).filter(review_parent=data['id']).order_by('created_date')
+        review_responses_serializer = ReviewResponsesSerializer(responses_queryset, context={'request': self.context['request']}, many=True)
+        data['review_responses'] = review_responses_serializer.data
+
+        return data
+
+    def validate(self, data):
+        """
+        validate review
+        """
+        data['listing'] = self.context['listing']
+
+        if 'rate' not in data:
+            raise serializers.ValidationError('Missing required rate field')
+
+        if 'text' not in data:
+            data['text'] = None
+            # raise serializers.ValidationError('Missing required text field')
+
+        if 'review_parent' not in data:
+            data['review_parent'] = None
+        else:
+            review_parent = data['review_parent']
+
+            if review_parent.review_parent is not None:
+                raise serializers.ValidationError('More than one level review responses not allowed')
+
+        return data
+
+    def create(self, validated_data):
+        profile = generic_model_access.get_profile(self.context['request'].user.username)
+        try:
+            resp = model_access.create_listing_review(profile,
+                        validated_data['listing'],
+                validated_data['rate'],
+                validated_data['text'],
+                validated_data['review_parent'])
+        except ValidationError as err:
+            raise serializers.ValidationError('{}'.format(err))
+        return resp
+
+    def update(self, review_instance, validated_data):
+        try:
+            review = model_access.edit_listing_review(self.context['request'].user.username,
+                                                      review_instance,
+                                                      validated_data['rate'],
+                                                      validated_data['text'])
+        except ValidationError as err:
+            raise serializers.ValidationError('{}'.format(err))
+        return review

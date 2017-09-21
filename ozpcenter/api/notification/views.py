@@ -20,6 +20,35 @@ logger = logging.getLogger('ozp-center.' + str(__name__))
 
 
 class NotificationViewSet(viewsets.ModelViewSet):
+    """
+    ModelViewSet for getting all Notification entries for all users
+
+    URIs
+    ======
+
+    GET /api/notification/
+        Summary:
+            Get a list of all system-wide Notification entries
+        Response:
+            200 - Successful operation - [NotificationSerializer]
+
+    POST /api/notification/
+        Summary:
+            Add a Notification
+        Request:
+            data: NotificationSerializer Schema
+        Response:
+            200 - Successful operation - NotificationSerializer
+
+    PUT /api/notification/{pk}
+        Summary:
+            Update an Notification Entry by ID
+
+    DELETE /api/notification/{pk}
+    Summary:
+        Delete a Notification Entry by ID
+    """
+
     serializer_class = serializers.NotificationSerializer
     permission_classes = (permissions.IsUser,)
 
@@ -28,7 +57,7 @@ class NotificationViewSet(viewsets.ModelViewSet):
 
         listing_id = self.request.query_params.get('listing', None)
         if listing_id is not None:
-            queryset = queryset.filter(listing__id=listing_id)
+            queryset = queryset.filter(notification_type='listing', entity_id=listing_id)
 
         return queryset
 
@@ -71,17 +100,38 @@ class NotificationViewSet(viewsets.ModelViewSet):
 
 
 class UserNotificationViewSet(viewsets.ModelViewSet):
+    """
+    ModelViewSet for getting all UserNotification entries for all users
+
+    URIs
+    ======
+
+    GET /api/self/notification/
+        Summary:
+            Get a list of all user Notification (NotificationMailBox) entries
+        Response:
+            200 - Successful operation - [NotificationMailboxSerializer]
+
+    DELETE /api/self/notification/{pk}
+    Summary:
+        Delete a user Notification (NotificationMailBox) Entry by ID
+
+    PUT /api/self/notification/{pk}
+    Summary:
+        Update user Notification (NotificationMailBox) Entry by ID
+    """
+
     permission_classes = (permissions.IsUser,)
-    serializer_class = serializers.NotificationSerializer
+    serializer_class = serializers.NotificationMailBoxSerializer
     filter_backends = (filters.OrderingFilter,)
-    ordering_fields = ('created_date',)
-    ordering = ('-created_date',)
+    ordering_fields = ('notification__created_date',)
+    ordering = ('-notification__created_date',)
 
     def get_queryset(self):
         """
         Get current user's notifications
         """
-        return model_access.get_self_notifications(self.request.user.username)
+        return model_access.get_self_notifications_mailbox(self.request.user.username)
 
     def destroy(self, request, pk=None):
         """
@@ -89,11 +139,43 @@ class UserNotificationViewSet(viewsets.ModelViewSet):
         """
         queryset = self.get_queryset()
         notification = get_object_or_404(queryset, pk=pk)
-        model_access.dismiss_notification(notification, self.request.user.username)
+        model_access.dismiss_notification_mailbox(notification, self.request.user.username)
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+    def update(self, request, pk=None):
+        """
+        Update is used only change the read_status or acknowledged_status of the NotificationMailBox
+        """
+        instance = self.get_queryset().get(pk=pk)
+        serializer = serializers.NotificationMailBoxSerializer(instance,
+            data=request.data, context={'request': request}, partial=True)
+
+        if not serializer.is_valid():
+            logger.error('{0!s}'.format(serializer.errors))
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        serializer.save()
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class PendingNotificationView(generics.ListCreateAPIView):
+    """
+    APIView for getting all PendingNotification entries for all users
+
+    URIs
+    ======
+
+    GET /api/notifications/pending/
+        Summary:
+            Get a list of all Pending Notification entries
+        Response:
+            200 - Successful operation - [NotificationSerializer]
+
+    DELETE /api/notifications/pending/
+    Summary:
+        Delete a Pending Notification Entry
+    """
+
     permission_classes = (permissions.IsOrgSteward,)
     serializer_class = serializers.NotificationSerializer
 
@@ -102,7 +184,7 @@ class PendingNotificationView(generics.ListCreateAPIView):
 
         listing_id = self.request.query_params.get('listing', None)
         if listing_id is not None:
-            queryset = queryset.filter(listing__id=listing_id)
+            queryset = queryset.filter(notification_type='listing', entity_id=listing_id)
 
         return queryset
 
@@ -119,6 +201,19 @@ class PendingNotificationView(generics.ListCreateAPIView):
 
 
 class ExpiredNotificationView(generics.ListCreateAPIView):
+    """
+    APIView for getting all PendingNotification entries for all users
+
+    URIs
+    ======
+
+    GET /api/notification/
+        Summary:
+            Get a list of all Expired Notification entries
+        Response:
+            200 - Successful operation - [NotificationSerializer]
+    """
+
     permission_classes = (permissions.IsOrgSteward,)
     serializer_class = serializers.NotificationSerializer
 
@@ -127,7 +222,7 @@ class ExpiredNotificationView(generics.ListCreateAPIView):
 
         listing_id = self.request.query_params.get('listing', None)
         if listing_id is not None:
-            queryset = queryset.filter(listing__id=listing_id)
+            queryset = queryset.filter(notification_type='listing', entity_id=listing_id)
 
         return queryset
 

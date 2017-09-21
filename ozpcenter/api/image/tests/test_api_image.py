@@ -1,6 +1,7 @@
 """
 Tests for image endpoints
 """
+from django.test import override_settings
 from rest_framework import status
 from rest_framework.test import APITestCase
 
@@ -8,6 +9,7 @@ from ozpcenter import model_access as generic_model_access
 from ozpcenter.scripts import sample_data_generator as data_gen
 
 
+@override_settings(ES_ENABLED=False)
 class ImageApiTest(APITestCase):
 
     def setUp(self):
@@ -26,6 +28,7 @@ class ImageApiTest(APITestCase):
     def test_post_image(self):
         user = generic_model_access.get_profile('wsmith').user
         self.client.force_authenticate(user=user)
+
         url = '/api/image/'
         data = {
             'security_marking': 'UNCLASSIFIED',
@@ -34,6 +37,7 @@ class ImageApiTest(APITestCase):
             'image': open('ozpcenter/scripts/test_images/android.png', mode='rb')
         }
         response = self.client.post(url, data, format='multipart')
+
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertTrue('id' in response.data)
         self.assertTrue('security_marking' in response.data)

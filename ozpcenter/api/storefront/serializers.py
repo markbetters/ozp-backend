@@ -1,5 +1,5 @@
 """
-Storefront and Metadata Serializers
+Storefront Serializers
 """
 import logging
 
@@ -12,6 +12,7 @@ logger = logging.getLogger('ozp-center.' + str(__name__))
 
 
 class StorefrontSerializer(serializers.Serializer):
-    featured = listing_serializers.ListingSerializer(many=True)
-    recent = listing_serializers.ListingSerializer(many=True)
-    most_popular = listing_serializers.ListingSerializer(many=True)
+    recommended = listing_serializers.StorefrontListingSerializer(many=True)
+    featured = listing_serializers.StorefrontListingSerializer(many=True)
+    recent = listing_serializers.StorefrontListingSerializer(many=True)
+    most_popular = listing_serializers.StorefrontListingSerializer(many=True)

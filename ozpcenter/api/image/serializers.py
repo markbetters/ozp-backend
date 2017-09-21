@@ -46,6 +46,14 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
 
         return value
 
+    def to_representation(self, image):
+        ret = super(ImageSerializer, self).to_representation(image)
+        # To get Presigned URLS
+        # from ozp.storage import media_storage
+        # image_path = str(image.id) + '_' + image.image_type.name + '.' + image.file_extension
+        # ret['url'] = media_storage.url(image_path)
+        return ret
+
 
 class ShortImageSerializer(serializers.HyperlinkedModelSerializer):
 

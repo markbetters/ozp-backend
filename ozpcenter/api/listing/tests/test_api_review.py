@@ -1,14 +1,18 @@
 """
 Tests for listing endpoints
 """
+from django.test import override_settings
 from rest_framework import status
 from rest_framework.test import APITestCase
 
 from ozpcenter import model_access as generic_model_access
 from ozpcenter import models
 from ozpcenter.scripts import sample_data_generator as data_gen
+from ozpcenter.tests.helper import validate_listing_map_keys
+from ozpcenter.tests.helper import unittest_request_helper
 
 
+@override_settings(ES_ENABLED=False)
 class ListingReviewApiTest(APITestCase):
 
     def setUp(self):
@@ -24,88 +28,26 @@ class ListingReviewApiTest(APITestCase):
         """
         data_gen.run()
 
-    def _validate_listing_map_keys(self, listing_map):
-        """
-        Used to validate the keys of a listing
-        """
-        if not isinstance(listing_map, dict):
-            raise Exception('listing_map is not type dict, it is {0!s}'.format(type(listing_map)))
-
-        listing_map_default_keys = ['id', 'is_bookmarked', 'screenshots',
-                                    'doc_urls', 'owners', 'categories', 'tags', 'contacts', 'intents',
-                                    'small_icon', 'large_icon', 'banner_icon', 'large_banner_icon',
-                                    'agency', 'last_activity', 'current_rejection', 'listing_type',
-                                    'title', 'approved_date', 'edited_date', 'description', 'launch_url',
-                                    'version_name', 'unique_name', 'what_is_new', 'description_short',
-                                    'requirements', 'approval_status', 'is_enabled', 'is_featured',
-                                    'is_deleted', 'avg_rate', 'total_votes', 'total_rate5', 'total_rate4',
-                                    'total_rate3', 'total_rate2', 'total_rate1', 'total_reviews',
-                                    'iframe_compatible', 'security_marking', 'is_private',
-                                    'required_listings']
-
-        listing_keys = [k for k, v in listing_map.items()]
-
-        invalid_key_list = []
-
-        for current_key in listing_map_default_keys:
-            if current_key not in listing_keys:
-                invalid_key_list.append(current_key)
-
-        return invalid_key_list
-
-    def _request_helper(self, url, method, data=None, username='bigbrother', status_code=200):
-        """
-        Request Helper
-        """
-        user = generic_model_access.get_profile(username).user
-        self.client.force_authenticate(user=user)
-
-        response = None
-
-        if method.upper() == 'GET':
-            response = self.client.get(url, format='json')
-        elif method.upper() == 'POST':
-            response = self.client.post(url, data, format='json')
-        elif method.upper() == 'PUT':
-            response = self.client.put(url, data, format='json')
-        elif method.upper() == 'DELETE':
-            response = self.client.delete(url, format='json')
-        else:
-            raise Exception('method is not supported')
-
-        if response:
-            if status_code == 200:
-                self.assertEqual(response.status_code, status.HTTP_200_OK)
-            elif status_code == 201:
-                self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-            elif status_code == 204:
-                self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-            else:
-                raise Exception('status code is not supported')
-
-        return response
-
     def test_get_reviews(self):
-        user = generic_model_access.get_profile('wsmith').user
-        self.client.force_authenticate(user=user)
         air_mail_id = models.Listing.objects.get(title='Air Mail').id
         url = '/api/listing/{0!s}/review/'.format(air_mail_id)
-        response = self.client.get(url, format='json')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        response = unittest_request_helper(self, url, 'GET', username='wsmith', status_code=200)
+        self.assertEqual(4, len(response.data))
 
     def test_get_single_review(self):
-        user = generic_model_access.get_profile('wsmith').user
-        self.client.force_authenticate(user=user)
         air_mail_id = models.Listing.objects.get(title='Air Mail').id
-        url = '/api/listing/{0!s}/review/1/'.format(air_mail_id)
-        response = self.client.get(url, format='json')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        url = '/api/listing/{0!s}/review/4/'.format(air_mail_id)  # 4/5/6/7
+        response = unittest_request_helper(self, url, 'GET', username='wsmith', status_code=200)
+
         self.assertTrue('rate' in response.data)
         self.assertTrue('text' in response.data)
         self.assertTrue('author' in response.data)
         self.assertTrue('listing' in response.data)
 
     def test_create_review(self):
+        """
+        test_create_review
+        """
         # create a new review
         user = generic_model_access.get_profile('wsmith').user
         self.client.force_authenticate(user=user)
@@ -129,7 +71,10 @@ class ListingReviewApiTest(APITestCase):
         #     pass
 
     def test_create_review_not_found(self):
-        # creating a review for an app this user cannot see should fail
+        """
+        test_create_review_not_found
+        Creating a review for an app this user cannot see should fail
+        """
         bread_basket_id = models.Listing.objects.get(title='Bread Basket').id
         user = generic_model_access.get_profile('rutherford').user
         self.client.force_authenticate(user=user)
@@ -139,7 +84,7 @@ class ListingReviewApiTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_create_review_no_text(self):
-        # create a new review
+        # test_create_review_no_text
         user = generic_model_access.get_profile('julia').user
         self.client.force_authenticate(user=user)
         air_mail_id = models.Listing.objects.get(title='Air Mail').id
@@ -153,6 +98,7 @@ class ListingReviewApiTest(APITestCase):
 
     def test_update_review(self):
         """
+        test_update_review
         Also tests the listing/<id>/activity endpoint
         """
         # create a new review
@@ -187,7 +133,7 @@ class ListingReviewApiTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_simple_delete_review(self):
-        # create a new review
+        # test_simple_delete_review
         user = generic_model_access.get_profile('rutherford').user
         self.client.force_authenticate(user=user)
         air_mail_id = models.Listing.objects.get(title='Air Mail').id
@@ -210,7 +156,7 @@ class ListingReviewApiTest(APITestCase):
         self.assertTrue(models.ListingActivity.REVIEW_DELETED in activiy_actions)
 
     def test_delete_review(self):
-        # create a new review
+        # test_delete_review
         user = generic_model_access.get_profile('wsmith').user
         self.client.force_authenticate(user=user)
         air_mail_id = models.Listing.objects.get(title='Air Mail').id
@@ -233,8 +179,19 @@ class ListingReviewApiTest(APITestCase):
         response = self.client.delete(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
+        # Check listing history
+        url = '/api/listing/{0!s}/'.format(air_mail_id)
+        response = unittest_request_helper(self, url, 'GET', username='wsmith', status_code=200)
+        data = response.data
+
+        self.assertEquals(validate_listing_map_keys(data), [])
+        self.assertEquals(data['last_activity']['author']['user']['username'], 'julia')
+        self.assertEquals(data['last_activity']['action'], 'REVIEW_DELETED')
+        self.assertEquals(data['last_activity']['listing']['id'], air_mail_id)
+
     def test_rating_updates(self):
         """
+        test_rating_updates
         Tests that reviews are updated
         """
         title = 'Hatch Latch'

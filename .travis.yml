@@ -1,19 +1,23 @@
+env:
+  - ES_VERSION=2.4.6 ES_DOWNLOAD_URL=https://download.elastic.co/elasticsearch/release/org/elasticsearch/distribution/tar/elasticsearch/$ES_VERSION/elasticsearch-$ES_VERSION.tar.gz
 services:
   - redis-server
 language: python
 python:
   - "3.4"
 # command to install dependencies
-install: 
+install:
   - pip install -r requirements.txt
+  - wget ${ES_DOWNLOAD_URL}
+  - tar -xzf elasticsearch-${ES_VERSION}.tar.gz
+  - ./elasticsearch-${ES_VERSION}/bin/elasticsearch &
 # command to run tests
 before_script:
  - mkdir -p media
  - mkdir -p static
- - python manage.py migrate --noinput
+ - DEV_MODE=True python manage.py migrate --noinput
  - python manage.py collectstatic --noinput
 script:
- - python manage.py test
- - flake8 ozp ozpcenter ozpiwc plugins plugins_util --ignore=E501,E123,E128,E121,E124,E711,E402 --exclude=ozpcenter/scripts/* --show-source
-
-
+ - wget -q --waitretry=1 --retry-connrefused -T 10 -O - http://127.0.0.1:9200
+ - flake8 ozp ozpcenter ozpiwc plugins plugins_util --ignore=E501,E123,E128,E121,E124,E711,E402 --show-source
+ - DEV_MODE=True python manage.py test

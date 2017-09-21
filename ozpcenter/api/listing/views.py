@@ -2,30 +2,84 @@
 Listing Views
 """
 import logging
+import operator
 
 from django.shortcuts import get_object_or_404
+from django.db.models import Min
+from django.db.models.functions import Lower
 from rest_framework import filters
 from rest_framework import status
 from rest_framework import viewsets
 from rest_framework.response import Response
+from rest_framework.decorators import list_route
 
 #  from ozpcenter import pagination  # TODO: Is Necessary?
 from ozpcenter import permissions
+from ozpcenter.pipe import pipes
+from ozpcenter.pipe import pipeline
+from ozpcenter.recommend import recommend_utils
 import ozpcenter.api.listing.model_access as model_access
 import ozpcenter.api.listing.serializers as serializers
 import ozpcenter.model_access as generic_model_access
+import ozpcenter.api.listing.model_access_es as model_access_es
 
 # Get an instance of a logger
 logger = logging.getLogger('ozp-center.' + str(__name__))
 
 
 class ContactViewSet(viewsets.ModelViewSet):
+    """
+    ModelViewSet for getting all contacts for a given listing
+
+    Access Control
+    ===============
+    - All users can view
+
+    URIs
+    ======
+    GET /api/contact
+    Summary:
+        Get a list of all system-wide Contact entries
+    Response:
+        200 - Successful operation - [ContactSerializer]
+
+    POST /api/contact/
+    Summary:
+        Add a Contact
+    Request:
+        data: ContactSerializer Schema
+    Response:
+        200 - Successful operation - ContactSerializer
+
+    GET /api/contact/{pk}
+    Summary:
+        Find a Contact Entry by ID
+    Response:
+        200 - Successful operation - ContactSerializer
+
+    PUT /api/contact/{pk}
+    Summary:
+        Update a Contact Entry by ID
+
+    PATCH /api/contact/{pk}
+    Summary:
+        Update (Partial) a Contact Entry by ID
+
+    DELETE /api/contact/{pk}
+    Summary:
+        Delete a Contact Entry by ID
+    """
+
     permission_classes = (permissions.IsUser,)
     queryset = model_access.get_all_contacts()
     serializer_class = serializers.ContactSerializer
 
 
 class DocUrlViewSet(viewsets.ModelViewSet):
+    """
+    TODO: Remove?
+    """
+
     permission_classes = (permissions.IsUser,)
     queryset = model_access.get_all_doc_urls()
     serializer_class = serializers.DocUrlSerializer
@@ -41,32 +95,80 @@ class ReviewViewSet(viewsets.ModelViewSet):
 
     Primarily for that reason, we forgo using Serializers for POST and PUT
     actions
+
+    ModelViewSet for getting all Reviews for a given listing
+
+    Access Control
+    ===============
+    - All users can view
+
+    URIs
+    ======
+    GET /api/listing/{pk}/review
+    Summary:
+        Find a Review Entry by ID
+    Response:
+        200 - Successful operation - ReviewSerializer
+
+    DELETE /api/listing/{pk}/review
+    Summary:
+        Delete a Review Entry by ID
     """
+
     permission_classes = (permissions.IsUser,)
     serializer_class = serializers.ReviewSerializer
-    # pagination_class = pagination.StandardPagination
+    filter_backends = (filters.OrderingFilter,)
+    pagination_class = pagination.ReviewLimitOffsetPagination
+
+    ordering_fields = ('id', 'listing', 'text', 'rate', 'edited_date', 'created_date')
+    ordering = ('-created_date')
 
     def get_queryset(self):
         return model_access.get_reviews(self.request.user.username)
 
     def list(self, request, listing_pk=None):
-        queryset = self.get_queryset().filter(listing=listing_pk).order_by('-edited_date')
+        queryset = self.get_queryset().filter(listing=listing_pk, review_parent__isnull=True)
+        queryset = self.filter_queryset(queryset)
         # it appears that because we override the queryset here, we must
         # manually invoke the pagination methods
         page = self.paginate_queryset(queryset)
         if page is not None:
-            serializer = serializers.ReviewSerializer(page,
-                context={'request': request}, many=True)
+            serializer = serializers.ReviewSerializer(page, context={'request': request}, many=True)
             return self.get_paginated_response(serializer.data)
-        serializer = serializers.ReviewSerializer(queryset, many=True,
-            context={'request': request})
+        serializer = serializers.ReviewSerializer(queryset, many=True, context={'request': request})
         return Response(serializer.data)
 
     def retrieve(self, request, pk=None, listing_pk=None):
         queryset = self.get_queryset().get(pk=pk, listing=listing_pk)
-        serializer = serializers.ReviewSerializer(queryset,
-            context={'request': request})
+        serializer = serializers.ReviewSerializer(queryset, context={'request': request})
         return Response(serializer.data)
+
+    def create(self, request, listing_pk=None):
+        """
+        Create a new review
+        """
+        listing = model_access.get_listing_by_id(request.user.username, listing_pk, True)
+
+        serializer = serializers.ReviewSerializer(data=request.data, context={'request': request, 'listing': listing}, partial=True)
+        if not serializer.is_valid():
+            logger.error('{0!s}'.format(serializer.errors), extra={'request': request})
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    def update(self, request, pk=None, listing_pk=None):
+        """
+        Update an existing review
+        """
+        listing = model_access.get_listing_by_id(request.user.username, listing_pk, True)
+        review = model_access.get_review_by_id(pk)
+
+        serializer = serializers.ReviewSerializer(review, data=request.data, context={'request': request, 'listing': listing}, partial=True)
+        if not serializer.is_valid():
+            logger.error('{0!s}'.format(serializer.errors), extra={'request': request})
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def destroy(self, request, pk=None, listing_pk=None):
         queryset = self.get_queryset()
@@ -74,39 +176,124 @@ class ReviewViewSet(viewsets.ModelViewSet):
         model_access.delete_listing_review(request.user.username, review)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-    def create(self, request, listing_pk=None):
-        """
-        Create a new review
-        """
-        request_current_username = request.user.username
-        listing = model_access.get_listing_by_id(request_current_username,
-            listing_pk, True)
 
-        rate = int(request.data.get('rate', None))
-        text = request.data.get('text', None)
+class SimilarViewSet(viewsets.ModelViewSet):
+    """
+    Similar Apps for a given listing
 
-        resp = model_access.create_listing_review(request_current_username,
-            listing, rate, text)
-        return Response(resp, status=status.HTTP_201_CREATED)
+    # TODO (Rivera 2017-2-22) Implement Similar Listing Algorithm
 
-    def update(self, request, pk=None, listing_pk=None):
-        """
-        Update an existing review
-        """
-        review = model_access.get_review_by_id(pk)
+    Primarily for that reason, we forgo using Serializers for POST and PUT
+    actions
 
-        rate = request.data.get('rate', review.rate)
-        text = request.data.get('text', None)
+    ModelViewSet for getting all Similar Apps for a given listing
 
-        review = model_access.edit_listing_review(request.user.username,
-            review, rate, text)
-        output = {"rate": review.rate, "text": review.text,
-                  "author": review.author.id,
-                  "listing": review.listing.id, "id": review.id}
-        return Response(output, status=status.HTTP_200_OK)
+    Access Control
+    ===============
+    - All users can view
+
+    URIs
+    ======
+    GET /api/listing/{pk}/similar
+    Summary:
+        Find a Similar App Entry by ID
+    Response:
+        200 - Successful operation - ListingSerializer
+    """
+
+    permission_classes = (permissions.IsUser,)
+    serializer_class = serializers.ListingSerializer
+    # pagination_class = pagination.StandardPagination
+
+    def get_queryset(self, listing_pk):
+        approval_status = self.request.query_params.get('approval_status', None)
+        # org = self.request.query_params.get('org', None)
+        orgs = self.request.query_params.getlist('org', False)
+        enabled = self.request.query_params.get('enabled', None)
+        ordering = self.request.query_params.getlist('ordering', None)
+        if enabled:
+            enabled = enabled.lower()
+            if enabled in ['true', '1']:
+                enabled = True
+            else:
+                enabled = False
+
+        listings = model_access.get_similar_listings(self.request.user.username, listing_pk)
+
+        if approval_status:
+            listings = listings.filter(approval_status=approval_status)
+        if orgs:
+            listings = listings.filter(agency__title__in=orgs)
+        if enabled is not None:
+            listings = listings.filter(is_enabled=enabled)
+        # have to handle this case manually because the ordering includes an app multiple times
+        # if there are multiple owners. We instead do sorting by case insensitive compare of the
+        # app owner that comes first alphabetically
+        param = [s for s in ordering if 'owners__display_name' == s or '-owners__display_name' == s]
+        if ordering is not None and param:
+            orderby = 'min'
+            if param[0].startswith('-'):
+                orderby = '-min'
+            listings = listings.annotate(min=Min(Lower('owners__display_name'))).order_by(orderby)
+            self.ordering = None
+        return listings
+
+    def list(self, request, listing_pk=None):
+        queryset = self.filter_queryset(self.get_queryset(listing_pk))
+        serializer = serializers.ListingSerializer(queryset, context={'request': request}, many=True)
+
+        similar_listings = pipeline.Pipeline(recommend_utils.ListIterator(serializer.data),
+                                          [pipes.ListingDictPostSecurityMarkingCheckPipe(self.request.user.username),
+                                           pipes.LimitPipe(10)]).to_list()
+
+        r = Response(similar_listings)
+        return r
 
 
 class ListingTypeViewSet(viewsets.ModelViewSet):
+    """
+    Listing Types
+
+    ModelViewSet for getting all Listing Types for a given listing
+
+    Access Control
+    ===============
+    - All users can view
+
+    URIs
+    ======
+    GET /api/listingtype
+    Summary:
+        Get a list of all system-wide ListingType entries
+    Response:
+        200 - Successful operation - [ListingTypeSerializer]
+
+    POST /api/listingtype
+    Summary:
+        Add a ListingType
+    Request:
+        data: ListingTypeSerializer Schema
+    Response:
+        200 - Successful operation - ListingTypeSerializer
+
+    GET /api/listingtype/{pk}
+    Summary:
+        Find a ListingType Entry by ID
+    Response:
+        200 - Successful operation - ListingTypeSerializer
+
+    PUT /api/listingtype/{pk}
+    Summary:
+        Update a ListingType Entry by ID
+
+    PATCH /api/listingtype/{pk}
+    Summary:
+        Update (Partial) a ListingType Entry by ID
+
+    DELETE /api/listingtype/{pk}
+    Summary:
+        Delete a ListingType Entry by ID
+    """
     permission_classes = (permissions.IsUser,)
     queryset = model_access.get_all_listing_types()
     serializer_class = serializers.ListingTypeSerializer
@@ -115,7 +302,28 @@ class ListingTypeViewSet(viewsets.ModelViewSet):
 class ListingUserActivitiesViewSet(viewsets.ModelViewSet):
     """
     ListingUserActivitiesViewSet endpoints are read-only
+
+    ModelViewSet for getting all Listing User Activities for a given listing
+
+    Access Control
+    ===============
+    - All users can view
+
+    URIs
+    ======
+    GET /api/self/listings/activity
+    Summary:
+        Get a list of all system-wide ListingUserActivities entries
+    Response:
+        200 - Successful operation - [ListingActivitySerializer]
+
+    GET /api/self/listings/activity/{pk}
+    Summary:
+        Find a Listing User Activity Entry by ID
+    Response:
+        200 - Successful operation - ListingActivitySerializer
     """
+
     permission_classes = (permissions.IsUser,)
     serializer_class = serializers.ListingActivitySerializer
 
@@ -138,6 +346,26 @@ class ListingUserActivitiesViewSet(viewsets.ModelViewSet):
 class ListingActivitiesViewSet(viewsets.ModelViewSet):
     """
     ListingActivity endpoints are read-only
+
+    ModelViewSet for getting all Listing Activities for a given listing
+
+    Access Control
+    ===============
+    - AppsMallSteward can view
+
+    URIs
+    ======
+    GET /api/listings/activity
+    Summary:
+        Get a list of all system-wide ListingActivities entries
+    Response:
+        200 - Successful operation - [ListingActivitySerializer]
+
+    GET /api/listings/activity/{pk}
+    Summary:
+        Find a Listing User Activity Entry by ID
+    Response:
+        200 - Successful operation - ListingActivitySerializer
     """
     permission_classes = (permissions.IsOrgSteward,)
     serializer_class = serializers.ListingActivitySerializer
@@ -163,6 +391,20 @@ class ListingActivitiesViewSet(viewsets.ModelViewSet):
 class ListingActivityViewSet(viewsets.ModelViewSet):
     """
     ListingActivity endpoints are read-only
+
+    ModelViewSet for getting all Listing Activities for a given listing
+
+    Access Control
+    ===============
+    - All users can view
+
+    URIs
+    ======
+    GET /api/listing/{pk}/activity
+    Summary:
+        Find a Listing Activity Entry by ID
+    Response:
+        200 - Successful operation - ListingActivitySerializer
     """
     permission_classes = (permissions.IsUser,)
     serializer_class = serializers.ListingActivitySerializer
@@ -192,6 +434,30 @@ class ListingActivityViewSet(viewsets.ModelViewSet):
 
 
 class ListingRejectionViewSet(viewsets.ModelViewSet):
+    """
+    ModelViewSet for getting all Listing Rejections
+
+    Access Control
+    ===============
+    - AppsMallSteward can view
+
+    URIs
+    ======
+    POST /api/listing/{pk}/rejection
+    Summary:
+        Add a ListingRejection
+    Request:
+        data: ListingRejectionSerializer Schema
+    Response:
+        200 - Successful operation - ListingActivitySerializer
+
+    GET /api/listing/{pk}/rejection
+    Summary:
+        Find a ListingRejection Entry by ID
+    Response:
+        200 - Successful operation - ListingActivitySerializer
+    """
+
     permission_classes = (permissions.IsOrgStewardOrReadOnly,)
     serializer_class = serializers.ListingActivitySerializer
 
@@ -223,12 +489,100 @@ class ListingRejectionViewSet(viewsets.ModelViewSet):
 
 
 class ScreenshotViewSet(viewsets.ModelViewSet):
+    """
+    Listing Types
+
+    ModelViewSet for getting all Screenshots for a given listing
+
+    Access Control
+    ===============
+    - All users can view
+
+    URIs
+    ======
+    GET /api/screenshot/
+    Summary:
+        Get a list of all system-wide Screenshot entries
+    Response:
+        200 - Successful operation - [ScreenshotSerializer]
+
+    POST /api/screenshot/
+    Summary:
+        Add a Screenshot
+    Request:
+        data: ScreenshotSerializer Schema
+    Response:
+        200 - Successful operation - ScreenshotSerializer
+
+    GET /api/screenshot/{pk}
+    Summary:
+        Find a Screenshot Entry by ID
+    Response:
+        200 - Successful operation - ScreenshotSerializer
+
+    PUT /api/screenshot/{pk}
+    Summary:
+        Update a Screenshot Entry by ID
+
+    PATCH /api/screenshot/{pk}
+    Summary:
+        Update (Partial) a Screenshot Entry by ID
+
+    DELETE /api/screenshot/{pk}
+    Summary:
+        Delete a Screenshot Entry by ID
+    """
+
     permission_classes = (permissions.IsUser,)
     queryset = model_access.get_all_screenshots()
     serializer_class = serializers.ScreenshotSerializer
 
 
 class TagViewSet(viewsets.ModelViewSet):
+    """
+    Listing Types
+
+    ModelViewSet for getting all Tags for a given listing
+
+    Access Control
+    ===============
+    - All users can view
+
+    URIs
+    ======
+    GET /api/tag/
+    Summary:
+        Get a list of all system-wide Tag entries
+    Response:
+        200 - Successful operation - [TagSerializer]
+
+    POST /api/tag/
+    Summary:
+        Add a Tag
+    Request:
+        data: TagSerializer Schema
+    Response:
+        200 - Successful operation - TagSerializer
+
+    GET /api/tag/{pk}
+    Summary:
+        Find a Tag Entry by ID
+    Response:
+        200 - Successful operation - TagSerializer
+
+    PUT /api/tag/{pk}
+    Summary:
+        Update a Tag Entry by ID
+
+    PATCH /api/tag/{pk}
+    Summary:
+        Update (Partial) a Tag Entry by ID
+
+    DELETE /api/tag/{pk}
+    Summary:
+        Delete a Tag Entry by ID
+    """
+
     permission_classes = (permissions.IsUser,)
     queryset = model_access.get_all_tags()
     serializer_class = serializers.TagSerializer
@@ -237,15 +591,63 @@ class TagViewSet(viewsets.ModelViewSet):
 class ListingViewSet(viewsets.ModelViewSet):
     """
     Get all listings this user can see
+
+    Listing Types
+
+    ModelViewSet for getting all Listings
+
+    Access Control
+    ===============
+    - All users can view
+
+    URIs
+    ======
+    GET /api/listing
+    Summary:
+        Get a list of all system-wide Listings
+    Response:
+        200 - Successful operation - [ListingSerializer]
+
+    POST /api/listing/
+    Summary:
+        Add a Listing
+    Request:
+        data: ListingSerializer Schema
+    Response:
+        200 - Successful operation - ListingSerializer
+
+    GET /api/listing/{pk}
+    Summary:
+        Find a Listing Entry by ID
+    Response:
+        200 - Successful operation - ListingSerializer
+
+    PUT /api/listing/{pk}
+    Summary:
+        Update a Listing Entry by ID
+
+    PATCH /api/listing/{pk}
+    Summary:
+        Update (Partial) a Listing Entry by ID
+
+    DELETE /api/listing/{pk}
+    Summary:
+        Delete a Listing Entry by ID
     """
+
     permission_classes = (permissions.IsUser,)
     serializer_class = serializers.ListingSerializer
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter)
+    search_fields = ('title', 'id', 'owners__display_name', 'agency__title', 'agency__short_name',)
+    ordering_fields = ('title', 'id', 'agency__title', 'agency__short_name', 'is_enabled', 'is_featured', 'edited_date', 'security_marking', 'is_private', 'approval_status')
+    ordering = ('is_deleted', '-edited_date')
 
     def get_queryset(self):
         approval_status = self.request.query_params.get('approval_status', None)
         # org = self.request.query_params.get('org', None)
         orgs = self.request.query_params.getlist('org', False)
         enabled = self.request.query_params.get('enabled', None)
+        ordering = self.request.query_params.getlist('ordering', None)
         if enabled:
             enabled = enabled.lower()
             if enabled in ['true', '1']:
@@ -260,11 +662,20 @@ class ListingViewSet(viewsets.ModelViewSet):
             listings = listings.filter(agency__title__in=orgs)
         if enabled is not None:
             listings = listings.filter(is_enabled=enabled)
-
+        # have to handle this case manually because the ordering includes an app multiple times
+        # if there are multiple owners. We instead do sorting by case insensitive compare of the
+        # app owner that comes first alphabetically
+        param = [s for s in ordering if 'owners__display_name' == s or '-owners__display_name' == s]
+        if ordering is not None and param:
+            orderby = 'min'
+            if param[0].startswith('-'):
+                orderby = '-min'
+            listings = listings.annotate(min=Min(Lower('owners__display_name'))).order_by(orderby)
+            self.ordering = None
         return listings
 
     def list(self, request):
-        queryset = self.get_queryset()
+        queryset = self.filter_queryset(self.get_queryset())
         counts_data = model_access.put_counts_in_listings_endpoint(queryset)
         # it appears that because we override the queryset here, we must
         # manually invoke the pagination methods
@@ -377,6 +788,9 @@ class ListingViewSet(viewsets.ModelViewSet):
         queryset = self.get_queryset().get(pk=pk)
         serializer = serializers.ListingSerializer(queryset,
             context={'request': request})
+        # TODO: Refactor in future to use django ordering (mlee)
+        temp = serializer.data.get('screenshots')
+        temp.sort(key=operator.itemgetter('order'))
         return Response(serializer.data)
 
     def destroy(self, request, pk=None):
@@ -474,10 +888,8 @@ class ListingViewSet(viewsets.ModelViewSet):
         }
         """
         # logger.debug('inside ListingViewSet.update', extra={'request': request})
-
         instance = self.get_queryset().get(pk=pk)
-        serializer = serializers.ListingSerializer(instance,
-            data=request.data, context={'request': request}, partial=True)
+        serializer = serializers.ListingSerializer(instance, data=request.data, context={'request': request}, partial=True)
 
         # logger.debug('created ListingSerializer', extra={'request': request})
 
@@ -497,7 +909,29 @@ class ListingViewSet(viewsets.ModelViewSet):
 
 class ListingUserViewSet(viewsets.ModelViewSet):
     """
+    Listing Types
+
     Get all listings owned by this user
+
+    ModelViewSet for getting all ListingUserViewSets
+
+    Access Control
+    ===============
+    - All users can view
+
+    URIs
+    ======
+    GET /api/self/listing
+    Summary:
+        Get a list of all system-wide Listing User entries
+    Response:
+        200 - Successful operation - [ListingSerializer]
+
+    GET /api/self/listing/{pk}
+    Summary:
+        Find a ListingUserViewSet Entry by ID
+    Response:
+        200 - Successful operation - ListingSerializer
     """
     permission_classes = (permissions.IsUser,)
     serializer_class = serializers.ListingSerializer
@@ -512,7 +946,28 @@ class ListingUserViewSet(viewsets.ModelViewSet):
 class ListingSearchViewSet(viewsets.ModelViewSet):
     """
     Search for listings
+
+    ModelViewSet for getting all Listing Searches
+
+    Access Control
+    ===============
+    - All users can view
+
+    URIs
+    ======
+    GET /api/listings/search
+    Summary:
+        Get a list of all system-wide Listing Search entries
+    Response:
+        200 - Successful operation - [ListingSerializer]
+
+    GET /api/listings/search/{pk}
+    Summary:
+        Find a ListingSearchViewSet Entry by ID
+    Response:
+        200 - Successful operation - ListingSerializer
     """
+
     permission_classes = (permissions.IsUser,)
     serializer_class = serializers.ListingSerializer
     filter_backends = (filters.SearchFilter, )
@@ -567,3 +1022,72 @@ class ListingSearchViewSet(viewsets.ModelViewSet):
               message: Not authenticated
         """
         return super(ListingSearchViewSet, self).list(self, request)
+
+
+class ElasticsearchListingSearchViewSet(viewsets.ViewSet):
+    """
+    Elasticsearch Listing Search Viewset
+
+    It must support pagination. offset, limit
+
+    GET /api/listings/essearch/?search=6&offset=0&limit=24 HTTP/1.1
+    GET /api/listings/essearch/?search=6&offset=0&limit=24 HTTP/1.1
+
+    GET api/listings/essearch/?search=6&offset=0&category=Education&limit=24&type=web+application&agency=Minitrue&agency=Miniluv&minscore=0.4
+
+    ModelViewSet for searching all Listings with Elasticsearch
+
+    Access Control
+    ===============
+    - All users can view
+
+    URIs
+    ======
+    GET /api/listings/essearch
+    """
+    permission_classes = (permissions.IsUser,)
+
+    def list(self, request):
+        current_request_username = request.user.username
+        params_obj = model_access_es.SearchParamParser(request)
+
+        results = model_access_es.search(current_request_username, params_obj)
+        return Response(results, status=status.HTTP_200_OK)
+
+    @list_route(methods=['get'], permission_classes=[permissions.IsUser])
+    def suggest(self, request):
+        current_request_username = request.user.username
+        params_obj = model_access_es.SearchParamParser(self.request)
+
+        results = model_access_es.suggest(current_request_username, params_obj)
+        return Response(results, status=status.HTTP_200_OK)
+
+    def create(self, request):
+        """
+        This method is not supported
+        """
+        return Response({'detail': 'HTTP Verb Not Supported'}, status=status.HTTP_501_NOT_IMPLEMENTED)
+
+    def retrieve(self, request, pk=None):
+        """
+        This method is not supported
+        """
+        return Response({'detail': 'HTTP Verb Not Supported'}, status=status.HTTP_501_NOT_IMPLEMENTED)
+
+    def update(self, request, pk=None):
+        """
+        This method is not supported
+        """
+        return Response({'detail': 'HTTP Verb Not Supported'}, status=status.HTTP_501_NOT_IMPLEMENTED)
+
+    def partial_update(self, request, pk=None):
+        """
+        This method is not supported
+        """
+        return Response({'detail': 'HTTP Verb Not Supported'}, status=status.HTTP_501_NOT_IMPLEMENTED)
+
+    def destroy(self, request, pk=None):
+        """
+        This method is not supported
+        """
+        return Response({'detail': 'HTTP Verb Not Supported'}, status=status.HTTP_501_NOT_IMPLEMENTED)
